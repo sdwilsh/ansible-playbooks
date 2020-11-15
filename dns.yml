@@ -1,0 +1,6 @@
+---
+- hosts: dns
+  become: true
+  roles:
+    - role: common
+    - role: bertvv.bind

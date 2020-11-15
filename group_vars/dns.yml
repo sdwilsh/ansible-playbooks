@@ -1,0 +1,133 @@
+---
+bind_acls:
+  - name: ns2
+    match_list:
+      - 10.0.0.4
+      - 10.10.0.4
+      - 10.117.0.4
+      - 192.168.2.4
+      - fd36:3eb3:43b0:0::4
+      - fd36:3eb3:43b0:a::4
+      - fd36:3eb3:43b0:75::4
+bind_allow_query:
+  - any
+bind_listen_ipv4:
+  - any
+bind_listen_ipv6:
+  - any
+bind_zones:
+  - name: tswn.us
+    create_reverse_zones: true
+    primaries: 
+      - fd36:3eb3:43b0:75::3
+    name_servers:
+      - shadowofsunderedstar.hogs.tswn.us.
+      - bornstellarmakeseternallasting.hogs.tswn.us.
+    hosts:
+      - name: shadowofsunderedstar.hogs
+        ip: 10.117.0.3
+        ipv6: fd36:3eb3:43b0:75::3
+        aliases:
+          - ns1
+      - name: bornstellarmakeseternallasting.hogs
+        ip: 10.117.0.4
+        ipv6: fd36:3eb3:43b0:75::4
+        aliases:
+          - ns2
+      - name: al-cygni01
+        aliases:
+          - al-cygni01.hogs.tswn.us.
+      - name: installation02
+        ip: 172.16.2.2
+        aliases:
+          - unifi
+      - name: installation03
+        ip: 172.16.3.2
+      - name: installation04
+        ip: 172.16.4.2
+  - name: hogs.tswn.us
+    create_reverse_zones: true
+    primaries: 
+      - fd36:3eb3:43b0:75::3
+    name_servers:
+      - shadowofsunderedstar.hogs.tswn.us.
+      - bornstellarmakeseternallasting.hogs.tswn.us.
+    hosts:
+      - name: maccabeus
+        ip: 10.117.0.1
+        ipv6: fd36:3eb3:43b0:75::1
+      - name: shadowofsunderedstar.hogs
+        ip: 10.117.0.3
+        ipv6: fd36:3eb3:43b0:75::3
+        aliases:
+          - ns1
+      - name: bornstellarmakeseternallasting.hogs
+        ip: 10.117.0.4
+        ipv6: fd36:3eb3:43b0:75::4
+        aliases:
+          - ns2
+      - name: al-cygni01
+        ip: 10.117.0.6
+        ipv6: fd36:3eb3:43b0:75::6
+      - name: nut
+        ip: 10.117.0.9
+        ipv6: fd36:3eb3:43b0:75::9
+      - name: firstlightweaveslivingsong
+        ip: 10.117.0.10
+        ipv6: fd36:3eb3:43b0:75::a
+        aliases:
+          - truenas
+      - name: dadab
+        ip: 10.117.0.11
+        ipv6: fd36:3eb3:43b0:75::b
+        aliases:
+          - hyper-v01
+      - name: palamok
+        ip: 10.117.0.12
+        ipv6: fd36:3eb3:43b0:75::c
+        aliases:
+          - mqtt
+      - name: sif
+        ip: 10.117.0.16
+        ipv6: fd36:3eb3:43b0:75::10
+        aliases:
+          - zwave
+      - name: harvest
+        ip: 10.117.0.17
+        ipv6: fd36:3eb3:43b0:75::11
+        aliases:
+          - opensprinkler
+      - name: cortana
+        ip: 10.117.0.19
+        ipv6: fd36:3eb3:43b0:75::13
+        aliases:
+          - homeassistant
+      - name: boinc01
+        ip: 10.117.0.23
+      - name: boinc02
+        ip: 10.117.0.24
+      - name: boinc03
+        ip: 10.117.0.25
+      - name: enduringbias
+        ip: 10.117.0.26
+        ipv6: fd36:3eb3:43b0:75::1a
+        aliases:
+          - smokeping
+      - name: iona
+        ip: 10.117.0.27
+        ipv6: fd36:3eb3:43b0:75::1b
+        aliases:
+          - blueiris
+      - name: test.cortana
+        ip: 10.117.0.28
+        ipv6: fd36:3eb3:43b0:75::1c
+        aliases:
+          - test.homeassistant
+      - name: test.viseron
+        ip: 10.117.0.29
+        ipv6: fd36:3eb3:43b0:75::1d
+      
+      # MAN Network
+      - name: ups01
+        ip: 10.10.0.5
+        ipv6: fd36:3eb3:43b0:75:a::5

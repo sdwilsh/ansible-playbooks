@@ -1,0 +1,16 @@
+---
+# tasks file for github-client
+- name: Install git
+  package:
+    name: git
+    state: latest
+- name: Create srcs group
+  group:
+    name: srcs
+    state: present
+- name: Create /src folder
+  file:
+    path: /src
+    state: directory
+    group: srcs
+    mode: "u=rwx,g=rwx,o=rx"

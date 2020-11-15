@@ -1,0 +1,11 @@
+---
+- hosts: viseron
+  become: true
+  roles:
+    - role: common
+    - role: github-client
+    - role: nickjj.docker
+      tags: ["docker"]
+      vars:
+        docker__state: "latest"
+    - role: viseron

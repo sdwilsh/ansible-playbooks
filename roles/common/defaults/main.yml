@@ -1,0 +1,11 @@
+---
+# defaults file for common
+base_unix_groups:
+  - name: ansible
+    gid: 2000
+    sudo: true
+base_unix_users:
+  - name: ansible
+    uid: 2000
+
+etc_dir: /etc

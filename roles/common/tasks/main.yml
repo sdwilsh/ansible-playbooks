@@ -1,0 +1,26 @@
+---
+- name: Create base unix groups
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+    state: present
+  loop: "{{ base_unix_groups }}"
+- name: Create base users
+  user:
+    name: "{{ item.name }}"
+    group: "{{ item.name }}"
+    state: present
+  loop: "{{ base_unix_users }}"
+- name: Deploy ansible user's public key
+  authorized_key:
+    user: ansible
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMiRn+dJyIkJ22qrkuMlNC33xxS7VUwkYRY/55Wf4ryq"
+- name: Setup sudoers
+  template:
+    src: sudoers.j2
+    dest: "{{ etc_dir + '/sudoers.d/ansible' }}"
+    validate: 'visudo -cf %s'
+    mode: 0440
+- include: ubuntu.yml
+  when: ansible_distribution == "Ubuntu"

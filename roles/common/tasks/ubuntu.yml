@@ -1,0 +1,12 @@
+---
+- name: Set timezone to US/Pacific
+  community.general.timezone:
+    name: US/Pacific
+  become: yes
+  become_method: sudo
+- name: Remove ubuntu user
+  user:
+    name: ubuntu
+    state: absent
+    remove: yes
+  when: ansible_architecture == "aarch64"
