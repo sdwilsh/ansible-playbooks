@@ -6,3 +6,5 @@
 ```
     ansible-playbook -i {{inventory_file}} -l {{hostname}} provision.yml -u {{remote_user}} --ask-pass --ask-become-pass
 ```
+
+Note: this will remove a user with the name `provision` automatically, so it's best to set that up as the first user.

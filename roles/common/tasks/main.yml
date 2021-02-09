@@ -24,3 +24,11 @@
     mode: 0440
 - include: ubuntu.yml
   when: ansible_distribution == "Ubuntu"
+- name: Remove provision user
+  user:
+    name: provision
+    state: absent
+- name: Remove provision group
+  group:
+    name: provision
+    state: absent
