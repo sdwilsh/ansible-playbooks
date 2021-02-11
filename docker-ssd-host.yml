@@ -1,0 +1,9 @@
+---
+- hosts: docker_ssd
+  become: true
+  roles:
+    - role: common
+    # - role: github-client
+    - role: nickjj.docker
+      tags: ["docker"]
+    - role: factorio

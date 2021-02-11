@@ -1,0 +1,76 @@
+---
+# `a` removes unused images (useful in production).
+# `f` forces it to happen without prompting you to agree.
+docker__cron_jobs_prune_flags: "af"
+# Every Sunday at midnight
+docker__cron_jobs_prune_schedule: ["0", "0", "*", "*", "0"]
+docker__state: "latest"
+docker__cron_jobs:
+  - name: "Docker disk clean up"
+    job: "docker system prune -{{ docker__cron_jobs_prune_flags }} > /dev/null 2>&1"
+    schedule: "{{ docker__cron_jobs_prune_schedule }}"
+    cron_file: "docker-disk-clean-up"
+
+
+factorio__server_name: "factorio.tswn.us"
+factorio__server_description: "A game of fun and chance."
+factorio__server_tags:
+  - "tswn.us"
+  - "black-market2"
+  - "rpg"
+
+factorio__server_visibility_public: False
+factorio__server_visibility_lan: True
+
+factorio__username: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32663136366332636462613232353033323734643733386663616663393763383337353066653564
+          6236613864356162303535373733306566323733636633660a383234323633323931343235653334
+          33336663383630396662663338393739663938333230343666343331623833386131326232376231
+          3262316232313331650a316562613461363036393530363330626537353037346264373533383334
+          3738
+factorio__token: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37353663366637336639643563353835303436636131613931343335383434383739376431383633
+          3731663835613334366230363862626361376436633232610a373339383538633530643239646266
+          31616339303631396533653237656530343063366665386135616564636162383365303636336537
+          6362393065353732660a363337383830376234313331653534646635346130633932336661373866
+          64336330346363356632376534616631336466623533356466363330613736376631
+
+factorio__game_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          39313966303866346137333966303038623437333930656535663134333630316364366435623238
+          6635313939663438613036633666373632633666336236320a653935646162393461663430646362
+          62656464353164363663616262383364323638643236613266626632666634383032393430393339
+          3661393537313834640a623435353563313134356161356533386135393131303532393134313336
+          3263
+
+factorio__mods:
+  - name: "ArmouredBiters"
+    enabled: True
+  - name: "combat-mechanics-overhaul"
+    enabled: True
+  - name: "BlackMarket2"
+    enabled: True
+  - name: "even-distribution"
+    enabled: True
+  - name: "flib"
+    enabled: True
+  - name: "heroturrets"
+    enabled: True
+  - name: "InlaidLampsExtended"
+    enabled: True
+  - name: "LargeLamp"
+    enabled: True
+  - name: "liborio"
+    enabled: True
+  - name: "MegaBotStart"
+    enabled: True
+  - name: "miniloader"
+    enabled: True
+  - name: "RPGsystem"
+    enabled: True
+  - name: "scattergun_turret"
+    enabled: True
+  - name: "Squeak Through"
+    enabled: True
