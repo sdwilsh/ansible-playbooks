@@ -20,6 +20,7 @@
     dest: /src/viseron-config
   become: yes
   become_user: viseron
+  register: config
 - name: Create viseron secrets.yaml
   ansible.builtin.template:
     src: viseron_secrets.j2
@@ -27,6 +28,7 @@
     owner: viseron
     group: viseron
     mode: 0640
+  register: secrets
 # TODO: recordings directory
 - name: Launch viseron container
   community.general.docker_compose:
@@ -41,6 +43,7 @@
             - "/home/viseron/recordings:/recordings"
             - "/etc/localtime:/etc/localtime:ro"
     pull: yes
+    restarted: "{{ ((config.after != config.before) or secrets.changed) | bool }}"
   become: yes
   become_user: viseron
   vars:
