@@ -6,6 +6,7 @@ base_unix_groups:
     sudo: true
 base_unix_users:
   - name: ansible
+    shell: /bin/bash
     uid: 2000
 
 etc_dir: /etc

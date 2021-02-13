@@ -7,9 +7,11 @@
   loop: "{{ base_unix_groups }}"
 - name: Create base users
   user:
-    name: "{{ item.name }}"
     group: "{{ item.name }}"
+    name: "{{ item.name }}"
+    shell: "{{ item.shell }}"
     state: present
+    uid: "{{ item.uid }}"
   loop: "{{ base_unix_users }}"
 - name: Deploy ansible user's public key
   authorized_key:
@@ -24,6 +26,8 @@
     mode: 0440
 - include: ubuntu.yml
   when: ansible_distribution == "Ubuntu"
+
+# Cleanup From Provisioning
 - name: Remove provision user
   user:
     name: provision
