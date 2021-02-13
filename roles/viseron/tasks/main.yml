@@ -1,11 +1,11 @@
 ---
 # tasks file for viseron
 - name: Create viseron group
-  group:
+  ansible.builtin.group:
     name: viseron
     state: present
 - name: Create viseron user
-  user:
+  ansible.builtin.user:
     name: viseron
     group: viseron
     groups:
@@ -15,13 +15,13 @@
     state: present
     shell: /bin/bash
 - name: Checkout viseron config
-  git:
+  ansible.builtin.git:
     repo: https://github.com/sdwilsh/viseron-config.git
     dest: /src/viseron-config
   become: yes
   become_user: viseron
 - name: Create viseron secrets.yaml
-  template:
+  ansible.builtin.template:
     src: viseron_secrets.j2
     dest: /src/viseron-config/secrets.yaml
     owner: viseron
@@ -45,6 +45,6 @@
   become_user: viseron
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
-- assert:
+- ansible.builtin.assert:
     that:
       - "viseron.viseron_viseron_1.state.running"
