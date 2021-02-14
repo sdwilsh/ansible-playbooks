@@ -14,6 +14,38 @@
       - viseron
     state: present
     shell: /bin/bash
+- name: Ensure cifs-utils is installed and up-to-date
+  ansible.builtin.apt:
+    name: "cifs-utils"
+    state: "latest"
+    update_cache: yes
+
+- name: Create Home Assistant mount credentials file
+  ansible.builtin.template:
+    src: cifs_creds.j2
+    dest: /root/ha-cifs.txt
+    owner: root
+    group: root
+    mode: 0600
+- name: Create Home Assistant mount point
+  ansible.builtin.file:
+    path: "/home/viseron/ha-media"
+    state: directory
+    owner: viseron
+    group: viseron
+    mode: 0775
+- name: Mount Home Assistant media share
+  ansible.posix.mount:
+    fstype: "cifs"
+    opts: "noperm,_netdev,credentials=/root/ha-cifs.txt"
+    path: "/home/viseron/ha-media"
+    src: "//{{ viseron__cifs_address }}/media"
+    state: mounted
+- name: Create viseron folder in media share
+  ansible.builtin.file:
+    path: "/home/viseron/ha-media/viseron"
+    state: directory
+
 - name: Checkout viseron config
   ansible.builtin.git:
     repo: https://github.com/sdwilsh/viseron-config.git
@@ -29,7 +61,7 @@
     group: viseron
     mode: 0640
   register: secrets
-# TODO: recordings directory
+
 - name: Launch viseron container
   community.general.docker_compose:
     project_name: viseron
@@ -37,11 +69,16 @@
       version: "2"
       services:
         viseron:
-          image: roflcoopter/viseron:latest
+          image: roflcoopter/viseron:1.8.0b1
           volumes:
             - "/src/viseron-config:/config"
-            - "/home/viseron/recordings:/recordings"
+            - "/home/viseron/ha-media/viseron:/recordings"
             - "/etc/localtime:/etc/localtime:ro"
+          tmpfs:
+            - "/segments"
+          # This does not seem to work just yet, so leaving out until the next release to try it.
+          # ports:
+          #   - "8888:8888/tcp"
     pull: yes
     restarted: "{{ ((config.after != config.before) or secrets.changed) | bool }}"
   become: yes
