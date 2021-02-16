@@ -49,6 +49,21 @@
       - "requirements.yml"
   become_user: "ansible"
 
+- name: Ensure log file exists at /var/log/ansible.log
+  ansible.builtin.file:
+    group: "ansible"
+    mode: "u=rw,g=rw,o=r"
+    modification_time: "preserve"
+    owner: "ansible"
+    path: "/var/log/ansible.log"
+    state: "touch"
+- name: Set environment in cron file to log to /var/log/ansible.log
+  ansible.builtin.cron:
+    name: "ANSIBLE_LOG_PATH"
+    env: yes
+    job: "/var/log/ansible.log"
+    user: "ansible"
+    state: present
 - ansible.builtin.set_fact:
     cron_command: "cd /src/ansible-playbooks && ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml 2>&1"
 - name: Setup cron job
