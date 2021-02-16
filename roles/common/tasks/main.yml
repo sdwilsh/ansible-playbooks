@@ -4,15 +4,25 @@
     name: "{{ item.name }}"
     gid: "{{ item.gid }}"
     state: present
-  loop: "{{ base_unix_groups }}"
+  loop: "{{ common__unix_groups }}"
 - name: Create base users
   user:
     group: "{{ item.name }}"
     name: "{{ item.name }}"
-    shell: "{{ item.shell }}"
+    shell: "/bin/bash"
     state: present
     uid: "{{ item.uid }}"
-  loop: "{{ base_unix_users }}"
+  loop: "{{ common__unix_users }}"
+  when: ansible_distribution != "FreeBSD"
+- name: Create base users (FreeBSD)
+  user:
+    group: "{{ item.name }}"
+    name: "{{ item.name }}"
+    shell: "/usr/local/bin/bash"
+    state: present
+    uid: "{{ item.uid }}"
+  loop: "{{ common__unix_users }}"
+  when: ansible_distribution == "FreeBSD"
 - name: Deploy ansible user's public key
   authorized_key:
     user: ansible
@@ -21,7 +31,7 @@
 - name: Setup sudoers
   template:
     src: sudoers.j2
-    dest: "{{ etc_dir + '/sudoers.d/ansible' }}"
+    dest: "{{ common__etc_dir + '/sudoers.d/ansible' }}"
     validate: 'visudo -cf %s'
     mode: 0440
 - include: ubuntu.yml
@@ -32,7 +42,9 @@
   user:
     name: provision
     state: absent
+  when: ansible_user_id != "provision" and ansible_env.SUDO_USER != "provision"
 - name: Remove provision group
   group:
     name: provision
     state: absent
+  when: ansible_user_id != "provision" and ansible_env.SUDO_USER != "provision"

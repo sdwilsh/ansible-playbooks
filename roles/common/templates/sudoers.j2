@@ -1,4 +1,4 @@
-{% for item in base_unix_groups %}
+{% for item in common__unix_groups %}
 {% if item.sudo %}
 %{{ item.name }} ALL=(ALL:ALL) NOPASSWD:ALL
 {% endif %}

@@ -1,5 +1,8 @@
 [docker_ssd]
 docker-ssd.hogs.tswn.us
 
+[ntp]
+0.ntp.hogs.tswn.us
+
 [opensprinkler]
 harvest.hogs.tswn.us
