@@ -63,8 +63,8 @@
   register: secrets
 
 - name: Launch viseron container
-  community.general.docker_compose:
-    project_name: viseron
+  community.docker.docker_compose:
+    project_name: nvr
     definition:
       version: "2"
       services:
@@ -85,6 +85,7 @@
   become_user: viseron
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
 - ansible.builtin.assert:
     that:
-      - "viseron.viseron_viseron_1.state.running"
+      - "status.services.viseron.nvr_viseron_1.state.running"

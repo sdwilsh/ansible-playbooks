@@ -62,7 +62,7 @@
     factorio_uid: "{{ getent_passwd[\"factorio\"].1 }}"
     factorio_gid: "{{ getent_passwd[\"factorio\"].2 }}"
 - name: Launch factorio container
-  community.general.docker_compose:
+  community.docker.docker_compose:
     project_name: factorio
     definition:
       version: "2"
@@ -84,6 +84,7 @@
     restarted: "{{ (server_settings.changed or mod_list.changed) | bool }}"
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
 - ansible.builtin.assert:
     that:
-      - "factorio.factorio_factorio_1.state.running"
+      - "status.services.factorio.factorio_factorio_1.state.running"
