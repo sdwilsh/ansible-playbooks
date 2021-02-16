@@ -3,4 +3,5 @@ roles:
   - name: nickjj.docker
   - name: bertvv.bind
 collections:
+  - name: ansible.posix
   - name: community.general
