@@ -1,0 +1,62 @@
+---
+# tasks file for ansible-cron
+- name: Ensure ansible dependencies are installed
+  ansible.builtin.apt:
+    name: "software-properties-common"
+    state: "latest"
+- name: Ensure ansible is installed
+  ansible.builtin.apt:
+    name: "ansible"
+    state: "latest"
+
+- name: Add ansible user to srcs group
+  ansible.builtin.user:
+    name: "ansible"
+    groups:
+      - "srcs"
+- name: Checkout playbooks
+  ansible.builtin.git:
+    repo: "https://github.com/sdwilsh/ansible-playbooks.git"
+    dest: "/src/ansible-playbooks"
+  become: yes
+  become_user: "ansible"
+- name: Create vault password file
+  ansible.builtin.copy:
+    dest: "/src/ansible-playbooks/.ansible_vault_password"
+    content: "{{ ansible_cron__vault_password }}"
+    mode: "u=rw"
+    owner: "ansible"
+    group: "ansible"
+
+- name: Download or update galaxy roles
+  ansible.builtin.command:
+    chdir: "/src/ansible-playbooks"
+    argv:
+      - "ansible-galaxy"
+      - "role"
+      - "install"
+      - "-r"
+      - "requirements.yml"
+  become_user: "ansible"
+- name: Download or update galaxy collections
+  ansible.builtin.command:
+    chdir: "/src/ansible-playbooks"
+    argv:
+      - "ansible-galaxy"
+      - "collection"
+      - "install"
+      - "-r"
+      - "requirements.yml"
+  become_user: "ansible"
+
+- ansible.builtin.set_fact:
+    cron_command: "cd /src/ansible-playbooks && ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml 2>&1"
+- name: Setup cron job
+  ansible.builtin.cron:
+    name: "run ansible locally"
+    job: "if ! out=`{{ cron_command }}`; then echo $out; fi"
+    user: "ansible"
+    minute: "*/15"
+    state: present
+
+
