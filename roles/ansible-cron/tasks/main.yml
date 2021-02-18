@@ -11,6 +11,7 @@
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
+    append: yes
     name: "ansible"
     groups:
       - "srcs"
