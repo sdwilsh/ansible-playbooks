@@ -1,0 +1,67 @@
+---
+# tasks file for opensprinkler
+- name: Create opensprinkler group
+  ansible.builtin.group:
+    name: opensprinkler
+    state: present
+- name: Create opensprinkler user
+  ansible.builtin.user:
+    group: opensprinkler
+    groups:
+      - srcs
+    name: opensprinkler
+    state: present
+    system: yes
+  register: opensprinkler_user
+- name: Ensure dependencies are installed
+  ansible.builtin.apt:
+    name:
+      - "g++"
+      - "libmosquitto-dev"
+    state: "latest"
+- name: Checkout firmware
+  ansible.builtin.git:
+    repo: "https://github.com/OpenSprinkler/OpenSprinkler-Firmware.git"
+    dest: "/src/OpenSprinkler-Firmware"
+  notify: "recompile opensprinkler"
+  register: firmware
+- name: Change firmware ownership to opensprinkler
+  ansible.builtin.file:
+    group: "opensprinkler"
+    owner: "opensprinkler"
+    path: "/src/OpenSprinkler-Firmware"
+    recurse: yes
+    state: "directory"
+- name: Copy statup script
+  ansible.builtin.copy:
+    dest: "/etc/init.d/opensprinkler"
+    mode: "u=rwx,g=rx,o=rx"
+    remote_src: yes
+    src: "/src/OpenSprinkler-Firmware/OpenSprinkler.launch"
+  notify: "restart opensprinkler"
+  when: firmware.changed
+- name: Update service user to opensprinkler
+  ansible.builtin.replace:
+    path: "/etc/init.d/opensprinkler"
+    regexp: "USER=.*"
+    replace: "USER=opensprinkler"
+  when: firmware.changed
+  notify: "reload opensprinkler service details"
+- name: "Update HOMEDIR to {{ opensprinkler_user.home }}"
+  ansible.builtin.replace:
+    path: "/etc/init.d/opensprinkler"
+    regexp: "HOMEDIR=.*"
+    replace: "HOMEDIR={{ opensprinkler_user.home }}"
+  when: firmware.changed
+  notify: "reload opensprinkler service details"
+- name: "Update DAEMON to be {{ opensprinkler_user.home }}/ospi"
+  ansible.builtin.replace:
+    path: "/etc/init.d/opensprinkler"
+    regexp: "DAEMON=.*"
+    replace: "DAEMON={{ opensprinkler_user.home }}/ospi"
+  when: firmware.changed
+  notify: "reload opensprinkler service details"
+- name: Ensure service is started on boot
+  ansible.builtin.service:
+    name: "opensprinkler"
+    enabled: yes
