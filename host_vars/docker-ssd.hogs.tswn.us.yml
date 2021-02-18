@@ -1,4 +1,6 @@
 ---
+ansible_cron__inventory_file: "prod-inventory"
+
 # `a` removes unused images (useful in production).
 # `f` forces it to happen without prompting you to agree.
 docker__cron_jobs_prune_flags: "af"
