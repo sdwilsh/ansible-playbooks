@@ -2,6 +2,8 @@
 # defaults file for common
 common__etc_dir: "/etc"
 
+common__ntp_pool: "pool.ntp.hogs.tswn.us"
+
 common__unix_groups:
   - name: "ansible"
     gid: 2000

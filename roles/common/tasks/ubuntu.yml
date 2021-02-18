@@ -1,9 +1,29 @@
 ---
+# Time Management
 - name: Set timezone to US/Pacific
   community.general.timezone:
     name: US/Pacific
   become: yes
   become_method: sudo
+- name: Ensure chrony is installed
+  ansible.builtin.apt:
+    name: "chrony"
+    state: "latest"
+- name: Setup chrony conf
+  ansible.builtin.template:
+    src: "chrony.conf.ubuntu.j2"
+    dest: "/etc/chrony/chrony.conf"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "root"
+  register: chrony_conf
+- name: Ensure chrony is running with latest config
+  ansible.builtin.systemd:
+    name: "chrony"
+    state: "{% if chrony_conf.changed %}restarted{% else %}started{% endif %}"
+    enabled: yes
+
+# Provisoning Cleanup
 - name: Remove ubuntu user
   user:
     name: ubuntu
