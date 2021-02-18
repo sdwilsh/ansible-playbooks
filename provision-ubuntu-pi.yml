@@ -1,104 +1,117 @@
 ---
 # This is ran to setup network booting for the pi
-- name: Provision Pi4 for Network Booting
+- name: Provision Pi for Network Booting
   hosts: all
   become: true
+  roles:
+    - role: common
   tasks:
-  - name: Fetch iscsi information
-    slurp:
-      src: /etc/iscsi/iscsi.initramfs
-    register: iscsi_data
+  - ansible.builtin.debug:
+      msg: "{{ ansible_facts }}"
   - name: Extract additional information into facts
     set_fact:
-      iscsi_initiator_iqn: "{{ iscsi_data['content'] | b64decode | regex_search('(?<=ISCSI_INITIATOR=).*$', multiline=True) }}"
-      iscsi_target_ip: "{{ iscsi_data['content'] | b64decode | regex_search('(?<=ISCSI_TARGET_IP=).*$', multiline=True) }}"
-      iscsi_target_iqn: "{{ iscsi_data['content'] | b64decode | regex_search('(?<=ISCSI_TARGET=).*$', multiline=True) }}"
+      iscsi_initiator_iqn: "{{ common__iscsi_initiator_iqn_base }}:{{ ansible_hostname }}"
+      iscsi_target_iqn: "{{ common__iscsi_target_iqn_base }}:{{ ansible_hostname }}"
       mnt_firmware: "{{ '/mnt/' + ansible_hostname + '-firmware' }}"
       mnt_iscsi: "{{ '/mnt/' + ansible_hostname + '-iscsi' }}"
-      nfs_server_ip: "{{ iscsi_data['content'] | b64decode | regex_search('(?<=ISCSI_TARGET_IP=).*$', multiline=True) }}"
-      nfs_server_path: "{{ '/mnt/rust0/tftp/' + ansible_default_ipv4['macaddress'] | replace(':', '-') }}"
+      nfs_tftp_server_path: "{{ '/mnt/rust0/tftp/' + ansible_default_ipv4['macaddress'] | replace(':', '-') }}"
       rootfs_partlabel: "{{ ansible_hostname + '-rootfs' }}"
   
   # Setup firmware
-  # - name: Install rpi-eeprom files
-  #   package:
-  #      name: rpi-eeprom
-  #      state: latest
-  # - name: Create temporary directory for scratch space
-  #   tempfile:
-  #     state: directory
-  #     suffix: firmware-update
-  #   register: eeprom_firmware_dir
-  # - name: Extract additional information into facts
-  #   set_fact:
-  #     pi_pieeprom_file: /lib/firmware/raspberrypi/bootloader/stable/pieeprom-2020-04-16.bin
-  # - name: Extract config from eeprom firmware
-  #   shell:
-  #     chdir: "{{ eeprom_firmware_dir.path }}"
-  #     cmd: "{{ 'rpi-eeprom-config ' + pi_pieeprom_file + ' > bootconf.txt' }}"
-  # - name: Set BOOT_ORDER to load from SD card, and then netboot
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: BOOT_ORDER=0xe21
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: BOOT_ORDER
-  #     state: present
-  # - name: Set TFTP_PREFIX to use mac address
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: TFTP_PREFIX=2
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: TFTP_PREFIX
-  #     state: present
-  # - name: Set TFTP_IP to nfs_server_ip
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: "{{ 'TFTP_IP=' + nfs_server_ip }}"
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: TFTP_IP
-  #     state: present
-  # - name: Set CLIENT_IP
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: "{{ 'CLIENT_IP=' + ansible_default_ipv4['address'] }}"
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: CLIENT_IP
-  #     state: present
-  # - name: Set GATEWAY
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: "{{ 'GATEWAY=' + ansible_default_ipv4['gateway'] }}"
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: GATEWAY
-  #     state: present
-  # - name: Set SUBNET
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: "{{ 'SUBNET=' + ansible_default_ipv4['netmask'] }}"
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: SUBNET
-  #     state: present
-  # - name: Disable firmware self-update
-  #   lineinfile:
-  #     insertbefore: "none"
-  #     line: ENABLE_SELF_UPDATE=0
-  #     path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
-  #     regex: ENABLE_SELF_UPDATE
-  #     state: present
-  # - name: Write new config out to new pieeprom.bin
-  #   shell:
-  #     chdir: "{{ eeprom_firmware_dir.path }}"
-  #     cmd: "{{ 'rpi-eeprom-config --out pieeprom.bin --config bootconf.txt ' + pi_pieeprom_file }}"
-  # - name: Update to new pieeprom.bin
-  #   shell:
-  #     chdir: "{{ eeprom_firmware_dir.path }}"
-  #     cmd: rpi-eeprom-update -d -f pieeprom.bin
-  # - name: Reboot the server to apply new firmware
-  #   reboot:
-  # - name: Remove rpi-eeprom files
-  #   package:
-  #      name: rpi-eeprom
-  #      state: absent
+  - name: Install rpi-eeprom files
+    package:
+       name: rpi-eeprom
+       state: latest
+    when: ansible_architecture == "aarch64"
+  - name: Create temporary directory for scratch space
+    tempfile:
+      state: directory
+      suffix: firmware-update
+    register: eeprom_firmware_dir
+    when: ansible_architecture == "aarch64"
+  - name: Extract additional information into facts
+    set_fact:
+      pi_pieeprom_file: /lib/firmware/raspberrypi/bootloader/stable/pieeprom-2020-04-16.bin
+    when: ansible_architecture == "aarch64"
+  - name: Extract config from eeprom firmware
+    shell:
+      chdir: "{{ eeprom_firmware_dir.path }}"
+      cmd: "{{ 'rpi-eeprom-config ' + pi_pieeprom_file + ' > bootconf.txt' }}"
+    when: ansible_architecture == "aarch64"
+  - name: Set BOOT_ORDER to load from SD card, and then netboot
+    lineinfile:
+      insertbefore: "none"
+      line: BOOT_ORDER=0xe21
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: BOOT_ORDER
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Set TFTP_PREFIX to use mac address
+    lineinfile:
+      insertbefore: "none"
+      line: TFTP_PREFIX=2
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: TFTP_PREFIX
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Set TFTP_IP to common__nfs_server_ip
+    lineinfile:
+      insertbefore: "none"
+      line: "{{ 'TFTP_IP=' + common__nfs_server_ip }}"
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: TFTP_IP
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Set CLIENT_IP
+    lineinfile:
+      insertbefore: "none"
+      line: "{{ 'CLIENT_IP=' + ansible_default_ipv4['address'] }}"
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: CLIENT_IP
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Set GATEWAY
+    lineinfile:
+      insertbefore: "none"
+      line: "{{ 'GATEWAY=' + ansible_default_ipv4['gateway'] }}"
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: GATEWAY
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Set SUBNET
+    lineinfile:
+      insertbefore: "none"
+      line: "{{ 'SUBNET=' + ansible_default_ipv4['netmask'] }}"
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: SUBNET
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Disable firmware self-update
+    lineinfile:
+      insertbefore: "none"
+      line: ENABLE_SELF_UPDATE=0
+      path: "{{ eeprom_firmware_dir.path + '/bootconf.txt' }}"
+      regex: ENABLE_SELF_UPDATE
+      state: present
+    when: ansible_architecture == "aarch64"
+  - name: Write new config out to new pieeprom.bin
+    shell:
+      chdir: "{{ eeprom_firmware_dir.path }}"
+      cmd: "{{ 'rpi-eeprom-config --out pieeprom.bin --config bootconf.txt ' + pi_pieeprom_file }}"
+    when: ansible_architecture == "aarch64"
+  - name: Update to new pieeprom.bin
+    shell:
+      chdir: "{{ eeprom_firmware_dir.path }}"
+      cmd: rpi-eeprom-update -d -f pieeprom.bin
+    when: ansible_architecture == "aarch64"
+  - name: Reboot the server to apply new firmware
+    reboot:
+    when: ansible_architecture == "aarch64"
+  - name: Remove rpi-eeprom files
+    package:
+       name: rpi-eeprom
+       state: absent
+    when: ansible_architecture == "aarch64"
 
   # Booting setup
   - name: Dislable cloud-init
@@ -109,13 +122,32 @@
     shell:
       cmd: update-initramfs -u
 
+  # ISCSI Setup
+  - name: Setup /etc/iscsi/iscsi.initramfs
+    ansible.builtin.copy:
+      dest: "/etc/iscsi/iscsi.initramfs"
+      content: |
+        ISCSI_INITIATOR={{ iscsi_initiator_iqn }}
+        ISCSI_TARGET={{ iscsi_target_iqn }}
+        ISCSI_TARGET_IP={{ common__iscsi_target_ip }}
+      mode: "u=rw"
+      owner: "root"
+      group: "root"
+  - name: Setup /etc/iscsi/initiatorname.iscsi
+    ansible.builtin.copy:
+      dest: "/etc/iscsi/initiatorname.iscsi"
+      content: "InitiatorName={{ iscsi_initiator_iqn }}"
+      mode: "u=rw"
+      owner: "root"
+      group: "root"
+
   # Setup new rootfs
   - name: Login to iscsi device for new rootfs
     community.general.open_iscsi:
       auto_node_startup: no
       discover: yes
       login: yes
-      portal: "{{ iscsi_target_ip }}"
+      portal: "{{ common__iscsi_target_ip }}"
       target: "{{ iscsi_target_iqn }}"
   - name: Setup new rootfs disk
     community.general.parted:
@@ -170,7 +202,7 @@
       opts: defaults,vers=4.1,proto=tcp
       passno: "0"
       path: /boot/firmware
-      src: "{{ nfs_server_ip + ':' + nfs_server_path }}"
+      src: "{{ common__nfs_server_ip + ':' + nfs_tftp_server_path }}"
       state: present
   - name: Setup new rootfs /etc/fstab - remove iscsi mount
     ansible.posix.mount:
@@ -187,11 +219,11 @@
       target: "{{ iscsi_target_iqn }}"
 
   # Setup netboot fs
-  - name: Mount tftp folder
+  - name: "Mount tftp folder {{ common__nfs_server_ip + ':' + nfs_tftp_server_path }}"
     ansible.posix.mount:
       fstype: nfs
       path: "{{ mnt_firmware }}"
-      src: "{{ nfs_server_ip + ':' + nfs_server_path }}"
+      src: "{{ common__nfs_server_ip + ':' + nfs_tftp_server_path }}"
       state: mounted
   - name: Rsync /boot/firmware to tftp folder
     ansible.posix.synchronize:
@@ -218,7 +250,7 @@
   - name: Update cmdline.txt iscsi info
     lineinfile:
       backrefs: yes
-      line: "{{ '\\1 ISCSI_INITIATOR=' + iscsi_initiator_iqn + ' ISCSI_TARGET_NAME=' + iscsi_target_iqn + ' ISCSI_TARGET_IP=' + iscsi_target_ip + ' rw' }}"
+      line: "{{ '\\1 ISCSI_INITIATOR=' + iscsi_initiator_iqn + ' ISCSI_TARGET_NAME=' + iscsi_target_iqn + ' ISCSI_TARGET_IP=' + common__iscsi_target_ip + ' rw' }}"
       path: "{{ mnt_firmware + '/cmdline.txt' }}"
       regexp: "^(.*)$"
   - name: Update cmdline.txt to disable cloud-init
