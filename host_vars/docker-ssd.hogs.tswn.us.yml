@@ -1,6 +1,10 @@
 ---
 ansible_cron__inventory_file: "prod-inventory"
 
+common__ip_addresses:
+  - "10.117.0.30/23"
+  - "fd36:3eb3:43b0:75::1e/64"
+
 # `a` removes unused images (useful in production).
 # `f` forces it to happen without prompting you to agree.
 docker__cron_jobs_prune_flags: "af"

@@ -1,0 +1,20 @@
+# This file is managed by ansible
+network:
+  version: 2
+  ethernets:
+    {{ ansible_default_ipv4.interface }}:
+      addresses:
+{% for item in common__ip_addresses %}
+        - "{{ item }}"
+{% endfor %}
+      gateway4: "{{ common__gateway_v4_address }}"
+      gateway6: "{{ common__gateway_v6_address }}"
+      nameservers:
+        addresses:
+{% for item in common__nameservers.addresses %}
+          - "{{ item }}"
+{% endfor %}
+        search:
+{% for item in common__nameservers.search %}
+          - "{{ item }}"
+{% endfor %}

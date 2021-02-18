@@ -7,7 +7,17 @@ ansible_cron__vault_password: !vault |
           3564646339343435610a393539386438666562333034373166396130626138356136616238633164
           38613962316365316261363534366632643563643539646533373439343065373436
 
+common__gateway_v4_address: "10.117.0.1"
+common__gateway_v6_address: "fd36:3eb3:43b0:75::1"
 common__iscsi_initiator_iqn_base: "iqn.2019-09.us.tswn.hogs"
 common__iscsi_target_ip: "10.117.0.10"
 common__iscsi_target_iqn_base: "iqn.2019-09.net.shawnwilsher.firstlightweaveslivingsong.ctl"
+common__nameservers:
+  addresses:
+    - 10.117.0.3
+    - 10.117.0.4
+    - fd36:3eb3:43b0:75::3
+    - fd36:3eb3:43b0:75::4
+  search:
+    - hogs.tswn.us
 common__nfs_server_ip: "10.117.0.10"

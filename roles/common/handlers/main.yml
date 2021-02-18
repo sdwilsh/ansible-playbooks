@@ -1,0 +1,7 @@
+---
+# handlers file for common
+- name: netplan apply
+  ansible.builtin.command:
+    argv:
+      - "netplan"
+      - "apply"

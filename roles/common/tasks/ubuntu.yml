@@ -1,4 +1,34 @@
 ---
+# Networking
+- name: Check for existing configurations in /etc/netplan
+  ansible.builtin.find:
+    recurse: no
+    file_type: "file"
+    paths:
+      - "/etc/netplan"
+    excludes:
+      - "00-ansible-config.yaml"
+    patterns:
+      - "*.yaml"
+  register: existing_configs
+- name: Set aside existing configurations in /etc/netplan
+  ansible.builtin.command:
+    argv:
+      - "mv"
+      - "{{ item.path }}"
+      - "{{ item.path }}.old"
+  loop: "{{ existing_configs.files }}"
+  when: existing_configs.matched
+- name: Setup networking
+  ansible.builtin.template:
+    dest: "/etc/netplan/00-ansible-config.yaml"
+    group: "root"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    src: "netplan.yaml.j2"
+    validate: "netplan try --config-file=%s --timeout=5"
+  notify: "netplan apply"
+
 # Time Management
 - name: Set timezone to US/Pacific
   community.general.timezone:

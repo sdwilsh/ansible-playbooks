@@ -1,6 +1,10 @@
 ---
 ansible_cron__inventory_file: "testing-inventory"
 
+common__ip_addresses:
+  - "10.117.0.29/23"
+  - "fd36:3eb3:43b0:75::1d/64"
+
 eth0_ip4: 10.117.0.29
 eth0_ip6: fd36:3eb3:43b0:75::1d
 
