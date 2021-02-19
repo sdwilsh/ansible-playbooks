@@ -10,8 +10,6 @@
       msg: "{{ ansible_facts }}"
   - name: Extract additional information into facts
     set_fact:
-      iscsi_initiator_iqn: "{{ common__iscsi_initiator_iqn_base }}:{{ ansible_hostname }}"
-      iscsi_target_iqn: "{{ common__iscsi_target_iqn_base }}:{{ ansible_hostname }}"
       mnt_firmware: "{{ '/mnt/' + ansible_hostname + '-firmware' }}"
       mnt_iscsi: "{{ '/mnt/' + ansible_hostname + '-iscsi' }}"
       nfs_tftp_server_path: "{{ '/mnt/rust0/tftp/' + ansible_default_ipv4['macaddress'] | replace(':', '-') }}"
@@ -122,25 +120,6 @@
     shell:
       cmd: update-initramfs -u
 
-  # ISCSI Setup
-  - name: Setup /etc/iscsi/iscsi.initramfs
-    ansible.builtin.copy:
-      dest: "/etc/iscsi/iscsi.initramfs"
-      content: |
-        ISCSI_INITIATOR={{ iscsi_initiator_iqn }}
-        ISCSI_TARGET={{ iscsi_target_iqn }}
-        ISCSI_TARGET_IP={{ common__iscsi_target_ip }}
-      mode: "u=rw"
-      owner: "root"
-      group: "root"
-  - name: Setup /etc/iscsi/initiatorname.iscsi
-    ansible.builtin.copy:
-      dest: "/etc/iscsi/initiatorname.iscsi"
-      content: "InitiatorName={{ iscsi_initiator_iqn }}"
-      mode: "u=rw"
-      owner: "root"
-      group: "root"
-
   # Setup new rootfs
   - name: Login to iscsi device for new rootfs
     community.general.open_iscsi:
@@ -148,7 +127,7 @@
       discover: yes
       login: yes
       portal: "{{ common__iscsi_target_ip }}"
-      target: "{{ iscsi_target_iqn }}"
+      target: "{{ common__iscsi_target_iqn }}"
   - name: Setup new rootfs disk
     community.general.parted:
       device: /dev/sda
@@ -216,7 +195,7 @@
   - name: Disconnect from iscsi device
     community.general.open_iscsi:
       login: no
-      target: "{{ iscsi_target_iqn }}"
+      target: "{{ common__iscsi_target_iqn }}"
 
   # Setup netboot fs
   - name: "Mount tftp folder {{ common__nfs_server_ip + ':' + nfs_tftp_server_path }}"

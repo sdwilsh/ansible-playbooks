@@ -34,6 +34,10 @@
     dest: "{{ common__etc_dir + '/sudoers.d/ansible' }}"
     validate: 'visudo -cf %s'
     mode: 0440
+
+- include: iscsi.yml
+
+# Platform-specific stuff
 - include: ubuntu.yml
   when: ansible_distribution == "Ubuntu"
 

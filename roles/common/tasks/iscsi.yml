@@ -1,0 +1,22 @@
+---
+# tasks file for iscsi setup for the common role
+- set_fact:
+    common__iscsi_initiator_iqn: "{{ common__iscsi_initiator_iqn_base }}:{{ ansible_hostname }}"
+    common__iscsi_target_iqn: "{{ common__iscsi_target_iqn_base }}:{{ ansible_hostname }}"
+- name: Setup /etc/iscsi/iscsi.initramfs
+  ansible.builtin.copy:
+    dest: "/etc/iscsi/iscsi.initramfs"
+    content: |
+      ISCSI_INITIATOR={{ common__iscsi_initiator_iqn }}
+      ISCSI_TARGET={{ common__iscsi_target_iqn }}
+      ISCSI_TARGET_IP={{ common__iscsi_target_ip }}
+    mode: "u=rw"
+    owner: "root"
+    group: "root"
+- name: Setup /etc/iscsi/initiatorname.iscsi
+  ansible.builtin.copy:
+    dest: "/etc/iscsi/initiatorname.iscsi"
+    content: "InitiatorName={{ common__iscsi_initiator_iqn }}"
+    mode: "u=rw"
+    owner: "root"
+    group: "root"
