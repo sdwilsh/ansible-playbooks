@@ -121,6 +121,16 @@
       cmd: update-initramfs -u
 
   # Setup new rootfs
+  - name: Setup /etc/iscsi/iscsi.initramfs
+    ansible.builtin.copy:
+      dest: "/etc/iscsi/iscsi.initramfs"
+      content: |
+        ISCSI_INITIATOR={{ common__iscsi_initiator_iqn }}
+        ISCSI_TARGET={{ common__iscsi_target_iqn }}
+        ISCSI_TARGET_IP={{ common__iscsi_target_ip }}
+      mode: "u=rw"
+      owner: "root"
+      group: "root"
   - name: Login to iscsi device for new rootfs
     community.general.open_iscsi:
       auto_node_startup: no
