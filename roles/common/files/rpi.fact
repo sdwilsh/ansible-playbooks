@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import json
+import re
+
+from pathlib import Path
+
+def parseCPUInfo():
+  cpuinfo = Path("/proc/cpuinfo").read_text()
+  matches = re.search("Model\s+:\s+Raspberry Pi (\w+) Model ([\w\+]+) Rev ([0-9\.]+)$", cpuinfo, flags=re.MULTILINE) 
+  if matches is None:
+    print(json.dumps({
+      "is": False
+    }))
+    exit(0)
+  print(json.dumps({
+    "is": True,
+    "version": matches.group(1),
+    "model": matches.group(2),
+    "rev": matches.group(3),
+  }))
+  exit(0)
+
+
+if __name__ == "__main__":
+  parseCPUInfo()

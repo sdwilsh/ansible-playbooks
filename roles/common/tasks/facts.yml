@@ -1,0 +1,17 @@
+---
+# tasks file for installing custom facts for the common role
+- name: Create custom facts directory
+  ansible.builtin.file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: Add rpi custom fact
+  ansible.builtin.copy:
+    src: "files/rpi.fact"
+    dest: "/etc/ansible/facts.d/rpi.fact"
+    mode: "u=rx,g=rx,o=rx"
+  register: added_custom_fact_rpi
+
+- name: Re-run setup to use custom facts
+  setup: ~
+  when: added_custom_fact_rpi.changed
