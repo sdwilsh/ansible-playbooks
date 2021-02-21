@@ -1,4 +1,6 @@
 ---
+- include: iscsi.yml
+
 # Networking
 - name: Check for existing configurations in /etc/netplan
   ansible.builtin.find:

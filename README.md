@@ -28,6 +28,13 @@ Run this on the remote machine:
 echo 'provision:::::+1h::/nonexistent:/bin/sh:provision' | adduser -G wheel -f - 
 ```
 
+#### Enable `wheel` Group to Use Password-based `sudo`
+
+Run this on the remote machine:
+```
+sed -i '' 's/#\(.*%wheel.*ALL=(ALL).*ALL$\)/%wheel ALL=(ALL) ALL/' /usr/local/etc/sudoers
+```
+
 ####
 
 In this repository, setup a host_vars for the host with these contents:
@@ -49,7 +56,7 @@ ssh provision@{{ hostname }} echo 'success!'
 ```
 
 ```
-    ansible-playbook -i {{ inventory_file }} -l {{} hostname }} provision.yml -u provision --ask-pass --ask-become-pass
+    ansible-playbook -i {{ inventory_file }} -l {{ hostname }} provision.yml -u provision --ask-pass --ask-become-pass
 ```
 
 Note: The user `provision` will be removed automatically when the `common` role is run not as that user.

@@ -36,7 +36,6 @@
     mode: 0440
 
 - include: facts.yml
-- include: iscsi.yml
 
 # Platform-specific stuff
 - include: ubuntu.yml
