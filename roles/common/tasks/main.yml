@@ -38,6 +38,8 @@
 - include: facts.yml
 
 # Platform-specific stuff
+- include: freebsd.yml
+  when: ansible_distribution == "FreeBSD"
 - include: ubuntu.yml
   when: ansible_distribution == "Ubuntu"
 

@@ -8,14 +8,14 @@
 
 Run this on the remote machine:
 ```
-pkg install bash python39 sudo
+pkg install bash python37 sudo
 ```
 
 #### Setup `sshd`
 
 Run this on the remote machine:
 ```
-echo 'sshd_enable="YES"' >> /etc/rc.conf
+echo 'sshd_enable="YES"' >> /etc/rc.conf.d/sshd
 service sshd start
 ```
 
@@ -35,12 +35,12 @@ Run this on the remote machine:
 sed -i '' 's/#\(.*%wheel.*ALL=(ALL).*ALL$\)/%wheel ALL=(ALL) ALL/' /usr/local/etc/sudoers
 ```
 
-####
+#### Set the Appropriate `host_vars`
 
 In this repository, setup a host_vars for the host with these contents:
 ```
 ---
-ansible_python_interpreter: "/usr/local/bin/python3.9"
+ansible_python_interpreter: "/usr/local/bin/python3.7"
 ansible_remote_tmp: "/tmp/ansible"
 
 common__etc_dir: "/usr/local/etc"
