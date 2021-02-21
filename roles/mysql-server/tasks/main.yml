@@ -1,0 +1,115 @@
+---
+# tasks file for mysql-server
+- name: "Install latest version of mysql-server"
+  ansible.builtin.package:
+    name: "mysql80-server"
+    state: "latest"
+  notify: "restart mysql-server"
+- name: "Install latest version of PyMySQL"
+  ansible.builtin.package:
+    name: "py37-pymysql"
+    state: "latest"
+- name: "Enable service at start"
+  ansible.builtin.copy:
+    content: |
+      mysql_enable="YES"
+      # Set the data directory to be our specifically configured ZFS directory.
+      mysql_dbdir="/var/db/mysql/data"
+    dest: "/etc/rc.conf.d/mysql"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "wheel"
+- name: "Setup mysql-server config"
+  ansible.builtin.copy:
+    content: |
+      [client]
+      port                            = 3306
+      socket                          = /tmp/mysql.sock
+
+      [mysql]
+      prompt                          = \u@\h [\d]>\_
+      no_auto_rehash
+
+      [mysqld]
+      user                            = mysql
+      port                            = 3306
+      socket                          = /tmp/mysql.sock
+      bind-address                    = *
+      basedir                         = /usr/local
+      # Set the data directory to be our specifically configured ZFS directory.
+      datadir                         = /var/db/mysql/data
+      tmpdir                          = /var/db/mysql_tmpdir
+      slave-load-tmpdir               = /var/db/mysql_tmpdir
+      secure-file-priv                = /var/db/mysql_secure
+      log-bin                         = mysql-bin
+      log-output                      = TABLE
+      master-info-repository          = TABLE
+      relay-log-info-repository       = TABLE
+      relay-log-recovery              = 1
+      slow-query-log                  = 1
+      server-id                       = 1
+      sync_binlog                     = 1
+      sync_relay_log                  = 1
+      binlog_cache_size               = 16M
+      expire_logs_days                = 30
+      default_password_lifetime       = 0
+      enforce-gtid-consistency        = 1
+      gtid-mode                       = ON
+      safe-user-create                = 1
+      lower_case_table_names          = 1
+      explicit-defaults-for-timestamp = 1
+      myisam-recover-options          = BACKUP,FORCE
+      open_files_limit                = 32768
+      table_open_cache                = 16384
+      table_definition_cache          = 8192
+      net_retry_count                 = 16384
+      key_buffer_size                 = 256M
+      max_allowed_packet              = 64M
+      long_query_time                 = 0.5
+      innodb_buffer_pool_size         = 1G
+      # Set the logs directory to be our specifically configured ZFS directory.
+      innodb_log_group_home_dir       = /var/db/mysql/logs
+      innodb_data_file_path           = ibdata1:128M:autoextend
+      innodb_temp_data_file_path      = ibtmp1:128M:autoextend
+      innodb_flush_method             = O_DIRECT
+      innodb_log_file_size            = 256M
+      innodb_log_buffer_size          = 16M
+      innodb_write_io_threads         = 6
+      innodb_read_io_threads          = 6
+      innodb_autoinc_lock_mode        = 2
+      # Disble double writes because ZFS protects us already.
+      innodb_doublewrite              = 0
+      # Disable checksum because ZFS protects us already.
+      innodb_checksum_algorithm       = none
+      skip-symbolic-links
+
+      [mysqldump]
+      max_allowed_packet              = 256M
+      quote_names
+      quick
+    dest: "/usr/local/etc/mysql/my.cnf"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "wheel"
+  notify: "restart mysql-server"
+- name: "Setup configured databases"
+  delegate_to: "{{ inventory_hostname }}"
+  community.mysql.mysql_db:
+    name: "{{ item }}"
+    state: "present"
+    login_password: "{{ mysql_server__root_password }}"
+    login_unix_socket: "/tmp/mysql.sock"
+    login_user: "root"
+  loop: "{{ mysql_server__databases }}"
+- name: "Setup configured users"
+  no_log: True
+  community.mysql.mysql_user:
+    name: "{{ item.name }}"
+    host: "{{ item.host }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.priv }}"
+    login_password: "{{ mysql_server__root_password }}"
+    login_unix_socket: "/tmp/mysql.sock"
+    login_user: "root"
+    state: "present"
+  loop: "{{ mysql_server__users }}"

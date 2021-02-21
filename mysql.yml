@@ -1,0 +1,7 @@
+--- 
+# Setup mysql-server on a FreeBSD host
+- hosts: mysql
+  become: true
+  roles:
+    - role: common
+    - role: mysql-server

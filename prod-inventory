@@ -1,6 +1,9 @@
 [docker_ssd]
 docker-ssd.hogs.tswn.us
 
+[mysql]
+mysql.hogs.tswn.us
+
 [ntp]
 0.ntp.hogs.tswn.us
 

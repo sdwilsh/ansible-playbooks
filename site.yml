@@ -1,5 +1,6 @@
 ---
 - import_playbook: docker-ssd-host.yml
 - import_playbook: dns.yml
+- import_playbook: mysql.yml
 - import_playbook: opensprinkler.yml
 - import_playbook: viseron.yml
