@@ -85,7 +85,7 @@
   register: fetch_ara_callback_plugin_path
 - name: Set environment in cron file for ARA callback
   ansible.builtin.cron:
-    name: "ANSIBLE_CALLBACK_PLUGIN"
+    name: "ANSIBLE_CALLBACK_PLUGINS"
     env: yes
     job: "{{ fetch_ara_callback_plugin_path.stdout }}"
     user: "ansible"
