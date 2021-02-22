@@ -13,6 +13,13 @@
   ansible.builtin.package:
     name: "{% if ansible_distribution == 'FreeBSD' %}py37-ansible{% else %}ansible{% endif %}"
     state: "latest"
+- name: "Ensure ara is installed"
+  ansible.builtin.pip:
+    extra_args: "--user"
+    name: "ara"
+    state: "latest"
+  become: yes
+  become_user: "ansible"
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
@@ -66,6 +73,35 @@
     name: "ANSIBLE_LOG_PATH"
     env: yes
     job: "/var/log/ansible.log"
+    user: "ansible"
+    state: present
+- name: "Determine the path for ARA's callback plugin"
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_python.executable }}"
+      - "-m"
+      - "ara.setup.callback_plugins"
+  become_user: "ansible"
+  register: fetch_ara_callback_plugin_path
+- name: Set environment in cron file for ARA callback
+  ansible.builtin.cron:
+    name: "ANSIBLE_CALLBACK_PLUGIN"
+    env: yes
+    job: "{{ fetch_ara_callback_plugin_path.stdout }}"
+    user: "ansible"
+    state: present
+- name: Set environment in cron file for ARA API Client
+  ansible.builtin.cron:
+    name: "ARA_API_CLIENT"
+    env: yes
+    job: "http"
+    user: "ansible"
+    state: present
+- name: Set environment in cron file for ARA API Client
+  ansible.builtin.cron:
+    name: "ARA_API_SERVER"
+    env: yes
+    job: "http://ara.hogs.tswn.us:8000"
     user: "ansible"
     state: present
 - ansible.builtin.set_fact:

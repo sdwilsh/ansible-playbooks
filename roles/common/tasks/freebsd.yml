@@ -7,3 +7,15 @@
   ansible.builtin.package:
     name: "sudo"
     state: "latest"
+- name: "Install latest version of pip"
+  ansible.builtin.package:
+    name: "py37-pip"
+    state: "latest"
+- name: "Symlink pip to pip3"
+  ansible.builtin.file:
+    src: "/usr/local/bin/pip-3.7"
+    dest: "/usr/local/bin/pip3"
+    owner: "root"
+    group: "wheel"
+    mode: "o=rwx,g=rx,o=rx"
+    state: "link"
