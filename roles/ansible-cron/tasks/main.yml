@@ -1,7 +1,7 @@
 ---
 # tasks file for ansible-cron
 - ansible.builtin.assert:
-    that: "ansible_cron__inventory_file == 'prod-inventory' or ansible_cron__inventory_file == 'prod-inventory'"
+    that: "ansible_cron__inventory_file == 'prod-inventory' or ansible_cron__inventory_file == 'testing-inventory'"
     fail_msg: "Please set ansible_cron__inventory_file to the correct inventory file in host_vars/{{ inventory_hostname }}.yml"
 
 - name: "Ensure ansible dependencies are installed"
