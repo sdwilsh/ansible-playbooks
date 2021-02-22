@@ -1,0 +1,98 @@
+---
+# tasks file for ara-docker
+- name: "Create ara group"
+  ansible.builtin.group:
+    name: "ara"
+    state: "present"
+- name: "Create ara user"
+  ansible.builtin.user:
+    name: "ara"
+    group: "ara"
+    groups:
+      - "docker"
+      - "ara"
+    state: "present"
+    shell: "/bin/bash"
+
+- name: "Create ara directory"
+  ansible.builtin.file:
+    path: "/opt/ara"
+    state: "directory"
+    owner: "ara"
+    group: "ara"
+    mode: "u=rwx"
+- name: "Create ara config file"
+  ansible.builtin.copy:
+    content: "{{ ara_config | to_nice_yaml(indent=2, explicit_start=True) }}"
+    dest: "/opt/ara/settings.yaml"
+    owner: "ara"
+    group: "ara"
+    mode: "u=rw"
+  vars:
+    ara_config:
+      default:
+        ALLOWED_HOSTS:
+          - "ara.hogs.tswn.us"
+        BASE_DIR: "/opt/ara"
+        CORS_ORIGIN_WHITELIST:
+          - "http://ara.hogs.tswn.us"
+        DATABASE_CONN_MAX_AGE: 28800
+        DATABASE_ENGINE: "django.db.backends.mysql"
+        DATABASE_NAME: "ara"
+        DATABASE_USER: "ara"
+        DATABASE_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'ara') | map(attribute='password') | first }}"
+        DATABASE_HOST: "mysql.hogs.tswn.us"
+        DEBUG: False
+        EXTERNAL_AUTH: False
+        LOGGING:
+          disable_existing_loggers: false
+          formatters:
+            normal:
+                format: "%(asctime)s %(levelname)s %(name)s: %(message)s"
+          handlers:
+            console:
+                class: "logging.StreamHandler"
+                formatter: "normal"
+                level: "INFO"
+                stream: "ext://sys.stdout"
+          loggers:
+            ara:
+                handlers:
+                  - "console"
+                level: "INFO"
+                propagate: 0
+          root:
+            handlers:
+              - "console"
+            level: "INFO"
+          version: 1
+        LOG_LEVEL: "INFO"
+        PAGE_SIZE: 100
+        READ_LOGIN_REQUIRED: False
+        SECRET_KEY: "{{ ara_docker__secret_key }}"
+        TIME_ZONE: "America/Los_Angeles"
+        WRITE_LOGIN_REQUIRED: False
+  register: ara_config
+
+- name: "Launch ara API server container"
+  community.docker.docker_compose:
+    project_name: "ara"
+    definition:
+      version: "3"
+      services:
+        api_server:
+          environment:
+            ARA_SETTINGS: "/opt/ara/settings.yaml"
+          image: "quay.io/recordsansible/ara-api:latest"
+          ports:
+            - "8000:8000/tcp"
+          volumes:
+            - "/opt/ara:/opt/ara"
+    pull: yes
+    restarted: "{{ ara_config.changed | bool }}"
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
+- ansible.builtin.assert:
+    that:
+      - "status.services.api_server.ara_api_server_1.state.running"
