@@ -103,6 +103,7 @@
   loop: "{{ mysql_server__databases }}"
 - name: "Setup configured users"
   no_log: True
+  delegate_to: "{{ inventory_hostname }}"
   community.mysql.mysql_user:
     name: "{{ item.name }}"
     host: "{{ item.host }}"
