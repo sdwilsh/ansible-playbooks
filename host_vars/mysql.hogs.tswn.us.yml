@@ -2,6 +2,8 @@
 ansible_python_interpreter: "/usr/local/bin/python3.7"
 ansible_remote_tmp: "/tmp/ansible"
 
+ansible_cron__inventory_file: "prod-inventory"
+
 common__etc_dir: "/usr/local/etc"
 
 mysql_server__databases:
