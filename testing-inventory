@@ -1,9 +1,2 @@
-
 [viseron]
 test.viseron.hogs.tswn.us
-
-[dns]
-10.117.1.38
-
-[freebsd]
-10.117.1.38
