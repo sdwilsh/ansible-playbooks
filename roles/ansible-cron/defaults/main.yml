@@ -1,2 +1,5 @@
 ---
 # defaults file for ansible-cron
+
+# This must be defined for each host!
+ansible_cron__inventory_file: None
