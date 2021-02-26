@@ -19,3 +19,12 @@
     group: "wheel"
     mode: "o=rwx,g=rx,o=rx"
     state: "link"
+
+# Networking
+- name: "Set hostname"
+  ansible.builtin.copy:
+    content: "hostname={{ inventory_hostname }}"
+    dest: "/etc/rc.conf.d/hostname"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "wheel"
