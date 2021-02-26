@@ -1,0 +1,58 @@
+---
+# tasks file for valheim
+- name: "Create valheim group"
+  ansible.builtin.group:
+    name: "valheim"
+    state: "present"
+- name: "Create valheim user"
+  ansible.builtin.user:
+    name: "valheim"
+    group: "valheim"
+    groups:
+      - "docker"
+      - "valheim"
+    state: "present"
+    shell: "/bin/bash"
+
+- name: "Create valheim directory"
+  ansible.builtin.file:
+    path: "/opt/valheim"
+    state: "directory"
+    owner: "valheim"
+    group: "valheim"
+    mode: "u=rwx,g=rx"
+- name: "Create valheim world directory"
+  ansible.builtin.file:
+    path: "/opt/valheim/worlds"
+    state: "directory"
+    owner: "valheim"
+    group: "valheim"
+    mode: "u=rwx,g=rx"
+
+- name: "Launch valheim container"
+  community.docker.docker_compose:
+    project_name: "valheim"
+    definition:
+      version: "2"
+      services:
+        valheim_server:
+          environment:
+            - "DNS_1=10.117.0.3"
+            - "DNS_2=10.117.0.4"
+            - "SERVER_NAME={{ valheim__server_name }}"
+            - "SERVER_PASS={{ valheim__game_password }}"
+            - "SERVER_PUBLIC=1"
+            - "WORLD_NAME={{ valheim__world_name }}"
+            - "TZ=America/Los_Angeles"
+          image: "lloesche/valheim-server:latest"
+          ports:
+            - "2456-2458:2456-2458/udp"
+          volumes:
+            - "/opt/valheim:/config"
+    pull: yes
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
+- ansible.builtin.assert:
+    that:
+      - "status.services.valheim_server.valheim_valheim_server_1.state.running"

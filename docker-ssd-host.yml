@@ -9,3 +9,4 @@
       tags: ["docker"]
     - role: ara-docker
     - role: factorio
+    - role: valheim
