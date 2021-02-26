@@ -4,7 +4,11 @@
 
 # IPv4 Entries
 127.0.0.1 localhost
+{% if 'hogs.tswn.us' in inventory_hostname %}
+{{ ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }} {{ inventory_hostname }} {{ inventory_hostname[0:-13] }}
+{% else %}
 {{ ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }} {{ inventory_hostname }} {{ ansible_hostname }}
+{% endif %}
 
 # IPv6 Entries
 ::1 ip6-localhost  ip6-loopback
