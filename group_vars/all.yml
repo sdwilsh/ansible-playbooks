@@ -1,4 +1,6 @@
 ---
+ansible_managed: "Managed by Ansible"
+
 ansible_cron__vault_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           34626361383431396636616330646636316261633962633133643165663330346433363331383461

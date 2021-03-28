@@ -1,0 +1,531 @@
+---
+- hosts: vyos
+  tasks:
+    # TODO: lock down ssh
+    # TODO: v6 firewall rules
+    # TODO: interface configurability
+    # TODO: dhcp
+    - name: "Set hostname"
+      vyos.vyos.vyos_system:
+        host_name: "{{ inventory_hostname }}"
+        state: "present"
+    - name: "Set nameservers"
+      vyos.vyos.vyos_system:
+        name_servers: "{{ common__nameservers.addresses }}"
+    - name: "Set domain search suffixes"
+      vyos.vyos.vyos_system:
+        domain_search: "{{ common__nameservers.search }}"
+
+    #
+    # Interfaces
+    #
+    - name: "Set the device interfaces"
+      vyos.vyos.vyos_interfaces:
+        config:
+          - name: "eth0"
+            description: "CenturyLink WAN ({{ ansible_managed }})"
+            enabled: true
+            vifs:
+              - vlan_id: 201
+                description: "CenturyLink PPPOE ({{ ansible_managed }})"
+          - name: "eth1"
+            description: "Local Network ({{ ansible_managed }})"
+            enabled: true
+            vifs:
+              - vlan_id: 1
+                description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
+              - vlan_id: 10
+                description: "MAN - management vlan ({{ ansible_managed }})"
+              - vlan_id: 66
+                description: "NOWAN - internet of shit: no WAN or other access ({{ ansible_managed }})"
+              - vlan_id: 82
+                description: "SERVICE82 - installation02 ({{ ansible_managed }})"
+              - vlan_id: 100
+                description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
+              - vlan_id: 117
+                description: "HOME - home network with home services ({{ ansible_managed }})"
+        state: merged 
+    - name: "Setup CenturyLink PPPOE"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set interfaces pppoe pppoe0 authentication password vyos" # TODO set this up more smartly
+          - "set interfaces pppoe pppoe0 authentication user vyos" # TODO set this up more smartly
+          - "set interfaces pppoe pppoe0 default-route auto"
+          - "set interfaces pppoe pppoe0 mtu 1492"
+          - "set interfaces pppoe pppoe0 no-peer-dns"
+          - "set interfaces pppoe pppoe0 source-interface eth0.201"
+        save: yes
+    - name: "Set interfaces addresses"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set interfaces ethernet eth1 vif 1 address 10.1.0.1/24"
+          - "set interfaces ethernet eth1 vif 1 address fd36:3eb3:43b0:1::1/64"
+          - "set interfaces ethernet eth1 vif 10 address 10.10.0.1/24"
+          - "set interfaces ethernet eth1 vif 10 address fd36:3eb3:43b0:a::1/64"
+          - "set interfaces ethernet eth1 vif 66 address 10.66.0.1/24"
+          - "set interfaces ethernet eth1 vif 82 address 10.82.0.1/24"
+          - "set interfaces ethernet eth1 vif 100 address 10.100.0.1/24"
+          - "set interfaces ethernet eth1 vif 117 address 10.117.0.1/24"
+          - "set interfaces ethernet eth1 vif 117 address fd36:3eb3:43b0:75::1/64"
+        save: yes
+
+    #
+    # Firewall
+    #
+    - name: "Set global firewall settings"
+      vyos.vyos.vyos_firewall_global:
+        config:
+          config_trap: no
+          group:
+            address_group:
+              - name: "DNS-SERVICES-v4"
+                description: "DNS services ({{ ansible_managed }})"
+                members:
+                  - address: "10.117.0.3"
+                  - address: "10.117.0.4"
+              - name: "DNS-SERVICES-v6"
+                description: "DNS services ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  - address: "fd36:3eb3:43b0:75::3"
+                  - address: "fd36:3eb3:43b0:75::4"
+              - name: "NTP-SERVICES-v4"
+                description: "NTP services ({{ ansible_managed }})"
+                members:
+                  - address: "10.117.0.50"
+              - name: "NOWAN-TALKERS-from-HOME-v4"
+                description: "IP Addresses allowed to talk to devices on NOWAN ({{ ansible_managed }})"
+                members:
+                  # cortana.hogs.tswn.us
+                  - address: "10.117.0.19"
+                  # sdwilsh-desktop
+                  - address: "10.117.0.31"
+              - name: "NOWAN-TALKERS-from-HOME-v6"
+                description: "IP Addresses allowed to talk to devices on NOWAN ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  # cortana.hogs.tswn.us
+                  - address: "fd36:3eb3:43b0:75::13"
+                  # sdwilsh-desktop
+                  - address: "fd36:3eb3:43b0:75::1f"
+            network_group:
+              - name: "RFC1918-v4" 
+                description: "IPv4 Private Address Space ({{ ansible_managed }})"
+                members:
+                  - address: "192.168.0.0/16"
+                  - address: "172.16.0.0/12"
+                  - address: "10.0.0.0/8"
+            port_group:
+              - name: "DNS"
+                description: "{{ ansible_managed }}"
+                members:
+                  - port: "53"
+              - name: "NTP"
+                description: "{{ ansible_managed }}"
+                members:
+                  - port: "123"
+          log_martians: yes
+          ping:
+            all: yes
+            broadcast: no
+          route_redirects:
+            - afi: ipv4
+              icmp_redirects:
+                receive: no
+                send: yes
+              ip_src_route: no
+            - afi: ipv6
+              icmp_redirects:
+                receive: no
+                send: yes
+              ip_src_route: no
+          syn_cookies: yes
+          twa_hazards_protection: yes
+          validation: disable
+        state: replaced
+          
+    - name: "Set the firewall rules"
+      vyos.vyos.vyos_firewall_rules:
+        config:
+          - afi: "ipv4"
+            rule_sets:
+              - name: "HOME-from-NOWAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v4"
+                        port_group: "DNS" 
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v4"
+                        port_group: "NTP" 
+              - name: "HOME-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "HOME-from-MAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v4"
+                        port_group: "DNS" 
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v4"
+                        port_group: "NTP" 
+              - name: "HOME-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "LOCAL-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 20
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
+              - name: "LOCAL-from-MAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "LOCAL-from-NOWAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 20
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
+              - name: "LOCAL-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+              - name: "MAN-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "MAN-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "NOWAN-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 20
+                    description: "Allow specific hosts ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    source:
+                      group:
+                        address_group: "NOWAN-TALKERS-from-HOME-v4"
+              - name: "NOWAN-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "WAN-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "WAN-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "WAN-from-MAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules: 
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+        state: replaced
+    - name: "Set Zone Policy"
+      vyos.vyos.vyos_config:
+        lines:
+          # HOME Zone
+          - "set zone-policy zone HOME default-action drop"
+          - "set zone-policy zone HOME description 'home network with home services ({{ ansible_managed }})'"
+          - "set zone-policy zone HOME from LOCAL firewall name HOME-from-LOCAL-v4"
+          - "set zone-policy zone HOME from MAN firewall name HOME-from-MAN-v4"
+          # - "set zone-policy zone HOME from NOWAN firewall ipv6-name HOME-from-NOWAN-v6"
+          - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
+          - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
+          - "set zone-policy zone HOME interface eth1.117"
+          # LOCAL Zone
+          - "set zone-policy zone LOCAL default-action drop"
+          - "set zone-policy zone LOCAL description '{{ ansible_managed }}'"
+          - "set zone-policy zone LOCAL from HOME firewall name LOCAL-from-HOME-v4"
+          - "set zone-policy zone LOCAL from MAN firewall name LOCAL-from-MAN-v4"
+          - "set zone-policy zone LOCAL from NOWAN firewall name LOCAL-from-NOWAN-v4"
+          - "set zone-policy zone LOCAL from WAN-CenturyLink firewall name LOCAL-from-WAN-v4"
+          - "set zone-policy zone LOCAL local-zone"
+          # MAN Zone
+          - "set zone-policy zone MAN default-action drop"
+          - "set zone-policy zone MAN description 'management vlan ({{ ansible_managed }})'"
+          - "set zone-policy zone MAN from LOCAL firewall name MAN-from-LOCAL-v4"
+          - "set zone-policy zone MAN from WAN-CenturyLink firewall name MAN-from-WAN-v4"
+          - "set zone-policy zone MAN interface eth1.10"
+          # NOWAN Zone
+          - "set zone-policy zone NOWAN default-action drop"
+          - "set zone-policy zone NOWAN description 'internet of shit: no WAN or other access ({{ ansible_managed }})'"
+          - "set zone-policy zone NOWAN from HOME firewall name NOWAN-from-HOME-v4"
+          - "set zone-policy zone NOWAN from LOCAL firewall name NOWAN-from-LOCAL-v4"
+          - "set zone-policy zone NOWAN interface eth1.66"
+          # WAN-CenturyLink Zone
+          - "set zone-policy zone WAN-CenturyLink default-action drop"
+          - "set zone-policy zone WAN-CenturyLink description 'CenturyLink WAN connection ({{ ansible_managed }})'"
+          - "set zone-policy zone WAN-CenturyLink from HOME firewall name WAN-from-HOME-v4"
+          - "set zone-policy zone WAN-CenturyLink from LOCAL firewall name WAN-from-LOCAL-v4"
+          - "set zone-policy zone WAN-CenturyLink from MAN firewall name WAN-from-MAN-v4"
+          - "set zone-policy zone WAN-CenturyLink interface pppoe0"
+        save: yes
+

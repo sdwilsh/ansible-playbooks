@@ -1,2 +1,5 @@
 [viseron]
 test.viseron.hogs.tswn.us
+
+[vyos]
+maccabeus01.hogs.tswn.us ansible_host=10.10.0.1
