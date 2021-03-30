@@ -83,15 +83,15 @@
     - name: "Set interfaces addresses"
       vyos.vyos.vyos_config:
         lines:
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address 10.1.0.1/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address fd36:3eb3:43b0:1::1/64"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.1/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::1/64"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 66 address 10.66.0.1/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 82 address 10.82.0.1/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.1/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.1/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::1/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address 10.1.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 66 address 10.66.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 82 address 10.82.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
           - "set interfaces ethernet {{ vyos__wan_cellular_interface }} address 172.16.5.{{ vyos__host_id_ipv4 }}/24"
         save: yes
 
@@ -871,7 +871,8 @@
       vyos.vyos.vyos_config:
         lines:
           - "set service ssh port 22"
-          - "set service ssh listen-address 10.10.0.1"
+          - "set service ssh listen-address 10.10.0.{{ vyos__host_id_ipv4 }}"
+          - "set service ssh listen-address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
           - "set service ssh disable-password-authentication"
           - "set system login user ansible full-name 'ansible'"
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
