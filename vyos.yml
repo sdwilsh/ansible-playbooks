@@ -3,6 +3,8 @@
   tasks:
     # TODO: v6 firewall rules
     # TODO: add NAT
+    # TODO: setup failover
+    # TODO: setup additional wifi networks
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
