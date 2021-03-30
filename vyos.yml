@@ -2,6 +2,7 @@
 - hosts: vyos
   tasks:
     # TODO: v6 firewall rules
+    # TODO: add NAT
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
