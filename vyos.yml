@@ -1,7 +1,6 @@
 ---
 - hosts: vyos
   tasks:
-    # TODO: lock down ssh
     # TODO: v6 firewall rules
     # TODO: interface configurability
     # TODO: dhcp
@@ -294,9 +293,12 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
-                    description: "{{ ansible_managed }}"
+                  - number: 10
+                    description: "Allow SSH ({{ ansible_managed }})"
                     action: "accept"
+                    destination:
+                      port: "22"
+                    protocol: "tcp"
                     state:
                       new: true
               - name: "LOCAL-from-NOWAN-v4"
@@ -529,3 +531,16 @@
           - "set zone-policy zone WAN-CenturyLink interface pppoe0"
         save: yes
 
+    #
+    # Services
+    #
+    - name: "Setup SSH"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service ssh port 22"
+          - "set service ssh listen-address 10.10.0.1"
+          - "set service ssh disable-password-authentication"
+          - "set system login user ansible full-name 'ansible'"
+          - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
+          - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
+        save: yes

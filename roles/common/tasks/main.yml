@@ -27,7 +27,7 @@
   authorized_key:
     user: ansible
     state: present
-    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMiRn+dJyIkJ22qrkuMlNC33xxS7VUwkYRY/55Wf4ryq"
+    key: "{{ common__ansible_key_type }} {{ common__ansible_key }}"
 - name: Setup sudoers
   template:
     src: sudoers.j2
