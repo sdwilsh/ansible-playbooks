@@ -233,6 +233,39 @@
                       group:
                         address_group: "NTP-SERVICES-v4"
                         port_group: "NTP" 
+              - name: "HOME-from-UNIFI-MAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v4"
+                        port_group: "DNS"
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v4"
+                        port_group: "NTP"
               - name: "HOME-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
@@ -428,6 +461,41 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "UNIFI-MAN-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "UNIFI-MAN-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
               - name: "WAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
@@ -497,6 +565,7 @@
           - "set zone-policy zone HOME description 'home network with home services ({{ ansible_managed }})'"
           - "set zone-policy zone HOME from LOCAL firewall name HOME-from-LOCAL-v4"
           - "set zone-policy zone HOME from MAN firewall name HOME-from-MAN-v4"
+          - "set zone-policy zone HOME from UNIFI-MAN firewall name HOME-from-UNIFI-MAN-v4"
           # - "set zone-policy zone HOME from NOWAN firewall ipv6-name HOME-from-NOWAN-v6"
           - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
           - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
@@ -521,6 +590,12 @@
           - "set zone-policy zone NOWAN from HOME firewall name NOWAN-from-HOME-v4"
           - "set zone-policy zone NOWAN from LOCAL firewall name NOWAN-from-LOCAL-v4"
           - "set zone-policy zone NOWAN interface eth1.66"
+          # UNIFI-MAN Zone
+          - "set zone-policy zone UNIFI-MAN default-action drop"
+          - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
+          - "set zone-policy zone UNIFI-MAN from LOCAL firewall name UNIFI-MAN-from-LOCAL-v4"
+          - "set zone-policy zone UNIFI-MAN from WAN-CenturyLink firewall name UNIFI-MAN-from-WAN-v4"
+          - "set zone-policy zone UNIFI-MAN interface eth1.1"
           # WAN-CenturyLink Zone
           - "set zone-policy zone WAN-CenturyLink default-action drop"
           - "set zone-policy zone WAN-CenturyLink description 'CenturyLink WAN connection ({{ ansible_managed }})'"
@@ -556,6 +631,11 @@
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 start 10.10.0.200"
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 stop 10.10.0.250"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 default-router 10.1.0.1"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 start 10.1.0.200"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 stop 10.1.0.250"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 default-router 10.66.0.1"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.3"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.4"
