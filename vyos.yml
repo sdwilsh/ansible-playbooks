@@ -3,6 +3,13 @@
   tasks:
     # TODO: v6 firewall rules
     # TODO: interface configurability
+    - name: "Gather Config"
+      vyos.vyos.vyos_facts:
+        gather_subset: "config"
+
+    #
+    # System
+    #
     - name: "Set hostname"
       vyos.vyos.vyos_system:
         host_name: "{{ inventory_hostname }}"
@@ -13,6 +20,21 @@
     - name: "Set domain search suffixes"
       vyos.vyos.vyos_system:
         domain_search: "{{ common__nameservers.search }}"
+    - name: "Remove default NTP servers"
+      vyos.vyos.vyos_config:
+        lines:
+          - "delete system ntp server {{ item }}"
+      loop:
+        - "0.pool.ntp.org"
+        - "1.pool.ntp.org"
+        - "2.pool.ntp.org"
+      when: item in ansible_net_config[0]
+    - name: "Remove default NTP servers"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set system ntp server {{ common__ntp_pool }} pool"
+          - "set system time-zone US/Pacific"
+        save: true
 
     #
     # Interfaces

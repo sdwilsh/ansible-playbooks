@@ -25,3 +25,4 @@ common__nameservers:
   search:
     - hogs.tswn.us
 common__nfs_server_ip: "10.117.0.10"
+common__ntp_pool: "pool.ntp.hogs.tswn.us"
