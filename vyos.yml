@@ -42,12 +42,6 @@
     - name: "Set the device interfaces"
       vyos.vyos.vyos_interfaces:
         config:
-          - name: "{{ vyos__wan_centurylink_interface }}"
-            description: "CenturyLink WAN ({{ ansible_managed }})"
-            enabled: true
-            vifs:
-              - vlan_id: 201
-                description: "CenturyLink PPPOE ({{ ansible_managed }})"
           - name: "{{ vyos__lan_interface }}"
             description: "Local Network ({{ ansible_managed }})"
             enabled: true
@@ -64,6 +58,15 @@
                 description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
               - vlan_id: 117
                 description: "HOME - home network with home services ({{ ansible_managed }})"
+          - name: "{{ vyos__wan_cellular_interface }}"
+            description: "Cellular WAN ({{ ansible_managed }})"
+            enabled: true
+          - name: "{{ vyos__wan_centurylink_interface }}"
+            description: "CenturyLink WAN ({{ ansible_managed }})"
+            enabled: true
+            vifs:
+              - vlan_id: 201
+                description: "CenturyLink PPPOE ({{ ansible_managed }})"
         state: merged 
     - name: "Setup CenturyLink PPPOE"
       vyos.vyos.vyos_config:
@@ -87,6 +90,7 @@
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.1/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.1/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::1/64"
+          - "set interfaces ethernet {{ vyos__wan_cellular_interface }} address 172.16.5.{{ vyos__host_id_ipv4 }}/24"
         save: yes
 
     #
@@ -798,6 +802,7 @@
           - "set zone-policy zone HOME from UNIFI-MAN firewall name HOME-from-UNIFI-MAN-v4"
           # - "set zone-policy zone HOME from NOWAN firewall ipv6-name HOME-from-NOWAN-v6"
           - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
+          - "set zone-policy zone HOME from WAN-Cellular firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME interface {{ vyos__lan_interface }}.117"
           # LOCAL Zone
@@ -806,12 +811,14 @@
           - "set zone-policy zone LOCAL from HOME firewall name LOCAL-from-HOME-v4"
           - "set zone-policy zone LOCAL from MAN firewall name LOCAL-from-MAN-v4"
           - "set zone-policy zone LOCAL from NOWAN firewall name LOCAL-from-NOWAN-v4"
+          - "set zone-policy zone LOCAL from WAN-Cellular firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL from WAN-CenturyLink firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL local-zone"
           # MAN Zone
           - "set zone-policy zone MAN default-action drop"
           - "set zone-policy zone MAN description 'management vlan ({{ ansible_managed }})'"
           - "set zone-policy zone MAN from LOCAL firewall name MAN-from-LOCAL-v4"
+          - "set zone-policy zone MAN from WAN-Cellular firewall name MAN-from-WAN-v4"
           - "set zone-policy zone MAN from WAN-CenturyLink firewall name MAN-from-WAN-v4"
           - "set zone-policy zone MAN interface {{ vyos__lan_interface }}.10"
           # NOWAN Zone
@@ -826,6 +833,7 @@
           - "set zone-policy zone SERVICE82 from HOME firewall name SERVICE82-from-HOME-v4"
           - "set zone-policy zone SERVICE82 from LOCAL firewall name SERVICE82-from-LOCAL-v4"
           - "set zone-policy zone SERVICE82 from UNIFI-MAN firewall name SERVICE82-from-UNIFI-MAN-v4"
+          - "set zone-policy zone SERVICE82 from WAN-Cellular firewall name SERVICE82-from-WAN-v4"
           - "set zone-policy zone SERVICE82 from WAN-CenturyLink firewall name SERVICE82-from-WAN-v4"
           - "set zone-policy zone SERVICE82 interface {{ vyos__lan_interface }}.82"
           # UNIFI-MAN Zone
@@ -833,8 +841,17 @@
           - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
           - "set zone-policy zone UNIFI-MAN from LOCAL firewall name UNIFI-MAN-from-LOCAL-v4"
           - "set zone-policy zone UNIFI-MAN from SERVICE82 firewall name UNIFI-MAN-from-SERVICE82-v4"
+          - "set zone-policy zone UNIFI-MAN from WAN-Cellular firewall name UNIFI-MAN-from-WAN-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-CenturyLink firewall name UNIFI-MAN-from-WAN-v4"
           - "set zone-policy zone UNIFI-MAN interface {{ vyos__lan_interface }}.1"
+          # WAN-Cellular Zone
+          - "set zone-policy zone WAN-Cellular default-action drop"
+          - "set zone-policy zone WAN-Cellular description 'Cellular WAN connection ({{ ansible_managed }})'"
+          - "set zone-policy zone WAN-Cellular from HOME firewall name WAN-from-HOME-v4"
+          - "set zone-policy zone WAN-Cellular from LOCAL firewall name WAN-from-LOCAL-v4"
+          - "set zone-policy zone WAN-Cellular from MAN firewall name WAN-from-MAN-v4"
+          - "set zone-policy zone WAN-Cellular from SERVICE82 firewall name WAN-from-SERVICE82-v4"
+          - "set zone-policy zone WAN-Cellular interface {{ vyos__wan_cellular_interface }}"
           # WAN-CenturyLink Zone
           - "set zone-policy zone WAN-CenturyLink default-action drop"
           - "set zone-policy zone WAN-CenturyLink description 'CenturyLink WAN connection ({{ ansible_managed }})'"

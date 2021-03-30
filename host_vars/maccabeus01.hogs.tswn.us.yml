@@ -1,3 +1,6 @@
 ---
+vyos__host_id_ipv4: "48"
+vyos__host_id_ipv6: "30"
 vyos__wan_centurylink_interface: "eth0"
+vyos__wan_cellular_interface: "eth1"
 vyos__lan_interface: "eth1"
