@@ -58,7 +58,7 @@
               - vlan_id: 66
                 description: "NOWAN - internet of shit: no WAN or other access ({{ ansible_managed }})"
               - vlan_id: 82
-                description: "SERVICE82 - installation02 ({{ ansible_managed }})"
+                description: "SERVICE82 - installation02 (unifi controller) ({{ ansible_managed }})"
               - vlan_id: 100
                 description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
               - vlan_id: 117
@@ -143,6 +143,20 @@
                 description: "{{ ansible_managed }}"
                 members:
                   - port: "123"
+              - name: "UNIFI-DEVICE-TCP"
+                description: "Ports used by the Unifi Controller to talk to devices over TCP ({{ ansible_managed }})"
+                members:
+                  - port: "8080"
+                  - port: "6789"
+              - name: "UNIFI-DEVICE-UDP"
+                description: "Ports used by the Unifi Controller to talk to devices over UDP ({{ ansible_managed }})"
+                members:
+                  - port: "3478"
+              - name: "UNIFI-WEB-TCP"
+                description: "Ports used by the Unifi Controller for clients ({{ ansible_managed }})"
+                members:
+                  - port: "8880"
+                  - port: "8843"
           log_martians: yes
           ping:
             all: yes
@@ -254,6 +268,39 @@
                       group:
                         address_group: "NTP-SERVICES-v4"
                         port_group: "NTP" 
+              - name: "HOME-from-SERVICE82-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v4"
+                        port_group: "DNS"
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v4"
+                        port_group: "NTP"
               - name: "HOME-from-UNIFI-MAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
@@ -482,6 +529,131 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "SERVICE82-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      address: "10.82.0.2"
+                      group:
+                        port_group: "UNIFI-WEB-TCP"
+                    protocol: "tcp"
+              - name: "SERVICE82-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "SERVICE82-from-UNIFI-MAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      address: "10.82.0.2"
+                      group:
+                        port_group: "UNIFI-DEVICE-TCP"
+                    protocol: "tcp"
+                  - number: 11
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      address: "10.82.0.2"
+                      group:
+                        port_group: "UNIFI-DEVICE-UDP"
+                    protocol: "udp"
+              - name: "SERVICE82-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      address: "10.82.0.2"
+                      group:
+                        port_group: "UNIFI-DEVICE-TCP"
+                    protocol: "tcp"
+                  - number: 11
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      address: "10.82.0.2"
+                      group:
+                        port_group: "UNIFI-DEVICE-UDP"
+                    protocol: "udp"
+                  - number: 12
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      address: "10.82.0.2"
+                      group:
+                        port_group: "UNIFI-WEB-TCP"
+                    protocol: "tcp"
               - name: "UNIFI-MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
@@ -502,6 +674,21 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "UNIFI-MAN-from-SERVICE82-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
               - name: "UNIFI-MAN-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
@@ -577,6 +764,26 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "WAN-from-SERVICE82-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
         state: replaced
     - name: "Set Zone Policy"
       vyos.vyos.vyos_config:
@@ -586,6 +793,7 @@
           - "set zone-policy zone HOME description 'home network with home services ({{ ansible_managed }})'"
           - "set zone-policy zone HOME from LOCAL firewall name HOME-from-LOCAL-v4"
           - "set zone-policy zone HOME from MAN firewall name HOME-from-MAN-v4"
+          - "set zone-policy zone HOME from SERVICE82 firewall name HOME-from-SERVICE82-v4"
           - "set zone-policy zone HOME from UNIFI-MAN firewall name HOME-from-UNIFI-MAN-v4"
           # - "set zone-policy zone HOME from NOWAN firewall ipv6-name HOME-from-NOWAN-v6"
           - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
@@ -611,10 +819,19 @@
           - "set zone-policy zone NOWAN from HOME firewall name NOWAN-from-HOME-v4"
           - "set zone-policy zone NOWAN from LOCAL firewall name NOWAN-from-LOCAL-v4"
           - "set zone-policy zone NOWAN interface {{ vyos__lan_interface }}.66"
+          # SERVICE82 Zone
+          - "set zone-policy zone SERVICE82 default-action drop"
+          - "set zone-policy zone SERVICE82 description 'installation02 - unifi controller ({{ ansible_managed }})'"
+          - "set zone-policy zone SERVICE82 from HOME firewall name SERVICE82-from-HOME-v4"
+          - "set zone-policy zone SERVICE82 from LOCAL firewall name SERVICE82-from-LOCAL-v4"
+          - "set zone-policy zone SERVICE82 from UNIFI-MAN firewall name SERVICE82-from-UNIFI-MAN-v4"
+          - "set zone-policy zone SERVICE82 from WAN-CenturyLink firewall name SERVICE82-from-WAN-v4"
+          - "set zone-policy zone SERVICE82 interface {{ vyos__lan_interface }}.82"
           # UNIFI-MAN Zone
           - "set zone-policy zone UNIFI-MAN default-action drop"
           - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
           - "set zone-policy zone UNIFI-MAN from LOCAL firewall name UNIFI-MAN-from-LOCAL-v4"
+          - "set zone-policy zone UNIFI-MAN from SERVICE82 firewall name UNIFI-MAN-from-SERVICE82-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-CenturyLink firewall name UNIFI-MAN-from-WAN-v4"
           - "set zone-policy zone UNIFI-MAN interface {{ vyos__lan_interface }}.1"
           # WAN-CenturyLink Zone
@@ -623,6 +840,7 @@
           - "set zone-policy zone WAN-CenturyLink from HOME firewall name WAN-from-HOME-v4"
           - "set zone-policy zone WAN-CenturyLink from LOCAL firewall name WAN-from-LOCAL-v4"
           - "set zone-policy zone WAN-CenturyLink from MAN firewall name WAN-from-MAN-v4"
+          - "set zone-policy zone WAN-CenturyLink from SERVICE82 firewall name WAN-from-SERVICE82-v4"
           - "set zone-policy zone WAN-CenturyLink interface pppoe0"
         save: yes
 
@@ -642,6 +860,9 @@
     - name: "Setup DHCP"
       vyos.vyos.vyos_config:
         lines:
+          - "set service dhcp-server global-parameters 'option space ubnt;'"
+          - "set service dhcp-server global-parameters 'option ubnt.unifi-address code 1 = ip-address;'"
+          - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
           - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 default-router 10.117.0.1"
           - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.3"
           - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.4"
@@ -657,6 +878,7 @@
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 start 10.1.0.200"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 stop 10.1.0.250"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2'"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 default-router 10.66.0.1"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.3"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.4"
