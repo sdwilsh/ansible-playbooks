@@ -879,7 +879,7 @@
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 start 10.1.0.200"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 stop 10.1.0.250"
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2'"
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 default-router 10.66.0.1"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.3"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.4"
