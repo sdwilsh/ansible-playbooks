@@ -2,7 +2,6 @@
 - hosts: vyos
   tasks:
     # TODO: v6 firewall rules
-    # TODO: interface configurability
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
@@ -42,13 +41,13 @@
     - name: "Set the device interfaces"
       vyos.vyos.vyos_interfaces:
         config:
-          - name: "eth0"
+          - name: "{{ vyos__wan_centurylink_interface }}"
             description: "CenturyLink WAN ({{ ansible_managed }})"
             enabled: true
             vifs:
               - vlan_id: 201
                 description: "CenturyLink PPPOE ({{ ansible_managed }})"
-          - name: "eth1"
+          - name: "{{ vyos__lan_interface }}"
             description: "Local Network ({{ ansible_managed }})"
             enabled: true
             vifs:
@@ -68,25 +67,25 @@
     - name: "Setup CenturyLink PPPOE"
       vyos.vyos.vyos_config:
         lines:
-          - "set interfaces pppoe pppoe0 authentication password vyos" # TODO set this up more smartly
-          - "set interfaces pppoe pppoe0 authentication user vyos" # TODO set this up more smartly
+          - "set interfaces pppoe pppoe0 authentication password {{ vyos__wan_centurylink_password }}"
+          - "set interfaces pppoe pppoe0 authentication user {{ vyos__wan_centurylink_username }}"
           - "set interfaces pppoe pppoe0 default-route auto"
           - "set interfaces pppoe pppoe0 mtu 1492"
           - "set interfaces pppoe pppoe0 no-peer-dns"
-          - "set interfaces pppoe pppoe0 source-interface eth0.201"
+          - "set interfaces pppoe pppoe0 source-interface {{ vyos__wan_centurylink_interface }}.201"
         save: yes
     - name: "Set interfaces addresses"
       vyos.vyos.vyos_config:
         lines:
-          - "set interfaces ethernet eth1 vif 1 address 10.1.0.1/24"
-          - "set interfaces ethernet eth1 vif 1 address fd36:3eb3:43b0:1::1/64"
-          - "set interfaces ethernet eth1 vif 10 address 10.10.0.1/24"
-          - "set interfaces ethernet eth1 vif 10 address fd36:3eb3:43b0:a::1/64"
-          - "set interfaces ethernet eth1 vif 66 address 10.66.0.1/24"
-          - "set interfaces ethernet eth1 vif 82 address 10.82.0.1/24"
-          - "set interfaces ethernet eth1 vif 100 address 10.100.0.1/24"
-          - "set interfaces ethernet eth1 vif 117 address 10.117.0.1/24"
-          - "set interfaces ethernet eth1 vif 117 address fd36:3eb3:43b0:75::1/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address 10.1.0.1/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address fd36:3eb3:43b0:1::1/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.1/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::1/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 66 address 10.66.0.1/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 82 address 10.82.0.1/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.1/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.1/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::1/64"
         save: yes
 
     #
@@ -591,7 +590,7 @@
           # - "set zone-policy zone HOME from NOWAN firewall ipv6-name HOME-from-NOWAN-v6"
           - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
           - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
-          - "set zone-policy zone HOME interface eth1.117"
+          - "set zone-policy zone HOME interface {{ vyos__lan_interface }}.117"
           # LOCAL Zone
           - "set zone-policy zone LOCAL default-action drop"
           - "set zone-policy zone LOCAL description '{{ ansible_managed }}'"
@@ -605,19 +604,19 @@
           - "set zone-policy zone MAN description 'management vlan ({{ ansible_managed }})'"
           - "set zone-policy zone MAN from LOCAL firewall name MAN-from-LOCAL-v4"
           - "set zone-policy zone MAN from WAN-CenturyLink firewall name MAN-from-WAN-v4"
-          - "set zone-policy zone MAN interface eth1.10"
+          - "set zone-policy zone MAN interface {{ vyos__lan_interface }}.10"
           # NOWAN Zone
           - "set zone-policy zone NOWAN default-action drop"
           - "set zone-policy zone NOWAN description 'internet of shit: no WAN or other access ({{ ansible_managed }})'"
           - "set zone-policy zone NOWAN from HOME firewall name NOWAN-from-HOME-v4"
           - "set zone-policy zone NOWAN from LOCAL firewall name NOWAN-from-LOCAL-v4"
-          - "set zone-policy zone NOWAN interface eth1.66"
+          - "set zone-policy zone NOWAN interface {{ vyos__lan_interface }}.66"
           # UNIFI-MAN Zone
           - "set zone-policy zone UNIFI-MAN default-action drop"
           - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
           - "set zone-policy zone UNIFI-MAN from LOCAL firewall name UNIFI-MAN-from-LOCAL-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-CenturyLink firewall name UNIFI-MAN-from-WAN-v4"
-          - "set zone-policy zone UNIFI-MAN interface eth1.1"
+          - "set zone-policy zone UNIFI-MAN interface {{ vyos__lan_interface }}.1"
           # WAN-CenturyLink Zone
           - "set zone-policy zone WAN-CenturyLink default-action drop"
           - "set zone-policy zone WAN-CenturyLink description 'CenturyLink WAN connection ({{ ansible_managed }})'"

@@ -1,0 +1,3 @@
+---
+vyos__wan_centurylink_interface: "eth0"
+vyos__lan_interface: "eth1"
