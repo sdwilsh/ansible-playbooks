@@ -3,7 +3,6 @@
   tasks:
     # TODO: v6 firewall rules
     # TODO: interface configurability
-    # TODO: dhcp
     - name: "Set hostname"
       vyos.vyos.vyos_system:
         host_name: "{{ inventory_hostname }}"
@@ -543,4 +542,23 @@
           - "set system login user ansible full-name 'ansible'"
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
+        save: yes
+    - name: "Setup DHCP"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 default-router 10.117.0.1"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 start 10.117.1.1"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 stop 10.117.1.254"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 default-router 10.10.0.1"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 start 10.10.0.200"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 stop 10.10.0.250"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 default-router 10.66.0.1"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 range 0 start 10.66.0.200"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 range 0 stop 10.66.0.250"
         save: yes
