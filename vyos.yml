@@ -2,7 +2,6 @@
 - hosts: vyos
   gather_facts: false
   tasks:
-    # TODO: v6 firewall rules
     # TODO: add NAT
     # TODO: setup failover
     - name: "Gather Config"
@@ -89,18 +88,28 @@
     - name: "Set interfaces addresses"
       vyos.vyos.vyos_config:
         lines:
+          # UNIFI-MAN
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address 10.1.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}/64"
+          # MAN
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
+          # GWORK
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 15 address 192.168.1.{{ vyos__host_id_ipv4 }}/24"
+          # IOT
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 66 address 10.66.0.{{ vyos__host_id_ipv4 }}/24"
+          # NOWAN
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 67 address 10.67.0.{{ vyos__host_id_ipv4 }}/24"
+          # SERVICE82
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 82 address 10.82.0.{{ vyos__host_id_ipv4 }}/24"
+          # ROUTER-LAB
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.{{ vyos__host_id_ipv4 }}/24"
+          # HOME
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
+          # GUEST
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 131 address 10.131.0.{{ vyos__host_id_ipv4 }}/24"
+          # WAN-CELLULAR
           - "set interfaces ethernet {{ vyos__wan_cellular_interface }} address 172.16.5.{{ vyos__host_id_ipv4 }}/24"
         save: yes
 
@@ -128,6 +137,14 @@
                 description: "NTP services ({{ ansible_managed }})"
                 members:
                   - address: "10.117.0.50"
+                  - address: "10.117.0.51"
+                  - address: "10.117.0.52"
+              - name: "NTP-SERVICES-v6"
+                description: "NTP services ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  - address: "fd36:3eb3:43b0:75::33"
+                  - address: "fd36:3eb3:43b0:75::34"
               - name: "NOWAN-TALKERS-from-HOME-v4"
                 description: "IP Addresses allowed to talk to devices on NOWAN ({{ ansible_managed }})"
                 members:
@@ -638,6 +655,22 @@
                     protocol: "icmp"
                     icmp:
                       type_name: any
+              - name: "MAN-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
               - name: "MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -849,6 +882,22 @@
                       group:
                         port_group: "UNIFI-WEB-TCP"
                     protocol: "tcp"
+              - name: "UNIFI-MAN-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
               - name: "UNIFI-MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1049,6 +1098,171 @@
                     action: "accept"
                     state:
                       new: true
+          - afi: "ipv6"
+            rule_sets:
+              - name: "HOME-from-LOCAL-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "HOME-from-MAN-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v6"
+                        port_group: "DNS"
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v6"
+                        port_group: "NTP"
+              - name: "HOME-from-UNIFI-MAN-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v6"
+                        port_group: "DNS"
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v6"
+                        port_group: "NTP"
+              - name: "MAN-from-HOME-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "MAN-from-LOCAL-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "UNIFI-MAN-from-HOME-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "UNIFI-MAN-from-LOCAL-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
         state: replaced
     - name: "Set Zone Policy"
       vyos.vyos.vyos_config:
@@ -1072,10 +1286,12 @@
           - "set zone-policy zone HOME description 'home network with home services ({{ ansible_managed }})'"
           - "set zone-policy zone HOME from IOT firewall name HOME-from-IOT-v4"
           - "set zone-policy zone HOME from LOCAL firewall name HOME-from-LOCAL-v4"
+          - "set zone-policy zone HOME from LOCAL firewall ipv6-name HOME-from-LOCAL-v6"
           - "set zone-policy zone HOME from MAN firewall name HOME-from-MAN-v4"
+          - "set zone-policy zone HOME from MAN firewall ipv6-name HOME-from-MAN-v6"
           - "set zone-policy zone HOME from SERVICE82 firewall name HOME-from-SERVICE82-v4"
           - "set zone-policy zone HOME from UNIFI-MAN firewall name HOME-from-UNIFI-MAN-v4"
-          # - "set zone-policy zone HOME from NOWAN firewall ipv6-name HOME-from-NOWAN-v6"
+          - "set zone-policy zone HOME from UNIFI-MAN firewall ipv6-name HOME-from-UNIFI-MAN-v6"
           - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
           - "set zone-policy zone HOME from WAN-Cellular firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
@@ -1100,7 +1316,10 @@
           # MAN Zone
           - "set zone-policy zone MAN default-action drop"
           - "set zone-policy zone MAN description 'management vlan ({{ ansible_managed }})'"
+          - "set zone-policy zone MAN from HOME firewall name MAN-from-HOME-v4"
+          - "set zone-policy zone MAN from HOME firewall ipv6-name MAN-from-HOME-v6"
           - "set zone-policy zone MAN from LOCAL firewall name MAN-from-LOCAL-v4"
+          - "set zone-policy zone MAN from LOCAL firewall ipv6-name MAN-from-LOCAL-v6"
           - "set zone-policy zone MAN from WAN-Cellular firewall name MAN-from-WAN-v4"
           - "set zone-policy zone MAN from WAN-CenturyLink firewall name MAN-from-WAN-v4"
           - "set zone-policy zone MAN interface {{ vyos__lan_interface }}.10"
@@ -1122,7 +1341,10 @@
           # UNIFI-MAN Zone
           - "set zone-policy zone UNIFI-MAN default-action drop"
           - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
+          - "set zone-policy zone UNIFI-MAN from HOME firewall name UNIFI-MAN-from-HOME-v4"
+          - "set zone-policy zone UNIFI-MAN from HOME firewall ipv6-name UNIFI-MAN-from-HOME-v6"
           - "set zone-policy zone UNIFI-MAN from LOCAL firewall name UNIFI-MAN-from-LOCAL-v4"
+          - "set zone-policy zone UNIFI-MAN from LOCAL firewall ipv6-name UNIFI-MAN-from-LOCAL-v6"
           - "set zone-policy zone UNIFI-MAN from SERVICE82 firewall name UNIFI-MAN-from-SERVICE82-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-Cellular firewall name UNIFI-MAN-from-WAN-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-CenturyLink firewall name UNIFI-MAN-from-WAN-v4"
