@@ -5,7 +5,6 @@
     # TODO: v6 firewall rules
     # TODO: add NAT
     # TODO: setup failover
-    # TODO: setup additional wifi networks
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
@@ -53,7 +52,11 @@
                 description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
               - vlan_id: 10
                 description: "MAN - management vlan ({{ ansible_managed }})"
+              - vlan_id: 15
+                description: "GWORK - work-friendly addressed network ({{ ansible_managed }})"
               - vlan_id: 66
+                description: "IOT - internet of things: WAN access, but not much else ({{ ansible_managed }})"
+              - vlan_id: 67
                 description: "NOWAN - internet of shit: no WAN or other access ({{ ansible_managed }})"
               - vlan_id: 82
                 description: "SERVICE82 - installation02 (unifi controller) ({{ ansible_managed }})"
@@ -61,6 +64,8 @@
                 description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
               - vlan_id: 117
                 description: "HOME - home network with home services ({{ ansible_managed }})"
+              - vlan_id: 131
+                description: "GUEST - used for guest wifi ({{ ansible_managed }})"
           - name: "{{ vyos__wan_cellular_interface }}"
             description: "Cellular WAN ({{ ansible_managed }})"
             enabled: true
@@ -70,7 +75,7 @@
             vifs:
               - vlan_id: 201
                 description: "CenturyLink PPPOE ({{ ansible_managed }})"
-        state: merged 
+        state: merged
     - name: "Setup CenturyLink PPPOE"
       vyos.vyos.vyos_config:
         lines:
@@ -88,11 +93,14 @@
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}/64"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 15 address 192.168.1.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 66 address 10.66.0.{{ vyos__host_id_ipv4 }}/24"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 67 address 10.67.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 82 address 10.82.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 131 address 10.131.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__wan_cellular_interface }} address 172.16.5.{{ vyos__host_id_ipv4 }}/24"
         save: yes
 
@@ -136,7 +144,7 @@
                   # sdwilsh-desktop
                   - address: "fd36:3eb3:43b0:75::1f"
             network_group:
-              - name: "RFC1918-v4" 
+              - name: "RFC1918-v4"
                 description: "IPv4 Private Address Space ({{ ansible_managed }})"
                 members:
                   - address: "192.168.0.0/16"
@@ -184,16 +192,86 @@
           twa_hazards_protection: yes
           validation: disable
         state: replaced
-          
+
     - name: "Set the firewall rules"
       vyos.vyos.vyos_firewall_rules:
         config:
           - afi: "ipv4"
             rule_sets:
-              - name: "HOME-from-NOWAN-v4"
+              - name: "GUEST-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "GUEST-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "GWORK-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "GWORK-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "HOME-from-IOT-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -213,7 +291,7 @@
                     destination:
                       group:
                         address_group: "DNS-SERVICES-v4"
-                        port_group: "DNS" 
+                        port_group: "DNS"
                   - number: 20
                     description: "Allow NTP ({{ ansible_managed }})"
                     action: "accept"
@@ -222,11 +300,11 @@
                     destination:
                       group:
                         address_group: "NTP-SERVICES-v4"
-                        port_group: "NTP" 
+                        port_group: "NTP"
               - name: "HOME-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -246,7 +324,7 @@
               - name: "HOME-from-MAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -266,7 +344,7 @@
                     destination:
                       group:
                         address_group: "DNS-SERVICES-v4"
-                        port_group: "DNS" 
+                        port_group: "DNS"
                   - number: 20
                     description: "Allow NTP ({{ ansible_managed }})"
                     action: "accept"
@@ -275,7 +353,40 @@
                     destination:
                       group:
                         address_group: "NTP-SERVICES-v4"
-                        port_group: "NTP" 
+                        port_group: "NTP"
+              - name: "HOME-from-NOWAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "DNS-SERVICES-v4"
+                        port_group: "DNS"
+                  - number: 20
+                    description: "Allow NTP ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "NTP-SERVICES-v4"
+                        port_group: "NTP"
               - name: "HOME-from-SERVICE82-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
@@ -345,7 +456,57 @@
               - name: "HOME-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "IOT-from-HOME-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+              - name: "IOT-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "IOT-from-WAN-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -360,7 +521,7 @@
               - name: "LOCAL-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -389,7 +550,7 @@
               - name: "LOCAL-from-MAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -412,7 +573,7 @@
               - name: "LOCAL-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -441,7 +602,7 @@
               - name: "LOCAL-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -462,7 +623,7 @@
               - name: "MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -482,7 +643,7 @@
               - name: "MAN-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -497,7 +658,7 @@
               - name: "NOWAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -520,7 +681,7 @@
               - name: "NOWAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -712,10 +873,70 @@
                     action: "drop"
                     state:
                       invalid: true
+              - name: "WAN-from-GUEST-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "WAN-from-GWORK-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
               - name: "WAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
+              - name: "WAN-from-IOT-v4"
+                description: "{{ ansible_managed }}"
+                default_action: "drop"
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -735,7 +956,7 @@
               - name: "WAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -755,7 +976,7 @@
               - name: "WAN-from-MAN-v4"
                 description: "{{ ansible_managed }}"
                 default_action: "drop"
-                rules: 
+                rules:
                   - number: 1
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -796,9 +1017,24 @@
     - name: "Set Zone Policy"
       vyos.vyos.vyos_config:
         lines:
+          # GUEST Zone
+          - "set zone-policy zone GUEST default-action drop"
+          - "set zone-policy zone GUEST description 'guest network ({{ ansible_managed }})'"
+          - "set zone-policy zone GUEST from LOCAL firewall name GUEST-from-LOCAL-v4"
+          - "set zone-policy zone GUEST from WAN-Cellular firewall name GUEST-from-WAN-v4"
+          - "set zone-policy zone GUEST from WAN-CenturyLink firewall name GUEST-from-WAN-v4"
+          - "set zone-policy zone GUEST interface {{ vyos__lan_interface }}.131"
+          # GWORK Zone
+          - "set zone-policy zone GWORK default-action drop"
+          - "set zone-policy zone GWORK description 'work network ({{ ansible_managed }})'"
+          - "set zone-policy zone GWORK from LOCAL firewall name GWORK-from-LOCAL-v4"
+          - "set zone-policy zone GWORK from WAN-Cellular firewall name GWORK-from-WAN-v4"
+          - "set zone-policy zone GWORK from WAN-CenturyLink firewall name GWORK-from-WAN-v4"
+          - "set zone-policy zone GWORK interface {{ vyos__lan_interface }}.15"
           # HOME Zone
           - "set zone-policy zone HOME default-action drop"
           - "set zone-policy zone HOME description 'home network with home services ({{ ansible_managed }})'"
+          - "set zone-policy zone HOME from IOT firewall name HOME-from-IOT-v4"
           - "set zone-policy zone HOME from LOCAL firewall name HOME-from-LOCAL-v4"
           - "set zone-policy zone HOME from MAN firewall name HOME-from-MAN-v4"
           - "set zone-policy zone HOME from SERVICE82 firewall name HOME-from-SERVICE82-v4"
@@ -808,6 +1044,14 @@
           - "set zone-policy zone HOME from WAN-Cellular firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME interface {{ vyos__lan_interface }}.117"
+          # IOT Zone
+          - "set zone-policy zone IOT default-action drop"
+          - "set zone-policy zone IOT description 'IoT network ({{ ansible_managed }})'"
+          - "set zone-policy zone IOT from HOME firewall name IOT-from-HOME-v4"
+          - "set zone-policy zone IOT from LOCAL firewall name IOT-from-LOCAL-v4"
+          - "set zone-policy zone IOT from WAN-Cellular firewall name IOT-from-WAN-v4"
+          - "set zone-policy zone IOT from WAN-CenturyLink firewall name IOT-from-WAN-v4"
+          - "set zone-policy zone IOT interface {{ vyos__lan_interface }}.66"
           # LOCAL Zone
           - "set zone-policy zone LOCAL default-action drop"
           - "set zone-policy zone LOCAL description '{{ ansible_managed }}'"
@@ -829,7 +1073,7 @@
           - "set zone-policy zone NOWAN description 'internet of shit: no WAN or other access ({{ ansible_managed }})'"
           - "set zone-policy zone NOWAN from HOME firewall name NOWAN-from-HOME-v4"
           - "set zone-policy zone NOWAN from LOCAL firewall name NOWAN-from-LOCAL-v4"
-          - "set zone-policy zone NOWAN interface {{ vyos__lan_interface }}.66"
+          - "set zone-policy zone NOWAN interface {{ vyos__lan_interface }}.67"
           # SERVICE82 Zone
           - "set zone-policy zone SERVICE82 default-action drop"
           - "set zone-policy zone SERVICE82 description 'installation02 - unifi controller ({{ ansible_managed }})'"
@@ -850,7 +1094,10 @@
           # WAN-Cellular Zone
           - "set zone-policy zone WAN-Cellular default-action drop"
           - "set zone-policy zone WAN-Cellular description 'Cellular WAN connection ({{ ansible_managed }})'"
+          - "set zone-policy zone WAN-Cellular from GUEST firewall name WAN-from-GUEST-v4"
+          - "set zone-policy zone WAN-Cellular from GWORK firewall name WAN-from-GWORK-v4"
           - "set zone-policy zone WAN-Cellular from HOME firewall name WAN-from-HOME-v4"
+          - "set zone-policy zone WAN-Cellular from IOT firewall name WAN-from-IOT-v4"
           - "set zone-policy zone WAN-Cellular from LOCAL firewall name WAN-from-LOCAL-v4"
           - "set zone-policy zone WAN-Cellular from MAN firewall name WAN-from-MAN-v4"
           - "set zone-policy zone WAN-Cellular from SERVICE82 firewall name WAN-from-SERVICE82-v4"
@@ -858,7 +1105,10 @@
           # WAN-CenturyLink Zone
           - "set zone-policy zone WAN-CenturyLink default-action drop"
           - "set zone-policy zone WAN-CenturyLink description 'CenturyLink WAN connection ({{ ansible_managed }})'"
+          - "set zone-policy zone WAN-CenturyLink from GUEST firewall name WAN-from-GUEST-v4"
+          - "set zone-policy zone WAN-CenturyLink from GWORK firewall name WAN-from-GWORK-v4"
           - "set zone-policy zone WAN-CenturyLink from HOME firewall name WAN-from-HOME-v4"
+          - "set zone-policy zone WAN-CenturyLink from IOT firewall name WAN-from-IOT-v4"
           - "set zone-policy zone WAN-CenturyLink from LOCAL firewall name WAN-from-LOCAL-v4"
           - "set zone-policy zone WAN-CenturyLink from MAN firewall name WAN-from-MAN-v4"
           - "set zone-policy zone WAN-CenturyLink from SERVICE82 firewall name WAN-from-SERVICE82-v4"
@@ -885,25 +1135,47 @@
           - "set service dhcp-server global-parameters 'option space ubnt;'"
           - "set service dhcp-server global-parameters 'option ubnt.unifi-address code 1 = ip-address;'"
           - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 default-router 10.117.0.1"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.4"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 start 10.117.1.1"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 stop 10.117.1.254"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 default-router 10.10.0.1"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.4"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 start 10.10.0.200"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 stop 10.10.0.250"
+          # UNIFI-MAN
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 default-router 10.1.0.1"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.3"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 start 10.1.0.200"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 stop 10.1.0.250"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 default-router 10.66.0.1"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 dns-server 10.117.0.4"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 range 0 start 10.66.0.200"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.66.0.0/24 range 0 stop 10.66.0.250"
+          # MAN
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 default-router 10.10.0.1"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 start 10.10.0.200"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 stop 10.10.0.250"
+          # GWORK
+          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 default-router 192.168.1.1"
+          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 dns-server 1.1.1.1"
+          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 dns-server 1.0.0.1"
+          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 range 0 start 192.168.1.100"
+          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 range 0 stop 192.168.1.250"
+          # IOT
+          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 default-router 10.66.0.1"
+          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 range 0 start 10.66.0.200"
+          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 range 0 stop 10.66.0.250"
+          # NOWAN
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 default-router 10.67.0.1"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 range 0 start 10.67.0.200"
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 range 0 stop 10.67.0.250"
+          # HOME
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 default-router 10.117.0.1"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.3"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.4"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 start 10.117.1.1"
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 stop 10.117.1.254"
+          # GUEST
+          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 default-router 10.131.0.1"
+          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 dns-server 1.1.1.1"
+          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 dns-server 1.0.0.1"
+          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 start 10.131.0.100"
+          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 stop 10.131.0.250"
         save: yes
