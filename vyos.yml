@@ -200,6 +200,7 @@
             rule_sets:
               - name: "GUEST-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -220,6 +221,7 @@
                       new: true
               - name: "GUEST-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -235,6 +237,7 @@
                       invalid: true
               - name: "GWORK-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -255,6 +258,7 @@
                       new: true
               - name: "GWORK-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -270,6 +274,7 @@
                       invalid: true
               - name: "HOME-from-IOT-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -303,6 +308,7 @@
                         port_group: "NTP"
               - name: "HOME-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -323,6 +329,7 @@
                       new: true
               - name: "HOME-from-MAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -356,6 +363,7 @@
                         port_group: "NTP"
               - name: "HOME-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -389,6 +397,7 @@
                         port_group: "NTP"
               - name: "HOME-from-SERVICE82-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -422,6 +431,7 @@
                         port_group: "NTP"
               - name: "HOME-from-UNIFI-MAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -455,6 +465,7 @@
                         port_group: "NTP"
               - name: "HOME-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -470,6 +481,7 @@
                       invalid: true
               - name: "IOT-from-HOME-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -485,6 +497,7 @@
                       invalid: true
               - name: "IOT-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -505,6 +518,7 @@
                       new: true
               - name: "IOT-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -520,6 +534,7 @@
                       invalid: true
               - name: "LOCAL-from-HOME-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -549,6 +564,7 @@
                       port: "67"
               - name: "LOCAL-from-MAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -572,6 +588,7 @@
                       new: true
               - name: "LOCAL-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -601,6 +618,7 @@
                       port: "67"
               - name: "LOCAL-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -622,6 +640,7 @@
                       type_name: any
               - name: "MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -642,6 +661,7 @@
                       new: true
               - name: "MAN-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -657,6 +677,7 @@
                       invalid: true
               - name: "NOWAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -680,6 +701,7 @@
                         address_group: "NOWAN-TALKERS-from-HOME-v4"
               - name: "NOWAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -700,6 +722,7 @@
                       new: true
               - name: "SERVICE82-from-HOME-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -725,6 +748,7 @@
                     protocol: "tcp"
               - name: "SERVICE82-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -745,6 +769,7 @@
                       new: true
               - name: "SERVICE82-from-UNIFI-MAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -780,6 +805,7 @@
                     protocol: "udp"
               - name: "SERVICE82-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -825,6 +851,7 @@
                     protocol: "tcp"
               - name: "UNIFI-MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -845,6 +872,7 @@
                       new: true
               - name: "UNIFI-MAN-from-SERVICE82-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -860,6 +888,7 @@
                       invalid: true
               - name: "UNIFI-MAN-from-WAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -875,6 +904,7 @@
                       invalid: true
               - name: "WAN-from-GUEST-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -895,6 +925,7 @@
                       new: true
               - name: "WAN-from-GWORK-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -915,6 +946,7 @@
                       new: true
               - name: "WAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -935,6 +967,7 @@
                       new: true
               - name: "WAN-from-IOT-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -955,6 +988,7 @@
                       new: true
               - name: "WAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -975,6 +1009,7 @@
                       new: true
               - name: "WAN-from-MAN-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
@@ -995,6 +1030,7 @@
                       new: true
               - name: "WAN-from-SERVICE82-v4"
                 description: "{{ ansible_managed }}"
+                enable_default_log: yes
                 default_action: "drop"
                 rules:
                   - number: 1
