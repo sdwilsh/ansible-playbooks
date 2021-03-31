@@ -1,5 +1,6 @@
 ---
 - hosts: vyos
+  gather_facts: false
   tasks:
     # TODO: v6 firewall rules
     # TODO: add NAT
