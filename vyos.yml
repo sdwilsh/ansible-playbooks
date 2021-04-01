@@ -644,13 +644,13 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 10
+                  - number: 3
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmp"
                     icmp:
                       type_name: any
-                  - number: 20
+                  - number: 4
                     description: "Allow DHCP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "udp"
@@ -674,6 +674,20 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 4
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
                   - number: 10
                     description: "Allow SSH ({{ ansible_managed }})"
                     action: "accept"
@@ -698,13 +712,43 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 10
+                  - number: 3
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmp"
                     icmp:
                       type_name: any
-                  - number: 20
+                  - number: 4
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
+              - name: "LOCAL-from-UNIFI-MAN-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 4
                     description: "Allow DHCP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "udp"
@@ -1195,6 +1239,10 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1268,6 +1316,66 @@
                       group:
                         address_group: "NTP-SERVICES-v6"
                         port_group: "NTP"
+              - name: "LOCAL-from-HOME-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
+              - name: "LOCAL-from-MAN-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
+              - name: "LOCAL-from-UNIFI-MAN-v6"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
               - name: "MAN-from-HOME-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1300,6 +1408,10 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1337,6 +1449,10 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1368,10 +1484,10 @@
           - "set zone-policy zone HOME from LOCAL firewall ipv6-name HOME-from-LOCAL-v6"
           - "set zone-policy zone HOME from MAN firewall name HOME-from-MAN-v4"
           - "set zone-policy zone HOME from MAN firewall ipv6-name HOME-from-MAN-v6"
+          - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
           - "set zone-policy zone HOME from SERVICE82 firewall name HOME-from-SERVICE82-v4"
           - "set zone-policy zone HOME from UNIFI-MAN firewall name HOME-from-UNIFI-MAN-v4"
           - "set zone-policy zone HOME from UNIFI-MAN firewall ipv6-name HOME-from-UNIFI-MAN-v6"
-          - "set zone-policy zone HOME from NOWAN firewall name HOME-from-NOWAN-v4"
           - "set zone-policy zone HOME from WAN-Cellular firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME from WAN-CenturyLink firewall name HOME-from-WAN-v4"
           - "set zone-policy zone HOME interface {{ vyos__lan_interface }}.117"
@@ -1387,8 +1503,12 @@
           - "set zone-policy zone LOCAL default-action drop"
           - "set zone-policy zone LOCAL description '{{ ansible_managed }}'"
           - "set zone-policy zone LOCAL from HOME firewall name LOCAL-from-HOME-v4"
+          - "set zone-policy zone LOCAL from HOME firewall ipv6-name LOCAL-from-HOME-v6"
           - "set zone-policy zone LOCAL from MAN firewall name LOCAL-from-MAN-v4"
+          - "set zone-policy zone LOCAL from MAN firewall ipv6-name LOCAL-from-MAN-v6"
           - "set zone-policy zone LOCAL from NOWAN firewall name LOCAL-from-NOWAN-v4"
+          - "set zone-policy zone LOCAL from UNIFI-MAN firewall name LOCAL-from-UNIFI-MAN-v4"
+          - "set zone-policy zone LOCAL from UNIFI-MAN firewall ipv6-name LOCAL-from-UNIFI-MAN-v6"
           - "set zone-policy zone LOCAL from WAN-Cellular firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL from WAN-CenturyLink firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL local-zone"
