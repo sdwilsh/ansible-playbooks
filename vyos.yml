@@ -1594,15 +1594,11 @@
           - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
           # UNIFI-MAN
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 default-router 10.1.0.1"
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 start 10.1.0.200"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 stop 10.1.0.250"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
           # MAN
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 default-router 10.10.0.1"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 start 10.10.0.200"
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 stop 10.10.0.250"
           # GWORK
@@ -1613,20 +1609,14 @@
           - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 range 0 stop 192.168.1.250"
           # IOT
           - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 default-router 10.66.0.1"
-          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 range 0 start 10.66.0.200"
           - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 range 0 stop 10.66.0.250"
           # NOWAN
           - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 default-router 10.67.0.1"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 range 0 start 10.67.0.200"
           - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 range 0 stop 10.67.0.250"
           # HOME
           - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 default-router 10.117.0.1"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.3"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server 10.117.0.4"
           - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 start 10.117.1.1"
           - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 stop 10.117.1.254"
           # GUEST
@@ -1636,6 +1626,21 @@
           - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 start 10.131.0.100"
           - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 stop 10.131.0.250"
         save: yes
+    - name: "Setup DHCP Name Servers"
+      vyos.vyos.vyos_config:
+        lines:
+          # UNIFI-MAN
+          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server {{ item }}"
+          # MAN
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server {{ item }}"
+          # IOT
+          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 dns-server {{ item }}"
+          # NOWAN
+          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 dns-server {{ item }}"
+          # HOME
+          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server {{ item }}"
+        save: yes
+      loop: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
     - name: "Setup Router Advertisement"
       vyos.vyos.vyos_config:
         lines:
@@ -1648,6 +1653,7 @@
           # HOME
           - "set service router-advert interface {{ vyos__lan_interface }}.117 link-mtu 1492"
           - "set service router-advert interface {{ vyos__lan_interface }}.117 prefix ::/64 valid-lifetime 172800"
+        save: yes
     - name: "Setup Router Advertisement Name Servers"
       vyos.vyos.vyos_config:
         lines:
