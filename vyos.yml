@@ -1636,3 +1636,26 @@
           - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 start 10.131.0.100"
           - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 stop 10.131.0.250"
         save: yes
+    - name: "Setup Router Advertisement"
+      vyos.vyos.vyos_config:
+        lines:
+          # UNIFI-MAN
+          - "set service router-advert interface {{ vyos__lan_interface }}.1 link-mtu 1492"
+          - "set service router-advert interface {{ vyos__lan_interface }}.1 prefix ::/64 valid-lifetime 172800"
+          # MAN
+          - "set service router-advert interface {{ vyos__lan_interface }}.10 link-mtu 1492"
+          - "set service router-advert interface {{ vyos__lan_interface }}.10 prefix ::/64 valid-lifetime 172800"
+          # HOME
+          - "set service router-advert interface {{ vyos__lan_interface }}.117 link-mtu 1492"
+          - "set service router-advert interface {{ vyos__lan_interface }}.117 prefix ::/64 valid-lifetime 172800"
+    - name: "Setup Router Advertisement Name Servers"
+      vyos.vyos.vyos_config:
+        lines:
+          # UNIFI-MAN
+          - "set service router-advert interface {{ vyos__lan_interface }}.1 name-server {{ item }}"
+          # MAN
+          - "set service router-advert interface {{ vyos__lan_interface }}.10 name-server {{ item }}"
+          # HOME
+          - "set service router-advert interface {{ vyos__lan_interface }}.117 name-server {{ item }}"
+        save: yes
+      loop: "{{ common__nameservers.addresses | ansible.netcommon.ipv6 }}"
