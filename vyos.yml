@@ -30,7 +30,7 @@
         - "1.pool.ntp.org"
         - "2.pool.ntp.org"
       when: item in ansible_net_config[0]
-    - name: "Remove default NTP servers"
+    - name: "Set NTP servers"
       vyos.vyos.vyos_config:
         lines:
           - "set system ntp server {{ common__ntp_pool }} pool"
