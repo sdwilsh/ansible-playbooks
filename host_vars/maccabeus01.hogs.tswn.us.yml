@@ -4,5 +4,5 @@ vyos__host_id_ipv6: "30"
 vyos__peer_host_id_ipv4: "49"
 vyos__vrrp_priority: 25
 vyos__wan_centurylink_interface: "eth0"
-vyos__wan_cellular_interface: "eth1"
+vyos__wan_cellular_interface: "eth2"
 vyos__lan_interface: "eth1"
