@@ -834,7 +834,7 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 10
+                  - number: 3
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmp"
@@ -1271,7 +1271,17 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
