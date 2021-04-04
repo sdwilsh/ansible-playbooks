@@ -3,7 +3,7 @@
   gather_facts: false
   tasks:
     # TODO: add NAT
-    # TODO: setup failover
+    # TODO: setup conntrack
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
@@ -49,6 +49,8 @@
             vifs:
               - vlan_id: 1
                 description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
+              - vlan_id: 9
+                description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
               - vlan_id: 10
                 description: "MAN - management vlan ({{ ansible_managed }})"
               - vlan_id: 15
@@ -91,6 +93,8 @@
           # UNIFI-MAN
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address 10.1.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 1 address fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}/64"
+          # SYNC
+          - "set interfaces ethernet {{ vyos__lan_interface }} vif 9 address 10.9.0.{{ vyos__host_id_ipv4 }}/24"
           # MAN
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.{{ vyos__host_id_ipv4 }}/24"
           - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
@@ -118,21 +122,34 @@
           # UNIFI-MAN
           - "set high-availability vrrp group UNIFI-MAN-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group UNIFI-MAN-v4 interface {{ vyos__lan_interface }}.1"
+          - "set high-availability vrrp group UNIFI-MAN-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group UNIFI-MAN-v4 virtual-address 10.1.0.1/24"
           - "set high-availability vrrp group UNIFI-MAN-v4 vrid 1"
           - "set high-availability vrrp group UNIFI-MAN-v6 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group UNIFI-MAN-v6 interface {{ vyos__lan_interface }}.1"
+          - "set high-availability vrrp group UNIFI-MAN-v6 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group UNIFI-MAN-v6 virtual-address fd36:3eb3:43b0:1::1/64"
           - "set high-availability vrrp group UNIFI-MAN-v6 vrid 2"
           - "set high-availability vrrp sync-group MAIN member UNIFI-MAN-v4"
           - "set high-availability vrrp sync-group MAIN member UNIFI-MAN-v6"
+          # SYNC
+          - "set high-availability vrrp group SYNC-v4 description '{{ ansible_managed }}'"
+          - "set high-availability vrrp group SYNC-v4 hello-source-address 10.9.0.{{ vyos__host_id_ipv4 }}"
+          - "set high-availability vrrp group SYNC-v4 interface {{ vyos__lan_interface }}.9"
+          - "set high-availability vrrp group SYNC-v4 peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+          - "set high-availability vrrp group SYNC-v4 priority {{ vyos__vrrp_priority }}"
+          - "set high-availability vrrp group SYNC-v4 virtual-address 10.9.0.1/24"
+          - "set high-availability vrrp group SYNC-v4 vrid 9"
+          - "set high-availability vrrp sync-group MAIN member SYNC-v4"
           # MAN
           - "set high-availability vrrp group MAN-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group MAN-v4 interface {{ vyos__lan_interface }}.10"
+          - "set high-availability vrrp group MAN-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group MAN-v4 virtual-address 10.10.0.1/24"
           - "set high-availability vrrp group MAN-v4 vrid 10"
           - "set high-availability vrrp group MAN-v6 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group MAN-v6 interface {{ vyos__lan_interface }}.10"
+          - "set high-availability vrrp group MAN-v6 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group MAN-v6 virtual-address fd36:3eb3:43b0:a::1/64"
           - "set high-availability vrrp group MAN-v6 vrid 11"
           - "set high-availability vrrp sync-group MAIN member MAN-v4"
@@ -140,40 +157,47 @@
           # GWORK
           - "set high-availability vrrp group GWORK-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group GWORK-v4 interface {{ vyos__lan_interface }}.15"
+          - "set high-availability vrrp group GWORK-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group GWORK-v4 virtual-address 192.168.1.1/24"
           - "set high-availability vrrp group GWORK-v4 vrid 15"
           - "set high-availability vrrp sync-group MAIN member GWORK-v4"
           # IOT
           - "set high-availability vrrp group IOT-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group IOT-v4 interface {{ vyos__lan_interface }}.66"
+          - "set high-availability vrrp group IOT-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group IOT-v4 virtual-address 10.66.0.1/24"
           - "set high-availability vrrp group IOT-v4 vrid 66"
           - "set high-availability vrrp sync-group MAIN member IOT-v4"
           # NOWAN
           - "set high-availability vrrp group NOWAN-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group NOWAN-v4 interface {{ vyos__lan_interface }}.67"
+          - "set high-availability vrrp group NOWAN-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group NOWAN-v4 virtual-address 10.67.0.1/24"
           - "set high-availability vrrp group NOWAN-v4 vrid 67"
           - "set high-availability vrrp sync-group MAIN member NOWAN-v4"
           # SERVICE82
           - "set high-availability vrrp group SERVICE82-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group SERVICE82-v4 interface {{ vyos__lan_interface }}.82"
+          - "set high-availability vrrp group SERVICE82-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group SERVICE82-v4 virtual-address 10.82.0.1/24"
           - "set high-availability vrrp group SERVICE82-v4 vrid 82"
           - "set high-availability vrrp sync-group MAIN member SERVICE82-v4"
           # ROUTER-LAB
           - "set high-availability vrrp group ROUTER-LAB-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group ROUTER-LAB-v4 interface {{ vyos__lan_interface }}.100"
+          - "set high-availability vrrp group ROUTER-LAB-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group ROUTER-LAB-v4 virtual-address 10.100.0.1/24"
           - "set high-availability vrrp group ROUTER-LAB-v4 vrid 100"
           - "set high-availability vrrp sync-group MAIN member ROUTER-LAB-v4"
           # HOME
           - "set high-availability vrrp group HOME-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group HOME-v4 interface {{ vyos__lan_interface }}.117"
+          - "set high-availability vrrp group HOME-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group HOME-v4 virtual-address 10.117.0.1/23"
           - "set high-availability vrrp group HOME-v4 vrid 117"
           - "set high-availability vrrp group HOME-v6 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group HOME-v6 interface {{ vyos__lan_interface }}.117"
+          - "set high-availability vrrp group HOME-v6 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group HOME-v6 virtual-address fd36:3eb3:43b0:75::1/64"
           - "set high-availability vrrp group HOME-v6 vrid 118"
           - "set high-availability vrrp sync-group MAIN member HOME-v4"
@@ -181,12 +205,14 @@
           # GUEST
           - "set high-availability vrrp group GUEST-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group GUEST-v4 interface {{ vyos__lan_interface }}.131"
+          - "set high-availability vrrp group GUEST-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group GUEST-v4 virtual-address 10.131.0.1/24"
           - "set high-availability vrrp group GUEST-v4 vrid 131"
           - "set high-availability vrrp sync-group MAIN member GUEST-v4"
           # WAN-CELLULAR
           - "set high-availability vrrp group WAN-CELLULAR-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group WAN-CELLULAR-v4 interface {{ vyos__wan_cellular_interface }}"
+          - "set high-availability vrrp group WAN-CELLULAR-v4 priority {{ vyos__vrrp_priority }}"
           - "set high-availability vrrp group WAN-CELLULAR-v4 virtual-address 172.16.5.2/24"
           - "set high-availability vrrp group WAN-CELLULAR-v4 vrid 255"
           - "set high-availability vrrp sync-group MAIN member WAN-CELLULAR-v4"
@@ -726,6 +752,34 @@
                       port: "68"
                     destination:
                       port: "67"
+              - name: "LOCAL-from-SYNC-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    protocol: "vrrp"
+                    source:
+                      address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
               - name: "LOCAL-from-UNIFI-MAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1005,6 +1059,34 @@
                       group:
                         port_group: "UNIFI-WEB-TCP"
                     protocol: "tcp"
+              - name: "SYNC-from-LOCAL-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    protocol: "vrrp"
+                    destination:
+                      address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
               - name: "UNIFI-MAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1509,6 +1591,7 @@
           - "set zone-policy zone LOCAL from NOWAN firewall name LOCAL-from-NOWAN-v4"
           - "set zone-policy zone LOCAL from UNIFI-MAN firewall name LOCAL-from-UNIFI-MAN-v4"
           - "set zone-policy zone LOCAL from UNIFI-MAN firewall ipv6-name LOCAL-from-UNIFI-MAN-v6"
+          - "set zone-policy zone LOCAL from SYNC firewall name LOCAL-from-SYNC-v4"
           - "set zone-policy zone LOCAL from WAN-Cellular firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL from WAN-CenturyLink firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL local-zone"
@@ -1537,6 +1620,11 @@
           - "set zone-policy zone SERVICE82 from WAN-Cellular firewall name SERVICE82-from-WAN-v4"
           - "set zone-policy zone SERVICE82 from WAN-CenturyLink firewall name SERVICE82-from-WAN-v4"
           - "set zone-policy zone SERVICE82 interface {{ vyos__lan_interface }}.82"
+          # SYNC Zone
+          - "set zone-policy zone SYNC default-action drop"
+          - "set zone-policy zone SYNC description 'VRRP and other related synchronizations connection ({{ ansible_managed }})'"
+          - "set zone-policy zone SYNC from LOCAL firewall name SYNC-from-LOCAL-v4"
+          - "set zone-policy zone SYNC interface {{ vyos__lan_interface }}.9"
           # UNIFI-MAN Zone
           - "set zone-policy zone UNIFI-MAN default-action drop"
           - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
