@@ -3,7 +3,6 @@
   gather_facts: false
   tasks:
     # TODO: port forward
-    # TODO: stop VRRP on most interfaces from LOCAL
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
@@ -362,7 +361,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -399,7 +402,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -470,7 +477,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -659,7 +670,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -898,7 +913,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -959,7 +978,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -1006,7 +1029,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -1160,7 +1187,11 @@
                     action: "drop"
                     state:
                       invalid: true
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -1406,7 +1437,11 @@
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmpv6"
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -1575,7 +1610,11 @@
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmpv6"
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
@@ -1616,7 +1655,11 @@
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmpv6"
-                  - number: 5
+                  - number: 10
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    protocol: "vrrp"
+                  - number: 500
                     description: "{{ ansible_managed }}"
                     action: "accept"
                     state:
