@@ -1186,6 +1186,12 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1207,6 +1213,12 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1249,6 +1261,12 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1301,6 +1319,12 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
@@ -1322,6 +1346,12 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
                   - number: 5
                     description: "{{ ansible_managed }}"
                     action: "accept"
