@@ -2,7 +2,8 @@
 - hosts: vyos
   gather_facts: false
   tasks:
-    # TODO: add NAT
+    # TODO: port forward
+    # TODO: stop VRRP on most interfaces from LOCAL
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
@@ -115,6 +116,32 @@
           # WAN-CELLULAR
           - "set interfaces ethernet {{ vyos__wan_cellular_interface }} address 172.16.5.{{ vyos__host_id_ipv4 }}/24"
         save: yes
+    - set_fact:
+        lan_interfaces_with_wan_access:
+          # UNIFI-MAN
+          - interface: "{{ vyos__lan_interface }}.1"
+            ipv4_network: "10.1.0.0/24"
+          # MAN
+          - interface: "{{ vyos__lan_interface }}.10"
+            ipv4_network: "10.10.0.0/24"
+          # GWORK
+          - interface: "{{ vyos__lan_interface }}.15"
+            ipv4_network: "192.168.1.0/24"
+          # IOT
+          - interface: "{{ vyos__lan_interface }}.66"
+            ipv4_network: "10.66.0.0/24"
+          # SERVICE82
+          - interface: "{{ vyos__lan_interface }}.82"
+            ipv4_network: "10.82.0.0/24"
+          # ROUTER-LAB
+          - interface: "{{ vyos__lan_interface }}.100"
+            ipv4_network: "10.100.0.0/24"
+          # HOME
+          - interface: "{{ vyos__lan_interface }}.117"
+            ipv4_network: "10.117.0.0/24"
+          # GUEST
+          - interface: "{{ vyos__lan_interface }}.131"
+            ipv4_network: "10.131.0.0/24"
     - name: "Setup vrrp"
       vyos.vyos.vyos_config:
         lines:
@@ -1748,19 +1775,27 @@
       vyos.vyos.vyos_config:
         lines:
           - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} failover"
-          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} inbound-interface {{ item }}"
+          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} inbound-interface {{ item.interface }}"
           - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} interface pppoe0 weight 10"
           - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} interface {{ vyos__wan_cellular_interface }} weight 1"
         save: yes
-      loop:
-        - "{{ vyos__lan_interface }}.1" # UNIFI-MAN
-        - "{{ vyos__lan_interface }}.10" # MAN
-        - "{{ vyos__lan_interface }}.15" # GWORK
-        - "{{ vyos__lan_interface }}.66" # IOT
-        - "{{ vyos__lan_interface }}.82" # SERVICE82
-        - "{{ vyos__lan_interface }}.100" # ROUTER-LAB
-        - "{{ vyos__lan_interface }}.117" # HOME
-        - "{{ vyos__lan_interface }}.131" # GUEST
+      loop: "{{ lan_interfaces_with_wan_access }}"
+      loop_control:
+        index_var: rule_number
+
+    #
+    # NAT
+    #
+    - name: "Setup NAT masquerade rules"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set nat source rule {{ (rule_number + 1) * 10 }} outbound-interface pppoe0"
+          - "set nat source rule {{ (rule_number + 1) * 10 }} source address {{ item.ipv4_network }}"
+          - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
+          - "set nat source rule {{ ((rule_number + 1) * 10) + 1 }} outbound-interface {{ vyos__wan_cellular_interface }}"
+          - "set nat source rule {{ ((rule_number + 1) * 10) + 1 }} source address {{ item.ipv4_network }}"
+          - "set nat source rule {{ ((rule_number + 1) * 10) + 1 }} translation address masquerade"
+      loop: "{{ lan_interfaces_with_wan_access }}"
       loop_control:
         index_var: rule_number
 
