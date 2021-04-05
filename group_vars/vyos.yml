@@ -2,5 +2,11 @@ ansbile_network_cli_ssh_type: libssh
 ansible_connection: network_cli
 ansible_network_os: vyos
 
+vyos__wan_cellular_dns:
+  - "199.2.252.10"
+  - "204.117.214.10"
 vyos__wan_centurylink_username: "vyos"
 vyos__wan_centurylink_password: "vyos"
+vyos__wan_centurylink_dns:
+  - "205.171.2.65"
+  - "205.171.3.65"

@@ -3,7 +3,6 @@
   gather_facts: false
   tasks:
     # TODO: add NAT
-    # TODO: setup WAN fail-over
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
@@ -82,7 +81,7 @@
         lines:
           - "set interfaces pppoe pppoe0 authentication password {{ vyos__wan_centurylink_password }}"
           - "set interfaces pppoe pppoe0 authentication user {{ vyos__wan_centurylink_username }}"
-          - "set interfaces pppoe pppoe0 default-route auto"
+          - "set interfaces pppoe pppoe0 default-route none"
           - "set interfaces pppoe pppoe0 mtu 1492"
           - "set interfaces pppoe pppoe0 no-peer-dns"
           - "set interfaces pppoe pppoe0 source-interface {{ vyos__wan_centurylink_interface }}.201"
@@ -1684,6 +1683,56 @@
           - "set zone-policy zone WAN-CenturyLink from SERVICE82 firewall name WAN-from-SERVICE82-v4"
           - "set zone-policy zone WAN-CenturyLink interface pppoe0"
         save: yes
+
+    #
+    # Failover
+    #
+    - name: "Setup WAN load-balancing"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set load-balancing wan interface-health pppoe0 nexthop dhcp"
+          - "set load-balancing wan interface-health pppoe0 failure-count 2"
+          - "set protocols static interface-route 0.0.0.0/0 next-hop-interface pppoe0 distance 10"
+          - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} nexthop 172.16.5.1"
+          - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} failure-count 5"
+          - "set protocols static route 0.0.0.0/0 next-hop 172.16.5.1 distance 100"
+    - name: "Setup static routes and ping targets for WAN-CenturyLink"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set protocols static interface-route {{ item }}/32 next-hop-interface pppoe0"
+          - "set load-balancing wan interface-health pppoe0 test {{ rule_number }} type ping"
+          - "set load-balancing wan interface-health pppoe0 test {{ rule_number }} target {{ item }}"
+      loop: "{{ vyos__wan_centurylink_dns }}"
+      loop_control:
+        index_var: rule_number
+    - name: "Setup static routes and ping targets for WAN-Cellular"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set protocols static route {{ item }}/32 next-hop 172.16.5.1"
+          - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} test {{ rule_number }} type ping"
+          - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} test {{ rule_number }} target {{ item }}"
+      loop: "{{ vyos__wan_cellular_dns }}"
+      loop_control:
+        index_var: rule_number
+    - name: "Setup rules for each inbound interface"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} failover"
+          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} inbound-interface {{ item }}"
+          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} interface pppoe0 weight 10"
+          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} interface {{ vyos__wan_cellular_interface }} weight 1"
+        save: yes
+      loop:
+        - "{{ vyos__lan_interface }}.1" # UNIFI-MAN
+        - "{{ vyos__lan_interface }}.10" # MAN
+        - "{{ vyos__lan_interface }}.15" # GWORK
+        - "{{ vyos__lan_interface }}.66" # IOT
+        - "{{ vyos__lan_interface }}.82" # SERVICE82
+        - "{{ vyos__lan_interface }}.100" # ROUTER-LAB
+        - "{{ vyos__lan_interface }}.117" # HOME
+        - "{{ vyos__lan_interface }}.131" # GUEST
+      loop_control:
+        index_var: rule_number
 
     #
     # Services
