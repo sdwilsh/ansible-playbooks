@@ -144,6 +144,36 @@
           # GUEST
           - interface: "{{ vyos__lan_interface }}.131"
             ipv4_network: "10.131.0.0/24"
+    - name: "Setup pppoe0 activation script"
+      ansible.builtin.copy:
+        dest: "/config/scripts/activate-pppoe0.script"
+        content: |
+          #!/bin/vbash
+          source /opt/vyatta/etc/functions/script-template
+          configure
+          delete interfaces pppoe pppoe0 disable
+          commit
+        owner: "root"
+        group: "vyattacfg"
+        mode: "u=rwx,g=rx,o=rx"
+      become: true
+      vars:
+        ansible_connection: "ssh"
+    - name: "Setup pppoe0 disable script"
+      ansible.builtin.copy:
+        dest: "/config/scripts/disable-pppoe0.script"
+        content: |
+          #!/bin/vbash
+          source /opt/vyatta/etc/functions/script-template
+          configure
+          set interfaces pppoe pppoe0 disable
+          commit
+        owner: "root"
+        group: "vyattacfg"
+        mode: "u=rwx,g=rx,o=rx"
+      become: true
+      vars:
+        ansible_connection: "ssh"
     - name: "Setup vrrp"
       vyos.vyos.vyos_config:
         lines:
@@ -166,6 +196,8 @@
           - "set high-availability vrrp group SYNC-v4 interface {{ vyos__lan_interface }}.9"
           - "set high-availability vrrp group SYNC-v4 peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
           - "set high-availability vrrp group SYNC-v4 priority {{ vyos__vrrp_priority }}"
+          - "set high-availability vrrp group SYNC-v4 transition-script backup /config/scripts/disable-pppoe0.script"
+          - "set high-availability vrrp group SYNC-v4 transition-script master /config/scripts/activate-pppoe0.script"
           - "set high-availability vrrp group SYNC-v4 virtual-address 10.9.0.1/24"
           - "set high-availability vrrp group SYNC-v4 vrid 9"
           - "set high-availability vrrp sync-group MAIN member SYNC-v4"
