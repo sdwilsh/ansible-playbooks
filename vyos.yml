@@ -826,7 +826,7 @@
                     action: "accept"
                     protocol: "udp"
                     destination:
-                      port: 3780
+                      port: "3780"
                     source:
                       address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
               - name: "LOCAL-from-UNIFI-MAN-v4"
@@ -1154,7 +1154,7 @@
                     protocol: "udp"
                     destination:
                       address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-                      port: 3780
+                      port: "3780"
               - name: "UNIFI-MAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
