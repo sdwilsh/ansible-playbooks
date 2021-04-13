@@ -796,6 +796,13 @@
                     protocol: "tcp"
                     state:
                       new: true
+                  - number: 20
+                    description: "Drop Eaton Alarms Broadcast ({{ ansible_managed }})"
+                    action: "drop"
+                    protocol: "udp"
+                    destination:
+                      address: "255.255.255.255"
+                      port: "4680"
               - name: "LOCAL-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
