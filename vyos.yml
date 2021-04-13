@@ -315,6 +315,8 @@
                 members:
                   # cortana.hogs.tswn.us
                   - address: "10.117.0.19"
+                  # iona.hogs.tswn.us
+                  - address: "10.117.0.27"
                   # sdwilsh-desktop
                   - address: "10.117.0.31"
               - name: "NOWAN-TALKERS-from-HOME-v6"
