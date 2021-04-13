@@ -75,10 +75,6 @@
               - vlan_id: 201
                 description: "CenturyLink PPPOE ({{ ansible_managed }})"
         state: merged
-    - name: "Set the mac addresses"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set interfaces ethernet {{ vyos__wan_centurylink_interface }} hw-id 'b4:fb:e4:24:3c:1c'"
     - name: "Setup CenturyLink PPPOE"
       vyos.vyos.vyos_config:
         lines:
