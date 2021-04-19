@@ -1839,7 +1839,7 @@
     - name: "Setup static routes and ping targets for WAN-CenturyLink"
       vyos.vyos.vyos_config:
         lines:
-          - "set protocols static route {{ item }}/32 dhcp-interface pppoe0"
+          - "set protocols static interface-route {{ item }}/32 next-hop-interface pppoe0"
           - "set load-balancing wan interface-health pppoe0 test {{ rule_number }} type ping"
           - "set load-balancing wan interface-health pppoe0 test {{ rule_number }} target {{ item }}"
       loop: "{{ vyos__wan_centurylink_dns }}"
