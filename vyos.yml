@@ -1954,61 +1954,91 @@
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
         save: yes
+
+    - ansible.builtin.set_fact:
+        dhcp_servers:
+          - name: "UNIFI-MAN"
+            subnet: "10.1.0.0/24"
+            default_router: "10.1.0.1"
+            range:
+              start: "10.1.0.200"
+              stop: "10.1.0.250"
+            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+          - name: "MAN"
+            subnet: "10.10.0.0/24"
+            default_router: "10.10.0.1"
+            range:
+              start: "10.10.0.200"
+              stop: "10.10.0.250"
+            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+          - name: "GWORK"
+            subnet: "192.168.1.0/24"
+            default_router: "192.168.1.1"
+            range:
+              start: "192.168.1.100"
+              stop: "192.168.1.250"
+            dns:
+              - "1.1.1.1"
+              - "1.0.0.1"
+          - name: "IOT"
+            subnet: "10.66.0.0/24"
+            default_router: "10.66.0.1"
+            range:
+              start: "10.66.0.100"
+              stop: "10.66.0.250"
+            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+          - name: "NOWAN"
+            subnet: "10.67.0.0/24"
+            default_router: "10.67.0.1"
+            range:
+              start: "10.67.0.100"
+              stop: "10.67.0.250"
+            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+          - name: "HOME"
+            subnet: "10.117.0.0/23"
+            default_router: "10.117.0.1"
+            range:
+              start: "10.117.1.1"
+              stop: "10.117.1.254"
+            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+          - name: "GUEST"
+            subnet: "10.131.0.0/24"
+            default_router: "10.131.0.1"
+            range:
+              start: "10.131.0.100"
+              stop: "10.131.0.250"
+            dns:
+              - "1.1.1.1"
+              - "1.0.0.1"
     - name: "Setup DHCP"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} default-router {{ item.default_router }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 start {{ item.range.start }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 stop {{ item.range.stop }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address 10.9.0.{{ vyos__host_id_ipv4 }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
+      loop: "{{ dhcp_servers }}"
+      loop_control:
+        label: "{{ item.name }}"
+    - name: "Setup DHCP Name Servers"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dhcp-server shared-network-name {{ item.0.name }} subnet {{ item.0.subnet }} dns-server {{ item.1 }}"
+      loop: "{{ dhcp_servers | subelements('dns') }}"
+      loop_control:
+        label: "{{ item.0.name }}: {{ item.1 }}"
+    - name: "Setup UBNT DHCP global-parameters"
       vyos.vyos.vyos_config:
         lines:
           - "set service dhcp-server global-parameters 'option space ubnt;'"
           - "set service dhcp-server global-parameters 'option ubnt.unifi-address code 1 = ip-address;'"
           - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
-          # UNIFI-MAN
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 default-router 10.1.0.1"
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 start 10.1.0.200"
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 range 0 stop 10.1.0.250"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
-          # MAN
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 default-router 10.10.0.1"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 start 10.10.0.200"
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 range 0 stop 10.10.0.250"
-          # GWORK
-          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 default-router 192.168.1.1"
-          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 dns-server 1.1.1.1"
-          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 dns-server 1.0.0.1"
-          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 range 0 start 192.168.1.100"
-          - "set service dhcp-server shared-network-name GWORK subnet 192.168.1.0/24 range 0 stop 192.168.1.250"
-          # IOT
-          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 default-router 10.66.0.1"
-          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 range 0 start 10.66.0.200"
-          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 range 0 stop 10.66.0.250"
-          # NOWAN
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 default-router 10.67.0.1"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 range 0 start 10.67.0.200"
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 range 0 stop 10.67.0.250"
-          # HOME
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 default-router 10.117.0.1"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 start 10.117.1.1"
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 range 0 stop 10.117.1.254"
-          # GUEST
-          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 default-router 10.131.0.1"
-          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 dns-server 1.1.1.1"
-          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 dns-server 1.0.0.1"
-          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 start 10.131.0.100"
-          - "set service dhcp-server shared-network-name GWORK subnet 10.131.0.0/24 range 0 stop 10.131.0.250"
         save: yes
-    - name: "Setup DHCP Name Servers"
-      vyos.vyos.vyos_config:
-        lines:
-          # UNIFI-MAN
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 dns-server {{ item }}"
-          # MAN
-          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 dns-server {{ item }}"
-          # IOT
-          - "set service dhcp-server shared-network-name IOT subnet 10.66.0.0/24 dns-server {{ item }}"
-          # NOWAN
-          - "set service dhcp-server shared-network-name NOWAN subnet 10.67.0.0/24 dns-server {{ item }}"
-          # HOME
-          - "set service dhcp-server shared-network-name HOME subnet 10.117.0.0/23 dns-server {{ item }}"
-        save: yes
-      loop: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+
     - name: "Setup Router Advertisement"
       vyos.vyos.vyos_config:
         lines:
