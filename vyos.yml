@@ -294,6 +294,17 @@
                 members:
                   - address: "fd36:3eb3:43b0:75::3"
                   - address: "fd36:3eb3:43b0:75::4"
+              - name: "MAN-TALKERS-from-HOME-v4"
+                description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
+                members:
+                  # sdwilsh-desktop
+                  - address: "10.117.0.31"
+              - name: "MAN-TALKERS-from-HOME-v6"
+                description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  # sdwilsh-desktop
+                  - address: "fd36:3eb3:43b0:75::1f"
               - name: "NTP-SERVICES-v4"
                 description: "NTP services ({{ ansible_managed }})"
                 members:
@@ -937,6 +948,14 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 20
+                    description: "Allow specific hosts ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    source:
+                      group:
+                        address_group: "MAN-TALKERS-from-HOME-v4"
               - name: "MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1630,6 +1649,14 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 20
+                    description: "Allow specific hosts ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    source:
+                      group:
+                        address_group: "MAN-TALKERS-from-HOME-v6"
               - name: "MAN-from-LOCAL-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
