@@ -2072,10 +2072,11 @@
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} default-router {{ item.default_router }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 start {{ item.range.start }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 stop {{ item.range.stop }}"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address 10.9.0.{{ vyos__host_id_ipv4 }}"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
+          # Uncomment these when failover is actually setup; Nothing gets an address if the primary cannot be reached.
+          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address 10.9.0.{{ vyos__host_id_ipv4 }}"
+          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
+          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }} ({{ item.subnet }})"
