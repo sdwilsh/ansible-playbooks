@@ -2078,7 +2078,7 @@
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
       loop: "{{ dhcp_servers }}"
       loop_control:
-        label: "{{ item.name }}"
+        label: "{{ item.name }} ({{ item.subnet }})"
       tags:
         - services
         - dhcp-server
