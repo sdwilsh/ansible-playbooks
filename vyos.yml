@@ -1220,6 +1220,13 @@
                     destination:
                       address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
                       port: "3780"
+                  - number: 30
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+                      port: "520"
               - name: "UNIFI-MAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
