@@ -142,6 +142,8 @@
           # GUEST
           - interface: "{{ vyos__lan_interface }}.131"
             ipv4_network: "10.131.0.0/24"
+        tags:
+          - always
     - name: "Setup pppoe0 activation script"
       ansible.builtin.copy:
         dest: "/config/scripts/activate-pppoe0.script"
@@ -1916,6 +1918,8 @@
       loop: "{{ lan_interfaces_with_wan_access }}"
       loop_control:
         index_var: rule_number
+      tags:
+        - nat
     - name: "Setup port forwarding rules"
       vyos.vyos.vyos_config:
         lines:
@@ -1956,6 +1960,8 @@
           translation_address: "10.82.0.2"
       loop_control:
         index_var: rule_number
+      tags:
+        - nat
 
     #
     # Services
@@ -1978,6 +1984,9 @@
           - "set service conntrack-sync interface {{ vyos__lan_interface }}.9 peer 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
           - "set service conntrack-sync sync-queue-size 8"
         save: yes
+      tags:
+        - services
+        - conntrack
     - name: "Setup SSH"
       vyos.vyos.vyos_config:
         lines:
@@ -1989,6 +1998,9 @@
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
           - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
         save: yes
+      tags:
+        - services
+        - ssh
 
     - ansible.builtin.set_fact:
         dhcp_servers:
@@ -2045,6 +2057,8 @@
             dns:
               - "1.1.1.1"
               - "1.0.0.1"
+      tags:
+        - always
     - name: "Setup DHCP"
       vyos.vyos.vyos_config:
         lines:
@@ -2058,6 +2072,9 @@
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }}"
+      tags:
+        - services
+        - dhcp-server
     - name: "Setup DHCP Name Servers"
       vyos.vyos.vyos_config:
         lines:
@@ -2065,6 +2082,9 @@
       loop: "{{ dhcp_servers | subelements('dns') }}"
       loop_control:
         label: "{{ item.0.name }}: {{ item.1 }}"
+      tags:
+        - services
+        - dhcp-server
     - name: "Setup UBNT DHCP global-parameters"
       vyos.vyos.vyos_config:
         lines:
@@ -2073,6 +2093,9 @@
           - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
           - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
         save: yes
+      tags:
+        - services
+        - dhcp-server
 
     - name: "Setup Router Advertisement"
       vyos.vyos.vyos_config:
@@ -2087,6 +2110,9 @@
           - "set service router-advert interface {{ vyos__lan_interface }}.117 link-mtu 1492"
           - "set service router-advert interface {{ vyos__lan_interface }}.117 prefix ::/64 valid-lifetime 172800"
         save: yes
+      tags:
+        - services
+        - route-advert
     - name: "Setup Router Advertisement Name Servers"
       vyos.vyos.vyos_config:
         lines:
@@ -2098,3 +2124,6 @@
           - "set service router-advert interface {{ vyos__lan_interface }}.117 name-server {{ item }}"
         save: yes
       loop: "{{ common__nameservers.addresses | ansible.netcommon.ipv6 }}"
+      tags:
+        - services
+        - route-advert
