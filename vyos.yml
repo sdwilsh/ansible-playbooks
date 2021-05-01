@@ -5,6 +5,8 @@
     - name: "Gather Config"
       vyos.vyos.vyos_facts:
         gather_subset: "config"
+      tags:
+        - always
 
     #
     # System
@@ -383,6 +385,8 @@
           twa_hazards_protection: yes
           validation: disable
         state: replaced
+      tags:
+        - firewall
 
     - name: "Set the firewall rules"
       vyos.vyos.vyos_firewall_rules:
@@ -1732,6 +1736,8 @@
                     state:
                       new: true
         state: replaced
+      tags:
+        - firewall
     - name: "Set Zone Policy"
       vyos.vyos.vyos_config:
         lines:
@@ -1850,6 +1856,8 @@
           - "set zone-policy zone WAN-CenturyLink from SERVICE82 firewall name WAN-from-SERVICE82-v4"
           - "set zone-policy zone WAN-CenturyLink interface pppoe0"
         save: yes
+      tags:
+        - firewall
 
     #
     # Failover
