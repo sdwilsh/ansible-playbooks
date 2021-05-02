@@ -773,6 +773,16 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 50
+                    description: "Drop broadcast traffic ({{ ansible_managed }})"
+                    action: "drop"
+                    destination:
+                      address: "255.255.255.255"
+                  - number: 60
+                    description: "Drop broadcast traffic ({{ ansible_managed }})"
+                    action: "drop"
+                    destination:
+                      address: "10.117.1.255"
               - name: "LOCAL-from-MAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -914,6 +924,11 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 50
+                    description: "Drop broadcast traffic ({{ ansible_managed }})"
+                    action: "drop"
+                    destination:
+                      address: "255.255.255.255"
               - name: "LOCAL-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1644,6 +1659,11 @@
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmpv6"
+                  - number: 50
+                    description: "Drop link-local multicast traffic ({{ ansible_managed }})"
+                    action: "drop"
+                    destination:
+                      address: "ff02::1"
               - name: "MAN-from-HOME-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
