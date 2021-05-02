@@ -140,8 +140,8 @@
           # GUEST
           - interface: "{{ vyos__lan_interface }}.131"
             ipv4_network: "10.131.0.0/24"
-        tags:
-          - always
+      tags:
+        - always
     - name: "Setup pppoe0 activation script"
       ansible.builtin.copy:
         dest: "/config/scripts/activate-pppoe0.script"
@@ -1898,6 +1898,8 @@
           - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} nexthop 172.16.5.1"
           - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} failure-count 5"
           - "set protocols static route 0.0.0.0/0 next-hop 172.16.5.1 distance 100"
+      tags:
+        - failover
     - name: "Setup static routes and ping targets for WAN-CenturyLink"
       vyos.vyos.vyos_config:
         lines:
@@ -1907,6 +1909,8 @@
       loop: "{{ vyos__wan_centurylink_dns }}"
       loop_control:
         index_var: rule_number
+      tags:
+        - failover
     - name: "Setup static routes and ping targets for WAN-Cellular"
       vyos.vyos.vyos_config:
         lines:
@@ -1916,17 +1920,34 @@
       loop: "{{ vyos__wan_cellular_dns }}"
       loop_control:
         index_var: rule_number
+      tags:
+        - failover
     - name: "Setup rules for each inbound interface"
       vyos.vyos.vyos_config:
         lines:
-          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} failover"
-          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} inbound-interface {{ item.interface }}"
-          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} interface pppoe0 weight 10"
-          - "set load-balancing wan rule {{ (rule_number + 1) * 10 }} interface {{ vyos__wan_cellular_interface }} weight 1"
+          # Exclude Private IPv4 Space
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 3 }} destination address 10.0.0.0/8"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 3 }} exclude"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 3 }} inbound-interface {{ item.interface }}"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 4 }} destination address 172.16.0.0/12"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 4 }} exclude"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 4 }} inbound-interface {{ item.interface }}"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 5 }} destination address 192.168.0.0/16"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 5 }} exclude"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 5 }} inbound-interface {{ item.interface }}"
+          # Setup Failover
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 9 }} failover"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 9 }} inbound-interface {{ item.interface }}"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 9 }} interface pppoe0 weight 10"
+          - "set load-balancing wan rule {{ ((rule_number + 1) * 10) + 9 }} interface {{ vyos__wan_cellular_interface }} weight 1"
         save: yes
       loop: "{{ lan_interfaces_with_wan_access }}"
       loop_control:
         index_var: rule_number
+        label: "{{ item.interface }}"
+      tags:
+        - rules
+        - failover
 
     #
     # NAT
