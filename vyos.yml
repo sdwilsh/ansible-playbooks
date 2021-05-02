@@ -2093,6 +2093,19 @@
               start: "10.117.1.1"
               stop: "10.117.1.254"
             dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+            static_mapping:
+              - name: "office-printer"
+                ip: "10.117.0.14"
+                mac: "f8:0d:60:ca:32:bf"
+              - name: "lutron"
+                ip: "10.117.0.18"
+                mac: "50:8c:b1:1d:4d:1f"
+              - name: "roku-master"
+                ip: "10.117.0.20"
+                mac: "d8:31:34:5f:6c:35"
+              - name: "roku-den"
+                ip: "10.117.0.21"
+                mac: "d8:31:34:66:95:f1"
           - name: "GUEST"
             subnet: "10.131.0.0/24"
             default_router: "10.131.0.1"
@@ -2128,6 +2141,17 @@
       loop: "{{ dhcp_servers | subelements('dns') }}"
       loop_control:
         label: "{{ item.0.name }}: {{ item.1 }}"
+      tags:
+        - services
+        - dhcp-server
+    - name: "Setup DHCP Static Assignments"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dhcp-server shared-network-name {{ item.0.name }} subnet {{ item.0.subnet }} static-mapping {{ item.1.name }} mac-address {{ item.1.mac }}"
+          - "set service dhcp-server shared-network-name {{ item.0.name }} subnet {{ item.0.subnet }} static-mapping {{ item.1.name }} ip-address {{ item.1.ip }}"
+      loop: "{{ dhcp_servers | subelements('static_mapping', skip_missing=true) }}"
+      loop_control:
+        label: "{{ item.0.name }}: {{ item.1.name }} ({{ item.1.ip }})"
       tags:
         - services
         - dhcp-server
