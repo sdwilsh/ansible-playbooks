@@ -1,133 +1,128 @@
 ---
 bind_acls:
-  - name: ns2
+  - name: "ns1"
     match_list:
-      - 10.0.0.4
-      - 10.10.0.4
-      - 10.117.0.4
-      - 192.168.2.4
-      - fd36:3eb3:43b0:0::4
-      - fd36:3eb3:43b0:a::4
-      - fd36:3eb3:43b0:75::4
+      - "10.10.0.3"
+      - "fd36:3eb3:43b0:a::3"
+  - name: "ns2"
+    match_list:
+      - "10.10.0.4"
+      - "fd36:3eb3:43b0:a::4"
 bind_allow_query:
-  - any
+  - "any"
 bind_listen_ipv4:
-  - any
+  - "any"
 bind_listen_ipv6:
-  - any
+  - "any"
 bind_zones:
-  - name: tswn.us
+  - name: "tswn.us"
     create_reverse_zones: true
     primaries: 
-      - fd36:3eb3:43b0:75::3
+      - "fd36:3eb3:43b0:a::3"
     name_servers:
-      - shadowofsunderedstar.hogs.tswn.us.
-      - bornstellarmakeseternallasting.hogs.tswn.us.
+      - "shadowofsunderedstar.hogs.tswn.us."
+      - "bornstellarmakeseternallasting.hogs.tswn.us."
     hosts:
-      - name: shadowofsunderedstar.hogs
-        ip: 10.117.0.3
-        ipv6: fd36:3eb3:43b0:75::3
+      - name: "maccabeus.hogs"
+        ip: "10.117.0.1"
+        ipv6: "fd36:3eb3:43b0:75::1"
         aliases:
-          - ns1
-      - name: bornstellarmakeseternallasting.hogs
-        ip: 10.117.0.4
-        ipv6: fd36:3eb3:43b0:75::4
+          - "home"
+      - name: "mysql.hogs"
+        ip: "10.117.0.5"
+        ipv6: "fd36:3eb3:43b0:75::5"
+      - name: "nut.hogs"
+        ip: "10.117.0.9"
+        ipv6: "fd36:3eb3:43b0:75::9"
+      - name: "firstlightweaveslivingsong.hogs"
+        ip: "10.117.0.10"
+        ipv6: "fd36:3eb3:43b0:75::a"
+      - name: "dadab.hogs"
+        ip: "10.117.0.11"
+        ipv6: "fd36:3eb3:43b0:75::b"
+      - name: "palamok.hogs"
+        ip: "10.117.0.12"
+        ipv6: "fd36:3eb3:43b0:75::c"
         aliases:
-          - ns2
-      - name: al-cygni01
+          - "mqtt.hogs"
+      - name: "sif.hogs"
+        ip: "10.117.0.16"
+        ipv6: "fd36:3eb3:43b0:75::10"
         aliases:
-          - al-cygni01.hogs.tswn.us.
-      - name: installation02
-        ip: 172.16.2.2
+          - "zwave.hogs"
+      - name: "harvest.hogs"
+        ip: "10.117.0.17"
+        ipv6: "fd36:3eb3:43b0:75::11"
         aliases:
-          - unifi
-      - name: installation03
-        ip: 172.16.3.2
-      - name: installation04
-        ip: 172.16.4.2
-  - name: hogs.tswn.us
-    create_reverse_zones: true
-    primaries: 
-      - fd36:3eb3:43b0:75::3
-    name_servers:
-      - shadowofsunderedstar.hogs.tswn.us.
-      - bornstellarmakeseternallasting.hogs.tswn.us.
-    hosts:
-      - name: maccabeus
-        ip: 10.117.0.1
-        ipv6: fd36:3eb3:43b0:75::1
-      - name: shadowofsunderedstar.hogs
-        ip: 10.117.0.3
-        ipv6: fd36:3eb3:43b0:75::3
+          - "opensprinkler.hogs"
+      - name: "cortana.hogs"
+        ip: "10.117.0.19"
+        ipv6: "fd36:3eb3:43b0:75::13"
         aliases:
-          - ns1
-      - name: bornstellarmakeseternallasting.hogs
-        ip: 10.117.0.4
-        ipv6: fd36:3eb3:43b0:75::4
+          - "homeassistant.hogs"
+      - name: "enduringbias.hogs"
+        ip: "10.117.0.26"
+        ipv6: "fd36:3eb3:43b0:75::1a"
         aliases:
-          - ns2
-      - name: al-cygni01
-        ip: 10.117.0.6
-        ipv6: fd36:3eb3:43b0:75::6
-      - name: nut
-        ip: 10.117.0.9
-        ipv6: fd36:3eb3:43b0:75::9
-      - name: firstlightweaveslivingsong
-        ip: 10.117.0.10
-        ipv6: fd36:3eb3:43b0:75::a
+          - "smokeping.hogs"
+      - name: "iona.hogs"
+        ip: "10.117.0.27"
+        ipv6: "fd36:3eb3:43b0:75::1b"
         aliases:
-          - truenas
-      - name: dadab
-        ip: 10.117.0.11
-        ipv6: fd36:3eb3:43b0:75::b
+          - "blueiris.hogs"
+      - name: "docker-ssd.hogs"
+        ip: "10.117.0.30"
+        ipv6: "fd36:3eb3:43b0:75::1e"
         aliases:
-          - hyper-v01
-      - name: palamok
-        ip: 10.117.0.12
-        ipv6: fd36:3eb3:43b0:75::c
+          - "ara.hogs"
+          - "factorio"
+          - "valheim"
+          - "valheim.hogs"
+      - name: "maccabeus01.hogs"
+        ip: "10.117.0.48"
+        ipv6: "fd36:3eb3:43b0:75::30"
+      - name: "maccabeus02.hogs"
+        ip: "10.117.0.49"
+        ipv6: "fd36:3eb3:43b0:75::31"
+      - name: "0.ntp.hogs"
+        ip: "10.117.0.50"
         aliases:
-          - mqtt
-      - name: sif
-        ip: 10.117.0.16
-        ipv6: fd36:3eb3:43b0:75::10
+          - "pool.ntp.hogs"
+
+      - name: "al-cygni.hogs"
+        ip: "10.10.0.2"
+        ipv6: "fd36:3eb3:43b0:a::2"
+      - name: "shadowofsunderedstar.hogs"
+        ip: "10.10.0.3"
+        ipv6: "fd36:3eb3:43b0:a::3"
         aliases:
-          - zwave
-      - name: harvest
-        ip: 10.117.0.17
-        ipv6: fd36:3eb3:43b0:75::11
+          - "ns1"
+      - name: "bornstellarmakeseternallasting.hogs"
+        ip: "10.10.0.4"
+        ipv6: "fd36:3eb3:43b0:a::4"
         aliases:
-          - opensprinkler
-      - name: cortana
-        ip: 10.117.0.19
-        ipv6: fd36:3eb3:43b0:75::13
+          - "ns2"
+      - name: "ups01.hogs"
+        ip: "10.10.0.5"
+        ipv6: "fd36:3eb3:43b0:a::5"
+      - name: "ipmi.firstlightweaveslivingsong.hogs"
+        ip: "10.10.0.10"
+        ipv6: "fd36:3eb3:43b0:a::a"
+      - name: "ipmi.dadab.hogs"
+        ip: "10.10.0.11"
+        ipv6: "fd36:3eb3:43b0:a::b"
+      - name: "sdwilsh-dev.hogs"
+        ip: "10.10.0.20"
+        ipv6: "fd36:3eb3:43b0:a::14"
+      # Services
+      - name: "installation02"
+        ip: "10.82.0.2"
         aliases:
-          - homeassistant
-      - name: boinc01
-        ip: 10.117.0.23
-      - name: boinc02
-        ip: 10.117.0.24
-      - name: boinc03
-        ip: 10.117.0.25
-      - name: enduringbias
-        ip: 10.117.0.26
-        ipv6: fd36:3eb3:43b0:75::1a
-        aliases:
-          - smokeping
-      - name: iona
-        ip: 10.117.0.27
-        ipv6: fd36:3eb3:43b0:75::1b
-        aliases:
-          - blueiris
-      - name: test.cortana
-        ip: 10.117.0.28
-        ipv6: fd36:3eb3:43b0:75::1c
-        aliases:
-          - test.homeassistant
-      - name: test.viseron
-        ip: 10.117.0.29
-        ipv6: fd36:3eb3:43b0:75::1d
-      
-      # MAN Network
-      - name: ups01
-        ip: 10.10.0.5
-        ipv6: fd36:3eb3:43b0:75:a::5
+          - "unifi"
+          - "unifi.hogs"
+    networks:
+      - "10.10.0"
+      - "10.117.0"
+    ipv6_networks:
+      - "fd36:3eb3:43b0:a::/64"
+      - "fd36:3eb3:43b0:75::/64"

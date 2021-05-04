@@ -1,0 +1,6 @@
+---
+common__gateway_v4_address: "10.10.0.1"
+common__gateway_v6_address: "fd36:3eb3:43b0:a::1"
+common__ip_addresses:
+  - "10.10.0.3/24"
+  - "fd36:3eb3:43b0:a::3/64"
