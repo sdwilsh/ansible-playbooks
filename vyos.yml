@@ -742,6 +742,84 @@
                     action: "drop"
                     state:
                       invalid: true
+              - name: "LOCAL-from-GUEST-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 4
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
+              - name: "LOCAL-from-GWORK-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 4
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
               - name: "LOCAL-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -772,6 +850,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
                   - number: 50
                     description: "Drop broadcast traffic ({{ ansible_managed }})"
                     action: "drop"
@@ -782,6 +869,45 @@
                     action: "drop"
                     destination:
                       address: "10.117.1.255"
+              - name: "LOCAL-from-IOT-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 4
+                    description: "Allow DHCP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    source:
+                      port: "68"
+                    destination:
+                      port: "67"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
               - name: "LOCAL-from-MAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -813,6 +939,15 @@
                     destination:
                       port: "67"
                   - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
+                  - number: 50
                     description: "Allow SSH ({{ ansible_managed }})"
                     action: "accept"
                     destination:
@@ -820,7 +955,7 @@
                     protocol: "tcp"
                     state:
                       new: true
-                  - number: 20
+                  - number: 60
                     description: "Drop Eaton Alarms Broadcast ({{ ansible_managed }})"
                     action: "drop"
                     protocol: "udp"
@@ -857,6 +992,46 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
+              - name: "LOCAL-from-SERVICE82-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
               - name: "LOCAL-from-SYNC-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -923,6 +1098,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
                   - number: 50
                     description: "Drop broadcast traffic ({{ ansible_managed }})"
                     action: "drop"
@@ -1618,6 +1802,15 @@
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmpv6"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
               - name: "LOCAL-from-MAN-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1638,6 +1831,15 @@
                     description: "Allow ICMP ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "icmpv6"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
               - name: "LOCAL-from-UNIFI-MAN-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1663,6 +1865,15 @@
                     action: "drop"
                     destination:
                       address: "ff02::1"
+                  - number: 10
+                    description: "Allow DNS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        port_group: "DNS"
               - name: "MAN-from-HOME-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1807,13 +2018,17 @@
           # LOCAL Zone
           - "set zone-policy zone LOCAL default-action drop"
           - "set zone-policy zone LOCAL description '{{ ansible_managed }}'"
+          - "set zone-policy zone LOCAL from GUEST firewall name LOCAL-from-GUEST-v4"
+          - "set zone-policy zone LOCAL from GWORK firewall name LOCAL-from-GWORK-v4"
           - "set zone-policy zone LOCAL from HOME firewall name LOCAL-from-HOME-v4"
           - "set zone-policy zone LOCAL from HOME firewall ipv6-name LOCAL-from-HOME-v6"
+          - "set zone-policy zone LOCAL from IOT firewall name LOCAL-from-IOT-v4"
           - "set zone-policy zone LOCAL from MAN firewall name LOCAL-from-MAN-v4"
           - "set zone-policy zone LOCAL from MAN firewall ipv6-name LOCAL-from-MAN-v6"
           - "set zone-policy zone LOCAL from NOWAN firewall name LOCAL-from-NOWAN-v4"
           - "set zone-policy zone LOCAL from UNIFI-MAN firewall name LOCAL-from-UNIFI-MAN-v4"
           - "set zone-policy zone LOCAL from UNIFI-MAN firewall ipv6-name LOCAL-from-UNIFI-MAN-v6"
+          - "set zone-policy zone LOCAL from SERVICE82 firewall name LOCAL-from-SERVICE82-v4"
           - "set zone-policy zone LOCAL from SYNC firewall name LOCAL-from-SYNC-v4"
           - "set zone-policy zone LOCAL from WAN-Cellular firewall name LOCAL-from-WAN-v4"
           - "set zone-policy zone LOCAL from WAN-CenturyLink firewall name LOCAL-from-WAN-v4"
@@ -2166,6 +2381,20 @@
       tags:
         - services
         - dhcp-server
+
+    - name: "Setup DNS Forwarding"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dns forwarding allow-from 10.0.0.0/8"
+          - "set service dns forwarding allow-from fd00::/8"
+          - "set service dns forwarding listen-address 10.117.0.{{ vyos__host_id_ipv4 }}"
+          - "set service dns forwarding listen-address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
+          - "set service dns forwarding name-server 1.0.0.1"
+          - "set service dns forwarding name-server 1.1.1.1"
+        save: yes
+      tags:
+        - services
+        - dns
 
     - name: "Setup Router Advertisement"
       vyos.vyos.vyos_config:
