@@ -386,6 +386,13 @@
       tags:
         - firewall
 
+    - name: "Set MSS clamping on PPPOE interface"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set firewall options interface pppoe0 adjust-mss 1452"
+      tags:
+        - firewall
+
     - name: "Set the firewall rules"
       vyos.vyos.vyos_firewall_rules:
         config:
