@@ -285,6 +285,16 @@
           config_trap: no
           group:
             address_group:
+              - name: "PEER-v4"
+                description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
+                members:
+                  - address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
               - name: "MAN-TALKERS-from-HOME-v4"
                 description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
                 members:
@@ -725,6 +735,15 @@
                     destination:
                       group:
                         port_group: "DNS"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
               - name: "LOCAL-from-GWORK-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -755,6 +774,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -794,6 +822,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -843,6 +880,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -882,6 +928,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -936,6 +991,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -1012,14 +1076,6 @@
                       port: "3780"
                     source:
                       address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-                  - number: 30
-                    description: "Allow dhcp-sync ({{ ansible_managed }})"
-                    action: "accept"
-                    protocol: "tcp"
-                    destination:
-                      port: "520"
-                    source:
-                      address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
               - name: "LOCAL-from-UNIFI-MAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1050,6 +1106,15 @@
                       port: "68"
                     destination:
                       port: "67"
+                  - number: 5
+                    description: "Allow dhcp-sync ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    destination:
+                      port: "520"
+                    source:
+                      group:
+                        address_group: "PEER-v4"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -2202,7 +2267,7 @@
             subnet: "10.1.0.0/24"
             default_router: "10.1.0.1"
             range:
-              start: "10.1.0.200"
+              start: "10.1.0.150"
               stop: "10.1.0.250"
             dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
           - name: "MAN"
@@ -2225,14 +2290,14 @@
             subnet: "10.66.0.0/24"
             default_router: "10.66.0.1"
             range:
-              start: "10.66.0.100"
+              start: "10.66.0.10"
               stop: "10.66.0.250"
             dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
           - name: "NOWAN"
             subnet: "10.67.0.0/24"
             default_router: "10.67.0.1"
             range:
-              start: "10.67.0.100"
+              start: "10.67.0.10"
               stop: "10.67.0.250"
             dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
           - name: "HOME"
@@ -2269,14 +2334,14 @@
     - name: "Setup DHCP"
       vyos.vyos.vyos_config:
         lines:
+          - "set service dhcp-server shared-network-name {{ item.name }} authoritative"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} default-router {{ item.default_router }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 start {{ item.range.start }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 stop {{ item.range.stop }}"
-          # Uncomment these when failover is actually setup; Nothing gets an address if the primary cannot be reached.
-          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address 10.9.0.{{ vyos__host_id_ipv4 }}"
-          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
-          # - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }} ({{ item.subnet }})"
