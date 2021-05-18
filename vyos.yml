@@ -2395,7 +2395,6 @@
           - "set service dns forwarding allow-from fd00::/8"
           - "set service dns forwarding domain tswn.us server 10.10.0.3"
           - "set service dns forwarding domain tswn.us server 10.10.0.4"
-          - "set service dns forwarding domain tswn.us server 10.10.0.4"
           - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::3"
           - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::4"
           - "set service dns forwarding listen-address 10.117.0.{{ vyos__host_id_ipv4 }}"
