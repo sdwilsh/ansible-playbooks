@@ -12,3 +12,7 @@ mysql.hogs.tswn.us
 
 [opensprinkler]
 harvest.hogs.tswn.us
+
+[vyos]
+maccabeus01.hogs.tswn.us ansible_host=10.10.0.48
+maccabeus02.hogs.tswn.us ansible_host=10.10.0.49
