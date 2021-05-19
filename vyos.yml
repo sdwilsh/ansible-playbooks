@@ -2271,49 +2271,46 @@
     - ansible.builtin.set_fact:
         dhcp_servers:
           - name: "UNIFI-MAN"
-            subnet: "10.1.0.0/24"
             default_router: "10.1.0.1"
+            own_dns: true
             range:
               start: "10.1.0.150"
               stop: "10.1.0.250"
-            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+            subnet: "10.1.0.0/24"
           - name: "MAN"
-            subnet: "10.10.0.0/24"
             default_router: "10.10.0.1"
+            own_dns: true
             range:
               start: "10.10.0.200"
               stop: "10.10.0.250"
-            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+            subnet: "10.10.0.0/24"
           - name: "GWORK"
-            subnet: "192.168.1.0/24"
             default_router: "192.168.1.1"
+            own_dns: false
             range:
               start: "192.168.1.100"
               stop: "192.168.1.250"
-            dns:
-              - "1.1.1.1"
-              - "1.0.0.1"
+            subnet: "192.168.1.0/24"
           - name: "IOT"
-            subnet: "10.66.0.0/24"
             default_router: "10.66.0.1"
+            own_dns: true
             range:
               start: "10.66.0.10"
               stop: "10.66.0.250"
-            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+            subnet: "10.66.0.0/24"
           - name: "NOWAN"
-            subnet: "10.67.0.0/24"
             default_router: "10.67.0.1"
+            own_dns: true
             range:
               start: "10.67.0.10"
               stop: "10.67.0.250"
-            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
+            subnet: "10.67.0.0/24"
           - name: "HOME"
-            subnet: "10.117.0.0/23"
             default_router: "10.117.0.1"
+            own_dns: true
             range:
               start: "10.117.1.1"
               stop: "10.117.1.254"
-            dns: "{{ common__nameservers.addresses | ansible.netcommon.ipv4 }}"
             static_mapping:
               - name: "office-printer"
                 ip: "10.117.0.14"
@@ -2327,15 +2324,14 @@
               - name: "roku-den"
                 ip: "10.117.0.21"
                 mac: "d8:31:34:66:95:f1"
+            subnet: "10.117.0.0/23"
           - name: "GUEST"
-            subnet: "10.131.0.0/24"
             default_router: "10.131.0.1"
+            own_dns: false
             range:
               start: "10.131.0.100"
               stop: "10.131.0.250"
-            dns:
-              - "1.1.1.1"
-              - "1.0.0.1"
+            subnet: "10.131.0.0/24"
       tags:
         - always
     - name: "Setup DHCP"
@@ -2345,6 +2341,12 @@
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} default-router {{ item.default_router }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 start {{ item.range.start }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 stop {{ item.range.stop }}"
+          - >-
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            {% if item.own_dns %}{{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}{% else %}1.1.1.1{% endif %}
+          - >-
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            {% if item.own_dns %}{{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}{% else %}1.0.0.1{% endif %}
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
@@ -2352,16 +2354,6 @@
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }} ({{ item.subnet }})"
-      tags:
-        - services
-        - dhcp-server
-    - name: "Setup DHCP Name Servers"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set service dhcp-server shared-network-name {{ item.0.name }} subnet {{ item.0.subnet }} dns-server {{ item.1 }}"
-      loop: "{{ dhcp_servers | subelements('dns') }}"
-      loop_control:
-        label: "{{ item.0.name }}: {{ item.1 }}"
       tags:
         - services
         - dhcp-server
