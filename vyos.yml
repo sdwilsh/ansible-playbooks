@@ -2389,11 +2389,35 @@
           - "set service dns forwarding domain tswn.us server 10.10.0.4"
           - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::3"
           - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::4"
-          - "set service dns forwarding listen-address 10.117.0.{{ vyos__host_id_ipv4 }}"
-          - "set service dns forwarding listen-address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
           - "set service dns forwarding name-server 1.0.0.1"
           - "set service dns forwarding name-server 1.1.1.1"
         save: yes
+      tags:
+        - services
+        - dns
+    - name: "Set DNS Listenting Addresses"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dns forwarding listen-address {{ item }}"
+        save: yes
+      loop:
+          # UNIFI-MAN
+          - "10.1.0.{{ vyos__host_id_ipv4 }}"
+          - "fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}"
+          # MAN
+          - "10.10.0.{{ vyos__host_id_ipv4 }}"
+          - "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
+          # IOT
+          - "10.66.0.{{ vyos__host_id_ipv4 }}"
+          # NOWAN
+          - "10.67.0.{{ vyos__host_id_ipv4 }}"
+          # SERVICE82
+          - "10.82.0.{{ vyos__host_id_ipv4 }}"
+          # ROUTER-LAB
+          - "10.100.0.{{ vyos__host_id_ipv4 }}"
+          # HOME
+          - "10.117.0.{{ vyos__host_id_ipv4 }}"
+          - "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
       tags:
         - services
         - dns
