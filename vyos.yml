@@ -2286,7 +2286,7 @@
             subnet: "10.10.0.0/24"
           - name: "GWORK"
             default_router: "192.168.1.1"
-            own_dns: false
+            own_dns: true
             range:
               start: "192.168.1.100"
               stop: "192.168.1.250"
@@ -2341,12 +2341,6 @@
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} default-router {{ item.default_router }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 start {{ item.range.start }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 stop {{ item.range.stop }}"
-          - >-
-            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
-            {% if item.own_dns %}{{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}{% else %}1.1.1.1{% endif %}
-          - >-
-            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
-            {% if item.own_dns %}{{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}{% else %}1.0.0.1{% endif %}
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
@@ -2354,6 +2348,37 @@
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }} ({{ item.subnet }})"
+      tags:
+        - services
+        - dhcp-server
+    - name: "Setup DHCP DNS Servers"
+      vyos.vyos.vyos_config:
+        lines:
+          - >-
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            {{ item.default_router[:-1] }}1
+          - >-
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}
+          - >-
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}
+      loop: "{{ dhcp_servers }}"
+      loop_control:
+        label: "{{ item.name }} ({{ item.subnet }})"
+      when: "item.own_dns"
+      tags:
+        - services
+        - dhcp-server
+    - name: "Setup DHCP DNS Servers"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server 1.1.1.2"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server 1.0.0.2"
+      loop: "{{ dhcp_servers }}"
+      loop_control:
+        label: "{{ item.name }} ({{ item.subnet }})"
+      when: "not item.own_dns"
       tags:
         - services
         - dhcp-server
@@ -2384,13 +2409,14 @@
       vyos.vyos.vyos_config:
         lines:
           - "set service dns forwarding allow-from 10.0.0.0/8"
+          - "set service dns forwarding allow-from 192.168.1.0/24"
           - "set service dns forwarding allow-from fd00::/8"
           - "set service dns forwarding domain tswn.us server 10.10.0.3"
           - "set service dns forwarding domain tswn.us server 10.10.0.4"
           - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::3"
           - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::4"
-          - "set service dns forwarding name-server 1.0.0.1"
-          - "set service dns forwarding name-server 1.1.1.1"
+          - "set service dns forwarding name-server 1.1.1.2"
+          - "set service dns forwarding name-server 1.0.0.2"
         save: yes
       tags:
         - services
@@ -2402,20 +2428,30 @@
         save: yes
       loop:
           # UNIFI-MAN
+          - "10.1.0.1"
           - "10.1.0.{{ vyos__host_id_ipv4 }}"
           - "fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}"
           # MAN
+          - "10.10.0.1"
           - "10.10.0.{{ vyos__host_id_ipv4 }}"
           - "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
+          # GWORK
+          - "10.15.0.1"
+          - "10.15.0.{{ vyos__host_id_ipv4 }}"
           # IOT
+          - "10.66.0.1"
           - "10.66.0.{{ vyos__host_id_ipv4 }}"
           # NOWAN
+          - "10.67.0.1"
           - "10.67.0.{{ vyos__host_id_ipv4 }}"
           # SERVICE82
+          - "10.82.0.1"
           - "10.82.0.{{ vyos__host_id_ipv4 }}"
           # ROUTER-LAB
+          - "10.100.0.1"
           - "10.100.0.{{ vyos__host_id_ipv4 }}"
           # HOME
+          - "10.117.0.1"
           - "10.117.0.{{ vyos__host_id_ipv4 }}"
           - "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
       tags:
