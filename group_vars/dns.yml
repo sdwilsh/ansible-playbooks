@@ -45,6 +45,9 @@ bind_zones:
         ipv6: "fd36:3eb3:43b0:75::c"
         aliases:
           - "mqtt.hogs"
+      - name: "nvidia-shield.hogs"
+        ip: "10.117.0.13"
+        ipv6: "fd36:3eb3:43b0:75:864:f450:825c:a847"
       - name: "sif.hogs"
         ip: "10.117.0.16"
         ipv6: "fd36:3eb3:43b0:75::10"
