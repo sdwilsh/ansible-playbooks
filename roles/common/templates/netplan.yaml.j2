@@ -14,7 +14,9 @@ network:
 {% for item in common__nameservers.addresses %}
           - "{{ item }}"
 {% endfor %}
+{% if "search" in common__nameservers %}
         search:
 {% for item in common__nameservers.search %}
           - "{{ item }}"
 {% endfor %}
+{% endif %}

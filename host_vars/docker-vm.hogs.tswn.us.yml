@@ -1,0 +1,24 @@
+---
+ansible_cron__inventory_file: "prod-inventory"
+
+common__gateway_v4_address: "10.10.0.1"
+common__gateway_v6_address: "fd36:3eb3:43b0:a::1"
+common__ip_addresses:
+  - "10.10.0.6/23"
+  - "fd36:3eb3:43b0:a::6/64"
+common__nameservers:
+  addresses:
+    - "10.10.0.1"
+    - "fd36:3eb3:43b0:a::1"
+
+# `a` removes unused images (useful in production).
+# `f` forces it to happen without prompting you to agree.
+docker__cron_jobs_prune_flags: "af"
+# Every Sunday at midnight
+docker__cron_jobs_prune_schedule: ["0", "0", "*", "*", "0"]
+docker__state: "latest"
+docker__cron_jobs:
+  - name: "Docker disk clean up"
+    job: "docker system prune -{{ docker__cron_jobs_prune_flags }} > /dev/null 2>&1"
+    schedule: "{{ docker__cron_jobs_prune_schedule }}"
+    cron_file: "docker-disk-clean-up"
