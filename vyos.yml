@@ -17,7 +17,10 @@
         state: "present"
     - name: "Set nameservers"
       vyos.vyos.vyos_system:
-        name_servers: "{{ common__nameservers.addresses }}"
+        name_servers:
+          - "127.0.0.1"
+      tags:
+        - "dns"
     - name: "Set domain search suffixes"
       vyos.vyos.vyos_system:
         domain_search: "{{ common__nameservers.search }}"
@@ -2408,6 +2411,8 @@
     - name: "Setup DNS Forwarding"
       vyos.vyos.vyos_config:
         lines:
+          - "set service dns forwarding allow-from 127.0.0.0/8"
+          - "set service dns forwarding allow-from ::1/128"
           - "set service dns forwarding allow-from 10.0.0.0/8"
           - "set service dns forwarding allow-from 192.168.1.0/24"
           - "set service dns forwarding allow-from fd00::/8"
@@ -2429,6 +2434,8 @@
           - "set service dns forwarding listen-address {{ item }}"
         save: yes
       loop:
+          # localhost
+          - "127.0.0.1"
           # UNIFI-MAN
           - "10.1.0.1"
           - "10.1.0.{{ vyos__host_id_ipv4 }}"
