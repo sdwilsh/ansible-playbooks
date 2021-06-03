@@ -33,6 +33,7 @@
   ansible.builtin.git:
     repo: "https://github.com/sdwilsh/ansible-playbooks.git"
     dest: "/src/ansible-playbooks"
+    update: no
 - name: Create vault password file
   ansible.builtin.copy:
     dest: "/src/ansible-playbooks/.ansible_vault_password"
@@ -40,27 +41,6 @@
     mode: "u=rw"
     owner: "ansible"
     group: "ansible"
-
-- name: Download or update galaxy roles
-  ansible.builtin.command:
-    chdir: "/src/ansible-playbooks"
-    argv:
-      - "ansible-galaxy"
-      - "role"
-      - "install"
-      - "-r"
-      - "requirements.yml"
-  become_user: "ansible"
-- name: Download or update galaxy collections
-  ansible.builtin.command:
-    chdir: "/src/ansible-playbooks"
-    argv:
-      - "ansible-galaxy"
-      - "collection"
-      - "install"
-      - "-r"
-      - "requirements.yml"
-  become_user: "ansible"
 
 - name: Ensure log file exists at /var/log/ansible.log
   ansible.builtin.file:
@@ -107,7 +87,12 @@
     user: "ansible"
     state: present
 - ansible.builtin.set_fact:
-    cron_command: "cd /src/ansible-playbooks && ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml 2>&1"
+    collections_command: "ansible-galaxy collection install -r requirements.yml"
+    git_command: "git pull --rebase"
+    playbook_command: "ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml"
+    role_command: "ansible-galaxy role install -r requirements.yml"
+- ansible.builtin.set_fact:
+    cron_command: "cd /src/ansible-playbooks && {{ git_command }} && {{ collections_command }} && {{ role_command }} && {{ playbook_command }} 2>&1"
 - name: Setup cron job
   ansible.builtin.cron:
     name: "run ansible locally"
