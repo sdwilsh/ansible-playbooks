@@ -1,0 +1,83 @@
+---
+# tasks file for zabbix
+- name: "Create zabbix group"
+  ansible.builtin.group:
+    name: "zabbix"
+    state: "present"
+- name: "Create zabbix user"
+  ansible.builtin.user:
+    name: "zabbix"
+    group: "zabbix"
+    groups:
+      - "docker"
+      - "zabbix"
+    state: "present"
+    shell: "/bin/bash"
+
+- name: "Create zabbix directory"
+  ansible.builtin.file:
+    path: "/var/lib/zabbix"
+    state: "directory"
+    owner: "zabbix"
+    group: "zabbix"
+    mode: "u=rwx"
+
+- name: "Launch zabbix server and frontend containers"
+  community.docker.docker_compose:
+    project_name: "zabbix"
+    definition:
+      services:
+        server:
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
+          environment:
+            DB_SERVER_HOST: "mysql.hogs.tswn.us"
+            MYSQL_USER: "zabbix"
+            MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
+          image: "zabbix/zabbix-server-mysql:5.4-ubuntu-latest"
+          networks:
+            zabbix:
+              ipv4_address: "10.117.0.32"
+              ipv6_address: "fd36:3eb3:43b0:75::20"
+          ports:
+            - "10051:10051/tcp"
+          volumes:
+            - "/var/lib/zabbix:/var/lib/zabbix"
+        frontend:
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
+          environment:
+            DB_SERVER_HOST: "mysql.hogs.tswn.us"
+            MYSQL_USER: "zabbix"
+            MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
+            ZBX_SERVER_HOST: "zabbix-server.hogs.tswn.us"
+            PHP_TZ: "America/Los Angeles"
+          image: "zabbix/zabbix-web-apache-mysql:5.4-ubuntu-latest"
+          networks:
+            zabbix:
+              ipv4_address: "10.117.0.33"
+              ipv6_address: "fd36:3eb3:43b0:75::21"
+          ports:
+            - "80:8080/tcp"
+      networks:
+        zabbix:
+          driver: "macvlan"
+          driver_opts:
+            parent: "eth1"
+          ipam:
+            driver: "default"
+            config:
+              - subnet: "10.117.0.0/23"
+                gateway: "10.117.0.1"
+              - subnet: "fd36:3eb3:43b0:75::/64"
+                gateway: "fd36:3eb3:43b0:75::1"
+    pull: yes
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
+- ansible.builtin.assert:
+    that:
+      - "status.services.server.zabbix_server_1.state.running"
+      - "status.services.frontend.zabbix_frontend_1.state.running"
