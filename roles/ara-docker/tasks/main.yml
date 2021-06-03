@@ -96,3 +96,14 @@
 - ansible.builtin.assert:
     that:
       - "status.services.api_server.ara_api_server_1.state.running"
+
+- ansible.builtin.set_fact:
+    cron_command: "ara playbook prune --days 90 --confirm 2>&1"
+- name: "Setup cleanup cron job"
+  ansible.builtin.cron:
+    name: "Prune ara playbook storage"
+    job: "if ! out=`{{ cron_command }}`; then echo $out; fi"
+    user: "ansible"
+    hour: "1"
+    minute: "0"
+    state: present
