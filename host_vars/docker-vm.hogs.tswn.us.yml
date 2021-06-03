@@ -1,6 +1,8 @@
 ---
 ansible_cron__inventory_file: "prod-inventory"
 
+common__additional_ethernet_interfaces:
+  eth1: {}
 common__gateway_v4_address: "10.10.0.1"
 common__gateway_v6_address: "fd36:3eb3:43b0:a::1"
 common__ip_addresses:
