@@ -112,3 +112,5 @@
     login_user: "root"
     state: "present"
   loop: "{{ mysql_server__users }}"
+  loop_control:
+    label: "{{ item.name }}@{{ item.host }}"
