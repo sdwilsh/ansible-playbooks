@@ -4,9 +4,11 @@
     that: "ansible_cron__inventory_file == 'prod-inventory' or ansible_cron__inventory_file == 'testing-inventory'"
     fail_msg: "Please set ansible_cron__inventory_file to the correct inventory file in host_vars/{{ inventory_hostname }}.yml"
 
-- name: "Ensure ansible dependencies are installed"
+- name: "Ensure ansible & ara dependencies are installed"
   ansible.builtin.apt:
-    name: "software-properties-common"
+    name:
+      - "software-properties-common"
+      - "python3-pip"
     state: "latest"
   when: ansible_distribution == "Ubuntu"
 - name: "Ensure ansible is installed"
