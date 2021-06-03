@@ -63,6 +63,7 @@
       - "{{ ansible_python.executable }}"
       - "-m"
       - "ara.setup.callback_plugins"
+  changed_when: false
   become_user: "ansible"
   register: fetch_ara_callback_plugin_path
 - name: Set environment in cron file for ARA callback
