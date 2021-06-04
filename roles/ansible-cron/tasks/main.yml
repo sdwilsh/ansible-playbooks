@@ -42,14 +42,30 @@
     owner: "ansible"
     group: "ansible"
 
-- name: Ensure log file exists at /var/log/ansible.log
+- name: "Install logrotate conf for ansible logs"
+  when: ansible_os_family == "Debian"
+  ansible.builtin.template:
+    dest: "/etc/logrotate.d/ansible"
+    owner: "root"
+    group: "root"
+    mode: "u=rw,g=r,o=r"
+    src: "logrotate-ansible.j2"
+- name: "Ensure /usr/local/etc/newsyslog.conf.d/ exists"
+  when: ansible_distribution == "FreeBSD"
   ansible.builtin.file:
-    group: "ansible"
-    mode: "u=rw,g=rw,o=r"
-    modification_time: "preserve"
-    owner: "ansible"
-    path: "/var/log/ansible.log"
-    state: "touch"
+    group: "wheel"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: "root"
+    path: "/usr/local/etc/newsyslog.conf.d"
+    state: "directory"
+- name: "Install newsyslog conf for ansible logs"
+  when: ansible_distribution == "FreeBSD"
+  ansible.builtin.template:
+    dest: "/usr/local/etc/newsyslog.conf.d/ansible.conf"
+    owner: "root"
+    group: "wheel"
+    mode: "u=rw,g=r,o=r"
+    src: "newsyslog-ansible.conf.j2"
 - name: Set environment in cron file to log to /var/log/ansible.log
   ansible.builtin.cron:
     name: "ANSIBLE_LOG_PATH"
