@@ -43,8 +43,12 @@
           ports:
             - "10051:10051/tcp"
           volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
             - "/var/lib/zabbix:/var/lib/zabbix"
         frontend:
+          depends_on:
+            - "server"
           dns:
             - "10.117.0.1"
             - "fd36:3eb3:43b0:75::1"
@@ -54,6 +58,13 @@
             MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
             ZBX_SERVER_HOST: "zabbix-server.hogs.tswn.us"
             PHP_TZ: "America/Los Angeles"
+            ZBX_DEBUGLEVEL: "5"
+          healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+            interval: "10s"
+            timeout: "5s"
+            retries: 3
+            start_period: "30s"
           image: "zabbix/zabbix-web-apache-mysql:5.4-ubuntu-latest"
           networks:
             zabbix:
@@ -61,6 +72,9 @@
               ipv6_address: "fd36:3eb3:43b0:75::21"
           ports:
             - "80:8080/tcp"
+          volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
       networks:
         zabbix:
           driver: "macvlan"
