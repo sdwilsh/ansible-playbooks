@@ -34,11 +34,18 @@
     repo: "https://github.com/sdwilsh/ansible-playbooks.git"
     dest: "/src/ansible-playbooks"
     update: no
+- name: "Ensure /src/ansible-playbooks is owned by ansible"
+  ansible.builtin.file:
+    state: "directory"
+    recurse: yes
+    path: "/src/ansible-playbooks"
+    owner: "ansible"
+    group: "ansible"
 - name: Create vault password file
   ansible.builtin.copy:
     dest: "/src/ansible-playbooks/.ansible_vault_password"
     content: "{{ ansible_cron__vault_password }}"
-    mode: "u=rw"
+    mode: "u=rw,g=,o="
     owner: "ansible"
     group: "ansible"
 
