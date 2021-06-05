@@ -10,9 +10,6 @@ docker-vm.hogs.tswn.us ansible_host=10.10.0.6
 [mysql]
 mysql.hogs.tswn.us
 
-[ntp]
-0.ntp.hogs.tswn.us
-
 [opensprinkler]
 harvest.hogs.tswn.us
 
