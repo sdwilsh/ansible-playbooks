@@ -110,6 +110,7 @@
       export ANSIBLE_CALLBACK_PLUGINS=$({{ ansible_python.executable }} -m ara.setup.callback_plugins)
       export ARA_API_CLIENT=http
       export ARA_API_SERVER=http://ara.hogs.tswn.us:8000
+      export ARA_CALLBACK_THREADS=4
 
       cd /src/ansible-playbooks
       /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
