@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for address in common__nameservers.addresses %}
+nameserver {{ address }}
+{% endfor %}
+{% if "search" in common__nameservers %}
+{% for search in common__nameservers.search %}
+search {{ search }}
+{% endfor %}
+{% endif %}
