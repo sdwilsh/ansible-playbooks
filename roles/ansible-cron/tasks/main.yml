@@ -116,6 +116,7 @@
       #!/usr/bin/env bash
       set -e
 
+      export ANSIBLE_LOG_PATH=/var/log/ansible.log
       export ANSIBLE_CALLBACK_PLUGINS={{ fetch_ara_callback_plugin_path.stdout }}
       export ARA_API_CLIENT=http
       export ARA_API_SERVER=http://ara.hogs.tswn.us:8000
