@@ -5,3 +5,8 @@
     argv:
       - "netplan"
       - "apply"
+
+- name: "restart systemd-resolved"
+  ansible.builtin.systemd:
+    name: "systemd-resolved"
+    state: "restarted"

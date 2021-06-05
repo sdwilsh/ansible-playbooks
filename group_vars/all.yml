@@ -18,8 +18,10 @@ common__iscsi_target_ip: "10.117.0.10"
 common__iscsi_target_iqn_base: "iqn.2019-09.net.shawnwilsher.firstlightweaveslivingsong.ctl"
 common__nameservers:
   addresses:
+    - "10.117.0.1"
     - "10.117.0.48"
     - "10.117.0.49"
+    - "fd36:3eb3:43b0:75::1"
     - "fd36:3eb3:43b0:75::30"
     - "fd36:3eb3:43b0:75::31"
   search:

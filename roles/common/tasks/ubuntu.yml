@@ -31,6 +31,20 @@
     validate: "netplan try --config-file=%s --timeout=5"
   notify: "netplan apply"
 
+- name: "Disable systemd-resolved DNS Stub Listener"
+  notify: "restart systemd-resolved"
+  ansible.builtin.lineinfile:
+    insertafter: "[Resolve]"
+    line: "DNSStubListener=no"
+    path: "/etc/systemd/resolved.conf"
+- name: "Setup /etc/resolv.conf"
+  ansible.builtin.template:
+    src: "resolv.conf.j2"
+    dest: "/etc/resolv.conf"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "root"
+
 # Time Management
 - name: Set timezone to US/Pacific
   community.general.timezone:
