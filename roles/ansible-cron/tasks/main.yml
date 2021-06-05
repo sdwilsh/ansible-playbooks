@@ -110,17 +110,33 @@
     job: "http://ara.hogs.tswn.us:8000"
     user: "ansible"
     state: present
-- ansible.builtin.set_fact:
-    collections_command: "ansible-galaxy collection install -r requirements.yml"
-    git_command: "git pull --rebase"
-    playbook_command: "ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml"
-    role_command: "ansible-galaxy role install -r requirements.yml"
-- ansible.builtin.set_fact:
-    cron_command: "cd /src/ansible-playbooks && {{ git_command }} && {{ collections_command }} && {{ role_command }} && {{ playbook_command }} 2>&1"
+- name: "Create ansible-cron script"
+  ansible.builtin.copy:
+    content: |
+      #!/usr/bin/env bash
+      set -e
+
+      export ANSIBLE_CALLBACK_PLUGINS={{ fetch_ara_callback_plugin_path.stdout }}
+      export ARA_API_CLIENT=http
+      export ARA_API_SERVER=http://ara.hogs.tswn.us:8000
+
+      cd /src/ansible-playbooks
+      /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
+      git pull --rebase
+      /usr/bin/logger -p user.notice -t ansible-cron -- "Installing collections"
+      ansible-galaxy collection install -r requirements.yml
+      /usr/bin/logger -p user.notice -t ansible-cron -- "Installing roles"
+      ansible-galaxy role install -r requirements.yml
+      /usr/bin/logger -p user.notice -t ansible-cron -- "Running ansible"
+      ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml
+    dest: "/home/ansible/ansible-cron.sh"
+    mode: "u=rx,g=rx,o=r"
+    owner: "ansible"
+    group: "ansible"
 - name: Setup cron job
   ansible.builtin.cron:
     name: "run ansible locally"
-    job: "if ! out=`{{ cron_command }}`; then echo $out; fi"
+    job: "if ! out=`/home/ansible/ansible-cron.sh`; then echo $out; fi"
     user: "ansible"
     minute: "*/15"
     state: present
