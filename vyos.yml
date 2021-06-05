@@ -572,7 +572,7 @@
                       new: true
                     destination:
                       address: "10.117.0.30"
-                      port: 8000
+                      port: "8000"
               - name: "HOME-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1793,7 +1793,7 @@
                       new: true
                     destination:
                       address: "fd36:3eb3:43b0:75::1e"
-                      port: 8000
+                      port: "8000"
               - name: "HOME-from-UNIFI-MAN-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
