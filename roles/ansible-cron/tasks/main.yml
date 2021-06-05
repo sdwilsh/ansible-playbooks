@@ -73,13 +73,6 @@
     group: "wheel"
     mode: "u=rw,g=r,o=r"
     src: "newsyslog-ansible.conf.j2"
-- name: Set environment in cron file to log to /var/log/ansible.log
-  ansible.builtin.cron:
-    name: "ANSIBLE_LOG_PATH"
-    env: yes
-    job: "/var/log/ansible.log"
-    user: "ansible"
-    state: absent
 - name: Set environment in cron file for ARA API Client
   ansible.builtin.cron:
     name: "ARA_API_CLIENT"
