@@ -80,22 +80,12 @@
     job: "/var/log/ansible.log"
     user: "ansible"
     state: present
-- name: "Determine the path for ARA's callback plugin"
-  ansible.builtin.command:
-    argv:
-      - "{{ ansible_python.executable }}"
-      - "-m"
-      - "ara.setup.callback_plugins"
-  changed_when: false
-  become_user: "ansible"
-  register: fetch_ara_callback_plugin_path
-- name: Set environment in cron file for ARA callback
+- name: remove environment in cron file for ARA callback
   ansible.builtin.cron:
     name: "ANSIBLE_CALLBACK_PLUGINS"
     env: yes
-    job: "{{ fetch_ara_callback_plugin_path.stdout }}"
     user: "ansible"
-    state: present
+    state: absent
 - name: Set environment in cron file for ARA API Client
   ansible.builtin.cron:
     name: "ARA_API_CLIENT"
@@ -117,7 +107,7 @@
       set -e
 
       export ANSIBLE_LOG_PATH=/var/log/ansible.log
-      export ANSIBLE_CALLBACK_PLUGINS={{ fetch_ara_callback_plugin_path.stdout }}
+      export ANSIBLE_CALLBACK_PLUGINS=$({{ ansible_python.executable }} -m ara.setup.callback_plugins)
       export ARA_API_CLIENT=http
       export ARA_API_SERVER=http://ara.hogs.tswn.us:8000
 
