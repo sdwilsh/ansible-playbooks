@@ -79,12 +79,6 @@
     env: yes
     job: "/var/log/ansible.log"
     user: "ansible"
-    state: present
-- name: remove environment in cron file for ARA callback
-  ansible.builtin.cron:
-    name: "ANSIBLE_CALLBACK_PLUGINS"
-    env: yes
-    user: "ansible"
     state: absent
 - name: Set environment in cron file for ARA API Client
   ansible.builtin.cron:
