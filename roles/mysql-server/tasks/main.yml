@@ -107,14 +107,14 @@
 - name: "Setup configured users"
   no_log: True
   community.mysql.mysql_user:
-    name: "{{ item.name }}"
-    host: "{{ item.host }}"
-    password: "{{ item.password }}"
-    priv: "{{ item.priv }}"
+    name: "{{ item.0.name }}"
+    host: "{{ item.1 }}"
+    password: "{{ item.0.password }}"
+    priv: "{{ item.0.priv }}"
     login_password: "{{ mysql_server__root_password }}"
     login_unix_socket: "/tmp/mysql.sock"
     login_user: "root"
     state: "present"
-  loop: "{{ mysql_server__users }}"
+  loop: "{{ mysql_server__users | subelements('hosts') }}"
   loop_control:
-    label: "{{ item.name }}@{{ item.host }}"
+    label: "{{ item.0.name }}@{{ item.1 }}"
