@@ -1213,6 +1213,12 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
                   - number: 20
                     description: "Allow specific hosts ({{ ansible_managed }})"
                     action: "accept"
@@ -1958,6 +1964,10 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmpv6"
                   - number: 20
                     description: "Allow specific hosts ({{ ansible_managed }})"
                     action: "accept"
@@ -2043,6 +2053,7 @@
         state: replaced
       tags:
         - firewall
+        - firewall-rules
     - name: "Set Zone Policy"
       vyos.vyos.vyos_config:
         lines:
