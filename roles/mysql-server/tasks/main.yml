@@ -94,12 +94,16 @@
   notify: "restart mysql-server"
 - name: "Setup configured databases"
   community.mysql.mysql_db:
-    name: "{{ item }}"
+    collation: "{% if 'collation' in item %}{{ item.collation }}{% endif %}"
+    encoding: "{% if 'encoding' in item %}{{ item.encoding }}{% endif %}"
+    name: "{{ item.name }}"
     state: "present"
     login_password: "{{ mysql_server__root_password }}"
     login_unix_socket: "/tmp/mysql.sock"
     login_user: "root"
   loop: "{{ mysql_server__databases }}"
+  loop_control:
+    label: "{{ item.name }}"
 - name: "Setup configured users"
   no_log: True
   community.mysql.mysql_user:

@@ -7,9 +7,11 @@ ansible_cron__inventory_file: "prod-inventory"
 common__etc_dir: "/usr/local/etc"
 
 mysql_server__databases:
-  - "ara"
-  - "homeassistant"
-  - "zabbix"
+  - name: "ara"
+  - name: "homeassistant"
+  - name: "zabbix"
+    collation: "utf8_bin"
+    encoding: "utf8"
 mysql_server__users:
   - name: "ara"
     host: "10.117.0.30"
