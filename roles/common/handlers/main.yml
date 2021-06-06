@@ -10,3 +10,8 @@
   ansible.builtin.systemd:
     name: "systemd-resolved"
     state: "restarted"
+
+- name: "restart zabbix-agent"
+  ansible.builtin.systemd:
+    name: "zabbix-agent"
+    state: "restarted"
