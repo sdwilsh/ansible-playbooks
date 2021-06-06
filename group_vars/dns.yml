@@ -84,13 +84,13 @@ bind_zones:
       - name: "zabbix-server.hogs"
         ip: "10.117.0.32"
         ipv6:
+          - "fd36:3eb3:43b0:75:42:aff:fe75:20" # Docker container prefers this.
           - "fd36:3eb3:43b0:75::20"
-          - "fd36:3eb3:43b0:75:42:aff:fe75:20"
       - name: "zabbix.hogs"
         ip: "10.117.0.33"
         ipv6:
+          - "fd36:3eb3:43b0:75:42:aff:fe75:21" # Docker container prefers this.
           - "fd36:3eb3:43b0:75::21"
-          - "fd36:3eb3:43b0:75:42:aff:fe75:21"
       - name: "maccabeus01.hogs"
         ip: "10.117.0.48"
         ipv6: "fd36:3eb3:43b0:75::30"
