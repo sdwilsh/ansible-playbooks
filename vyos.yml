@@ -2541,21 +2541,22 @@
       vyos.vyos.vyos_config:
         lines:
           # UNIFI-MAN
-          - "set service router-advert interface {{ vyos__lan_interface }} link-mtu 1492"
-          - "set service router-advert interface {{ vyos__lan_interface }} prefix ::/64 valid-lifetime 172800"
+          - "set service router-advert interface {{ vyos__lan_interface }} prefix fd36:3eb3:43b0:1::/64 valid-lifetime 172800"
           - "set service router-advert interface {{ vyos__lan_interface }} name-server fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}"
           - "set service router-advert interface {{ vyos__lan_interface }} name-server fd36:3eb3:43b0:1::{{ vyos__peer_host_id_ipv6 }}"
           # MAN
-          - "set service router-advert interface {{ vyos__lan_interface }}.10 link-mtu 1492"
-          - "set service router-advert interface {{ vyos__lan_interface }}.10 prefix ::/64 valid-lifetime 172800"
+          - "set service router-advert interface {{ vyos__lan_interface }}.10 no-send-advert"
+          - "set service router-advert interface {{ vyos__lan_interface }}.10 prefix fd36:3eb3:43b0:a::/64 valid-lifetime 172800"
+          - "set service router-advert interface {{ vyos__lan_interface }}.10 prefix fd36:3eb3:43b0:a::/64 no-autonomous-flag"
           - "set service router-advert interface {{ vyos__lan_interface }}.10 name-server fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
           - "set service router-advert interface {{ vyos__lan_interface }}.10 name-server fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv6 }}"
           # HOME
-          - "set service router-advert interface {{ vyos__lan_interface }}.117 link-mtu 1492"
-          - "set service router-advert interface {{ vyos__lan_interface }}.117 prefix ::/64 valid-lifetime 172800"
+          - "set service router-advert interface {{ vyos__lan_interface }}.117 no-send-advert"
+          - "set service router-advert interface {{ vyos__lan_interface }}.117 prefix fd36:3eb3:43b0:75::/64 valid-lifetime 172800"
+          - "set service router-advert interface {{ vyos__lan_interface }}.117 prefix fd36:3eb3:43b0:75::/64 no-autonomous-flag"
           - "set service router-advert interface {{ vyos__lan_interface }}.117 name-server fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
           - "set service router-advert interface {{ vyos__lan_interface }}.117 name-server fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv6 }}"
         save: yes
       tags:
         - services
-        - route-advert
+        - router-advert
