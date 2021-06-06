@@ -73,7 +73,7 @@
             MYSQL_USER: "zabbix"
             MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
             ZBX_SERVER_HOST: "zabbix-server.hogs.tswn.us"
-            PHP_TZ: "America/Los Angeles"
+            PHP_TZ: "America/Los_Angeles"
             ZBX_DEBUGLEVEL: "5"
           healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:8080/"]
