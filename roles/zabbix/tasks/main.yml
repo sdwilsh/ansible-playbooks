@@ -22,26 +22,44 @@
     group: "zabbix"
     mode: "u=rwx"
 
+- name: "Create HOME network"
+  community.docker.docker_network:
+    attachable: yes
+    driver: "macvlan"
+    driver_options:
+      parent: "eth1"
+    enable_ipv6: yes
+    ipam_driver: "default"
+    ipam_config:
+      - subnet: "10.117.0.0/23"
+        gateway: "10.117.0.1"
+      - subnet: "fd36:3eb3:43b0:75::/64"
+        gateway: "fd36:3eb3:43b0:75::1"
+    name: "home"
+    state: "present"
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+
 - name: "Launch zabbix server and frontend containers"
   community.docker.docker_compose:
     project_name: "zabbix"
     definition:
       services:
         server:
-          dns:
-            - "10.117.0.1"
-            - "fd36:3eb3:43b0:75::1"
+          dns: "{{ common__nameservers.addresses }}"
           environment:
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
             MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
-          image: "zabbix/zabbix-server-mysql:5.4-ubuntu-latest"
+          image: "zabbix/zabbix-server-mysql:ubuntu-5.4-latest"
+          mac_address: "02:42:0a:75:00:20"
           networks:
-            zabbix:
+            home:
               ipv4_address: "10.117.0.32"
               ipv6_address: "fd36:3eb3:43b0:75::20"
+              # This also gets an ipv6 address of fd36:3eb3:43b0:75:42:aff:fe75:20, based on the mac address.
           ports:
-            - "10051:10051/tcp"
+            - "10051:10051"
           volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "/etc/timezone:/etc/timezone:ro"
@@ -49,9 +67,7 @@
         frontend:
           depends_on:
             - "server"
-          dns:
-            - "10.117.0.1"
-            - "fd36:3eb3:43b0:75::1"
+          dns: "{{ common__nameservers.addresses }}"
           environment:
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
@@ -65,28 +81,22 @@
             timeout: "5s"
             retries: 3
             start_period: "30s"
-          image: "zabbix/zabbix-web-apache-mysql:5.4-ubuntu-latest"
+          image: "zabbix/zabbix-web-apache-mysql:ubuntu-5.4-latest"
+          mac_address: "02:42:0a:75:00:21"
           networks:
-            zabbix:
+            home:
               ipv4_address: "10.117.0.33"
               ipv6_address: "fd36:3eb3:43b0:75::21"
+              # This also gets an ipv6 address of fd36:3eb3:43b0:75:42:aff:fe75:21, based on the mac address.
           ports:
             - "80:8080/tcp"
           volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "/etc/timezone:/etc/timezone:ro"
       networks:
-        zabbix:
-          driver: "macvlan"
-          driver_opts:
-            parent: "eth1"
-          ipam:
-            driver: "default"
-            config:
-              - subnet: "10.117.0.0/23"
-                gateway: "10.117.0.1"
-              - subnet: "fd36:3eb3:43b0:75::/64"
-                gateway: "fd36:3eb3:43b0:75::1"
+        home:
+          external:
+            name: "home"
     pull: yes
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
