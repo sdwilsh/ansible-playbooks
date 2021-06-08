@@ -2,13 +2,14 @@
 ansible_cron__inventory_file: "prod-inventory"
 
 common__additional_ethernet_interfaces:
-  eth1:
-    accept-ra: no
-    link-local: []
+  - name: "eth1"
+    inet:
+      mode: "manual"
+      lines: []
 common__gateway_v4_address: "10.10.0.1"
 common__gateway_v6_address: "fd36:3eb3:43b0:a::1"
 common__ip_addresses:
-  - "10.10.0.6/23"
+  - "10.10.0.6/24"
   - "fd36:3eb3:43b0:a::6/64"
 common__nameservers:
   addresses:

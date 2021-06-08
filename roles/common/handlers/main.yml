@@ -1,10 +1,10 @@
 ---
 # handlers file for common
-- name: netplan apply
+- name: "restart networking interfaces"
   ansible.builtin.command:
-    argv:
-      - "netplan"
-      - "apply"
+    cmd: "bash -c 'ifdown --force {{ interfaces | join(' ') }}; sleep 1; ifup {{ interfaces | join(' ') }}'"
+  vars:
+    interfaces: "[ '{{ ansible_default_ipv4.interface }}' ] + {{ common__additional_ethernet_interfaces | default([]) | map(attribute='name') }}"
 
 - name: "restart systemd-resolved"
   ansible.builtin.systemd:

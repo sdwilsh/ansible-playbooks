@@ -2,34 +2,60 @@
 - include: iscsi.yml
 
 # Networking
-- name: Check for existing configurations in /etc/netplan
-  ansible.builtin.find:
-    recurse: no
-    file_type: "file"
-    paths:
-      - "/etc/netplan"
-    excludes:
-      - "00-ansible-config.yaml"
-    patterns:
-      - "*.yaml"
-  register: existing_configs
-- name: Set aside existing configurations in /etc/netplan
-  ansible.builtin.command:
-    argv:
-      - "mv"
-      - "{{ item.path }}"
-      - "{{ item.path }}.old"
-  loop: "{{ existing_configs.files }}"
-  when: existing_configs.matched
-- name: Setup networking
+- name: "Remove netplan.io"
+  ansible.builtin.apt:
+    name: "netplan.io"
+    state: "absent"
+  tags:
+    - "networking"
+- name: "Remove netplan directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: "absent"
+  loop:
+    - "/etc/netplan"
+    - "/lib/netplan"
+    - "/run/netplan"
+  tags:
+    - "networking"
+- name: "Install Dependencies for /etc/network/interfaces"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "latest"
+  loop:
+    - "ifupdown"
+    - "net-tools"
+  tags:
+    - "networking"
+- name: "Setup /etc/network/interfaces"
   ansible.builtin.template:
-    dest: "/etc/netplan/00-ansible-config.yaml"
+    dest: "/etc/network/interfaces"
     group: "root"
     mode: "u=rw,g=r,o=r"
     owner: "root"
-    src: "netplan.yaml.j2"
-    validate: "netplan try --config-file=%s --timeout=5"
-  notify: "netplan apply"
+    src: "network-interfaces.j2"
+    validate: "ifup --no-act %s"
+  notify: "restart networking interfaces"
+  tags:
+    - "networking"
+- name: "Ensure networking is enabled and unmasked"
+  ansible.builtin.systemd:
+    enabled: yes
+    masked: no
+    name: "networking"
+  tags:
+    - "networking"
+
+- name: "Ensure systemd-networkd[.socket] is stopped and disabled"
+  ansible.builtin.systemd:
+    enabled: no
+    name: "{{ item }}"
+    state: "stopped"
+  loop:
+    - "systemd-networkd"
+    - "systemd-networkd.socket"
+  tags:
+    - "networking"
 
 - name: "Disable systemd-resolved DNS Stub Listener"
   notify: "restart systemd-resolved"
@@ -37,6 +63,8 @@
     insertafter: "[Resolve]"
     line: "DNSStubListener=no"
     path: "/etc/systemd/resolved.conf"
+  tags:
+    - "networking"
 - name: "Setup /etc/resolv.conf"
   ansible.builtin.template:
     src: "resolv.conf.j2"
@@ -44,6 +72,8 @@
     mode: "u=rw,g=r,o=r"
     owner: "root"
     group: "root"
+  tags:
+    - "networking"
 
 # Time Management
 - name: Set timezone to US/Pacific
