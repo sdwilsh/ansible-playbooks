@@ -150,6 +150,12 @@
         dest: "/config/scripts/activate-pppoe0.script"
         content: |
           #!/bin/vbash
+
+          # Safeguard to ensure the script is called with the correct group.
+          if [ "$(id -g -n)" != 'vyattacfg' ] ; then
+            exec sg vyattacfg -c "/bin/vbash $(readlink -f $0) $@"
+          fi
+
           source /opt/vyatta/etc/functions/script-template
           configure
           delete interfaces pppoe pppoe0 disable
@@ -165,6 +171,12 @@
         dest: "/config/scripts/disable-pppoe0.script"
         content: |
           #!/bin/vbash
+
+          # Safeguard to ensure the script is called with the correct group.
+          if [ "$(id -g -n)" != 'vyattacfg' ] ; then
+            exec sg vyattacfg -c "/bin/vbash $(readlink -f $0) $@"
+          fi
+
           source /opt/vyatta/etc/functions/script-template
           configure
           set interfaces pppoe pppoe0 disable
