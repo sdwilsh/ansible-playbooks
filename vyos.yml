@@ -1239,6 +1239,17 @@
                     source:
                       group:
                         address_group: "MAN-TALKERS-from-HOME-v4"
+                  - number: 40
+                    description: "Allow Zabbix Server Connections ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    state:
+                      new: true
+                    destination:
+                      port: "10050"
+                    source:
+                      group:
+                        address_group: "ZABBIX-SERVER-v4"
               - name: "MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1988,6 +1999,17 @@
                     source:
                       group:
                         address_group: "MAN-TALKERS-from-HOME-v6"
+                  - number: 40
+                    description: "Allow Zabbix Server Connections ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    state:
+                      new: true
+                    destination:
+                      port: "10050"
+                    source:
+                      group:
+                        address_group: "ZABBIX-SERVER-v6"
               - name: "MAN-from-LOCAL-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
