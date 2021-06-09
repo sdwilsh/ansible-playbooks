@@ -11,7 +11,7 @@
     name: "systemd-resolved"
     state: "restarted"
 
-- name: "restart zabbix-agent"
+- name: "restart zabbix-agent2"
   ansible.builtin.systemd:
-    name: "zabbix-agent"
+    name: "zabbix-agent2"
     state: "restarted"

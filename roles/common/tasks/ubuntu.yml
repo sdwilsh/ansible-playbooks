@@ -113,47 +113,70 @@
     deb: "https://repo.zabbix.com/zabbix/5.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.4-1+ubuntu{{ ansible_lsb.release }}_all.deb"
   tags:
     - "zabbix-agent"
-- name: "Install zabbix-agent"
+- name: "Disable zabbix-agent"
+  ansible.builtin.systemd:
+    name: "zabbix-agent"
+    enabled: no
+    state: "stopped"
+  tags:
+    - "zabbix-agent"
+- name: "Remove zabbix-agent"
   ansible.builtin.apt:
     name: "zabbix-agent"
+    state: "latest"
+  tags:
+    - "zabbix-agent"
+- name: "Install zabbix-agent2"
+  ansible.builtin.apt:
+    name: "zabbix-agent2"
     state: "latest"
     update_cache: yes
     cache_valid_time: 3600
   tags:
     - "zabbix-agent"
-- name: "Enable zabbix-agent"
+- name: "Remove zabbix-agent files"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: "absent"
+  loop:
+    - "/etc/zabbix/zabbix_agentd.conf"
+    - "/etc/zabbix/zabbix_agentd.d"
+    - "/var/log/zabbix/zabbix_agentd.log"
+  tags:
+    - "zabbix-agent"
+- name: "Enable zabbix-agent2"
   ansible.builtin.systemd:
-    name: "zabbix-agent"
+    name: "zabbix-agent2"
     enabled: yes
   tags:
     - "zabbix-agent"
 - name: "Set zabbix-agent Hostname"
   ansible.builtin.lineinfile:
-    path: "/etc/zabbix/zabbix_agentd.conf"
+    path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^Hostname="
     line: "Hostname={{ inventory_hostname }}"
-  notify: "restart zabbix-agent"
+  notify: "restart zabbix-agent2"
   tags:
     - "zabbix-agent"
-- name: "Set zabbix-agent Server"
+- name: "Set zabbix-agent2 Server"
   ansible.builtin.lineinfile:
-    path: "/etc/zabbix/zabbix_agentd.conf"
+    path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^Server="
     line: "Server=zabbix-server.hogs.tswn.us"
-  notify: "restart zabbix-agent"
+  notify: "restart zabbix-agent2"
   tags:
     - "zabbix-agent"
-- name: "Set zabbix-agent ServerActive"
+- name: "Set zabbix-agent2 ServerActive"
   ansible.builtin.lineinfile:
-    path: "/etc/zabbix/zabbix_agentd.conf"
+    path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^ServerActive="
     line: "ServerActive=zabbix-server.hogs.tswn.us"
-  notify: "restart zabbix-agent"
+  notify: "restart zabbix-agent2"
   tags:
     - "zabbix-agent"
-- name: "Ensure zabbix-agent is started"
+- name: "Ensure zabbix-agent2 is started"
   ansible.builtin.systemd:
-    name: "zabbix-agent"
+    name: "zabbix-agent2"
     state: "started"
   tags:
     - "zabbix-agent"
