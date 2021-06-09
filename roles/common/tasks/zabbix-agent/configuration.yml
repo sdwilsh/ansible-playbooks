@@ -1,24 +1,24 @@
 ---
-# Tasks to configure ansible-agent2.
-- name: "Set zabbix-agent Hostname"
-  ansible.builtin.lineinfile:
-    path: "/etc/zabbix/zabbix_agentd.conf"
-    regexp: "^Hostname="
-    line: "Hostname={{ inventory_hostname }}"
-  notify: "restart zabbix-agent"
-  tags:
-    - "zabbix-agent"
-- name: "Set zabbix-agent Server"
-  ansible.builtin.lineinfile:
-    path: "/etc/zabbix/zabbix_agentd.conf"
-    regexp: "^Server="
-    line: "Server=zabbix-server.hogs.tswn.us"
-  notify: "restart zabbix-agent"
-  tags:
-    - "zabbix-agent"
-- name: "Set zabbix-agent ServerActive"
-  ansible.builtin.lineinfile:
-    path: "/etc/zabbix/zabbix_agentd.conf"
-    regexp: "^ServerActive="
-    line: "ServerActive=zabbix-server.hogs.tswn.us"
+# Tasks to configure ansible-agent.
+- name: "Ensure /var/log/zabbix exists with the correct permissions"
+  ansible.builtin.file:
+    group: "zabbix"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: "zabbix"
+    path: "/var/log/zabbix"
+    state: "directory"
+- name: "Ensure /var/run/zabbix exists"
+  ansible.builtin.file:
+    group: "zabbix"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: "zabbix"
+    path: "/var/run/zabbix"
+    state: "directory"
+- name: "Setup zabbix-agent configuration file"
+  ansible.builtin.template:
+    dest: "{{ common__etc_dir }}/zabbix/zabbix_agentd.conf"
+    owner: "root"
+    group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
+    mode: "u=rw,g=r,o=r"
+    src: "zabbix-agentd.conf.j2"
   notify: "restart zabbix-agent"
