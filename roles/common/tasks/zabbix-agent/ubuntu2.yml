@@ -1,0 +1,20 @@
+---
+# Installation
+- name: "Install zabbix-agent2"
+  ansible.builtin.apt:
+    name: "zabbix-agent2"
+    state: "latest"
+    update_cache: yes
+    cache_valid_time: 3600
+- name: "Enable zabbix-agent2"
+  ansible.builtin.systemd:
+    name: "zabbix-agent2"
+    enabled: yes
+
+# Configuration
+- ansible.builtin.import_tasks: "configuration2.yml"
+
+- name: "Ensure zabbix-agent2 is started"
+  ansible.builtin.systemd:
+    name: "zabbix-agent2"
+    state: "started"

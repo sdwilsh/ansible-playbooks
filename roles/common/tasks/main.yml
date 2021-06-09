@@ -53,6 +53,11 @@
 - include: ubuntu.yml
   when: ansible_distribution == "Ubuntu"
 
+# Zabbix Agent
+- ansible.builtin.import_tasks: "zabbix-agent/main.yml"
+  tags:
+    - "zabbix-agent"
+
 # Cleanup From Provisioning
 - name: Remove provision user
   user:

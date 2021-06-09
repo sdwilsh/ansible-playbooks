@@ -1,0 +1,24 @@
+---
+# Tasks to configure ansible-agent2.
+- name: "Set zabbix-agent Hostname"
+  ansible.builtin.lineinfile:
+    path: "/etc/zabbix/zabbix_agentd.conf"
+    regexp: "^Hostname="
+    line: "Hostname={{ inventory_hostname }}"
+  notify: "restart zabbix-agent"
+  tags:
+    - "zabbix-agent"
+- name: "Set zabbix-agent Server"
+  ansible.builtin.lineinfile:
+    path: "/etc/zabbix/zabbix_agentd.conf"
+    regexp: "^Server="
+    line: "Server=zabbix-server.hogs.tswn.us"
+  notify: "restart zabbix-agent"
+  tags:
+    - "zabbix-agent"
+- name: "Set zabbix-agent ServerActive"
+  ansible.builtin.lineinfile:
+    path: "/etc/zabbix/zabbix_agentd.conf"
+    regexp: "^ServerActive="
+    line: "ServerActive=zabbix-server.hogs.tswn.us"
+  notify: "restart zabbix-agent"
