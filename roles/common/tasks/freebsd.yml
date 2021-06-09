@@ -1,4 +1,28 @@
 ---
+# Ports
+- name: "Ensure /usr/local/etc/pkg/repos exists"
+  ansible.builtin.file:
+    path: "/usr/local/etc/pkg/repos"
+    state: "directory"
+    owner: "root"
+    group: "wheel"
+    mode: "u=rw,g=r,o=r"
+  tags:
+    - "pkg"
+- name: "Use latest package builds"
+  ansible.builtin.copy:
+    dest: "/usr/local/etc/pkg/repos/FreeBSD.conf"
+    content: |
+      FreeBSD: {
+        url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest"
+      }
+    owner: "root"
+    group: "wheel"
+    mode: "u=rw,g=r,o=r"
+  tags:
+    - "pkg"
+
+# Dependencies
 - name: "Install latest version of Python"
   ansible.builtin.package:
     name: "python37"
