@@ -6,6 +6,7 @@
     mode: "u=rwx,g=rx,o=rx"
     owner: "zabbix"
     path: "/var/log/zabbix"
+    recurse: yes
     state: "directory"
   tags:
     - "zabbix-agent"
@@ -15,6 +16,7 @@
     mode: "u=rwx,g=rx,o=rx"
     owner: "zabbix"
     path: "/var/run/zabbix"
+    recurse: yes
     state: "directory"
   tags:
     - "zabbix-agent"

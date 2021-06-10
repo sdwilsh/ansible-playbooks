@@ -1,5 +1,7 @@
+# {{ ansible_managed }}
+
 {% for item in common__unix_groups %}
-{% if item.sudo %}
+{% if "sudo" in item and item.sudo %}
 %{{ item.name }} ALL=(ALL:ALL) NOPASSWD:ALL
 {% endif %}
 {% endfor %}

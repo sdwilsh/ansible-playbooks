@@ -8,6 +8,12 @@ common__unix_groups:
   - name: "ansible"
     gid: 2000
     sudo: true
+  - name: "zabbix"
+    gid: 2001
+  - name: "srcs"
+    gid: 2050
 common__unix_users:
   - name: "ansible"
     uid: 2000
+  - name: "zabbix"
+    uid: 2001
