@@ -4,6 +4,8 @@
   ansible.builtin.package:
     name: "zabbix54-agent"
     state: "latest"
+  tags:
+    - "zabbix-agent"
 - name: "Setup a symlink from /usr/local/etc/zabbix to installed version"
   ansible.builtin.file:
     group: "wheel"
@@ -11,6 +13,8 @@
     path: "/usr/local/etc/zabbix"
     src: "/usr/local/etc/zabbix54/"
     state: "link"
+  tags:
+    - "zabbix-agent"
 - name: "Enable zabbix-agent"
   ansible.builtin.copy:
     content: |
@@ -21,6 +25,8 @@
     owner: "root"
     group: "wheel"
   notify: "restart zabbix-agent"
+  tags:
+    - "zabbix-agent"
 
 # Configuration
 - ansible.builtin.import_tasks: "configuration.yml"
@@ -29,3 +35,5 @@
   ansible.builtin.service:
     name: "zabbix_agentd"
     state: "started"
+  tags:
+    - "zabbix-agent"

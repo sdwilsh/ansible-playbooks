@@ -55,8 +55,6 @@
 
 # Zabbix Agent
 - ansible.builtin.import_tasks: "zabbix-agent/main.yml"
-  tags:
-    - "zabbix-agent"
 
 # Cleanup From Provisioning
 - name: Remove provision user

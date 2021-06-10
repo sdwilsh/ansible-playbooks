@@ -7,6 +7,8 @@
     owner: "zabbix"
     path: "/var/log/zabbix"
     state: "directory"
+  tags:
+    - "zabbix-agent"
 - name: "Ensure /var/run/zabbix exists"
   ansible.builtin.file:
     group: "zabbix"
@@ -14,6 +16,8 @@
     owner: "zabbix"
     path: "/var/run/zabbix"
     state: "directory"
+  tags:
+    - "zabbix-agent"
 - name: "Setup zabbix-agent configuration file"
   ansible.builtin.template:
     dest: "{{ common__etc_dir }}/zabbix/zabbix_agentd.conf"
@@ -22,3 +26,5 @@
     mode: "u=rw,g=r,o=r"
     src: "zabbix-agentd.conf.j2"
   notify: "restart zabbix-agent"
+  tags:
+    - "zabbix-agent"

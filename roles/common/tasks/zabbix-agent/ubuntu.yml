@@ -6,10 +6,14 @@
     state: "latest"
     update_cache: yes
     cache_valid_time: 3600
+  tags:
+    - "zabbix-agent"
 - name: "Enable zabbix-agent"
   ansible.builtin.systemd:
     name: "zabbix-agent"
     enabled: yes
+  tags:
+    - "zabbix-agent"
 
 # Configuration
 - ansible.builtin.import_tasks: "configuration.yml"
@@ -18,3 +22,5 @@
   ansible.builtin.systemd:
     name: "zabbix-agent"
     state: "started"
+  tags:
+    - "zabbix-agent"

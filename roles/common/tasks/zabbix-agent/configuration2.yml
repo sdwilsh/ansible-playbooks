@@ -22,3 +22,5 @@
     regexp: "^ServerActive="
     line: "ServerActive=zabbix-server.hogs.tswn.us"
   notify: "restart zabbix-agent2"
+  tags:
+    - "zabbix-agent"
