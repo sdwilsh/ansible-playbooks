@@ -104,6 +104,5 @@
     name: "Prune ara playbook storage"
     job: "if ! out=`{{ cron_command }}`; then echo $out; fi"
     user: "ansible"
-    hour: "1"
-    minute: "0"
+    minute: "10" # Run every hour at ten-past the hour.
     state: present
