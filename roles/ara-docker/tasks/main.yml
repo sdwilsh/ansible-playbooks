@@ -97,8 +97,6 @@
     that:
       - "status.services.api_server.ara_api_server_1.state.running"
 
-- ansible.builtin.set_fact:
-    cron_command: "ara playbook prune --days 30 --confirm 2>&1"
 - name: "Setup cleanup cron job"
   ansible.builtin.cron:
     name: "Prune ara playbook storage"
@@ -106,3 +104,5 @@
     user: "ansible"
     minute: "10" # Run every hour at ten-past the hour.
     state: present
+  vars:
+    cron_command: "/home/ansible/.local/bin/ara playbook prune --days 30 --confirm 2>&1"
