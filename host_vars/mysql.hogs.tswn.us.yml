@@ -5,6 +5,9 @@ ansible_remote_tmp: "/tmp/ansible"
 ansible_cron__inventory_file: "prod-inventory"
 
 common__etc_dir: "/usr/local/etc"
+common__ip_addresses:
+  - "10.117.0.5/23"
+  - "fd36:3eb3:43b0:75::5/64"
 
 mysql_server__databases:
   - name: "ara"

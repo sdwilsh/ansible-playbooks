@@ -2,16 +2,23 @@
 #
 # {{ ansible_managed }}
 
+{% if 'hogs.tswn.us' in inventory_hostname -%}
+{% set hostnames %}{{ inventory_hostname }} {{ inventory_hostname[0:-13] }}{% endset -%}
+{% else -%}
+{% set hostnames %}{{ inventory_hostname }} {{ ansible_hostname }}{% endset -%}
+{% endif -%}
+
 # IPv4 Entries
 127.0.0.1 localhost
-{% if 'hogs.tswn.us' in inventory_hostname %}
-{{ ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }} {{ inventory_hostname }} {{ inventory_hostname[0:-13] }}
-{% else %}
-{{ ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }} {{ inventory_hostname }} {{ ansible_hostname }}
-{% endif %}
+{% for ipv4_host in common__ip_addresses | ansible.netcommon.ipv4('host/prefix') %}
+{{ ipv4_host | ansible.netcommon.ipaddr('address') }} {{ hostnames }}
+{% endfor %}
 
 # IPv6 Entries
 ::1 ip6-localhost  ip6-loopback
+{% for ipv6_host in common__ip_addresses | ansible.netcommon.ipv6('host/prefix') %}
+{{ ipv6_host | ansible.netcommon.ipaddr('address') }} {{ hostnames }}
+{% endfor %}
 fe00::0  ip6-localnet
 ff00::0  ip6-mcastprefix
 ff02::1  ip6-allnodes
