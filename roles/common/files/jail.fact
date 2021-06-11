@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+import json
+import platform
+import subprocess
+
+
+if __name__ == "__main__":
+  print(json.dumps({
+    "is": platform.system() == "FreeBSD" and subprocess.run(["procstat", "0"]).returncode == 0
+  }))
+  exit(0)
