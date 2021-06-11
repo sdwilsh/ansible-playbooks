@@ -6,7 +6,9 @@
     definition:
       services:
         webserver:
-          dns: "{{ common__nameservers.addresses }}"
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
           environment:
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
