@@ -83,16 +83,13 @@ bind_zones:
           - "valheim.hogs"
       - name: "zabbix-server.hogs"
         ip: "10.117.0.32"
-        ipv6:
-          - "fd36:3eb3:43b0:75::20"
+        ipv6: "fd36:3eb3:43b0:75::20"
       - name: "zabbix.hogs"
         ip: "10.117.0.33"
-        ipv6:
-          - "fd36:3eb3:43b0:75::21"
+        ipv6: "fd36:3eb3:43b0:75::21"
       - name: "snmp.zabbix.hogs"
         ip: "10.117.0.34"
-        ipv6:
-          - "fd36:3eb3:43b0:75::22"
+        ipv6: "fd36:3eb3:43b0:75::22"
       - name: "maccabeus01.hogs"
         ip: "10.117.0.48"
         ipv6: "fd36:3eb3:43b0:75::30"
