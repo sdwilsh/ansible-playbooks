@@ -5,7 +5,13 @@ import re
 from pathlib import Path
 
 def parseCPUInfo():
-  cpuinfo = Path("/proc/cpuinfo").read_text()
+  path = Path("/proc/cpuinfo")
+  if not path.exists():
+    print(json.dumps({
+      "is": False
+    }))
+    exit(0)
+  cpuinfo = path.read_text()
   matches = re.search("Model\s+:\s+Raspberry Pi (\w+) Model ([\w\+]+) Rev ([0-9\.]+)$", cpuinfo, flags=re.MULTILINE) 
   if matches is None:
     print(json.dumps({

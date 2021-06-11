@@ -27,6 +27,14 @@
   ansible.builtin.package:
     name: "python37"
     state: "latest"
+- name: "Symlink python37 to python3"
+  ansible.builtin.file:
+    src: "/usr/local/bin/python3.7"
+    dest: "/usr/local/bin/python3"
+    owner: "root"
+    group: "wheel"
+    mode: "o=rwx,g=rx,o=rx"
+    state: "link"
 - name: "Install latest version of sudo"
   ansible.builtin.package:
     name: "sudo"
