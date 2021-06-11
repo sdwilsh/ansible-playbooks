@@ -133,12 +133,21 @@
   tags:
     - "zabbix-agent"
 - name: "Install template for zabbix and mysql"
-  ansible.builtin.get_url:
+  ansible.builtin.copy:
+    # For updates, see:
+    # https://git.zabbix.com/projects/ZBX/repos/zabbix/raw/templates/db/mysql_agent/template_db_mysql.conf?at=refs%2Fheads%2Fmaster
+    content: |
+      UserParameter=mysql.ping[*], /usr/local/bin/mysqladmin -h"$1" -P"$2" ping
+      UserParameter=mysql.get_status_variables[*], /usr/local/bin/mysql -h"$1" -P"$2" -sNX -e "show global status"
+      UserParameter=mysql.version[*], /usr/local/bin/mysqladmin -s -h"$1" -P"$2" version
+      UserParameter=mysql.db.discovery[*], /usr/local/bin/mysql -h"$1" -P"$2" -sN -e "show databases"
+      UserParameter=mysql.dbsize[*], /usr/local/bin/mysql -h"$1" -P"$2" -sN -e "SELECT COALESCE(SUM(DATA_LENGTH + INDEX_LENGTH),0) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$3'"
+      UserParameter=mysql.replication.discovery[*], /usr/local/bin/mysql -h"$1" -P"$2" -sNX -e "show slave status"
+      UserParameter=mysql.slave_status[*], /usr/local/bin/mysql -h"$1" -P"$2" -sNX -e "show slave status"
     dest: "{{ common__etc_dir }}/zabbix/zabbix_agent.d/template_db_mysql.conf"
-    force: yes
     group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
     mode: "u=rw,g=r,o=r"
-    url: "https://git.zabbix.com/projects/ZBX/repos/zabbix/raw/templates/db/mysql_agent/template_db_mysql.conf?at=refs%2Fheads%2Fmaster"
+    owner: "root"
   notify: "restart zabbix-agent"
   tags:
     - "zabbix-agent"
