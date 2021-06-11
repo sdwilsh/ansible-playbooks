@@ -44,7 +44,8 @@ mysql_server__users:
       "homeassistant.*": "ALL"
   - name: "zabbix"
     hosts:
-      - "server.zabbix.hogs.tswn.us"
+      - "fd36:3eb3:43b0:75::20" # server.zabbix.hogs.tswn.us
+      - "10.117.0.32" # server.zabbix.hogs.tswn.us
       - "zabbix.hogs.tswn.us"
     password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
