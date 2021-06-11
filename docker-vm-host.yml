@@ -6,6 +6,9 @@
     - role: "nickjj.docker"
       tags:
         - "docker"
+    - role: "docker-networks"
+      tags:
+        - "docker"
     - role: "zabbix"
       tags:
         - "docker"
