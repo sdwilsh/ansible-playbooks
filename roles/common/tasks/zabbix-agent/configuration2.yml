@@ -12,7 +12,7 @@
   ansible.builtin.lineinfile:
     path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^Server="
-    line: "Server=zabbix-server.hogs.tswn.us"
+    line: "Server=server.zabbix.hogs.tswn.us"
   notify: "restart zabbix-agent"
   tags:
     - "zabbix-agent"
@@ -20,7 +20,7 @@
   ansible.builtin.lineinfile:
     path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^ServerActive="
-    line: "ServerActive=zabbix-server.hogs.tswn.us"
+    line: "ServerActive=server.zabbix.hogs.tswn.us"
   notify: "restart zabbix-agent"
   tags:
     - "zabbix-agent"

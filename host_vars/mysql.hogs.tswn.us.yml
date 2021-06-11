@@ -44,10 +44,8 @@ mysql_server__users:
       "homeassistant.*": "ALL"
   - name: "zabbix"
     hosts:
-      - "zabbix-server.hogs.tswn.us"
-      - "fd36:3eb3:43b0:75:42:aff:fe75:20" # Specific IP address in docker container.
+      - "server.zabbix.hogs.tswn.us"
       - "zabbix.hogs.tswn.us"
-      - "fd36:3eb3:43b0:75:42:aff:fe75:21" # Specific IP address in docker container.
     password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           39613332383262643866643339656463656531316663636136646336653864303433313464666163

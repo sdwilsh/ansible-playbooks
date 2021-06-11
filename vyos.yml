@@ -351,16 +351,15 @@
                   # sdwilsh-desktop
                   - address: "fd36:3eb3:43b0:75::1f"
               - name: "ZABBIX-SERVER-v4"
-                description: "The v4 zabbix-server.hogs.tswn.us addresses"
+                description: "The v4 server.zabbix.hogs.tswn.us addresses"
                 afi: "ipv4"
                 members:
                   - address: "10.117.0.32"
               - name: "ZABBIX-SERVER-v6"
-                description: "The v4 zabbix-server.hogs.tswn.us addresses"
+                description: "The v4 server.zabbix.hogs.tswn.us addresses"
                 afi: "ipv6"
                 members:
                   - address: "fd36:3eb3:43b0:75::20"
-                  - address: "fd36:3eb3:43b0:75:42:aff:fe75:20"
             network_group:
               - name: "RFC1918-v4"
                 description: "IPv4 Private Address Space ({{ ansible_managed }})"

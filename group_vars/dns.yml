@@ -81,9 +81,11 @@ bind_zones:
           - "factorio"
           - "valheim"
           - "valheim.hogs"
-      - name: "zabbix-server.hogs"
+      - name: "server.zabbix.hogs"
         ip: "10.117.0.32"
         ipv6: "fd36:3eb3:43b0:75::20"
+        aliases:
+          - "zabbix-server.hogs"
       - name: "zabbix.hogs"
         ip: "10.117.0.33"
         ipv6: "fd36:3eb3:43b0:75::21"

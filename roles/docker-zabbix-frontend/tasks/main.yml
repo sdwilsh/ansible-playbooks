@@ -13,7 +13,7 @@
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
             MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
-            ZBX_SERVER_HOST: "zabbix-server.hogs.tswn.us"
+            ZBX_SERVER_HOST: "server.zabbix.hogs.tswn.us"
             PHP_TZ: "America/Los_Angeles"
           healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:8080/"]
