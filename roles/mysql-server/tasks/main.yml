@@ -118,3 +118,27 @@
   loop: "{{ mysql_server__users | subelements('hosts') }}"
   loop_control:
     label: "{{ item.0.name }}@{{ item.1 }}"
+
+- name: "Write out mysql information for zabbix-agent"
+  ansible.builtin.copy:
+    content: |
+      [client]
+      user='zbx_monitor'
+      password='{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zbx_monitor') | map(attribute='password') | first }}'
+    dest: "~zabbix/.my.cnf"
+    group: "zabbix"
+    mode: "u=r"
+    owner: "zabbix"
+  notify: "restart zabbix-agent"
+  tags:
+    - "zabbix-agent"
+- name: "Install template for zabbix and mysql"
+  ansible.builtin.get_url:
+    dest: "{{ common__etc_dir }}/zabbix/zabbix_agent.d/template_db_mysql.conf"
+    force: yes
+    group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
+    mode: "u=rw,g=r,o=r"
+    url: "https://git.zabbix.com/projects/ZBX/repos/zabbix/raw/templates/db/mysql_agent/template_db_mysql.conf?at=refs%2Fheads%2Fmaster"
+  notify: "restart zabbix-agent"
+  tags:
+    - "zabbix-agent"

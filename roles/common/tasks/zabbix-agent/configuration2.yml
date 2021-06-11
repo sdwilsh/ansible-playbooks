@@ -5,7 +5,7 @@
     path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^Hostname="
     line: "Hostname={{ inventory_hostname }}"
-  notify: "restart zabbix-agent2"
+  notify: "restart zabbix-agent"
   tags:
     - "zabbix-agent"
 - name: "Set zabbix-agent2 Server"
@@ -13,7 +13,7 @@
     path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^Server="
     line: "Server=zabbix-server.hogs.tswn.us"
-  notify: "restart zabbix-agent2"
+  notify: "restart zabbix-agent"
   tags:
     - "zabbix-agent"
 - name: "Set zabbix-agent2 ServerActive"
@@ -21,6 +21,6 @@
     path: "/etc/zabbix/zabbix_agent2.conf"
     regexp: "^ServerActive="
     line: "ServerActive=zabbix-server.hogs.tswn.us"
-  notify: "restart zabbix-agent2"
+  notify: "restart zabbix-agent"
   tags:
     - "zabbix-agent"

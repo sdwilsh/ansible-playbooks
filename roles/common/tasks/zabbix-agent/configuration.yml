@@ -1,21 +1,24 @@
 ---
 # Tasks to configure ansible-agent.
-- name: "Ensure /var/log/zabbix exists with the correct permissions"
+- name: "Ensure Zabbix paths exist with the correct permissions"
   ansible.builtin.file:
     group: "zabbix"
     mode: "u=rwx,g=rx,o=rx"
     owner: "zabbix"
-    path: "/var/log/zabbix"
+    path: "{{ item }}"
     recurse: yes
     state: "directory"
+  loop:
+    - "/var/run/zabbix"
+    - "/var/log/zabbix"
   tags:
     - "zabbix-agent"
-- name: "Ensure /var/run/zabbix exists"
+- name: "Ensure /etc/zabbix/zabbix_agent.d/ exists with the correct permissions"
   ansible.builtin.file:
-    group: "zabbix"
+    group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
     mode: "u=rwx,g=rx,o=rx"
     owner: "zabbix"
-    path: "/var/run/zabbix"
+    path: "{{ common__etc_dir }}/zabbix/zabbix_agent.d/"
     recurse: yes
     state: "directory"
   tags:

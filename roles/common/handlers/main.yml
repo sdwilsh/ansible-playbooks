@@ -23,11 +23,11 @@
     name: "zabbix-agent"
     state: "restarted"
   listen: "restart zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu'"
+  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"
 
 - name: "restart zabbix-agent2 with systemd"
   ansible.builtin.systemd:
     name: "zabbix-agent2"
     state: "restarted"
-  listen: "restart zabbix-agent2"
-  when: "ansible_distribution == 'Ubuntu'"
+  listen: "restart zabbix-agent"
+  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'x86_64'"

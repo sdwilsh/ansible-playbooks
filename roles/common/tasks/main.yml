@@ -8,6 +8,7 @@
 - name: Create base users
   user:
     group: "{{ item.name }}"
+    home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
     shell: "/bin/bash"
     state: present
@@ -17,6 +18,7 @@
 - name: Create base users (FreeBSD)
   user:
     group: "{{ item.name }}"
+    home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
     shell: "/usr/local/bin/bash"
     state: present
