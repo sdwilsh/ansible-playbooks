@@ -1,19 +1,5 @@
 ---
 # tasks file for zabbix
-- name: "Create zabbix group"
-  ansible.builtin.group:
-    name: "zabbix"
-    state: "present"
-- name: "Create zabbix user"
-  ansible.builtin.user:
-    name: "zabbix"
-    group: "zabbix"
-    groups:
-      - "docker"
-      - "zabbix"
-    state: "present"
-    shell: "/bin/bash"
-
 - name: "Create zabbix directory"
   ansible.builtin.file:
     path: "/var/lib/zabbix"
