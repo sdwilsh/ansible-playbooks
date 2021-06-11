@@ -9,7 +9,11 @@
     - role: "docker-networks"
       tags:
         - "docker"
-    - role: "zabbix"
+    - role: "docker-zabbix-backend"
+      tags:
+        - "docker"
+        - "zabbix"
+    - role: "docker-zabbix-frontend"
       tags:
         - "docker"
         - "zabbix"

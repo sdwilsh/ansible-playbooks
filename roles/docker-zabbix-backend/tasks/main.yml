@@ -1,0 +1,58 @@
+---
+# tasks file for docker-zabbix-backend
+- name: "Launch zabbix backend containers"
+  community.docker.docker_compose:
+    project_name: "zabbix_backend"
+    definition:
+      networks:
+        home:
+          external:
+            name: "home"
+      services:
+        server:
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
+          environment:
+            DB_SERVER_HOST: "mysql.hogs.tswn.us"
+            MYSQL_USER: "zabbix"
+            MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
+          image: "zabbix/zabbix-server-mysql:alpine-5.4-latest"
+          mac_address: "02:42:0a:75:00:20"
+          networks:
+            home:
+              ipv4_address: "10.117.0.32"
+              ipv6_address: "fd36:3eb3:43b0:75::20"
+          ports:
+            - "10051:10051"
+          stop_grace_period: "30s"
+          volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
+            - "/home/zabbix/mibs:/var/lib/zabbix/mibs:ro"
+            - "snmptraps:/var/lib/zabbix/snmptraps:rw"
+        snmptraps:
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
+          image: "zabbix/zabbix-snmptraps:alpine-5.4-latest"
+          mac_address: "02:42:0a:75:00:21"
+          networks:
+            home:
+              ipv4_address: "10.117.0.34"
+              ipv6_address: "fd36:3eb3:43b0:75::22"
+          ports:
+            - "162:162/udp"
+          stop_grace_period: "5s"
+          volumes:
+            - "snmptraps:/var/lib/zabbix/snmptraps:rw"
+      volumes:
+        snmptraps:
+    pull: yes
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
+- ansible.builtin.assert:
+    that:
+      - "status.services.server.zabbix_backend_server_1.state.running"
+      - "status.services.snmptraps.zabbix_backend_snmptraps_1.state.running"
