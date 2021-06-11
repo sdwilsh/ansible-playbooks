@@ -2,13 +2,13 @@
 # tasks file for installing custom facts for the common role
 - name: "Create custom facts directory"
   ansible.builtin.file:
-    path: "{{ common__etc_dir }}/ansible/facts.d"
+    path: "/etc/ansible/facts.d"
     state: "directory"
 
 - name: "Add custom facts"
   ansible.builtin.copy:
     src: "files/{{ item }}"
-    dest: "{{ common__etc_dir }}/ansible/facts.d/{{ item }}"
+    dest: "/etc/ansible/facts.d/{{ item }}"
     mode: "u=rx,g=rx,o=rx"
   loop:
     - "jail.fact"
