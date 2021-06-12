@@ -45,6 +45,7 @@ mysql_server__users:
   - name: "zabbix"
     hosts:
       - "fd36:3eb3:43b0:a::12" # server.zabbix.hogs.tswn.us
+      - "fd36:3eb3:43b0:a:42:aff:fe75:20" # Docker container prefers this.
       - "10.10.0.18" # server.zabbix.hogs.tswn.us
       - "zabbix.hogs.tswn.us"
     password: !vault |

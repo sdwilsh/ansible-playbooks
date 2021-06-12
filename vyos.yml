@@ -370,6 +370,7 @@
                 afi: "ipv6"
                 members:
                   - address: "fd36:3eb3:43b0:a::12"
+                  - address: "fd36:3eb3:43b0:a:42:aff:fe75:20"
             network_group:
               - name: "RFC1918-v4"
                 description: "IPv4 Private Address Space ({{ ansible_managed }})"
@@ -1262,7 +1263,7 @@
                     source:
                       group:
                         address_group: "MAN-TALKERS-from-HOME-v4"
-                  - number: 40
+                  - number: 100
                     description: "Allow zabbix-agent Connections ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "tcp"

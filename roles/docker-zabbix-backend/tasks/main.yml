@@ -23,6 +23,7 @@
             man:
               ipv4_address: "10.10.0.18"
               ipv6_address: "fd36:3eb3:43b0:a::12"
+              # This also gets an ipv6 address of fd36:3eb3:43b0:a:42:aff:fe75:20, based on the mac address.
           ports:
             - "10051:10051"
           stop_grace_period: "30s"
