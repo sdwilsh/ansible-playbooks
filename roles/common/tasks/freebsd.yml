@@ -26,7 +26,7 @@
 - name: "Install latest version of Python"
   ansible.builtin.package:
     name: "python37"
-    state: "latest"
+    state: "present"
 - name: "Symlink python37 to python3"
   ansible.builtin.file:
     src: "/usr/local/bin/python3.7"
@@ -38,11 +38,11 @@
 - name: "Install latest version of sudo"
   ansible.builtin.package:
     name: "sudo"
-    state: "latest"
+    state: "present"
 - name: "Install latest version of pip"
   ansible.builtin.package:
     name: "py37-pip"
-    state: "latest"
+    state: "present"
 - name: "Symlink pip to pip3"
   ansible.builtin.file:
     src: "/usr/local/bin/pip-3.7"
