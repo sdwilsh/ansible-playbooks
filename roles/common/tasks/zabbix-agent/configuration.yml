@@ -6,7 +6,6 @@
     mode: "u=rwx,g=rx,o=rx"
     owner: "zabbix"
     path: "{{ item }}"
-    recurse: yes
     state: "directory"
   loop:
     - "/var/run/zabbix"
@@ -19,7 +18,6 @@
     mode: "u=rwx,g=rx,o=rx"
     owner: "root"
     path: "{{ common__etc_dir }}/zabbix/zabbix_agent.d/"
-    recurse: yes
     state: "directory"
   tags:
     - "zabbix-agent"
