@@ -321,6 +321,16 @@
                 members:
                   # sdwilsh-desktop
                   - address: "fd36:3eb3:43b0:75::1f"
+              - name: "MYSQL-SERVER-v4"
+                description: "The v4 mysql.hogs.tswn.us addresses"
+                afi: "ipv4"
+                members:
+                  - address: "10.117.0.5"
+              - name: "MYSQL-SERVER-v6"
+                description: "The v4 mysql.hogs.tswn.us addresses"
+                afi: "ipv6"
+                members:
+                  - address: "fd36:3eb3:43b0:75::5"
               - name: "NTP-SERVICES-v4"
                 description: "NTP services ({{ ansible_managed }})"
                 members:
@@ -354,12 +364,12 @@
                 description: "The v4 server.zabbix.hogs.tswn.us addresses"
                 afi: "ipv4"
                 members:
-                  - address: "10.117.0.32"
+                  - address: "10.10.0.18"
               - name: "ZABBIX-SERVER-v6"
                 description: "The v4 server.zabbix.hogs.tswn.us addresses"
                 afi: "ipv6"
                 members:
-                  - address: "fd36:3eb3:43b0:75::20"
+                  - address: "fd36:3eb3:43b0:a::12"
             network_group:
               - name: "RFC1918-v4"
                 description: "IPv4 Private Address Space ({{ ansible_managed }})"
@@ -595,16 +605,30 @@
                     destination:
                       address: "10.117.0.30"
                       port: "8000"
-                  - number: 40
-                    description: "Allow zabbix-agent Connections ({{ ansible_managed }})"
+                  - number: 100
+                    description: "Allow Zabbix Server Connections ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    state:
+                      new: true
+                    destination:
+                      port: "10050"
+                    source:
+                      group:
+                        address_group: "ZABBIX-SERVER-v4"
+                  - number: 101
+                    description: "Allow Zabbix Server Connections to MySQL ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "tcp"
                     state:
                       new: true
                     destination:
                       group:
+                        address_group: "MYSQL-SERVER-v4"
+                      port: "3306"
+                    source:
+                      group:
                         address_group: "ZABBIX-SERVER-v4"
-                      port: "10051"
               - name: "HOME-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1239,16 +1263,15 @@
                       group:
                         address_group: "MAN-TALKERS-from-HOME-v4"
                   - number: 40
-                    description: "Allow Zabbix Server Connections ({{ ansible_managed }})"
+                    description: "Allow zabbix-agent Connections ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "tcp"
                     state:
                       new: true
                     destination:
-                      port: "10050"
-                    source:
                       group:
                         address_group: "ZABBIX-SERVER-v4"
+                      port: "10051"
               - name: "MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1843,16 +1866,30 @@
                     destination:
                       address: "fd36:3eb3:43b0:75::1e"
                       port: "8000"
-                  - number: 40
-                    description: "Allow zabbix-agent Connections ({{ ansible_managed }})"
+                  - number: 100
+                    description: "Allow Zabbix Server Connections ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp"
+                    state:
+                      new: true
+                    destination:
+                      port: "10050"
+                    source:
+                      group:
+                        address_group: "ZABBIX-SERVER-v6"
+                  - number: 101
+                    description: "Allow Zabbix Server Connections to MySQL ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "tcp"
                     state:
                       new: true
                     destination:
                       group:
+                        address_group: "MYSQL-SERVER-v6"
+                      port: "3306"
+                    source:
+                      group:
                         address_group: "ZABBIX-SERVER-v6"
-                      port: "10051"
               - name: "HOME-from-UNIFI-MAN-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1998,17 +2035,16 @@
                     source:
                       group:
                         address_group: "MAN-TALKERS-from-HOME-v6"
-                  - number: 40
-                    description: "Allow Zabbix Server Connections ({{ ansible_managed }})"
+                  - number: 100
+                    description: "Allow zabbix-agent Connections ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "tcp"
                     state:
                       new: true
                     destination:
-                      port: "10050"
-                    source:
                       group:
                         address_group: "ZABBIX-SERVER-v6"
+                      port: "10051"
               - name: "MAN-from-LOCAL-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes

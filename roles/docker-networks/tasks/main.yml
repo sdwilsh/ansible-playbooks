@@ -1,5 +1,22 @@
 ---
 # tasks file for docker-networks
+- name: "Create MAN network"
+  community.docker.docker_network:
+    attachable: yes
+    driver: "macvlan"
+    driver_options:
+      parent: "eth0"
+    enable_ipv6: yes
+    ipam_driver: "default"
+    ipam_config:
+      - subnet: "10.10.0.0/24"
+        gateway: "10.10.0.1"
+      - subnet: "fd36:3eb3:43b0:a::/64"
+        gateway: "fd36:3eb3:43b0:a::1"
+    name: "man"
+    state: "present"
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
 - name: "Create HOME network"
   community.docker.docker_network:
     attachable: yes
