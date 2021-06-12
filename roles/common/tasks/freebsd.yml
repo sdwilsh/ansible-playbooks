@@ -55,8 +55,12 @@
 # Networking
 - name: "Set hostname"
   ansible.builtin.copy:
-    content: "hostname={{ inventory_hostname }}"
+    content: |
+      {{ ansible_managed }}
+      hostname={{ inventory_hostname }}
     dest: "/etc/rc.conf.d/hostname"
     mode: "u=rw,g=r,o=r"
     owner: "root"
     group: "wheel"
+  tags:
+    - "networking"
