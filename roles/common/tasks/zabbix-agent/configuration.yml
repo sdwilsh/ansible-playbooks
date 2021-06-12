@@ -17,7 +17,7 @@
   ansible.builtin.file:
     group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
     mode: "u=rwx,g=rx,o=rx"
-    owner: "zabbix"
+    owner: "root"
     path: "{{ common__etc_dir }}/zabbix/zabbix_agent.d/"
     recurse: yes
     state: "directory"
