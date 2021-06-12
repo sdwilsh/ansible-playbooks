@@ -3,12 +3,12 @@
 - name: "Install latest version of mysql-server"
   ansible.builtin.package:
     name: "mysql80-server"
-    state: "latest"
+    state: "present"
   notify: "restart mysql-server"
 - name: "Install latest version of PyMySQL"
   ansible.builtin.package:
     name: "py37-pymysql"
-    state: "latest"
+    state: "present"
 - name: "Enable service at start"
   ansible.builtin.copy:
     content: |
