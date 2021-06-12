@@ -14,7 +14,7 @@
 - name: "Ensure ansible is installed"
   ansible.builtin.package:
     name: "{% if ansible_distribution == 'FreeBSD' %}py37-ansible{% else %}ansible{% endif %}"
-    state: "latest"
+    state: "present"
 - name: "Ensure ara is installed"
   ansible.builtin.pip:
     extra_args: "--user"
