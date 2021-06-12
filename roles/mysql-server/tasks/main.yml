@@ -92,6 +92,10 @@
     owner: "root"
     group: "wheel"
   notify: "restart mysql-server"
+- name: "Ensure mysql-server is started"
+  ansible.builtin.service:
+    name: "mysql-server"
+    state: "started"
 - name: "Setup configured databases"
   community.mysql.mysql_db:
     collation: "{% if 'collation' in item %}{{ item.collation }}{% endif %}"
