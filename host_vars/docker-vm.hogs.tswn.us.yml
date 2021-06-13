@@ -6,6 +6,14 @@ common__additional_ethernet_interfaces:
     inet:
       mode: "manual"
       lines: []
+  - name: "eth1.10"
+    inet:
+      mode: "manual"
+      lines: []
+  - name: "eth1.117"
+    inet:
+      mode: "manual"
+      lines: []
 common__gateway_v4_address: "10.10.0.1"
 common__gateway_v6_address: "fd36:3eb3:43b0:a::1"
 common__ip_addresses:

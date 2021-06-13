@@ -26,17 +26,23 @@ iface {{ ansible_default_ipv6.interface }} inet6 static
     down /sbin/ip address del {{ subnet }} dev {{ ansible_default_ipv6.interface }}
 {% endfor %}
 {% endif %}
-
 {% if common__additional_ethernet_interfaces is defined %}
 {% for interface_config in common__additional_ethernet_interfaces %}
+
 # Additional Interface: {{ interface_config.name }}
 auto {{ interface_config.name }}
 iface {{ interface_config.name }} inet {{ interface_config.inet.mode }}
+{% if '.' in interface_config.name %}
+    vlan-raw-device {{ interface_config.name.split('.')[0] }}
+{% endif %}
 {% for line in interface_config.inet.lines %}
     {{ line }}
 {% endfor %}
 {% if "inet6" in interface_config %}
 iface {{ interface_config.name }} inet6 {{ interface_config.mode }}
+{% if '.' in interface_config.name %}
+    vlan-raw-device {{ interface_config.name.split('.')[0] }}
+{% endif %}
 {% for line in interface_config.inet6.lines %}
     {{ line }}
 {% endfor %}
