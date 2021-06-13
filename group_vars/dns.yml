@@ -134,7 +134,7 @@ bind_zones:
       - name: "ups02.hogs"
         ip: "10.10.0.31"
         ipv6: "fd36:3eb3:43b0:a::20"
-      - name: "power-failover"
+      - name: "power-failover.hogs"
         ip: "10.10.0.32"
         ipv6: "fd36:3eb3:43b0:a::21"
       # Services
