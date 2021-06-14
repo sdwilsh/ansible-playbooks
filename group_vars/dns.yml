@@ -23,6 +23,25 @@ bind_zones:
       - "shadowofsunderedstar.hogs.tswn.us."
       - "bornstellarmakeseternallasting.hogs.tswn.us."
     hosts:
+      # UNIFI-MAN Network
+      - name: "usw-pro-48.unifi"
+        ip: "10.1.0.11"
+      - name: "flex-porch.unifi"
+        ip: "10.1.0.30"
+      - name: "flex-office-sdwilsh.unifi"
+        ip: "10.1.0.31"
+      - name: "flex-mini-office.unifi"
+        ip: "10.1.0.32"
+      - name: "den-ap.unifi"
+        ip: "10.1.0.50"
+      - name: "living-ap.unifi"
+        ip: "10.1.0.51"
+      - name: "kitchen-ap.unifi"
+        ip: "10.1.0.52"
+      - name: "upper-hallway-ip.unifi"
+        ip: "10.1.0.53"
+
+      # HOME Network
       - name: "maccabeus.hogs"
         ip: "10.117.0.1"
         ipv6: "fd36:3eb3:43b0:75::1"
@@ -95,6 +114,7 @@ bind_zones:
         aliases:
           - "pool.ntp.hogs"
 
+      # MAN Network
       - name: "al-cygni.hogs"
         ip: "10.10.0.2"
         ipv6: "fd36:3eb3:43b0:a::2"
@@ -137,13 +157,15 @@ bind_zones:
       - name: "power-failover.hogs"
         ip: "10.10.0.32"
         ipv6: "fd36:3eb3:43b0:a::21"
-      # Services
+
+      # Services Networks
       - name: "installation02"
         ip: "10.82.0.2"
         aliases:
           - "unifi"
           - "unifi.hogs"
     networks:
+      - "10.1.0"
       - "10.10.0"
       - "10.117.0"
     ipv6_networks:
