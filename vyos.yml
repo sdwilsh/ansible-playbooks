@@ -1042,7 +1042,7 @@
                     destination:
                       address: "255.255.255.255"
                       port: "4680"
-                  - number: 100
+                  - number: 103
                     description: "Allow Zabbix SNMP Connections ({{ ansible_managed }})"
                     action: "accept"
                     protocol: "tcp_udp"
@@ -1308,6 +1308,28 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "MAN-from-UNIFI-MAN-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
               - name: "MAN-from-WAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1589,6 +1611,39 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "UNIFI-MAN-from-MAN-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 103
+                    description: "Allow Zabbix SNMP Connections ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      port: "161"
+                    source:
+                      group:
+                        address_group: "ZABBIX-SERVER-v4"
               - name: "UNIFI-MAN-from-SERVICE82-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -2093,6 +2148,7 @@
           - "set zone-policy zone MAN from HOME firewall ipv6-name MAN-from-HOME-v6"
           - "set zone-policy zone MAN from LOCAL firewall name MAN-from-LOCAL-v4"
           - "set zone-policy zone MAN from LOCAL firewall ipv6-name MAN-from-LOCAL-v6"
+          - "set zone-policy zone MAN from UNIFI-MAN firewall name MAN-from-UNIFI-MAN-v4"
           - "set zone-policy zone MAN from WAN-Cellular firewall name MAN-from-WAN-v4"
           - "set zone-policy zone MAN from WAN-CenturyLink firewall name MAN-from-WAN-v4"
           - "set zone-policy zone MAN interface {{ vyos__lan_interface }}.10"
@@ -2121,6 +2177,7 @@
           - "set zone-policy zone UNIFI-MAN description 'unifi management vlan ({{ ansible_managed }})'"
           - "set zone-policy zone UNIFI-MAN from HOME firewall name UNIFI-MAN-from-HOME-v4"
           - "set zone-policy zone UNIFI-MAN from LOCAL firewall name UNIFI-MAN-from-LOCAL-v4"
+          - "set zone-policy zone UNIFI-MAN from MAN firewall name UNIFI-MAN-from-MAN-v4"
           - "set zone-policy zone UNIFI-MAN from SERVICE82 firewall name UNIFI-MAN-from-SERVICE82-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-Cellular firewall name UNIFI-MAN-from-WAN-v4"
           - "set zone-policy zone UNIFI-MAN from WAN-CenturyLink firewall name UNIFI-MAN-from-WAN-v4"
