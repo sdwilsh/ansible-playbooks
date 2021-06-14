@@ -137,6 +137,8 @@ bind_zones:
       - name: "ipmi.dadab.hogs"
         ip: "10.10.0.11"
         ipv6: "fd36:3eb3:43b0:a::b"
+      - name: "rack-switch01.hogs.tswn.us"
+        ip: "10.10.0.15"
       - name: "server.zabbix.hogs"
         ip: "10.10.0.18"
         ipv6:
