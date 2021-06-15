@@ -33,6 +33,7 @@
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
             MYSQL_PASSWORD: "{{ hostvars['mysql.hogs.tswn.us'].mysql_server__users | selectattr('name', 'equalto', 'zabbix') | map(attribute='password') | first }}"
+            ZBX_CACHESIZE: "64M"
             ZBX_ENABLE_SNMP_TRAPS: "true"
           image: "zabbix/zabbix-server-mysql:alpine-5.4-latest"
           mac_address: "02:42:0a:75:00:20"
