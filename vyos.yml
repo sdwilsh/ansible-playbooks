@@ -342,6 +342,18 @@
                 members:
                   - address: "fd36:3eb3:43b0:75::33"
                   - address: "fd36:3eb3:43b0:75::34"
+              - name: "FILE-SERVER-v4"
+                description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
+                afi: "ipv4"
+                members:
+                  # firstlightweaveslivingsong.hogs.tswn.us
+                  - address: "10.117.0.10"
+              - name: "FILE-SERVER-v6"
+                description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  # firstlightweaveslivingsong.hogs.tswn.us
+                  - address: "fd36:3eb3:43b0:75::a"
               - name: "NOWAN-TALKERS-from-HOME-v4"
                 description: "IP Addresses allowed to talk to devices on NOWAN ({{ ansible_managed }})"
                 members:
@@ -382,6 +394,12 @@
                 description: "{{ ansible_managed }}"
                 members:
                   - port: "53"
+              - name: "NFS"
+                description: "{{ ansible_managed }}"
+                members:
+                  - port: "111"
+                  - port: "674"
+                  - port: "2049"
               - name: "NTP"
                 description: "{{ ansible_managed }}"
                 members:
@@ -419,7 +437,8 @@
           validation: disable
         state: replaced
       tags:
-        - firewall
+        - "firewall"
+        - "firewall-rules"
 
     - name: "Set MSS clamping on PPPOE interface"
       vyos.vyos.vyos_config:
@@ -629,6 +648,16 @@
                     source:
                       group:
                         address_group: "ZABBIX-SERVER-v4"
+                  - number: 120
+                    description: "Allow Connections to NFS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "FILE-SERVER-v4"
+                        port_group: "NFS"
               - name: "HOME-from-NOWAN-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -1956,6 +1985,16 @@
                     source:
                       group:
                         address_group: "ZABBIX-SERVER-v6"
+                  - number: 120
+                    description: "Allow Connections to NFS ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "tcp_udp"
+                    state:
+                      new: true
+                    destination:
+                      group:
+                        address_group: "FILE-SERVER-v6"
+                        port_group: "NFS"
               - name: "LOCAL-from-HOME-v6"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -2616,7 +2655,7 @@
         lines:
           - "set service snmp listen-address 10.10.0.{{ vyos__host_id_ipv4 }}"
           - "set service snmp listen-address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
-          - "set service snmp trap-target 10.10.0.19"
+          - "set service snmp trap-target 10.10.0.19 port 1162"
           - "set service snmp community hogs authorization ro"
           - "set service snmp community hogs client 10.10.0.18"
         save: yes

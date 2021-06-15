@@ -1,5 +1,21 @@
 ---
 # tasks file for docker-zabbix-backend
+- name: "Ensure nfs-common is installed"
+  ansible.builtin.package:
+    name: "nfs-common"
+    state: "present"
+- name: "Ensure /home/zabbix/mibs exists"
+  ansible.builtin.file:
+    path: "/home/zabbix/mibs"
+    state: "directory"
+- name: "Mount NFS Share to /home/zabbix/mibs"
+  ansible.builtin.mount:
+    fstype: "nfs"
+    opts: "rw"
+    path: "/home/zabbix/mibs"
+    src: "firstlightweaveslivingsong.hogs.tswn.us:/mnt/rust0/enc/nfs/mibs"
+    state: "mounted"
+
 - name: "Launch zabbix backend containers"
   community.docker.docker_compose:
     project_name: "zabbix_backend"
@@ -25,8 +41,6 @@
               ipv4_address: "10.10.0.18"
               ipv6_address: "fd36:3eb3:43b0:a::12"
               # This also gets an ipv6 address of fd36:3eb3:43b0:a:42:aff:fe75:20, based on the mac address.
-          ports:
-            - "10051:10051"
           stop_grace_period: "30s"
           volumes:
             - "/etc/localtime:/etc/localtime:ro"
@@ -43,10 +57,10 @@
             man:
               ipv4_address: "10.10.0.19"
               ipv6_address: "fd36:3eb3:43b0:a::13"
-          ports:
-            - "162:162/udp"
           stop_grace_period: "5s"
           volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
             - "/home/zabbix/mibs:/var/lib/zabbix/mibs:ro"
             - "snmptraps:/var/lib/zabbix/snmptraps:rw"
       volumes:
