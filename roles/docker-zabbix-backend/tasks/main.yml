@@ -36,6 +36,12 @@
             ZBX_CACHESIZE: "64M"
             ZBX_ENABLE_SNMP_TRAPS: "true"
             ZBX_IPMIPOLLERS: "2"
+          healthcheck:
+            test: "nc -z 10.10.0.18 10051 && nc -z fd36:3eb3:43b0:a::12 10051 || exit 1"
+            interval: "10s"
+            timeout: "5s"
+            retries: 3
+            start_period: "30s"
           image: "zabbix/zabbix-server-mysql:alpine-5.4-latest"
           mac_address: "02:42:0a:75:00:20"
           networks:
@@ -53,6 +59,12 @@
           dns:
             - "10.10.0.1"
             - "fd36:3eb3:43b0:a::1"
+          healthcheck:
+            test: "nc -z -u 10.10.0.19 1162 && nc -z -u fd36:3eb3:43b0:a::13 1162 || exit 1"
+            interval: "10s"
+            timeout: "5s"
+            retries: 3
+            start_period: "10s"
           image: "zabbix/zabbix-snmptraps:alpine-5.4-latest"
           mac_address: "02:42:0a:75:00:21"
           networks:
