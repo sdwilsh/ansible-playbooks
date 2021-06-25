@@ -33,6 +33,17 @@
     - "net-tools"
   tags:
     - "networking"
+- name: "Disable accepting of router advertisments on additional interfaces"
+  ansible.posix.sysctl:
+    name: "net.ipv6.conf.{{ item.name | replace('.', '/') }}.accept_ra"
+    state: "present"
+    sysctl_set: yes
+    value: "0"
+    reload: no
+  loop: "{{ common__additional_ethernet_interfaces }}"
+  notify: "restart networking interfaces"
+  tags:
+    - "networking"
 - name: "Setup /etc/network/interfaces"
   ansible.builtin.template:
     dest: "/etc/network/interfaces"
