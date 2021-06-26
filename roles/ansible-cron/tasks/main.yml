@@ -117,7 +117,7 @@
     name: "run ansible locally"
     job: "if ! out=`/home/ansible/ansible-cron.sh`; then echo $out; fi"
     user: "ansible"
-    minute: "*/15"
+    minute: "0"
     state: present
 
 
