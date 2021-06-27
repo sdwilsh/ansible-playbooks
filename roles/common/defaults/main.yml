@@ -1,5 +1,7 @@
 ---
 # defaults file for common
+common__additional_ethernet_interfaces: []
+
 common__etc_dir: "/etc"
 
 common__ntp_pool: "pool.ntp.hogs.tswn.us"
