@@ -54,6 +54,6 @@
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   register: status
-- ansible.builtin.assert:
-    that:
-      - "status.services.valheim_server.valheim_valheim_server_1.state.running"
+# - ansible.builtin.assert:
+#     that:
+#       - "status.services.valheim_server.valheim_valheim_server_1.state.running"
