@@ -1,0 +1,12 @@
+---
+- hosts: "loki"
+  become: yes
+  roles:
+    - role: "common"
+    - role: "nickjj.docker"
+      tags:
+        - "docker"
+    - role: "zwavejs2mqtt"
+      tags:
+        - "docker"
+        - "zwavejs2mqtt"

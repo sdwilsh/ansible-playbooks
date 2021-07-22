@@ -1,0 +1,108 @@
+---
+# tasks file for zwavejs2mqtt
+
+- name: "Create zwavejs2mqtt group"
+  ansible.builtin.group:
+    name: "zwavejs2mqtt"
+    state: "present"
+- name: "Create zwavejs2mqtt user"
+  ansible.builtin.user:
+    name: "zwavejs2mqtt"
+    group: "zwavejs2mqtt"
+    groups:
+      - "docker"
+      - "zwavejs2mqtt"
+    state: "present"
+    shell: "/bin/bash"
+
+- name: "Create zwavejs2mqtt directory"
+  ansible.builtin.file:
+    path: "/opt/zwavejs2mqtt"
+    state: "directory"
+    owner: "zwavejs2mqtt"
+    group: "zwavejs2mqtt"
+    mode: "u=rwx,g=rx"
+- name: "Write out settings.json"
+  copy:
+    content: "{{ settings | to_json }}"
+    dest: "/zwave2mqtt/settings.json"
+  vars:
+    settings:
+      mqtt:
+        name: "zwavejs2mqtt"
+        host: "mqtt://palamok.hogs.tswn.us"
+        port: 1883
+        qos: 2
+        prefix: "zwave"
+        reconnectPeriod: 3000
+        retain: true
+        clean: true
+        auth: true
+        _ca:
+        ca:
+        _cert:
+        cert:
+        _key:
+        key:
+        password: "{{ zwavejs2mqtt__password }}"
+        username: "{{ zwavejs2mqtt__username }}"
+      gateway:
+        type: 0
+        plugins: []
+        authEnabled: false
+        payloadType: 1
+        hassDiscovery: false
+        discoveryPrefix: homeassistant
+        logEnabled: true
+        logLevel: "info"
+        logToFile: false
+        values: []
+      zwave:
+        commandsTimeout: 30
+        logLevel: "info"
+        logToFile: false
+        serverEnabled: true
+        enableStatistics: true
+        serverPort: 3000
+        disclaimerVersion: 1
+        port: "/dev/zwave"
+        networkKey: "{{ zwavejs2mqtt__network_key }}"
+
+- name: "Ensure zwavejs2mqtt container is up"
+  community.general.docker_compose:
+    project_name: "zwavejs"
+    definition:
+      services:
+        zwavejs2mqtt:
+          devices:
+            - "/dev/serial/by-id/{{ zwavejs2mqtt__device_serial }}:/dev/zwave"
+          environment:
+            - "STORE_DIR=/store"
+            - "TZ=America/Los_Angeles"
+            - "ZWAVEJS_EXTERNAL_CONFIG=/store/.config-db"
+          healthcheck:
+            test: ["CMD", "curl", "-f", "localhost:8080/health/zwave", "-H", "Accept: text/plain"]
+            interval: "30s"
+            timeout: "5s"
+            retries: 3
+            start_period: "10s"
+          image: "zwavejs/zwavejs2mqtt:latest"
+          networks:
+            - "zwave"
+          volumes:
+            - "/zwave2mqtt:/store"
+            - "/etc/localtime:/etc/localtime:ro"
+          ports:
+            - "8080:8091"
+            - "3000:3000"
+          stop_signal: "SIGINT"
+          tty: yes
+      networks:
+        zwave:
+    pull: yes
+  register: status
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+- assert:
+    that:
+      - "status.services.zwavejs2mqtt.zwavejs_zwavejs2mqtt_1.state.running"

@@ -7,6 +7,9 @@ docker-ssd.hogs.tswn.us
 [docker_vm]
 docker-vm.hogs.tswn.us ansible_host=10.10.0.6
 
+[loki]
+loki.hogs.tswn.us ansible_host=10.117.0.23
+
 [mysql]
 mysql.hogs.tswn.us
 
