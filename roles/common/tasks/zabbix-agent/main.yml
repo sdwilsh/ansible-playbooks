@@ -11,4 +11,4 @@
 - include: "ubuntu2.yml" # zabbix-agent2
   when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'x86_64'"
 - include: "ubuntu.yml" # zabbix-agent
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"
+  when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'armv7l' or ansible_architecture == 'aarch64')"
