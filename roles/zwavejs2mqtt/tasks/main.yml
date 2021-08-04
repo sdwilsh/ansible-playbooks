@@ -25,7 +25,7 @@
 - name: "Write out settings.json"
   copy:
     content: "{{ settings | to_json }}"
-    dest: "/zwave2mqtt/settings.json"
+    dest: "/opt/zwavejs2mqtt/settings.json"
   vars:
     settings:
       mqtt:
@@ -90,7 +90,7 @@
           networks:
             - "zwave"
           volumes:
-            - "/zwave2mqtt:/store"
+            - "/opt/zwavejs2mqtt:/store"
             - "/etc/localtime:/etc/localtime:ro"
           ports:
             - "8080:8091"
