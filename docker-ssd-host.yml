@@ -10,3 +10,5 @@
     - role: ara-docker
     - role: factorio
     - role: valheim
+      tags:
+        - "valheim"

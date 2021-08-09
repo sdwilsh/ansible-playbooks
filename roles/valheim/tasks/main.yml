@@ -29,6 +29,14 @@
     group: "valheim"
     mode: "u=rwx,g=rx"
 
+- name: "Get valheim user info"
+  ansible.builtin.getent:
+    database: "passwd"
+    key: "valheim"
+- name: "Storing valheim UID and GID"
+  ansible.builtin.set_fact:
+    valheim_uid: "{{ getent_passwd[\"valheim\"].1 }}"
+    valheim_gid: "{{ getent_passwd[\"valheim\"].2 }}"
 - name: "Launch valheim container"
   community.docker.docker_compose:
     project_name: "valheim"
@@ -39,6 +47,8 @@
           environment:
             - "DNS_1=10.117.0.3"
             - "DNS_2=10.117.0.4"
+            - "PGID={{ valheim_gid }}"
+            - "PUID={{ valheim_uid }}"
             - "SERVER_NAME={{ valheim__server_name }}"
             - "SERVER_PASS={{ valheim__game_password }}"
             - "SERVER_PUBLIC=1"
