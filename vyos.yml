@@ -355,7 +355,7 @@
                   # firstlightweaveslivingsong.hogs.tswn.us
                   - address: "fd36:3eb3:43b0:75::a"
               - name: "NOWAN-TALKERS-from-HOME-v4"
-                description: "IP Addresses allowed to talk to devices on NOWAN ({{ ansible_managed }})"
+                description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
                 members:
                   # cortana.hogs.tswn.us
                   - address: "10.117.0.19"
@@ -364,7 +364,7 @@
                   # sdwilsh-desktop
                   - address: "10.117.0.31"
               - name: "NOWAN-TALKERS-from-HOME-v6"
-                description: "IP Addresses allowed to talk to devices on NOWAN ({{ ansible_managed }})"
+                description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
                 afi: "ipv6"
                 members:
                   # cortana.hogs.tswn.us
@@ -765,6 +765,14 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 20
+                    description: "Allow specific hosts ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    source:
+                      group:
+                        address_group: "NOWAN-TALKERS-from-HOME-v4"
               - name: "IOT-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
