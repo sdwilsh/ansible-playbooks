@@ -299,16 +299,18 @@
           config_trap: no
           group:
             address_group:
-              - name: "PEER-v4"
-                description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
+              - name: "FILE-SERVER-v4"
+                description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
+                afi: "ipv4"
                 members:
-                  - address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
-                  - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
-                  - address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
-                  - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
-                  - address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
-                  - address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
-                  - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
+                  # firstlightweaveslivingsong.hogs.tswn.us
+                  - address: "10.117.0.10"
+              - name: "FILE-SERVER-v6"
+                description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  # firstlightweaveslivingsong.hogs.tswn.us
+                  - address: "fd36:3eb3:43b0:75::a"
               - name: "MAN-TALKERS-from-HOME-v4"
                 description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
                 members:
@@ -336,24 +338,6 @@
                   - address: "10.117.0.50"
                   - address: "10.117.0.51"
                   - address: "10.117.0.52"
-              - name: "NTP-SERVICES-v6"
-                description: "NTP services ({{ ansible_managed }})"
-                afi: "ipv6"
-                members:
-                  - address: "fd36:3eb3:43b0:75::33"
-                  - address: "fd36:3eb3:43b0:75::34"
-              - name: "FILE-SERVER-v4"
-                description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
-                afi: "ipv4"
-                members:
-                  # firstlightweaveslivingsong.hogs.tswn.us
-                  - address: "10.117.0.10"
-              - name: "FILE-SERVER-v6"
-                description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
-                afi: "ipv6"
-                members:
-                  # firstlightweaveslivingsong.hogs.tswn.us
-                  - address: "fd36:3eb3:43b0:75::a"
               - name: "NOWAN-TALKERS-from-HOME-v4"
                 description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
                 members:
@@ -371,6 +355,22 @@
                   - address: "fd36:3eb3:43b0:75::13"
                   # sdwilsh-desktop
                   - address: "fd36:3eb3:43b0:75::1f"
+              - name: "NTP-SERVICES-v6"
+                description: "NTP services ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  - address: "fd36:3eb3:43b0:75::33"
+                  - address: "fd36:3eb3:43b0:75::34"
+              - name: "PEER-v4"
+                description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
+                members:
+                  - address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
+                  - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
               - name: "ZABBIX-SERVER-v4"
                 description: "The v4 server.zabbix.hogs.tswn.us addresses"
                 afi: "ipv4"
