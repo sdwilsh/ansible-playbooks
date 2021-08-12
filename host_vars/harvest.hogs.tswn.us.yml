@@ -1,4 +1,6 @@
 ---
+ansible_cron__interval: "daily"
+
 common__ip_addresses:
   - "10.117.0.17/23"
   - "fd36:3eb3:43b0:75::11/64"
