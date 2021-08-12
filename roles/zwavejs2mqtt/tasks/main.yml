@@ -81,11 +81,19 @@
             - "TZ=America/Los_Angeles"
             - "ZWAVEJS_EXTERNAL_CONFIG=/store/.config-db"
           healthcheck:
-            test: ["CMD", "curl", "-f", "localhost:8080/health/zwave", "-H", "Accept: text/plain"]
             interval: "30s"
-            timeout: "5s"
             retries: 3
             start_period: "10s"
+            test:
+              - "CMD"
+              - "/usr/bin/wget"
+              - "--no-verbose"
+              - "--tries=1"
+              - "--header"
+              - "Accept: text/plain"
+              - "--spider"
+              - "localhost:8091/health/zwave"
+            timeout: "5s"
           image: "zwavejs/zwavejs2mqtt:latest"
           networks:
             - "zwave"
