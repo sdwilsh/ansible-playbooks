@@ -3,7 +3,6 @@
   become: true
   roles:
     - role: common
-    - role: github-client
     - role: ansible-cron
     - role: nickjj.docker
       tags: ["docker"]
