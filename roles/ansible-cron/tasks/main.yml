@@ -99,6 +99,9 @@
       export ARA_API_SERVER=http://ara.hogs.tswn.us:8000
       export ARA_CALLBACK_THREADS=4
 
+      # Adding up to a minute of jitter so not all machines hit resources at the same time.
+      sleep $(( RANDOM %= 60 ))
+
       cd /src/ansible-playbooks
       /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
       git pull --rebase
@@ -117,7 +120,7 @@
     name: "run ansible locally"
     job: "if ! out=`/home/ansible/ansible-cron.sh`; then echo $out; fi"
     user: "ansible"
-    minute: "0"
+    special_time: "{{ ansible_cron__interval }}"
     state: present
 
 

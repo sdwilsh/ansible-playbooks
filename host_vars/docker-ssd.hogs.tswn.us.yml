@@ -1,6 +1,4 @@
 ---
-ansible_cron__inventory_file: "prod-inventory"
-
 ara_docker__secret_key: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           36336164333830626536643635383934303338353764656436653564313630643533383563346566

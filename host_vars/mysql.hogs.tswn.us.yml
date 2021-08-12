@@ -2,8 +2,6 @@
 ansible_python_interpreter: "/usr/local/bin/python3.7"
 ansible_remote_tmp: "/tmp/ansible"
 
-ansible_cron__inventory_file: "prod-inventory"
-
 common__etc_dir: "/usr/local/etc"
 common__ip_addresses:
   - "10.117.0.5/23"
