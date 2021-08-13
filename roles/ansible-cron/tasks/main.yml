@@ -106,9 +106,9 @@
       /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
       git pull --rebase
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing collections"
-      ansible-galaxy collection install -r requirements.yml
+      ansible-galaxy collection install --force-with-deps -r requirements.yml
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing roles"
-      ansible-galaxy role install -r requirements.yml
+      ansible-galaxy role install --force-with-deps -r requirements.yml
       /usr/bin/logger -p user.notice -t ansible-cron -- "Running ansible"
       ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml
     dest: "/home/ansible/ansible-cron.sh"
