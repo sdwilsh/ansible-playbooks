@@ -1,12 +1,10 @@
 ---
 - hosts: "all:!vyos"
   become: yes
-  collections:
-    - "devsec.hardening"
   roles:
     - role: "common"
     - role: "ansible-cron"
-    - role: "ssh_hardening"
+    - role: "devsec.hardening.ssh_hardening"
       vars:
         ssh_kerberos_supprt: no
         ssh_listen_to: "{{ common__ip_addresses | ansible.netcommon.ipaddr('address') }}"

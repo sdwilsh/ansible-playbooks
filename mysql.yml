@@ -2,11 +2,9 @@
 # Setup mysql-server on a FreeBSD host
 - hosts: mysql
   become: true
-  collections:
-    - "devsec.hardening"
   roles:
     - role: "mysql-server"
-    - role: "mysql_hardening"
+    - role: "devsec.hardening.mysql_hardening"
       vars:
         login_unix_socket: "/tmp/mysql.sock"
         mysql_cnf_group: "mysql"
