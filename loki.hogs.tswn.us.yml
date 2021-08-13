@@ -2,8 +2,6 @@
 - hosts: "loki"
   become: yes
   roles:
-    - role: "common"
-    - role: "ansible-cron"
     - role: "nickjj.docker"
       tags:
         - "docker"

@@ -2,7 +2,6 @@
 - hosts: "docker_vm"
   become: yes
   roles:
-    - role: "common"
     - role: "nickjj.docker"
       tags:
         - "docker"

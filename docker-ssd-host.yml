@@ -2,8 +2,6 @@
 - hosts: docker_ssd
   become: true
   roles:
-    - role: common
-    - role: ansible-cron
     - role: nickjj.docker
       tags: ["docker"]
     - role: ara-docker

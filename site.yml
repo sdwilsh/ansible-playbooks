@@ -1,6 +1,11 @@
 ---
-- import_playbook: docker-ssd-host.yml
-- import_playbook: dns.yml
-- import_playbook: mysql.yml
-- import_playbook: opensprinkler.yml
-- import_playbook: viseron.yml
+- hosts: "all:!vyos"
+  become: yes
+  roles:
+    - role: "common"
+    - role: "ansible-cron"
+- import_playbook: "docker-ssd-host.yml"
+- import_playbook: "dns.yml"
+- import_playbook: "loki.hogs.tswn.us.yml"
+- import_playbook: "mysql.yml"
+- import_playbook: "opensprinkler.yml"

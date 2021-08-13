@@ -2,6 +2,4 @@
 - hosts: opensprinkler
   become: true
   roles:
-    - role: common
-    - role: "ansible-cron"
     - role: opensprinkler
