@@ -15,13 +15,16 @@
   ansible.builtin.package:
     name: "{% if ansible_distribution == 'FreeBSD' %}py37-ansible{% else %}ansible{% endif %}"
     state: "present"
-- name: "Ensure ara is installed"
+- name: "Ensure python deps are installed"
   ansible.builtin.pip:
     extra_args: "--user"
-    name: "ara"
+    name: "{{ item }}"
     state: "latest"
   become: yes
   become_user: "ansible"
+  loop:
+    - "ara"
+    - "jmespath" # For community.general.json_query
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
