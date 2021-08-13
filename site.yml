@@ -7,7 +7,6 @@
     - role: "common"
     - role: "ansible-cron"
     - role: "ssh_hardening"
-      tags: "doit"
       vars:
         ssh_kerberos_supprt: no
         ssh_listen_to: "{{ common__ip_addresses | ansible.netcommon.ipaddr('address') }}"
