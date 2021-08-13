@@ -69,7 +69,7 @@
         networkKey: "{{ zwavejs2mqtt__network_key }}"
 
 - name: "Ensure zwavejs2mqtt container is up"
-  community.general.docker_compose:
+  community.docker.docker_compose:
     project_name: "zwavejs"
     definition:
       services:
