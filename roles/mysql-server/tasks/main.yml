@@ -4,7 +4,7 @@
   ansible.builtin.package:
     name: "mysql80-server"
     state: "present"
-  notify: "restart mysql-server"
+  notify: "Restart mysql"
 - name: "Install latest version of PyMySQL"
   ansible.builtin.package:
     name: "py37-pymysql"
@@ -81,17 +81,18 @@
       innodb_doublewrite              = 0
       # Disable checksum because ZFS protects us already.
       innodb_checksum_algorithm       = none
-      skip-symbolic-links
 
       [mysqldump]
       max_allowed_packet              = 256M
       quote_names
       quick
+
+      !includedir /usr/local/etc/mysql/conf.d
     dest: "/usr/local/etc/mysql/my.cnf"
-    mode: "u=rw,g=r,o=r"
+    mode: "u=rw,g=r"
     owner: "root"
-    group: "wheel"
-  notify: "restart mysql-server"
+    group: "mysql"
+  notify: "Restart mysql"
 - name: "Ensure mysql-server is started"
   ansible.builtin.service:
     name: "mysql-server"
