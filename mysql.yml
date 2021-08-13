@@ -7,15 +7,16 @@
     - role: "devsec.hardening.mysql_hardening"
       vars:
         login_unix_socket: "/tmp/mysql.sock"
+        mysql_datadir: "/var/db/mysql/data"
+        mysql_distribution: "mysql"
+        mysql_hardening_log_file: "/var/db/mysql/data/mysql.err"
+        mysql_root_password: "{{ mysql_server__root_password }}"
+        # TODO(https://github.com/dev-sec/ansible-collection-hardening/issues/472)
         mysql_cnf_group: "mysql"
         mysql_cnf_owner: "root"
         mysql_daemon: "mysql-server"
-        mysql_datadir: "/var/db/mysql/data"
+        mysql_hardening_enabled: no
         mysql_hardening_group: "mysql"
-        mysql_hardening_log_file: "/var/db/mysql/data/mysql.err"
         mysql_hardening_mysql_conf_file: "/usr/local/etc/mysql/my.cnf"
         mysql_hardening_mysql_confd_dir: "/usr/local/etc/mysql/conf.d"
         mysql_hardening_mysql_hardening_conf_file: "/usr/local/etc/mysql/conf.d/hardening.cnf"
-        mysql_root_password: "{{ mysql_server__root_password }}"
-        # TODO(https://github.com/dev-sec/ansible-collection-hardening/issues/472)
-        mysql_hardening_enabled: no
