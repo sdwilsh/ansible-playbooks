@@ -2,6 +2,4 @@
 - hosts: dns
   become: true
   roles:
-    - role: common
-    - role: ansible-cron
     - role: bertvv.bind
