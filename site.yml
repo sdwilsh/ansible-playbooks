@@ -1,9 +1,16 @@
 ---
 - hosts: "all:!vyos"
   become: yes
+  collections:
+    - "devsec.hardening"
   roles:
     - role: "common"
     - role: "ansible-cron"
+    - role: "ssh_hardening"
+      tags: "doit"
+      vars:
+        ssh_kerberos_supprt: no
+        ssh_listen_to: "{{ common__ip_addresses | ansible.netcommon.ipaddr('address') }}"
 - import_playbook: "docker-ssd-host.yml"
 - import_playbook: "dns.yml"
 - import_playbook: "loki.hogs.tswn.us.yml"

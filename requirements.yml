@@ -7,4 +7,5 @@ collections:
   - name: community.docker
   - name: community.general
   - name: community.mysql
+  - name: "devsec.hardening"
   - name: vyos.vyos
