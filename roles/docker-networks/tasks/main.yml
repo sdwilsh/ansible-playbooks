@@ -17,6 +17,9 @@
     state: "present"
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
+  when:
+    - common__additional_ethernet_interfaces is defined
+    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.10") | length > 0
 - name: "Create HOME network"
   community.docker.docker_network:
     attachable: yes
@@ -34,3 +37,6 @@
     state: "present"
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
+  when:
+    - common__additional_ethernet_interfaces is defined
+    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.117") | length > 0
