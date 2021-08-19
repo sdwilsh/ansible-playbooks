@@ -52,6 +52,14 @@
     owner: "ansible"
     group: "ansible"
 
+- name: "Ensure logfile exists"
+  ansible.builtin.file:
+    group: "ansible"
+    mode: "0644"
+    modification_time: "preserve"
+    owner: "ansible"
+    path: "/var/log/ansible.log"
+    state: "touch"
 - name: "Install logrotate conf for ansible logs"
   when: ansible_os_family == "Debian"
   ansible.builtin.template:
