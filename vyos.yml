@@ -1900,6 +1900,33 @@
                     action: "accept"
                     state:
                       new: true
+              - name: "WAN-from-UNIFI-MAN-v4"
+                description: "{{ ansible_managed }}"
+                enable_default_log: yes
+                default_action: "drop"
+                rules:
+                  - number: 1
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      established: true
+                      related: true
+                  - number: 2
+                    description: "{{ ansible_managed }}"
+                    action: "drop"
+                    state:
+                      invalid: true
+                  - number: 3
+                    description: "Allow ICMP ({{ ansible_managed }})"
+                    action: "accept"
+                    protocol: "icmp"
+                    icmp:
+                      type_name: any
+                  - number: 5
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    state:
+                      new: true
           - afi: "ipv6"
             rule_sets:
               - name: "HOME-from-LOCAL-v6"
@@ -2239,6 +2266,7 @@
           - "set zone-policy zone WAN-Cellular from LOCAL firewall name WAN-from-LOCAL-v4"
           - "set zone-policy zone WAN-Cellular from MAN firewall name WAN-from-MAN-v4"
           - "set zone-policy zone WAN-Cellular from SERVICE82 firewall name WAN-from-SERVICE82-v4"
+          - "set zone-policy zone WAN-Cellular from UNIFI-MAN firewall name WAN-from-UNIFI-MAN-v4"
           - "set zone-policy zone WAN-Cellular interface {{ vyos__wan_cellular_interface }}"
           # WAN-CenturyLink Zone
           - "set zone-policy zone WAN-CenturyLink default-action drop"
@@ -2250,6 +2278,7 @@
           - "set zone-policy zone WAN-CenturyLink from LOCAL firewall name WAN-from-LOCAL-v4"
           - "set zone-policy zone WAN-CenturyLink from MAN firewall name WAN-from-MAN-v4"
           - "set zone-policy zone WAN-CenturyLink from SERVICE82 firewall name WAN-from-SERVICE82-v4"
+          - "set zone-policy zone WAN-CenturyLink from UNIFI-MAN firewall name WAN-from-UNIFI-MAN-v4"
           - "set zone-policy zone WAN-CenturyLink interface pppoe0"
         save: yes
       tags:
