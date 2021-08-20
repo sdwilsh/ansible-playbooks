@@ -60,6 +60,7 @@
     owner: "ansible"
     path: "/var/log/ansible.log"
     state: "touch"
+  changed_when: no
 - name: "Install logrotate conf for ansible logs"
   when: ansible_os_family == "Debian"
   ansible.builtin.template:
