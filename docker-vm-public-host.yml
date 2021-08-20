@@ -1,0 +1,7 @@
+---
+- hosts: "docker_vm_public"
+  become: yes
+  roles:
+    - role: "docker-unifi-controller"
+      tags:
+        - "docker"

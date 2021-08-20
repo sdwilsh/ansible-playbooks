@@ -40,3 +40,22 @@
   when:
     - common__additional_ethernet_interfaces is defined
     - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.117") | length > 0
+
+- name: "Create SERVICE82 network"
+  community.docker.docker_network:
+    attachable: yes
+    driver: "macvlan"
+    driver_options:
+      parent: "eth1.82"
+    enable_ipv6: no
+    ipam_driver: "default"
+    ipam_config:
+      - subnet: "10.82.0.0/23"
+        gateway: "10.82.0.1"
+    name: "service82"
+    state: "present"
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+  when:
+    - common__additional_ethernet_interfaces is defined
+    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.82") | length > 0

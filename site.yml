@@ -11,6 +11,7 @@
       when:
         - ansible_version.full is version("2.9.10", ">=")
 - import_playbook: "docker-ssd-host.yml"
+- import_playbook: "docker-vm-public.yml"
 - import_playbook: "dns.yml"
 - import_playbook: "loki.hogs.tswn.us.yml"
 - import_playbook: "mysql.yml"
