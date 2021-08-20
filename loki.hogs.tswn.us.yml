@@ -2,9 +2,6 @@
 - hosts: "loki"
   become: yes
   roles:
-    - role: "nickjj.docker"
-      tags:
-        - "docker"
     - role: "zwavejs2mqtt"
       tags:
         - "docker"
