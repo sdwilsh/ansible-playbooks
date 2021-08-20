@@ -1394,6 +1394,12 @@
                     protocol: "icmp"
                     icmp:
                       type_name: any
+                  - number: 6
+                    description: "{{ ansible_managed }}"
+                    action: "accept"
+                    protocol: "vrrp"
+                    source:
+                      address: "172.16.5.{{ vyos__peer_host_id_ipv4 }}"
               - name: "MAN-from-HOME-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
@@ -2259,7 +2265,7 @@
                     action: "accept"
                     protocol: "vrrp"
                     source:
-                      address: "fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv4 }}"
+                      address: "fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv6 }}"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
@@ -2294,7 +2300,7 @@
                     action: "accept"
                     protocol: "vrrp"
                     source:
-                      address: "fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv4 }}"
+                      address: "fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv6 }}"
                   - number: 10
                     description: "Allow DNS ({{ ansible_managed }})"
                     action: "accept"
