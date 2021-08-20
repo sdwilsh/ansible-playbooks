@@ -2,12 +2,6 @@
 - hosts: "docker_vm"
   become: yes
   roles:
-    - role: "nickjj.docker"
-      tags:
-        - "docker"
-    - role: "docker-networks"
-      tags:
-        - "docker"
     - role: "docker-zabbix-backend"
       tags:
         - "docker"
