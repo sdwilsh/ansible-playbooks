@@ -1623,6 +1623,14 @@
                     action: "drop"
                     state:
                       invalid: true
+                  - number: 20
+                    description: "Allow specific hosts ({{ ansible_managed }})"
+                    action: "accept"
+                    state:
+                      new: true
+                    source:
+                      group:
+                        address_group: "MAN-TALKERS-from-HOME-v4"
               - name: "UNIFI-MAN-from-LOCAL-v4"
                 description: "{{ ansible_managed }}"
                 enable_default_log: yes
