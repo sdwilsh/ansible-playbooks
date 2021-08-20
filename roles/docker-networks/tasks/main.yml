@@ -19,7 +19,7 @@
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   when:
     - common__additional_ethernet_interfaces is defined
-    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.10") | length > 0
+    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.10") | list | length > 0
 - name: "Create HOME network"
   community.docker.docker_network:
     attachable: yes
@@ -39,7 +39,7 @@
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   when:
     - common__additional_ethernet_interfaces is defined
-    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.117") | length > 0
+    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.117") | list | length > 0
 
 - name: "Create SERVICE82 network"
   community.docker.docker_network:
@@ -58,4 +58,4 @@
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   when:
     - common__additional_ethernet_interfaces is defined
-    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.82") | length > 0
+    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.82") | list | length > 0
