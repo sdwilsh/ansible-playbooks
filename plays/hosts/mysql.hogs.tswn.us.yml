@@ -1,6 +1,6 @@
 --- 
 # Setup mysql-server on a FreeBSD host
-- hosts: mysql
+- hosts: "mysql.hogs.tswn.us"
   become: true
   roles:
     - role: "mysql-server"

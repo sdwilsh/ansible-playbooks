@@ -1,23 +1,17 @@
 [dns]
 shadowofsunderedstar.hogs.tswn.us ansible_host=10.10.0.3
 
-[docker_ssd]
-docker-ssd.hogs.tswn.us
+[jails]
+mysql.hogs.tswn.us ansible_host=10.117.0.5
 
-[docker_vm]
-docker-vm.hogs.tswn.us ansible_host=10.10.0.6
-
-[docker_vm_public]
-docker-vm-public.hogs.tswn.us ansible_host=10.10.0.7
-
-[loki]
+[rpi]
+harvest.hogs.tswn.us ansible_host=10.117.0.17
 loki.hogs.tswn.us ansible_host=10.117.0.23
 
-[mysql]
-mysql.hogs.tswn.us
-
-[opensprinkler]
-harvest.hogs.tswn.us
+[vms]
+docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
+docker-vm-public.hogs.tswn.us ansible_host=10.10.0.7
+docker-vm.hogs.tswn.us ansible_host=10.10.0.6
 
 [vyos]
 maccabeus01.hogs.tswn.us ansible_host=10.10.0.48

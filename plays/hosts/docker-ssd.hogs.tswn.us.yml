@@ -1,5 +1,5 @@
 ---
-- hosts: docker_ssd
+- hosts: "docker-ssd.hogs.tswn.us"
   become: true
   roles:
     - role: nickjj.docker

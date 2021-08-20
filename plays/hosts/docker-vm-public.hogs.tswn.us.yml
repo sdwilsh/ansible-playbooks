@@ -1,5 +1,5 @@
 ---
-- hosts: "docker_vm_public"
+- hosts: "docker-vm-public.hogs.tswn.us"
   become: yes
   roles:
     - role: "docker-unifi-controller"

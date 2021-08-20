@@ -1,5 +1,5 @@
 --- 
-- hosts: opensprinkler
+- hosts: "harvest.hogs.tswn.us"
   become: true
   roles:
     - role: opensprinkler
