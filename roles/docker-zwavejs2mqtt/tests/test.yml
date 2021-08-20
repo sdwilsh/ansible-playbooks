@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - zwavejs2mqtt
+    - docker-zwavejs2mqtt

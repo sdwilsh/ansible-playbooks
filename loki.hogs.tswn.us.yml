@@ -2,7 +2,7 @@
 - hosts: "loki"
   become: yes
   roles:
-    - role: "zwavejs2mqtt"
+    - role: "docker-zwavejs2mqtt"
       tags:
         - "docker"
         - "zwavejs2mqtt"

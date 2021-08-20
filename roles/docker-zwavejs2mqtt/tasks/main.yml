@@ -1,5 +1,5 @@
 ---
-# tasks file for zwavejs2mqtt
+# tasks file for docker-zwavejs2mqtt
 
 - name: "Create zwavejs2mqtt group"
   ansible.builtin.group:
