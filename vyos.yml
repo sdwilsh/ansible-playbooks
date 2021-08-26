@@ -2723,7 +2723,7 @@
             subnet: "10.10.0.0/24"
           - name: "GWORK"
             default_router: "192.168.1.1"
-            own_dns: true
+            own_dns: false
             range:
               start: "192.168.1.100"
               stop: "192.168.1.250"
