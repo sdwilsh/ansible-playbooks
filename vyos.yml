@@ -78,6 +78,8 @@
               - vlan_id: 201
                 description: "CenturyLink PPPOE ({{ ansible_managed }})"
         state: merged
+      tags:
+        - "interfaces"
     - name: "Setup CenturyLink PPPOE"
       vyos.vyos.vyos_config:
         lines:
@@ -88,35 +90,63 @@
           - "set interfaces pppoe pppoe0 no-peer-dns"
           - "set interfaces pppoe pppoe0 source-interface {{ vyos__wan_centurylink_interface }}.201"
         save: yes
+      tags:
+        - "interfaces"
     - name: "Set interfaces addresses"
-      vyos.vyos.vyos_config:
-        lines:
-          # UNIFI-MAN
-          - "set interfaces ethernet {{ vyos__lan_interface }} address 10.1.0.{{ vyos__host_id_ipv4 }}/24"
-          # SYNC
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 9 address 10.9.0.{{ vyos__host_id_ipv4 }}/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 9 address fd36:3eb3:43b0:9::{{ vyos__host_id_ipv6 }}/24"
-          # MAN
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address 10.10.0.{{ vyos__host_id_ipv4 }}/24"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 10 address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
-          # GWORK
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 15 address 192.168.1.{{ vyos__host_id_ipv4 }}/24"
-          # IOT
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 66 address 10.66.0.{{ vyos__host_id_ipv4 }}/24"
-          # NOWAN
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 67 address 10.67.0.{{ vyos__host_id_ipv4 }}/24"
-          # SERVICE82
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 82 address 10.82.0.{{ vyos__host_id_ipv4 }}/24"
-          # ROUTER-LAB
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 100 address 10.100.0.{{ vyos__host_id_ipv4 }}/24"
-          # HOME
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address 10.117.0.{{ vyos__host_id_ipv4 }}/23"
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 117 address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
-          # GUEST
-          - "set interfaces ethernet {{ vyos__lan_interface }} vif 131 address 10.131.0.{{ vyos__host_id_ipv4 }}/24"
-          # WAN-CELLULAR
-          - "set interfaces ethernet {{ vyos__wan_cellular_interface }} address 172.16.5.{{ vyos__host_id_ipv4 }}/24"
-        save: yes
+      vyos.vyos.vyos_l3_interfaces:
+        config:
+          - name: "{{ vyos__lan_interface }}"
+            ipv4:
+              - address: "10.1.0.{{ vyos__host_id_ipv4 }}/24"
+            vifs:
+              # SYNC
+              - vlan_id: 9
+                ipv4:
+                  - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
+                ipv6:
+                  - address: "fd36:3eb3:43b0:9::{{ vyos__host_id_ipv6 }}/64"
+              # MAN
+              - vlan_id: 10
+                ipv4:
+                  - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+                ipv6:
+                  - address: "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
+              # GWORK
+              - vlan_id: 15
+                ipv4:
+                  - address: "192.168.1.{{ vyos__host_id_ipv4 }}/24"
+              # IOT
+              - vlan_id: 66
+                ipv4:
+                  - address: "10.66.0.{{ vyos__host_id_ipv4 }}/24"
+              # NOWAN
+              - vlan_id: 67
+                ipv4:
+                  - address: "10.67.0.{{ vyos__host_id_ipv4 }}/24"
+              # SERVICE82
+              - vlan_id: 82
+                ipv4:
+                  - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
+              # ROUTER-LAB
+              - vlan_id: 100
+                ipv4:
+                  - address: "10.100.0.{{ vyos__host_id_ipv4 }}/24"
+              # HOME
+              - vlan_id: 117
+                ipv4:
+                  - address: "10.117.0.{{ vyos__host_id_ipv4 }}/24"
+                ipv6:
+                  - address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
+              # GUEST
+              - vlan_id: 131
+                ipv4:
+                  - address: "10.131.0.{{ vyos__host_id_ipv4 }}/24"
+          - name: "{{ vyos__wan_cellular_interface }}"
+            ipv4:
+              - address: "172.16.5.{{ vyos__host_id_ipv4 }}/24"
+        state: "replaced"
+      tags:
+        - "interfaces"
     - set_fact:
         lan_interfaces_with_wan_access:
           # UNIFI-MAN
@@ -166,6 +196,8 @@
       become: true
       vars:
         ansible_connection: "ssh"
+      tags:
+        - "interfaces"
     - name: "Setup pppoe0 disable script"
       ansible.builtin.copy:
         dest: "/config/scripts/disable-pppoe0.script"
@@ -187,6 +219,8 @@
       become: true
       vars:
         ansible_connection: "ssh"
+      tags:
+        - "interfaces"
     - name: "Setup vrrp"
       vyos.vyos.vyos_config:
         lines:
