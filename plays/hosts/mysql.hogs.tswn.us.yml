@@ -9,7 +9,7 @@
         login_unix_socket: "/tmp/mysql.sock"
         mysql_datadir: "/var/db/mysql/data"
         mysql_distribution: "mysql"
-        mysql_hardening_log_file: "/var/db/mysql/data/mysql.err"
+        mysql_hardening_log_file: "/var/db/mysql/data/{{ ansible_hostname }}.err"
         mysql_root_password: "{{ mysql_server__root_password }}"
         # TODO(https://github.com/dev-sec/ansible-collection-hardening/issues/472)
         mysql_cnf_group: "mysql"
