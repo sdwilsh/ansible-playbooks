@@ -43,15 +43,12 @@
       secure-file-priv                = /var/db/mysql_secure
       log-bin                         = mysql-bin
       log-output                      = TABLE
-      master-info-repository          = TABLE
-      relay-log-info-repository       = TABLE
       relay-log-recovery              = 1
       slow-query-log                  = 1
       server-id                       = 1
       sync_binlog                     = 1
       sync_relay_log                  = 1
       binlog_cache_size               = 16M
-      expire_logs_days                = 30
       default_password_lifetime       = 0
       enforce-gtid-consistency        = 1
       gtid-mode                       = ON
