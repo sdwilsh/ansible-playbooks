@@ -1,0 +1,23 @@
+---
+- action: "accept"
+  protocol: "vrrp"
+  destination:
+    group:
+      address_group: "PEER-v4"
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmp"
+  icmp:
+    type_name: any
+- description: "Allow conntrack-sync"
+  action: "accept"
+  protocol: "udp"
+  destination:
+    address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    port: "3780"
+- description: "Allow dhcp-sync"
+  action: "accept"
+  protocol: "tcp"
+  destination:
+    address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    port: "520"

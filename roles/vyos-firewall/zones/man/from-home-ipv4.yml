@@ -1,0 +1,22 @@
+---
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmp"
+  icmp:
+    type_name: any
+- description: "Allow specific hosts"
+  action: "accept"
+  state:
+    new: true
+  source:
+    group:
+      address_group: "MAN-TALKERS-from-HOME-v4"
+- description: "Allow zabbix-agent Connections"
+  action: "accept"
+  protocol: "tcp"
+  state:
+    new: true
+  destination:
+    group:
+      address_group: "ZABBIX-SERVER-v4"
+    port: "10051"

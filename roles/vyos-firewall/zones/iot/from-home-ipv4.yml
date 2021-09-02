@@ -1,0 +1,8 @@
+---
+- description: "Allow specific hosts"
+  action: "accept"
+  state:
+    new: true
+  source:
+    group:
+      address_group: "NOWAN-TALKERS-from-HOME-v4"

@@ -1,0 +1,42 @@
+---
+- action: "accept"
+  protocol: "vrrp"
+  source:
+    group:
+      address_group: "PEER-v4"
+- description: "Allow dhcp-sync"
+  action: "accept"
+  protocol: "tcp"
+  destination:
+    port: "520"
+  source:
+    group:
+      address_group: "PEER-v4"
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmp"
+  icmp:
+    type_name: any
+- description: "Allow DHCP"
+  action: "accept"
+  protocol: "udp"
+  source:
+    port: "68"
+  destination:
+    port: "67"
+- description: "Allow DNS"
+  action: "accept"
+  protocol: "tcp_udp"
+  state:
+    new: true
+  destination:
+    group:
+      port_group: "DNS"
+- description: "Drop broadcast traffic"
+  action: "drop"
+  destination:
+    address: "255.255.255.255"
+- description: "Drop broadcast traffic"
+  action: "drop"
+  destination:
+    address: "10.117.1.255"

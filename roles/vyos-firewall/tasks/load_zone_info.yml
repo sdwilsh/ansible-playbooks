@@ -1,0 +1,20 @@
+---
+# tasks file for vyos-firewall to load zone information.
+- name: "Build rule_sets_{{ afi }} for {{ zone }}"
+  ansible.builtin.set_fact: >-
+    rule_sets_{{ afi }}={{
+      lookup("vars", "rule_sets_" + afi, default=[]) + [
+        dict(
+          name=(zone | upper + "-from-" + file_path.split("/")[-1][5:-9] | upper + "-v" + afi[-1]),
+          description=ansible_managed,
+          enable_default_log=True,
+          default_action="drop",
+          rules=lookup("template", "templates/firewall_rules.j2") | from_yaml,
+        )
+      ]
+    }}
+  with_fileglob: "zones/{{ zone | lower }}/from-*-{{ afi }}.yml"
+  loop_control:
+    loop_var: "file_path"
+  when:
+    - "file_path.split('/')[-1][5:-9].upper() in vyos_firewall__zones"

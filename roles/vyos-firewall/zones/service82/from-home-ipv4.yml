@@ -1,0 +1,10 @@
+---
+- description: "Allow access to Unifi Controller"
+  action: "accept"
+  state:
+    new: true
+  destination:
+    address: "10.82.0.2"
+    group:
+      port_group: "UNIFI-WEB-TCP"
+  protocol: "tcp"

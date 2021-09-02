@@ -1,0 +1,17 @@
+---
+- action: "accept"
+  protocol: "vrrp"
+  source:
+    group:
+      address_group: "PEER-v6"
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmpv6"
+- description: "Allow DNS"
+  action: "accept"
+  protocol: "tcp_udp"
+  state:
+    new: true
+  destination:
+    group:
+      port_group: "DNS"

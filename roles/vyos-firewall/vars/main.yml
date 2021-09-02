@@ -1,0 +1,10 @@
+---
+# vars file for vyos-firewall
+core_firewall_rules:
+  - action: "accept"
+    state:
+      established: true
+      related: true
+  - action: "drop"
+    state:
+      invalid: true

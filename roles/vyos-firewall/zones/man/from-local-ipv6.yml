@@ -1,0 +1,13 @@
+---
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmpv6"
+- action: "accept"
+  protocol: "vrrp"
+  destination:
+    group:
+      address_group: "PEER-v6"
+- description: "Accept all traffic"
+  action: "accept"
+  state:
+    new: true

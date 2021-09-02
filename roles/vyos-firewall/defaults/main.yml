@@ -1,0 +1,3 @@
+---
+# defaults file for vyos-firewall
+vyos_firewall__zones: []
