@@ -67,11 +67,8 @@ bind_zones:
       - name: "nvidia-shield.hogs"
         ip: "10.117.0.13"
         ipv6: "fd36:3eb3:43b0:75:864:f450:825c:a847"
-      - name: "sif.hogs"
+      - name: "energy.hogs"
         ip: "10.117.0.16"
-        ipv6: "fd36:3eb3:43b0:75::10"
-        aliases:
-          - "zwave.hogs"
       - name: "harvest.hogs"
         ip: "10.117.0.17"
         ipv6: "fd36:3eb3:43b0:75::11"
