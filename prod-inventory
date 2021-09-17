@@ -7,6 +7,7 @@ mysql.hogs.tswn.us ansible_host=10.117.0.5
 [rpi]
 harvest.hogs.tswn.us ansible_host=10.117.0.17
 loki.hogs.tswn.us ansible_host=10.117.0.23
+monitor.house.gem.hogs.tswn.us ansible_host=10.117.0.24
 
 [vms]
 docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
