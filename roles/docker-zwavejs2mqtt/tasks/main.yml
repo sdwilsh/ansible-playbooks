@@ -38,19 +38,20 @@
         retain: true
         clean: true
         auth: true
-        _ca:
-        ca:
-        _cert:
-        cert:
-        _key:
-        key:
-        password: "{{ zwavejs2mqtt__password }}"
         username: "{{ zwavejs2mqtt__username }}"
+        password: "{{ zwavejs2mqtt__password }}"
+        _ca: ""
+        ca: ""
+        _cert: ""
+        cert: ""
+        _key: ""
+        key: ""
       gateway:
         type: 0
         plugins: []
         authEnabled: false
         payloadType: 1
+        nodeNames: false
         hassDiscovery: false
         discoveryPrefix: homeassistant
         logEnabled: true
@@ -58,15 +59,20 @@
         logToFile: false
         values: []
       zwave:
+        port: "/dev/zwave"
         commandsTimeout: 30
         logLevel: "info"
+        securityKeys:
+          S0_Legacy: "{{ zwavejs2mqtt__network_key }}"
+          S2_Unauthenticated: "{{ zwavejs2mqtt__s2_unauthenticated }}"
+          S2_Authenticated: "{{ zwavejs2mqtt__s2_authenticated }}"
+          S2_AccessControl: "{{ zwavejs2mqtt__s2_access_control }}"
+        deviceConfigPriorityDir: "/store/config"
         logToFile: false
         serverEnabled: true
         enableStatistics: true
         serverPort: 3000
         disclaimerVersion: 1
-        port: "/dev/zwave"
-        networkKey: "{{ zwavejs2mqtt__network_key }}"
 
 - name: "Ensure zwavejs2mqtt container is up"
   community.docker.docker_compose:
