@@ -716,6 +716,7 @@
       vyos.vyos.vyos_config:
         lines:
           - "set protocols static route {{ item }}/32 next-hop 172.16.5.1"
+          - "set protocols static route {{ item }}/32 next-hop 172.16.5.1 distance 2"
           - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} test {{ rule_number }} type ping"
           - "set load-balancing wan interface-health {{ vyos__wan_cellular_interface }} test {{ rule_number }} target {{ item }}"
       loop: "{{ vyos__wan_cellular_dns }}"
