@@ -2,6 +2,10 @@
 - hosts: "docker-vm.hogs.tswn.us"
   become: yes
   roles:
+    - role: "docker-deepstack"
+      tags:
+        - "docker"
+        - "deepstack"
     - role: "docker-zabbix-backend"
       tags:
         - "docker"

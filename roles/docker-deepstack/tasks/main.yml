@@ -1,0 +1,43 @@
+---
+# tasks file for docker-deepstack
+- name: "Launch deepstack container"
+  community.docker.docker_compose:
+    project_name: "deepstackai"
+    definition:
+      networks:
+        home:
+          external:
+            name: "home"
+      services:
+        deepstack:
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
+          environment:
+            VISION-DETECTION: "True"
+          healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+            interval: "10s"
+            timeout: "5s"
+            retries: 3
+            start_period: "30s"
+          image: "deepquestai/deepstack:cpu"
+          mac_address: "02:42:0a:75:00:23"
+          networks:
+            home:
+              ipv4_address: "10.117.0.32"
+              ipv6_address: "fd36:3eb3:43b0:75::20"
+          stop_grace_period: "30s"
+          volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
+            - "localstorage:/datastore:rw"
+      volumes:
+        localstorage:
+    pull: yes
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+  register: status
+- ansible.builtin.assert:
+    that:
+      - "status.services.deepstack.deepstackai_deepstack_1.state.running"
