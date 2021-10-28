@@ -74,14 +74,16 @@
           width: 2560
           height: 1920
           fps: 30
-          codec: "h264_cuvid"
+          audio_codec: "aac"
+          codec: "h264"
           substream:
             path: "/h264Preview_01_sub"
             port: 554
             width: 640
             height: 480
             fps: 4
-            codec: "h264_cuvid"
+            audio_codec: "aac"
+            codec: "h264"
         - name: "Front-North"
           mqtt_name: "viseron_front_north"
           host: "10.67.0.11"
@@ -92,14 +94,16 @@
           width: 2560
           height: 1920
           fps: 30
-          codec: "h264_cuvid"
+          audio_codec: "aac"
+          codec: "h264"
           substream:
             path: "/h264Preview_01_sub"
             port: 554
             width: 640
             height: 480
             fps: 4
-            codec: "h264_cuvid"
+            audio_codec: "aac"
+            codec: "h264"
       logging:
         level: "debug"
       motion_detection:
