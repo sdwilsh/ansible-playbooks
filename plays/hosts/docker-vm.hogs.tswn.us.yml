@@ -6,6 +6,10 @@
       tags:
         - "docker"
         - "deepstack"
+    - role: "docker-viseron"
+      tags:
+        - "docker"
+        - "viseron"
     - role: "docker-zabbix-backend"
       tags:
         - "docker"

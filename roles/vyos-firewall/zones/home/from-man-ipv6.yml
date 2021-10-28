@@ -49,3 +49,14 @@
     group:
       address_group: "FILE-SERVER-v6"
       port_group: "NFS"
+- description: "Allow Samba connections to Home Assistant"
+  action: "accept"
+  protocol: "tcp"
+  state:
+    new: true
+  destination:
+    group:
+      port_group: "CIFS"
+  source:
+    group:
+      address_group: "HASS-CIFS-from-MAN-v6"

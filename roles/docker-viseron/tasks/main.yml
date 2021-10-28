@@ -1,0 +1,171 @@
+---
+# tasks file for docker-viseron
+
+- name: "Create viseron group"
+  ansible.builtin.group:
+    name: "viseron"
+    state: present
+- name: "Create viseron user"
+  ansible.builtin.user:
+    name: "viseron"
+    group: "viseron"
+    groups:
+      - "docker"
+      - "viseron"
+    state: present
+    shell: "/bin/bash"
+- name: "Ensure cifs-utils is installed and up-to-date"
+  ansible.builtin.apt:
+    name: "cifs-utils"
+    state: "latest"
+    update_cache: yes
+
+- name: "Create Home Assistant mount credentials file"
+  ansible.builtin.template:
+    src: "cifs_creds.j2"
+    dest: "/root/ha-cifs.txt"
+    owner: "root"
+    group: "root"
+    mode: "u=rw"
+- name: "Create Home Assistant mount point"
+  ansible.builtin.file:
+    path: "/home/viseron/ha-media"
+    state: directory
+    owner: "viseron"
+    group: "viseron"
+    mode: "u=rwx,g=rwx,o=rx"
+- name: "Mount Home Assistant media share"
+  ansible.posix.mount:
+    fstype: "cifs"
+    opts: "noperm,_netdev,credentials=/root/ha-cifs.txt"
+    path: "/home/viseron/ha-media"
+    src: "//{{ viseron__cifs_address }}/media"
+    state: mounted
+- name: "Create viseron folder in media share"
+  ansible.builtin.file:
+    path: "/home/viseron/ha-media/viseron"
+    state: directory
+
+- name: "Create viseron config dir"
+  ansible.builtin.file:
+    path: "/home/viseron/config"
+    state: directory
+    owner: "viseron"
+    group: "viseron"
+    mode: "u=rwx,g=rx"
+- name: "Create viseron config file"
+  ansible.builtin.copy:
+    content: "{{ viseron_config | to_nice_yaml(indent=2, explicit_start=True) }}"
+    dest: "/home/viseron/config/config.yaml"
+    owner: "viseron"
+    group: "viseron"
+    mode: "u=rw,g=r"
+  register: config
+  vars:
+    viseron_config:
+      cameras:
+        - name: "Front Porch"
+          mqtt_name: "viseron_front_porch"
+          host: "10.67.0.10"
+          port: 554
+          username: "viseron"
+          password: "{{ viseron__reolink_password }}"
+          path: "/h264Preview_01_main"
+          width: 2560
+          height: 1920
+          fps: 30
+          codec: "h264_cuvid"
+          substream:
+            path: "/h264Preview_01_sub"
+            port: 554
+            width: 640
+            height: 480
+            fps: 4
+            codec: "h264_cuvid"
+        - name: "Front-North"
+          mqtt_name: "viseron_front_north"
+          host: "10.67.0.11"
+          port: 554
+          username: "viseron"
+          password: "{{ viseron__reolink_password }}"
+          path: "/h264Preview_01_main"
+          width: 2560
+          height: 1920
+          fps: 30
+          codec: "h264_cuvid"
+          substream:
+            path: "/h264Preview_01_sub"
+            port: 554
+            width: 640
+            height: 480
+            fps: 4
+            codec: "h264_cuvid"
+      logging:
+        level: "debug"
+      motion_detection:
+        interval: 0.5
+        threshold: 10
+        frames: 1
+        trigger_detector: true
+      mqtt:
+        broker: "mqtt.hogs.tswn.us"
+        username: "viseron"
+        password: "{{ viseron__mqtt_password }}"
+      object_detection:
+        type: "darknet"
+        labels:
+          - label: "cat"
+            confidence: 0.8
+          - label: "dog"
+            confidence: 0.8
+          - label: "person"
+            confidence: 0.8
+      recorder:
+        lookback: 5
+        retain: 14
+        segments_folder: "/segments"
+        thumbnail:
+          save_to_disk: True
+          send_to_mqtt: True
+
+- name: "Get viseron user info"
+  ansible.builtin.getent:
+    database: "passwd"
+    key: "viseron"
+- name: "Launch viseron container"
+  community.docker.docker_compose:
+    project_name: "nvr"
+    definition:
+      networks:
+        home:
+          external:
+            name: "home"
+      services:
+        viseron:
+          dns:
+            - "10.117.0.1"
+            - "fd36:3eb3:43b0:75::1"
+          environment:
+            - "PGID={{ viseron_gid }}"
+            - "PUID={{ viseron_uid }}"
+          image: "roflcoopter/viseron:latest"
+          mac_address: "02:42:0a:75:00:24"
+          networks:
+            home:
+              ipv4_address: "10.117.0.29"
+              ipv6_address: "fd36:3eb3:43b0:75::1d"
+          volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
+            - "/home/viseron/config:/config"
+            - "/home/viseron/ha-media/viseron:/recordings"
+    pull: yes
+    restarted: "{{ config.changed | bool }}"
+  register: status
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+    viseron_gid: "{{ getent_passwd[\"viseron\"].2 }}"
+    viseron_uid: "{{ getent_passwd[\"viseron\"].1 }}"
+- ansible.builtin.assert:
+    that:
+      - "status.services.viseron.nvr_viseron_1.state.running"

@@ -354,6 +354,18 @@
           config_trap: no
           group:
             address_group:
+              - name: "HASS-CIFS-from-MAN-v4"
+                description: "IP Addresses from MAN that can talk to HASS Samba Server ({{ ansible_managed }})"
+                afi: "ipv4"
+                members:
+                  # docker-vm.hogs.tswn.us
+                  - address: "10.10.0.6"
+              - name: "HASS-CIFS-from-MAN-v6"
+                description: "IP Addresses from MAN that can talk to HASS Samba Server ({{ ansible_managed }})"
+                afi: "ipv6"
+                members:
+                  # docker-vm.hogs.tswn.us
+                  - address: "fd36:3eb3:43b0:a::6"
               - name: "FILE-SERVER-v4"
                 description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
                 afi: "ipv4"
@@ -402,6 +414,8 @@
                   - address: "10.117.0.27"
                   # sdwilsh-desktop
                   - address: "10.117.0.31"
+                  # viseron
+                  - address: "10.117.0.29"
               - name: "NOWAN-TALKERS-from-HOME-v6"
                 description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
                 afi: "ipv6"
@@ -456,6 +470,10 @@
                   - address: "172.16.0.0/12"
                   - address: "10.0.0.0/8"
             port_group:
+              - name: "CIFS"
+                description: "{{ ansible_managed }}"
+                members:
+                  - port: "445"
               - name: "DNS"
                 description: "{{ ansible_managed }}"
                 members:

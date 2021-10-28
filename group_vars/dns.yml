@@ -95,6 +95,9 @@ bind_zones:
         ipv6: "fd36:3eb3:43b0:75::1b"
         aliases:
           - "blueiris.hogs"
+      - name: "viseron.hogs"
+        ip: "10.117.0.29"
+        ipv6: "fd36:3eb3:43b0:75::1d"
       - name: "docker-ssd.hogs"
         ip: "10.117.0.30"
         ipv6: "fd36:3eb3:43b0:75::1e"
