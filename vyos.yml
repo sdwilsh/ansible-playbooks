@@ -798,14 +798,6 @@
     - name: "Setup connection-tracking synchronization"
       vyos.vyos.vyos_config:
         lines:
-          # Configure Conntrack
-          - "set system conntrack modules ftp disable"
-          - "set system conntrack modules h323 disable"
-          - "set system conntrack modules nfs disable"
-          - "set system conntrack modules pptp disable"
-          - "set system conntrack modules sip disable"
-          - "set system conntrack modules sqlnet disable"
-          - "set system conntrack modules tftp disable"
           # Configure Synchronization
           - "set service conntrack-sync accept-protocol 'tcp,udp,icmp'"
           - "set service conntrack-sync event-listen-queue-size 8"
