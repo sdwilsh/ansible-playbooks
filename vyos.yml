@@ -817,7 +817,9 @@
       vyos.vyos.vyos_config:
         lines:
           # Configure Synchronization
-          - "set service conntrack-sync accept-protocol 'tcp,udp,icmp'"
+          - "set service conntrack-sync accept-protocol 'icmp'"
+          - "set service conntrack-sync accept-protocol 'udp'"
+          - "set service conntrack-sync accept-protocol 'tcp'"
           - "set service conntrack-sync event-listen-queue-size 8"
           - "set service conntrack-sync failover-mechanism vrrp sync-group MAIN"
           - "set service conntrack-sync interface {{ vyos__lan_interface }}.9 peer 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
