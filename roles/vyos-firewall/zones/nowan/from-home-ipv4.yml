@@ -6,3 +6,13 @@
   source:
     group:
       address_group: "NOWAN-TALKERS-from-HOME-v4"
+- description: "Allow viseron to talk to cameras"
+  action: "accept"
+  state:
+    new: true
+  destination:
+    group:
+      address_group: "CAMERAS-v4"
+  source:
+    group:
+      address_group: "VISERON-v4"
