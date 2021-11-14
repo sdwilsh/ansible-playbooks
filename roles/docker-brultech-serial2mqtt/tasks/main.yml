@@ -1,0 +1,131 @@
+---
+# tasks file for docker-brultech-serial2mqtt
+- name: "Create brultech group"
+  ansible.builtin.group:
+    name: "brultech"
+    state: present
+- name: "Create brultech user"
+  ansible.builtin.user:
+    name: "brultech"
+    group: "brultech"
+    groups:
+      - "docker"
+      - "brultech"
+    state: present
+    shell: "/bin/bash"
+
+- name: "Create brultech config dir"
+  ansible.builtin.file:
+    path: "/home/brultech/config"
+    state: directory
+    owner: "brultech"
+    group: "brultech"
+    mode: "u=rwx,g=rx"
+- name: "Create brultech config file"
+  ansible.builtin.copy:
+    content: "{{ brultech_config | to_nice_yaml(indent=2, explicit_start=True) }}"
+    dest: "/home/brultech/config/config.yml"
+    owner: "brultech"
+    group: "brultech"
+    mode: "u=rw,g=r"
+  register: config
+  vars:
+    brultech_config:
+      device:
+        channels:
+          - number: 1
+            name: "Appliance Garage, Dining Plugs"
+          - number: 2
+            name: "Floor Heating"
+          - number: 4
+            name: "Oven"
+          - number: 5
+            name: "Basement Fridge"
+          - number: 6
+            name: "West Bedrooms Lights and Plugs"
+          - number: 7
+            name: "Guest Bedroom, Hallway, and Stairway Lights and Plugs"
+          - number: 8
+            name: "Dryer"
+          - number: 9
+            name: "Communication Closet"
+          - number: 10
+            name: "Hood Vent"
+          - number: 11
+            name: "Living Room Plugs"
+          - number: 13
+            name: "Irrigation Pump"
+          - number: 14
+            name: "Dishwasher and Garbage Disposal"
+          - number: 15
+            name: "Skylights"
+          - number: 16
+            name: "Main and 2nd Floor Bathroom Plugs"
+          - number: 17
+            name: "Mail Left"
+            type: "main"
+          - number: 18
+            name: "Mail Right"
+            type: "main"
+          - number: 19
+            name: "Fridge"
+          - number: 20
+            name: "Bathroom Lights"
+          - number: 21
+            name: "Main Floor Lights, Back Porch Plugs"
+          - number: 24
+            name: "Lunos Fans, Low Voltage Panels"
+          - number: 25
+            name: "Solar"
+            type: "solar_downstream_main"
+          - number: 26
+            name: "Utility Room Plugs"
+          - number: 27
+            name: "Kitchen Plugs"
+          - number: 28
+            name: "Laundry Room Plugs"
+          - number: 29
+            name: "Main Hall Lights and Plugs"
+          - number: 30
+            name: "Utility, Communication Closet, & West Basement Lights and Plugs"
+          - number: 31
+            name: "Main Floor & Guest Bathroom Plugs"
+          - number: 32
+            name: "Garage"
+        device_com: "COM2"
+        name: "House"
+      mqtt:
+        broker: "mqtt.hogs.tswn.us"
+        username: "brultech-serial2mqtt"
+        password: "{{ docker_brultech_serial2mqtt__mqtt_password }}"
+
+- name: "Get brultech user info"
+  ansible.builtin.getent:
+    database: "passwd"
+    key: "brultech"
+- name: "Launch brultech-serial2mqtt container"
+  community.docker.docker_compose:
+    project_name: "brultech"
+    definition:
+      services:
+        serial2mqtt:
+          devices:
+            - "/dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D309LJ40-if00-port0:/dev/ttyUSB0"
+          environment:
+            - "PGID={{ brultech_gid }}"
+            - "PUID={{ brultech_uid }}"
+          image: "ghcr.io/sdwilsh/brultech-serial2mqtt:main"
+          volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "/etc/timezone:/etc/timezone:ro"
+            - "/home/brultech/config:/config:ro"
+    pull: yes
+    restarted: "{{ config.changed | bool }}"
+  register: status
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3-docker"
+    brultech_gid: "{{ getent_passwd[\"brultech\"].2 }}"
+    brultech_uid: "{{ getent_passwd[\"brultech\"].1 }}"
+- ansible.builtin.assert:
+    that:
+      - "status.services.serial2mqtt.brultech_serial2mqtt_1.state.running"
