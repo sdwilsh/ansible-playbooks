@@ -62,10 +62,10 @@
           - number: 16
             name: "Main and 2nd Floor Bathroom Plugs"
           - number: 17
-            name: "Mail Left"
+            name: "Main Left"
             type: "main"
           - number: 18
-            name: "Mail Right"
+            name: "Main Right"
             type: "main"
           - number: 19
             name: "Fridge"
