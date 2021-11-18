@@ -894,6 +894,10 @@
               start: "10.10.0.200"
               stop: "10.10.0.250"
             subnet: "10.10.0.0/24"
+            static_mapping:
+              - name: "sdwilsh-desk-switch"
+                ip: "10.10.0.16"
+                mac: "2c:c8:1b:9c:21:29"
           - name: "GWORK"
             default_router: "192.168.1.1"
             own_dns: false
