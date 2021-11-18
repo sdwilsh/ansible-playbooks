@@ -1,0 +1,15 @@
+---
+ansible_cron__interval: "daily"
+
+common__additional_ethernet_interfaces:
+  - name: "eth1"
+    inet:
+      mode: "manual"
+      lines: []
+
+common__gateway_v4_address: "10.10.0.1"
+common__ip_addresses:
+  - "10.10.0.60/24"
+common__nameservers:
+  addresses:
+    - "10.10.0.1"
