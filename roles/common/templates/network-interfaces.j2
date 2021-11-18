@@ -6,7 +6,7 @@ source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
 
-# Primary Interface {{ ansible_default_ipv4.interface }}
+# Primary Interface {{ ansible_default_ipv4.interface }} (v4)
 auto {{ ansible_default_ipv4.interface }}
 iface {{ ansible_default_ipv4.interface }} inet static
 {% for ipv4_host in common__ip_addresses | ansible.netcommon.ipv4('host/prefix') %}
@@ -16,8 +16,11 @@ iface {{ ansible_default_ipv4.interface }} inet static
     broadcast {{ ipv4_host | ansible.netcommon.ipaddr('broadcast') }}
 {% endfor %}
     gateway   {{ common__gateway_v4_address }}
-iface {{ ansible_default_ipv4.interface }} inet6 static
+
 {% set ipv6_list = common__ip_addresses | ansible.netcommon.ipv6('host/prefix') %}
+{% if ipv6_list | length > 0 %}
+# Primary Interface {{ ansible_default_ipv4.interface }} (v6)
+iface {{ ansible_default_ipv4.interface }} inet6 static
     address   {{ ipv6_list[0] }}
     gateway   {{ common__gateway_v6_address }}
 {% if ipv6_list | length > 1 %}
@@ -26,6 +29,8 @@ iface {{ ansible_default_ipv4.interface }} inet6 static
     down /sbin/ip address del {{ subnet }} dev {{ ansible_default_ipv4.interface }}
 {% endfor %}
 {% endif %}
+{% endif %}
+
 {% if common__additional_ethernet_interfaces is defined %}
 {% for interface_config in common__additional_ethernet_interfaces %}
 
