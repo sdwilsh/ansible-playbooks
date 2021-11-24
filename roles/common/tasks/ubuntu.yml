@@ -117,6 +117,17 @@
     state: "{% if chrony_conf.changed %}restarted{% else %}started{% endif %}"
     enabled: yes
 
+# Raspberry Pi usercfg.txt
+- name: "Setup /boot/firmware/usercfg.txt"
+  ansible.builtin.template:
+    src: "pi-usercfg.txt.j2"
+    dest: "/boot/firmware/usercfg.txt"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: "root"
+    group: "root"
+  notify: "reboot"
+  when: ansible_local.rpi.is and common__pi_usercfg | length != 0
+
 # Provisoning Cleanup
 - name: Remove ubuntu user
   user:

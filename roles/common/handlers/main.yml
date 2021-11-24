@@ -1,5 +1,9 @@
 ---
 # handlers file for common
+- name: "reboot the machine"
+  ansible.builtin.reboot:
+  listen: "reboot"
+
 - name: "restart networking interfaces"
   ansible.builtin.command:
     cmd: "bash -c 'ifdown --force {{ interfaces | join(' ') }}; sleep 1; ifup {{ interfaces | join(' ') }}'"

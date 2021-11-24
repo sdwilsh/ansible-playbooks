@@ -13,3 +13,16 @@ common__ip_addresses:
 common__nameservers:
   addresses:
     - "10.10.0.1"
+
+common__pi_usercfg:
+  - "# Disable audio"
+  - "dtparam=audio=off"
+  - "# Enable USB"
+  - "dtoverlay=dwc2,dr_mode=host"
+  - "# Use the CPU to access i2c"
+  - "dtparam=i2c_vc=on"
+  - "# RTC"
+  - "dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi"
+  - "# Overclock"
+  - "over_voltage=6"
+  - "arm_freq=2000"
