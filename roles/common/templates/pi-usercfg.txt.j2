@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+# Disable wifi, bluetooth
+dtoverlay=disable-wifi
+dtoverlay=disable-bt
+
+{% for line in common__pi_usercfg %}
+{{ line }}
+{% endfor %}
