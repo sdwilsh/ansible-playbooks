@@ -12,18 +12,26 @@ def parseCPUInfo():
     }))
     exit(0)
   cpuinfo = path.read_text()
-  matches = re.search("Model\s+:\s+Raspberry Pi (\w+) Model ([\w\+]+) Rev ([0-9\.]+)$", cpuinfo, flags=re.MULTILINE) 
+  matches = re.search("Model\s+:\s+Raspberry Pi ((\w+) Model ([\w\+]+)|Compute Module ([0-9])) Rev ([0-9\.]+)$", cpuinfo, flags=re.MULTILINE)
   if matches is None:
     print(json.dumps({
       "is": False
     }))
     exit(0)
-  print(json.dumps({
-    "is": True,
-    "version": matches.group(1),
-    "model": matches.group(2),
-    "rev": matches.group(3),
-  }))
+  if "Compute" in matches.group(0):
+    print(json.dumps({
+      "is": True,
+      "version": matches.group(4),
+      "model": "CM",
+      "rev": matches.group(5),
+    }))
+  else:
+    print(json.dumps({
+      "is": True,
+      "version": matches.group(2),
+      "model": matches.group(3),
+      "rev": matches.group(5),
+    }))
   exit(0)
 
 
