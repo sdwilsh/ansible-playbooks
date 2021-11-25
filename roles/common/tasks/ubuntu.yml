@@ -134,4 +134,4 @@
     name: ubuntu
     state: absent
     remove: yes
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_user == "ubuntu"
