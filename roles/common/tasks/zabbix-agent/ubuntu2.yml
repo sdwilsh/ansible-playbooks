@@ -1,4 +1,12 @@
 ---
+# Handle old zabbix-agent installs
+- name: "Remove zabbix-agent"
+  ansible.builtin.apt:
+    name: "zabbix-agent"
+    state: "absent"
+  tags:
+    - "zabbix-agent"
+
 # Installation
 - name: "Install zabbix-agent2"
   ansible.builtin.apt:

@@ -1,4 +1,12 @@
 ---
+# Handle old zabbix-agent installs
+- name: "Remove old zabbix-agent config"
+  ansible.builtin.file:
+    path: "{{ common__etc_dir }}/zabbix/zabbix_agentd.conf"
+    state: "absent"
+  tags:
+    - "zabbix-agent"
+
 # Tasks to configure ansible-agent2.
 - name: "Set zabbix-agent2 Hostname"
   ansible.builtin.lineinfile:

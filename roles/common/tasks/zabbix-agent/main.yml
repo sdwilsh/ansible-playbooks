@@ -2,15 +2,27 @@
 # Tasks for zabbix-agent installation and configuration.
 - include: "freebsd.yml" # zabbix-agent
   when: "ansible_distribution == 'FreeBSD'"
+
 - name: "Install Zabbix Repository"
   ansible.builtin.apt:
-    # Ideally, we would use the ansible_lsb.release here, however Zabbix only supports LTS
-    # releases, so we just use the previous package that is available (20.04).
-    deb: "https://repo.zabbix.com/zabbix/5.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.4-1+ubuntu20.04_all.deb"
+    deb: "https://repo.zabbix.com/zabbix/5.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.4-1+ubuntu{{ ansible_lsb.release }}_all.deb"
   tags:
     - "zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu'"
+  when: "ansible_distribution == 'Ubuntu' and ansible_architecture != 'aarch64'"
+- name: "Install Zabbix Repository (aarch64)"
+  ansible.builtin.apt_repository:
+    # Ideally, we would use the ansible_lsb.release here, however Zabbix only supports LTS
+    # releases, so we just use the previous package that is available (20.04).
+    repo: "{{ item }} https://repo.zabbix.com/zabbix/5.0/ubuntu-arm64/ focal main"
+    state: present
+  loop:
+    - "deb"
+    - "deb-src"
+  tags:
+    - "zabbix-agent"
+  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'aarch64'"
+
 - include: "ubuntu2.yml" # zabbix-agent2
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'x86_64'"
+  when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'x86_64' or ansible_architecture == 'aarch64')"
 - include: "ubuntu.yml" # zabbix-agent
-  when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'armv7l' or ansible_architecture == 'aarch64')"
+  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"
