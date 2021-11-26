@@ -1,0 +1,19 @@
+---
+# tasks file for common-rpi
+- name: "Determine config file path"
+  ansible.builtin.set_fact:
+    config_path: "/boot/firmware/usercfg.txt"
+  when: ansible_lsb.release == "20.04"
+- name: "Determine config file path"
+  ansible.builtin.set_fact:
+    config_path: "/boot/firmware/config.txt"
+  when: ansible_lsb.release == "21.10"
+
+- name: "Setup {{ config_path }}"
+  ansible.builtin.template:
+    dest: "{{ config_path }}"
+    group: "root"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: "root"
+    src: "config.txt.j2"
+  notify: "reboot"

@@ -14,15 +14,8 @@ common__nameservers:
   addresses:
     - "10.10.0.1"
 
-common__pi_usercfg:
-  - "# Disable audio"
-  - "dtparam=audio=off"
-  - "# Enable USB"
-  - "dtoverlay=dwc2,dr_mode=host"
-  - "# Use the CPU to access i2c"
-  - "dtparam=i2c_vc=on"
-  - "# RTC"
-  - "dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi"
-  - "# Overclock"
-  - "over_voltage=6"
-  - "arm_freq=2000"
+common_rpi__cpu_i2c: yes
+common_rpi__dtoverlays:
+  - "cm4io-fan,minrpm=1200,maxrpm=5000"
+common_rpi__i2c_rtc: "pcf85063a,i2c_csi_dsi"
+common_rpi__overclock: yes

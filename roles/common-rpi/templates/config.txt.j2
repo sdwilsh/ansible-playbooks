@@ -1,0 +1,46 @@
+# {{ ansible_managed }}
+#
+# See https://www.raspberrypi.com/documentation/computers/config_txt.html
+
+[all]
+kernel=vmlinuz
+cmdline=cmdline.txt
+initramfs initrd.img followkernel
+
+# Disable wifi, bluetooth
+dtoverlay=disable-wifi
+dtoverlay=disable-bt
+
+{%- if common_rpi__audio %}
+# Enable aduio
+dtparam=audio=on
+{% endif %}
+
+{% if common_rpi__cpu_i2c %}
+# Enable CPU i2c Control
+dtparam=i2c_vc=on
+{% endif %}
+
+{% if common_rpi__i2c_rtc != "" %}
+# Enable RTC
+dtoverlay=i2c-rtc,{{ common_rpi__i2c_rtc }}
+{% endif %}
+
+{% if common_rpi__overclock %}
+# Overclock
+over_voltage=6
+arm_freq=2000
+{% endif %}
+
+{% if ansible_architecture == 'aarch64' %}
+# Config settings specific to arm64
+arm_64bit=1
+dtoverlay=dwc2
+{% endif %}
+
+{% for dtoverlay in common_rpi__dtoverlays %}
+dtoverlay={{ dtoverlay }}
+{% endfor %}
+
+[cm4]
+dtoverlay=dwc2,dr_mode=host

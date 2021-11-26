@@ -3,6 +3,8 @@
   become: yes
   roles:
     - role: "common"
+    - role: "common-rpi"
+      when: ansible_local.rpi.is
     - role: "ansible-cron"
     - role: "devsec.hardening.ssh_hardening"
       vars:

@@ -2,4 +2,6 @@
 - hosts: all
   become: true
   roles:
-    - role: common
+    - role: "common"
+    - role: "common-rpi"
+      when: ansible_local.rpi.is
