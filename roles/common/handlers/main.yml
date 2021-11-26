@@ -34,4 +34,4 @@
     name: "zabbix-agent2"
     state: "restarted"
   listen: "restart zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'x86_64'"
+  when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'x86_64' or ansible_architecture == 'aarch64')"
