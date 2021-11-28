@@ -2,4 +2,4 @@
 # tasks file for common-rpi
 - include: "config.yml"
 - include: "cm4io-fan.yml"
-  when: common_rpi__cm4io_fan != None
+  when: common_rpi__cm4io_fan | length
