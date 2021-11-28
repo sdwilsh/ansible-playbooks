@@ -2,13 +2,39 @@
 
 source /etc/network/interfaces.d/*
 
-# The loopback network interface
+#
+# Loopback Interface
+#
 auto lo
 iface lo inet loopback
 
-{%- set primary_interface = common__ethernet_primary_interface | default(ansible_default_ipv4.interface, true) %}
+{% for bond, bond_details in common__ethernet_interface_bonds.items() -%}
 
-# Primary Interface {{ primary_interface }} (v4)
+#
+# Bond Interface {{ bond }}
+#
+{% for interface in bond_details.interfaces %}
+auto {{ interface }}
+iface {{ interface }} inet manual
+    bond-master {{ bond }}
+
+{% endfor %}
+auto {{ bond }}
+iface {{ bond }} inet manual
+    bond-downdelay        200
+    bond-lacp-rate        1
+    bond-miimon           100
+    bond-mode             802.3ad
+    bond-slaves           none
+    bond-updelay          100
+    bond-xmit-hash-policy layer2+3
+    up ifconfig {{ bond }} 0.0.0.0 up
+{% endfor %}
+
+{%- set primary_interface = common__ethernet_primary_interface | default(ansible_default_ipv4.interface, true) %}
+#
+# Primary Interface {{ primary_interface }}
+#
 auto {{ primary_interface }}
 iface {{ primary_interface }} inet static
 {% for ipv4_host in common__ip_addresses | ansible.netcommon.ipv4('host/prefix') %}
@@ -24,7 +50,6 @@ iface {{ primary_interface }} inet static
 
 {% set ipv6_list = common__ip_addresses | ansible.netcommon.ipv6('host/prefix') %}
 {% if ipv6_list | length > 0 %}
-# Primary Interface {{ primary_interface }} (v6)
 iface {{ primary_interface }} inet6 static
     address   {{ ipv6_list[0] }}
     gateway   {{ common__gateway_v6_address }}
@@ -34,9 +59,10 @@ iface {{ primary_interface }} inet6 static
     down /sbin/ip address del {{ subnet }} dev {{ primary_interface }}
 {% endfor %}
 {% endif %}
+
 {% endif %}
 
-{% for interface_config in common__additional_ethernet_interfaces | default([]) %}
+{%- for interface_config in common__additional_ethernet_interfaces | default([]) %}
 
 # Additional Interface: {{ interface_config.name }}
 auto {{ interface_config.name }}

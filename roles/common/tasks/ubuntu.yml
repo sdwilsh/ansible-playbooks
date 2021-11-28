@@ -29,8 +29,20 @@
     name: "{{ item }}"
     state: "latest"
   loop:
+    - "ifenslave"
     - "ifupdown"
     - "net-tools"
+  tags:
+    - "networking"
+- name: "Load networking modules at boot"
+  ansible.builtin.copy:
+    content: |
+      8021q
+      bonding
+    dest: "/etc/modules-load.d/networking.conf"
+    mode: "u=r,g=r,o=r"
+    owner: "root"
+    group: "root"
   tags:
     - "networking"
 - name: "Disable accepting of router advertisments on additional interfaces"
