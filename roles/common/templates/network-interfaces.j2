@@ -31,8 +31,7 @@ iface {{ ansible_default_ipv4.interface }} inet6 static
 {% endif %}
 {% endif %}
 
-{% if common__additional_ethernet_interfaces is defined %}
-{% for interface_config in common__additional_ethernet_interfaces %}
+{% for interface_config in common__additional_ethernet_interfaces | default([]) %}
 
 # Additional Interface: {{ interface_config.name }}
 auto {{ interface_config.name }}
@@ -53,4 +52,3 @@ iface {{ interface_config.name }} inet6 {{ interface_config.mode }}
 {% endfor %}
 {% endif %}
 {% endfor %}
-{% endif %}
