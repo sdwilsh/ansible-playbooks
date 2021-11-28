@@ -24,6 +24,7 @@
     content: |
       [openstack]
           use_template = production
+          recursive = yes
       
       [template_production]
           frequently = 0
