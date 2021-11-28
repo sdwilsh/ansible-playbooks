@@ -22,3 +22,6 @@
   ansible.builtin.apt:
     name: "linux-modules-extra-raspi"
     state: "present"
+
+- include: "cm4io-fan.yml"
+  when: common_rpi__cm4io_fan != None

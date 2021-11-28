@@ -1,6 +1,7 @@
 ---
 # defaults file for common-rpi
 common_rpi__audio: no
+common_rpi__cm4io_fan: None
 common_rpi__cpu_i2c: no
 common_rpi__dtoverlays: []
 common_rpi__i2c_rtc: ""

@@ -38,6 +38,10 @@ arm_64bit=1
 dtoverlay=dwc2
 {% endif %}
 
+{% if common_rpi__cm4io_fan != None %}
+dtoverlay=cm4io-fan,minrpm={{ common_rpi__cm4io_fan.minrpm }},maxrpm={{ common_rpi__cm4io_fan.maxrpm }}
+{% endif -%}
+
 {% for dtoverlay in common_rpi__dtoverlays %}
 dtoverlay={{ dtoverlay }}
 {% endfor %}

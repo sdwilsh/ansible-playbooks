@@ -14,8 +14,9 @@ common__nameservers:
   addresses:
     - "10.10.0.1"
 
+common_rpi__cm4io_fan:
+  minrpm: 1200
+  maxrpm: 5000
 common_rpi__cpu_i2c: yes
-common_rpi__dtoverlays:
-  - "cm4io-fan,minrpm=1200,maxrpm=5000"
 common_rpi__i2c_rtc: "pcf85063a,i2c_csi_dsi"
 common_rpi__overclock: yes

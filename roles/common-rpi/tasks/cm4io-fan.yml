@@ -1,0 +1,22 @@
+---
+# tasks file for common-rpi to install cm4io-fan
+- name: "Install cm4io-fan dependencies"
+  ansible.builtin.apt:
+    name: "dkms"
+    state: "present"
+  become: yes
+- name: "Fetch cm4io-fan kernel module"
+  ansible.builtin.git:
+    repo: "https://github.com/sdwilsh/cm4io-fan.git"
+    dest: "/usr/src/cm4io-fan-0.1.1/"
+    refspec: "refs/heads/ubuntu-21.10"
+  become: yes
+  notify: "build cm4io-fan"
+- name: "Load module at boot"
+  ansible.builtin.copy:
+    content: |
+      emc2301
+    dest: "/etc/modules-load.d/cm4io-fan.conf"
+    mode: "u=r,g=r,o=r"
+    owner: "root"
+    group: "root"
