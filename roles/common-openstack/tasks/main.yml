@@ -1,0 +1,43 @@
+---
+# tasks file for common-openstack
+- name: "Install Dependencies for ZFS"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "latest"
+  become: yes
+  loop:
+    - "sanoid"
+    - "zfsutils-linux"
+  tags:
+    - "zfs"
+- name: "Ensure sanoid directory exists"
+  ansible.builtin.file:
+    group: "root"
+    owner: "root"
+    path: "/etc/sanoid"
+    state: "directory"
+  become: yes
+  tags:
+    - "zfs"
+- name: "Set sanoid config"
+  ansible.builtin.copy:
+    content: |
+      [openstack]
+          use_template = production
+      
+      [template_production]
+          frequently = 0
+          hourly = 36
+          daily = 30
+          monthly = 3
+          yearly = 0
+          autosnap = yes
+          autoprune = yes
+    dest: "/etc/sanoid/sanoid.conf"
+    mode: "u=r,g=r,o=r"
+    owner: "root"
+    group: "root"
+  become: yes
+  tags:
+    - "zfs"
+ 

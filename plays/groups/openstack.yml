@@ -1,0 +1,4 @@
+---
+- hosts: "openstack"
+  roles:
+    - role: "common-openstack"

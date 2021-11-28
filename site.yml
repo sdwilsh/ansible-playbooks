@@ -13,6 +13,7 @@
       when:
         - ansible_version.full is version("2.9.10", ">=")
 - import_playbook: "plays/groups/dns.yml"
+- import_playbook: "plays/groups/openstack.yml"
 - import_playbook: "plays/hosts/docker-ssd.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/docker-vm-public.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/docker-vm.hogs.tswn.us.yml"
