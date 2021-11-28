@@ -2,6 +2,10 @@
 # defaults file for common
 common__additional_ethernet_interfaces: []
 
+# Interface name of the primary interface of the device.  This falls back to
+# ansible_default_ipv4.interface if falsey.
+common__ethernet_primary_interface: ""
+
 common__etc_dir: "/etc"
 
 common__ntp_pool: "pool.ntp.hogs.tswn.us"
