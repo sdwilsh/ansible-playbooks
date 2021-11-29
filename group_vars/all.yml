@@ -16,6 +16,19 @@ common__gateway_v6_address: "fd36:3eb3:43b0:75::1"
 common__iscsi_initiator_iqn_base: "iqn.2019-09.us.tswn.hogs"
 common__iscsi_target_ip: "10.117.0.10"
 common__iscsi_target_iqn_base: "iqn.2019-09.net.shawnwilsher.firstlightweaveslivingsong.ctl"
+common__unix_groups:
+  - name: "ansible"
+    gid: 2000
+    sudo: true
+  - name: "zabbix"
+    gid: 2001
+  - name: "srcs"
+    gid: 2050
+common__unix_users:
+  - name: "ansible"
+    uid: 2000
+  - name: "zabbix"
+    uid: 2001
 common__nameservers:
   addresses:
     - "10.117.0.1"
