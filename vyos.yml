@@ -951,14 +951,20 @@
     - name: "Setup DHCP"
       vyos.vyos.vyos_config:
         lines:
+          - "set service dhcp-server failover source-address 10.9.0.{{ vyos__host_id_ipv4 }}"
+          - "set service dhcp-server failover remote 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+          - "set service dhcp-server failover name maccabeus-HA"
+          - "set service dhcp-server failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
+      tags:
+        - services
+        - dhcp-server
+    - name: "Setup DHCP Subnets"
+      vyos.vyos.vyos_config:
+        lines:
           - "set service dhcp-server shared-network-name {{ item.name }} authoritative"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} default-router {{ item.default_router }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 start {{ item.range.start }}"
           - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} range 0 stop {{ item.range.stop }}"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover local-address {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover peer-address {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover name {{ item.name }}-HA"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} failover status {% if vyos__vrrp_priority < 100 %}secondary{% else %}primary{% endif %}"
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }} ({{ item.subnet }})"
@@ -969,13 +975,13 @@
       vyos.vyos.vyos_config:
         lines:
           - >-
-            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
             {{ item.default_router[:-1] }}1
           - >-
-            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
             {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}
           - >-
-            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server
+            set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
             {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}
       loop: "{{ dhcp_servers }}"
       loop_control:
@@ -987,8 +993,8 @@
     - name: "Setup DHCP DNS Servers"
       vyos.vyos.vyos_config:
         lines:
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server 1.1.1.2"
-          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} dns-server 1.0.0.2"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server 1.1.1.2"
+          - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server 1.0.0.2"
       loop: "{{ dhcp_servers }}"
       loop_control:
         label: "{{ item.name }} ({{ item.subnet }})"
