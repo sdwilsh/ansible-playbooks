@@ -12,6 +12,14 @@
   source:
     group:
       address_group: "PEER-v4"
+- description: "Allow dhcp-sync"
+  action: "accept"
+  protocol: "tcp"
+  destination:
+    port: "520"
+  source:
+    group:
+      address_group: "PEER-v4"
 - description: "Allow ICMP"
   action: "accept"
   protocol: "icmp"
