@@ -112,6 +112,8 @@ bind_zones:
       - name: "zabbix.hogs"
         ip: "10.117.0.33"
         ipv6: "fd36:3eb3:43b0:75::21"
+      - name: "hue.hogs"
+        ip: "10.117.0.34"
       - name: "house.gem.hogs"
         ip: "10.117.0.46"
       - name: "maccabeus01.hogs"
