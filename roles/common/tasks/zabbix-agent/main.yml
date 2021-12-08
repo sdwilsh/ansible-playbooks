@@ -6,6 +6,7 @@
 - name: "Install Zabbix Repository"
   ansible.builtin.apt:
     deb: "https://repo.zabbix.com/zabbix/5.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.4-1+ubuntu{{ ansible_lsb.release }}_all.deb"
+  become: yes
   tags:
     - "zabbix-agent"
   when: "ansible_distribution == 'Ubuntu' and ansible_architecture != 'aarch64'"
@@ -15,6 +16,7 @@
     # releases, so we just use the previous package that is available (20.04).
     repo: "{{ item }} https://repo.zabbix.com/zabbix/5.0/ubuntu-arm64/ focal main"
     state: present
+  become: yes
   loop:
     - "deb"
     - "deb-src"

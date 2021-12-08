@@ -1,0 +1,21 @@
+---
+common__unix_groups:
+  - name: "ansible"
+    gid: 2000
+    sudo: true
+  - name: "zabbix"
+    gid: 2001
+  - name: "srcs"
+    gid: 2050
+  - name: "backup"
+    gid: 2100
+common__unix_users:
+  - name: "ansible"
+    uid: 2000
+  - name: "zabbix"
+    uid: 2001
+  - name: "backup"
+    uid: 2100
+
+common_openstack__backup_key_type: "ssh-rsa"
+common_openstack__backup_key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDGmUq9gsKZev7DGqwGd4JvwjpQGLOkzQHiNnmr6veI6Bn3pvNJyX+6CDOk12/u1Jdo4micNShiPvnNziW5x6ws1/na/P5IIWm8z2toiJkZY7SvoFflBKtBe72heII5qCMyH0+bA5Rzx0EEmI8d8CWQ25J33xpoKgMZXypaDeaCpr8iOEp0XyiYTJGk1rkY1eqVNQKwErB5YFgZyuZVlc3WZnSDEZVNMG+hCid2RQa85aG8KONFYd0UfMn/BV7kRjxa/v82qef1/K7tbz/PpV2Nrd/VKiiqLjY52MKWncdwVYdExRQ6KBk0dv8eAsy6KpBLNGy8giV9kgRDQPqhtReV"

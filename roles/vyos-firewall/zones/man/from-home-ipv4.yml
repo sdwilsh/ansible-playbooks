@@ -20,3 +20,13 @@
     group:
       address_group: "ZABBIX-SERVER-v4"
     port: "10051"
+- description: "Allow backup server to pull ZFS data from devices via ssh"
+  action: "accept"
+  destination:
+    port: "22"
+  protocol: "tcp"
+  state:
+    new: true
+  source:
+    group:
+      address_group: "FILE-SERVER-v4"

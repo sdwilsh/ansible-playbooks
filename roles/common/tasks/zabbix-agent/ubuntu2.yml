@@ -4,6 +4,7 @@
   ansible.builtin.apt:
     name: "zabbix-agent"
     state: "absent"
+  become: yes
   tags:
     - "zabbix-agent"
 
@@ -14,12 +15,14 @@
     state: "latest"
     update_cache: yes
     cache_valid_time: 3600
+  become: yes
   tags:
     - "zabbix-agent"
 - name: "Enable zabbix-agent2"
   ansible.builtin.systemd:
     name: "zabbix-agent2"
     enabled: yes
+  become: yes
   tags:
     - "zabbix-agent"
 

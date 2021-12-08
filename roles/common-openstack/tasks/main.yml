@@ -1,5 +1,13 @@
 ---
 # tasks file for common-openstack
+- name: "Deploy backup user's public key"
+  ansible.builtin.authorized_key:
+    user: "backup"
+    state: "present"
+    key: "{{ common_openstack__backup_key_type }} {{ common_openstack__backup_key }}"
+  become: yes
+  tags:
+    - "zfs"
 - name: "Install Dependencies for ZFS"
   ansible.builtin.apt:
     name: "{{ item }}"
