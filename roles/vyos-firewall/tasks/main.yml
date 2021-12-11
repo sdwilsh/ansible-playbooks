@@ -2,18 +2,22 @@
 # tasks file for vyos-firewall
 - name: "Load Firewall Zone Information for IPv4"
   ansible.builtin.include_tasks: "load_zone_info.yml"
-  loop: "{{ vyos_firewall__zones }}"
+  loop: "{{ (_named_firewalls + _default_named_firewalls) | unique | sort }}"
   loop_control:
     loop_var: zone
   vars:
-    afi: "ipv4"
+    _afi: "ipv4"
+    _default_named_firewalls: "{{ vyos_firewall__zones | selectattr('firewall_name', 'undefined') | map(attribute='name') }}"
+    _named_firewalls: "{{ vyos_firewall__zones | rejectattr('firewall_name', 'undefined') | map(attribute='firewall_name') }}"
 - name: "Load Firewall Zone Information for IPv6"
   ansible.builtin.include_tasks: "load_zone_info.yml"
-  loop: "{{ vyos_firewall__zones }}"
+  loop: "{{ (_named_firewalls + _default_named_firewalls) | unique | sort }}"
   loop_control:
     loop_var: zone
   vars:
-    afi: "ipv6"
+    _afi: "ipv6"
+    _default_named_firewalls: "{{ vyos_firewall__zones | selectattr('firewall_name', 'undefined') | map(attribute='name') }}"
+    _named_firewalls: "{{ vyos_firewall__zones | rejectattr('firewall_name', 'undefined') | map(attribute='firewall_name') }}"
 - name: "Set the firewall rules"
   vyos.vyos.vyos_firewall_rules:
     config:
