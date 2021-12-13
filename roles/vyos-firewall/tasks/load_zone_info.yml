@@ -17,4 +17,4 @@
   loop_control:
     loop_var: "file_path"
   when:
-    - "file_path.split('/')[-1][5:-9].upper() in _named_firewalls or file_path.split('/')[-1][5:-9].upper() in _default_named_firewalls"
+    - "file_path.split('/')[-1][5:-9].upper() in _named_firewalls"
