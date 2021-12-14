@@ -27,5 +27,8 @@
       - afi: "ipv6"
         rule_sets: "{{ rule_sets_ipv6 | default([]) }}"
     state: "replaced"
-  # vars:
-  #   ansible_persistent_log_messages: True
+  tags:
+    - "firewall-rules"
+- name: "Set Zone Policy"
+  vyos.vyos.vyos_config:
+    src: "zone-policy.j2"
