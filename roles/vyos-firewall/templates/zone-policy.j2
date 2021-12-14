@@ -1,0 +1,43 @@
+{%- macro set_description(zone) -%}
+    {%- if "description" in zone -%}
+        set zone-policy zone {{ zone.name }} description '{{ zone.description }}'
+    {%- endif %}
+{%- endmacro %}
+
+{%- macro set_firewall(zone, firewall_name) -%}
+    {%- set afi = "ipv" + firewall_name[-1] %}
+    {%- set prefix_offset = ((zone.firewall_name | default(zone.name)) + "-from-") | length %}
+    {%- set suffix_offset = 0 - ("-vX" | length) %}
+    {%- set from_zone_firewall_name = firewall_name[prefix_offset:suffix_offset] %}
+    {%- set from_zones = vyos_firewall__zones | selectattr("firewall_name", "equalto", from_zone_firewall_name) | map(attribute="name") | sort %}
+
+    {%- for from_zone in from_zones -%}
+{% if afi == "ipv4" -%}
+set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall name '{{ firewall_name }}'
+{% elif afi == "ipv6" -%}
+set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall ipv6-name '{{ firewall_name }}'
+{% endif -%}
+    {% endfor -%}
+{%- endmacro %}
+
+{%- macro set_interface(zone) -%}
+    {%- if zone["local-zone"] -%}
+        set zone-policy zone {{ zone.name }} local-zone
+    {%- else -%}
+        set zone-policy zone {{ zone.name }} interface '{{ zone.interface }}'
+    {%- endif %}
+{%- endmacro %}
+
+
+{%- for zone in vyos_firewall__zones -%}
+set zone-policy zone {{ zone.name }} default-action 'drop'
+{{ set_description(zone) }}
+{% set zone_firewall_filter = zone.firewall_name + ".*" %}
+{% for firewall_name in rule_sets_ipv4 | default([]) | selectattr('name', 'match', zone_firewall_filter) | map(attribute='name') %}
+    {{- set_firewall(zone, firewall_name) -}}
+{% endfor %}
+{% for firewall_name in rule_sets_ipv6 | default([]) | selectattr('name', 'match', zone_firewall_filter) | map(attribute='name') %}
+    {{- set_firewall(zone, firewall_name) -}}
+{% endfor %}
+{{ set_interface(zone) }}
+{% endfor -%}
