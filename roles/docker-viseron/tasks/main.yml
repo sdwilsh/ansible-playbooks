@@ -129,6 +129,7 @@
         retain: 14
         segments_folder: "/segments"
         thumbnail:
+          filename_pattern: "%H_%M_%S"
           save_to_disk: True
           send_to_mqtt: True
 
