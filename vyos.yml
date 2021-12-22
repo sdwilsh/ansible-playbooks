@@ -134,7 +134,7 @@
               # HOME
               - vlan_id: 117
                 ipv4:
-                  - address: "10.117.0.{{ vyos__host_id_ipv4 }}/24"
+                  - address: "10.117.0.{{ vyos__host_id_ipv4 }}/23"
                 ipv6:
                   - address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
               # GUEST
