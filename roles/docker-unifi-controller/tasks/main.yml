@@ -65,10 +65,10 @@
           external:
             name: "service82"
     pull: yes
-    stopped: yes
+    stopped: no
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   register: status
 - ansible.builtin.assert:
     that:
-      - "not status.services.controller.unifi_controller_1.state.running"
+      - "status.services.controller.unifi_controller_1.state.running"
