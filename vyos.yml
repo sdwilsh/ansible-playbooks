@@ -68,6 +68,8 @@
                 description: "HOME - home network with home services ({{ ansible_managed }})"
               - vlan_id: 131
                 description: "GUEST - used for guest wifi ({{ ansible_managed }})"
+              - vlan_id: 150
+                description: "CULTIVAR - used for Cultivar access to specific services ({{ ansible_managed }})"
           - name: "{{ vyos__wan_cellular_interface }}"
             description: "Cellular WAN ({{ ansible_managed }})"
             enabled: true
@@ -141,6 +143,10 @@
               - vlan_id: 131
                 ipv4:
                   - address: "10.131.0.{{ vyos__host_id_ipv4 }}/24"
+              # CULTIVAR
+              - vlan_id: 150
+                ipv4:
+                  - address: "10.150.0.{{ vyos__host_id_ipv4 }}/24"
           - name: "{{ vyos__wan_cellular_interface }}"
             ipv4:
               - address: "172.16.5.{{ vyos__host_id_ipv4 }}/24"
@@ -332,6 +338,15 @@
           - "set high-availability vrrp group GUEST-v4 virtual-address 10.131.0.1/24"
           - "set high-availability vrrp group GUEST-v4 vrid 131"
           - "set high-availability vrrp sync-group MAIN member GUEST-v4"
+          # CULTIVAR
+          - "set high-availability vrrp group CULTIVAR-v4 description '{{ ansible_managed }}'"
+          - "set high-availability vrrp group CULTIVAR-v4 hello-source-address 10.150.0.{{ vyos__host_id_ipv4 }}"
+          - "set high-availability vrrp group CULTIVAR-v4 interface {{ vyos__lan_interface }}.150"
+          - "set high-availability vrrp group CULTIVAR-v4 peer-address 10.150.0.{{ vyos__peer_host_id_ipv4 }}"
+          - "set high-availability vrrp group CULTIVAR-v4 priority {{ vyos__vrrp_priority }}"
+          - "set high-availability vrrp group CULTIVAR-v4 virtual-address 10.150.0.1/24"
+          - "set high-availability vrrp group CULTIVAR-v4 vrid 150"
+          - "set high-availability vrrp sync-group MAIN member CULTIVAR-v4"
           # WAN-CELLULAR
           - "set high-availability vrrp group WAN-CELLULAR-v4 description '{{ ansible_managed }}'"
           - "set high-availability vrrp group WAN-CELLULAR-v4 hello-source-address 172.16.5.{{ vyos__host_id_ipv4 }}"
@@ -384,6 +399,10 @@
                 members:
                   # firstlightweaveslivingsong.hogs.tswn.us
                   - address: "fd36:3eb3:43b0:75::a"
+              - name: "LUXOR-v4"
+                description: "Luxor Lighting Device"
+                members:
+                  - address: "10.117.0.22"
               - name: "MAN-TALKERS-from-HOME-v4"
                 description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
                 members:
@@ -434,6 +453,10 @@
                 members:
                   - address: "fd36:3eb3:43b0:75::33"
                   - address: "fd36:3eb3:43b0:75::34"
+              - name: "OPENSPRINKLER-v4"
+                description: "harvest.hogs.tswn.us"
+                members:
+                  - address: "10.117.0.17"
               - name: "PEER-v4"
                 description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
                 afi: "ipv4"
@@ -577,6 +600,9 @@
           - name: "GUEST"
             description: "guest network ({{ ansible_managed }})"
             interface: "{{ vyos__lan_interface }}.131"
+          - name: "CULTIVAR"
+            description: "cultivar network ({{ ansible_managed }})"
+            interface: "{{ vyos__lan_interface }}.150"
           - name: "LOCAL"
             description: "{{ ansible_managed }}"
             local-zone: yes
@@ -843,6 +869,13 @@
               start: "10.131.0.100"
               stop: "10.131.0.250"
             subnet: "10.131.0.0/24"
+          - name: "CULTIVAR"
+            default_router: "10.150.0.1"
+            own_dns: true
+            range:
+              start: "10.150.0.100"
+              stop: "10.150.0.250"
+            subnet: "10.150.0.0/24"
       tags:
         - always
     - name: "Setup DHCP"
@@ -991,6 +1024,9 @@
           - "10.117.0.1"
           - "10.117.0.{{ vyos__host_id_ipv4 }}"
           - "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
+          # CULTIVAR
+          - "10.150.0.1"
+          - "10.117.0.{{ vyos__host_id_ipv4 }}"
       tags:
         - services
         - dns
