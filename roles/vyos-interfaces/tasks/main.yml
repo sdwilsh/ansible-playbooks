@@ -1,0 +1,11 @@
+---
+# tasks file for vyos-interfaces
+- name: "Set the device interfaces"
+  vyos.vyos.vyos_interfaces:
+    config: "{{ lookup('template', 'templates/vyos_interfaces.j2') | from_yaml }}"
+    state: merged
+
+- name: "Set interface l3 addresses"
+  vyos.vyos.vyos_l3_interfaces:
+    config: "{{ lookup('template', 'templates/vyos_l3_interfaces.j2') | from_yaml }}"
+    state: "replaced"

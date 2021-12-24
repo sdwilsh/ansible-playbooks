@@ -43,45 +43,74 @@
     #
     # Interfaces
     #
-    - name: "Set the device interfaces"
-      vyos.vyos.vyos_interfaces:
-        config:
+    - name: "Set interface information"
+      ansible.builtin.import_role:
+        name: "vyos-interfaces"
+      tags:
+        - "interfaces"
+      vars:
+        vyos_interfaces__ethernet:
           - name: "{{ vyos__lan_interface }}"
             description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
             enabled: true
             vifs:
               - vlan_id: 9
                 description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
+                ipv6:
+                  - address: "fd36:3eb3:43b0:9::{{ vyos__host_id_ipv6 }}/64"
               - vlan_id: 10
                 description: "MAN - management vlan ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+                ipv6:
+                  - address: "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
               - vlan_id: 15
                 description: "GWORK - work-friendly addressed network ({{ ansible_managed }})"
+                ipv4:
+                  - address: "192.168.1.{{ vyos__host_id_ipv4 }}/24"
               - vlan_id: 66
                 description: "IOT - internet of things: WAN access, but not much else ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.66.0.{{ vyos__host_id_ipv4 }}/24"
               - vlan_id: 67
                 description: "NOWAN - internet of shit: no WAN or other access ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.67.0.{{ vyos__host_id_ipv4 }}/24"
               - vlan_id: 82
                 description: "SERVICE82 - installation02 (unifi controller) ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
               - vlan_id: 100
                 description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.100.0.{{ vyos__host_id_ipv4 }}/24"
               - vlan_id: 117
                 description: "HOME - home network with home services ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.117.0.{{ vyos__host_id_ipv4 }}/23"
+                ipv6:
+                  - address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
               - vlan_id: 131
                 description: "GUEST - used for guest wifi ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.131.0.{{ vyos__host_id_ipv4 }}/24"
               - vlan_id: 150
                 description: "CULTIVAR - used for Cultivar access to specific services ({{ ansible_managed }})"
+                ipv4:
+                  - address: "10.150.0.{{ vyos__host_id_ipv4 }}/24"
           - name: "{{ vyos__wan_cellular_interface }}"
             description: "Cellular WAN ({{ ansible_managed }})"
             enabled: true
+            ipv4:
+              - address: "172.16.5.{{ vyos__host_id_ipv4 }}/24"
           - name: "{{ vyos__wan_centurylink_interface }}"
             description: "CenturyLink WAN ({{ ansible_managed }})"
             enabled: true
             vifs:
               - vlan_id: 201
                 description: "CenturyLink PPPOE ({{ ansible_managed }})"
-        state: merged
-      tags:
-        - "interfaces"
     - name: "Setup CenturyLink PPPOE"
       vyos.vyos.vyos_config:
         lines:
@@ -92,65 +121,6 @@
           - "set interfaces pppoe pppoe0 no-peer-dns"
           - "set interfaces pppoe pppoe0 source-interface {{ vyos__wan_centurylink_interface }}.201"
         save: yes
-      tags:
-        - "interfaces"
-    - name: "Set interfaces addresses"
-      vyos.vyos.vyos_l3_interfaces:
-        config:
-          - name: "{{ vyos__lan_interface }}"
-            ipv4:
-              - address: "10.1.0.{{ vyos__host_id_ipv4 }}/24"
-            vifs:
-              # SYNC
-              - vlan_id: 9
-                ipv4:
-                  - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
-                ipv6:
-                  - address: "fd36:3eb3:43b0:9::{{ vyos__host_id_ipv6 }}/64"
-              # MAN
-              - vlan_id: 10
-                ipv4:
-                  - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
-                ipv6:
-                  - address: "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
-              # GWORK
-              - vlan_id: 15
-                ipv4:
-                  - address: "192.168.1.{{ vyos__host_id_ipv4 }}/24"
-              # IOT
-              - vlan_id: 66
-                ipv4:
-                  - address: "10.66.0.{{ vyos__host_id_ipv4 }}/24"
-              # NOWAN
-              - vlan_id: 67
-                ipv4:
-                  - address: "10.67.0.{{ vyos__host_id_ipv4 }}/24"
-              # SERVICE82
-              - vlan_id: 82
-                ipv4:
-                  - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
-              # ROUTER-LAB
-              - vlan_id: 100
-                ipv4:
-                  - address: "10.100.0.{{ vyos__host_id_ipv4 }}/24"
-              # HOME
-              - vlan_id: 117
-                ipv4:
-                  - address: "10.117.0.{{ vyos__host_id_ipv4 }}/23"
-                ipv6:
-                  - address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
-              # GUEST
-              - vlan_id: 131
-                ipv4:
-                  - address: "10.131.0.{{ vyos__host_id_ipv4 }}/24"
-              # CULTIVAR
-              - vlan_id: 150
-                ipv4:
-                  - address: "10.150.0.{{ vyos__host_id_ipv4 }}/24"
-          - name: "{{ vyos__wan_cellular_interface }}"
-            ipv4:
-              - address: "172.16.5.{{ vyos__host_id_ipv4 }}/24"
-        state: "replaced"
       tags:
         - "interfaces"
     - set_fact:
