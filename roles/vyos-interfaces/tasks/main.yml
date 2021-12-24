@@ -9,3 +9,9 @@
   vyos.vyos.vyos_l3_interfaces:
     config: "{{ lookup('template', 'templates/vyos_l3_interfaces.j2') | from_yaml }}"
     state: "replaced"
+
+- name: "Setup PPPOE"
+  vyos.vyos.vyos_config:
+    src: "pppoe_config.j2"
+    save: yes
+  when: "vyos_interfaces__pppoe | length > 0"

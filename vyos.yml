@@ -111,18 +111,14 @@
             vifs:
               - vlan_id: 201
                 description: "CenturyLink PPPOE ({{ ansible_managed }})"
-    - name: "Setup CenturyLink PPPOE"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set interfaces pppoe pppoe0 authentication password {{ vyos__wan_centurylink_password }}"
-          - "set interfaces pppoe pppoe0 authentication user {{ vyos__wan_centurylink_username }}"
-          - "set interfaces pppoe pppoe0 default-route none"
-          - "set interfaces pppoe pppoe0 mtu 1492"
-          - "set interfaces pppoe pppoe0 no-peer-dns"
-          - "set interfaces pppoe pppoe0 source-interface {{ vyos__wan_centurylink_interface }}.201"
-        save: yes
-      tags:
-        - "interfaces"
+        vyos_interfaces__pppoe:
+          - name: "pppoe0"
+            authentication:
+              password: "{{ vyos__wan_centurylink_password }}"
+              user: "{{ vyos__wan_centurylink_username }}"
+            mss: 1452
+            mtu: 1492
+            source_interface: "{{ vyos__wan_centurylink_interface }}.201"
     - set_fact:
         lan_interfaces_with_wan_access:
           # UNIFI-MAN
@@ -525,13 +521,6 @@
       tags:
         - "firewall"
         - "firewall-rules"
-
-    - name: "Set MSS clamping on PPPOE interface"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set firewall options interface pppoe0 adjust-mss 1452"
-      tags:
-        - firewall
 
     - name: "Set the firewall rules"
       ansible.builtin.import_role:
