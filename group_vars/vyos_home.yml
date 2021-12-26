@@ -76,6 +76,173 @@ vyos_firewall__zones:
     firewall_name: "WAN"
     interface: "pppoe0"
 
+vyos_firewall_global__group:
+  address_group:
+    - name: "CAMERAS-v4"
+      description: "The v4 IP camera addresses"
+      afi: "ipv4"
+      members:
+        - address: "10.67.0.10"
+        - address: "10.67.0.11"
+    - name: "HASS-CIFS-from-MAN-v4"
+      description: "IP Addresses from MAN that can talk to HASS Samba Server ({{ ansible_managed }})"
+      afi: "ipv4"
+      members:
+        # docker-vm.hogs.tswn.us
+        - address: "10.10.0.6"
+    - name: "HASS-CIFS-from-MAN-v6"
+      description: "IP Addresses from MAN that can talk to HASS Samba Server ({{ ansible_managed }})"
+      afi: "ipv6"
+      members:
+        # docker-vm.hogs.tswn.us
+        - address: "fd36:3eb3:43b0:a::6"
+    - name: "FILE-SERVER-v4"
+      description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
+      afi: "ipv4"
+      members:
+        # firstlightweaveslivingsong.hogs.tswn.us
+        - address: "10.117.0.10"
+    - name: "FILE-SERVER-v6"
+      description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
+      afi: "ipv6"
+      members:
+        # firstlightweaveslivingsong.hogs.tswn.us
+        - address: "fd36:3eb3:43b0:75::a"
+    - name: "LUXOR-v4"
+      description: "Luxor Lighting Device"
+      members:
+        - address: "10.117.0.22"
+    - name: "MAN-TALKERS-from-HOME-v4"
+      description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
+      members:
+        # sdwilsh-desktop
+        - address: "10.117.0.31"
+    - name: "MAN-TALKERS-from-HOME-v6"
+      description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
+      afi: "ipv6"
+      members:
+        # sdwilsh-desktop
+        - address: "fd36:3eb3:43b0:75::1f"
+    - name: "MYSQL-SERVER-v4"
+      description: "The v4 mysql.hogs.tswn.us addresses"
+      afi: "ipv4"
+      members:
+        - address: "10.117.0.5"
+    - name: "MYSQL-SERVER-v6"
+      description: "The v4 mysql.hogs.tswn.us addresses"
+      afi: "ipv6"
+      members:
+        - address: "fd36:3eb3:43b0:75::5"
+    - name: "NTP-SERVICES-v4"
+      description: "NTP services ({{ ansible_managed }})"
+      members:
+        - address: "10.117.0.50"
+        - address: "10.117.0.51"
+        - address: "10.117.0.52"
+    - name: "NOWAN-TALKERS-from-HOME-v4"
+      description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
+      members:
+        # cortana.hogs.tswn.us
+        - address: "10.117.0.19"
+        # iona.hogs.tswn.us
+        - address: "10.117.0.27"
+        # sdwilsh-desktop
+        - address: "10.117.0.31"
+    - name: "NOWAN-TALKERS-from-HOME-v6"
+      description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
+      afi: "ipv6"
+      members:
+        # cortana.hogs.tswn.us
+        - address: "fd36:3eb3:43b0:75::13"
+        # sdwilsh-desktop
+        - address: "fd36:3eb3:43b0:75::1f"
+    - name: "NTP-SERVICES-v6"
+      description: "NTP services ({{ ansible_managed }})"
+      afi: "ipv6"
+      members:
+        - address: "fd36:3eb3:43b0:75::33"
+        - address: "fd36:3eb3:43b0:75::34"
+    - name: "OPENSPRINKLER-v4"
+      description: "harvest.hogs.tswn.us"
+      members:
+        - address: "10.117.0.17"
+    - name: "PEER-v4"
+      description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
+      afi: "ipv4"
+      members:
+        - address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.100.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "172.16.5.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
+    - name: "PEER-v6"
+      description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
+      afi: "ipv6"
+      members:
+        - address: "fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv6 }}"
+        - address: "fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv6 }}"
+    - name: "VISERON-v4"
+      description: "The v4 viseron.hogs.tswn.us addresses"
+      afi: "ipv4"
+      members:
+        - address: "10.117.0.29"
+    - name: "ZABBIX-SERVER-v4"
+      description: "The v4 server.zabbix.hogs.tswn.us addresses"
+      afi: "ipv4"
+      members:
+        - address: "10.10.0.18"
+    - name: "ZABBIX-SERVER-v6"
+      description: "The v4 server.zabbix.hogs.tswn.us addresses"
+      afi: "ipv6"
+      members:
+        - address: "fd36:3eb3:43b0:a::12"
+        - address: "fd36:3eb3:43b0:a:42:aff:fe75:20"
+  network_group:
+    - name: "RFC1918-v4"
+      description: "IPv4 Private Address Space ({{ ansible_managed }})"
+      members:
+        - address: "192.168.0.0/16"
+        - address: "172.16.0.0/12"
+        - address: "10.0.0.0/8"
+  port_group:
+    - name: "CIFS"
+      description: "{{ ansible_managed }}"
+      members:
+        - port: "445"
+    - name: "DNS"
+      description: "{{ ansible_managed }}"
+      members:
+        - port: "53"
+    - name: "NFS"
+      description: "{{ ansible_managed }}"
+      members:
+        - port: "111"
+        - port: "674"
+        - port: "2049"
+    - name: "NTP"
+      description: "{{ ansible_managed }}"
+      members:
+        - port: "123"
+    - name: "UNIFI-DEVICE-TCP"
+      description: "Ports used by the Unifi Controller to talk to devices over TCP ({{ ansible_managed }})"
+      members:
+        - port: "8080"
+        - port: "6789"
+    - name: "UNIFI-DEVICE-UDP"
+      description: "Ports used by the Unifi Controller to talk to devices over UDP ({{ ansible_managed }})"
+      members:
+        - port: "3478"
+    - name: "UNIFI-WEB-TCP"
+      description: "Ports used by the Unifi Controller for clients ({{ ansible_managed }})"
+      members:
+        - port: "8443"
+
 vyos_interfaces__ethernet:
   - name: "{{ vyos__lan_interface }}"
     description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
