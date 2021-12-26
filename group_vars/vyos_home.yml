@@ -1,0 +1,149 @@
+---
+vyos__dynamic_dns_hosts:
+  - hostname: "home.tswn.us"
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          33306664323634633861653339373536333439343231393039366231376635633462626562643838
+          3637396336353934323662373638356533623237306633640a306532343330663765663833616538
+          66393430353938653839353937666139363730333266356262333730666132383431383432613933
+          6363323662376538640a346230636436656338633861393833653035346665353231356238653265
+          61376264343735646531646538646165303037326565356363353933633934626130
+
+vyos__wan_cellular_dns:
+  - "199.2.252.10"
+  - "204.117.214.10"
+vyos__wan_centurylink_username: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63633161613537383431336638636264383930663362336130353061343335653939633165393431
+          3537386236383534653065393065363965653736366461640a343037313232396163663465613661
+          35346336356666343363383165336136346130316434643564373332353131333635306465393966
+          3566373763336138390a336333366363346232633965613238626165356134636237643639613864
+          36353536646238333764303064636138663235383134643133646336383166303839
+vyos__wan_centurylink_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36643664373838363663333338653534303965313464343162313231633134383231316330336639
+          6234316631333833336261643265363062346563613233340a323136323331396130383164393064
+          33376532336336623664643562336233653764323130653136393831663663383165373633303331
+          6134626138656130640a643735386465666165333330366262666333383932396138633834623636
+          3963
+vyos__wan_centurylink_dns:
+  - "205.171.2.65"
+  - "205.171.3.65"
+
+vyos_firewall__zones:
+  - name: "UNIFI-MAN"
+    description: "unifi management vlan ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}"
+  - name: "SYNC"
+    description: "VRRP and other related synchronizations connection ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.9"
+  - name: "MAN"
+    description: "management vlan ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.10"
+  - name: "GWORK"
+    description: "work network ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.15"
+  - name: "IOT"
+    description: "IoT network ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.66"
+  - name: "NOWAN"
+    description: "internet of shit: no WAN or other access ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.67"
+  - name: "SERVICE82"
+    description: "installation02 - unifi controller ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.82"
+  - name: "ROUTER-LAB"
+    description: "Lab network for vyos router testing ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.100"
+  - name: "HOME"
+    description: "home network with home services ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.117"
+  - name: "GUEST"
+    description: "guest network ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.131"
+  - name: "CULTIVAR"
+    description: "cultivar network ({{ ansible_managed }})"
+    interface: "{{ vyos__lan_interface }}.150"
+  - name: "LOCAL"
+    description: "{{ ansible_managed }}"
+    local-zone: yes
+  - name: "WAN-Cellular"
+    description: "Cellular WAN connection ({{ ansible_managed }})"
+    firewall_name: "WAN"
+    interface: "{{ vyos__wan_cellular_interface }}"
+  - name: "WAN-CenturyLink"
+    description: "CenturyLink WAN connection ({{ ansible_managed }})"
+    firewall_name: "WAN"
+    interface: "pppoe0"
+
+vyos_interfaces__ethernet:
+  - name: "{{ vyos__lan_interface }}"
+    description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
+    enabled: true
+    vifs:
+      - vlan_id: 9
+        description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
+        ipv6:
+          - address: "fd36:3eb3:43b0:9::{{ vyos__host_id_ipv6 }}/64"
+      - vlan_id: 10
+        description: "MAN - management vlan ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+        ipv6:
+          - address: "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
+      - vlan_id: 15
+        description: "GWORK - work-friendly addressed network ({{ ansible_managed }})"
+        ipv4:
+          - address: "192.168.1.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 66
+        description: "IOT - internet of things: WAN access, but not much else ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.66.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 67
+        description: "NOWAN - internet of shit: no WAN or other access ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.67.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 82
+        description: "SERVICE82 - installation02 (unifi controller) ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 100
+        description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.100.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 117
+        description: "HOME - home network with home services ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.117.0.{{ vyos__host_id_ipv4 }}/23"
+        ipv6:
+          - address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
+      - vlan_id: 131
+        description: "GUEST - used for guest wifi ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.131.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 150
+        description: "CULTIVAR - used for Cultivar access to specific services ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.150.0.{{ vyos__host_id_ipv4 }}/24"
+  - name: "{{ vyos__wan_cellular_interface }}"
+    description: "Cellular WAN ({{ ansible_managed }})"
+    enabled: true
+    ipv4:
+      - address: "172.16.5.{{ vyos__host_id_ipv4 }}/24"
+  - name: "{{ vyos__wan_centurylink_interface }}"
+    description: "CenturyLink WAN ({{ ansible_managed }})"
+    enabled: true
+    vifs:
+      - vlan_id: 201
+        description: "CenturyLink PPPOE ({{ ansible_managed }})"
+
+vyos_interfaces__pppoe:
+  - name: "pppoe0"
+    authentication:
+      password: "{{ vyos__wan_centurylink_password }}"
+      user: "{{ vyos__wan_centurylink_username }}"
+    mss: 1452
+    mtu: 1492
+    source_interface: "{{ vyos__wan_centurylink_interface }}.201"
