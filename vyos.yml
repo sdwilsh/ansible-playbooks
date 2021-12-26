@@ -89,6 +89,12 @@
 - hosts: vyos_home
   gather_facts: false
   tasks:
+    - name: "Gather Config"
+      vyos.vyos.vyos_facts:
+        gather_subset: "config"
+      tags:
+        - always
+
     #
     # VRRP
     #
