@@ -16,5 +16,7 @@
   with_fileglob: "zones/{{ zone | lower }}/from-*-{{ _afi }}.yml"
   loop_control:
     loop_var: "file_path"
+  tags:
+    - "firewall-rules"
   when:
     - "file_path.split('/')[-1][5:-9].upper() in _named_firewalls"
