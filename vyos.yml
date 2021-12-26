@@ -86,6 +86,9 @@
       tags:
         - firewall
 
+- hosts: vyos_home
+  gather_facts: false
+  tasks:
     #
     # VRRP
     #
