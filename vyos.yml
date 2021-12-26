@@ -76,6 +76,47 @@
             ipv4_network: "10.131.0.0/24"
       tags:
         - always
+
+    #
+    # Firewall
+    #
+    - name: "Set global firewall settings"
+      vyos.vyos.vyos_firewall_global:
+        config:
+          config_trap: no
+          group: "{{ vyos_firewall_global__group }}"
+          log_martians: yes
+          ping:
+            all: yes
+            broadcast: no
+          route_redirects:
+            - afi: ipv4
+              icmp_redirects:
+                receive: no
+                send: yes
+              ip_src_route: no
+            - afi: ipv6
+              icmp_redirects:
+                receive: no
+                send: yes
+              ip_src_route: no
+          syn_cookies: yes
+          twa_hazards_protection: yes
+          validation: disable
+        state: replaced
+      tags:
+        - "firewall"
+        - "firewall-rules"
+
+    - name: "Set the firewall rules"
+      ansible.builtin.import_role:
+        name: "vyos-firewall"
+      tags:
+        - firewall
+
+    #
+    # VRRP
+    #
     - name: "Setup pppoe0 activation script"
       ansible.builtin.copy:
         dest: "/config/scripts/activate-pppoe0.script"
@@ -99,6 +140,7 @@
         ansible_connection: "ssh"
       tags:
         - "interfaces"
+        - "vrrp"
     - name: "Setup pppoe0 disable script"
       ansible.builtin.copy:
         dest: "/config/scripts/disable-pppoe0.script"
@@ -122,6 +164,7 @@
         ansible_connection: "ssh"
       tags:
         - "interfaces"
+        - "vrrp"
     - name: "Setup vrrp"
       vyos.vyos.vyos_config:
         lines:
@@ -255,42 +298,6 @@
       tags:
         - "vrrp"
 
-    #
-    # Firewall
-    #
-    - name: "Set global firewall settings"
-      vyos.vyos.vyos_firewall_global:
-        config:
-          config_trap: no
-          group: "{{ vyos_firewall_global__group }}"
-          log_martians: yes
-          ping:
-            all: yes
-            broadcast: no
-          route_redirects:
-            - afi: ipv4
-              icmp_redirects:
-                receive: no
-                send: yes
-              ip_src_route: no
-            - afi: ipv6
-              icmp_redirects:
-                receive: no
-                send: yes
-              ip_src_route: no
-          syn_cookies: yes
-          twa_hazards_protection: yes
-          validation: disable
-        state: replaced
-      tags:
-        - "firewall"
-        - "firewall-rules"
-
-    - name: "Set the firewall rules"
-      ansible.builtin.import_role:
-        name: "vyos-firewall"
-      tags:
-        - firewall
 
     #
     # Failover
