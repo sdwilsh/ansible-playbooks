@@ -109,6 +109,11 @@
     definition:
       services:
         serial2mqtt:
+          deploy:
+            restart_policy:
+              condition: "on-failure"
+              max_attempts: 3
+              window: "2m"
           devices:
             - "/dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D309LJ40-if00-port0:/dev/ttyUSB0"
           environment:
