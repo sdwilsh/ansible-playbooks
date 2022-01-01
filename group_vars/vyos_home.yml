@@ -9,9 +9,6 @@ vyos__dynamic_dns_hosts:
           6363323662376538640a346230636436656338633861393833653035346665353231356238653265
           61376264343735646531646538646165303037326565356363353933633934626130
 
-vyos__wan_cellular_dns:
-  - "199.2.252.10"
-  - "204.117.214.10"
 vyos__wan_centurylink_username: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           63633161613537383431336638636264383930663362336130353061343335653939633165393431
@@ -67,10 +64,6 @@ vyos_firewall__zones:
   - name: "LOCAL"
     description: "{{ ansible_managed }}"
     local-zone: yes
-  - name: "WAN-Cellular"
-    description: "Cellular WAN connection ({{ ansible_managed }})"
-    firewall_name: "WAN"
-    interface: "{{ vyos__wan_cellular_interface }}"
   - name: "WAN-CenturyLink"
     description: "CenturyLink WAN connection ({{ ansible_managed }})"
     firewall_name: "WAN"
@@ -248,6 +241,8 @@ vyos_interfaces__ethernet:
   - name: "{{ vyos__lan_interface }}"
     description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
     enabled: true
+    ipv4:
+      - address: "10.1.0.{{ vyos__host_id_ipv4 }}/24"
     vifs:
       - vlan_id: 9
         description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
@@ -295,11 +290,6 @@ vyos_interfaces__ethernet:
         description: "CULTIVAR - used for Cultivar access to specific services ({{ ansible_managed }})"
         ipv4:
           - address: "10.150.0.{{ vyos__host_id_ipv4 }}/24"
-  - name: "{{ vyos__wan_cellular_interface }}"
-    description: "Cellular WAN ({{ ansible_managed }})"
-    enabled: true
-    ipv4:
-      - address: "172.16.5.{{ vyos__host_id_ipv4 }}/24"
   - name: "{{ vyos__wan_centurylink_interface }}"
     description: "CenturyLink WAN ({{ ansible_managed }})"
     enabled: true
