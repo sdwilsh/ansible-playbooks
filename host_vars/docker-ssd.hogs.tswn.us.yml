@@ -64,11 +64,12 @@ factorio__game_password: !vault |
 #   enabled: False
 factorio__mods:
   - name: "ArmouredBiters"
+  - name: "Auto Deconstruct"
   - name: "combat-mechanics-overhaul"
   - name: "BlackMarket2"
   - name: "even-distribution"
   - name: "flib"
-  - name: "heroturrets"
+  - name: "Pitch Black"
   - name: "InlaidLampsExtended"
   - name: "LargeLamp"
   - name: "liborio"
@@ -77,6 +78,25 @@ factorio__mods:
   - name: "RPGsystem"
   - name: "scattergun_turret"
   - name: "Squeak Through"
+  - name: "Player Auto Build"
+  - name: "Rebalanced solar energy and laser turrets"
+  - name: "Repair Turret"
+  - name: "Solarthermal Energy"
+  - name: "Shield Projector"
+  - name: "Long Range Turret"
+  - name: "Inventory Repair"
+  - name: "Advanced Solar and Accumulator"
+  - name: "Krastorio 2"
+  - name: "Mega Bot Start"
+  - name: "The Ruins Mod"
+  - name: "Enemy Race Manager"
+  - name: "ERM - Zerg Units"
+  - name: "ERM - Protoss Units"
+  
+
+  
+  
+  
 
 valheim__server_name: "valheim.tswn.us"
 valheim__world_name: "Forerunner"
