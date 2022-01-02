@@ -10,7 +10,7 @@
 
     {
       "name": "{{ item.name }}",
-      "enabled": {{ item.enabled | to_json }}
+      "enabled": {{ item.enabled | default(True) | to_json }}
     }{% endfor %}
 
   ]

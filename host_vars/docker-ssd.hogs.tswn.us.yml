@@ -59,35 +59,24 @@ factorio__game_password: !vault |
           3661393537313834640a623435353563313134356161356533386135393131303532393134313336
           3263
 
+# To disable, but leave installed, do something like this:
+# - name: "Squeak Through"
+#   enabled: False
 factorio__mods:
   - name: "ArmouredBiters"
-    enabled: True
   - name: "combat-mechanics-overhaul"
-    enabled: True
   - name: "BlackMarket2"
-    enabled: True
   - name: "even-distribution"
-    enabled: True
   - name: "flib"
-    enabled: True
   - name: "heroturrets"
-    enabled: True
   - name: "InlaidLampsExtended"
-    enabled: True
   - name: "LargeLamp"
-    enabled: True
   - name: "liborio"
-    enabled: True
   - name: "MegaBotStart"
-    enabled: True
   - name: "miniloader"
-    enabled: True
   - name: "RPGsystem"
-    enabled: True
   - name: "scattergun_turret"
-    enabled: True
   - name: "Squeak Through"
-    enabled: True
 
 valheim__server_name: "valheim.tswn.us"
 valheim__world_name: "Forerunner"
