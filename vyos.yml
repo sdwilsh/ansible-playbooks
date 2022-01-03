@@ -56,7 +56,7 @@
       vyos.vyos.vyos_firewall_global:
         config:
           config_trap: no
-          group: "{{ vyos_firewall_global__group }}"
+          group: "{{ vyos_firewall_global__group | default({}) }}"
           log_martians: yes
           ping:
             all: yes
