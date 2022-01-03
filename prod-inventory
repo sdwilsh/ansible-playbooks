@@ -21,5 +21,9 @@ docker-vm.hogs.tswn.us ansible_host=10.10.0.6
 maccabeus01.hogs.tswn.us ansible_host=10.10.0.48
 maccabeus02.hogs.tswn.us ansible_host=10.10.0.49
 
+[vyos_remote]
+tartarus01.tswn.us ansible_host=149.248.37.12
+
 [vyos:children]
 vyos_home
+vyos_remote

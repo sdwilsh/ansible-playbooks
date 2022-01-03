@@ -23,6 +23,10 @@ bind_zones:
       - "shadowofsunderedstar.hogs.tswn.us."
       - "bornstellarmakeseternallasting.hogs.tswn.us."
     hosts:
+      # PUBLIC
+      - name: "tartarus01"
+        ip: "149.248.37.12"
+
       # UNIFI-MAN Network
       - name: "usw-pro-48.unifi"
         ip: "10.1.0.11"

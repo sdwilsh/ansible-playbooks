@@ -1,0 +1,13 @@
+---
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmp"
+  icmp:
+    type_name: any
+- description: "Allow SSH"
+  action: "accept"
+  destination:
+    port: "22"
+  protocol: "tcp"
+  state:
+    new: true

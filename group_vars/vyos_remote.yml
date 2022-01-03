@@ -1,0 +1,19 @@
+---
+vyos_firewall__zones:
+  - name: "LOCAL"
+    local-zone: yes
+  - name: "WAN"
+    interface: "eth0"
+vyos_firewall__zones_path: "./firewall_zones/vyos_remote"
+
+vyos_interfaces__ethernet:
+  - name: "eth0"
+    description: "WAN"
+    enabled: true
+    ipv4:
+      - address: "149.248.37.12/23"
+
+# https://www.vultr.com/docs/vultr-dns-servers
+vyos_system__name_servers:
+  - "108.61.10.10"
+  - "2001:19f0:300:1704::6"

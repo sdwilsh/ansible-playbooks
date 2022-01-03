@@ -680,3 +680,24 @@
       tags:
         - "services"
         - "snmp"
+
+#
+# vyos_remote
+#
+
+- hosts: "vyos_remote"
+  gather_facts: false
+  tasks:
+    - name: "Gather Config"
+      vyos.vyos.vyos_facts:
+        gather_subset: "config"
+      tags:
+        - always
+
+    - name: "Setup default route"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set protocols static route 0.0.0.0/0 next-hop 149.248.36.1"
+        save: yes
+      tags:
+        - "routing"
