@@ -86,6 +86,10 @@
       tags:
         - firewall
 
+#
+# vyos_home
+#
+
 - hosts: vyos_home
   gather_facts: false
   tasks:
