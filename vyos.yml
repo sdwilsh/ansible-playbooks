@@ -17,8 +17,7 @@
         state: "present"
     - name: "Set nameservers"
       vyos.vyos.vyos_system:
-        name_servers:
-          - "127.0.0.1"
+        name_servers: "{{ vyos_system__name_servers }}"
       tags:
         - "dns"
     - name: "Remove default NTP servers"

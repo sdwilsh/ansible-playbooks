@@ -306,3 +306,7 @@ vyos_interfaces__pppoe:
     mss: 1452
     mtu: 1492
     source_interface: "{{ vyos__wan_centurylink_interface }}.201"
+
+# This uses a local DNS forwarding server, so use that.
+vyos_system__name_servers:
+  - "127.0.0.1"
