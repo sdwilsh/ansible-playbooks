@@ -13,7 +13,7 @@
         )
       ]
     }}
-  with_fileglob: "zones/{{ zone | lower }}/from-*-{{ _afi }}.yml"
+  with_fileglob: "{{ vyos_firewall__zones_path }}/{{ zone | lower }}/from-*-{{ _afi }}.yml"
   loop_control:
     loop_var: "file_path"
   tags:

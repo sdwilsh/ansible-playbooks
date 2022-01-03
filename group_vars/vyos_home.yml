@@ -68,6 +68,7 @@ vyos_firewall__zones:
     description: "CenturyLink WAN connection ({{ ansible_managed }})"
     firewall_name: "WAN"
     interface: "pppoe0"
+vyos_firewall__zones_path: "./firewall_zones/vyos_home"
 
 vyos_firewall_global__group:
   address_group:
