@@ -21,9 +21,6 @@
           - "127.0.0.1"
       tags:
         - "dns"
-    - name: "Set domain search suffixes"
-      vyos.vyos.vyos_system:
-        domain_search: "{{ common__nameservers.search }}"
     - name: "Remove default NTP servers"
       vyos.vyos.vyos_config:
         lines:
