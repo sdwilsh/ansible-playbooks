@@ -4,27 +4,32 @@
   ansible.builtin.set_fact:
     vyos_firewall__zones: "{{ lookup('template', 'templates/vyos_firewall__zones.j2') | from_yaml }}"
   tags:
-    - "always"
+    - "firewall-rules"
+    - "firewall-zones"
+- name: "Setup private helper variables"
+  ansible.builtin.set_fact:
+    _zone_name_info: "{{ lookup('template', 'templates/_zone_name_info.j2') | from_yaml }}"
+  tags:
+    - "firewall-rules"
+    - "firewall-zones"
 - name: "Load Firewall Zone Information for IPv4"
   ansible.builtin.include_tasks: "load_zone_info.yml"
-  loop: "{{ _named_firewalls }}"
+  loop: "{{ _zone_name_info }}"
   loop_control:
     loop_var: zone
   tags:
     - "firewall-rules"
   vars:
     _afi: "ipv4"
-    _named_firewalls: "{{ vyos_firewall__zones | map(attribute='firewall_name') | unique | sort }}"
 - name: "Load Firewall Zone Information for IPv6"
   ansible.builtin.include_tasks: "load_zone_info.yml"
-  loop: "{{ _named_firewalls }}"
+  loop: "{{ _zone_name_info }}"
   loop_control:
     loop_var: zone
   tags:
     - "firewall-rules"
   vars:
     _afi: "ipv6"
-    _named_firewalls: "{{ vyos_firewall__zones | map(attribute='firewall_name') | unique | sort }}"
 - name: "Set the firewall rules"
   vyos.vyos.vyos_firewall_rules:
     config:
