@@ -3,7 +3,7 @@
 - name: "Build rule_sets_{{ _afi }} for {{ zone.name }}"
   ansible.builtin.set_fact: >-
     rule_sets_{{ _afi }}={{
-      lookup("vars", "rule_sets_" + _afi, default=[]) + [
+      lookup("vars", "rule_sets_" + _afi) + [
         dict(
           name=(zone.firewall_name | upper + "-from-" + file_path.split("/")[-1][5:-9] | upper + "-v" + _afi[-1]),
           description=ansible_managed,
@@ -18,6 +18,7 @@
     loop_var: "file_path"
   tags:
     - "firewall-rules"
+    - "firewall-zones"
   when:
     # Only run when we expect a zone to be paired with the zone we are building the ruleset for.
     - "file_path.split('/')[-1][5:-9].upper() in zone.from | map(attribute='firewall_name')"

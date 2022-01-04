@@ -28,16 +28,25 @@ set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall ipv6-name '{{
     {%- endif %}
 {%- endmacro %}
 
+{%- macro set_zone_firewalls(zone, afi) -%}
+    {%- set zone_firewall_filter = zone.firewall_name + "-from-.*-" + afi[-2:] %}
+    {%- set firewall_names = (rule_sets_ipv4 + rule_sets_ipv6) | selectattr('name', 'match', zone_firewall_filter) | map(attribute='name') %}
+
+    {%- for from_zone in _zone_name_info | selectattr('name', 'equalto', zone.name) | map(attribute='from') | first %}
+{% set expected_firewall_name = zone.firewall_name + "-from-" + from_zone.firewall_name + "-" + afi[-2:] %}
+{% if expected_firewall_name in firewall_names -%}
+    {{- set_firewall(zone, expected_firewall_name) -}}
+{% else -%}
+set zone-policy zone {{ zone.name }} from {{ from_zone.name }} firewall {% if afi == "ipv6" %}ipv6-{% endif %}name 'DROP-AND-LOG-{{ afi[-2:] }}'
+{% endif -%}
+    {% endfor -%}
+{%- endmacro %}
+
 
 {%- for zone in vyos_firewall__zones -%}
 set zone-policy zone {{ zone.name }} default-action 'drop'
 {{ set_description(zone) }}
-{% set zone_firewall_filter = zone.firewall_name + ".*" %}
-{% for firewall_name in rule_sets_ipv4 | default([]) | selectattr('name', 'match', zone_firewall_filter) | map(attribute='name') %}
-    {{- set_firewall(zone, firewall_name) -}}
-{% endfor %}
-{% for firewall_name in rule_sets_ipv6 | default([]) | selectattr('name', 'match', zone_firewall_filter) | map(attribute='name') %}
-    {{- set_firewall(zone, firewall_name) -}}
-{% endfor %}
+{{ set_zone_firewalls(zone, "ipv4") }}
+{{ set_zone_firewalls(zone, "ipv6") }}
 {{ set_interface(zone) }}
 {% endfor -%}

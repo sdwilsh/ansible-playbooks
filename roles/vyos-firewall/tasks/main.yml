@@ -9,6 +9,16 @@
 - name: "Setup private helper variables"
   ansible.builtin.set_fact:
     _zone_name_info: "{{ lookup('template', 'templates/_zone_name_info.j2') | from_yaml }}"
+    rule_sets_ipv4:
+      - name: "DROP-AND-LOG-v4"
+        description: "Fallback rule to automatically drop and log traffic on zone pairs that do not have rules defined."
+        enable_default_log: yes
+        default_action: "drop"
+    rule_sets_ipv6:
+      - name: "DROP-AND-LOG-v6"
+        description: "Fallback rule to automatically drop and log traffic on zone pairs that do not have rules defined."
+        enable_default_log: yes
+        default_action: "drop"
   tags:
     - "firewall-rules"
     - "firewall-zones"
@@ -19,6 +29,7 @@
     loop_var: zone
   tags:
     - "firewall-rules"
+    - "firewall-zones"
   vars:
     _afi: "ipv4"
 - name: "Load Firewall Zone Information for IPv6"
@@ -28,15 +39,16 @@
     loop_var: zone
   tags:
     - "firewall-rules"
+    - "firewall-zones"
   vars:
     _afi: "ipv6"
 - name: "Set the firewall rules"
   vyos.vyos.vyos_firewall_rules:
     config:
       - afi: "ipv4"
-        rule_sets: "{{ rule_sets_ipv4 | default([]) }}"
+        rule_sets: "{{ rule_sets_ipv4 }}"
       - afi: "ipv6"
-        rule_sets: "{{ rule_sets_ipv6 | default([]) }}"
+        rule_sets: "{{ rule_sets_ipv6 }}"
     state: "replaced"
   tags:
     - "firewall-rules"
