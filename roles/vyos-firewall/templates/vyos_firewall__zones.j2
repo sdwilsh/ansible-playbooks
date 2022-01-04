@@ -4,7 +4,7 @@
   - description:{% if "description" in zone %}
   "{{ zone.description }}"
 {% else %}
-  None
+  null
 {% endif %}
     firewall_name: {{ zone.firewall_name | default(zone.name) }}
     interface: {{ zone.interface | default(None)}}

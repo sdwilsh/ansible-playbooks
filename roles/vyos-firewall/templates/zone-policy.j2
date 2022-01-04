@@ -1,5 +1,5 @@
 {%- macro set_description(zone) -%}
-    {%- if "description" in zone -%}
+    {%- if "description" in zone and zone.description -%}
         set zone-policy zone {{ zone.name }} description '{{ zone.description }}'
     {%- endif %}
 {%- endmacro %}
