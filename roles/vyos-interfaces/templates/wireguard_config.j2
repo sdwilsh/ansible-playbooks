@@ -5,6 +5,12 @@
 {% endfor -%}
 {%- endmacro %}
 
+{%- macro set_wireguard_description(wireguard) -%}
+    {%- if "description" in wireguard -%}
+        set interfaces wireguard {{ wireguard.name }} description '{{ wireguard.description }}'
+{% endif %}
+{%- endmacro %}
+
 {%- macro set_wireguard_mtu(wireguard) -%}
     {%- if "mtu" in wireguard -%}
         set interfaces wireguard {{ wireguard.name }} mtu {{ wireguard.mtu }}
@@ -49,6 +55,7 @@
 
 {%- for wireguard in vyos_interfaces__wireguard -%}
 {{- set_wireguard_addresses(wireguard) }}
+{{- set_wireguard_description(wireguard) }}
 {{- set_wireguard_mtu(wireguard) }}
 {{- set_wireguard_port(wireguard) }}
 {%- for peer in wireguard.peers %}

@@ -1,6 +1,7 @@
 ---
 vyos_interfaces__wireguard:
   - name: "wg0"
+    description: "maccabeus site-to-site"
     ipv4:
       - address: "10.10.1.2/24"
     mtu: 1280
