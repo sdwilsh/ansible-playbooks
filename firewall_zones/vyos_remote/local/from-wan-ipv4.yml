@@ -14,5 +14,5 @@
 - description: "Allow Wireguard"
   action: "accept"
   destination:
-    port: "51820-51821"
+    port: "51820"
   protocol: "udp"

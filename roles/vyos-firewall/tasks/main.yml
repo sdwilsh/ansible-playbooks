@@ -54,6 +54,7 @@
     - "firewall-rules"
 - name: "Set Zone Policy"
   vyos.vyos.vyos_config:
+    save: yes
     src: "zone-policy.j2"
   tags:
     - "firewall-zones"
