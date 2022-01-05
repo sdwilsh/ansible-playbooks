@@ -64,6 +64,8 @@ vyos_firewall__zones:
   - name: "LOCAL"
     description: "{{ ansible_managed }}"
     local-zone: yes
+  - name: "REMOTE-TUN"
+    interface: "wg0"
   - name: "WAN-CenturyLink"
     description: "CenturyLink WAN connection ({{ ansible_managed }})"
     firewall_name: "WAN"

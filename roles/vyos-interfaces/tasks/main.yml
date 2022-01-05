@@ -15,3 +15,9 @@
     src: "pppoe_config.j2"
     save: yes
   when: "vyos_interfaces__pppoe | default([]) | length > 0"
+
+- name: "Setup Wireguard"
+  vyos.vyos.vyos_config:
+    src: "wireguard_config.j2"
+    save: yes
+  when: "vyos_interfaces__wireguard | default([]) | length > 0"

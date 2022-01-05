@@ -11,3 +11,8 @@
   protocol: "tcp"
   state:
     new: true
+- description: "Allow Wireguard"
+  action: "accept"
+  destination:
+    port: "51820-51821"
+  protocol: "udp"

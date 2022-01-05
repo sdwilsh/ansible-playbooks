@@ -1,0 +1,32 @@
+---
+- description: "Allow ICMP"
+  action: "accept"
+  protocol: "icmp"
+  icmp:
+    type_name: any
+- description: "Allow NTP"
+  action: "accept"
+  state:
+    new: true
+  destination:
+    group:
+      address_group: "NTP-SERVICES-v4"
+      port_group: "NTP"
+- description: "Allow ARA Connections"
+  action: "accept"
+  protocol: "tcp"
+  state:
+    new: true
+  destination:
+    address: "10.117.0.30"
+    port: "8000"
+- description: "Allow Zabbix Server Connections"
+  action: "accept"
+  protocol: "tcp"
+  state:
+    new: true
+  destination:
+    port: "10050"
+  source:
+    group:
+      address_group: "ZABBIX-SERVER-v4"

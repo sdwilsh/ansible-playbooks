@@ -1,0 +1,33 @@
+---
+vyos_interfaces__wireguard:
+  - name: "wg0"
+    ipv4:
+      - address: "10.10.1.2/24"
+    mtu: 1280
+    peers:
+      - name: "maccabeus01"
+        allowed_ips:
+          ipv4:
+            - network: "0.0.0.0/0"
+            - network: "10.117.0.0/23"
+            - network: "10.10.1.{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__host_id_ipv4 }}/32"
+        persistent_keepalive_sec: 25
+        pubkey: "{{ hostvars['maccabeus01.hogs.tswn.us'].wireguard__pubkey }}"
+    port: 51820
+  - name: "wg1"
+    ipv4:
+      - address: "10.10.1.2/24"
+    mtu: 1280
+    peers:
+      - name: "maccabeus02"
+        allowed_ips:
+          ipv4:
+            - network: "0.0.0.0/0"
+            - network: "10.117.0.0/23"
+            - network: "10.10.1.{{ hostvars['maccabeus02.hogs.tswn.us'].vyos__host_id_ipv4 }}/32"
+        persistent_keepalive_sec: 25
+        pubkey: "{{ hostvars['maccabeus02.hogs.tswn.us'].wireguard__pubkey }}"
+    port: 51821
+
+
+wireguard__pubkey: "Dwdz7rWR4y8uMW3s4MWZwe1+rR0Bqiigms7Aku51ghU="
