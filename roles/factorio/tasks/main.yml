@@ -43,7 +43,7 @@
     state: directory
     owner: factorio
     group: factorio
-    mode: 0555
+    mode: "u=rwx,g=rwx,o=rw"
 - name: Create mod-list.json
   ansible.builtin.template:
     src: mod-list.j2
