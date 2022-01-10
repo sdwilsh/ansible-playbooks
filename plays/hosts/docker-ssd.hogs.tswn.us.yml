@@ -5,7 +5,9 @@
     - role: nickjj.docker
       tags: ["docker"]
     - role: ara-docker
-    - role: factorio
+    - role: "factorio"
+      tags:
+        - "factorio"
     - role: valheim
       tags:
         - "valheim"
