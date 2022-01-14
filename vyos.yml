@@ -82,6 +82,33 @@
       tags:
         - firewall
 
+    #
+    # OSPF
+    #
+    - name: "Setup OSPF for IPv4"
+      vyos.vyos.vyos_ospfv2:
+        config:
+          areas: "{{ vyos_ospfv2__areas }}"
+          auto_cost:
+            reference_bandwidth: "10000" # 10G
+          log_adjacency_changes: "detail"
+          neighbor: "{{ vyos_ospfv2__neighbors }}"
+          parameters:
+            abr_type: "cisco"
+            router_id: "{{ vyos_ospfv2_parameters__router_id }}"
+          redistribute:
+            - route_type: "connected"
+        state: "replaced"
+      tags:
+        - "ospf"
+
+    - name: "Setup OSPF Interfaces"
+      vyos.vyos.vyos_ospf_interfaces:
+        config: "{{ vyos_ospf_interfaces__config }}"
+        state: "replaced"
+      tags:
+        - "ospf"
+
 #
 # vyos_home
 #

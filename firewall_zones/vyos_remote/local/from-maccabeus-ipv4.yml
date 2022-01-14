@@ -4,3 +4,6 @@
   protocol: "icmp"
   icmp:
     type_name: any
+- description: "Allow OSPF"
+  action: "accept"
+  protocol: "89"

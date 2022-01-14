@@ -24,3 +24,6 @@
   destination:
     group:
       port_group: "DNS"
+- description: "Allow OSPF"
+  action: "accept"
+  protocol: "89"
