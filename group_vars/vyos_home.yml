@@ -201,6 +201,10 @@ vyos_firewall_global__group:
         - address: "fd36:3eb3:43b0:a::12"
         - address: "fd36:3eb3:43b0:a:42:aff:fe75:20"
   network_group:
+    - name: "REMOTE-VPN-v4"
+      description: "Subnets that can be used as a VPN through REMOTE-TUN"
+      members:
+        - address: "10.117.2.0/24"
     - name: "RFC1918-v4"
       description: "IPv4 Private Address Space ({{ ansible_managed }})"
       members:

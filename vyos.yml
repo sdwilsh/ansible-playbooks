@@ -333,6 +333,8 @@
           # GUEST
           - interface: "{{ vyos__lan_interface }}.131"
             ipv4_network: "10.131.0.0/24"
+          - interface: "wg0"
+            ipv4_network: "10.117.2.0/24"
       tags:
         - always
     - name: "Setup NAT masquerade rules"
