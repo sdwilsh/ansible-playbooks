@@ -730,3 +730,13 @@
         save: yes
       tags:
         - "routing"
+
+    - name: "Setup default VPN route"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set protocols static table 10 route 0.0.0.0/0 next-hop 10.117.0.1"
+          - "set policy route VPN rule 10 set table 10"
+          - "set interfaces wireguard wg2 policy route 'VPN'"
+        save: yes
+      tags:
+        - "routing"
