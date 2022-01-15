@@ -122,6 +122,26 @@
       tags:
         - always
 
+    - name: "Setup Outbound OSPF Redistribution"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set policy access-list 150 description 'Outbound OSPF Redistribution'"
+          - "set policy access-list 150 rule 10 action 'permit'"
+          - "set policy access-list 150 rule 10 destination any"
+          - "set policy access-list 150 rule 10 source inverse-mask '0.0.1.255'"
+          - "set policy access-list 150 rule 10 source network '10.117.0.0'"
+          - "set policy access-list 150 rule 20 action 'permit'"
+          - "set policy access-list 150 rule 20 destination any"
+          - "set policy access-list 150 rule 20 source inverse-mask '0.0.0.255'"
+          - "set policy access-list 150 rule 20 source network '10.10.0.0'"
+          - "set policy access-list 150 rule 1000 action 'deny'"
+          - "set policy access-list 150 rule 1000 destination any"
+          - "set policy access-list 150 rule 1000 source any"
+          - "set protocols ospf access-list 150 export 'connected'"
+        save: yes
+      tags:
+        - "ospf"
+
     #
     # VRRP
     #
@@ -722,6 +742,22 @@
         gather_subset: "config"
       tags:
         - always
+
+    - name: "Setup Outbound OSPF Redistribution"
+      vyos.vyos.vyos_config:
+        lines:
+          - "set policy access-list 150 description 'Outbound OSPF Redistribution'"
+          - "set policy access-list 150 rule 10 action 'permit'"
+          - "set policy access-list 150 rule 10 destination any"
+          - "set policy access-list 150 rule 10 source inverse-mask '0.0.0.255'"
+          - "set policy access-list 150 rule 10 source network '10.117.2.0'"
+          - "set policy access-list 150 rule 1000 action 'deny'"
+          - "set policy access-list 150 rule 1000 destination any"
+          - "set policy access-list 150 rule 1000 source any"
+          - "set protocols ospf access-list 150 export 'connected'"
+        save: yes
+      tags:
+        - "ospf"
 
     - name: "Setup default route"
       vyos.vyos.vyos_config:
