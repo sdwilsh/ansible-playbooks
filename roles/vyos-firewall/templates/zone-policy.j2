@@ -20,12 +20,18 @@ set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall ipv6-name '{{
     {% endfor -%}
 {%- endmacro %}
 
-{%- macro set_interface(zone) -%}
-    {%- if zone["local-zone"] -%}
-        set zone-policy zone {{ zone.name }} local-zone
-    {%- else -%}
-        set zone-policy zone {{ zone.name }} interface '{{ zone.interface }}'
-    {%- endif %}
+{%- macro set_interface(zone, interface) -%}
+{% if zone["local-zone"] %}
+set zone-policy zone {{ zone.name }} local-zone
+{% else %}
+set zone-policy zone {{ zone.name }} interface '{{ interface }}'
+{% endif %}
+{%- endmacro %}
+
+{%- macro set_interfaces(zone) -%}
+    {%- for interface in zone.interfaces %}
+        {{- set_interface(zone, interface) }}
+    {%- endfor -%}
 {%- endmacro %}
 
 {%- macro set_zone_firewalls(zone, afi) -%}
@@ -48,5 +54,5 @@ set zone-policy zone {{ zone.name }} default-action 'drop'
 {{ set_description(zone) }}
 {{ set_zone_firewalls(zone, "ipv4") }}
 {{ set_zone_firewalls(zone, "ipv6") }}
-{{ set_interface(zone) }}
+{{ set_interfaces(zone) }}
 {% endfor -%}

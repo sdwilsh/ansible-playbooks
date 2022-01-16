@@ -7,7 +7,7 @@
   null
 {% endif %}
     firewall_name: {{ zone.firewall_name | default(zone.name) }}
-    interface: {{ zone.interface | default(None)}}
+    interfaces: {{ zone.interfaces | default([])}}
     local-zone: {{ zone['local-zone'] | default(false) }}
     name: {{ zone.name }}
 {% endfor %}

@@ -30,46 +30,59 @@ vyos__wan_centurylink_dns:
 vyos_firewall__zones:
   - name: "UNIFI-MAN"
     description: "unifi management vlan ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}"
+    interfaces:
+      - "{{ vyos__lan_interface }}"
   - name: "SYNC"
     description: "VRRP and other related synchronizations connection ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.9"
+    interfaces:
+      - "{{ vyos__lan_interface }}.9"
   - name: "MAN"
     description: "management vlan ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.10"
+    interfaces:
+      - "{{ vyos__lan_interface }}.10"
   - name: "GWORK"
     description: "work network ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.15"
+    interfaces:
+      - "{{ vyos__lan_interface }}.15"
   - name: "IOT"
     description: "IoT network ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.66"
+    interfaces:
+      - "{{ vyos__lan_interface }}.66"
   - name: "NOWAN"
     description: "internet of shit: no WAN or other access ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.67"
+    interfaces:
+      - "{{ vyos__lan_interface }}.67"
   - name: "SERVICE82"
     description: "installation02 - unifi controller ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.82"
+    interfaces:
+      - "{{ vyos__lan_interface }}.82"
   - name: "ROUTER-LAB"
     description: "Lab network for vyos router testing ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.100"
+    interfaces:
+      - "{{ vyos__lan_interface }}.100"
   - name: "HOME"
     description: "home network with home services ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.117"
+    interfaces:
+      - "{{ vyos__lan_interface }}.117"
   - name: "GUEST"
     description: "guest network ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.131"
+    interfaces:
+      - "{{ vyos__lan_interface }}.131"
   - name: "CULTIVAR"
     description: "cultivar network ({{ ansible_managed }})"
-    interface: "{{ vyos__lan_interface }}.150"
+    interfaces:
+      - "{{ vyos__lan_interface }}.150"
   - name: "LOCAL"
     description: "{{ ansible_managed }}"
     local-zone: yes
   - name: "REMOTE-TUN"
-    interface: "wg0"
+    interfaces:
+      - "wg0"
   - name: "WAN-CenturyLink"
     description: "CenturyLink WAN connection ({{ ansible_managed }})"
     firewall_name: "WAN"
-    interface: "pppoe0"
+    interfaces:
+      - "pppoe0"
 vyos_firewall__zones_path: "./firewall_zones/vyos_home"
 
 vyos_firewall_global__group:

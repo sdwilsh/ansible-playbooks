@@ -3,11 +3,15 @@ vyos_firewall__zones:
   - name: "LOCAL"
     local-zone: yes
   - name: "MACCABEUS"
-    interface: "wg0"
+    interfaces:
+      - "wg0"
+      - "wg1"
   - name: "MOBILE"
-    interface: "wg2"
+    interfaces:
+      - "wg2"
   - name: "WAN"
-    interface: "eth0"
+    interfaces:
+      - "eth0"
 vyos_firewall__zones_path: "./firewall_zones/vyos_remote"
 
 vyos_interfaces__ethernet:
