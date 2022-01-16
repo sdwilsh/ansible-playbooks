@@ -1,0 +1,21 @@
+---
+- hosts: "all:!vyos"
+  tasks:
+    - name: "Update packages with apt"
+      ansible.builtin.apt:
+        autoclean: yes
+        autoremove: yes
+        name: "*"
+        state: "latest"
+        update_cache: yes
+      become: yes
+      when: ansible_distribution == "Ubuntu"
+    - name: "Determine if a reboot is required"
+      ansible.builtin.stat:
+        path: "/var/run/reboot-required"
+      register: reboot_required
+      when: ansible_distribution == "Ubuntu"
+    - name: "Reboot iff required"
+      ansible.builtin.reboot:
+      become: yes
+      when: ansible_distribution == "Ubuntu" and reboot_required.stat.exists
