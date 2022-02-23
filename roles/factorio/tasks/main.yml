@@ -74,7 +74,7 @@
             - "UPDATE_MODS_ON_START={{ (factorio__token != '') | to_json }}"
             - "USERNAME={{ factorio__username }}"
             - "TOKEN={{ factorio__token }}"
-          image: factoriotools/factorio:latest
+          image: factoriotools/factorio:stable
           ports:
             - "34197:34197/udp"
             - "27015:27015/tcp"
