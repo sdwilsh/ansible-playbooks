@@ -37,18 +37,18 @@ iface {{ bond }} inet manual
 #
 auto {{ primary_interface }}
 iface {{ primary_interface }} inet static
-{% for ipv4_host in common__ip_addresses | ansible.netcommon.ipv4('host/prefix') %}
-    address         {{ ipv4_host | ansible.netcommon.ipaddr('address') }}
-    network         {{ ipv4_host | ansible.netcommon.ipaddr('network') }}
-    netmask         {{ ipv4_host | ansible.netcommon.ipaddr('netmask') }}
-    broadcast       {{ ipv4_host | ansible.netcommon.ipaddr('broadcast') }}
+{% for ipv4_host in common__ip_addresses | ansible.utils.ipv4('host/prefix') %}
+    address         {{ ipv4_host | ansible.utils.ipaddr('address') }}
+    network         {{ ipv4_host | ansible.utils.ipaddr('network') }}
+    netmask         {{ ipv4_host | ansible.utils.ipaddr('netmask') }}
+    broadcast       {{ ipv4_host | ansible.utils.ipaddr('broadcast') }}
 {% endfor %}
     gateway         {{ common__gateway_v4_address }}
 {% if "." in primary_interface %}
     vlan-raw-device {{ primary_interface.split('.')[0] }}
 {% endif %}
 
-{% set ipv6_list = common__ip_addresses | ansible.netcommon.ipv6('host/prefix') %}
+{% set ipv6_list = common__ip_addresses | ansible.utils.ipv6('host/prefix') %}
 {% if ipv6_list | length > 0 %}
 iface {{ primary_interface }} inet6 static
     address   {{ ipv6_list[0] }}

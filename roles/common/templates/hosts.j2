@@ -13,8 +13,8 @@
 {% if ansible_facts[interface_lo].ipv4 | length %}
   {{- ansible_facts[interface_lo].ipv4.address }} localhost
 {% endif %}
-{% for ipv4_host in common__ip_addresses | ansible.netcommon.ipv4('host/prefix') %}
-  {{- ipv4_host | ansible.netcommon.ipaddr('address') }} {{ hostnames -}}
+{% for ipv4_host in common__ip_addresses | ansible.utils.ipv4('host/prefix') %}
+  {{- ipv4_host | ansible.utils.ipaddr('address') }} {{ hostnames -}}
   {%- if ansible_facts[interface_lo].ipv4 | length == 0 %} localhost{% endif %}
 {% endfor %}
 
@@ -23,8 +23,8 @@
 {% if ansible_facts[interface_lo].ipv6 | length %}
   {{- ansible_facts[interface_lo].ipv6 | map(attribute='address') | first }} ip6-localhost ip6-loopback
 {% endif %}
-{% for ipv6_host in common__ip_addresses | ansible.netcommon.ipv6('host/prefix') %}
-  {{- ipv6_host | ansible.netcommon.ipaddr('address') }} {{ hostnames -}}
+{% for ipv6_host in common__ip_addresses | ansible.utils.ipv6('host/prefix') %}
+  {{- ipv6_host | ansible.utils.ipaddr('address') }} {{ hostnames -}}
   {%- if ansible_facts[interface_lo].ipv4 | length == 0 %} ip6-localhost ip6-loopback{% endif %}
 {% endfor %}
 
