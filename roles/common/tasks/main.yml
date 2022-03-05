@@ -6,8 +6,8 @@
     state: present
   become: yes
   loop: "{{ common__unix_groups }}"
-- name: Create base users
-  user:
+- name: "Create base users"
+  ansible.builtin.user:
     group: "{{ item.name }}"
     home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
