@@ -38,6 +38,7 @@
       basedir                         = /usr/local
       # Set the data directory to be our specifically configured ZFS directory.
       datadir                         = /var/db/mysql/data
+      log_error                       = /var/db/mysql/data/mysql.err
       tmpdir                          = /var/db/mysql_tmpdir
       slave-load-tmpdir               = /var/db/mysql_tmpdir
       secure-file-priv                = /var/db/mysql_secure
