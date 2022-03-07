@@ -25,11 +25,11 @@
 # Dependencies
 - name: "Install latest version of Python"
   ansible.builtin.package:
-    name: "python37"
+    name: "python38"
     state: "present"
-- name: "Symlink python37 to python3"
+- name: "Symlink python38 to python3"
   ansible.builtin.file:
-    src: "/usr/local/bin/python3.7"
+    src: "/usr/local/bin/python3.8"
     dest: "/usr/local/bin/python3"
     owner: "root"
     group: "wheel"
@@ -41,16 +41,20 @@
     state: "present"
 - name: "Install latest version of pip"
   ansible.builtin.package:
-    name: "py37-pip"
+    name: "py38-pip"
     state: "present"
 - name: "Symlink pip to pip3"
   ansible.builtin.file:
-    src: "/usr/local/bin/pip-3.7"
+    src: "/usr/local/bin/pip-3.8"
     dest: "/usr/local/bin/pip3"
     owner: "root"
     group: "wheel"
     mode: "o=rwx,g=rx,o=rx"
     state: "link"
+- name: "Install latest version of setuptools"
+  ansible.builtin.package:
+    name: "py38-setuptools"
+    state: "present"
 
 # Networking
 - name: "Set hostname"

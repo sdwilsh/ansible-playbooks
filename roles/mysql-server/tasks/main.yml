@@ -7,7 +7,7 @@
   notify: "Restart mysql"
 - name: "Install latest version of PyMySQL"
   ansible.builtin.package:
-    name: "py37-pymysql"
+    name: "py38-pymysql"
     state: "present"
 - name: "Enable service at start"
   ansible.builtin.copy:

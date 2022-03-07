@@ -1,5 +1,4 @@
 ---
-ansible_python_interpreter: "/usr/local/bin/python3.7"
 ansible_remote_tmp: "/tmp/ansible"
 
 common__etc_dir: "/usr/local/etc"

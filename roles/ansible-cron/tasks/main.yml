@@ -25,6 +25,7 @@
   loop:
     - "ara"
     - "jmespath" # For community.general.json_query
+    - "netaddr"
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
