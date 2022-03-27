@@ -5,3 +5,9 @@
 %{{ item.name }} ALL=(ALL:ALL) NOPASSWD:ALL
 {% endif %}
 {% endfor %}
+
+{% for item in common__unix_users %}
+{% if "sudo" in item and item.sudo %}
+{{ item.name }} ALL=(ALL:ALL) ALL
+{% endif %}
+{% endfor %}
