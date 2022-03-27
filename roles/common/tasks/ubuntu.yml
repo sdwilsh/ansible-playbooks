@@ -70,7 +70,7 @@
     mode: "u=rw,g=r,o=r"
     owner: "root"
     src: "network-interfaces.j2"
-    validate: "ifup --no-act %s"
+    validate: "ifup --no-act -i %s -a"
   notify: "restart networking interfaces"
   tags:
     - "networking"
