@@ -8,9 +8,10 @@
   loop: "{{ common__unix_groups }}"
 - name: "Create base users"
   ansible.builtin.user:
-    group: "{{ item.name }}"
+    group: "{{ item.group | default(item.name) }}"
     home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
+    password: "{{ item.password | default('') }}"
     shell: "{% if ansible_distribution == 'FreeBSD' %}/usr/local{% endif %}/bin/bash"
     state: present
     uid: "{{ item.uid }}"
