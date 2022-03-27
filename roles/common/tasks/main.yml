@@ -11,22 +11,11 @@
     group: "{{ item.name }}"
     home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
-    shell: "/bin/bash"
+    shell: "{% if ansible_distribution == 'FreeBSD' %}/usr/local{% endif %}/bin/bash"
     state: present
     uid: "{{ item.uid }}"
   become: yes
   loop: "{{ common__unix_users }}"
-  when: ansible_distribution != "FreeBSD"
-- name: Create base users (FreeBSD)
-  user:
-    group: "{{ item.name }}"
-    home: "/home/{{ item.name }}"
-    name: "{{ item.name }}"
-    shell: "/usr/local/bin/bash"
-    state: present
-    uid: "{{ item.uid }}"
-  loop: "{{ common__unix_users }}"
-  when: ansible_distribution == "FreeBSD"
 - name: Deploy ansible user's public key
   authorized_key:
     user: ansible
