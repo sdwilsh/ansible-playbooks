@@ -11,6 +11,12 @@
       - "python3-pip"
     state: "latest"
   when: ansible_distribution == "Ubuntu"
+- name: "Install Ansible PPA Repository"
+  ansible.builtin.apt_repository:
+    repo: "ppa:ansible/ansible"
+    state: "present"
+  become: yes
+  when: ansible_distribution == "Ubuntu"
 - name: "Ensure ansible is installed"
   ansible.builtin.package:
     name: "{% if ansible_distribution == 'FreeBSD' %}py38-ansible{% else %}ansible{% endif %}"
