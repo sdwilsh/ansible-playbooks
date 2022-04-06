@@ -30,7 +30,7 @@
     mode: 0440
   become: yes
 
-- include: facts.yml
+- import_tasks: "facts.yml"
 
 # Networking
 - name: "Set /etc/hosts"
@@ -39,13 +39,13 @@
     dest: "/etc/hosts"
 
 # Platform-specific stuff
-- include: freebsd.yml
+- import_tasks: "freebsd.yml"
   when: ansible_distribution == "FreeBSD"
-- include: ubuntu.yml
+- import_tasks: "ubuntu.yml"
   when: ansible_distribution == "Ubuntu"
 
 # Zabbix Agent
-- include: "zabbix-agent/main.yml"
+- import_tasks: "zabbix-agent/main.yml"
 
 # Cleanup From Provisioning
 - name: Remove provision user

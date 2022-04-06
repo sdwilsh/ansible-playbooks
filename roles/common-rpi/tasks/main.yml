@@ -1,5 +1,5 @@
 ---
 # tasks file for common-rpi
-- include: "config.yml"
-- include: "cm4io-fan.yml"
+- import_tasks: "config.yml"
+- import_tasks: "cm4io-fan.yml"
   when: common_rpi__cm4io_fan | length

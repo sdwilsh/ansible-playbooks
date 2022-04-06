@@ -1,6 +1,6 @@
 ---
 # Tasks for zabbix-agent installation and configuration.
-- include: "freebsd.yml" # zabbix-agent
+- import_tasks: "freebsd.yml" # zabbix-agent
   when: "ansible_distribution == 'FreeBSD'"
 
 - name: "Install Zabbix Repository"
@@ -24,7 +24,7 @@
     - "zabbix-agent"
   when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'aarch64'"
 
-- include: "ubuntu2.yml" # zabbix-agent2
+- import_tasks: "ubuntu2.yml" # zabbix-agent2
   when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'x86_64' or ansible_architecture == 'aarch64')"
-- include: "ubuntu.yml" # zabbix-agent
+- import_tasks: "ubuntu.yml" # zabbix-agent
   when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"

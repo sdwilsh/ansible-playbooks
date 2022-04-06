@@ -27,7 +27,7 @@
     - "zabbix-agent"
 
 # Configuration
-- include: "configuration2.yml"
+- import_tasks: "configuration2.yml"
 
 - name: "Ensure zabbix-agent2 is started"
   ansible.builtin.systemd:

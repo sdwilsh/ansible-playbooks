@@ -29,7 +29,7 @@
     - "zabbix-agent"
 
 # Configuration
-- include: "configuration.yml"
+- import_tasks: "configuration.yml"
 
 - name: "Ensure zabbix-agent is started"
   ansible.builtin.service:
