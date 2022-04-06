@@ -1,3 +1,6 @@
+[dev]
+sdwilsh-dev.hogs.tswn.us ansible_host=10.10.0.20
+
 [dns]
 shadowofsunderedstar.hogs.tswn.us ansible_host=10.10.0.3
 

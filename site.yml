@@ -9,7 +9,6 @@
     - role: "devsec.hardening.ssh_hardening"
       vars:
         ssh_kerberos_supprt: no
-        ssh_listen_to: "{{ common__ip_addresses | ansible.netcommon.ipaddr('address') }}"
       when:
         - ansible_version.full is version("2.9.10", ">=")
   tasks:

@@ -61,3 +61,5 @@ common__ntp_pool: "pool.ntp.hogs.tswn.us"
 docker__users:
   - "ansible"
   - "zabbix"
+
+ssh_listen_to: "{{ common__ip_addresses | ansible.netcommon.ipaddr('address') }}"

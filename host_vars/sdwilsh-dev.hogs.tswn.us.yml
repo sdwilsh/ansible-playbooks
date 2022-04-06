@@ -1,0 +1,20 @@
+---
+common__additional_ethernet_interfaces:
+  - name: "eth1"
+    inet:
+      mode: "static"
+      lines:
+        - "address   10.117.0.25"
+        - "network   10.117.0.0"
+        - "netmask   255.255.254.0"
+        - "broadcast 10.117.1.255"
+common__gateway_v4_address: "10.10.0.1"
+common__ip_addresses:
+  - "10.10.0.20/24"
+common__nameservers:
+  addresses:
+    - "10.10.0.1"
+
+ssh_listen_to:
+  - "10.10.0.20"
+  - "10.117.0.25"
