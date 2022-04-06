@@ -15,6 +15,7 @@ common__nameservers:
   addresses:
     - "10.10.0.1"
 
+ssh_allow_tcp_forwarding: "yes"
 ssh_listen_to:
   - "10.10.0.20"
   - "10.117.0.25"
