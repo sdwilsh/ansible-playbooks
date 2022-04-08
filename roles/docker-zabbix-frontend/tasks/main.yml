@@ -21,7 +21,7 @@
             timeout: "5s"
             retries: 3
             start_period: "30s"
-          image: "zabbix/zabbix-web-apache-mysql:alpine-5.4-latest"
+          image: "zabbix/zabbix-web-apache-mysql:alpine-6.0-latest"
           mac_address: "02:42:0a:75:00:22"
           networks:
             home:

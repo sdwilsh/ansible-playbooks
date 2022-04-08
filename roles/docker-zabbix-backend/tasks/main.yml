@@ -42,7 +42,7 @@
             timeout: "5s"
             retries: 3
             start_period: "30s"
-          image: "zabbix/zabbix-server-mysql:alpine-5.4-latest"
+          image: "zabbix/zabbix-server-mysql:alpine-6.0-latest"
           mac_address: "02:42:0a:75:00:20"
           networks:
             man:
@@ -65,7 +65,7 @@
             timeout: "5s"
             retries: 3
             start_period: "10s"
-          image: "zabbix/zabbix-snmptraps:alpine-5.4-latest"
+          image: "zabbix/zabbix-snmptraps:alpine-6.0-latest"
           mac_address: "02:42:0a:75:00:21"
           networks:
             man:
