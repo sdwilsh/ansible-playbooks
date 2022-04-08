@@ -2,7 +2,7 @@
 # Installation
 - name: "Install zabbix-agent"
   ansible.builtin.package:
-    name: "zabbix54-agent"
+    name: "zabbix6-agent"
     state: "latest"
   tags:
     - "zabbix-agent"
