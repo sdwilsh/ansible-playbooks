@@ -1,17 +1,39 @@
 ---
 # tasks file for opensprinkler
+# Prerequisites
+- name: "Create spi group"
+  ansible.builtin.group:
+    name: "spi"
+    state: "present"
+    system: yes
+- name: "Setup udve rules for spi"
+  ansible.builtin.copy:
+    content: |
+      KERNEL=="spidev0.0", OWNER="root", GROUP="spi"
+      KERNEL=="spidev0.1", OWNER="root", GROUP="spi"
+    dest: "/etc/udev/rules.d/90-gpio-spi.rules"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "root"
+  notify: "reboot"
+
+# Setup
 - name: Create opensprinkler group
   ansible.builtin.group:
     name: opensprinkler
     state: present
-- name: Create opensprinkler user
+- name: "Create opensprinkler user"
   ansible.builtin.user:
-    group: opensprinkler
+    group: "opensprinkler"
     groups:
-      - srcs
-    name: opensprinkler
-    state: present
+      - "dialout"
+      - "i2c"
+      - "spi"
+      - "srcs"
+    name: "opensprinkler"
+    state: "present"
     system: yes
+  notify: "restart opensprinkler"
   register: opensprinkler_user
 - name: Ensure dependencies are installed
   ansible.builtin.apt:

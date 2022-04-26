@@ -48,5 +48,6 @@ galaxy_info:
     #       Maximum 20 tags per role.
 
 dependencies:
-  - github-client
+  - "common"
+  - "github-client"
   
