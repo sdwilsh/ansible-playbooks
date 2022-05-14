@@ -8,5 +8,6 @@ collections:
   - name: community.docker
   - name: community.general
   - name: community.mysql
+  - name: "community.zabbix"
   - name: "devsec.hardening"
   - name: vyos.vyos

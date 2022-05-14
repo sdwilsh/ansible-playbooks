@@ -2,29 +2,3 @@
 # Tasks for zabbix-agent installation and configuration.
 - import_tasks: "freebsd.yml" # zabbix-agent
   when: "ansible_distribution == 'FreeBSD'"
-
-- name: "Install Zabbix Repository"
-  ansible.builtin.apt:
-    deb: "https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-1+ubuntu{{ ansible_lsb.release }}_all.deb"
-  become: yes
-  tags:
-    - "zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture != 'aarch64'"
-- name: "Install Zabbix Repository (aarch64)"
-  ansible.builtin.apt_repository:
-    # Ideally, we would use the ansible_lsb.release here, however Zabbix only supports LTS
-    # releases, so we just use the previous package that is available (20.04).
-    repo: "{{ item }} https://repo.zabbix.com/zabbix/5.0/ubuntu-arm64/ focal main"
-    state: present
-  become: yes
-  loop:
-    - "deb"
-    - "deb-src"
-  tags:
-    - "zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'aarch64'"
-
-- import_tasks: "ubuntu2.yml" # zabbix-agent2
-  when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'x86_64' or ansible_architecture == 'aarch64')"
-- import_tasks: "ubuntu.yml" # zabbix-agent
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"

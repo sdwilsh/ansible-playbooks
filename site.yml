@@ -5,6 +5,16 @@
     - role: "common"
     - role: "common-rpi"
       when: ansible_local.rpi.is
+    - role: "community.zabbix.zabbix_agent"
+      vars:
+        zabbix_agent2: True
+        zabbix_agent2_hostname: "{{ inventory_hostname }}"
+        zabbix_agent2_logfile: "/var/log/zabbix/zabbix-agent.log"
+        zabbix_agent2_logtype: "file"
+        zabbix_agent2_server: "server.zabbix.hogs.tswn.us"
+        zabbix_agent2_serveractive: "server.zabbix.hogs.tswn.us"
+        zabbix_agent_allowroot: 0
+      when: ansible_distribution == 'Ubuntu'
     - role: "ansible-cron"
     - role: "devsec.hardening.ssh_hardening"
       vars:
