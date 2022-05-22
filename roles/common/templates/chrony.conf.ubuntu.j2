@@ -33,6 +33,9 @@ driftfile /var/lib/chrony/chrony.drift
 # Log files location.
 logdir /var/log/chrony
 
+# Handle time being very off at boot
+initstepslew 30 0.ntp.hogs.tswn.us
+
 # Stop bad estimates upsetting machine clock.
 maxupdateskew 100.0
 
