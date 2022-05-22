@@ -7,13 +7,18 @@
       when: ansible_local.rpi.is
     - role: "community.zabbix.zabbix_agent"
       vars:
-        zabbix_agent2: True
+        zabbix_agent2: "{{ ansible_architecture != 'armv7l' }}"
         zabbix_agent2_hostname: "{{ inventory_hostname }}"
         zabbix_agent2_logfile: "/var/log/zabbix/zabbix-agent.log"
         zabbix_agent2_logtype: "file"
         zabbix_agent2_server: "server.zabbix.hogs.tswn.us"
         zabbix_agent2_serveractive: "server.zabbix.hogs.tswn.us"
+        zabbix_agent2_sourceip:  "{{ common__ip_addresses | ansible.utils.ipv4 | first }}"
         zabbix_agent_allowroot: 0
+        zabbix_agent_dont_detect_ip: True
+        zabbix_agent_install_agent_only: True # We only use zabbix-agent(1) when on architectures where we can only use the agent.
+        zabbix_agent_ip: "{{ common__ip_addresses | ansible.utils.ipv4 | first }}"
+        zabbix_install_pip_packages: False
       when: ansible_distribution == 'Ubuntu'
     - role: "ansible-cron"
     - role: "devsec.hardening.ssh_hardening"
