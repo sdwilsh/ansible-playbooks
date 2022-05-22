@@ -62,13 +62,14 @@
     src: "/src/OpenSprinkler-Firmware/OpenSprinkler.launch"
   notify: "restart opensprinkler"
   when: firmware.changed
-- name: Update service user to opensprinkler
-  ansible.builtin.replace:
-    path: "/etc/init.d/opensprinkler"
-    regexp: "USER=.*"
-    replace: "USER=opensprinkler"
-  when: firmware.changed
-  notify: "reload opensprinkler service details"
+# Permissions are somehow wrong, and it doesn't work unless it runs as root.  Don't update the user for now.
+# - name: Update service user to opensprinkler
+#   ansible.builtin.replace:
+#     path: "/etc/init.d/opensprinkler"
+#     regexp: "USER=.*"
+#     replace: "USER=opensprinkler"
+#   when: firmware.changed
+#   notify: "reload opensprinkler service details"
 - name: "Update HOMEDIR to {{ opensprinkler_user.home }}"
   ansible.builtin.replace:
     path: "/etc/init.d/opensprinkler"
