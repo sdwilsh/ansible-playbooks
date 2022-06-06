@@ -98,6 +98,8 @@
         broker: "mqtt.hogs.tswn.us"
         username: "brultech-serial2mqtt"
         password: "{{ docker_brultech_serial2mqtt__mqtt_password }}"
+        home_assistant:
+          skip_packets: 19
 
 - name: "Get brultech user info"
   ansible.builtin.getent:
