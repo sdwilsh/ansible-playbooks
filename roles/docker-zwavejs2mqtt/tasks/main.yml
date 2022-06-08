@@ -15,6 +15,16 @@
     state: "present"
     shell: "/bin/bash"
 
+- name: "Install prereqs to update controller"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "latest"
+  loop:
+    - "minicom"
+    - "lrzsz"
+  become: yes
+  # https://github.com/kpine/zwave-js-server-docker/wiki/700-series-Controller-Firmware-Updates-(Linux)
+
 - name: "Create zwavejs2mqtt directory"
   ansible.builtin.file:
     path: "/opt/zwavejs2mqtt"
