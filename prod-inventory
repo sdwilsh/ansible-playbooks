@@ -8,7 +8,8 @@ shadowofsunderedstar.hogs.tswn.us ansible_host=10.10.0.3
 mysql.hogs.tswn.us ansible_host=10.117.0.5
 
 [openstack]
-infra1.os.hogs.tswn.us ansible_host=10.10.0.60
+#infra1.os.hogs.tswn.us ansible_host=10.10.0.60
+infra3.os.hogs.tswn.us ansible_host=10.10.0.62
 
 [rpi]
 harvest.hogs.tswn.us ansible_host=10.117.0.17

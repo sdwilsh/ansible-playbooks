@@ -181,6 +181,8 @@ bind_zones:
         ipv6: "fd36:3eb3:43b0:a::21"
       - name: "infra1.os.hogs"
         ip: "10.10.0.60"
+      - name: "infra3.os.hogs"
+        ip: "10.10.0.62"
 
       # Services Networks
       - name: "installation02"
