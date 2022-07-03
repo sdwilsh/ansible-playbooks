@@ -32,6 +32,9 @@
     - "ara"
     - "jmespath" # For community.general.json_query
     - "netaddr"
+    # Can be removed once we have 2.13 or later
+    # See https://github.com/ansible/ansible/issues/77624
+    - "resolvelib<0.6.0"
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
