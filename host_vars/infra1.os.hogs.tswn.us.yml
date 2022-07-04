@@ -1,11 +1,14 @@
 ---
 ansible_cron__interval: "daily"
 
-common__ethernet_interface_bonds:
-  bond0:
-    interfaces:
-      - "eth0"
-      - "enx00e04c68012c"
+# TODO: bonding busted on 22.04
+# See https://bugs.launchpad.net/ubuntu/+bug/1980683
+# common__ethernet_interface_bonds:
+#   bond0:
+#     interfaces:
+#       - "eth0"
+#       - "enx00e04c68012c"
+common__ethernet_primary_interface: "eth0"
 
 common__gateway_v4_address: "10.10.0.1"
 common__ip_addresses:
