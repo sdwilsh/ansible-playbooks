@@ -10,6 +10,7 @@ bind_acls:
       - "fd36:3eb3:43b0:a::4"
 bind_allow_query:
   - "any"
+bind_dnssec_enable: no
 bind_listen_ipv4:
   - "any"
 bind_listen_ipv6:
