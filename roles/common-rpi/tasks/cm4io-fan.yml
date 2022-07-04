@@ -7,10 +7,10 @@
   become: yes
 - name: "Fetch cm4io-fan kernel module"
   ansible.builtin.git:
-    repo: "https://github.com/sdwilsh/cm4io-fan.git"
+    repo: "https://github.com/neg2led/cm4io-fan.git"
     dest: "/usr/src/cm4io-fan-0.1.1/"
-    refspec: "refs/heads/ubuntu-21.10"
-    version: "origin/ubuntu-21.10"
+    refspec: "refs/tags/0.2.0"
+    version: "origin/master"
   become: yes
   notify: "build cm4io-fan"
 - name: "Load module at boot"
