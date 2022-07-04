@@ -1,0 +1,22 @@
+---
+ansible_cron__interval: "daily"
+
+common__ethernet_interface_bonds:
+  bond0:
+    interfaces:
+      - "eth0"
+      - "enx00e04c6801f8"
+
+common__gateway_v4_address: "10.10.0.1"
+common__ip_addresses:
+  - "10.10.0.65/24"
+common__nameservers:
+  addresses:
+    - "10.10.0.1"
+
+common_rpi__cm4io_fan:
+  minrpm: 1200
+  maxrpm: 5000
+common_rpi__cpu_i2c: yes
+common_rpi__i2c_rtc: "pcf85063a,i2c_csi_dsi"
+common_rpi__overclock: yes

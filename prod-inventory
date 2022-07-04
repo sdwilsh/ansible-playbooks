@@ -10,6 +10,7 @@ mysql.hogs.tswn.us ansible_host=10.117.0.5
 [openstack]
 infra1.os.hogs.tswn.us ansible_host=10.10.0.60
 infra3.os.hogs.tswn.us ansible_host=10.10.0.62
+compute01.os.hogs.tswn.us ansible_host=10.10.0.65
 
 [rpi]
 harvest.hogs.tswn.us ansible_host=10.117.0.17
