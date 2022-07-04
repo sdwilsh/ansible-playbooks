@@ -1,5 +1,24 @@
 ---
 # tasks file for common-openstack
+- name: "Create unix groups"
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+    state: "present"
+  become: yes
+  loop: "{{ common_openstack__unix_groups }}"
+- name: "Create base users"
+  ansible.builtin.user:
+    group: "{{ item.group | default(item.name) }}"
+    home: "/home/{{ item.name }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password | default('') }}"
+    shell: "/bin/bash"
+    state: "present"
+    uid: "{{ item.uid }}"
+  become: yes
+  loop: "{{ common_openstack__unix_users }}"
+
 - name: "Deploy backup user's public key"
   ansible.builtin.authorized_key:
     user: "backup"
