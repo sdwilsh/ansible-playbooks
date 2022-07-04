@@ -7,7 +7,7 @@
 - name: "Determine config file path"
   ansible.builtin.set_fact:
     config_path: "/boot/firmware/config.txt"
-  when: ansible_lsb.release == "21.10"
+  when: ansible_lsb.release != "20.04"
 
 - name: "Setup {{ config_path }}"
   ansible.builtin.template:
