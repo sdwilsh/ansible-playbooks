@@ -1,4 +1,11 @@
 ---
+ansible_cron__interval: "daily"
+
+common__gateway_v4_address: "10.10.0.1"
+common__nameservers:
+  addresses:
+    - "10.10.0.1"
+
 common_openstack__backup_key_type: "ssh-rsa"
 common_openstack__backup_key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDGmUq9gsKZev7DGqwGd4JvwjpQGLOkzQHiNnmr6veI6Bn3pvNJyX+6CDOk12/u1Jdo4micNShiPvnNziW5x6ws1/na/P5IIWm8z2toiJkZY7SvoFflBKtBe72heII5qCMyH0+bA5Rzx0EEmI8d8CWQ25J33xpoKgMZXypaDeaCpr8iOEp0XyiYTJGk1rkY1eqVNQKwErB5YFgZyuZVlc3WZnSDEZVNMG+hCid2RQa85aG8KONFYd0UfMn/BV7kRjxa/v82qef1/K7tbz/PpV2Nrd/VKiiqLjY52MKWncdwVYdExRQ6KBk0dv8eAsy6KpBLNGy8giV9kgRDQPqhtReV"
 common_openstack__unix_groups:
@@ -7,3 +14,10 @@ common_openstack__unix_groups:
 common_openstack__unix_users:
   - name: "backup"
     uid: 2100
+
+common_rpi__cm4io_fan:
+  minrpm: 1200
+  maxrpm: 5000
+common_rpi__cpu_i2c: yes
+common_rpi__i2c_rtc: "pcf85063a,i2c_csi_dsi"
+common_rpi__overclock: yes

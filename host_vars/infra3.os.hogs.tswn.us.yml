@@ -1,10 +1,4 @@
 ---
-ansible_cron__interval: "daily"
-
 common__ethernet_primary_interface: "enp0s4"
-common__gateway_v4_address: "10.10.0.1"
 common__ip_addresses:
   - "10.10.0.62/24"
-common__nameservers:
-  addresses:
-    - "10.10.0.1"
