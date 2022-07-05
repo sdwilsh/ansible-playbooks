@@ -2,11 +2,7 @@
 #
 # {{ ansible_managed }}
 
-{% if 'hogs.tswn.us' in inventory_hostname -%}
-{% set hostnames %}{{ inventory_hostname }} {{ inventory_hostname[0:-13] }}{% endset -%}
-{% else -%}
-{% set hostnames %}{{ inventory_hostname }} {{ ansible_hostname }}{% endset -%}
-{% endif -%}
+{% set hostnames %}{{ inventory_hostname }} {{ inventory_hostname_short }}{% endset -%}
 {% set interface_lo = ansible_interfaces | select('match', '^lo') | first -%}
 
 # IPv4 Entries
