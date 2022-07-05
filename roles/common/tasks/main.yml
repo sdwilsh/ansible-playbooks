@@ -1,4 +1,12 @@
 ---
+# Check we have sane variables set before doing any more work
+- name: "Sanity Check"
+  ansible.builtin.assert:
+    that:
+      - common__ip_addresses
+  tags:
+    - "always"
+
 - name: Create base unix groups
   group:
     name: "{{ item.name }}"
