@@ -186,6 +186,10 @@ bind_zones:
         ip: "10.10.0.62"
       - name: "compute01.os.hogs"
         ip: "10.10.0.65"
+      - name: "compute02.os.hogs"
+        ip: "10.10.0.65"
+      - name: "storage1.os.hogs"
+        ip: "10.10.0.80"
 
       # Services Networks
       - name: "installation02"
