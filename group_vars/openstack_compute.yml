@@ -1,0 +1,11 @@
+---
+
+# mrlesmithjr.zfs
+zfs_create_pools: yes
+zfs_pools:
+  - name: "openstack-compute"
+    action: "create"
+    compression: "zstd"
+    devices: "{{ openstack_compute__zpool_devices }}"
+    state: "present"
+    type: "basic"
