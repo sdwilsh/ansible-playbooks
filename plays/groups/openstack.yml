@@ -2,3 +2,5 @@
 - hosts: "openstack"
   roles:
     - role: "common-openstack"
+    - role: "mrlesmithjr.zfs"
+      become: yes

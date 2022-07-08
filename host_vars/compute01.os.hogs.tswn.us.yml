@@ -10,3 +10,6 @@ common__ethernet_primary_interface: "eth0"
 
 common__ip_addresses:
   - "10.10.0.65/24"
+
+openstack_compute__zpool_devices:
+  - "scsi-SSamsung_SSD_860_EVO_250G_F43497654321"

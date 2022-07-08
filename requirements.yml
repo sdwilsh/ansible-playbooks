@@ -10,4 +10,5 @@ collections:
   - name: community.mysql
   - name: "community.zabbix"
   - name: "devsec.hardening"
+  - name: "mrlesmithjr.zfs"
   - name: vyos.vyos
