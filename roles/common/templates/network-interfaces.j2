@@ -1,7 +1,5 @@
 # {{ ansible_managed }}
 
-source /etc/network/interfaces.d/*
-
 #
 # Loopback Interface
 #
@@ -83,3 +81,5 @@ iface {{ interface_config.name }} inet6 {{ interface_config.mode }}
 {% endfor %}
 {% endif %}
 {% endfor %}
+
+source /etc/network/interfaces.d/*
