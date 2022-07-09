@@ -40,6 +40,15 @@
     - "net-tools"
   tags:
     - "networking"
+- name: "Install Pi Dependencies for /etc/network/interfaces"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "latest"
+  loop:
+    - "linux-modules-extra-raspi"
+  tags:
+    - "networking"
+  when: ansible_local.rpi.is
 - name: "Load networking modules at boot"
   ansible.builtin.copy:
     content: |
