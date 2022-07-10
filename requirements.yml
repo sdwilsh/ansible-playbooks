@@ -1,7 +1,8 @@
 ---
 roles:
-  - name: nickjj.docker
-  - name: bertvv.bind
+  - name: "bertvv.bind"
+  - name: "mrlesmithjr.zfs"
+  - name: "nickjj.docker"
 collections:
   - name: ansible.posix
   - name: "ansible.utils"
@@ -10,5 +11,4 @@ collections:
   - name: community.mysql
   - name: "community.zabbix"
   - name: "devsec.hardening"
-  - name: "mrlesmithjr.zfs"
   - name: vyos.vyos
