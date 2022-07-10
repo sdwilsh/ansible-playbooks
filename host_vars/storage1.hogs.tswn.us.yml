@@ -10,3 +10,7 @@ common__ethernet_primary_interface: "eth0"
 
 common__ip_addresses:
   - "10.10.0.80/24"
+
+openstack_storage__zpool_devices:
+  - "scsi-SSamsung_SSD_870_EVO_1TB_F2EF87654321"
+  - "scsi-SSamsung_SSD_870_EVO_1TB_F70397654321"

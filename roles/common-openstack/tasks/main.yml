@@ -68,4 +68,33 @@
   become: yes
   tags:
     - "zfs"
- 
+
+# Encrypted Volume Setup
+- name: "Create ZFS key directory"
+  ansible.builtin.file:
+    path: "/usr/local/etc/zfs/keys/{{ pool.name }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "u=rx,g=rx"
+  become: yes
+  loop: "{{ zfs_pools }}"
+  loop_control:
+    label: "{{ pool.name }}"
+    loop_var: "pool"
+  tags:
+    - "zfs"
+- name: "Create volume key file"
+  ansible.builtin.copy:
+    content: "{{ common_openstack__zfs_volume_keys[volume.pool][volume.name].key }}"
+    dest: "/usr/local/etc/zfs/keys/{{ volume.pool }}/{{ volume.name }}"
+    owner: "root"
+    group: "root"
+    mode: "u=r,g=r"
+  become: yes
+  loop: "{{ zfs_volumes }}"
+  loop_control:
+    label: "{{ volume.name }}"
+    loop_var: "volume"
+  tags:
+    - "zfs"

@@ -1,0 +1,34 @@
+---
+common_openstack__zfs_volume_keys:
+  openstack-storage:
+    cinder:
+      key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          65633164333964343865343431626333663439646639663530616433633037363161643136386535
+          3333356365636434303962666230646133396339363433660a303233353263663131363861613463
+          65353433646333396438386461356538306234626361633666356336353838353635306539663564
+          6665363432366230340a633663306436356133616666323738346638366139303431326664386634
+          32643737353764336433346232333932336135393530666365636137303333343231373561306331
+          38636638303136353064383664343433396162666230636461636365303232303763393534353831
+          65623837616364623835376463366266306631393531343663366635616566393237643834333461
+          34366130646136343561
+
+# mrlesmithjr.zfs
+zfs_create_pools: yes
+zfs_create_volumes: yes
+zfs_pools:
+  - name: "openstack-storage"
+    action: "create"
+    ashift: 13
+    compression: "zstd"
+    devices: "{{ openstack_storage__zpool_devices }}"
+    state: "present"
+    type: "mirror"
+zfs_volumes:
+  - name: "cinder"
+    pool: "openstack-storage"
+    volsize: "400GiB"
+    state: "present"
+    encryption: "aes-128-ccm"
+    keylocation: "file:///usr/local/etc/zfs/keys/openstack-storage/cinder"
+    keyformat: "hex"
