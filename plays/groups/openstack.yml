@@ -4,3 +4,5 @@
     - role: "common-openstack"
     - role: "mrlesmithjr.zfs"
       become: yes
+      tags:
+        - "zfs"
