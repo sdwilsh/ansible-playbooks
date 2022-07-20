@@ -19,8 +19,8 @@ compute02.hogs.tswn.us ansible_host=10.10.0.66
 storage1.hogs.tswn.us ansible_host=10.10.0.80
 
 [openstack:children]
-openstack_infra
 openstack_compute
+openstack_infra
 openstack_storage
 
 [rpi]
