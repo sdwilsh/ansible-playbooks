@@ -6,3 +6,5 @@
       become: yes
       tags:
         - "zfs"
+    - role: "mrlesmithjr.manage-lvm"
+      become: yes

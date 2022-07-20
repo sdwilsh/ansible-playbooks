@@ -13,6 +13,16 @@ common_openstack__zfs_volume_keys:
           65623837616364623835376463366266306631393531343663366635616566393237643834333461
           34366130646136343561
 
+# mrlesmithjr.manage-lvm
+lvm_groups:
+  - vgname: "cinder-volume"
+    disks:
+      - "/dev/zvol/openstack-storage/cinder"
+    create: yes
+    lvnames:
+      - None
+manage_lvm: yes
+
 # mrlesmithjr.zfs
 zfs_create_pools: yes
 zfs_create_volumes: yes
