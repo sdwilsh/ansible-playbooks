@@ -1,4 +1,8 @@
 ---
+common__ethernet_interface_bridges:
+  br-mgmt:
+    ports:
+      - "bond0.10"
 common_openstack__zfs_volume_keys:
   openstack-storage:
     cinder:
