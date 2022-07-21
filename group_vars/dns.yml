@@ -24,6 +24,11 @@ bind_zones:
       - "shadowofsunderedstar.hogs.tswn.us."
       - "bornstellarmakeseternallasting.hogs.tswn.us."
     hosts:
+      - name: "pool.ntp.hogs"
+        ip:
+          - "10.117.0.50"
+          - "10.10.0.60"
+
       # PUBLIC
       - name: "tartarus01"
         ip: "149.248.37.12"
@@ -129,8 +134,6 @@ bind_zones:
         ipv6: "fd36:3eb3:43b0:75::31"
       - name: "0.ntp.hogs"
         ip: "10.117.0.50"
-        aliases:
-          - "pool.ntp.hogs"
 
       # MAN Network
       - name: "al-cygni.hogs"
@@ -194,6 +197,8 @@ bind_zones:
         ip: "10.10.0.52"
       - name: "infra1.hogs"
         ip: "10.10.0.60"
+        aliases:
+          "1.ntp.hogs"
       - name: "infra3.hogs"
         ip: "10.10.0.62"
       - name: "compute01.hogs"

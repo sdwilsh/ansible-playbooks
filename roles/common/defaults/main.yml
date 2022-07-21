@@ -32,6 +32,8 @@ common__ethernet_primary_interface: ""
 common__etc_dir: "/etc"
 
 common__ntp_pool: "pool.ntp.hogs.tswn.us"
+# If the machine should be a ntp server or not.
+common__be_ntp_server: no
 
 # Groups to create.  For example:
 # common__unix_groups:

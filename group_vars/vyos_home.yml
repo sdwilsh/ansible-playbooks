@@ -146,8 +146,8 @@ vyos_firewall_global__group:
       description: "NTP services ({{ ansible_managed }})"
       members:
         - address: "10.117.0.50"
-        - address: "10.117.0.51"
-        - address: "10.117.0.52"
+        - address: "10.10.0.60"
+        - address: "10.10.0.61"
     - name: "NOWAN-TALKERS-from-HOME-v4"
       description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
       members:

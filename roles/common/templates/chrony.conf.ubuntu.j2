@@ -27,9 +27,6 @@ pool 2.ubuntu.pool.ntp.org iburst maxsources 2
 # information.
 driftfile /var/lib/chrony/chrony.drift
 
-# Uncomment the following line to turn logging on.
-#log tracking measurements statistics
-
 # Log files location.
 logdir /var/log/chrony
 
@@ -46,3 +43,9 @@ rtcsync
 # Step the system clock instead of slewing it if the adjustment is larger than
 # one second, but only in the first three clock updates.
 makestep 1 3
+
+{% if common__be_ntp_server %}
+allow 10.0.0.0/8
+
+log tracking measurements statistics
+{% endif %}

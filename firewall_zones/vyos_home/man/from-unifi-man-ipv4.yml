@@ -4,3 +4,11 @@
   protocol: "icmp"
   icmp:
     type_name: any
+- description: "Allow NTP"
+  action: "accept"
+  state:
+    new: true
+  destination:
+    group:
+      address_group: "NTP-SERVICES-v4"
+      port_group: "NTP"

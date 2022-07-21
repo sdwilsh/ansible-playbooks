@@ -1,4 +1,6 @@
 ---
+common__be_ntp_server: yes
+
 # TODO: bonding busted on 22.04
 # See https://bugs.launchpad.net/ubuntu/+bug/1980683
 # common__ethernet_interface_bonds:
