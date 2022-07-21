@@ -1,4 +1,5 @@
 # {{ ansible_managed }}
+{% set primary_interface = common__ethernet_primary_interface | default(ansible_default_ipv4.interface, true) %}
 
 #
 # Loopback Interface
@@ -27,7 +28,8 @@ iface {{ bond }} inet manual
     bond-updelay          100
     bond-xmit-hash-policy layer2+3
     up ifconfig {{ bond }} 0.0.0.0 up
-{% endfor %}
+
+{% endfor -%}
 
 {% for vlan, vlan_details in common__ethernet_interface_vlans.items() -%}
 
@@ -38,9 +40,28 @@ auto {{ vlan }}
 iface {{ vlan }} inet manual
     vlan-raw-device {{ vlan.split('.')[0] }}
 
-{% endfor %}
+{% endfor -%}
 
-{%- set primary_interface = common__ethernet_primary_interface | default(ansible_default_ipv4.interface, true) %}
+{% for bridge, bridge_details in common__ethernet_interface_bridges.items() if bridge != primary_interface -%}
+
+#
+# Bridge Interface {{ bridge }}
+#
+auto {{ bridge }}
+iface {{ bridge }} inet manual
+{% if "address" in bridge_details %}
+    address         {{ bridge_details.address | ansible.utils.ipaddr('address') }}
+    network         {{ bridge_details.address | ansible.utils.ipaddr('network') }}
+    netmask         {{ bridge_details.address | ansible.utils.ipaddr('netmask') }}
+    broadcast       {{ bridge_details.address | ansible.utils.ipaddr('broadcast') }}
+{% endif %}
+    bridge_stp      off
+    bridge_waitport 0
+    bridge_fd       0
+    bridge_ports    {{ bridge_details.ports | join(' ') }}
+
+{% endfor -%}
+
 #
 # Primary Interface {{ primary_interface }}
 #
