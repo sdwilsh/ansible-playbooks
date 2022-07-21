@@ -1,4 +1,17 @@
 ---
+common__ethernet_interface_bridges:
+  br-mgmt:
+    ports:
+      - "bond0.10"
+  br-storage:
+    ports:
+      - "bond0.11"
+    # 10.11.0.x/24, where x is whatever the management network ip is at the same spot.
+    address: "{{ common__ip_addresses | ansible.utils.reduce_on_network('10.10.0.0/24') | first | ansible.utils.ipmath(65536) }}/24"
+
+common__ethernet_interface_vlans:
+  bond0.10:
+  bond0.11:
 
 # mrlesmithjr.zfs
 zfs_create_pools: yes

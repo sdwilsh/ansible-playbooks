@@ -4,8 +4,6 @@ common__ethernet_interface_bonds:
     interfaces:
       - "eth0"
       - "enx00e04c68002f"
-common__ethernet_interface_vlans:
-  bond0.10:
 common__ethernet_primary_interface: "br-mgmt"
 
 common__ip_addresses:

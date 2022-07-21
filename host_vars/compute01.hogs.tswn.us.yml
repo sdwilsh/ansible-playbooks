@@ -1,12 +1,10 @@
 ---
-# TODO: bonding busted on 22.04
-# See https://bugs.launchpad.net/ubuntu/+bug/1980683
-# common__ethernet_interface_bonds:
-#   bond0:
-#     interfaces:
-#       - "eth0"
-#       - "enx00e04c6801f8"
-common__ethernet_primary_interface: "eth0"
+common__ethernet_interface_bonds:
+  bond0:
+    interfaces:
+      - "eth0"
+      - "enx00e04c6801f8"
+common__ethernet_primary_interface: "br-mgmt"
 
 common__ip_addresses:
   - "10.10.0.65/24"
