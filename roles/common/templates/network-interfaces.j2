@@ -29,6 +29,17 @@ iface {{ bond }} inet manual
     up ifconfig {{ bond }} 0.0.0.0 up
 {% endfor %}
 
+{% for vlan, vlan_details in common__ethernet_interface_vlans.items() -%}
+
+#
+# VLAN Interface {{ vlan }}
+#
+auto {{ vlan }}
+iface {{ vlan }} inet manual
+    vlan-raw-device {{ vlan.split('.')[0] }}
+
+{% endfor %}
+
 {%- set primary_interface = common__ethernet_primary_interface | default(ansible_default_ipv4.interface, true) %}
 #
 # Primary Interface {{ primary_interface }}
@@ -44,6 +55,11 @@ iface {{ primary_interface }} inet static
     gateway         {{ common__gateway_v4_address }}
 {% if "." in primary_interface %}
     vlan-raw-device {{ primary_interface.split('.')[0] }}
+{% elif "br-" in primary_interface %}
+    bridge_stp      off
+    bridge_waitport 0
+    bridge_fd       0
+    bridge_ports    {{ common__ethernet_interface_bridges[primary_interface].ports | join(' ') }}
 {% endif %}
 
 {% set ipv6_list = common__ip_addresses | ansible.utils.ipv6('host/prefix') %}

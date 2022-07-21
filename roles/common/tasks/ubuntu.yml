@@ -35,6 +35,7 @@
     name: "{{ item }}"
     state: "latest"
   loop:
+    - "bridge-utils"
     - "ifenslave"
     - "ifupdown"
     - "net-tools"

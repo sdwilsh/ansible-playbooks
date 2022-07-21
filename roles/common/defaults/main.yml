@@ -11,6 +11,20 @@ common__additional_ethernet_interfaces: []
 
 common__ethernet_interface_bonds: {}
 
+# Dictionary of bridges.  For example:
+# common__ethernet_interface_bridges:
+#   br-mgmt:
+#     ports:
+#       - "bond0.10"
+
+common__ethernet_interface_bridges: {}
+
+# Dictionary of vlans.  For example:
+# common__ethernet_interface_vlans:
+#   bond0.10:
+
+common__ethernet_interface_vlans: {}
+
 # Interface name of the primary interface of the device.  This falls back to
 # ansible_default_ipv4.interface if falsey.
 common__ethernet_primary_interface: ""
