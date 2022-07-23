@@ -15,10 +15,12 @@ common__ethernet_interface_vlans:
 
 # mrlesmithjr.zfs
 zfs_create_pools: yes
-zfs_pools:
-  - name: "openstack-compute"
-    action: "create"
-    compression: "zstd"
-    devices: "{{ openstack_compute__zpool_devices }}"
+zfs_create_volumes: yes
+zfs_volumes:
+  - name: "lxc"
+    pool: "openstack"
+    volsize: "200GiB"
     state: "present"
-    type: "basic"
+    encryption: "aes-128-ccm"
+    keylocation: "file:///usr/local/etc/zfs/keys/openstack/lxc"
+    keyformat: "hex"

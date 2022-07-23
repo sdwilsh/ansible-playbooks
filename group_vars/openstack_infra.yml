@@ -1,23 +1,9 @@
 ---
-common_openstack__zfs_volume_keys:
-  openstack-infra:
-    lxc:
-      key: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          65353262326230353837326534643930666366326137393836353936363830353166363837376531
-          3239356331396135383739356338613530643638313261370a326535646235636132633262653664
-          63633437313833623166363631633239336565326630653065633536396265316665366439313363
-          6336333434336263650a303165643631613038323062643166323332353565313765383064613866
-          62656430383661373465663566643965393733303438303962316534366234613765326534346239
-          63653634646661393332623930353032383936336432353434653835636436373737646331623561
-          65326664333832656237376236306263346662353465653338383235363562313165336130333465
-          30373032336266633533
-
 # mrlesmithjr.manage-lvm
 lvm_groups:
   - vgname: "lxc"
     disks:
-      - "/dev/zvol/openstack-infra/lxc"
+      - "/dev/zvol/openstack/lxc"
     create: yes
     lvnames:
       - None
@@ -26,19 +12,11 @@ manage_lvm: yes
 # mrlesmithjr.zfs
 zfs_create_pools: yes
 zfs_create_volumes: yes
-zfs_pools:
-  - name: "openstack-infra"
-    action: "create"
-    ashift: 13
-    compression: "zstd"
-    devices: "{{ openstack_infra__zpool_devices }}"
-    state: "present"
-    type: "mirror"
 zfs_volumes:
   - name: "lxc"
-    pool: "openstack-infra"
+    pool: "openstack"
     volsize: "200GiB"
     state: "present"
     encryption: "aes-128-ccm"
-    keylocation: "file:///usr/local/etc/zfs/keys/openstack-infra/lxc"
+    keylocation: "file:///usr/local/etc/zfs/keys/openstack/lxc"
     keyformat: "hex"

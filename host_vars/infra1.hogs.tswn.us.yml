@@ -22,6 +22,14 @@ common__ethernet_primary_interface: "br-mgmt"
 common__ip_addresses:
   - "10.10.0.60/24"
 
-openstack_infra__zpool_devices:
-  - "scsi-SSamsung_SSD_870_EVO_500G_3F5397654321"
-  - "scsi-SSamsung_SSD_870_EVO_500G_AAE297654321"
+# mrlesmithjr.zfs
+zfs_pools:
+  - name: "openstack"
+    action: "create"
+    ashift: 13
+    compression: "zstd"
+    devices:
+      - "scsi-SSamsung_SSD_870_EVO_500G_3F5397654321"
+      - "scsi-SSamsung_SSD_870_EVO_500G_AAE297654321"
+    state: "present"
+    type: "mirror"
