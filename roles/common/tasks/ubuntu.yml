@@ -33,7 +33,7 @@
 - name: "Install Dependencies for /etc/network/interfaces"
   ansible.builtin.apt:
     name: "{{ item }}"
-    state: "latest"
+    state: "present"
   become: yes
   loop:
     - "bridge-utils"
@@ -45,7 +45,7 @@
 - name: "Install Pi Dependencies for /etc/network/interfaces"
   ansible.builtin.apt:
     name: "{{ item }}"
-    state: "latest"
+    state: "present"
   become: yes
   loop:
     - "linux-modules-extra-raspi"
