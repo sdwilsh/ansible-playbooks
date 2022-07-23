@@ -34,6 +34,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: "latest"
+  become: yes
   loop:
     - "bridge-utils"
     - "ifenslave"
@@ -45,6 +46,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: "latest"
+  become: yes
   loop:
     - "linux-modules-extra-raspi"
   tags:
@@ -59,6 +61,7 @@
     mode: "u=r,g=r,o=r"
     owner: "root"
     group: "root"
+  become: yes
   tags:
     - "networking"
 - name: "Disable accepting of router advertisments on additional interfaces"
@@ -68,6 +71,7 @@
     sysctl_set: yes
     value: "0"
     reload: no
+  become: yes
   loop: "{{ common__additional_ethernet_interfaces }}"
   notify: "restart networking interfaces"
   tags:
@@ -81,6 +85,7 @@
     owner: "root"
     src: "network-interfaces.j2"
     validate: "ifup --no-act -i %s -a"
+  become: yes
   notify: "restart networking interfaces"
   tags:
     - "networking"

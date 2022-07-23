@@ -2,11 +2,13 @@
 # handlers file for common
 - name: "reboot the machine"
   ansible.builtin.reboot:
+  become: yes
   listen: "reboot"
 
 - name: "restart networking interfaces"
   ansible.builtin.command:
     cmd: "bash -c 'ifdown --force {{ interfaces | join(' ') }}; sleep 1; ifup {{ interfaces | join(' ') }}'"
+  become: yes
   vars:
     interfaces: "[ '{{ ansible_default_ipv4.interface }}' ] + {{ common__additional_ethernet_interfaces | default([]) | map(attribute='name') }}"
 
@@ -14,11 +16,13 @@
   ansible.builtin.systemd:
     name: "systemd-resolved"
     state: "restarted"
+  become: yes
 
 - name: "restart zabbix-agent"
   ansible.builtin.service:
     name: "zabbix_agentd"
     state: "restarted"
+  become: yes
   listen: "restart zabbix-agent"
   when: "ansible_distribution == 'FreeBSD'"
 
@@ -26,6 +30,7 @@
   ansible.builtin.systemd:
     name: "zabbix-agent"
     state: "restarted"
+  become: yes
   listen: "restart zabbix-agent"
   when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"
 
@@ -33,5 +38,6 @@
   ansible.builtin.systemd:
     name: "zabbix-agent2"
     state: "restarted"
+  become: yes
   listen: "restart zabbix-agent"
   when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'x86_64' or ansible_architecture == 'aarch64')"
