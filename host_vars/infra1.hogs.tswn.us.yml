@@ -14,9 +14,14 @@ common__ethernet_interface_bridges:
     ports:
       - "bond0.11"
     address: "10.11.0.60/24"
+  br-vxlan:
+    ports:
+      - "bond0.12"
+    address: "10.12.0.60/24"
 common__ethernet_interface_vlans:
   bond0.10:
-  enx00e04c68012c.11:
+  bond0.11:
+  bond0.12:
 common__ethernet_primary_interface: "br-mgmt"
 
 common__ip_addresses:
