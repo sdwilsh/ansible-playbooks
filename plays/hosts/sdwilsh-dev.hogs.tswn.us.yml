@@ -1,0 +1,4 @@
+---
+- hosts: "sdwilsh-dev.hogs.tswn.us"
+  roles:
+    - role: "openstack-ansible-deploy"

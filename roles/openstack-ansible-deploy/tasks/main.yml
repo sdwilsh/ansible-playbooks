@@ -1,0 +1,8 @@
+---
+# tasks file for openstack-ansible-deploy
+- name: "Get OpenStack-Ansible"
+  ansible.builtin.git:
+    repo: "https://opendev.org/openstack/openstack-ansible"
+    dest: "/opt/openstack-ansible"
+    version: "25.0.0.0rc2"
+  become: yes
