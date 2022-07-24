@@ -8,16 +8,16 @@ common__ethernet_interface_bridges:
       - "bond0.11"
     # 10.11.0.x/24, where x is whatever the management network ip is at the same spot.
     address: "{{ common__ip_addresses | ansible.utils.reduce_on_network('10.10.0.0/24') | first | ansible.utils.ipmath(65536) }}/24"
-  br-vxlan:
+  br-vlan:
     ports:
-      - "bond0.12"
-    # 10.12.0.x/24, where x is whatever the management network ip is at the same spot.
-    address: "{{ common__ip_addresses | ansible.utils.reduce_on_network('10.10.0.0/24') | first | ansible.utils.ipmath(2*65536) }}/24"
+      - "bond0"
 
 common__ethernet_interface_vlans:
   bond0.10:
   bond0.11:
-  bond0.12:
+  bond0.12: # "br-vxlan"
+    # 10.12.0.x/24, where x is whatever the management network ip is at the same spot.
+    address: "{{ common__ip_addresses | ansible.utils.reduce_on_network('10.10.0.0/24') | first | ansible.utils.ipmath(2*65536) }}/24"
 
 # mrlesmithjr.zfs
 zfs_create_pools: yes

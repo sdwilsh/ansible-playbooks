@@ -38,6 +38,12 @@ iface {{ bond }} inet manual
 #
 auto {{ vlan }}
 iface {{ vlan }} inet manual
+{% if vlan_details != None and "address" in vlan_details %}
+    address         {{ vlan_details.address | ansible.utils.ipaddr('address') }}
+    network         {{ vlan_details.address | ansible.utils.ipaddr('network') }}
+    netmask         {{ vlan_details.address | ansible.utils.ipaddr('netmask') }}
+    broadcast       {{ vlan_details.address | ansible.utils.ipaddr('broadcast') }}
+{% endif %}
     vlan-raw-device {{ vlan.split('.')[0] }}
 
 {% endfor -%}
