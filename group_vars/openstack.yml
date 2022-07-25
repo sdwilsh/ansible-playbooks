@@ -47,6 +47,9 @@ common_rpi__cpu_i2c: yes
 common_rpi__i2c_rtc: "pcf85063a,i2c_csi_dsi"
 common_rpi__overclock: yes
 
+# devsec.hardening.ssh_hardening
+ssh_permit_root_login: "without-password"
+
 # mrlesmithjr.zfs
 zfs_install_update: no # We manage ZFS on our own
 zfs_enable_auto_snapshots: no # Snapshots managed by sanoid

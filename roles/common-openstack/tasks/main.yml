@@ -19,6 +19,13 @@
   become: yes
   loop: "{{ common_openstack__unix_users }}"
 
+- name: "Deploy ansible user's openstack-ansible deploy public key"
+  ansible.posix.authorized_key:
+    user: "root"
+    state: "present"
+    key: "{{ common_openstack__ansible_deploy_key_type }} {{ common_openstack__ansible_deploy_key }}"
+  become: yes
+
 - name: "Deploy backup user's public key"
   ansible.builtin.authorized_key:
     user: "backup"

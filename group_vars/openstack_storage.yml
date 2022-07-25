@@ -12,6 +12,18 @@ common__ethernet_interface_vlans:
   bond0.10:
   bond0.11:
 
+openstack_ansible_deploy__storage_host_container_vars:
+  cinder_backends:
+    cinder_default_availability_zone: "cinderAZ_1"
+    cinder_storage_availability_zone: "cinderAZ_1"
+    limit_container_types: "cinder_volume"
+    lvm:
+      volume_backend_name: "LVM_iSCSI"
+      volume_driver: "cinder.volume.drivers.lvm.LVMVolumeDriver"
+      volume_group: "cinder-volume"
+      # br-storage address
+      iscsi_ip_address: "{{ common__ip_addresses | ansible.utils.reduce_on_network('10.10.0.0/24') | first | ansible.utils.ipmath(65536) }}"
+
 # mrlesmithjr.manage-lvm
 lvm_groups:
   - vgname: "cinder-volume"

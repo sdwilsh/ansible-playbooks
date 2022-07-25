@@ -1,8 +1,85 @@
 ---
 # tasks file for openstack-ansible-deploy
+
+# Setup SSH
+- name: "Create /home/ansible/.ssh/id_ed25519"
+  ansible.builtin.copy:
+    dest: "/home/ansible/.ssh/id_ed25519"
+    group: "ansible"
+    mode: "u=rw"
+    owner: "ansible"
+    src: "files/id_ed25519"
+- name: "Create /home/ansible/.ssh/id_ed25519.pub"
+  ansible.builtin.copy:
+    content: "{{ common_openstack__ansible_deploy_key_type }} {{ common_openstack__ansible_deploy_key }}"
+    dest: "/home/ansible/.ssh/id_ed25519.pub"
+    group: "ansible"
+    mode: "u=rw,g=r,o=r"
+    owner: "ansible"
+
+- name: "Setup /opt/openstack-ansible as a safe directory"
+  community.general.git_config:
+    name: "safe.directory"
+    value: "/opt/openstack-ansible"
+    state: "present"
+  become: yes
 - name: "Get OpenStack-Ansible"
   ansible.builtin.git:
     repo: "https://opendev.org/openstack/openstack-ansible"
     dest: "/opt/openstack-ansible"
     version: "25.0.0.0rc2"
   become: yes
+# TODO: if it doesn't exist, copy this over
+# - name: "Setup /etc/openstack_deploy"
+#   ansible.builtin.copy:
+#     dest: "/etc"
+#     remote_src: yes
+#     src: "/opt/openstack-ansible/etc/openstack_deploy"
+#   become: yes
+- name: "Create /etc/openstack_deploy/openstack_user_config.yml"
+  ansible.builtin.copy:
+    content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
+    dest: "/etc/openstack_deploy/openstack_user_config.yml"
+    group: "root"
+    mode: "u=r,g=r"
+    owner: "ansible"
+  become: yes
+  vars:
+    config: "{{ lookup('template', 'templates/openstack_user_config.j2') | from_yaml }}"
+- name: "Create /etc/openstack_deploy/user_variables.yml"
+  ansible.builtin.copy:
+    content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
+    dest: "/etc/openstack_deploy/user_variables.yml"
+    group: "root"
+    mode: "u=r,g=r"
+    owner: "ansible"
+  become: yes
+  vars:
+    config:
+      haproxy_keepalived_external_vip_cidr: "10.10.0.0/24"
+      haproxy_keepalived_internal_vip_cidr: "10.10.0.0/24"
+      haproxy_keepalived_external_interface: "br-vlan"
+      haproxy_keepalived_internal_interface: "br-mgmt"
+      install_method: "distro"
+      lxc_container_backing_store: "lvm"
+      lxc_container_ssh_key: "{{ common_openstack__ansible_deploy_key_type }} {{ common_openstack__ansible_deploy_key }}"
+- name: "Create /etc/openstack_deploy/user_variables.yml"
+  ansible.builtin.copy:
+    dest: "/etc/openstack_deploy/user_secrets.yml"
+    group: "root"
+    mode: "u=r,g=r"
+    owner: "ansible"
+    src: "files/user_secrets.yml"
+  become: yes
+- name: "Ensure ownership is correct for files"
+  ansible.builtin.file:
+    group: "root"
+    owner: "ansible"
+    recurse: yes
+    path: "{{ item }}"
+    state: "directory"
+  become: yes
+  loop:
+    - "/etc/openstack_deploy"
+    - "/openstack"
+    - "/opt/openstack-ansible"
