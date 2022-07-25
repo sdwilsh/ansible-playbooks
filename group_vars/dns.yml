@@ -201,6 +201,8 @@ bind_zones:
           "1.ntp.hogs"
       - name: "infra3.hogs"
         ip: "10.10.0.62"
+      - name: "openstack.hogs"
+        ip: "10.10.0.64"
       - name: "compute01.hogs"
         ip: "10.10.0.65"
       - name: "compute02.hogs"
