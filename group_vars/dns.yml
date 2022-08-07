@@ -216,6 +216,12 @@ bind_zones:
         aliases:
           - "unifi"
           - "unifi.hogs"
+
+      # NONET Network
+      - name: "front-porch.camera.hogs"
+        ip: "10.67.0.12"
+      - name: "front-north-west.camera.hogs"
+        ip: "10.67.0.13"
     networks:
       - "10.1.0"
       - "10.10.0"
