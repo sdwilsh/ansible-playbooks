@@ -166,11 +166,12 @@
             - "/home/viseron/ha-media/viseron:/recordings"
     pull: yes
     restarted: "{{ config.changed | bool }}"
+    state: absent
   register: status
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
     viseron_gid: "{{ getent_passwd[\"viseron\"].2 }}"
     viseron_uid: "{{ getent_passwd[\"viseron\"].1 }}"
-- ansible.builtin.assert:
-    that:
-      - "status.services.viseron.nvr_viseron_1.state.running"
+# - ansible.builtin.assert:
+#     that:
+#       - "status.services.viseron.nvr_viseron_1.state.running"
