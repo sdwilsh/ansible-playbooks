@@ -3,7 +3,7 @@ common__ip_addresses:
   - "10.117.0.23/23"
   - "fd36:3eb3:43b0:75::17/64"
 
-common_rpi__gpu_mem: 512
+common_rpi__gpu_mem: 256
 
 docker_frigate__camera_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
