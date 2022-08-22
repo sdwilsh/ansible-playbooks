@@ -76,6 +76,14 @@
               - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
                 roles:
                   - detect
+          motion:
+            mask:
+              # Camera Timestamp
+              - 875,0,1280,0,1280,70,875,70
+              # Rain Chain
+              - 860,471,844,587,825,720,899,720,919,598,930,467,936,342,939,210,921,99,905,0,831,0,857,219,860,346
+              # Trees
+              - 0,263,0,0,588,0,648,47,657,317,470,393,471,296
         Front_North_East:
           detect:
             fps: 5
@@ -93,6 +101,12 @@
               - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
                 roles:
                   - detect
+          motion:
+            mask:
+              # Camera Timestamp
+              - 875,0,1280,0,1280,70,875,70
+              # Trees & Sidewalk
+              - 0,0,1053,0,988,128,962,310,823,303,723,397,648,521,512,542,508,332,609,231,667,187,662,115,0,223
       database:
         path: /db/frigate.db
       detectors:
