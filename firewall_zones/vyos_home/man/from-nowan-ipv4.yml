@@ -1,0 +1,19 @@
+---
+- description: "Allow NTP"
+  action: "accept"
+  state:
+    new: true
+  destination:
+    group:
+      address_group: "NTP-SERVICES-v4"
+      port_group: "NTP"
+- description: "Allow SNMP Trap Connections"
+  action: "accept"
+  protocol: "tcp_udp"
+  state:
+    new: true
+  destination:
+    port: "162"
+  source:
+    group:
+      address_group: "ZABBIX-SERVER-v4"
