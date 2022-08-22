@@ -1,0 +1,149 @@
+---
+# tasks file for docker-frigate
+- name: Create frigate group
+  ansible.builtin.group:
+    name: frigate
+    state: present
+- name: Create frigate user
+  ansible.builtin.user:
+    name: frigate
+    group: frigate
+    groups:
+      - docker
+      - frigate
+    state: present
+    shell: /bin/bash
+- name: Ensure cifs-utils is installed
+  ansible.builtin.apt:
+    name: cifs-utils
+    state: present
+
+- name: Create Home Assistant mount credentials file
+  ansible.builtin.template:
+    src: cifs_creds.j2
+    dest: /root/ha-cifs.txt
+    owner: root
+    group: root
+    mode: u=rw
+- name: Create Home Assistant mount point
+  ansible.builtin.file:
+    path: /home/frigate/ha-media
+    state: directory
+    owner: frigate
+    group: frigate
+    mode: u=rwx,g=rwx,o=rx
+- name: Mount Home Assistant media share
+  ansible.posix.mount:
+    fstype: cifs
+    opts: noperm,_netdev,credentials=/root/ha-cifs.txt
+    path: /home/frigate/ha-media
+    src: "//{{ docker_frigate__cifs_address }}/media"
+    state: mounted
+- name: Create frigate folder in media share
+  ansible.builtin.file:
+    path: /home/frigate/ha-media/frigate
+    state: directory
+
+- name: Create frigate config file
+  ansible.builtin.copy:
+    content: "{{ frigate_config | to_nice_yaml(indent=2, explicit_start=True) }}"
+    dest: /home/frigate/config.yml
+    owner: frigate
+    group: frigate
+    mode: u=rw,g=r,o=r
+  register: config
+  vars:
+    frigate_config:
+      mqtt:
+        host: palamok.hogs.tswn.us
+        user: frigate
+        password: "{FRIGATE_MQTT_PASSWORD}"
+      cameras:
+        front-porch:
+          detect:
+            fps: 5
+            height: 720
+            width: 1280
+          ffmpeg:
+            hwaccel_args: -c:v h264_v4l2m2m
+            inputs:
+              - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+                roles:
+                  - record
+              - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=1
+                roles:
+                  - rtmp
+              - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
+                roles:
+                  - detect
+        front-north-east:
+          detect:
+            fps: 5
+            height: 720
+            width: 1280
+          ffmpeg:
+            hwaccel_args: -c:v h264_v4l2m2m
+            inputs:
+              - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+                roles:
+                  - record
+              - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=1
+                roles:
+                  - rtmp
+              - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
+                roles:
+                  - detect
+      database:
+        path: /db/frigate.db
+      detectors:
+        coral:
+          type: edgetpu
+          device: usb
+      objects:
+        track:
+          - cat
+          - dog
+          - person
+      record:
+        enabled: yes
+      snapshots:
+        enabled: yes
+
+- name: Launch frigate container
+  community.docker.docker_compose:
+    project_name: nvr
+    definition:
+      services:
+        frigate:
+          devices:
+            - /dev/bus/usb:/dev/bus/usb
+          environment:
+            - "FRIGATE_MQTT_PASSWORD={{ docker_frigate__mqtt_password }}"
+            - "FRIGATE_RTSP_PASSWORD={{ docker_frigate__camera_password }}"
+          image: "blakeblackshear/frigate:0.11.0-rc1"
+          ports:
+            - "5000:5000"
+            - "1935:1935"
+          privileged: yes
+          restart: unless-stopped
+          shm_size: "64mb"
+          volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+            - /home/frigate/config.yml:/config/config.yml:ro
+            - /home/frigate/ha-media/frigate:/media/frigate
+            - /home/frigate:/db
+            - type: tmpfs
+              target: /tmp/cache
+              tmpfs:
+                size: 1000000000
+    debug: yes
+    pull: yes
+    restarted: "{{ config.changed | bool }}"
+    state: present
+  register: status
+  vars:
+    ansible_python_interpreter: /usr/bin/env python3-docker
+- ansible.builtin.assert:
+    that:
+      - status.services.frigate.nvr_frigate_1.state.running

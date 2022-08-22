@@ -21,6 +21,12 @@ dtparam=audio=on
 dtparam=i2c_vc=on
 {% endif %}
 
+{%- if common_rpi__gpu_mem %}
+
+# Set How Much Memory is Set Aside for the GPU (MB)
+gpu_mem={{ common_rpi__gpu_mem }}
+{% endif %}
+
 {% if common_rpi__i2c_rtc != "" %}
 # Enable RTC
 dtoverlay=i2c-rtc,{{ common_rpi__i2c_rtc }}

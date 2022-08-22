@@ -91,8 +91,9 @@ vyos_firewall_global__group:
       description: "The v4 IP camera addresses"
       afi: "ipv4"
       members:
-        - address: "10.67.0.10"
-        - address: "10.67.0.11"
+        - address: "10.67.0.12"
+        - address: "10.67.0.13"
+        - address: "10.67.0.14"
     - name: "HASS-CIFS-from-MAN-v4"
       description: "IP Addresses from MAN that can talk to HASS Samba Server ({{ ansible_managed }})"
       afi: "ipv4"
@@ -197,11 +198,11 @@ vyos_firewall_global__group:
       members:
         - address: "fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv6 }}"
         - address: "fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv6 }}"
-    - name: "VISERON-v4"
-      description: "The v4 viseron.hogs.tswn.us addresses"
+    - name: "CAMERA-TALKERS-v4"
+      description: "The v4 addresses of devices that can talk to the cameras"
       afi: "ipv4"
       members:
-        - address: "10.117.0.29"
+        - address: "10.117.0.23"
     - name: "ZABBIX-SERVER-v4"
       description: "The v4 server.zabbix.hogs.tswn.us addresses"
       afi: "ipv4"
