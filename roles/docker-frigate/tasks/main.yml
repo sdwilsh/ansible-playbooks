@@ -54,6 +54,9 @@
   register: config
   vars:
     frigate_config:
+      birdseye:
+        enabled: yes
+        mode: continuous
       cameras:
         Front_Porch:
           detect:
