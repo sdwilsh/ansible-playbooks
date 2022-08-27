@@ -123,6 +123,8 @@
           - person
       record:
         enabled: yes
+        events:
+          pre_capture: 10
       snapshots:
         enabled: yes
 
