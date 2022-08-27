@@ -54,10 +54,6 @@
   register: config
   vars:
     frigate_config:
-      mqtt:
-        host: palamok.hogs.tswn.us
-        user: frigate
-        password: "{FRIGATE_MQTT_PASSWORD}"
       cameras:
         Front_Porch:
           detect:
@@ -113,6 +109,10 @@
         coral:
           type: edgetpu
           device: usb
+      mqtt:
+        host: palamok.hogs.tswn.us
+        user: frigate
+        password: "{FRIGATE_MQTT_PASSWORD}"
       objects:
         track:
           - cat
