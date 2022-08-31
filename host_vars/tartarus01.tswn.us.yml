@@ -62,6 +62,11 @@ vyos_interfaces__wireguard:
           ipv4:
             - network: "10.117.2.10/32"
         pubkey: "tPhu26d+Maw1P/ksdNA995PsTmqnpmjzwiTHe2t36ms="
+      - name: "sdwilsh-pixel6a"
+        allowed_ips:
+          ipv4:
+            - network: "10.117.2.11/32"
+        pubkey: "bj66TS/e9M1mbHvmc8JCbMR2t2ziEJ6tipyfBnYdJCE="
     port: 51822
 
 vyos_ospf_interfaces__config:
