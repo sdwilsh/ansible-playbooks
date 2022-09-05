@@ -103,9 +103,8 @@ vyos_ospfv2__neighbors:
 
 vyos_ospfv2_parameters__router_id: "149.248.37.12"
 
-# https://www.vultr.com/docs/vultr-dns-servers
+# This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
-  - "108.61.10.10"
-  - "2001:19f0:300:1704::6"
+  - "127.0.0.1"
 
 wireguard__pubkey: "Dwdz7rWR4y8uMW3s4MWZwe1+rR0Bqiigms7Aku51ghU="
