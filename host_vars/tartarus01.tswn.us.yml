@@ -67,6 +67,11 @@ vyos_interfaces__wireguard:
           ipv4:
             - network: "10.117.2.11/32"
         pubkey: "bj66TS/e9M1mbHvmc8JCbMR2t2ziEJ6tipyfBnYdJCE="
+      - name: "mango"
+        allowed_ips:
+          ipv4:
+            - network: "10.117.2.12/32"
+        pubkey: "dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw="
     port: "51822"
 
 vyos_ospf_interfaces__config:
