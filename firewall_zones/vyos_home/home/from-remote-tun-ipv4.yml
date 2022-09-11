@@ -30,3 +30,10 @@
   source:
     group:
       address_group: "ZABBIX-SERVER-v4"
+- description: Allow all mobile wireguard client traffic
+  action: accept
+  state:
+    new: true
+  source:
+    group:
+      network_group: MOBILE-WIREGUARD-v4

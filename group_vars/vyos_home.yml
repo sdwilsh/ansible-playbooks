@@ -225,6 +225,11 @@ vyos_firewall_global__group:
         - address: "192.168.0.0/16"
         - address: "172.16.0.0/12"
         - address: "10.0.0.0/8"
+    - name: MOBILE-WIREGUARD-v4
+      description: Mobile wireguard clients
+      afi: ipv4
+      members:
+        - address: 10.117.2.0/24
   port_group:
     - name: "CIFS"
       description: "{{ ansible_managed }}"
