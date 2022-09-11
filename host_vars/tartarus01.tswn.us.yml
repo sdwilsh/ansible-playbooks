@@ -26,7 +26,7 @@ vyos_interfaces__wireguard:
     description: "maccabeus01 site-to-site"
     ipv4:
       - address: "10.10.1.2/30"
-    mtu: 1280
+    mtu: "1280"
     peers:
       - name: "maccabeus01"
         allowed_ips:
@@ -34,14 +34,14 @@ vyos_interfaces__wireguard:
             - network: "0.0.0.0/0"
             - network: "10.117.0.0/23"
             - network: "10.10.1.1/32"
-        persistent_keepalive_sec: 15
+        persistent_keepalive_sec: "15"
         pubkey: "{{ hostvars['maccabeus01.hogs.tswn.us'].wireguard__pubkey }}"
-    port: 51820
+    port: "51820"
   - name: "wg1"
     description: "maccabeus02 site-to-site"
     ipv4:
       - address: "10.10.1.6/30"
-    mtu: 1280
+    mtu: "1280"
     peers:
       - name: "maccabeus02"
         allowed_ips:
@@ -49,9 +49,9 @@ vyos_interfaces__wireguard:
             - network: "0.0.0.0/0"
             - network: "10.117.0.0/23"
             - network: "10.10.1.5/32"
-        persistent_keepalive_sec: 15
+        persistent_keepalive_sec: "15"
         pubkey: "{{ hostvars['maccabeus02.hogs.tswn.us'].wireguard__pubkey }}"
-    port: 51821
+    port: "51821"
   - name: "wg2"
     description: "mobile devices vpn"
     ipv4:
@@ -67,7 +67,7 @@ vyos_interfaces__wireguard:
           ipv4:
             - network: "10.117.2.11/32"
         pubkey: "bj66TS/e9M1mbHvmc8JCbMR2t2ziEJ6tipyfBnYdJCE="
-    port: 51822
+    port: "51822"
 
 vyos_ospf_interfaces__config:
   - name: "wg0"
