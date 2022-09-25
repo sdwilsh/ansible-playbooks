@@ -139,7 +139,7 @@
           environment:
             - "FRIGATE_MQTT_PASSWORD={{ docker_frigate__mqtt_password }}"
             - "FRIGATE_RTSP_PASSWORD={{ docker_frigate__camera_password }}"
-          image: "blakeblackshear/frigate:0.11.0-rc1"
+          image: "blakeblackshear/frigate:stable"
           ports:
             - "5000:5000"
             - "1935:1935"
