@@ -7,3 +7,11 @@
   destination:
     address: "10.117.0.30"
     port: "34197"
+- description: "Allow Valheim Connections"
+  action: "accept"
+  protocol: "udp"
+  state:
+    new: true
+  destination:
+    address: "10.117.0.30"
+    port: "2456-2458"
