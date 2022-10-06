@@ -161,6 +161,12 @@ bind_zones:
         ip: "10.10.0.51"
       - name: "kvm03.hogs"
         ip: "10.10.0.52"
+      - name: "esxi-intel01.hogs"
+        ip: "10.10.0.53"
+      - name: "esxi-intel02.hogs"
+        ip: "10.10.0.54"
+      - name: "esxi-intel03.hogs"
+        ip: "10.10.0.55"
       - name: "infra1.hogs"
         ip: "10.10.0.60"
         aliases:
