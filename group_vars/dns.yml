@@ -126,6 +126,8 @@ bind_zones:
         ip: "10.10.0.4"
         aliases:
           - "ns2"
+      - name: "vcenter.hogs"
+        ip: "10.10.0.5"
       - name: "docker-vm.hogs"
         ip: "10.10.0.6"
       - name: "docker-vm-public.hogs"
