@@ -25,7 +25,6 @@ bind_zones:
       - name: "pool.ntp.hogs"
         ip:
           - "10.117.0.50"
-          - "10.10.0.60"
 
       # PUBLIC
       - name: "tartarus01"
