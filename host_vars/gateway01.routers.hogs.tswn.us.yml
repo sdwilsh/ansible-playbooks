@@ -1,0 +1,6 @@
+---
+vyos__host_id_ipv4: "76"
+vyos__peer_host_id_ipv4: "77"
+vyos__vrrp_priority: 25
+
+vyos_ospfv2__neighbors: []

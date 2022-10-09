@@ -36,6 +36,10 @@ docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
 docker-vm-public.hogs.tswn.us ansible_host=10.10.0.7
 docker-vm.hogs.tswn.us ansible_host=10.10.0.6
 
+[vyos_gateway]
+gateway01.routers.hogs.tswn.us ansible_host=10.10.0.76
+gateway02.routers.hogs.tswn.us ansible_host=10.10.0.77
+
 [vyos_home]
 maccabeus01.hogs.tswn.us ansible_host=10.10.0.48
 maccabeus02.hogs.tswn.us ansible_host=10.10.0.49
@@ -47,6 +51,7 @@ tartarus01.tswn.us ansible_host=149.248.37.12
 centurylink.routers.hogs.tswn.us ansible_host=10.10.0.70
 
 [vyos:children]
+vyos_gateway
 vyos_home
 vyos_remote
 vyos_wan

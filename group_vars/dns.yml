@@ -182,6 +182,12 @@ bind_zones:
         ip: "10.10.0.66"
       - name: "centurylink.routers.hogs"
         ip: "10.10.0.70"
+      - name: "gateway.routers.hogs"
+        ip: "10.10.0.75"
+      - name: "gateway01.routers.hogs"
+        ip: "10.10.0.76"
+      - name: "gateway02.routers.hogs"
+        ip: "10.10.0.77"
       - name: "storage1.hogs"
         ip: "10.10.0.80"
 

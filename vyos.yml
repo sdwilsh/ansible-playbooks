@@ -111,6 +111,19 @@
       when: vyos_ospf_interfaces__config | length > 0
 
 #
+# vyos_gateway
+#
+
+- hosts: vyos_gateway
+  gather_facts: false
+  tasks:
+    - name: Gather config
+      vyos.vyos.vyos_facts:
+        gather_subset: config
+      tags:
+        - always
+
+#
 # vyos_home
 #
 
