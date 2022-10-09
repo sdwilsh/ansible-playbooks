@@ -15,10 +15,10 @@ vyos__wan_centurylink_password: !vault |
           3963
 
 vyos_firewall__zones:
-  - name: TRANSIT
-    description: "VRRP and other related synchronizations connection ({{ ansible_managed }})"
+  - name: ISP-TRANSIT
+    description: "Transit traffic beween WAN routers and gateway routers ({{ ansible_managed }})"
     interfaces:
-      - eth0.2
+      - eth0.3
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
@@ -54,10 +54,10 @@ vyos_interfaces__ethernet:
   - name: eth1
     description: "Trunk ({{ ansible_managed }})"
     vifs:
-      - vlan_id: 2
-        description: "TRANSIT - router-to-router traffic ({{ ansible_managed }})"
+      - vlan_id: 3
+        description: "ISP-TRANSIT - router-to-router traffic ({{ ansible_managed }})"
         ipv4:
-          - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
+          - address: "10.3.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 10
         description: "MAN - management vlan ({{ ansible_managed }})"
         ipv4:
