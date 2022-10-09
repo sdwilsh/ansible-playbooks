@@ -43,6 +43,10 @@ maccabeus02.hogs.tswn.us ansible_host=10.10.0.49
 [vyos_remote]
 tartarus01.tswn.us ansible_host=149.248.37.12
 
+[vyos_wan]
+centurylink.routers.hogs.tswn.us ansible_host=10.10.0.70
+
 [vyos:children]
 vyos_home
 vyos_remote
+vyos_wan

@@ -1,0 +1,77 @@
+---
+vyos__wan_centurylink_username: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63633161613537383431336638636264383930663362336130353061343335653939633165393431
+          3537386236383534653065393065363965653736366461640a343037313232396163663465613661
+          35346336356666343363383165336136346130316434643564373332353131333635306465393966
+          3566373763336138390a336333366363346232633965613238626165356134636237643639613864
+          36353536646238333764303064636138663235383134643133646336383166303839
+vyos__wan_centurylink_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36643664373838363663333338653534303965313464343162313231633134383231316330336639
+          6234316631333833336261643265363062346563613233340a323136323331396130383164393064
+          33376532336336623664643562336233653764323130653136393831663663383165373633303331
+          6134626138656130640a643735386465666165333330366262666333383932396138633834623636
+          3963
+
+vyos_firewall__zones:
+  - name: TRANSIT
+    description: "VRRP and other related synchronizations connection ({{ ansible_managed }})"
+    interfaces:
+      - eth0.2
+  - name: MAN
+    description: "management vlan ({{ ansible_managed }})"
+    interfaces:
+      - eth0.10
+  - name: WAN
+    description: "CenturyLink WAN connection ({{ ansible_managed }})"
+    interfaces:
+      - pppoe0
+vyos_firewall__zones_path: "./firewall_zones/vyos_wan"
+
+vyos_firewall_global__group:
+  network_group:
+    - name: "RFC1918-v4"
+      description: "IPv4 Private Address Space ({{ ansible_managed }})"
+      members:
+        - address: "192.168.0.0/16"
+        - address: "172.16.0.0/12"
+        - address: "10.0.0.0/8"
+  port_group:
+    - name: "DNS"
+      description: "{{ ansible_managed }}"
+      members:
+        - port: "53"
+    - name: "NTP"
+      description: "{{ ansible_managed }}"
+      members:
+        - port: "123"
+
+vyos_interfaces__ethernet:
+  - name: eth0
+    description: "CenturyLink PPPOE ({{ ansible_managed }})"
+    enabled: true
+  - name: eth1
+    description: "Trunk ({{ ansible_managed }})"
+    vifs:
+      - vlan_id: 2
+        description: "TRANSIT - router-to-router traffic ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 10
+        description: "MAN - management vlan ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+
+vyos_interfaces__pppoe:
+  - name: "pppoe0"
+    authentication:
+      password: "{{ vyos__wan_centurylink_password }}"
+      user: "{{ vyos__wan_centurylink_username }}"
+    mss: 1452
+    mtu: 1492
+    source_interface: eth0
+
+# This uses a local DNS forwarding server, so use that.
+vyos_system__name_servers:
+  - "127.0.0.1"

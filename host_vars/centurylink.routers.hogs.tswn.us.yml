@@ -1,0 +1,6 @@
+---
+vyos__host_id_ipv4: "70"
+
+vyos_ospfv2__neighbors: []
+
+vyos_wan__outbound_interface: pppoe0

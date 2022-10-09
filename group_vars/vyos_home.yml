@@ -345,8 +345,6 @@ vyos_ospf_interfaces__config:
       hello_interval: 2
       network: "point-to-point"
 
-vyos_ospfv2_parameters__router_id: "10.9.0.{{ vyos__host_id_ipv4 }}"
-
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
   - "127.0.0.1"
