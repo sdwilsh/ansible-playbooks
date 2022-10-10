@@ -48,7 +48,8 @@ vyos_firewall_global__group:
 vyos_interfaces__ethernet:
   - name: eth0
     description: "ISP-TRANSIT ({{ ansible_managed }})"
-    enabled: true
+    ipv4:
+      - address: "10.3.0.{{ vyos__host_id_ipv4 }}/24"
   - name: eth1
     description: "Trunk ({{ ansible_managed }})"
     vifs:
