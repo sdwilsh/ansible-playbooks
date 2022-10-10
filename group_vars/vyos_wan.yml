@@ -15,14 +15,17 @@ vyos__wan_centurylink_password: !vault |
           3963
 
 vyos_firewall__zones:
+  - name: "LOCAL"
+    description: "{{ ansible_managed }}"
+    local-zone: yes
   - name: ISP-TRANSIT
     description: "Transit traffic beween WAN routers and gateway routers ({{ ansible_managed }})"
     interfaces:
-      - eth0.3
+      - eth1.3
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
-      - eth0.10
+      - eth1.10
   - name: WAN
     description: "CenturyLink WAN connection ({{ ansible_managed }})"
     interfaces:
