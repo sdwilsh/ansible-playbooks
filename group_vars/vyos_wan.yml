@@ -15,7 +15,7 @@ vyos__wan_centurylink_password: !vault |
           3963
 
 vyos_firewall__zones:
-  - name: "LOCAL"
+  - name: LOCAL
     description: "{{ ansible_managed }}"
     local-zone: yes
   - name: ISP-TRANSIT
