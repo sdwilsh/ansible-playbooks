@@ -20,21 +20,23 @@
         name_servers: "{{ vyos_system__name_servers }}"
       tags:
         - "dns"
-    - name: "Remove default NTP servers"
+    - name: Set Timezone
       vyos.vyos.vyos_config:
         lines:
-          - "delete system ntp server {{ item }}"
-      loop:
-        - "0.pool.ntp.org"
-        - "1.pool.ntp.org"
-        - "2.pool.ntp.org"
-      when: item in ansible_net_config[0]
-    - name: "Set NTP servers"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set system ntp server {{ common__ntp_pool }} pool"
-          - "set system time-zone US/Pacific"
+          - set system time-zone US/Pacific
         save: true
+      tags:
+        - time
+    - name: Set NTP servers
+      vyos.vyos.vyos_ntp_global:
+        config:
+          servers:
+            - server: "{{ common__ntp_pool }}"
+              options:
+                - pool
+        state: replaced
+      tags:
+        - time
 
     #
     # Interfaces
