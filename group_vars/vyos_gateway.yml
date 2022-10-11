@@ -3,19 +3,22 @@ vyos_firewall__zones:
   - name: ISP-TRANSIT
     description: "Transit traffic beween WAN routers and gateway routers ({{ ansible_managed }})"
     interfaces:
-      - eth1
-  - name: TRANSIT
-    description: "Transit between local routers ({{ ansible_managed }})"
-    interfaces:
-      - eth0.2
-  - name: SYNC
-    description: "Synchronization traffic (like VRRP, DHCP, etc) ({{ ansible_managed }})"
-    interfaces:
-      - eth0.9
+      - eth0
+  - name: LOCAL
+    description: "{{ ansible_managed }}"
+    local-zone: yes
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
-      - eth0.10
+      - eth1.10
+  - name: TRANSIT
+    description: "Transit between local routers ({{ ansible_managed }})"
+    interfaces:
+      - eth1.2
+  - name: SYNC
+    description: "Synchronization traffic (like VRRP, DHCP, etc) ({{ ansible_managed }})"
+    interfaces:
+      - eth1.9
 vyos_firewall__zones_path: "./firewall_zones/vyos_gateway"
 
 vyos_firewall_global__group:
@@ -57,6 +60,10 @@ vyos_interfaces__ethernet:
         description: "TRANSIT - router-to-router traffic ({{ ansible_managed }})"
         ipv4:
           - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 9
+        description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 10
         description: "MAN - management vlan ({{ ansible_managed }})"
         ipv4:
