@@ -183,54 +183,6 @@
     #
     # VRRP
     #
-    - name: "Setup pppoe0 activation script"
-      ansible.builtin.copy:
-        dest: "/config/scripts/activate-pppoe0.script"
-        content: |
-          #!/bin/vbash
-
-          # Safeguard to ensure the script is called with the correct group.
-          if [ "$(id -g -n)" != 'vyattacfg' ] ; then
-            exec sg vyattacfg -c "/bin/vbash $(readlink -f $0) $@"
-          fi
-
-          source /opt/vyatta/etc/functions/script-template
-          configure
-          delete interfaces pppoe pppoe0 disable
-          commit
-        owner: "root"
-        group: "vyattacfg"
-        mode: "u=rwx,g=rx,o=rx"
-      become: true
-      vars:
-        ansible_connection: "ssh"
-      tags:
-        - "interfaces"
-        - "vrrp"
-    - name: "Setup pppoe0 disable script"
-      ansible.builtin.copy:
-        dest: "/config/scripts/disable-pppoe0.script"
-        content: |
-          #!/bin/vbash
-
-          # Safeguard to ensure the script is called with the correct group.
-          if [ "$(id -g -n)" != 'vyattacfg' ] ; then
-            exec sg vyattacfg -c "/bin/vbash $(readlink -f $0) $@"
-          fi
-
-          source /opt/vyatta/etc/functions/script-template
-          configure
-          set interfaces pppoe pppoe0 disable
-          commit
-        owner: "root"
-        group: "vyattacfg"
-        mode: "u=rwx,g=rx,o=rx"
-      become: true
-      vars:
-        ansible_connection: "ssh"
-      tags:
-        - "interfaces"
-        - "vrrp"
     - name: "Setup vrrp"
       vyos.vyos.vyos_config:
         lines:
@@ -249,8 +201,6 @@
           - "set high-availability vrrp group SYNC-v4 interface {{ vyos__lan_interface }}.9"
           - "set high-availability vrrp group SYNC-v4 peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
           - "set high-availability vrrp group SYNC-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group SYNC-v4 transition-script backup /config/scripts/disable-pppoe0.script"
-          - "set high-availability vrrp group SYNC-v4 transition-script master /config/scripts/activate-pppoe0.script"
           - "set high-availability vrrp group SYNC-v4 virtual-address 10.9.0.1/24"
           - "set high-availability vrrp group SYNC-v4 vrid 9"
           - "set high-availability vrrp sync-group MAIN member SYNC-v4"
