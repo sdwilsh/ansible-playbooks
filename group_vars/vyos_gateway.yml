@@ -72,3 +72,37 @@ vyos_interfaces__ethernet:
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
   - "127.0.0.1"
+
+vyos_vrrp__groups:
+  - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.2
+    name: TRANSIT-v4
+    peer_address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.2.0.75/24
+    vrid: 2
+  - hello_source_address: "10.3.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth0
+    name: ISP-TRANSIT-v4
+    peer_address: "10.3.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.3.0.75/24
+    vrid: 3
+  - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.9
+    name: SYNC-v4
+    peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.9.0.75/24
+    vrid: 9
+  - hello_source_address: "10.10.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.10
+    name: MAN-v4
+    peer_address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.10.0.75/24
+    vrid: 10
