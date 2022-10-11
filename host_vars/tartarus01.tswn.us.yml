@@ -1,4 +1,6 @@
 ---
+vyos__ssh_address_ipv4: 149.248.37.12
+
 vyos_firewall__zones:
   - name: "LOCAL"
     local-zone: yes

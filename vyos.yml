@@ -110,6 +110,23 @@
         - "ospf"
       when: vyos_ospf_interfaces__config | length > 0
 
+    #
+    # Services
+    #
+    - name: Setup SSH
+      vyos.vyos.vyos_config:
+        lines:
+          - set service ssh port 22
+          - "set service ssh listen-address {{ vyos__ssh_address_ipv4 }}"
+          - set service ssh disable-password-authentication
+          - set system login user ansible full-name 'ansible'
+          - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
+          - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
+        save: yes
+      tags:
+        - services
+        - ssh
+
 #
 # vyos_gateway
 #
@@ -445,20 +462,6 @@
       tags:
         - services
         - conntrack
-    - name: "Setup SSH"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set service ssh port 22"
-          - "set service ssh listen-address 10.10.0.{{ vyos__host_id_ipv4 }}"
-          - "set service ssh listen-address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
-          - "set service ssh disable-password-authentication"
-          - "set system login user ansible full-name 'ansible'"
-          - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
-          - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
-        save: yes
-      tags:
-        - services
-        - ssh
 
     - ansible.builtin.set_fact:
         dhcp_servers:
