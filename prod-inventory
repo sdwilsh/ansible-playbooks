@@ -3,6 +3,7 @@ sdwilsh-dev.hogs.tswn.us ansible_host=10.10.0.20
 
 [dns]
 shadowofsunderedstar.hogs.tswn.us ansible_host=10.10.0.3
+ns2.tswn.us ansible_host=10.10.0.4
 
 [jails]
 mysql.hogs.tswn.us ansible_host=10.117.0.5

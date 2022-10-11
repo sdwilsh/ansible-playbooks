@@ -20,7 +20,7 @@ bind_zones:
       - "10.10.0.3"
     name_servers:
       - "shadowofsunderedstar.hogs.tswn.us."
-      - "bornstellarmakeseternallasting.hogs.tswn.us."
+      - "ns2.tswn.us."
     hosts:
       - name: "pool.ntp.hogs"
         ip:
@@ -122,10 +122,8 @@ bind_zones:
         ip: "10.10.0.3"
         aliases:
           - "ns1"
-      - name: "bornstellarmakeseternallasting.hogs"
+      - name: "ns2"
         ip: "10.10.0.4"
-        aliases:
-          - "ns2"
       - name: "vcenter.hogs"
         ip: "10.10.0.5"
       - name: "docker-vm.hogs"
