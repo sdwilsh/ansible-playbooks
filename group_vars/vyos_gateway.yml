@@ -63,7 +63,7 @@ vyos_interfaces__ethernet:
       - vlan_id: 9
         description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
         ipv4:
-          - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+          - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 10
         description: "MAN - management vlan ({{ ansible_managed }})"
         ipv4:
