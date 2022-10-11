@@ -348,3 +348,101 @@ vyos_ospf_interfaces__config:
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
   - "127.0.0.1"
+
+vyos_vrrp__groups:
+  - hello_source_address: "10.1.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}"
+    name: UNIFI-MAN-v4
+    peer_address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.1.0.1/24
+    vrid: 1
+  - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.9"
+    name: SYNC-v4
+    peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.9.0.1/24
+    vrid: 9
+  - hello_source_address: "10.10.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.10"
+    name: MAN-v4
+    peer_address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.10.0.1/24
+    vrid: 10
+  - hello_source_address: "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
+    interface: "{{ vyos__lan_interface }}.10"
+    name: MAN-v6
+    peer_address: "fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv6 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: fd36:3eb3:43b0:a::1/64
+    vrid: 11
+  - hello_source_address: "192.168.1.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.15"
+    name: GWORK-v4
+    peer_address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 192.168.1.1/24
+    vrid: 15
+  - hello_source_address: "10.66.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.66"
+    name: IOT-v4
+    peer_address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.66.0.1/24
+    vrid: 66
+  - hello_source_address: "10.67.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.67"
+    name: NOWAN-v4
+    peer_address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.67.0.1/24
+    vrid: 67
+  - hello_source_address: "10.82.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.82"
+    name: SERVICE82-v4
+    peer_address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.82.0.1/24
+    vrid: 82
+  - hello_source_address: "10.117.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.117"
+    name: HOME-v4
+    peer_address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.117.0.1/23
+    vrid: 117
+  - hello_source_address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
+    interface: "{{ vyos__lan_interface }}.117"
+    name: HOME-v6
+    peer_address: "fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv6 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: fd36:3eb3:43b0:75::1/64
+    vrid: 118
+  - hello_source_address: "10.131.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.131"
+    name: GUEST-v4
+    peer_address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.131.0.1/24
+    vrid: 131
+  - hello_source_address: "10.150.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.150"
+    name: CULTIVAR-v4
+    peer_address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.150.0.1/24
+    vrid: 150

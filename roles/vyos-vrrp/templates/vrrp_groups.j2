@@ -1,0 +1,14 @@
+{%- for group in vyos_vrrp__groups -%}
+{% if "description" in group -%}
+set high-availability vrrp group {{ group.name }} description '{{ group.description }}'
+{% endif %}
+set high-availability vrrp group {{ group.name }} hello-source-address {{ group.hello_source_address }}
+set high-availability vrrp group {{ group.name }} interface {{ group.interface }}
+set high-availability vrrp group {{ group.name }} peer-address {{ group.peer_address }}
+set high-availability vrrp group {{ group.name }} priority {{ group.priority }}
+set high-availability vrrp group {{ group.name }} virtual-address {{ group.virtual_address }}
+set high-availability vrrp group {{ group.name }} vrid {{ group.vrid }}
+{% if "sync_group" in group -%}
+set high-availability vrrp sync-group {{ group.sync_group }} member {{ group.name }}
+{% endif %}
+{% endfor -%}

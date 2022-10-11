@@ -1,0 +1,15 @@
+---
+# defaults file for vyos-vrrp
+
+# Defines a list of VRRP groups to setup
+# vyos_vrrp__groups:
+#   - description: This is a group.
+#     hello_source_address: 10.10.10.10
+#     interface: eth0
+#     name: TESTGROUP
+#     peer_address: 10.10.10.11
+#     priority: 100
+#     sync_group: MAIN
+#     virtual_address: 10.10.10.1/24
+#     vrid: 1
+vyos_vrrp__groups: []

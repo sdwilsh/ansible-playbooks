@@ -111,6 +111,15 @@
       when: vyos_ospf_interfaces__config | length > 0
 
     #
+    # VRRP
+    #
+    - name: Setup VRRP
+      ansible.builtin.import_role:
+        name: vyos-vrrp
+      tags:
+        - vrrp
+
+    #
     # Services
     #
     - name: Setup SSH
@@ -180,136 +189,11 @@
       tags:
         - "ospf"
 
-    #
-    # VRRP
-    #
-    - name: "Setup vrrp"
-      vyos.vyos.vyos_config:
-        lines:
-          # UNIFI-MAN
-          - "set high-availability vrrp group UNIFI-MAN-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group UNIFI-MAN-v4 hello-source-address 10.1.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group UNIFI-MAN-v4 interface {{ vyos__lan_interface }}"
-          - "set high-availability vrrp group UNIFI-MAN-v4 peer-address 10.1.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group UNIFI-MAN-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group UNIFI-MAN-v4 virtual-address 10.1.0.1/24"
-          - "set high-availability vrrp group UNIFI-MAN-v4 vrid 1"
-          - "set high-availability vrrp sync-group MAIN member UNIFI-MAN-v4"
-          # SYNC
-          - "set high-availability vrrp group SYNC-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group SYNC-v4 hello-source-address 10.9.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group SYNC-v4 interface {{ vyos__lan_interface }}.9"
-          - "set high-availability vrrp group SYNC-v4 peer-address 10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group SYNC-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group SYNC-v4 virtual-address 10.9.0.1/24"
-          - "set high-availability vrrp group SYNC-v4 vrid 9"
-          - "set high-availability vrrp sync-group MAIN member SYNC-v4"
-          # MAN
-          - "set high-availability vrrp group MAN-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group MAN-v4 hello-source-address 10.10.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group MAN-v4 interface {{ vyos__lan_interface }}.10"
-          - "set high-availability vrrp group MAN-v4 peer-address 10.10.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group MAN-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group MAN-v4 virtual-address 10.10.0.1/24"
-          - "set high-availability vrrp group MAN-v4 vrid 10"
-          - "set high-availability vrrp group MAN-v6 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group MAN-v6 hello-source-address fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
-          - "set high-availability vrrp group MAN-v6 interface {{ vyos__lan_interface }}.10"
-          - "set high-availability vrrp group MAN-v6 peer-address fd36:3eb3:43b0:a::{{ vyos__peer_host_id_ipv6 }}"
-          - "set high-availability vrrp group MAN-v6 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group MAN-v6 virtual-address fd36:3eb3:43b0:a::1/64"
-          - "set high-availability vrrp group MAN-v6 vrid 11"
-          - "set high-availability vrrp sync-group MAIN member MAN-v4"
-          - "set high-availability vrrp sync-group MAIN member MAN-v6"
-          # GWORK
-          - "set high-availability vrrp group GWORK-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group GWORK-v4 hello-source-address 192.168.1.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group GWORK-v4 interface {{ vyos__lan_interface }}.15"
-          - "set high-availability vrrp group GWORK-v4 peer-address 192.168.1.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group GWORK-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group GWORK-v4 virtual-address 192.168.1.1/24"
-          - "set high-availability vrrp group GWORK-v4 vrid 15"
-          - "set high-availability vrrp sync-group MAIN member GWORK-v4"
-          # IOT
-          - "set high-availability vrrp group IOT-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group IOT-v4 hello-source-address 10.66.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group IOT-v4 interface {{ vyos__lan_interface }}.66"
-          - "set high-availability vrrp group IOT-v4 peer-address 10.66.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group IOT-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group IOT-v4 virtual-address 10.66.0.1/24"
-          - "set high-availability vrrp group IOT-v4 vrid 66"
-          - "set high-availability vrrp sync-group MAIN member IOT-v4"
-          # NOWAN
-          - "set high-availability vrrp group NOWAN-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group NOWAN-v4 hello-source-address 10.67.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group NOWAN-v4 interface {{ vyos__lan_interface }}.67"
-          - "set high-availability vrrp group NOWAN-v4 peer-address 10.67.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group NOWAN-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group NOWAN-v4 virtual-address 10.67.0.1/24"
-          - "set high-availability vrrp group NOWAN-v4 vrid 67"
-          - "set high-availability vrrp sync-group MAIN member NOWAN-v4"
-          # SERVICE82
-          - "set high-availability vrrp group SERVICE82-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group SERVICE82-v4 hello-source-address 10.82.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group SERVICE82-v4 interface {{ vyos__lan_interface }}.82"
-          - "set high-availability vrrp group SERVICE82-v4 peer-address 10.82.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group SERVICE82-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group SERVICE82-v4 virtual-address 10.82.0.1/24"
-          - "set high-availability vrrp group SERVICE82-v4 vrid 82"
-          - "set high-availability vrrp sync-group MAIN member SERVICE82-v4"
-          # ROUTER-LAB
-          - "set high-availability vrrp group ROUTER-LAB-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group ROUTER-LAB-v4 hello-source-address 10.100.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group ROUTER-LAB-v4 interface {{ vyos__lan_interface }}.100"
-          - "set high-availability vrrp group ROUTER-LAB-v4 peer-address 10.100.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group ROUTER-LAB-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group ROUTER-LAB-v4 virtual-address 10.100.0.1/24"
-          - "set high-availability vrrp group ROUTER-LAB-v4 vrid 100"
-          - "set high-availability vrrp sync-group MAIN member ROUTER-LAB-v4"
-          # HOME
-          - "set high-availability vrrp group HOME-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group HOME-v4 hello-source-address 10.117.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group HOME-v4 interface {{ vyos__lan_interface }}.117"
-          - "set high-availability vrrp group HOME-v4 peer-address 10.117.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group HOME-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group HOME-v4 virtual-address 10.117.0.1/23"
-          - "set high-availability vrrp group HOME-v4 vrid 117"
-          - "set high-availability vrrp group HOME-v6 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group HOME-v6 hello-source-address fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
-          - "set high-availability vrrp group HOME-v6 interface {{ vyos__lan_interface }}.117"
-          - "set high-availability vrrp group HOME-v6 peer-address fd36:3eb3:43b0:75::{{ vyos__peer_host_id_ipv6 }}"
-          - "set high-availability vrrp group HOME-v6 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group HOME-v6 virtual-address fd36:3eb3:43b0:75::1/64"
-          - "set high-availability vrrp group HOME-v6 vrid 118"
-          - "set high-availability vrrp sync-group MAIN member HOME-v4"
-          - "set high-availability vrrp sync-group MAIN member HOME-v6"
-          # GUEST
-          - "set high-availability vrrp group GUEST-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group GUEST-v4 hello-source-address 10.131.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group GUEST-v4 interface {{ vyos__lan_interface }}.131"
-          - "set high-availability vrrp group GUEST-v4 peer-address 10.131.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group GUEST-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group GUEST-v4 virtual-address 10.131.0.1/24"
-          - "set high-availability vrrp group GUEST-v4 vrid 131"
-          - "set high-availability vrrp sync-group MAIN member GUEST-v4"
-          # CULTIVAR
-          - "set high-availability vrrp group CULTIVAR-v4 description '{{ ansible_managed }}'"
-          - "set high-availability vrrp group CULTIVAR-v4 hello-source-address 10.150.0.{{ vyos__host_id_ipv4 }}"
-          - "set high-availability vrrp group CULTIVAR-v4 interface {{ vyos__lan_interface }}.150"
-          - "set high-availability vrrp group CULTIVAR-v4 peer-address 10.150.0.{{ vyos__peer_host_id_ipv4 }}"
-          - "set high-availability vrrp group CULTIVAR-v4 priority {{ vyos__vrrp_priority }}"
-          - "set high-availability vrrp group CULTIVAR-v4 virtual-address 10.150.0.1/24"
-          - "set high-availability vrrp group CULTIVAR-v4 vrid 150"
-          - "set high-availability vrrp sync-group MAIN member CULTIVAR-v4"
-        save: yes
-      tags:
-        - "vrrp"
     - name: "Setup WAN load-balancing"
       vyos.vyos.vyos_config:
         lines:
           - "set protocols static interface-route 0.0.0.0/0 next-hop-interface pppoe0 distance 10"
       tags:
-        - "vrrp"
         - "routing"
 
     #

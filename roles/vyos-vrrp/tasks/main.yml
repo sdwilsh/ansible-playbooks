@@ -1,0 +1,9 @@
+---
+# tasks file for vyos-vrrp
+- name: Setup VRRP Groups and Sync Groups
+  vyos.vyos.vyos_config:
+    src: vrrp_groups.j2
+    save: yes
+  when: "vyos_vrrp__groups | default([]) | length > 0"
+  tags:
+    - vrrp
