@@ -138,6 +138,13 @@
         - services
         - ssh
 
+    - name: Setup DNS Forwarding
+      ansible.builtin.import_role:
+        name: vyos-dns-forwarding
+      tags:
+        - dns
+        - services
+
 #
 # vyos_gateway
 #
@@ -495,71 +502,6 @@
         - services
         - dynamic-dns
 
-    - name: "Setup DNS Forwarding"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set service dns forwarding allow-from 127.0.0.0/8"
-          - "set service dns forwarding allow-from ::1/128"
-          - "set service dns forwarding allow-from 10.0.0.0/8"
-          - "set service dns forwarding allow-from 192.168.1.0/24"
-          - "set service dns forwarding allow-from fd00::/8"
-          - "set service dns forwarding domain 0.10.10.in-addr.arpa server 10.10.0.3"
-          - "set service dns forwarding domain 0.10.10.in-addr.arpa server 10.10.0.4"
-          - "set service dns forwarding domain 0.117.10.in-addr.arpa server 10.10.0.3"
-          - "set service dns forwarding domain 0.117.10.in-addr.arpa server 10.10.0.4"
-          - "set service dns forwarding domain 5.7.0.0.0.b.3.4.3.b.e.3.6.3.d.f.ip6.arpa server 10.10.0.3"
-          - "set service dns forwarding domain a.0.0.0.0.b.3.4.3.b.e.3.6.3.d.f.ip6.arpa server 10.10.0.3"
-          - "set service dns forwarding domain tswn.us server 10.10.0.3"
-          - "set service dns forwarding domain tswn.us server 10.10.0.4"
-          - "set service dns forwarding domain tswn.us server fd36:3eb3:43b0:a::3"
-          - "set service dns forwarding name-server 1.1.1.2"
-          - "set service dns forwarding name-server 1.0.0.2"
-        save: yes
-      tags:
-        - services
-        - dns
-    - name: "Set DNS Listenting Addresses"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set service dns forwarding listen-address {{ item }}"
-        save: yes
-      loop:
-          # localhost
-          - "127.0.0.1"
-          # UNIFI-MAN
-          - "10.1.0.1"
-          - "10.1.0.{{ vyos__host_id_ipv4 }}"
-          - "fd36:3eb3:43b0:1::{{ vyos__host_id_ipv6 }}"
-          # MAN
-          - "10.10.0.1"
-          - "10.10.0.{{ vyos__host_id_ipv4 }}"
-          - "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}"
-          # GWORK
-          - "10.15.0.1"
-          - "10.15.0.{{ vyos__host_id_ipv4 }}"
-          # IOT
-          - "10.66.0.1"
-          - "10.66.0.{{ vyos__host_id_ipv4 }}"
-          # NOWAN
-          - "10.67.0.1"
-          - "10.67.0.{{ vyos__host_id_ipv4 }}"
-          # SERVICE82
-          - "10.82.0.1"
-          - "10.82.0.{{ vyos__host_id_ipv4 }}"
-          # ROUTER-LAB
-          - "10.100.0.1"
-          - "10.100.0.{{ vyos__host_id_ipv4 }}"
-          # HOME
-          - "10.117.0.1"
-          - "10.117.0.{{ vyos__host_id_ipv4 }}"
-          - "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}"
-          # CULTIVAR
-          - "10.150.0.1"
-          - "10.117.0.{{ vyos__host_id_ipv4 }}"
-      tags:
-        - services
-        - dns
-
     - name: "Setup Router Advertisement"
       vyos.vyos.vyos_config:
         lines:
@@ -639,22 +581,6 @@
         save: yes
       tags:
         - "routing"
-
-    - name: Setup DNS forwarding for .hogs.tswn.us hosts
-      vyos.vyos.vyos_config:
-        lines:
-          - set service dns forwarding allow-from 127.0.0.0/8
-          - set service dns forwarding domain 0.10.10.in-addr.arpa server 10.10.0.117
-          - set service dns forwarding domain 0.117.10.in-addr.arpa server 10.10.0.117
-          - set service dns forwarding domain hogs.tswn.us server 10.10.0.1
-          - set service dns forwarding listen-address 127.0.0.1
-          # https://www.vultr.com/docs/vultr-dns-servers
-          - set service dns forwarding name-server 108.61.10.10
-          - set service dns forwarding name-server 2001:19f0:300:1704::6
-        save: yes
-      tags:
-        - services
-        - dns
 
 #
 # vyos_wan

@@ -1,0 +1,31 @@
+---
+# defaults file for vyos-dns-forwarding
+
+# Defines the networks in which to allow DNS queries from.
+# vyos_dns_forwarding__allow_from:
+#   - 127.0.0.0/8
+#   - 10.0.0.0/8
+#   - 192.168.1.0/24
+vyos_dns_forwarding__allow_from: []
+
+# Species the servers to use for a specific domain.
+# vyos_dns_forwarding__domain_servers:
+#   - domain: 0.10.10.in-addr.arpa
+#     servers:
+#       - 10.10.0.3
+#       - 10.10.0.4
+#   - domain: tswn.us
+#     servers:
+#       - 10.10.0.3
+#       - 10.10.0.4
+vyos_dns_forwarding__domain_servers: []
+
+# Defines a list of addresses the DNS forwarding will listen to requests on.
+# vyos_dns_forwarding__listen_addresses:
+#   - 127.0.0.1
+vyos_dns_forwarding__listen_addresses: []
+
+# Defines the list of name servers to use for requests not otherwise specified.
+# vyos_dns_forwarding__name_servers:
+#   - 8.8.8.8
+vyos_dns_forwarding__name_servers: []

@@ -1,0 +1,10 @@
+---
+# tasks file for vyos-dns-forwarding
+- name: Setup DNS forwarding
+  vyos.vyos.vyos_config:
+    src: dns_forwarding.j2
+    save: yes
+  when: "vyos_dns_forwarding__listen_addresses | default([]) | length > 0"
+  tags:
+    - dns
+    - services

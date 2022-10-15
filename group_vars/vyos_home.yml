@@ -27,6 +27,57 @@ vyos__wan_centurylink_dns:
   - "205.171.2.65"
   - "205.171.3.65"
 
+vyos_dns_forwarding__allow_from:
+  - 10.0.0.0/8
+  - 127.0.0.0/8
+  - 192.168.1.0/24
+vyos_dns_forwarding__domain_servers:
+  - domain: 0.10.10.in-addr.arpa
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
+  - domain: 0.117.10.in-addr.arpa
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
+  - domain: tswn.us
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
+vyos_dns_forwarding__listen_addresses:
+  # localhost
+  - 127.0.0.1
+  # UNIFI-MAN
+  - 10.1.0.1
+  - "10.1.0.{{ vyos__host_id_ipv4 }}"
+  # MAN
+  - 10.10.0.1
+  - "10.10.0.{{ vyos__host_id_ipv4 }}"
+  # GWORK
+  - 10.15.0.1
+  - "10.15.0.{{ vyos__host_id_ipv4 }}"
+  # IOT
+  - 10.66.0.1
+  - "10.66.0.{{ vyos__host_id_ipv4 }}"
+  # NOWAN
+  - 10.67.0.1
+  - "10.67.0.{{ vyos__host_id_ipv4 }}"
+  # SERVICE82
+  - 10.82.0.1
+  - "10.82.0.{{ vyos__host_id_ipv4 }}"
+  # ROUTER-LAB
+  - 10.100.0.1
+  - "10.100.0.{{ vyos__host_id_ipv4 }}"
+  # HOME
+  - 10.117.0.1
+  - "10.117.0.{{ vyos__host_id_ipv4 }}"
+  # CULTIVAR
+  - 10.150.0.1
+  - "10.117.0.{{ vyos__host_id_ipv4 }}"
+vyos_dns_forwarding__name_servers:
+  - 1.1.1.2
+  - 1.0.0.2
+
 vyos_firewall__zones:
   - name: "UNIFI-MAN"
     description: "unifi management vlan ({{ ansible_managed }})"
