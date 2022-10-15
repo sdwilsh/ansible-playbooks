@@ -31,19 +31,6 @@ vyos_dns_forwarding__allow_from:
   - 10.0.0.0/8
   - 127.0.0.0/8
   - 192.168.1.0/24
-vyos_dns_forwarding__domain_servers:
-  - domain: 0.10.10.in-addr.arpa
-    servers:
-      - 10.10.0.3
-      - 10.10.0.4
-  - domain: 0.117.10.in-addr.arpa
-    servers:
-      - 10.10.0.3
-      - 10.10.0.4
-  - domain: tswn.us
-    servers:
-      - 10.10.0.3
-      - 10.10.0.4
 vyos_dns_forwarding__listen_addresses:
   # localhost
   - 127.0.0.1
@@ -74,9 +61,6 @@ vyos_dns_forwarding__listen_addresses:
   # CULTIVAR
   - 10.150.0.1
   - "10.117.0.{{ vyos__host_id_ipv4 }}"
-vyos_dns_forwarding__name_servers:
-  - 1.1.1.2
-  - 1.0.0.2
 
 vyos_firewall__zones:
   - name: "UNIFI-MAN"

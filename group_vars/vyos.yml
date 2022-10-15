@@ -12,6 +12,28 @@ vyos__ospf_authentication_key: !vault |
 
 vyos__ssh_address_ipv4: "10.10.0.{{ vyos__host_id_ipv4 }}"
 
+vyos_dns_forwarding__allow_from:
+  - 127.0.0.0/8
+vyos_dns_forwarding__domain_servers:
+  - domain: 0.10.10.in-addr.arpa
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
+  - domain: 0.117.10.in-addr.arpa
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
+  - domain: tswn.us
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
+vyos_dns_forwarding__listen_addresses:
+  # localhost
+  - 127.0.0.1
+vyos_dns_forwarding__name_servers:
+  - 1.1.1.2
+  - 1.0.0.2
+
 vyos_ospfv2__areas:
   - area_id: "0"
     authentication: "md5"
