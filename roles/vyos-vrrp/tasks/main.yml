@@ -7,3 +7,12 @@
   when: "vyos_vrrp__groups | default([]) | length > 0"
   tags:
     - vrrp
+
+- name: Setup Connection Tracking Synchronization
+  vyos.vyos.vyos_config:
+    src: conntrack_sync.j2
+    save: yes
+  when: "vyos_vrrp__groups | default([]) | length > 0"
+  tags:
+    - vrrp
+    - conntrack

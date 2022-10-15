@@ -21,6 +21,11 @@ vyos_firewall__zones:
       - eth1.9
 vyos_firewall__zones_path: "./firewall_zones/vyos_gateway"
 
+vyos_vrrp__conntrack_sync:
+  interface: eth1.9
+  peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+  sync_group: MAIN
+
 vyos_dns_forwarding__allow_from:
   - 10.2.0.0/24
   - 127.0.0.0/8

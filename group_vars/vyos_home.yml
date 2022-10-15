@@ -27,6 +27,11 @@ vyos__wan_centurylink_dns:
   - "205.171.2.65"
   - "205.171.3.65"
 
+vyos_vrrp__conntrack_sync:
+  interface: "{{ vyos__lan_interface }}.9"
+  peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+  sync_group: MAIN
+
 vyos_dns_forwarding__allow_from:
   - 10.0.0.0/8
   - 127.0.0.0/8
