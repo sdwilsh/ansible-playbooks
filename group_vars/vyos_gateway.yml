@@ -21,6 +21,16 @@ vyos_firewall__zones:
       - eth1.9
 vyos_firewall__zones_path: "./firewall_zones/vyos_gateway"
 
+vyos_dns_forwarding__allow_from:
+  - 10.2.0.0/24
+  - 127.0.0.0/8
+vyos_dns_forwarding__listen_addresses:
+  # localhost
+  - 127.0.0.1
+  # TRANSIT
+  - 10.2.0.75
+  - "10.2.0.{{ vyos__host_id_ipv4 }}"
+
 vyos_firewall_global__group:
   address_group:
     - name: PEER-v4
