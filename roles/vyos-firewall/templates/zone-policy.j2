@@ -21,14 +21,13 @@ set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall ipv6-name '{{
 {%- endmacro %}
 
 {%- macro set_interface(zone, interface) -%}
-{% if zone["local-zone"] %}
-set zone-policy zone {{ zone.name }} local-zone
-{% else %}
 set zone-policy zone {{ zone.name }} interface '{{ interface }}'
-{% endif %}
 {%- endmacro %}
 
 {%- macro set_interfaces(zone) -%}
+    {% if "local-zone" in zone and zone["local-zone"] -%}
+        set zone-policy zone {{ zone.name }} local-zone
+    {% endif %}
     {%- for interface in zone.interfaces %}
         {{- set_interface(zone, interface) }}
     {%- endfor -%}
