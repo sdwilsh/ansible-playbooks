@@ -580,3 +580,22 @@
         index_var: rule_number
       tags:
         - nat
+#
+# vyos_work
+#
+
+- hosts: vyos_work
+  gather_facts: false
+  tasks:
+    - name: Gather config
+      vyos.vyos.vyos_facts:
+        gather_subset: config
+      tags:
+        - always
+
+    - name: Setup default route
+      vyos.vyos.vyos_config:
+        lines:
+          - "set protocols static route 0.0.0.0/0 next-hop 10.2.0.75"
+      tags:
+        - routing
