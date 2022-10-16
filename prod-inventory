@@ -51,8 +51,13 @@ tartarus01.tswn.us ansible_host=149.248.37.12
 [vyos_wan]
 centurylink.routers.hogs.tswn.us ansible_host=10.10.0.70
 
+[vyos_work]
+work01.routers.hogs.tswn.us ansible_host=10.10.0.85
+work02.routers.hogs.tswn.us ansible_host=10.10.0.86
+
 [vyos:children]
 vyos_gateway
 vyos_home
 vyos_remote
 vyos_wan
+vyos_work

@@ -188,6 +188,12 @@ bind_zones:
         ip: "10.10.0.77"
       - name: "storage1.hogs"
         ip: "10.10.0.80"
+      - name: "work.routers.hogs"
+        ip: "10.10.0.84"
+      - name: "work01.routers.hogs"
+        ip: "10.10.0.85"
+      - name: "work02.routers.hogs"
+        ip: "10.10.0.86"
 
       # Services Networks
       - name: "installation02"
