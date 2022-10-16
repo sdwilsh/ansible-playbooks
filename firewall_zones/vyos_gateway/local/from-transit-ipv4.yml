@@ -17,3 +17,9 @@
   destination:
     group:
       port_group: DNS
+- description: Allow OSPF from Neighbors
+  action: accept
+  protocol: 89
+  source:
+    group:
+      address_group: OSPF-NEIGHBOR-v4

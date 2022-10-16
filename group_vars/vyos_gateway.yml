@@ -38,6 +38,13 @@ vyos_dns_forwarding__listen_addresses:
 
 vyos_firewall_global__group:
   address_group:
+    - name: OSPF-NEIGHBOR-v4
+      description: IP Addresses of our OSPF Neighbors ({{ ansible_managed }})
+      afi: ipv4
+      members:
+        - address: 10.2.0.85
+        - address: 10.2.0.86
+        - address: 10.3.0.70
     - name: PEER-v4
       description: IP Addresses of our Peer Router ({{ ansible_managed }})
       afi: ipv4
@@ -83,6 +90,37 @@ vyos_interfaces__ethernet:
         description: "MAN - management vlan ({{ ansible_managed }})"
         ipv4:
           - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+
+vyos_ospf_interfaces__config:
+  - name: eth0
+    address_family:
+    - afi: ipv4
+      authentication:
+        md5_key:
+          key_id: 1
+          key: "{{ vyos__ospf_authentication_key }}"
+      cost: "{% if vyos__host_id_ipv4 < vyos__peer_host_id_ipv4 %}1{% else %}10{% endif %}"
+      dead_interval: 5
+      hello_interval: 2
+      network: non-broadcast
+  - name: eth1 vif 2
+    address_family:
+    - afi: ipv4
+      authentication:
+        md5_key:
+          key_id: 1
+          key: "{{ vyos__ospf_authentication_key }}"
+      cost: "{% if vyos__host_id_ipv4 < vyos__peer_host_id_ipv4 %}1{% else %}10{% endif %}"
+      dead_interval: 5
+      hello_interval: 2
+      network: non-broadcast
+
+vyos_ospfv2__neighbors:
+  - neighbor_id: 10.2.0.85
+    priority: "{{ hostvars['work01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - neighbor_id: 10.2.0.86
+    priority: "{{ hostvars['work02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - neighbor_id: 10.3.0.70
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:

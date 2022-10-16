@@ -165,6 +165,22 @@
       tags:
         - routing
 
+    - name: Setup Outbound OSPF Redistribution
+      vyos.vyos.vyos_config:
+        lines:
+          - set policy access-list 150 description 'Outbound OSPF Redistribution'
+          - set policy access-list 150 rule 10 action 'permit'
+          - set policy access-list 150 rule 10 destination any
+          - set policy access-list 150 rule 10 source inverse-mask '0.0.0.255'
+          - set policy access-list 150 rule 10 source network '10.2.0.0'
+          - set policy access-list 150 rule 1000 action 'deny'
+          - set policy access-list 150 rule 1000 destination any
+          - set policy access-list 150 rule 1000 source any
+          - set protocols ospf access-list 150 export 'connected'
+        save: yes
+      tags:
+        - ospf
+
 #
 # vyos_home
 #
@@ -566,6 +582,22 @@
       tags:
         - routing
 
+    - name: Setup Outbound OSPF Redistribution
+      vyos.vyos.vyos_config:
+        lines:
+          - set policy access-list 150 description 'Outbound OSPF Redistribution'
+          - set policy access-list 150 rule 10 action 'permit'
+          - set policy access-list 150 rule 10 destination any
+          - set policy access-list 150 rule 10 source inverse-mask '0.0.0.255'
+          - set policy access-list 150 rule 10 source network '10.3.0.0'
+          - set policy access-list 150 rule 1000 action 'deny'
+          - set policy access-list 150 rule 1000 destination any
+          - set policy access-list 150 rule 1000 source any
+          - set protocols ospf access-list 150 export 'connected'
+        save: yes
+      tags:
+        - ospf
+
     - name: Setup NAT masquerade rules
       vyos.vyos.vyos_config:
         lines:
@@ -599,3 +631,19 @@
           - "set protocols static route 0.0.0.0/0 next-hop 10.2.0.75"
       tags:
         - routing
+
+    - name: Setup Outbound OSPF Redistribution
+      vyos.vyos.vyos_config:
+        lines:
+          - set policy access-list 150 description 'Outbound OSPF Redistribution'
+          - set policy access-list 150 rule 10 action 'permit'
+          - set policy access-list 150 rule 10 destination any
+          - set policy access-list 150 rule 10 source inverse-mask '0.0.0.255'
+          - set policy access-list 150 rule 10 source network '192.168.1.0'
+          - set policy access-list 150 rule 1000 action 'deny'
+          - set policy access-list 150 rule 1000 destination any
+          - set policy access-list 150 rule 1000 source any
+          - set protocols ospf access-list 150 export 'connected'
+        save: yes
+      tags:
+        - ospf

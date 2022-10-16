@@ -9,7 +9,6 @@
   protocol: icmp
   icmp:
     type_name: any
-- description: Allow all traffic
+- description: Allow OSPF
   action: accept
-  state:
-    new: true
+  protocol: 89
