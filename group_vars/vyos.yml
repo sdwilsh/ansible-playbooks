@@ -48,11 +48,6 @@ vyos_ospfv2__areas:
     authentication: md5
     network:
       - address: 10.2.0.0/24
-  # Gateway Routers
-  - area_id: 2
-    authentication: md5
-    network:
-      - address: 10.3.0.0/24
   # Work Routers
   - area_id: 10
     authentication: md5

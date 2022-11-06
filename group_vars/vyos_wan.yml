@@ -18,10 +18,10 @@ vyos_firewall__zones:
   - name: LOCAL
     description: "{{ ansible_managed }}"
     local-zone: yes
-  - name: ISP-TRANSIT
-    description: "Transit traffic beween WAN routers and gateway routers ({{ ansible_managed }})"
+  - name: TRANSIT
+    description: "Transit traffic beween local routers ({{ ansible_managed }})"
     interfaces:
-      - eth1.3
+      - eth1.2
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
@@ -94,12 +94,6 @@ vyos_ospf_interfaces__config:
       dead_interval: 5
       hello_interval: 2
       network: non-broadcast
-
-vyos_ospfv2__neighbors:
-  - neighbor_id: 10.3.0.76
-    priority: "{{ hostvars['gateway01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
-  - neighbor_id: 10.3.0.77
-    priority: "{{ hostvars['gateway02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:

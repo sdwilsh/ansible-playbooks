@@ -91,12 +91,6 @@ vyos_ospf_interfaces__config:
       hello_interval: 2
       network: non-broadcast
 
-vyos_ospfv2__neighbors:
-  - neighbor_id: 10.2.0.76
-    priority: "{{ hostvars['gateway01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
-  - neighbor_id: 10.2.0.77
-    priority: "{{ hostvars['gateway02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
-
 vyos_system__name_servers:
   - "10.2.0.75"
 
