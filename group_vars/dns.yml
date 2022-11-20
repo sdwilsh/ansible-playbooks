@@ -19,7 +19,7 @@ bind_zones:
     primaries: 
       - "10.10.0.3"
     name_servers:
-      - "shadowofsunderedstar.hogs.tswn.us."
+      - "ns1.tswn.us."
       - "ns2.tswn.us."
     hosts:
       - name: "pool.ntp.hogs"
@@ -118,10 +118,8 @@ bind_zones:
       # MAN Network
       - name: "al-cygni.hogs"
         ip: "10.10.0.2"
-      - name: "shadowofsunderedstar.hogs"
+      - name: "ns1"
         ip: "10.10.0.3"
-        aliases:
-          - "ns1"
       - name: "ns2"
         ip: "10.10.0.4"
       - name: "vcenter.hogs"
