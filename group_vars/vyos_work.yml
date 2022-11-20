@@ -30,8 +30,7 @@ vyos_firewall_global__group:
       description: IP Addresses of our OSPF Neighbors ({{ ansible_managed }})
       afi: ipv4
       members:
-        - address: 10.2.0.76
-        - address: 10.2.0.77
+        - address: 10.2.0.70
     - name: PEER-v4
       description: IP Addresses of our Peer Router ({{ ansible_managed }})
       afi: ipv4
@@ -91,8 +90,12 @@ vyos_ospf_interfaces__config:
       hello_interval: 2
       network: non-broadcast
 
+vyos_ospfv2__neighbors:
+  - neighbor_id: "10.2.0.70"
+
 vyos_system__name_servers:
-  - "10.2.0.75"
+  - "10.10.0.3"
+  - "10.10.0.4"
 
 vyos_vrrp__conntrack_sync:
   interface: eth1.9

@@ -592,7 +592,7 @@
     - name: Setup default route
       vyos.vyos.vyos_config:
         lines:
-          - "set protocols static route 0.0.0.0/0 next-hop 10.2.0.75"
+          - "set protocols static route 0.0.0.0/0 next-hop 10.2.0.70"
       tags:
         - routing
 
