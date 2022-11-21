@@ -1,0 +1,17 @@
+---
+- description: Allow ICMP
+  action: accept
+  protocol: icmp
+  icmp:
+    type_name: any
+- description: Drop local traffic
+  action: reject
+  log: enable
+  protocol: all
+  destination:
+    group:
+      network_group: RFC1918-v4
+- description: Allow all traffic
+  action: accept
+  state:
+    new: true
