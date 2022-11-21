@@ -15,3 +15,15 @@
   destination:
     address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
     port: 3780
+- description: Allow dhcp-sync
+  action: accept
+  protocol: tcp
+  destination:
+    address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    port: 520
+- description: Allow dhcp-failover
+  action: accept
+  protocol: tcp
+  destination:
+    address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    port: 647

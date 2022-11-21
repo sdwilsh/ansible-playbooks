@@ -112,13 +112,6 @@ vyos_dhcp_server__networks:
       - name: "sdwilsh-desk-switch"
         ip: "10.10.0.16"
         mac: "2c:c8:1b:9c:21:29"
-  - name: "GWORK"
-    default_router: "192.168.1.1"
-    own_dns: false
-    range:
-      start: "192.168.1.100"
-      stop: "192.168.1.250"
-    subnet: "192.168.1.0/24"
   - name: "IOT"
     default_router: "10.66.0.1"
     own_dns: true

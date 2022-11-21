@@ -9,3 +9,10 @@
   protocol: icmp
   icmp:
     type_name: any
+- description: Allow DHCP
+  action: accept
+  protocol: udp
+  source:
+    port: 68
+  destination:
+    port: 67

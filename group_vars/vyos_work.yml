@@ -1,5 +1,15 @@
 ---
 # This does no forwarding.
+vyos_dhcp_server__failover_name: work-HA
+vyos_dhcp_server__networks:
+  - name: "WORK"
+    default_router: "192.168.1.84"
+    own_dns: false
+    range:
+      start: "192.168.1.100"
+      stop: "192.168.1.250"
+    subnet: "192.168.1.0/24"
+
 vyos_dns_forwarding__listen_addresses: []
 
 vyos_firewall__zones:
