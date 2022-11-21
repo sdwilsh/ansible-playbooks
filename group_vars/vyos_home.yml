@@ -45,9 +45,6 @@ vyos_dns_forwarding__listen_addresses:
   # MAN
   - 10.10.0.1
   - "10.10.0.{{ vyos__host_id_ipv4 }}"
-  # GWORK
-  - 10.15.0.1
-  - "10.15.0.{{ vyos__host_id_ipv4 }}"
   # IOT
   - 10.66.0.1
   - "10.66.0.{{ vyos__host_id_ipv4 }}"
@@ -177,10 +174,6 @@ vyos_firewall__zones:
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
       - "{{ vyos__lan_interface }}.10"
-  - name: "GWORK"
-    description: "work network ({{ ansible_managed }})"
-    interfaces:
-      - "{{ vyos__lan_interface }}.15"
   - name: "IOT"
     description: "IoT network ({{ ansible_managed }})"
     interfaces:
@@ -328,7 +321,6 @@ vyos_firewall_global__group:
         - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "172.16.5.{{ vyos__peer_host_id_ipv4 }}"
-        - address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
     - name: "PEER-v6"
       description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
       afi: "ipv6"
@@ -419,10 +411,6 @@ vyos_interfaces__ethernet:
           - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
         ipv6:
           - address: "fd36:3eb3:43b0:a::{{ vyos__host_id_ipv6 }}/64"
-      - vlan_id: 15
-        description: "GWORK - work-friendly addressed network ({{ ansible_managed }})"
-        ipv4:
-          - address: "192.168.1.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 66
         description: "IOT - internet of things: WAN access, but not much else ({{ ansible_managed }})"
         ipv4:
@@ -519,14 +507,6 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: fd36:3eb3:43b0:a::1/64
     vrid: 11
-  - hello_source_address: "192.168.1.{{ vyos__host_id_ipv4 }}"
-    interface: "{{ vyos__lan_interface }}.15"
-    name: GWORK-v4
-    peer_address: "192.168.1.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 192.168.1.1/24
-    vrid: 15
   - hello_source_address: "10.66.0.{{ vyos__host_id_ipv4 }}"
     interface: "{{ vyos__lan_interface }}.66"
     name: IOT-v4
