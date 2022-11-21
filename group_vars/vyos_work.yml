@@ -95,7 +95,8 @@ vyos_ospf_interfaces__config:
         md5_key:
           key_id: 1
           key: "{{ vyos__ospf_authentication_key }}"
-      cost: "{% if vyos__host_id_ipv4 < vyos__peer_host_id_ipv4 %}10{% else %}100{% endif %}"
+      cost: 3
+      priority: "{% if vyos__host_id_ipv4 < vyos__peer_host_id_ipv4 %}10{% else %}1{% endif %}"
       dead_interval: 5
       hello_interval: 2
       network: non-broadcast
