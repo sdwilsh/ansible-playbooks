@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import json
+import subprocess
+
+
+if __name__ == "__main__":
+  print(json.dumps({
+    "vm": subprocess.run(
+      "lspci | grep -i vmware",
+      shell=True,
+      stdout=subprocess.DEVNULL,
+    ).returncode == 0
+  }))
+  exit(0)

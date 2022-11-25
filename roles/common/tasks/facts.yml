@@ -5,14 +5,15 @@
     path: "{{ common__etc_dir }}/ansible/facts.d"
     state: "directory"
 
-- name: "Add custom facts"
+- name: Add custom facts
   ansible.builtin.copy:
-    src: "files/{{ item }}"
     dest: "{{ common__etc_dir }}/ansible/facts.d/{{ item }}"
-    mode: "u=rx,g=rx,o=rx"
+    mode: u=rx,g=rx,o=rx
+    src: "files/{{ item }}"
   loop:
-    - "jail.fact"
-    - "rpi.fact"
+    - jail.fact
+    - rpi.fact
+    - vmware.fact
   register: added_custom_fact
 
 - name: Re-run setup to use custom facts
