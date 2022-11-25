@@ -100,7 +100,7 @@
             router_id: "{{ vyos_ospfv2_parameters__router_id }}"
           redistribute:
             - route_type: "connected"
-        state: "replaced"
+        state: "{% if vyos_ospf_interfaces__config | length > 0 %}replaced{% else %}deleted{% endif%}"
       tags:
         - "ospf"
 
