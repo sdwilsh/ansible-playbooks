@@ -34,6 +34,9 @@ vyos_dns_forwarding__name_servers:
   - 1.1.1.2
   - 1.0.0.2
 
+vyos_ospf_interfaces__config: []
+vyos_ospfv2__neighbors: []
+vyos_ospfv2_parameters__router_id: "10.9.0.{{ vyos__host_id_ipv4 }}"
 vyos_ospfv2__areas:
   - area_id: "0"
     authentication: "md5"
@@ -54,5 +57,4 @@ vyos_ospfv2__areas:
     network:
       - address: 192.168.1.0/24
 
-vyos_ospf_interfaces__config: []
-vyos_ospfv2_parameters__router_id: "10.9.0.{{ vyos__host_id_ipv4 }}"
+vyos_static_routes__config: []

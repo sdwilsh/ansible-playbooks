@@ -34,12 +34,6 @@ vyos_firewall__zones_path: "./firewall_zones/vyos_wan"
 
 vyos_firewall_global__group:
   address_group:
-    - name: OSPF-NEIGHBOR-v4
-      description: IP Addresses of our OSPF Neighbors ({{ ansible_managed }})
-      afi: ipv4
-      members:
-        - address: 10.2.0.85
-        - address: 10.2.0.86
   network_group:
     - name: "RFC1918-v4"
       description: "IPv4 Private Address Space ({{ ansible_managed }})"
@@ -82,24 +76,13 @@ vyos_interfaces__pppoe:
     mtu: 1492
     source_interface: eth0
 
-vyos_ospf_interfaces__config:
-  - name: eth1 vif 2
-    address_family:
+vyos_static_routes__config:
+  - address_families:
     - afi: ipv4
-      authentication:
-        md5_key:
-          key_id: 1
-          key: "{{ vyos__ospf_authentication_key }}"
-      cost: 1 # 10G
-      dead_interval: 5
-      hello_interval: 2
-      network: non-broadcast
-
-vyos_ospfv2__neighbors:
-  - neighbor_id: "10.2.0.85"
-    priority: "{{ hostvars['work01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
-  - neighbor_id: "10.2.0.86"
-    priority: "{{ hostvars['work02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+      routes:
+        - dest: 192.168.1.0/24
+          next_hops:
+            - forward_router_address: 10.2.0.84
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
