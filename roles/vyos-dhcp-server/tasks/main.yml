@@ -9,13 +9,13 @@
     lines:
       - >-
         set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
-        {{ item.default_router[:-1] }}1
+        {{ item.default_router }}
       - >-
         set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
-        {{ item.default_router[:-1] }}{{ vyos__host_id_ipv4 }}
+        {{ (item.subnet | ansible.utils.ipaddr('network'))[:-1] }}{{ vyos__host_id_ipv4 }}
       - >-
         set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
-        {{ item.default_router[:-1] }}{{ vyos__peer_host_id_ipv4 }}
+        {{ (item.subnet | ansible.utils.ipaddr('network'))[:-1] }}{{ vyos__peer_host_id_ipv4 }}
   loop: "{{ vyos_dhcp_server__networks }}"
   loop_control:
     label: "{{ item.name }} ({{ item.subnet }})"
