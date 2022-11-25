@@ -150,6 +150,12 @@
     state: "{% if chrony_conf.changed %}restarted{% else %}started{% endif %}"
     enabled: yes
 
+- name: Install open-vm-tools
+  ansible.builtin.apt:
+    name: open-vm-tools
+    state: present
+  when: ansible_local.vmware.vm
+
 # Provisoning Cleanup
 - name: Remove ubuntu user
   user:
