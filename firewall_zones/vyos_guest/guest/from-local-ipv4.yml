@@ -1,9 +1,9 @@
 ---
-- action: "accept"
-  protocol: "vrrp"
+- action: accept
+  protocol: vrrp
   destination:
     group:
-      address_group: "PEER-v4"
+      address_group: PEER-v4
 - description: "Accept all traffic"
   action: "accept"
   state:

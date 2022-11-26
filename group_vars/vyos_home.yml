@@ -60,9 +60,6 @@ vyos_dns_forwarding__listen_addresses:
   # HOME
   - 10.117.0.1
   - "10.117.0.{{ vyos__host_id_ipv4 }}"
-  # CULTIVAR
-  - 10.150.0.1
-  - "10.117.0.{{ vyos__host_id_ipv4 }}"
 
 vyos_dhcp_server__failover_name: maccabeus-HA
 vyos_dhcp_server__networks:
@@ -146,20 +143,6 @@ vyos_dhcp_server__networks:
         ip: "10.117.0.34"
         mac: "ec:b5:fa:9b:c1:f6"
     subnet: "10.117.0.0/23"
-  - name: "GUEST"
-    default_router: "10.131.0.1"
-    own_dns: false
-    range:
-      start: "10.131.0.100"
-      stop: "10.131.0.250"
-    subnet: "10.131.0.0/24"
-  - name: "CULTIVAR"
-    default_router: "10.150.0.1"
-    own_dns: true
-    range:
-      start: "10.150.0.100"
-      stop: "10.150.0.250"
-    subnet: "10.150.0.0/24"
 
 vyos_firewall__zones:
   - name: "UNIFI-MAN"
@@ -194,14 +177,6 @@ vyos_firewall__zones:
     description: "home network with home services ({{ ansible_managed }})"
     interfaces:
       - "{{ vyos__lan_interface }}.117"
-  - name: "GUEST"
-    description: "guest network ({{ ansible_managed }})"
-    interfaces:
-      - "{{ vyos__lan_interface }}.131"
-  - name: "CULTIVAR"
-    description: "cultivar network ({{ ansible_managed }})"
-    interfaces:
-      - "{{ vyos__lan_interface }}.150"
   - name: "LOCAL"
     description: "{{ ansible_managed }}"
     local-zone: yes
@@ -248,10 +223,6 @@ vyos_firewall_global__group:
       members:
         # firstlightweaveslivingsong.hogs.tswn.us
         - address: "fd36:3eb3:43b0:75::a"
-    - name: "LUXOR-v4"
-      description: "Luxor Lighting Device"
-      members:
-        - address: "10.117.0.22"
     - name: "MAN-TALKERS-from-HOME-v4"
       description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
       members:
@@ -302,10 +273,6 @@ vyos_firewall_global__group:
       members:
         - address: "fd36:3eb3:43b0:75::33"
         - address: "fd36:3eb3:43b0:75::34"
-    - name: "OPENSPRINKLER-v4"
-      description: "harvest.hogs.tswn.us"
-      members:
-        - address: "10.117.0.17"
     - name: "PEER-v4"
       description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
       afi: "ipv4"
@@ -433,14 +400,6 @@ vyos_interfaces__ethernet:
           - address: "10.117.0.{{ vyos__host_id_ipv4 }}/23"
         ipv6:
           - address: "fd36:3eb3:43b0:75::{{ vyos__host_id_ipv6 }}/64"
-      - vlan_id: 131
-        description: "GUEST - used for guest wifi ({{ ansible_managed }})"
-        ipv4:
-          - address: "10.131.0.{{ vyos__host_id_ipv4 }}/24"
-      - vlan_id: 150
-        description: "CULTIVAR - used for Cultivar access to specific services ({{ ansible_managed }})"
-        ipv4:
-          - address: "10.150.0.{{ vyos__host_id_ipv4 }}/24"
   - name: "{{ vyos__wan_centurylink_interface }}"
     description: "CenturyLink WAN ({{ ansible_managed }})"
     enabled: true
@@ -547,19 +506,3 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: fd36:3eb3:43b0:75::1/64
     vrid: 118
-  - hello_source_address: "10.131.0.{{ vyos__host_id_ipv4 }}"
-    interface: "{{ vyos__lan_interface }}.131"
-    name: GUEST-v4
-    peer_address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.131.0.1/24
-    vrid: 131
-  - hello_source_address: "10.150.0.{{ vyos__host_id_ipv4 }}"
-    interface: "{{ vyos__lan_interface }}.150"
-    name: CULTIVAR-v4
-    peer_address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.150.0.1/24
-    vrid: 150
