@@ -10,7 +10,3 @@
       tags:
         - "docker"
         - "viseron"
-    - role: "docker-zabbix-backend"
-      tags:
-        - "docker"
-        - "zabbix"

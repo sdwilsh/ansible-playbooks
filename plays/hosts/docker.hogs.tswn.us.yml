@@ -2,6 +2,10 @@
 - hosts: docker.hogs.tswn.us
   become: yes
   roles:
+    - role: docker-zabbix-backend
+      tags:
+        - docker
+        - zabbix
     - role: docker-zabbix-frontend
       tags:
         - docker
