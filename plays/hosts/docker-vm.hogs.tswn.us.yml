@@ -14,7 +14,3 @@
       tags:
         - "docker"
         - "zabbix"
-    - role: "docker-zabbix-frontend"
-      tags:
-        - "docker"
-        - "zabbix"

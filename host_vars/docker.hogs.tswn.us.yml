@@ -4,13 +4,9 @@ common__additional_ethernet_interfaces:
     inet:
       mode: manual
       lines: []
-  - name: "eth1.10"
+  - name: ens224.117
     inet:
-      mode: "manual"
-      lines: []
-  - name: "eth1.117"
-    inet:
-      mode: "manual"
+      mode: manual
       lines: []
 common__gateway_v4_address: 10.10.0.1
 common__ip_addresses:
@@ -30,3 +26,5 @@ docker__cron_jobs:
     job: "docker system prune -{{ docker__cron_jobs_prune_flags }} > /dev/null 2>&1"
     schedule: "{{ docker__cron_jobs_prune_schedule }}"
     cron_file: docker-disk-clean-up
+
+docker_networks__parent_interface: ens224
