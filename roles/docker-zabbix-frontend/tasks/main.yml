@@ -8,7 +8,6 @@
         webserver:
           dns:
             - "10.117.0.1"
-            - "fd36:3eb3:43b0:75::1"
           environment:
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
@@ -26,7 +25,6 @@
           networks:
             home:
               ipv4_address: "10.117.0.33"
-              ipv6_address: "fd36:3eb3:43b0:75::21"
           ports:
             - "80:8080/tcp"
           volumes:
