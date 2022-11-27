@@ -28,7 +28,6 @@
         server:
           dns:
             - "10.10.0.1"
-            - "fd36:3eb3:43b0:a::1"
           environment:
             DB_SERVER_HOST: "mysql.hogs.tswn.us"
             MYSQL_USER: "zabbix"
@@ -37,7 +36,7 @@
             ZBX_ENABLE_SNMP_TRAPS: "true"
             ZBX_IPMIPOLLERS: "2"
           healthcheck:
-            test: "nc -z 10.10.0.18 10051 && nc -z fd36:3eb3:43b0:a::12 10051 || exit 1"
+            test: "nc -z 10.10.0.18 10051 || exit 1"
             interval: "10s"
             timeout: "5s"
             retries: 3
@@ -47,8 +46,6 @@
           networks:
             man:
               ipv4_address: "10.10.0.18"
-              ipv6_address: "fd36:3eb3:43b0:a::12"
-              # This also gets an ipv6 address of fd36:3eb3:43b0:a:42:aff:fe75:20, based on the mac address.
           stop_grace_period: "30s"
           volumes:
             - "/etc/localtime:/etc/localtime:ro"
@@ -60,7 +57,7 @@
             - "10.10.0.1"
             - "fd36:3eb3:43b0:a::1"
           healthcheck:
-            test: "nc -z -u 10.10.0.19 1162 && nc -z -u fd36:3eb3:43b0:a::13 1162 || exit 1"
+            test: "nc -z -u 10.10.0.19 1162 || exit 1"
             interval: "10s"
             timeout: "5s"
             retries: 3
@@ -70,7 +67,6 @@
           networks:
             man:
               ipv4_address: "10.10.0.19"
-              ipv6_address: "fd36:3eb3:43b0:a::13"
           stop_grace_period: "5s"
           volumes:
             - "/etc/localtime:/etc/localtime:ro"
