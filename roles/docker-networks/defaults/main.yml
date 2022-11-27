@@ -1,2 +1,3 @@
 ---
 # defaults file for docker-networks
+docker_networks__parent_interface: eth1

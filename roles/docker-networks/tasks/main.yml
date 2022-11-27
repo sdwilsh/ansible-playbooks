@@ -5,7 +5,7 @@
     attachable: yes
     driver: "macvlan"
     driver_options:
-      parent: "eth1.10"
+      parent: "{{ docker_networks__parent_interface }}.10"
     enable_ipv6: yes
     ipam_driver: "default"
     ipam_config:
@@ -19,13 +19,13 @@
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   when:
     - common__additional_ethernet_interfaces is defined
-    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.10") | list | length > 0
+    - common__additional_ethernet_interfaces | selectattr("name", "match", docker_networks__parent_interface + ".10") | list | length > 0
 - name: "Create HOME network"
   community.docker.docker_network:
     attachable: yes
     driver: "macvlan"
     driver_options:
-      parent: "eth1.117"
+      parent: "{{ docker_networks__parent_interface }}.117"
     enable_ipv6: yes
     ipam_driver: "default"
     ipam_config:
@@ -39,14 +39,14 @@
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   when:
     - common__additional_ethernet_interfaces is defined
-    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.117") | list | length > 0
+    - common__additional_ethernet_interfaces | selectattr("name", "match", docker_networks__parent_interface + ".117") | list | length > 0
 
 - name: "Create SERVICE82 network"
   community.docker.docker_network:
     attachable: yes
     driver: "macvlan"
     driver_options:
-      parent: "eth1.82"
+      parent: "{{ docker_networks__parent_interface }}.82"
     enable_ipv6: no
     ipam_driver: "default"
     ipam_config:
@@ -58,4 +58,4 @@
     ansible_python_interpreter: "/usr/bin/env python3-docker"
   when:
     - common__additional_ethernet_interfaces is defined
-    - common__additional_ethernet_interfaces | selectattr("name", "match", "eth1.82") | list | length > 0
+    - common__additional_ethernet_interfaces | selectattr("name", "match", docker_networks__parent_interface + ".82") | list | length > 0
