@@ -1,0 +1,4 @@
+---
+- hosts: docker.hogs.tswn.us
+  become: yes
+  roles: []

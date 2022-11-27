@@ -17,6 +17,7 @@ monitor.house.gem.hogs.tswn.us ansible_host=10.117.0.24
 docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
 docker-vm-public.hogs.tswn.us ansible_host=10.10.0.7
 docker-vm.hogs.tswn.us ansible_host=10.10.0.6
+docker.hogs.tswn.us ansible_host=10.10.0.8
 
 [vyos_guest]
 guest01.routers.hogs.tswn.us ansible_host=10.10.0.82

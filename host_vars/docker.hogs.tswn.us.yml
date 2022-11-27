@@ -1,0 +1,32 @@
+---
+common__additional_ethernet_interfaces:
+  - name: ens224
+    inet:
+      mode: manual
+      lines: []
+  - name: "eth1.10"
+    inet:
+      mode: "manual"
+      lines: []
+  - name: "eth1.117"
+    inet:
+      mode: "manual"
+      lines: []
+common__gateway_v4_address: 10.10.0.1
+common__ip_addresses:
+  - 10.10.0.8/24
+common__nameservers:
+  addresses:
+    - 10.10.0.1
+
+# `a` removes unused images (useful in production).
+# `f` forces it to happen without prompting you to agree.
+docker__cron_jobs_prune_flags: af
+# Every Sunday at midnight
+docker__cron_jobs_prune_schedule: ["0", "0", "*", "*", "0"]
+docker__state: latest
+docker__cron_jobs:
+  - name: Docker disk clean up
+    job: "docker system prune -{{ docker__cron_jobs_prune_flags }} > /dev/null 2>&1"
+    schedule: "{{ docker__cron_jobs_prune_schedule }}"
+    cron_file: docker-disk-clean-up

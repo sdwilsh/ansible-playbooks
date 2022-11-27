@@ -130,6 +130,8 @@ bind_zones:
         ip: "10.10.0.6"
       - name: "docker-vm-public.hogs"
         ip: "10.10.0.7"
+      - name: "docker.hogs"
+        ip: "10.10.0.8"
       - name: "ipmi.firstlightweaveslivingsong.hogs"
         ip: "10.10.0.10"
       - name: "ipmi.dadab.hogs"
