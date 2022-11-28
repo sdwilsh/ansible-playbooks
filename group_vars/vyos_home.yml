@@ -54,9 +54,6 @@ vyos_dns_forwarding__listen_addresses:
   # SERVICE82
   - 10.82.0.1
   - "10.82.0.{{ vyos__host_id_ipv4 }}"
-  # ROUTER-LAB
-  - 10.100.0.1
-  - "10.100.0.{{ vyos__host_id_ipv4 }}"
   # HOME
   - 10.117.0.1
   - "10.117.0.{{ vyos__host_id_ipv4 }}"
@@ -169,10 +166,6 @@ vyos_firewall__zones:
     description: "installation02 - unifi controller ({{ ansible_managed }})"
     interfaces:
       - "{{ vyos__lan_interface }}.82"
-  - name: "ROUTER-LAB"
-    description: "Lab network for vyos router testing ({{ ansible_managed }})"
-    interfaces:
-      - "{{ vyos__lan_interface }}.100"
   - name: "HOME"
     description: "home network with home services ({{ ansible_managed }})"
     interfaces:
@@ -390,10 +383,6 @@ vyos_interfaces__ethernet:
         description: "SERVICE82 - installation02 (unifi controller) ({{ ansible_managed }})"
         ipv4:
           - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
-      - vlan_id: 100
-        description: "ROUTER-LAB - acts as a WAN for testing ({{ ansible_managed }})"
-        ipv4:
-          - address: "10.100.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 117
         description: "HOME - home network with home services ({{ ansible_managed }})"
         ipv4:
