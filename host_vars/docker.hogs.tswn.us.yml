@@ -8,6 +8,10 @@ common__additional_ethernet_interfaces:
     inet:
       mode: manual
       lines: []
+  - name: ens224.82
+    inet:
+      mode: manual
+      lines: []
   - name: ens224.117
     inet:
       mode: manual

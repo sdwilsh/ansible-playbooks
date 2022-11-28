@@ -1,7 +1,4 @@
 ---
 - hosts: "docker-vm-public.hogs.tswn.us"
   become: yes
-  roles:
-    - role: "docker-unifi-controller"
-      tags:
-        - "docker"
+  roles: []
