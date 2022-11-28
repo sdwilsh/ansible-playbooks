@@ -126,8 +126,6 @@ bind_zones:
         ip: "10.10.0.4"
       - name: "vcenter.hogs"
         ip: "10.10.0.5"
-      - name: "docker-vm-public.hogs"
-        ip: "10.10.0.7"
       - name: "docker.hogs"
         ip: "10.10.0.8"
       - name: "ipmi.firstlightweaveslivingsong.hogs"

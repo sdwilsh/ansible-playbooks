@@ -1,4 +1,0 @@
----
-- hosts: "docker-vm-public.hogs.tswn.us"
-  become: yes
-  roles: []
