@@ -9,7 +9,7 @@
         name: "*"
         state: "latest"
         update_cache: yes
-      async: 300 # Five minutes
+      async: 600 # Ten minutes
       become: yes
       poll: 5
       when: ansible_distribution == "Ubuntu"
