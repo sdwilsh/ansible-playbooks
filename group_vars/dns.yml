@@ -55,7 +55,7 @@ bind_zones:
           - "home"
       - name: "mysql.hogs"
         ip: "10.117.0.5"
-      - name: "nut.hogs"
+      - name: "lighterthansome.hogs"
         ip: "10.117.0.9"
       - name: "firstlightweaveslivingsong.hogs"
         ip: "10.117.0.10"

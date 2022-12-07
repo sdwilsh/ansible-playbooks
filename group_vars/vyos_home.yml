@@ -124,6 +124,9 @@ vyos_dhcp_server__networks:
       start: "10.117.1.1"
       stop: "10.117.1.254"
     static_mapping:
+      - name: "lighterthansome"
+        ip: "10.117.0.9"
+        mac: "04:cf:4b:1f:99:e2"
       - name: "office-printer"
         ip: "10.117.0.14"
         mac: "f8:0d:60:ca:32:bf"
@@ -219,6 +222,8 @@ vyos_firewall_global__group:
     - name: "MAN-TALKERS-from-HOME-v4"
       description: "IP Addresses allowed to talk to devices on MAN ({{ ansible_managed }})"
       members:
+        # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.0.9
         # sdwilsh-desktop
         - address: "10.117.0.31"
     - name: "MAN-TALKERS-from-HOME-v6"
@@ -246,6 +251,8 @@ vyos_firewall_global__group:
     - name: "NOWAN-TALKERS-from-HOME-v4"
       description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
       members:
+        # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.0.9
         # cortana.hogs.tswn.us
         - address: "10.117.0.19"
         # iona.hogs.tswn.us
