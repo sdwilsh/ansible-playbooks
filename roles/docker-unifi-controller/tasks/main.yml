@@ -39,8 +39,8 @@
           environment:
             - "PUID={{ unifi_uid }}"
             - "PGID={{ unifi_gid }}"
-            - "MEM_LIMIT=1024M"
-            - "MEM_STARTUP=1024M"
+            - "MEM_LIMIT=1024"
+            - "MEM_STARTUP=1024"
           healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:8080/"]
             interval: "15s"
