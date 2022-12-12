@@ -1,5 +1,21 @@
 ---
-- hosts: "all:!vyos"
+- name: Gather Facts
+  hosts: all
+  gather_facts: yes
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Add hosts to ansible_distribution group
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        group: "{{ hostvars[item]['ansible_facts']['distribution'] }}"
+      loop: "{{ hostvars | dict2items | map(attribute='key') }}"
+      when: item != 'localhost' and 'distribution' in hostvars[item]['ansible_facts']
+      changed_when: no
+
+- hosts: Ubuntu # ansible_disbrution == Ubuntu
+  gather_facts: no
   order: "sorted"
   tasks:
     - name: "Update packages with apt"
@@ -12,13 +28,11 @@
       async: 900 # 15 minutes, mostly becuase a Pi 2 is slow.
       become: yes
       poll: 5
-      when: ansible_distribution == "Ubuntu"
     - name: "Determine if a reboot is required"
       ansible.builtin.stat:
         path: "/var/run/reboot-required"
       register: reboot_required
-      when: ansible_distribution == "Ubuntu"
     - name: "Reboot iff required"
       ansible.builtin.reboot:
       become: yes
-      when: ansible_distribution == "Ubuntu" and reboot_required.stat.exists
+      when: reboot_required.stat.exists
