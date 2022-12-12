@@ -9,7 +9,7 @@
         name: "*"
         state: "latest"
         update_cache: yes
-      async: 600 # Ten minutes
+      async: 900 # 15 minutes, mostly becuase a Pi 2 is slow.
       become: yes
       poll: 5
       when: ansible_distribution == "Ubuntu"
