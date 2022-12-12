@@ -8,6 +8,9 @@ ns2.tswn.us ansible_host=10.10.0.4
 [jails]
 mysql.hogs.tswn.us ansible_host=10.117.0.5
 
+[pikvm]
+kvm01.hogs.tswn.us ansible_host=10.10.0.50
+
 [rpi]
 harvest.hogs.tswn.us ansible_host=10.117.0.17
 loki.hogs.tswn.us ansible_host=10.117.0.23

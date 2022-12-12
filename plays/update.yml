@@ -1,4 +1,10 @@
 ---
+- name: Mount the filesystem as rw
+  hosts: pikvm
+  gather_facts: no
+  tasks:
+    - name: Mount the filesystem as rw
+      ansible.builtin.raw: rw
 - name: Gather Facts
   hosts: all
   gather_facts: yes
@@ -13,6 +19,26 @@
       loop: "{{ hostvars | dict2items | map(attribute='key') }}"
       when: item != 'localhost' and 'distribution' in hostvars[item]['ansible_facts']
       changed_when: no
+
+#
+# ansible_disbribution-Specific Update Logic
+#
+
+- hosts: Archlinux # ansible_disbrution == Archlinux
+  gather_facts: no
+  order: sorted
+  tasks:
+    - name: Update packages with pacman
+      community.general.pacman:
+        update_cache: yes
+        upgrade: yes
+      register: pacman
+    - name: Reboot iff required
+      ansible.builtin.reboot:
+      become: yes
+      when: pacman.changed
+    - name: Mount the filesystem as ro
+      ansible.builtin.raw: ro
 
 - hosts: Ubuntu # ansible_disbrution == Ubuntu
   gather_facts: no
