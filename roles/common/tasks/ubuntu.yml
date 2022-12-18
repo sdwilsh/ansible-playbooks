@@ -43,4 +43,4 @@
     name: ubuntu
     state: absent
     remove: yes
-  when: ansible_user == "ubuntu"
+  when: ansible_user != "ubuntu"

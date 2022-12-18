@@ -61,9 +61,9 @@
   user:
     name: provision
     state: absent
-  when: ansible_user == "provision"
+  when: ansible_user != "provision"
 - name: Remove provision group
   group:
     name: provision
     state: absent
-  when: ansible_user == "provision"
+  when: ansible_user != "provision"
