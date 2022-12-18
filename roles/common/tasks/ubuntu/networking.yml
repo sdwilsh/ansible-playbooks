@@ -1,0 +1,119 @@
+---
+# Networking
+- name: "Set hostname"
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname[0:-13] }}"
+  when: "'hogs.tswn.us' in inventory_hostname"
+  tags:
+    - "networking"
+- name: "Remove netplan.io"
+  ansible.builtin.apt:
+    name: "netplan.io"
+    state: "absent"
+  tags:
+    - "networking"
+- name: "Remove netplan directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: "absent"
+  loop:
+    - "/etc/netplan"
+    - "/lib/netplan"
+    - "/run/netplan"
+  tags:
+    - "networking"
+- name: "Install Dependencies for /etc/network/interfaces"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "present"
+  become: yes
+  loop:
+    - "bridge-utils"
+    - "ifenslave"
+    - "ifupdown"
+    - "net-tools"
+  tags:
+    - "networking"
+- name: "Install Pi Dependencies for /etc/network/interfaces"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "present"
+  become: yes
+  loop:
+    - "linux-modules-extra-raspi"
+  tags:
+    - "networking"
+  when: ansible_local.rpi.is
+- name: "Load networking modules at boot"
+  ansible.builtin.copy:
+    content: |
+      8021q
+      bonding
+    dest: "/etc/modules-load.d/networking.conf"
+    mode: "u=r,g=r,o=r"
+    owner: "root"
+    group: "root"
+  become: yes
+  tags:
+    - "networking"
+- name: "Disable accepting of router advertisments on additional interfaces"
+  ansible.posix.sysctl:
+    name: "net.ipv6.conf.{{ item.name | replace('.', '/') }}.accept_ra"
+    state: "present"
+    sysctl_set: yes
+    value: "0"
+    reload: no
+  become: yes
+  loop: "{{ common__additional_ethernet_interfaces }}"
+  notify: "restart networking interfaces"
+  tags:
+    - "networking"
+  when: item.name in ansible_interfaces
+- name: "Setup /etc/network/interfaces"
+  ansible.builtin.template:
+    dest: "/etc/network/interfaces"
+    group: "root"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    src: "network-interfaces.j2"
+    validate: "ifup --no-act -i %s -a"
+  become: yes
+  notify: "restart networking interfaces"
+  tags:
+    - "networking"
+- name: "Ensure networking is enabled and unmasked"
+  ansible.builtin.systemd:
+    enabled: yes
+    masked: no
+    name: "networking"
+  tags:
+    - "networking"
+
+- name: "Ensure systemd-networkd[.socket] is stopped and disabled"
+  ansible.builtin.systemd:
+    enabled: no
+    name: "{{ item }}"
+    state: "stopped"
+  loop:
+    - "systemd-networkd"
+    - "systemd-networkd.socket"
+  tags:
+    - "networking"
+
+- name: "Disable systemd-resolved DNS Stub Listener"
+  notify: "restart systemd-resolved"
+  ansible.builtin.lineinfile:
+    insertafter: "[Resolve]"
+    line: "DNSStubListener=no"
+    path: "/etc/systemd/resolved.conf"
+  tags:
+    - "networking"
+- name: "Setup /etc/resolv.conf"
+  ansible.builtin.template:
+    src: "resolv.conf.j2"
+    dest: "/etc/resolv.conf"
+    mode: "u=rw,g=r,o=r"
+    owner: "root"
+    group: "root"
+  tags:
+    - "networking"
