@@ -13,9 +13,6 @@ common__ansible_key: "AAAAC3NzaC1lZDI1NTE5AAAAIMiRn+dJyIkJ22qrkuMlNC33xxS7VUwkYR
 common__ansible_key_type: "ssh-ed25519"
 common__gateway_v4_address: "10.117.0.1"
 common__gateway_v6_address: "fd36:3eb3:43b0:75::1"
-common__iscsi_initiator_iqn_base: "iqn.2019-09.us.tswn.hogs"
-common__iscsi_target_ip: "10.117.0.10"
-common__iscsi_target_iqn_base: "iqn.2019-09.net.shawnwilsher.firstlightweaveslivingsong.ctl"
 common__unix_groups:
   - name: "ansible"
     gid: 2000
