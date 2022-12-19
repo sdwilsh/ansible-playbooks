@@ -3,7 +3,7 @@
 - name: "Sanity Check"
   ansible.builtin.assert:
     that:
-      - common__ip_addresses
+      - common__ip_addresses is defined
   tags:
     - "always"
 
@@ -46,6 +46,7 @@
     src: "hosts.j2"
     dest: "/etc/hosts"
   become: yes
+  when: common__ip_addresses | length > 0
 
 # Platform-specific stuff
 - import_tasks: "freebsd.yml"

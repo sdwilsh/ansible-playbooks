@@ -6,6 +6,7 @@
   when: ansible_local.rpi.is and ansible_lsb.release == "21.10"
 
 - ansible.builtin.import_tasks: ubuntu/networking.yml
+  when: common__ip_addresses | length > 0
 
 - ansible.builtin.import_tasks: ubuntu/time.yml
 
