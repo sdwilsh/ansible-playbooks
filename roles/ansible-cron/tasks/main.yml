@@ -138,17 +138,18 @@
     mode: "u=rx,g=rx,o=r"
     owner: "ansible"
     group: "ansible"
-- name: "Remove old cron job"
+- name: Setup cron job at boot
   ansible.builtin.cron:
-    name: "run ansible locally"
-    state: "absent"
-- name: "Setup cron job"
+    name: run ansible locally @reboot
+    job: if ! out=`/home/ansible/ansible-cron.sh`; then echo $out; fi
+    user: ansible
+    special_time: reboot
+    state: present
+- name: Setup cron job at desired interval
   ansible.builtin.cron:
-    name: "run ansible locally @{{ item }}"
-    job: "if ! out=`/home/ansible/ansible-cron.sh`; then echo $out; fi"
-    user: "ansible"
-    special_time: "{{ item }}"
-    state: "present"
-  loop:
-    - "{{ ansible_cron__interval }}"
-    - "reboot"
+    name: "run ansible locally @{{ ansible_cron__interval }}"
+    job: if ! out=`/home/ansible/ansible-cron.sh`; then echo $out; fi
+    user: ansible
+    special_time: "{% if ansible_cron__interval %}{{ ansible_cron__interval }}{% else %}hourly{% endif %}"
+    state: present
+  when: ansible_cron__interval
