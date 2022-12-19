@@ -47,3 +47,6 @@ common__unix_groups: []
 #   - name: "ansible"
 #     gid: 2000
 common__unix_users: []
+
+# If Zabbix should be setup and managed.
+common__zabbix_enabled: yes

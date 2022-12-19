@@ -19,7 +19,9 @@
         zabbix_agent_install_agent_only: True # We only use zabbix-agent(1) when on architectures where we can only use the agent.
         zabbix_agent_ip: "{{ common__ip_addresses | ansible.utils.ipv4 | first }}"
         zabbix_install_pip_packages: False
-      when: ansible_distribution == 'Ubuntu'
+      when:
+        - ansible_distribution == 'Ubuntu'
+        - common__zabbix_enabled
     - role: "ansible-cron"
     - role: "devsec.hardening.ssh_hardening"
       vars:
