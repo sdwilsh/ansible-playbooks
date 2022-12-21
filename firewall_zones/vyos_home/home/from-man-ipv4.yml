@@ -62,3 +62,12 @@
   source:
     group:
       address_group: "HASS-CIFS-from-MAN-v4"
+- description: Allow Connections to File Server SSH
+  action: accept
+  destination:
+    group:
+      address_group: "FILE-SERVER-v4"
+    port: 22
+  protocol: tcp
+  state:
+    new: true
