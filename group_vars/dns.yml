@@ -164,6 +164,8 @@ bind_zones:
         ip: "10.10.0.54"
       - name: "esxi-intel03.hogs"
         ip: "10.10.0.55"
+      - name: "esxi-intel04.hogs"
+        ip: "10.10.0.56"
       - name: "centurylink.routers.hogs"
         ip: "10.10.0.70"
       - name: "guest.routers.hogs"
