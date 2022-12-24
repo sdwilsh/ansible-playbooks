@@ -5,20 +5,27 @@
   tasks:
     - name: Mount the filesystem as rw
       ansible.builtin.raw: rw
-- name: Gather Facts
-  hosts: all
+      changed_when: no
+- name: Setup ansible_distribution-based Groups
+  hosts: all:!vyos
   gather_facts: yes
-- hosts: localhost
-  connection: local
-  gather_facts: no
+  gather_subset:
+    - "!all"
+    - "!min"
+    - distribution
   tasks:
     - name: Add hosts to ansible_distribution group
       ansible.builtin.add_host:
         name: "{{ item }}"
         group: "{{ hostvars[item]['ansible_facts']['distribution'] }}"
-      loop: "{{ hostvars | dict2items | map(attribute='key') }}"
-      when: item != 'localhost' and 'distribution' in hostvars[item]['ansible_facts']
       changed_when: no
+      delegate_to: localhost
+      loop: "{{ ansible_play_batch }}"
+  post_tasks:
+    - name: Mount the filesystem as ro
+      ansible.builtin.raw: ro
+      changed_when: no
+      when: "'pikvm' in group_names"
 
 #
 # ansible_disbribution-Specific Update Logic
@@ -27,6 +34,11 @@
 - hosts: Archlinux # ansible_disbrution == Archlinux
   gather_facts: no
   order: sorted
+  pre_tasks:
+    - name: Mount the filesystem as rw
+      ansible.builtin.raw: rw
+      changed_when: no
+      when: "'pikvm' in group_names"
   tasks:
     - name: Update packages with pacman
       community.general.pacman:
@@ -37,8 +49,11 @@
       ansible.builtin.reboot:
       become: yes
       when: pacman.changed
+  post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
+      changed_when: no
+      when: "'pikvm' in group_names"
 
 - hosts: Ubuntu # ansible_disbrution == Ubuntu
   gather_facts: no
