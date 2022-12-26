@@ -171,12 +171,6 @@
 - hosts: vyos_home
   gather_facts: false
   tasks:
-    - name: "Gather Config"
-      vyos.vyos.vyos_facts:
-        gather_subset: "config"
-      tags:
-        - always
-
     - name: "Setup Outbound OSPF Redistribution"
       vyos.vyos.vyos_config:
         lines:
@@ -335,12 +329,6 @@
 - hosts: "vyos_remote"
   gather_facts: false
   tasks:
-    - name: "Gather Config"
-      vyos.vyos.vyos_facts:
-        gather_subset: "config"
-      tags:
-        - always
-
     - name: "Setup Outbound OSPF Redistribution"
       vyos.vyos.vyos_config:
         lines:
@@ -382,12 +370,6 @@
 - hosts: vyos_wan
   gather_facts: false
   tasks:
-    - name: Gather config
-      vyos.vyos.vyos_facts:
-        gather_subset: config
-      tags:
-        - always
-
     - name: Setup default route
       vyos.vyos.vyos_config:
         lines:
