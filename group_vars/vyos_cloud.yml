@@ -1,0 +1,101 @@
+---
+vyos_firewall__zones:
+  - name: LOCAL
+    local-zone: True
+  - name: MAN
+    description: "management vlan ({{ ansible_managed }})"
+    interfaces:
+      - eth1.10
+  - name: TRANSIT
+    description: "Transit between local routers ({{ ansible_managed }})"
+    interfaces:
+      - eth0
+  - name: SYNC
+    description: "Synchronization traffic (like VRRP, DHCP, etc) ({{ ansible_managed }})"
+    interfaces:
+      - eth1.9
+vyos_firewall__zones_path: ./firewall_zones/vyos_cloud
+
+vyos_firewall_global__group:
+  address_group:
+    - name: PEER-v4
+      description: IP Addresses of our Peer Router ({{ ansible_managed }})
+      afi: ipv4
+      members:
+        - address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+  network_group:
+    - name: RFC1918-v4
+      description: "IPv4 Private Address Space ({{ ansible_managed }})"
+      members:
+        - address: 192.168.0.0/16
+        - address: 172.16.0.0/12
+        - address: 10.0.0.0/8
+  port_group:
+    - name: DNS
+      members:
+        - port: 53
+    - name: NTP
+      members:
+        - port: 123
+
+vyos_interfaces__ethernet:
+  - name: eth0
+    description: "TRANSIT - router-to-router traffic ({{ ansible_managed }})"
+    ipv4:
+      - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
+  - name: eth1
+    description: "Trunk ({{ ansible_managed }})"
+    vifs:
+      - vlan_id: 9
+        description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 10
+        description: "MAN - management vlan ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+
+vyos_static_routes__config:
+  - address_families:
+    - afi: ipv4
+      routes:
+        - dest: 0.0.0.0/0
+          next_hops:
+            - forward_router_address: 10.2.0.70
+
+# This uses a local DNS forwarding server, so use that.
+vyos_system__name_servers:
+  - "127.0.0.1"
+
+vyos_vrrp__conntrack_sync:
+  interface: eth1.9
+  peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+  sync_group: MAIN
+vyos_vrrp__groups:
+  - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth0
+    name: TRANSIT-v4
+    peer_address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.2.0.78/24
+    vrid: 2
+  - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.9
+    name: SYNC-v4
+    peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.9.0.78/24
+    vrid: 9
+  - hello_source_address: "10.10.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.10
+    name: MAN-v4
+    peer_address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.10.0.78/24
+    vrid: 10
+
