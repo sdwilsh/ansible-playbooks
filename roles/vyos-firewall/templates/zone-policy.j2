@@ -30,7 +30,7 @@ set zone-policy zone {{ zone.name }} interface '{{ interface }}'
     {% endif %}
     {%- for interface in zone.interfaces %}
         {{- set_interface(zone, interface) }}
-    {%- endfor -%}
+    {% endfor -%}
 {%- endmacro %}
 
 {%- macro set_zone_firewalls(zone, afi) -%}
