@@ -6,6 +6,10 @@ vyos_firewall__zones:
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
       - eth1.10
+  - name: REMOTE-TUN
+    description: tartarus01.tswn.us
+    interfaces:
+      - wg0
   - name: TRANSIT
     description: "Transit between local routers ({{ ansible_managed }})"
     interfaces:
@@ -56,6 +60,19 @@ vyos_interfaces__ethernet:
         description: "MAN - management vlan ({{ ansible_managed }})"
         ipv4:
           - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+
+vyos_ospf_interfaces__config:
+  - name: wg0
+    address_family:
+    - afi: ipv4
+      authentication:
+        md5_key:
+          key_id: 1
+          key: "{{ vyos__ospf_authentication_key }}"
+      cost: 10 # 1G
+      dead_interval: 5
+      hello_interval: 2
+      network: point-to-point
 
 vyos_static_routes__config:
   - address_families:

@@ -9,3 +9,6 @@
   protocol: icmp
   icmp:
     type_name: any
+- description: Drop OSPF
+  action: drop
+  protocol: 89

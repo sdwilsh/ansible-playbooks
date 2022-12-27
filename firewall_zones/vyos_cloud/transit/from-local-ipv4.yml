@@ -23,3 +23,8 @@
   destination:
     group:
       port_group: DNS
+- description: Allow Wireguard
+  action: accept
+  destination:
+    port: "{{ hostvars['tartarus01.tswn.us'].vyos_interfaces__wireguard | selectattr('description', 'eq', inventory_hostname + ' wg0') | map(attribute='port') | first }}"
+  protocol: udp

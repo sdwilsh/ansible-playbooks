@@ -56,5 +56,12 @@ vyos_ospfv2__areas:
     authentication: md5
     network:
       - address: 192.168.1.0/24
+  # Cloud Gateway
+  - area_id: 80
+    authentication: md5
+    network:
+      # Tunnel Transit Networks
+      - address: 10.2.1.0/30 # For cloud01.routers.hogs.tswn.us
+      - address: 10.2.1.4/30 # For cloud02.routers.hogs.tswn.us
 
 vyos_static_routes__config: []

@@ -22,3 +22,6 @@
   destination:
     address: 255.255.255.255
     port: 4680
+- description: Drop OSPF
+  action: drop
+  protocol: 89

@@ -21,6 +21,10 @@ vyos_dns_forwarding__name_servers:
 vyos__ssh_address_ipv4: 149.248.37.12
 
 vyos_firewall__zones:
+  - name: CLOUD
+    interfaces:
+      - wg3
+      - wg4
   - name: "LOCAL"
     local-zone: yes
   - name: "MACCABEUS"
@@ -94,6 +98,44 @@ vyos_interfaces__wireguard:
             - network: "10.117.2.12/32"
         pubkey: "dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw="
     port: "51822"
+  - name: wg3
+    description: cloud01.routers.hogs.tswn.us wg0
+    ipv4:
+      - address: 10.2.1.2/30
+    mtu: "{{ hostvars['cloud01.routers.hogs.tswn.us'].vyos_interfaces__wireguard | selectattr('name', 'eq', 'wg0') | map(attribute='mtu') | first}}"
+    peers:
+      - name: cloud01.routers.hogs.tswn.us
+        allowed_ips:
+          ipv4:
+            # cloud01.routers.hogs.tswn.us
+            - network: 10.2.1.1/32
+            # Service Networks to Tunnel
+            - network: 10.82.0.0/24
+            # Allow OSPF
+            - network: 224.0.0.5/32
+            - network: 224.0.0.6/32
+        persistent_keepalive_sec: 15
+        pubkey: "{{ hostvars['cloud01.routers.hogs.tswn.us'].wireguard__pubkey }}"
+    port: 51823
+  - name: wg4
+    description: cloud02.routers.hogs.tswn.us wg0
+    ipv4:
+      - address: 10.2.1.6/30
+    mtu: "{{ hostvars['cloud02.routers.hogs.tswn.us'].vyos_interfaces__wireguard | selectattr('name', 'eq', 'wg0') | map(attribute='mtu') | first}}"
+    peers:
+      - name: cloud02.routers.hogs.tswn.us
+        allowed_ips:
+          ipv4:
+            # cloud02.routers.hogs.tswn.us
+            - network: 10.2.1.5/32
+            # Service Networks to Tunnel
+            - network: 10.82.0.0/24
+            # Allow OSPF
+            - network: 224.0.0.5/32
+            - network: 224.0.0.6/32
+        persistent_keepalive_sec: 15
+        pubkey: "{{ hostvars['cloud02.routers.hogs.tswn.us'].wireguard__pubkey }}"
+    port: 51824
 
 vyos_ospf_interfaces__config:
   - name: "wg0"
@@ -120,8 +162,36 @@ vyos_ospf_interfaces__config:
       hello_interval: 2
       network: "point-to-point"
       priority: "{{ hostvars['maccabeus02.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - name: wg3
+    address_family:
+    - afi: ipv4
+      authentication:
+        md5_key:
+          key_id: 1
+          key: "{{ vyos__ospf_authentication_key }}"
+      cost: 10 # 1G
+      dead_interval: 5
+      hello_interval: 2
+      network: point-to-point
+      priority: "{{ hostvars['cloud01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - name: wg4
+    address_family:
+    - afi: ipv4
+      authentication:
+        md5_key:
+          key_id: 1
+          key: "{{ vyos__ospf_authentication_key }}"
+      cost: 10 # 1G
+      dead_interval: 5
+      hello_interval: 2
+      network: point-to-point
+      priority: "{{ hostvars['cloud02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
 
 vyos_ospfv2__neighbors:
+  - neighbor_id: 10.2.1.1
+    priority: "{{ hostvars['cloud01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - neighbor_id: 10.2.1.5
+    priority: "{{ hostvars['cloud02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
   - neighbor_id: "10.10.1.1"
     priority: "{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__vrrp_priority }}"
   - neighbor_id: "10.10.1.5"

@@ -2,3 +2,28 @@
 vyos__host_id_ipv4: "79"
 vyos__peer_host_id_ipv4: "80"
 vyos__vrrp_priority: 100
+
+vyos_interfaces__wireguard:
+  - name: wg0
+    description: tartarus01.tswn.us wg3
+    ipv4:
+      - address: 10.2.1.1/30
+    mtu: 1280
+    peers:
+      - name: tartarus01.tswn.us
+        allowed_ips:
+          ipv4:
+            # tartarus01.tswn.us
+            - network: 10.2.1.2/32
+            # Allow all traffic
+            - network: 0.0.0.0/0
+        ipv4:
+          - address: 149.248.37.12
+        persistent_keepalive_sec: 15
+        port: "{{ hostvars['tartarus01.tswn.us'].vyos_interfaces__wireguard | selectattr('name', 'eq', 'wg3') | map(attribute='port') | first}}"
+        pubkey: "{{ hostvars['tartarus01.tswn.us'].wireguard__pubkey }}"
+
+vyos_ospfv2__neighbors:
+  - neighbor_id: 10.2.1.2
+
+wireguard__pubkey: dnL1k7Nmh0uaqzTO+aTfRaMf9UtG5XgaMl5nFSa4/FE=
