@@ -299,22 +299,6 @@
           port: "2456-2458"
           protocol: "udp"
           translation_address: "10.117.0.30"
-        - description: "unifi-gui"
-          port: "8443"
-          protocol: "tcp"
-          translation_address: "10.82.0.2"
-        - description: "unifi-inform"
-          port: "8080"
-          protocol: "tcp"
-          translation_address: "10.82.0.2"
-        - description: "unifi-ssh"
-          port: "4222"
-          protocol: "tcp"
-          translation_address: "10.82.0.2"
-        - description: "unifi-stun"
-          port: "3478"
-          protocol: "udp"
-          translation_address: "10.82.0.2"
       loop_control:
         index_var: rule_number
       tags:
