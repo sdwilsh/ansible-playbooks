@@ -18,6 +18,11 @@ vyos_firewall__zones:
     description: "Synchronization traffic (like VRRP, DHCP, etc) ({{ ansible_managed }})"
     interfaces:
       - eth1.9
+  # Services
+  - name: UNIFI
+    description: Unifi Controller
+    interfaces:
+      - eth1.82
 vyos_firewall__zones_path: ./firewall_zones/vyos_cloud
 
 vyos_firewall_global__group:
@@ -29,13 +34,28 @@ vyos_firewall_global__group:
         - address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
+    - name: UNIFI-v4
+      description: The v4 address of the Unifi Controller
+      afi: ipv4
+      members:
+        - address: 10.82.0.2
   network_group:
+    - name: HOME-v4
+      afi: ipv4
+      members:
+        - address: 10.117.0.0/23
     - name: RFC1918-v4
+      afi: ipv4
       description: "IPv4 Private Address Space ({{ ansible_managed }})"
       members:
         - address: 192.168.0.0/16
         - address: 172.16.0.0/12
         - address: 10.0.0.0/8
+    - name: UNIFI-MAN-v4
+      afi: ipv4
+      members:
+        - address: 10.1.0.0/24
   port_group:
     - name: DNS
       members:
@@ -43,6 +63,18 @@ vyos_firewall_global__group:
     - name: NTP
       members:
         - port: 123
+    - name: UNIFI-DEVICE-TCP
+      description: Ports used by the Unifi Controller to talk to devices over TCP
+      members:
+        - port: 8080
+    - name: UNIFI-DEVICE-UDP
+      description: Ports used by the Unifi Controller to talk to devices over UDP
+      members:
+        - port: 3478
+    - name: UNIFI-WEB-TCP
+      description: Ports used by the Unifi Controller for clients
+      members:
+        - port: 8443
 
 vyos_interfaces__ethernet:
   - name: eth0
@@ -60,6 +92,10 @@ vyos_interfaces__ethernet:
         description: "MAN - management vlan ({{ ansible_managed }})"
         ipv4:
           - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 82
+        description: Unifi Controller
+        ipv4:
+          - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
 
 vyos_ospf_interfaces__config:
   - name: wg0
@@ -115,4 +151,11 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: 10.10.0.78/24
     vrid: 10
-
+  - hello_source_address: "10.82.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.82
+    name: UNIFI-v4
+    peer_address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.82.0.78/24
+    vrid: 82

@@ -63,5 +63,7 @@ vyos_ospfv2__areas:
       # Tunnel Transit Networks
       - address: 10.2.1.0/30 # For cloud01.routers.hogs.tswn.us
       - address: 10.2.1.4/30 # For cloud02.routers.hogs.tswn.us
+      # Service Networks to Tunnel
+      - address: 10.82.0.0/24
 
 vyos_static_routes__config: []

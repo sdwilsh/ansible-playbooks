@@ -51,9 +51,6 @@ vyos_dns_forwarding__listen_addresses:
   # NOWAN
   - 10.67.0.1
   - "10.67.0.{{ vyos__host_id_ipv4 }}"
-  # SERVICE82
-  - 10.82.0.1
-  - "10.82.0.{{ vyos__host_id_ipv4 }}"
   # HOME
   - 10.117.0.1
   - "10.117.0.{{ vyos__host_id_ipv4 }}"
@@ -165,10 +162,6 @@ vyos_firewall__zones:
     description: "internet of shit: no WAN or other access ({{ ansible_managed }})"
     interfaces:
       - "{{ vyos__lan_interface }}.67"
-  - name: "SERVICE82"
-    description: "installation02 - unifi controller ({{ ansible_managed }})"
-    interfaces:
-      - "{{ vyos__lan_interface }}.82"
   - name: "HOME"
     description: "home network with home services ({{ ansible_managed }})"
     interfaces:
@@ -282,7 +275,6 @@ vyos_firewall_global__group:
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
-        - address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.100.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
@@ -386,10 +378,6 @@ vyos_interfaces__ethernet:
         description: "NOWAN - internet of shit: no WAN or other access ({{ ansible_managed }})"
         ipv4:
           - address: "10.67.0.{{ vyos__host_id_ipv4 }}/24"
-      - vlan_id: 82
-        description: "SERVICE82 - installation02 (unifi controller) ({{ ansible_managed }})"
-        ipv4:
-          - address: "10.82.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 117
         description: "HOME - home network with home services ({{ ansible_managed }})"
         ipv4:
@@ -424,6 +412,16 @@ vyos_ospf_interfaces__config:
       dead_interval: 5
       hello_interval: 2
       network: "point-to-point"
+
+vyos_static_routes__config:
+  - address_families:
+    - afi: ipv4
+      routes:
+        - dest: 10.82.0.0/24
+          next_hops:
+            # TODO(#4): Temporary until the home router moves to the transit stack
+            - forward_router_address: 10.10.0.78
+            # - forward_router_address: 10.2.0.78
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
@@ -478,14 +476,6 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: 10.67.0.1/24
     vrid: 67
-  - hello_source_address: "10.82.0.{{ vyos__host_id_ipv4 }}"
-    interface: "{{ vyos__lan_interface }}.82"
-    name: SERVICE82-v4
-    peer_address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.82.0.1/24
-    vrid: 82
   - hello_source_address: "10.117.0.{{ vyos__host_id_ipv4 }}"
     interface: "{{ vyos__lan_interface }}.117"
     name: HOME-v4

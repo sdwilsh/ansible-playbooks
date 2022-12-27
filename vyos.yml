@@ -171,11 +171,30 @@
 - hosts: vyos_cloud
   gather_facts: false
   tasks:
+    - name: Setup Outbound OSPF Redistribution
+      vyos.vyos.vyos_config:
+        lines:
+          - set policy access-list 150 description 'Outbound OSPF Redistribution'
+          - set policy access-list 150 rule 10 action 'permit'
+          - set policy access-list 150 rule 10 destination any
+          - set policy access-list 150 rule 10 source inverse-mask '0.0.0.255'
+          - set policy access-list 150 rule 10 source network '10.82.0.0'
+          - set policy access-list 150 rule 1000 action 'deny'
+          - set policy access-list 150 rule 1000 destination any
+          - set policy access-list 150 rule 1000 source any
+          - set protocols ospf access-list 150 export 'connected'
+        save: yes
+      tags:
+        - ospf
+
     - name: Setup default cloud gateway route
       vyos.vyos.vyos_config:
         lines:
           - "set protocols static table 10 route 0.0.0.0/0 next-hop {{ nexthop }}"
           - set policy route CLOUD rule 10 set table 10
+          # TODO(#4): This is temporary until home router moves onto the transit stack
+          - set protocols static table 10 route 10.1.0.0/24 next-hop 10.10.0.1
+          - set protocols static table 10 route 10.117.0.0/23 next-hop 10.10.0.1
       vars:
         nexthop: >-
           {{ hostvars['tartarus01.tswn.us'].vyos_interfaces__wireguard |
@@ -185,6 +204,15 @@
               map(attribute='address') |
               first |
               ansible.utils.ipaddr('address') }}
+      tags:
+        - routing
+    - name: Setup interfaces to use cloud gateway route
+      vyos.vyos.vyos_config:
+        lines:
+          - "set interfaces {{ item }} policy route 'CLOUD'"
+        save: yes
+      loop:
+        - ethernet eth1 vif 82
       tags:
         - routing
 
@@ -236,9 +264,6 @@
           # IOT
           - interface: "{{ vyos__lan_interface }}.66"
             ipv4_network: "10.66.0.0/24"
-          # SERVICE82
-          - interface: "{{ vyos__lan_interface }}.82"
-            ipv4_network: "10.82.0.0/24"
           # HOME
           - interface: "{{ vyos__lan_interface }}.117"
             ipv4_network: "10.117.0.0/23"
@@ -369,6 +394,40 @@
         save: yes
       tags:
         - "routing"
+
+    - name: Setup NAT masquerade rules
+      vyos.vyos.vyos_config:
+        lines:
+          - "set nat source rule {{ (rule_number + 1) * 10 }} outbound-interface eth0"
+          - "set nat source rule {{ (rule_number + 1) * 10 }} source address {{ item }}"
+          - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
+      loop:
+        - 10.82.0.0/24
+      loop_control:
+        index_var: rule_number
+      tags:
+        - nat
+    - name: Setup NAT port forwarding rules
+      vyos.vyos.vyos_config:
+        lines:
+          - "set nat destination rule {{ (rule_number + 1) * 10 }} description '{{ item.description }}'"
+          - "set nat destination rule {{ (rule_number + 1) * 10 }} destination port '{{ item.port }}'"
+          - "set nat destination rule {{ (rule_number + 1) * 10 }} inbound-interface eth0"
+          - "set nat destination rule {{ (rule_number + 1) * 10 }} protocol '{{ item.protocol }}'"
+          - "set nat destination rule {{ (rule_number + 1) * 10 }} translation address '{{ item.translation_address }}'"
+      loop:
+        - description: unifi-inform
+          port: 8080
+          protocol: tcp
+          translation_address: 10.82.0.2
+        - description: unifi-stun
+          port: 3478
+          protocol: udp
+          translation_address: 10.82.0.2
+      loop_control:
+        index_var: rule_number
+      tags:
+        - nat
 
 #
 # vyos_wan

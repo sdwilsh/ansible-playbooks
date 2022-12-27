@@ -38,3 +38,13 @@
   source:
     group:
       address_group: "FILE-SERVER-v4"
+  # TODO(#4): This is temporary until home router moves onto the transit stack
+- description: Allow access to Unifi Web port
+  action: accept
+  state:
+    new: true
+  destination:
+    address: 10.82.0.2
+    group:
+      port_group: UNIFI-WEB-TCP
+  protocol: tcp

@@ -1,0 +1,10 @@
+---
+- action: accept
+  protocol: vrrp
+  destination:
+    group:
+      address_group: PEER-v4
+- description: Allow all traffic
+  action: accept
+  state:
+    new: true

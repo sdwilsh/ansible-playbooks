@@ -20,6 +20,23 @@ vyos_dns_forwarding__name_servers:
 
 vyos__ssh_address_ipv4: 149.248.37.12
 
+vyos_firewall_global__group:
+  address_group:
+    - name: UNIFI-v4
+      description: The v4 address of the Unifi Controller
+      afi: ipv4
+      members:
+        - address: 10.82.0.2
+  port_group:
+    - name: UNIFI-DEVICE-TCP
+      description: Ports used by the Unifi Controller to talk to devices over TCP
+      members:
+        - port: 8080
+    - name: UNIFI-DEVICE-UDP
+      description: Ports used by the Unifi Controller to talk to devices over UDP
+      members:
+        - port: 3478
+
 vyos_firewall__zones:
   - name: CLOUD
     interfaces:
