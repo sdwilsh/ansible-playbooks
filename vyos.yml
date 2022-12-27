@@ -209,24 +209,15 @@
           # MAN
           - interface: "{{ vyos__lan_interface }}.10"
             ipv4_network: "10.10.0.0/24"
-          # GWORK
-          - interface: "{{ vyos__lan_interface }}.15"
-            ipv4_network: "192.168.1.0/24"
           # IOT
           - interface: "{{ vyos__lan_interface }}.66"
             ipv4_network: "10.66.0.0/24"
           # SERVICE82
           - interface: "{{ vyos__lan_interface }}.82"
             ipv4_network: "10.82.0.0/24"
-          # ROUTER-LAB
-          - interface: "{{ vyos__lan_interface }}.100"
-            ipv4_network: "10.100.0.0/24"
           # HOME
           - interface: "{{ vyos__lan_interface }}.117"
             ipv4_network: "10.117.0.0/23"
-          # GUEST
-          - interface: "{{ vyos__lan_interface }}.131"
-            ipv4_network: "10.131.0.0/24"
           - interface: "wg0"
             ipv4_network: "10.117.2.0/24"
       tags:
