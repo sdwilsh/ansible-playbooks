@@ -2,14 +2,14 @@
 vyos_dhcp_server__failover_name: guest-HA
 vyos_dhcp_server__networks:
   - name: GUEST
-    default_router: 10.131.0.81
+    default_router: 10.131.0.1
     own_dns: false
     range:
       start: 10.131.0.100
       stop: 10.131.0.250
     subnet: 10.131.0.0/24
   - name: CULTIVAR
-    default_router: 10.150.0.81
+    default_router: 10.150.0.1
     own_dns: true
     range:
       start: 10.150.0.100
@@ -20,7 +20,7 @@ vyos_dns_forwarding__allow_from:
   - 10.150.0.0/24
 vyos_dns_forwarding__listen_addresses:
   # CULTIVAR
-  - 10.150.0.81
+  - 10.150.0.1
   - "10.150.0.{{ vyos__host_id_ipv4 }}"
 
 vyos_firewall__zones:
@@ -133,29 +133,13 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: 10.2.0.81/24
     vrid: 2
-  - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth1.9
-    name: SYNC-v4
-    peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.9.0.81/24
-    vrid: 9
-  - hello_source_address: "10.10.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth1.10
-    name: MAN-v4
-    peer_address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.10.0.81/24
-    vrid: 10
   - hello_source_address: "10.131.0.{{ vyos__host_id_ipv4 }}"
     interface: eth1.131
     name: GUEST-v4
     peer_address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"
     sync_group: MAIN
-    virtual_address: 10.131.0.81/24
+    virtual_address: 10.131.0.1/24
     vrid: 131
   - hello_source_address: "10.150.0.{{ vyos__host_id_ipv4 }}"
     interface: eth1.150
@@ -163,5 +147,5 @@ vyos_vrrp__groups:
     peer_address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"
     sync_group: MAIN
-    virtual_address: 10.150.0.81/24
+    virtual_address: 10.150.0.1/24
     vrid: 150
