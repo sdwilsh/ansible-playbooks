@@ -1,4 +1,15 @@
 ---
+vyos_dns_forwarding__allow_from:
+  - 10.95.0.0/23
+  - 10.96.0.0/23
+vyos_dns_forwarding__listen_addresses:
+  # TANZU-MAN
+  - 10.95.0.1
+  - "10.95.0.{{ vyos__host_id_ipv4 }}"
+  # TANZU-WORK
+  - 10.96.0.1
+  - "10.96.0.{{ vyos__host_id_ipv4 }}"
+
 vyos_firewall__zones:
   - name: LOCAL
     local-zone: True
