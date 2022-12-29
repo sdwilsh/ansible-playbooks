@@ -1,9 +1,4 @@
 ---
-- action: accept
-  protocol: vrrp
-  source:
-    group:
-      address_group: PEER-v4
 - description: Allow conntrack-sync
   action: accept
   protocol: udp
