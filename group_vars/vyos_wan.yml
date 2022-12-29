@@ -80,6 +80,12 @@ vyos_static_routes__config:
   - address_families:
     - afi: ipv4
       routes:
+        - dest: 10.95.0.0/23
+          next_hops:
+            - forward_router_address: 10.2.0.75
+        - dest: 10.96.0.0/23
+          next_hops:
+            - forward_router_address: 10.2.0.75
         - dest: 10.131.0.0/24
           next_hops:
             - forward_router_address: 10.2.0.81

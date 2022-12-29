@@ -1,0 +1,19 @@
+---
+- action: accept
+  protocol: vrrp
+  destination:
+    group:
+      address_group: PEER-v4
+- description: Allow ICMP
+  action: accept
+  protocol: icmp
+  icmp:
+    type_name: any
+- description: Allow DNS
+  action: accept
+  protocol: tcp_udp
+  state:
+    new: true
+  destination:
+    group:
+      port_group: DNS
