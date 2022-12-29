@@ -51,7 +51,7 @@
     ipam_driver: default
     ipam_config:
       - subnet: 10.82.0.0/24
-        gateway: 10.82.0.78
+        gateway: 10.82.0.1
     name: service82
     state: present
   vars:

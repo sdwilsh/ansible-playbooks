@@ -35,7 +35,7 @@
       services:
         controller:
           dns:
-            - 10.82.0.78
+            - 10.82.0.1
           environment:
             - "PUID={{ unifi_uid }}"
             - "PGID={{ unifi_gid }}"

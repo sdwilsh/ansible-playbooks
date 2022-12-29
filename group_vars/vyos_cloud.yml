@@ -135,27 +135,11 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: 10.2.0.78/24
     vrid: 2
-  - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth1.9
-    name: SYNC-v4
-    peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.9.0.78/24
-    vrid: 9
-  - hello_source_address: "10.10.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth1.10
-    name: MAN-v4
-    peer_address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.10.0.78/24
-    vrid: 10
   - hello_source_address: "10.82.0.{{ vyos__host_id_ipv4 }}"
     interface: eth1.82
     name: UNIFI-v4
     peer_address: "10.82.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"
     sync_group: MAIN
-    virtual_address: 10.82.0.78/24
+    virtual_address: 10.82.0.1/24
     vrid: 82
