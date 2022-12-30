@@ -46,6 +46,18 @@ vyos_firewall_global__group:
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.95.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.96.0.{{ vyos__peer_host_id_ipv4 }}"
+    - name: TANZU-SUP-v4
+      description: vCenter Tanzu Supervisor IP Addresses
+      afi: ipv4
+      members:
+        - address: 10.95.0.11
+        - address: 10.95.0.12
+        - address: 10.95.0.13
+    - name: VCENTER-v4
+      description: vCenter IP Addresses
+      afi: ipv4
+      members:
+        - address: 10.10.0.5
   network_group:
     - name: RFC1918-v4
       description: "IPv4 Private Address Space ({{ ansible_managed }})"
