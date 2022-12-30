@@ -50,6 +50,7 @@ vyos_firewall_global__group:
       description: vCenter Tanzu Supervisor IP Addresses
       afi: ipv4
       members:
+        - address: 10.95.0.10
         - address: 10.95.0.11
         - address: 10.95.0.12
         - address: 10.95.0.13
