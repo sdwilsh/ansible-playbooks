@@ -221,12 +221,10 @@ vyos_firewall_global__group:
       afi: "ipv4"
       members:
         - address: "10.117.0.5"
-    - name: "NTP-SERVICES-v4"
-      description: "NTP services ({{ ansible_managed }})"
+    - name: NTP-SERVICES-v4
+      description: NTP Hosts
       members:
-        - address: "10.117.0.50"
-        - address: "10.10.0.60"
-        - address: "10.10.0.61"
+        - address: 10.117.0.50
     - name: "NOWAN-TALKERS-from-HOME-v4"
       description: "IP Addresses allowed to talk to devices on NOWAN and IOT ({{ ansible_managed }})"
       members:
@@ -302,10 +300,9 @@ vyos_firewall_global__group:
         - port: "111"
         - port: "674"
         - port: "2049"
-    - name: "NTP"
-      description: "{{ ansible_managed }}"
+    - name: NTP
       members:
-        - port: "123"
+        - port: 123
     - name: "UNIFI-DEVICE-TCP"
       description: "Ports used by the Unifi Controller to talk to devices over TCP ({{ ansible_managed }})"
       members:

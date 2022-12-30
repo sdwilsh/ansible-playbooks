@@ -37,6 +37,10 @@ vyos_firewall__zones_path: ./firewall_zones/vyos_tanzu
 
 vyos_firewall_global__group:
   address_group:
+    - name: NTP-SERVICES-v4
+      description: NTP Hosts
+      members:
+        - address: 10.117.0.50
     - name: PEER-v4
       description: IP Addresses of our Peer Router ({{ ansible_managed }})
       afi: ipv4
@@ -106,6 +110,9 @@ vyos_static_routes__config:
         - dest: 0.0.0.0/0
           next_hops:
             - forward_router_address: 10.2.0.70
+        - dest: 10.117.0.0/23
+          next_hops:
+            - forward_router_address: 10.2.0.72
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:

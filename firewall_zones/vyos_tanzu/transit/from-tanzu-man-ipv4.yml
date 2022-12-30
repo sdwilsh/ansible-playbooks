@@ -13,6 +13,14 @@
   source:
     group:
       address_group: TANZU-SUP-v4
+- description: Allow NTP
+  action: accept
+  state:
+    new: true
+  destination:
+    group:
+      address_group: NTP-SERVICES-v4
+      port_group: NTP
 - description: Drop local traffic
   action: reject
   log: enable
