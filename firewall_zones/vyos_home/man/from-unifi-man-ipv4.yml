@@ -12,22 +12,3 @@
     group:
       address_group: "NTP-SERVICES-v4"
       port_group: "NTP"
-  # TODO(#4): This is temporary until home router moves onto the transit stack
-- description: Allow access to Unifi TCP ports
-  action: accept
-  state:
-    new: true
-  destination:
-    address: 10.82.0.2
-    group:
-      port_group: UNIFI-DEVICE-TCP
-  protocol: tcp
-- description: Allow access to Unifi UDP ports
-  action: accept
-  state:
-    new: true
-  destination:
-    address: 10.82.0.2
-    group:
-      port_group: UNIFI-DEVICE-UDP
-  protocol: udp

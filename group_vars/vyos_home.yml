@@ -172,6 +172,10 @@ vyos_firewall__zones:
   - name: "REMOTE-TUN"
     interfaces:
       - "wg0"
+  - name: TRANSIT
+    description: Transit between local routers
+    interfaces:
+      - "{{ vyos__lan_interface }}.2"
   - name: "WAN-CenturyLink"
     description: "CenturyLink WAN connection ({{ ansible_managed }})"
     firewall_name: "WAN"
@@ -271,6 +275,7 @@ vyos_firewall_global__group:
       afi: "ipv4"
       members:
         - address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
@@ -358,6 +363,10 @@ vyos_interfaces__ethernet:
     ipv4:
       - address: "10.1.0.{{ vyos__host_id_ipv4 }}/24"
     vifs:
+      - vlan_id: 2
+        description: TRANSIT - router-to-router traffic
+        ipv4:
+          - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 9
         description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
         ipv4:
@@ -419,9 +428,7 @@ vyos_static_routes__config:
       routes:
         - dest: 10.82.0.0/24
           next_hops:
-            # TODO(#4): Temporary until the home router moves to the transit stack
-            - forward_router_address: 10.10.0.78
-            # - forward_router_address: 10.2.0.78
+            - forward_router_address: 10.2.0.78
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
@@ -436,6 +443,14 @@ vyos_vrrp__groups:
     sync_group: MAIN
     virtual_address: 10.1.0.1/24
     vrid: 1
+  - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
+    interface: "{{ vyos__lan_interface }}.2"
+    name: TRANSIT-v4
+    peer_address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.2.0.72/24
+    vrid: 2
   - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
     interface: "{{ vyos__lan_interface }}.9"
     name: SYNC-v4

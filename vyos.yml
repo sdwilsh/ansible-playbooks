@@ -190,13 +190,12 @@
     - name: Setup default cloud gateway route
       vyos.vyos.vyos_config:
         lines:
-          - "set protocols static table 10 route 0.0.0.0/0 next-hop {{ nexthop }}"
+          - "set protocols static table 10 route 0.0.0.0/0 next-hop {{ tunnel }}"
           - set policy route CLOUD rule 10 set table 10
-          # TODO(#4): This is temporary until home router moves onto the transit stack
-          - set protocols static table 10 route 10.1.0.0/24 next-hop 10.10.0.1
-          - set protocols static table 10 route 10.117.0.0/23 next-hop 10.10.0.1
+          - set protocols static table 10 route 10.1.0.0/24 next-hop 10.2.0.72
+          - set protocols static table 10 route 10.117.0.0/23 next-hop 10.2.0.72
       vars:
-        nexthop: >-
+        tunnel: >-
           {{ hostvars['tartarus01.tswn.us'].vyos_interfaces__wireguard |
               selectattr('description', 'eq', inventory_hostname + ' wg0') |
               map(attribute='ipv4') |
