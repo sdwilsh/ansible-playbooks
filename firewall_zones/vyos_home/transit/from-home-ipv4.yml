@@ -10,7 +10,7 @@
     new: true
   source:
     group:
-      address_group: MAN-TALKERS-from-HOME-v4
+      address_group: SERVICE-TALKERS-v4
 - description: Allow access to Unifi Web port
   action: accept
   state:

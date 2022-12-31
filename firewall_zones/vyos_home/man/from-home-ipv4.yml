@@ -12,13 +12,13 @@
     group:
       address_group: "NTP-SERVICES-v4"
       port_group: "NTP"
-- description: "Allow specific hosts"
-  action: "accept"
+- description: Allow specific hosts
+  action: accept
   state:
     new: true
   source:
     group:
-      address_group: "MAN-TALKERS-from-HOME-v4"
+      address_group: SERVICE-TALKERS-v4
 - description: "Allow zabbix-agent Connections"
   action: "accept"
   protocol: "tcp"

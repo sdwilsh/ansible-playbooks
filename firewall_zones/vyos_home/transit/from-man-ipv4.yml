@@ -4,6 +4,13 @@
   protocol: icmp
   icmp:
     type_name: any
+- description: Allow specific hosts
+  action: accept
+  state:
+    new: true
+  source:
+    group:
+      address_group: SERVICE-TALKERS-v4
 - description: Allow all traffic
   action: accept
   state:

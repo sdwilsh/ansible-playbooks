@@ -50,9 +50,11 @@ vyos_firewall_global__group:
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.95.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.96.0.{{ vyos__peer_host_id_ipv4 }}"
-    - name: TANZU-FULL-ACCESS-from-HOME-v4
-      afi: ipv4
+    - name: SERVICE-TALKERS-v4
+      description: IP Addresses allowed to talk to services
       members:
+        # sdwilsh-dev.hogs.tswn.us (sdwilsh-dev)
+        - address: 10.10.0.20
         # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
         - address: 10.117.0.9
         # sdwilsh-desktop

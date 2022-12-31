@@ -1,8 +1,8 @@
 ---
-- description: "Allow specific hosts"
-  action: "accept"
+- description: Allow specific hosts
+  action: accept
   state:
     new: true
   source:
     group:
-      address_group: "MAN-TALKERS-from-HOME-v4"
+      address_group: SERVICE-TALKERS-v4
