@@ -1,1 +1,8 @@
 ---
+- description: Allow specific hosts full access
+  action: accept
+  state:
+    new: true
+  source:
+    group:
+      address_group: TANZU-FULL-ACCESS-from-HOME-v4

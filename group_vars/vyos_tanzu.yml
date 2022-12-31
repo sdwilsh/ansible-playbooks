@@ -50,6 +50,13 @@ vyos_firewall_global__group:
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.95.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.96.0.{{ vyos__peer_host_id_ipv4 }}"
+    - name: TANZU-FULL-ACCESS-from-HOME-v4
+      afi: ipv4
+      members:
+        # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.0.9
+        # sdwilsh-desktop
+        - address: 10.117.0.31
     - name: TANZU-SUP-v4
       description: vCenter Tanzu Supervisor IP Addresses
       afi: ipv4
