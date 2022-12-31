@@ -12,4 +12,5 @@ collections:
   - name: community.mysql
   - name: "community.zabbix"
   - name: "devsec.hardening"
+  - name: kubernetes.core
   - name: vyos.vyos

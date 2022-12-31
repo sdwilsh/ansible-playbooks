@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - kubernetes.core.k8s:
+        api_version: run.tanzu.vmware.com/v1alpha3
+        apply: yes
+        validate_certs: no
+        kind: TanzuKubernetesCluster
+        name: test-cluster01
+        resource_definition:
+          metadata:
+            name: test-cluster01
+            namespace: lab
+          spec:
+            distribution:
+              version: v1.22
+            topology:
+              controlPlane:
+                replicas: 3
+                vmClass: guaranteed-xsmall
+                storageClass: vsan-default-storage-policy
+              nodePools:
+                - name: workers
+                  replicas: 2
+                  vmClass: best-effort-large
+                  storageClass: vsan-default-storage-policy
+
+    - kubernetes.core.k8s_info:
+        api_version: run.tanzu.vmware.com/v1alpha3
+        namespace: lab
+        kind: TanzuKubernetesCluster
+        validate_certs: no
+        name: test-cluster01
+      register: cluster_list
+    - ansible.builtin.debug:
+        msg: "{{ cluster_list }}"
