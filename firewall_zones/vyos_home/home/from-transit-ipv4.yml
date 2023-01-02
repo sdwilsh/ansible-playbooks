@@ -7,3 +7,12 @@
     group:
       address_group: NTP-SERVICES-v4
       port_group: NTP
+- description: Allow Connections to NFS
+  action: accept
+  protocol: tcp_udp
+  state:
+    new: true
+  destination:
+    group:
+      address_group: FILE-SERVER-v4
+      port_group: NFS

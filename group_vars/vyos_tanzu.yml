@@ -37,6 +37,12 @@ vyos_firewall__zones_path: ./firewall_zones/vyos_tanzu
 
 vyos_firewall_global__group:
   address_group:
+    - name: FILE-SERVER-v4
+      description: IP Addresses for the NFS Server
+      afi: ipv4
+      members:
+        # firstlightweaveslivingsong.hogs.tswn.us
+        - address: 10.117.0.10
     - name: NTP-SERVICES-v4
       description: NTP Hosts
       members:
@@ -83,6 +89,11 @@ vyos_firewall_global__group:
     - name: DNS
       members:
         - port: 53
+    - name: NFS
+      members:
+        - port: 111
+        - port: 674
+        - port: 2049
     - name: NTP
       members:
         - port: 123
