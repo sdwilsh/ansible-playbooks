@@ -1,0 +1,129 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create Minecraft Service
+      kubernetes.core.k8s:
+        context: "{{ context }}"
+        api_version: v1
+        kind: Service
+        validate_certs: no
+        resource_definition:
+          metadata:
+            name: minecraft
+            namespace: default
+          selector:
+            app.kubernetes.io/name: minecraft
+          spec:
+            loadBalancerIP: 10.96.0.200
+            ports:
+              - name: java
+                port: 25565
+                protocol: UDP
+                targetPort: 25565
+              - name: bedrock-ipv4
+                port: 19132
+                protocol: UDP
+                targetPort: 19132
+            type: LoadBalancer
+    - name: Create Minecraft PersistantVolume (NFS)
+      kubernetes.core.k8s:
+        context: "{{ context }}"
+        api_version: v1
+        kind: PersistentVolume
+        resource_definition:
+          metadata:
+            name: minecraft-nfs
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            capacity:
+              storage: 5Gi
+            nfs:
+              server: firstlightweaveslivingsong.hogs.tswn.us
+              path: /mnt/rust0/enc/nfs/minecraft
+            mountOptions:
+              - nfsvers=4
+    - name: Create Minecraft PersistantVolumeClaim (NFS)
+      kubernetes.core.k8s:
+        context: "{{ context }}"
+        api_version: v1
+        kind: PersistentVolumeClaim
+        resource_definition:
+          metadata:
+            name: minecraft-nfs
+            namespace: default
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: ""
+            resources:
+              requests:
+                storage: 5Gi
+            volumeName: minecraft-nfs
+    - name: Create Minecraft Deployment
+      kubernetes.core.k8s:
+        context: "{{ context }}"
+        api_version: apps/v1
+        kind: Deployment
+        resource_definition:
+          metadata:
+            name: minecraft-deployment
+            namespace: default
+          spec:
+            selector:
+              matchLabels:
+                app.kubernetes.io/name: minecraft
+            template:
+              metadata:
+                labels:
+                  app.kubernetes.io/name: minecraft
+              spec:
+                containers:
+                  - name: minecraft-papermc
+                    image: marctv/minecraft-papermc-server
+                    env:
+                      - name: MEMORYSIZE
+                        value: 2G
+                      - name: TZ
+                        value: America/Los_Angeles
+                    ports:
+                      - containerPort: 25565
+                        protocol: TCP
+                      - containerPort: 25565
+                        protocol: UDP
+                      - containerPort: 19132
+                        protocol: UDP
+                    volumeMounts:
+                      - name: minecraft-nfs
+                        mountPath: /data
+                initContainers:
+                  - name: init-geysermc
+                    image: curlimages/curl
+                    imagePullPolicy: IfNotPresent
+                    command:
+                      - sh
+                      - -c
+                    args:
+                      - "{{ init_geysermc_lines | join(' && ') }}"
+                    securityContext:
+                      runAsUser: 0
+                    volumeMounts:
+                      - name: minecraft-nfs
+                        mountPath: /data
+                volumes:
+                  - name: minecraft-nfs
+                    persistentVolumeClaim:
+                      claimName: minecraft-nfs
+      vars:
+        geysermc_url: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/build/libs/Geyser-Spigot.jar
+        geysermc_jar_path: /data/plugins/Geyser-Spigot.jar
+        init_geysermc_lines:
+          - mkdir -p /data/plugins
+          - id
+          - ls -la /data
+          - ls -la /data/plugins
+          - "curl '{{ geysermc_url }}/*fingerprint*/' | grep md5 | cut -d'>' -f3 | cut -d' ' -f2 | cut -d'<' -f1 | tr -d '\\n' > {{ geysermc_jar_path }}.md5"
+          - "echo '  {{ geysermc_jar_path }}' >> {{ geysermc_jar_path }}.md5"
+          - "curl -o {{ geysermc_jar_path }} '{{ geysermc_url }}'"
+          - "md5sum -w -c {{ geysermc_jar_path }}.md5"
