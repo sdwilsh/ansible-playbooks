@@ -82,4 +82,4 @@
 
 - ansible.builtin.import_playbook: k8s/minecraft.yml
   vars:
-    context: test-cluster01
+    cluster: test-cluster01

@@ -4,7 +4,7 @@
   tasks:
     - name: Create Minecraft Service
       kubernetes.core.k8s:
-        context: "{{ context }}"
+        context: "{{ cluster }}"
         api_version: v1
         kind: Service
         validate_certs: no
@@ -28,7 +28,7 @@
             type: LoadBalancer
     - name: Create Minecraft PersistantVolume (NFS)
       kubernetes.core.k8s:
-        context: "{{ context }}"
+        context: "{{ cluster }}"
         api_version: v1
         kind: PersistentVolume
         resource_definition:
@@ -46,7 +46,7 @@
               - nfsvers=4
     - name: Create Minecraft PersistantVolumeClaim (NFS)
       kubernetes.core.k8s:
-        context: "{{ context }}"
+        context: "{{ cluster }}"
         api_version: v1
         kind: PersistentVolumeClaim
         resource_definition:
@@ -63,7 +63,7 @@
             volumeName: minecraft-nfs
     - name: Create Minecraft Deployment
       kubernetes.core.k8s:
-        context: "{{ context }}"
+        context: "{{ cluster }}"
         api_version: apps/v1
         kind: Deployment
         resource_definition:
