@@ -50,16 +50,10 @@
             kind: Group
             name: system:serviceaccounts
 
-    # - kubernetes.core.k8s_info:
-    #     api_version: run.tanzu.vmware.com/v1alpha3
-    #     namespace: lab
-    #     kind: TanzuKubernetesCluster
-    #     validate_certs: no
-    #     name: test-cluster01
-    #   register: cluster_list
-    # - ansible.builtin.debug:
-    #     msg: "{{ cluster_list }}"
 
+- ansible.builtin.import_playbook: k8s/nginx-test.yml
+  vars:
+    cluster: test-cluster01
 - ansible.builtin.import_playbook: k8s/minecraft.yml
   vars:
     cluster: test-cluster01
