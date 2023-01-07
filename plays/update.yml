@@ -66,7 +66,7 @@
         name: "*"
         state: "latest"
         update_cache: yes
-      async: 900 # 15 minutes, mostly becuase a Pi 2 is slow.
+      async: 1800 # 30 minutes, mostly becuase a Pi 2 is slow.
       become: yes
       poll: 5
     - name: "Determine if a reboot is required"
