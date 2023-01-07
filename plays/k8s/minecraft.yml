@@ -2,38 +2,30 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Create Minecraft Service
+    - name: Create Minecraft Java Service
       kubernetes.core.k8s:
-        context: "{{ cluster }}"
         api_version: v1
+        context: "{{ cluster }}"
         kind: Service
-        validate_certs: no
+        name: minecraft-java
+        namespace: default
         resource_definition:
-          metadata:
-            name: minecraft
-            namespace: default
-          selector:
-            app.kubernetes.io/name: minecraft
           spec:
-            loadBalancerIP: 10.96.0.200
             ports:
               - name: java
                 port: 25565
-                protocol: UDP
+                protocol: TCP
                 targetPort: 25565
-              - name: bedrock-ipv4
-                port: 19132
-                protocol: UDP
-                targetPort: 19132
+            selector:
+              app.kubernetes.io/name: minecraft
             type: LoadBalancer
     - name: Create Minecraft PersistantVolume (NFS)
       kubernetes.core.k8s:
-        context: "{{ cluster }}"
         api_version: v1
+        context: "{{ cluster }}"
         kind: PersistentVolume
+        name: minecraft-nfs
         resource_definition:
-          metadata:
-            name: minecraft-nfs
           spec:
             accessModes:
               - ReadWriteOnce
@@ -46,13 +38,12 @@
               - nfsvers=4
     - name: Create Minecraft PersistantVolumeClaim (NFS)
       kubernetes.core.k8s:
-        context: "{{ cluster }}"
         api_version: v1
+        context: "{{ cluster }}"
         kind: PersistentVolumeClaim
+        name: minecraft-nfs
+        namespace: default
         resource_definition:
-          metadata:
-            name: minecraft-nfs
-            namespace: default
           spec:
             accessModes:
               - ReadWriteOnce
@@ -63,13 +54,12 @@
             volumeName: minecraft-nfs
     - name: Create Minecraft Deployment
       kubernetes.core.k8s:
-        context: "{{ cluster }}"
         api_version: apps/v1
+        context: "{{ cluster }}"
         kind: Deployment
+        name: minecraft-deployment
+        namespace: default
         resource_definition:
-          metadata:
-            name: minecraft-deployment
-            namespace: default
           spec:
             selector:
               matchLabels:
@@ -90,27 +80,27 @@
                     ports:
                       - containerPort: 25565
                         protocol: TCP
-                      - containerPort: 25565
-                        protocol: UDP
-                      - containerPort: 19132
-                        protocol: UDP
+                      # - containerPort: 25565
+                      #   protocol: UDP
+                      # - containerPort: 19132
+                      #   protocol: UDP
                     volumeMounts:
                       - name: minecraft-nfs
                         mountPath: /data
-                initContainers:
-                  - name: init-geysermc
-                    image: curlimages/curl
-                    imagePullPolicy: IfNotPresent
-                    command:
-                      - sh
-                      - -c
-                    args:
-                      - "{{ init_geysermc_lines | join(' && ') }}"
-                    securityContext:
-                      runAsUser: 0
-                    volumeMounts:
-                      - name: minecraft-nfs
-                        mountPath: /data
+                # initContainers:
+                #   - name: init-geysermc
+                #     image: curlimages/curl
+                #     imagePullPolicy: IfNotPresent
+                #     command:
+                #       - sh
+                #       - -c
+                #     args:
+                #       - "{{ init_geysermc_lines | join(' && ') }}"
+                #     securityContext:
+                #       runAsUser: 0
+                #     volumeMounts:
+                #       - name: minecraft-nfs
+                #         mountPath: /data
                 volumes:
                   - name: minecraft-nfs
                     persistentVolumeClaim:
