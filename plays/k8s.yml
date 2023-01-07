@@ -31,44 +31,24 @@
                   vmClass: best-effort-large
                   storageClass: vsan-default-storage-policy
 
-    # https://www.unknownfault.com/posts/podsecuritypolicy-unable-to-admit-pod/
-    # TODO: this instead: https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-4CCDBB85-2770-4FB8-BF0E-5146B45C9543.html
-    - name: Setup RoleBinding for default service user
+    # Per Example 2 at
+    # https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-4CCDBB85-2770-4FB8-BF0E-5146B45C9543.html
+    - name: Create a RoleBinding to allow service accounts within the default namespace to run privileged workloads
       kubernetes.core.k8s:
-        context: test-cluster01
         api_version: rbac.authorization.k8s.io/v1
+        context: test-cluster01
         kind: RoleBinding
-        validate_certs: no
+        name: rolebinding-default-privileged-sa-ns_default
+        namespace: default
         resource_definition:
-          metadata:
-            name: rolebinding-cluster-user-administrator
-            namespace: default
           roleRef:
-            kind: ClusterRole
-            name: edit
             apiGroup: rbac.authorization.k8s.io
-          subjects:
-            - kind: User
-              name: default
-              apiGroup: rbac.authorization.k8s.io
-    - name: Setup ClusterRoleBinding for default service user
-      kubernetes.core.k8s:
-        context: test-cluster01
-        api_version: rbac.authorization.k8s.io/v1
-        kind: ClusterRoleBinding
-        validate_certs: no
-        resource_definition:
-          metadata:
-            name: administrator-cluster-role-binding
-            namespace: default
-          roleRef:
             kind: ClusterRole
             name: psp:vmware-system-privileged
-            apiGroup: rbac.authorization.k8s.io
           subjects:
-            - kind: Group
-              name: system:authenticated
-              apiGroup: rbac.authorization.k8s.io
+          - apiGroup: rbac.authorization.k8s.io
+            kind: Group
+            name: system:serviceaccounts
 
     # - kubernetes.core.k8s_info:
     #     api_version: run.tanzu.vmware.com/v1alpha3
