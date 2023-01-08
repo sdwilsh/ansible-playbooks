@@ -19,6 +19,40 @@
             selector:
               app.kubernetes.io/name: minecraft
             type: LoadBalancer
+    - name: Create Minecraft BlueMap Service
+      kubernetes.core.k8s:
+        api_version: v1
+        context: "{{ cluster }}"
+        kind: Service
+        name: minecraft-bluemap
+        namespace: default
+        resource_definition:
+          spec:
+            ports:
+              - name: web
+                port: 80
+                protocol: TCP
+                targetPort: web
+            selector:
+              app.kubernetes.io/name: minecraft
+        state: present
+    - name: Create Minecraft BlueMap IngressRoute
+      kubernetes.core.k8s:
+        api_version: traefik.containo.us/v1alpha1
+        context: "{{ cluster }}"
+        kind: IngressRoute
+        name: minecraft-bluemap-ingressroute
+        namespace: default
+        resource_definition:
+          spec:
+            entryPoints:
+              - web
+            routes:
+              - match: Host(`map.minecraft.tswn.us`)
+                kind: Rule
+                services:
+                  - name: minecraft-bluemap
+                    port: 80
     - name: Create Minecraft PersistantVolume (NFS)
       kubernetes.core.k8s:
         api_version: v1
@@ -78,6 +112,9 @@
                       - name: TZ
                         value: America/Los_Angeles
                     ports:
+                      - name: web
+                        containerPort: 8100
+                        protocol: TCP
                       - containerPort: 25565
                         protocol: TCP
                       # - containerPort: 25565
@@ -87,7 +124,20 @@
                     volumeMounts:
                       - name: minecraft-nfs
                         mountPath: /data
-                # initContainers:
+                initContainers:
+                  - name: init-bluemap
+                    image: curlimages/curl
+                    imagePullPolicy: IfNotPresent
+                    command:
+                      - sh
+                      - -c
+                    args:
+                      - "{{ init_bluemap_lines | join(' && ') }}"
+                    securityContext:
+                      runAsUser: 0
+                    volumeMounts:
+                      - name: minecraft-nfs
+                        mountPath: /data
                 #   - name: init-geysermc
                 #     image: curlimages/curl
                 #     imagePullPolicy: IfNotPresent
@@ -106,6 +156,11 @@
                     persistentVolumeClaim:
                       claimName: minecraft-nfs
       vars:
+        bluemap_url: https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v3.9/BlueMap-3.9-spigot.jar
+        bluemap_jar_path: /data/plugins/BlueMap.jar
+        init_bluemap_lines:
+          - mkdir -p /data/plugins
+          - "curl -o {{ bluemap_jar_path }} -L '{{ bluemap_url }}'"
         geysermc_url: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/build/libs/Geyser-Spigot.jar
         geysermc_jar_path: /data/plugins/Geyser-Spigot.jar
         init_geysermc_lines:

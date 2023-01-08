@@ -200,6 +200,9 @@ bind_zones:
           - "unifi"
           - "unifi.hogs"
 
+      - name: map.minecraft
+        ip: 10.96.0.136
+
       # NONET Network
       - name: "front-porch.camera.hogs"
         ip: "10.67.0.12"
@@ -212,4 +215,5 @@ bind_zones:
       - 10.10.0
       - 10.67.0
       - 10.82.0
+      - 10.96.0
       - 10.117.0
