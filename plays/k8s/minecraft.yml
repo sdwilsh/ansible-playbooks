@@ -28,7 +28,7 @@
         resource_definition:
           spec:
             accessModes:
-              - ReadWriteOnce
+              - ReadWriteMany
             capacity:
               storage: 5Gi
             nfs:
@@ -46,7 +46,7 @@
         resource_definition:
           spec:
             accessModes:
-              - ReadWriteOnce
+              - ReadWriteMany
             storageClassName: ""
             resources:
               requests:
