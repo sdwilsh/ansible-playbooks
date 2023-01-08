@@ -51,6 +51,11 @@
             name: system:serviceaccounts
 
 
+- ansible.builtin.import_playbook: k8s/traefik.yml
+  vars:
+    cluster: test-cluster01
+  tags:
+    - traefik
 - ansible.builtin.import_playbook: k8s/nginx-test.yml
   vars:
     cluster: test-cluster01

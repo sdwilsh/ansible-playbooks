@@ -1,1 +1,2 @@
 .ansible_vault_password
+plays/k8s/kubernetes-crd.definition-v1.yml
