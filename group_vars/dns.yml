@@ -148,6 +148,12 @@ bind_zones:
         ip: "10.10.0.19"
       - name: "sdwilsh-dev.hogs"
         ip: "10.10.0.20"
+      - name: mariadb01.hogs
+        ip: 10.10.0.25
+      - name: mariadb02.hogs
+        ip: 10.10.0.26
+      - name: mariadb03.hogs
+        ip: 10.10.0.27
       - name: "ups01.hogs"
         ip: "10.10.0.30"
       - name: "ups02.hogs"
