@@ -1,7 +1,6 @@
 ---
 - name: Get ansible facts
   hosts: all
-  become: true
   tasks:
   - ansible.builtin.debug:
       msg: "{{ ansible_facts }}"
