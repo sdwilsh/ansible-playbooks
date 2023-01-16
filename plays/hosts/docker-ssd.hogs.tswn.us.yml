@@ -4,7 +4,6 @@
   roles:
     - role: nickjj.docker
       tags: ["docker"]
-    - role: ara-docker
     - role: "factorio"
       tags:
         - "factorio"
