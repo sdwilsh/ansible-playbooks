@@ -1,47 +1,13 @@
 ---
-# Sanoid Setup
-- name: Install Sanoid
-  ansible.builtin.apt:
-    name: sanoid
-    state: present
+# zfs-auto-snapshot configuration
+- name: Adjust zfs-auto-snapshot montly retention
+  ansible.builtin.replace:
+    path: /etc/cron.monthly/zfs-auto-snapshot
+    regexp: --keep=(?!3)[0-9]+
+    replace: --keep=3
   become: yes
   tags:
-    - sanoid
-    - zfs
-- name: Ensure sanoid directory exists
-  ansible.builtin.file:
-    group: root
-    owner: root
-    path: /etc/sanoid
-    state: directory
-  become: yes
-  tags:
-    - sanoid
-    - zfs
-- name: Set sanoid config
-  ansible.builtin.copy:
-    content: |
-      {% for zfs_pool in zfs_pools %}
-      [{{ zfs_pool.name }}]
-          use_template = production
-          recursive = yes
-      {% endfor %}
-
-      [template_production]
-          frequently = 0
-          hourly = 36
-          daily = 30
-          monthly = 3
-          yearly = 0
-          autosnap = yes
-          autoprune = yes
-    dest: /etc/sanoid/sanoid.conf
-    mode: u=r,g=r,o=r
-    owner: root
-    group: root
-  become: yes
-  tags:
-    - sanoid
+    - snapshots
     - zfs
 
 # Encryption Keys Setup

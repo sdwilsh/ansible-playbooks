@@ -51,7 +51,6 @@ mariadb_version: "10.10"
 # mrlesmithjr.zfs
 zfs_create_pools: yes
 zfs_create_filesystems: yes
-zfs_enable_auto_snapshots: no # Snapshots managed by sanoid
 zfs_filesystems:
   - name: mariadb-data
     encryption: aes-256-gcm
