@@ -36,7 +36,6 @@ zfs_filesystems:
     keylocation: file:///usr/local/etc/zfs/keys/mariadb/datasets/mariadb-data
     mountpoint: /var/lib/mysql/data
     pool: mariadb
-    recordsize: 16K
     state: present
   - name: mariadb-logs
     encryption: aes-256-gcm
@@ -52,5 +51,7 @@ zfs_pools:
     compression: zstd
     devices:
       - /dev/disk/by-path/pci-0000:02:00.0-scsi-0:0:1:0
+    # While InnoDB has 16K pages, this is running on a VMDK disk which uses a block size of 1M.
+    recordsize: 1M
     state: present
     type: basic
