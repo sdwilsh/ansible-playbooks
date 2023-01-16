@@ -106,7 +106,6 @@ bind_zones:
       - name: "docker-ssd.hogs"
         ip: "10.117.0.30"
         aliases:
-          - "ara.hogs"
           - "factorio"
           - "valheim"
           - "valheim.hogs"
@@ -142,6 +141,8 @@ bind_zones:
         ip: "10.10.0.11"
       - name: "rack-switch01.hogs.tswn.us"
         ip: "10.10.0.15"
+      - name: ara.hogs
+        ip: 10.10.0.17
       - name: "server.zabbix.hogs"
         ip: "10.10.0.18"
       - name: "snmp.zabbix.hogs"
