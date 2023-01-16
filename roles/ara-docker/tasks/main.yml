@@ -44,7 +44,7 @@
     - mariadb
   when:
     # Only run interactively; not part of ansible-cron
-    - ansible_connection == 'ssh'
+    - lookup('ansible.builtin.env', 'ARA_API_SERVER') == ''
 - name: Setup database users
   no_log: yes
   community.mysql.mysql_user:
@@ -61,7 +61,7 @@
     - mariadb
   when:
     # Only run interactively; not part of ansible-cron
-    - ansible_connection == 'ssh'
+    - lookup('ansible.builtin.env', 'ARA_API_SERVER') == ''
 
 - name: "Create ara directory"
   ansible.builtin.file:
