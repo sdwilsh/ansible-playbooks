@@ -1,0 +1,80 @@
+---
+# Sanoid Setup
+- name: Install Sanoid
+  ansible.builtin.apt:
+    name: sanoid
+    state: present
+  become: yes
+  tags:
+    - sanoid
+    - zfs
+- name: Ensure sanoid directory exists
+  ansible.builtin.file:
+    group: root
+    owner: root
+    path: /etc/sanoid
+    state: directory
+  become: yes
+  tags:
+    - sanoid
+    - zfs
+- name: Set sanoid config
+  ansible.builtin.copy:
+    content: |
+      {% for zfs_pool in zfs_pools %}
+      [{{ zfs_pool.name }}]
+          use_template = production
+          recursive = yes
+      {% endfor %}
+
+      [template_production]
+          frequently = 0
+          hourly = 36
+          daily = 30
+          monthly = 3
+          yearly = 0
+          autosnap = yes
+          autoprune = yes
+    dest: /etc/sanoid/sanoid.conf
+    mode: u=r,g=r,o=r
+    owner: root
+    group: root
+  become: yes
+  tags:
+    - sanoid
+    - zfs
+
+# Encryption Keys Setup
+- name: Create ZFS key directory for each pool's datasets
+  ansible.builtin.file:
+    path: "/usr/local/etc/zfs/keys/{{ pool.name }}/datasets"
+    state: "{% if pool.state == 'present' %}directory{% else %}absent{% endif %}"
+    owner: root
+    group: root
+    mode: u=rx,g=rx
+  become: yes
+  loop: "{{ zfs_pools }}"
+  loop_control:
+    label: "{{ pool.name }}"
+    loop_var: pool
+  tags:
+    - zfs
+  when: zfs_create_pools
+- name: Create dataset key file
+  ansible.builtin.copy:
+    content: "{{ common__zfs_dataset_keys[dataset.pool][dataset.name].key }}"
+    dest: "/usr/local/etc/zfs/keys/{{ dataset.pool }}/datasets/{{ dataset.name }}"
+    owner: root
+    group: root
+    mode: u=r,g=r
+  become: yes
+  loop: "{{ zfs_filesystems }}"
+  loop_control:
+    label: "/usr/local/etc/zfs/keys/{{ dataset.pool }}/datasets/{{ dataset.name }}"
+    loop_var: dataset
+  tags:
+    - zfs
+  when:
+    - zfs_create_filesystems | default(False)
+    - "'keylocation' in dataset"
+    - dataset.state == 'present'

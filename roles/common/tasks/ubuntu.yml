@@ -10,6 +10,9 @@
 
 - ansible.builtin.import_tasks: ubuntu/time.yml
 
+- ansible.builtin.import_tasks: ubuntu/zfs.yml
+  when: zfs_create_pools | default(False)
+
 - name: Install open-vm-tools
   ansible.builtin.apt:
     name: open-vm-tools

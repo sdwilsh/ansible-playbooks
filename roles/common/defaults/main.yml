@@ -50,3 +50,11 @@ common__unix_users: []
 
 # If Zabbix should be setup and managed.
 common__zabbix_enabled: yes
+
+# The encyrption keys to setup for a ZFS dataset.
+# To generate, run `hexdump -vn32 -e'8/4 "%08X" 1 "\n"' /dev/urandom`
+# common__zfs_dataset_keys:
+#   somepool:
+#     somedataset:
+#       key: somekey
+common__zfs_dataset_keys: {}
