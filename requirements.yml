@@ -1,6 +1,7 @@
 ---
 roles:
   - name: "bertvv.bind"
+  - name: mrlesmithjr.mariadb_galera_cluster
   - name: mrlesmithjr.zfs
   - name: "nickjj.docker"
 collections:

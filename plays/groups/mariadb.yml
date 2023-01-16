@@ -5,3 +5,8 @@
       become: yes
       tags:
         - zfs
+    - role: mrlesmithjr.mariadb_galera_cluster
+      become: yes
+      tags:
+        - mariadb
+        - galera
