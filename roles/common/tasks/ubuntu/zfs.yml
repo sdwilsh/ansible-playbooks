@@ -44,3 +44,38 @@
     - zfs_create_filesystems | default(False)
     - "'keylocation' in dataset"
     - dataset.state == 'present'
+
+# zfsbackup User Setup
+- name: Deploy zfsbackup user's public key
+  ansible.posix.authorized_key:
+    exclusive: yes
+    key: "{{ key_type }} {{ key }}"
+    key_options: "{{ options | join(',') }}"
+    state: present
+    user: zfsbackup
+  become: yes
+  tags:
+    - zfsbackup
+  vars:
+    key_type: ssh-rsa
+    key: AAAAB3NzaC1yc2EAAAADAQABAAABgQDSHhkjgy4dheArLBgijcdKLP/wXK+cKQSFrof0AADvPJ6dSjrEpzyaqFc0+4hK0wos3A2UYkmCfHhJBkHcK3tY251OxxKYfH7Jgm852+Tw0HM7jZ6cozOeHnjGQs6sFglps0NsiWQ14vwE52wPI3ENlRTDXYsJwYJ3s9qpwCrGn375osTtCjNxe3TMEJNUrMPtVPiw3AVbMqnJHPnwwNcqnH5s1KFnKIubiVALYuvo6KxpK0mLTwiDL6R2kg568acDXTttP6GmMQFyOmPaLe1FfTVbmfLQVpdhJ1IR+CJ0nQPwumcggr1RWS18Iswlyqh9cUrTazhrcfRSTBwzUK8R5iOp92QK5eHU1/SytRksVDlnOymckf2nKNR3UecdH0NGFuBweLXrHqxe+P/0y/US1aEG5FTQRdD6rAgGL8NJEkICAGy5jdvRw5SrJkGdh6h9YbmUv1785aQtfSeI7jZ4zB9mzUCTQitMvXlqdYfUn3bkNic78PYSWWQhF4AT1tE=
+    options:
+      - from="10.117.0.10"
+      - no-port-forwarding
+- name: Allow the zfsbackup to send and hold the filesystems
+  community.general.zfs_delegate_admin:
+    name: "{{ pool.name }}"
+    permissions:
+      - send
+      - hold
+    state: present
+    users:
+      - zfsbackup
+  become: yes
+  loop: "{{ zfs_pools }}"
+  loop_control:
+    label: "{{ pool.name }}"
+    loop_var: pool
+  tags:
+    - zfs
+    - zfsbackup
