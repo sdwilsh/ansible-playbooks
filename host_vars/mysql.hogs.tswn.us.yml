@@ -8,23 +8,10 @@ common__ip_addresses:
   - "fd36:3eb3:43b0:75::5/64"
 
 mysql_server__databases:
-  - name: "homeassistant"
   - name: "zabbix"
     collation: "utf8_bin"
     encoding: "utf8"
 mysql_server__users:
-  - name: "homeassistant"
-    hosts:
-      - "cortana.hogs.tswn.us"
-    password: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          66623263623135303932386330396266313362333338373964616435386230623062623133383861
-          6263333537373862653935623935353831303439663233350a626562653963643939616137623734
-          37396563333633386538643062306637636339616532623166666335656561623137656538656236
-          6332376361353937380a383666323230396362306363303831346236646530636163323062643339
-          64656439666665343466616532633639613466313439666665373839626634333534
-    priv:
-      "homeassistant.*": "ALL"
   - name: "zabbix"
     hosts:
       - "fd36:3eb3:43b0:a::12" # server.zabbix.hogs.tswn.us

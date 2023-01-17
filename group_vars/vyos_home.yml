@@ -209,6 +209,17 @@ vyos_firewall_global__group:
       members:
         # docker-vm.hogs.tswn.us
         - address: "10.10.0.6"
+    - name: MARIADB-SERVER-v4
+      afi: ipv4
+      members:
+        - address: 10.10.0.25
+        - address: 10.10.0.26
+        - address: 10.10.0.27
+    - name: MARIADB-TALKERS-v4
+      afi: ipv4
+      members:
+        # cortana.hogs.tswn.us
+        - address: 10.117.0.19
     - name: "MYSQL-SERVER-v4"
       description: "The v4 mysql.hogs.tswn.us addresses"
       afi: "ipv4"
