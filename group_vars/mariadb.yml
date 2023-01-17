@@ -54,18 +54,23 @@ zfs_create_filesystems: yes
 zfs_filesystems:
   - name: mariadb-data
     encryption: aes-256-gcm
+    group: mysql
     keyformat: hex
     keylocation: file:///usr/local/etc/zfs/keys/mariadb/datasets/mariadb-data
     mountpoint: /var/lib/mysql/data
+    owner: mysql
     pool: mariadb
     state: present
   - name: mariadb-logs
     encryption: aes-256-gcm
+    group: mysql
     keyformat: hex
     keylocation: file:///usr/local/etc/zfs/keys/mariadb/datasets/mariadb-logs
     mountpoint: /var/lib/mysql/logs
+    owner: mysql
     pool: mariadb
     state: present
+zfs_manage_filesystem_permissions: yes
 zfs_pools:
   - name: mariadb
     action: create
