@@ -79,6 +79,6 @@ zfs_pools:
     devices:
       - /dev/disk/by-path/pci-0000:02:00.0-scsi-0:0:1:0
     # While InnoDB has 16K pages, this is running on a VMDK disk which uses a block size of 1M.
-    recordsize: 1M
+    recordsize: 1048576 # 1M
     state: present
     type: basic
