@@ -12,14 +12,6 @@
     group:
       address_group: "NTP-SERVICES-v4"
       port_group: "NTP"
-- description: "Allow ARA Connections"
-  action: "accept"
-  protocol: "tcp"
-  state:
-    new: true
-  destination:
-    address: "10.117.0.30"
-    port: "8000"
 - description: "Allow Zabbix Server Connections"
   action: "accept"
   protocol: "tcp"

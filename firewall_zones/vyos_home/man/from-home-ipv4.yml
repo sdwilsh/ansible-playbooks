@@ -49,3 +49,11 @@
   source:
     group:
       address_group: MARIADB-TALKERS-v4
+- description: Allow ARA Connections
+  action: accept
+  protocol: tcp
+  state:
+    new: true
+  destination:
+    address: 10.10.0.17
+    port: 8000
