@@ -123,7 +123,10 @@
       export ARA_CALLBACK_THREADS=4
 
       # Adding up to 15 minutes of jitter so not all machines hit resources at the same time.
-      sleep $(( RANDOM %= 900 ))
+      _SLEEP_DURATION=$(( RANDOM %= 900 ))
+      echo "Sleeping for ${_SLEEP_DURATION} seconds before starting..."
+      /usr/bin/logger -p user.notice -t ansible-cron -- "Sleeping for ${_SLEEP_DURATION} seconds before starting..."
+      sleep ${_SLEEP_DURATION}
 
       cd /src/ansible-playbooks
       /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
