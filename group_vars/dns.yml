@@ -204,6 +204,12 @@ bind_zones:
         ip: "10.10.0.85"
       - name: "work02.routers.hogs"
         ip: "10.10.0.86"
+      - name: test-controlplane01.hogs
+        ip: 10.10.0.101
+      - name: test-controlplane02.hogs
+        ip: 10.10.0.102
+      - name: test-controlplane03.hogs
+        ip: 10.10.0.103
 
       # Services Networks
       - name: "installation02"

@@ -22,6 +22,17 @@ mariadb01.hogs.tswn.us ansible_host=10.10.0.25
 mariadb02.hogs.tswn.us ansible_host=10.10.0.26
 mariadb03.hogs.tswn.us ansible_host=10.10.0.27
 
+[kairos_test_controlplane]
+test-controlplane01.hogs.tswn.us ansible_host=10.10.0.101
+test-controlplane02.hogs.tswn.us ansible_host=10.10.0.102
+test-controlplane03.hogs.tswn.us ansible_host=10.10.0.103
+
+[kairos_test:children]
+kairos_test_controlplane
+
+[kairos:children]
+kairos_test
+
 [vms]
 docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
 docker.hogs.tswn.us ansible_host=10.10.0.8

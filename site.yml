@@ -1,5 +1,5 @@
 ---
-- hosts: "all:!vyos:!pikvm"
+- hosts: "all:!kairos:!pikvm:!vyos"
   become: yes
   roles:
     - role: "common"

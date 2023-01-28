@@ -7,7 +7,7 @@
       ansible.builtin.raw: rw
       changed_when: no
 - name: Setup ansible_distribution-based Groups
-  hosts: all:!vyos
+  hosts: all:!kairos:!vyos
   gather_facts: yes
   gather_subset:
     - "!all"
