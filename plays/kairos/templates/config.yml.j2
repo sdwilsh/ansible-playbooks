@@ -1,0 +1,51 @@
+#cloud-config
+
+hostname: {{ hostvars[host].inventory_hostname_short }}
+
+users:
+  - name: kairos
+    ssh_authorized_keys:
+      - {{ common__ansible_key_type }} {{ common__ansible_key }}
+
+k3s:
+  args:
+{% if hostvars[host].k3s_controlplane %}
+    # Control-plane Specific Flags
+{% if k3s_cluster_init | default(False) %}
+    - --cluster-init
+{% else %}
+    - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
+{% endif %}
+    - --disable=traefik,servicelb
+    - --node-taint key=value:NoExecute
+{% else %}
+    # Worker-node Specific Flags
+{% endif %}
+    # Flags for all nodes
+  enabled: true
+  env:
+    K3S_TOKEN: "{{ hostvars[host].k3s_token }}"
+{% if not hostvars[host].k3s_controlplane %}
+    K3S_URL: https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
+{% endif %}
+
+stages:
+  initramfs:
+    - name: Setup NTP
+      systemctl:
+        enable:
+          - systemd-timesyncd
+      timesyncd:
+        NTP: {{ common__ntp_pool }}
+        FallbackNTP: ""
+    - files:
+        - path: /etc/systemd/network/01-man.network
+          permissions: 0644
+          content: |
+            [Match]
+            Name=enp2s1
+
+            [Network]
+            Address={{ hostvars[host].common__ip_addresses | ansible.utils.ipv4 | first }}
+            Gateway={{ hostvars[host].common__gateway_v4_address }}
+            DNS={{ hostvars[host].common__nameservers.addresses | ansible.utils.ipv4 | first }}

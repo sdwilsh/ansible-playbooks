@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Sanity Check
+      ansible.builtin.assert:
+        fail_msg: Pass host in inventory to playbook invocation with `ansible-playbook plays/kairos/host_conf.yml --extra-vars "host=HOST"
+        that:
+          - host is defined
+          - host in hostvars
+          - "'k3s_token' in hostvars[host]"
+      tags:
+        - always
+    - name: Create temporary directory to host configuration from
+      ansible.builtin.tempfile:
+        state: directory
+      register: workdir
+    - name: Generate configuration
+      ansible.builtin.template:
+        dest: "{{ workdir.path }}/config.yml"
+        src: templates/config.yml.j2
+    - name: Host configuration on port 9000
+      ansible.builtin.command:
+        chdir: "{{ workdir.path }}"
+        cmd: python3 -m http.server 9000
