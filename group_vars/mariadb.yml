@@ -35,6 +35,7 @@ mariadb_config_overrides:
       datadir: /var/lib/mysql/data
       innodb_doublewrite: 0 # ZFS protects us already.
       innodb_log_group_home_dir: /var/lib/mysql/logs
+      log_ddl_recovery: /var/lib/mysql/logs/ddl-recover.log
 mariadb_mysql_root_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           33633361643462643162353732353234356436663065333936616562336538333136363431373130
