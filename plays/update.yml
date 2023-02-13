@@ -45,9 +45,12 @@
         update_cache: yes
         upgrade: yes
       register: pacman
-    - name: Reboot iff required
-      ansible.builtin.reboot:
-      become: yes
+    - name: Add hosts to group that will be rebooted
+      ansible.builtin.add_host:
+        name: "{{ inventory_hostname }}"
+        group: ToReboot
+      changed_when: no
+      delegate_to: localhost
       when: pacman.changed
   post_tasks:
     - name: Mount the filesystem as ro
@@ -73,7 +76,27 @@
       ansible.builtin.stat:
         path: "/var/run/reboot-required"
       register: reboot_required
-    - name: "Reboot iff required"
-      ansible.builtin.reboot:
-      become: yes
+    - name: Add hosts to group that will be rebooted
+      ansible.builtin.add_host:
+        name: "{{ inventory_hostname }}"
+        group: ToReboot
+      changed_when: no
+      delegate_to: localhost
       when: reboot_required.stat.exists
+
+- hosts: ToReboot
+  gather_facts: no
+  order: sorted
+  pre_tasks:
+    - name: Mount the filesystem as rw
+      ansible.builtin.raw: rw
+      changed_when: no
+      when: "'pikvm' in group_names"
+  serial: 1
+  tasks:
+    - name: Reboot the host
+      ansible.builtin.reboot:
+        msg: Reboot to apply updates initiated by Ansible
+        pre_reboot_delay: 60
+        test_command: "{{ reboot_test_command }}"
+      become: yes

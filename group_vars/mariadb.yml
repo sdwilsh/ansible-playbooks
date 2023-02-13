@@ -49,6 +49,8 @@ mariadb_mysql_root_password: !vault |
           34663634633037616465366539336261386138613066663834623436353630356263
 mariadb_version: "10.10"
 
+reboot_test_command: systemctl is-active --quiet mariadb
+
 # mrlesmithjr.zfs
 zfs_create_pools: yes
 zfs_create_filesystems: yes

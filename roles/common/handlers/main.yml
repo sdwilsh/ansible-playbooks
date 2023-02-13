@@ -2,6 +2,8 @@
 # handlers file for common
 - name: "reboot the machine"
   ansible.builtin.reboot:
+    pre_reboot_delay: 60
+    test_command: "{{ reboot_test_command }}"
   become: yes
   listen: "reboot"
 
