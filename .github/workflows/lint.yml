@@ -1,0 +1,16 @@
+---
+name: Lint
+on:
+ push:
+   branches:
+     - main
+ pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Lint checks
+        run: |
+          ./earthly.sh +lint
