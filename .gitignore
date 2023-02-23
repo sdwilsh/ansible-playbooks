@@ -1,2 +1,8 @@
 .ansible_vault_password
 plays/k8s/kubernetes-crd.definition-v1.yml
+
+# Roles that are managed by ansible-galaxy
+roles/bertvv.bind/
+roles/mrlesmithjr.mariadb_galera_cluster/
+roles/mrlesmithjr.zfs/
+roles/nickjj.docker/
