@@ -210,6 +210,8 @@ bind_zones:
         ip: 10.10.0.102
       - name: test-controlplane03.hogs
         ip: 10.10.0.103
+      - name: test-worker01.hogs
+        ip: 10.10.0.104
 
       # Services Networks
       - name: "installation02"

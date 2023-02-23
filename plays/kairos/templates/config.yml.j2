@@ -11,7 +11,7 @@ k3s:
   args:
 {% if hostvars[host].k3s_controlplane %}
     # Control-plane Specific Flags
-{% if k3s_cluster_init | default(False) %}
+{% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
 {% else %}
     - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
@@ -27,6 +27,15 @@ k3s:
     K3S_TOKEN: "{{ hostvars[host].k3s_token }}"
 {% if not hostvars[host].k3s_controlplane %}
     K3S_URL: https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
+{% endif %}
+
+{% if hostvars[host].k3s_controlplane and hostvars[host].k3s_cluster_init | default(False) %}
+bundles:
+  - targets:
+    - run: run://quay.io/kairos/community-bundles:calico_latest
+calico:
+  values: {{ hostvars[host].calico_values }}
+  version: 3.25.0
 {% endif %}
 
 stages:

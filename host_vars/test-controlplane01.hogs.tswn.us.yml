@@ -5,3 +5,5 @@ common__ip_addresses:
 common__nameservers:
   addresses:
     - 10.10.0.1
+
+k3s_cluster_init: yes
