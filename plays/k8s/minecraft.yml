@@ -47,12 +47,18 @@
           spec:
             entryPoints:
               - web
+              - websecure
             routes:
               - match: Host(`map.minecraft.tswn.us`)
                 kind: Rule
                 services:
                   - name: minecraft-bluemap
                     port: 80
+            tls:
+              domains:
+                - main: tswn.us
+                  sans:
+                  - "*.tswn.us"
     - name: Create Minecraft PersistantVolume (NFS)
       kubernetes.core.k8s:
         api_version: v1
