@@ -23,6 +23,16 @@
         "earthly\\/earthly:(?<currentValue>.*?)\\s"
       ],
       "versioningTemplate": "semver-coerced"
+    },
+    {
+      "fileMatch": [
+        "^roles/.+/tasks/.+\\.yml$"
+      ],
+      "datasourceTemplate": "docker",
+      "matchStrings": [
+        "#\\s*renovate:(\\s*versioning=(?<versioning>.*?))?\\n\\s*image:\\s*(?<depName>.*?):(?<currentValue>.*?)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     }
   ]
 }
