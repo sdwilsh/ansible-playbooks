@@ -33,7 +33,6 @@ k3s:
 bundles:
   - targets:
     - run://quay.io/kairos/community-bundles:calico_latest
-  - targets:
     - run://quay.io/kairos/community-bundles:longhorn_latest
 calico:
   values: {{ hostvars[host].calico_values }}
