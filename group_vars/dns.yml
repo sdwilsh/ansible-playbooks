@@ -152,8 +152,8 @@ bind_zones:
       - name: mariadb.hogs
         ip:
           - 10.10.0.25
-          - 10.10.0.26
-          - 10.10.0.27
+          # - 10.10.0.26
+          # - 10.10.0.27
       - name: mariadb01.hogs
         ip: 10.10.0.25
       - name: mariadb02.hogs
