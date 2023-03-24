@@ -17,7 +17,7 @@ collections:
   - name: ansible.utils
     version: 2.9.0
   - name: community.docker
-    version: 3.4.2
+    version: 3.4.3
   - name: community.general
     version: 6.4.0
   - name: community.mysql
