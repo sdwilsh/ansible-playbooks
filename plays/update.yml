@@ -45,6 +45,7 @@
         update_cache: yes
         upgrade: yes
       register: pacman
+    # This only works because there's only a single host active today.
     - name: Add hosts to group that will be rebooted
       ansible.builtin.add_host:
         name: "{{ inventory_hostname }}"
@@ -58,7 +59,8 @@
       changed_when: no
       when: "'pikvm' in group_names"
 
-- hosts: Ubuntu # ansible_disbrution == Ubuntu
+- name: Perform Updates for Ubuntu hosts
+  hosts: Ubuntu # ansible_disbrution == Ubuntu
   gather_facts: no
   order: "sorted"
   tasks:
@@ -72,20 +74,30 @@
       async: 1800 # 30 minutes, mostly becuase a Pi 2 is slow.
       become: yes
       poll: 5
-    - name: "Determine if a reboot is required"
+- name: Determine if any Ubuntu hosts need to be rebooted after updating
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Determine if a reboot is required
       ansible.builtin.stat:
-        path: "/var/run/reboot-required"
-      become: yes
+        path: /var/run/reboot-required
       register: reboot_required
+      delegate_to: "{{ hostname }}"
+      loop: "{{ groups.Ubuntu }}"
+      loop_control:
+        loop_var: hostname
     - name: Add hosts to group that will be rebooted
       ansible.builtin.add_host:
-        name: "{{ inventory_hostname }}"
+        name: "{{ item.hostname }}"
         group: ToReboot
       changed_when: no
-      delegate_to: localhost
-      when: reboot_required.stat.exists
+      loop: "{{ reboot_required.results }}"
+      loop_control:
+        label: "{{ item.hostname }}"
+      when: item.stat.exists
 
-- hosts: ToReboot
+- name: Reboot hosts that need to be rebooted
+  hosts: ToReboot
   gather_facts: no
   order: sorted
   pre_tasks:
