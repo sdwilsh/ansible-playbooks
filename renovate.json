@@ -33,6 +33,16 @@
         "#\\s*renovate:(\\s*versioning=(?<versioning>.*?))?\\n\\s*image:\\s*(?<depName>.*?):(?<currentValue>.*?)\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
+    },
+    {
+      "fileMatch": [
+        "^plays/.+?\\.yml$"
+      ],
+      "datasourceTemplate": "github-releases",
+      "matchStrings": [
+        "#\\s*renovate:((\\s*versioning=(?<versioning>.+?))|(\\s*depName=(?<depName>(\\w|-|\\/)+))|(\\s*datasource=(?<dataSource>(\\w|-)+)))*\\n.+?kairos_version: \"(?<currentValue>v\\d+\\.\\d+\\.\\d+?).+?"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     }
   ]
 }

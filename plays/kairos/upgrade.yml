@@ -1,0 +1,36 @@
+---
+- hosts: kairos
+  gather_facts: false
+  order: sorted
+  tasks:
+    - name: Read in current version
+      ansible.builtin.slurp:
+        src: /etc/os-release
+      register: osreleasefile
+    - name: Extract current version
+      ansible.builtin.set_fact:
+        os_release: "{{ osreleasefile['content'] | b64decode | regex_findall('^VERSION=\"(.*)\"$', multiline=True) | first }}"
+    - name: Print os version
+      ansible.builtin.debug:
+        var: os_release
+    - name: Install update
+      ansible.builtin.command:
+        argv:
+          - kairos-agent
+          - upgrade
+          # v1.6.1-k3sv1.26.1+k3s1 => v1.6.1-k3sv1.26.1-k3s1
+          - "{{ kairos_version | replace('+', '-') }}"
+      become: yes
+      when: os_release != kairos_version
+    - name: Reboot
+      ansible.builtin.reboot:
+        pre_reboot_delay: 60 # seconds
+        connect_timeout: 240 # seconds
+        test_command: "{{ reboot_test_command }}"
+      become: yes
+      # At most one reboot at a time
+      throttle: 1
+      when: os_release != kairos_version
+  vars:
+    # renovate: depName=kairos-io/provider-kairos
+    kairos_version: "v1.6.1-k3sv1.26.1+k3s1"
