@@ -3,6 +3,14 @@
   gather_facts: false
   order: sorted
   tasks:
+    - name: Ensure configuration is up-to-date
+      ansible.builtin.template:
+        dest: /oem/90_custom.yaml
+        src: templates/config.yml.j2
+      become: yes
+      register: config
+      vars:
+        host: "{{ inventory_hostname }}"
     - name: Read in current version
       ansible.builtin.slurp:
         src: /etc/os-release
@@ -30,7 +38,7 @@
       become: yes
       # At most one reboot at a time
       throttle: 1
-      when: os_release != kairos_version
+      when: os_release != kairos_version or config.changed
   vars:
     # renovate: depName=kairos-io/provider-kairos
     kairos_version: "v1.6.1-k3sv1.26.1+k3s1"
