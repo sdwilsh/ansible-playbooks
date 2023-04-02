@@ -18,6 +18,14 @@ k3s:
 {% endif %}
     - --disable=traefik,servicelb
     - --node-taint key=value:NoExecute
+    # S3 Backup
+    - --etcd-s3
+    - --etcd-s3-access-key={{ hostvars[host].k3s_s3.access_key }}
+    - --etcd-s3-bucket=k3s-etcd
+    - --etcd-s3-endpoint=firstlightweaveslivingsong.hogs.tswn.us:9000
+    - --etcd-s3-secret-key={{ hostvars[host].k3s_s3.secret_key }}
+    - --etcd-s3-skip-ssl-verify
+    - --etcd-s3-folder={{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}
 {% else %}
     # Worker-node Specific Flags
 {% endif %}
@@ -27,18 +35,6 @@ k3s:
     K3S_TOKEN: "{{ hostvars[host].k3s_token }}"
 {% if not hostvars[host].k3s_controlplane %}
     K3S_URL: https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
-{% endif %}
-
-{% if hostvars[host].k3s_controlplane and hostvars[host].k3s_cluster_init | default(False) %}
-bundles:
-  - targets:
-    - run://quay.io/kairos/community-bundles:calico_latest
-    - run://quay.io/kairos/community-bundles:longhorn_latest
-calico:
-  values: {{ hostvars[host].calico_values }}
-  version: 3.25.0
-longhorn:
-  version: 1.4.0
 {% endif %}
 
 stages:
