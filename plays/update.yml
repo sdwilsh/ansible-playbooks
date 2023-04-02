@@ -75,6 +75,7 @@
     - name: "Determine if a reboot is required"
       ansible.builtin.stat:
         path: "/var/run/reboot-required"
+      become: yes
       register: reboot_required
     - name: Add hosts to group that will be rebooted
       ansible.builtin.add_host:
