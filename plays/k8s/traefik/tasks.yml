@@ -1,0 +1,221 @@
+---
+#
+# Resource Configuration
+#
+- block:
+  - name: Fetch traefik CRD definition
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+      dest: ./k8s/traefik/kubernetes-crd.definition-v1.yml
+    register: crd_definition
+  - name: Apply traefik CRD definition
+    kubernetes.core.k8s:
+      src: "{{ crd_definition.dest }}"
+      state: present
+
+#
+# User Setup
+#
+- name: Create ClusterRole for traefik
+  kubernetes.core.k8s:
+    api_version: rbac.authorization.k8s.io/v1
+    context: "{{ cluster }}"
+    kind: ClusterRole
+    name: traefik-role
+    resource_definition:
+      rules:
+          - apiGroups:
+              - ""
+            resources:
+              - services
+              - endpoints
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch
+          - apiGroups:
+              - extensions
+              - networking.k8s.io
+            resources:
+              - ingresses
+              - ingressclasses
+            verbs:
+              - get
+              - list
+              - watch
+          - apiGroups:
+              - extensions
+              - networking.k8s.io
+            resources:
+              - ingresses/status
+            verbs:
+              - update
+          - apiGroups:
+              - traefik.containo.us
+            resources:
+              - middlewares
+              - middlewaretcps
+              - ingressroutes
+              - traefikservices
+              - ingressroutetcps
+              - ingressrouteudps
+              - tlsoptions
+              - tlsstores
+              - serverstransports
+            verbs:
+              - get
+              - list
+              - watch
+    state: present
+- name: Create ServiceAccount for traefik
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: ServiceAccount
+    name: traefik-account
+    namespace: default
+    state: present
+- name: Bind ClusterRole for traefik to traefik-account
+  kubernetes.core.k8s:
+    api_version: rbac.authorization.k8s.io/v1
+    context: "{{ cluster }}"
+    kind: ClusterRoleBinding
+    name: traefik-role-binding
+    resource_definition:
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: traefik-role
+      subjects:
+        - kind: ServiceAccount
+          name: traefik-account
+          namespace: default
+    state: present
+
+#
+# Secrets
+#
+- name: Create Secrets for traefik
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Secret
+    name: traefik-hurricane-tokens
+    namespace: default
+    resource_definition:
+      stringData:
+        env_var: "tswn.us:{{ hurricane_txt_tokens['tswn.us'] }}"
+      type: Opaque
+    state: present
+
+#
+# Deployment
+#
+- name: Create Service for traefik's dashboard
+  kubernetes.core.k8s:
+    api_version: apps/v1
+    context: "{{ cluster }}"
+    kind: Deployment
+    name: traefik-deployment
+    namespace: default
+    resource_definition:
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: traefik
+        template:
+          metadata:
+            labels:
+              app.kubernetes.io/name: traefik
+          spec:
+            serviceAccountName: traefik-account
+            containers:
+              - name: traefik
+                image: traefik:v2.9
+                args:
+                  - --api.insecure
+                  - --certificatesresolvers.hurricane.acme.dnschallenge=true
+                  - --certificatesresolvers.hurricane.acme.email=me@shawnwilsher.com
+                  - --entrypoints.web.address=:80
+                  - --entrypoints.websecure.address=:443
+                  - --entrypoints.websecure.http.tls.certresolver=hurricane
+                  - --entrypoints.websecure.http.tls.domains=*.tswn.us
+                  - --providers.kubernetescrd
+                  # TODO: remove once working
+                  - --log.level=DEBUG
+                  - --certificatesresolvers.hurricane.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+                env:
+                  - name: HURRICANE_TOKENS
+                    valueFrom:
+                      secretKeyRef:
+                        name: traefik-hurricane-tokens
+                        key: env_var
+                ports:
+                  - name: web
+                    containerPort: 80
+                  - name: websecure
+                    containerPort: 443
+                  - name: dashboard
+                    containerPort: 8080
+    state: present
+
+#
+# IngressClass
+#
+- name: Create IngressClass for traefik
+  kubernetes.core.k8s:
+    api_version: networking.k8s.io/v1
+    context: "{{ cluster }}"
+    kind: IngressClass
+    name: traefik-lb
+    resource_definition:
+      metadata:
+        annotations:
+          ingressclass.kubernetes.io/is-default-class: "true"
+        lables:
+          app.kubernetes.io/component: controller
+      spec:
+        controller: traefik.io/ingress-controller
+    state: present
+
+#
+# Services
+#
+- name: Create Service for traefik's dashboard
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Service
+    name: traefik-dashboard-service
+    namespace: default
+    resource_definition:
+      spec:
+        ports:
+          - port: 8080
+            targetPort: dashboard
+        selector:
+          app.kubernetes.io/name: traefik
+        type: LoadBalancer
+    state: present
+- name: Create Service for traefik's web ports
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Service
+    name: traefik-web-service
+    namespace: default
+    resource_definition:
+      spec:
+        ports:
+          - name: http
+            port: 80
+            targetPort: web
+          - name: https
+            port: 443
+            targetPort: websecure
+        selector:
+          app.kubernetes.io/name: traefik
+        type: LoadBalancer
+    state: present

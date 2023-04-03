@@ -1,5 +1,5 @@
 .ansible_vault_password
-plays/k8s/kubernetes-crd.definition-v1.yml
+plays/k8s/traefik/kubernetes-crd.definition-v1.yml
 
 # Roles that are managed by ansible-galaxy
 roles/bertvv.bind/
