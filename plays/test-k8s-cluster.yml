@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - ansible.builtin.import_tasks: k8s/purelb/tasks.yml
+      tags:
+        - purelb
+  vars:
+    # Right now, I only have the test cluster, but this will need to change in the future!
+    cluster: default
