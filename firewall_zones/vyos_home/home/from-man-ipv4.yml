@@ -63,3 +63,12 @@
   protocol: tcp
   state:
     new: true
+- description: Allow Connections to File Server Minio Server
+  action: accept
+  destination:
+    group:
+      address_group: FILE-SERVER-v4
+    port: 9000-9001
+  protocol: tcp
+  state:
+    new: true
