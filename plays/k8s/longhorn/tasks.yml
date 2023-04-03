@@ -1,0 +1,57 @@
+---
+- name: Create a namespace for Longhorn
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Namespace
+    name: longhorn-system
+- name: Create Secret for the bucket target
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Secret
+    name: backup-target-credentials
+    namespace: longhorn-system
+    resource_definition:
+      stringData:
+        AWS_ACCESS_KEY_ID: "{{ longhorn_s3.access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ longhorn_s3.secret_key }}"
+        AWS_ENDPOINTS: http://minio-svc.default.svc.cluster.local:9000
+      type: Opaque
+    state: present
+- name: Install Longhorn via Helm
+  kubernetes.core.k8s:
+    api_version: helm.cattle.io/v1
+    context: "{{ cluster }}"
+    kind: HelmChart
+    resource_definition:
+      metadata:
+        name: longhorn
+        namespace: longhorn-system
+      spec:
+        chart: longhorn
+        repo: https://charts.longhorn.io
+        valuesContent: |-
+          defaultSettings:
+            backup-target: s3://{{ longhorn_s3.bucket }}@communication-closet/
+            backup-target-credential-secret: backup-target-credentials
+            backupstorePollInterval: 600
+        version: "1.4.1"
+- name: Configure Longhorn Ingress
+  kubernetes.core.k8s:
+    api_version: traefik.containo.us/v1alpha1
+    context: "{{ cluster }}"
+    kind: IngressRoute
+    resource_definition:
+      metadata:
+        name: longhorn-ingressroute
+        namespace: longhorn-system
+      spec:
+        entryPoints:
+          - web
+        routes:
+          - match: Host(`longhorn.hogs.tswn.us`)
+            kind: Rule
+            services:
+              - name: longhorn-frontend
+                port: 80

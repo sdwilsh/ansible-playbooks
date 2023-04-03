@@ -213,6 +213,10 @@ bind_zones:
       - name: test-worker01.hogs
         ip: 10.10.0.104
 
+      # At some point, this should ask the k3s control plane what the IP address is
+      - name: longhorn.hogs
+        ip: 10.10.0.152
+
       # Services Networks
       - name: "installation02"
         ip: "10.82.0.2"

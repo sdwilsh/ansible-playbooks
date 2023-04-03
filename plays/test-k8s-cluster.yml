@@ -14,6 +14,11 @@
     - ansible.builtin.import_tasks: k8s/traefik/tasks.yml
       tags:
         - traefik
+    - ansible.builtin.import_tasks: k8s/longhorn/tasks.yml
+      tags:
+        - longhorn
+      vars:
+        longhorn_s3: "{{ hostvars[groups['kairos_test'] | first].longhorn_s3 }}"
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default
