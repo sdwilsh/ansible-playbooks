@@ -29,4 +29,4 @@ collections:
   - name: kubernetes.core
     version: 2.4.0
   - name: vyos.vyos
-    version: 4.0.1
+    version: 4.0.2
