@@ -10,27 +10,6 @@
         name: minio-svc
         namespace: default
       spec:
-        ports:
-          - name: minio-listen
-            protocol: TCP
-            port: 9000
-- name: Setup EndpointSlice for minio
-  kubernetes.core.k8s:
-    api_version: v1
-    context: "{{ cluster }}"
-    kind: Service
-    resource_definition:
-      metadata:
-        name: minio-svc
-        namespace: default
-        labels:
-          kubernetes.io/service-name: minio-svc
-      addressType: IPv4
-      ports:
-        - name: ''
-          appProtocol: http
-          protocol: TCP
-          port: 9000
-      endpoints:
-        - addresses:
-            - "{{ ((hostvars[groups['dns'] | first].bind_zones | selectattr('name', 'equalto', 'tswn.us') | first).hosts | selectattr('name', 'contains', 'firstlightweaveslivingsong') | first).ip }}"
+        type: ExternalName
+        externalName: firstlightweaveslivingsong.hogs.tswn.us
+    state: present
