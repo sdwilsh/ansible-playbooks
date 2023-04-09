@@ -15,10 +15,9 @@
         name: purelb
         namespace: purelb
       spec:
-        name: purelb
         chart: purelb
         repo: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
-        version: v0.7.0
+        version: "0.7.0"
 - name: Setup default (MAN) service pool
   kubernetes.core.k8s:
     api_version: purelb.io/v1

@@ -43,6 +43,15 @@
         "#\\s*renovate:((\\s*versioning=(?<versioning>.+?))|(\\s*depName=(?<depName>(\\w|-|\\/)+))|(\\s*datasource=(?<dataSource>(\\w|-)+)))*\\n.+?kairos_version: \"(?<currentValue>v\\d+\\.\\d+\\.\\d+?).+?"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
+    },
+        {
+      "datasourceTemplate": "helm",
+      "fileMatch": [
+        "^plays/k8s/.+/tasks\\.yml$"
+      ],
+      "matchStrings": [
+        "spec:\\n +chart: (?<depName>.*?)(?:\\n +repo: (?<registryUrl>.*?))?(?:\\n +valuesContent: \\|-\\n[\\s\\S]*?)?\\n +version: \"(?<currentValue>.*?)\""
+      ]
     }
   ]
 }
