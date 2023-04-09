@@ -44,7 +44,7 @@
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     },
-        {
+    {
       "datasourceTemplate": "helm",
       "fileMatch": [
         "^plays/k8s/.+/tasks\\.yml$"
