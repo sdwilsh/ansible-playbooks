@@ -5,6 +5,7 @@
     context: "{{ cluster }}"
     kind: Namespace
     name: purelb
+    state: present
 - name: Install PureLB via Helm
   kubernetes.core.k8s:
     api_version: helm.cattle.io/v1
@@ -18,6 +19,7 @@
         chart: purelb
         repo: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
         version: "0.7.0"
+    state: present
 - name: Setup default (MAN) service pool
   kubernetes.core.k8s:
     api_version: purelb.io/v1
@@ -33,3 +35,4 @@
             aggregation: default
             pool: 10.10.0.150-10.10.0.174
             subnet: 10.10.0.0/24
+    state: present

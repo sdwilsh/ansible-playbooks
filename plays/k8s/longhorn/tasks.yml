@@ -5,6 +5,7 @@
     context: "{{ cluster }}"
     kind: Namespace
     name: longhorn-system
+    state: present
 - name: Create Secret for the bucket target
   kubernetes.core.k8s:
     api_version: v1
@@ -37,6 +38,7 @@
             backup-target-credential-secret: backup-target-credentials
             backupstorePollInterval: 600
         version: "1.4.1"
+    state: present
 - name: Configure Longhorn Ingress
   kubernetes.core.k8s:
     api_version: traefik.containo.us/v1alpha1
@@ -55,3 +57,4 @@
             services:
               - name: longhorn-frontend
                 port: 80
+    state: present
