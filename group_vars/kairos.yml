@@ -1,3 +1,2 @@
 ---
 ansible_user: kairos
-reboot_test_command: systemctl is-active --quiet k3s

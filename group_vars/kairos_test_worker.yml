@@ -1,2 +1,4 @@
 ---
+reboot_test_command: systemctl is-active --quiet k3s-agent
+
 k3s_controlplane: no
