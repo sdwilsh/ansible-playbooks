@@ -7,10 +7,9 @@ users:
     ssh_authorized_keys:
       - {{ common__ansible_key_type }} {{ common__ansible_key }}
 
+{% if hostvars[host].k3s_controlplane %}
 k3s:
   args:
-{% if hostvars[host].k3s_controlplane %}
-    # Control-plane Specific Flags
 {% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
 {% else %}
@@ -27,9 +26,8 @@ k3s:
     - --etcd-s3-skip-ssl-verify
     - --etcd-s3-folder={{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}
 {% else %}
-    # Worker-node Specific Flags
+k3s-agent:
 {% endif %}
-    # Flags for all nodes
   enabled: true
   env:
     K3S_TOKEN: "{{ hostvars[host].k3s_token }}"
