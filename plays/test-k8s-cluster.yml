@@ -18,6 +18,8 @@
       tags:
         - longhorn
       vars:
+        longhorn_default_crypto_passphrase: "{{ hostvars[groups['kairos_test'] | first].longhorn_default_crypto_passphrase }}"
+        longhorn_default_replicas: "{{ hostvars[groups['kairos_test'] | first].longhorn_default_replicas }}"
         longhorn_s3: "{{ hostvars[groups['kairos_test'] | first].longhorn_s3 }}"
         longhorn_values: "{{ hostvars[groups['kairos_test'] | first].longhorn_values }}"
     - ansible.builtin.import_tasks: k8s/rabbitmq-operator/tasks.yml

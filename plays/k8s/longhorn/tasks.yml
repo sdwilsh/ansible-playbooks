@@ -55,3 +55,38 @@
               - name: longhorn-frontend
                 port: 80
     state: present
+- name: Configure global encryption key
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Secret
+    resource_definition:
+      metadata:
+        name: longhorn-default-crypto
+        namespace: longhorn-system
+      stringData:
+        CRYPTO_KEY_VALUE: "{{ longhorn_default_crypto_passphrase }}"
+        CRYPTO_KEY_PROVIDER: secret
+- name: Configure Encrypted StorageClass
+  kubernetes.core.k8s:
+    api_version: storage.k8s.io/v1
+    context: "{{ cluster }}"
+    kind: StorageClass
+    resource_definition:
+      metadata:
+        name: longhorn-crypto-global
+      provisioner: driver.longhorn.io
+      allowVolumeExpansion: yes
+      parameters:
+        numberOfReplicas: "{{ longhorn_default_replicas }}"
+        staleReplicaTimeout: "2880" # 48 hours in minutes
+        fromBackup: ""
+        encrypted: "true"
+        csi.storage.k8s.io/provisioner-secret-name: longhorn-default-crypto
+        csi.storage.k8s.io/provisioner-secret-namespace: longhorn-system
+        csi.storage.k8s.io/node-publish-secret-name: longhorn-default-crypto
+        csi.storage.k8s.io/node-publish-secret-namespace: longhorn-system
+        csi.storage.k8s.io/node-stage-secret-name: longhorn-default-crypto
+        csi.storage.k8s.io/node-stage-secret-namespace: longhorn-system
+      reclaimPolicy: Retain
+    state: present
