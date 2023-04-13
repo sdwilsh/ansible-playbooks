@@ -41,4 +41,4 @@
       when: os_release != kairos_version or config.changed
   vars:
     # renovate: depName=kairos-io/provider-kairos
-    kairos_version: "v1.6.1-k3sv1.26.1+k3s1"
+    kairos_version: "v2.0.0-k3sv1.26.1+k3s1"
