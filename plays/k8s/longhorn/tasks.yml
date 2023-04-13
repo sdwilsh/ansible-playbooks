@@ -90,3 +90,58 @@
         csi.storage.k8s.io/node-stage-secret-namespace: longhorn-system
       reclaimPolicy: Retain
     state: present
+
+#
+# Backups
+#
+- name: Configure hourly backup job
+  kubernetes.core.k8s:
+    api_version: longhorn.io/v1beta1
+    context: "{{ cluster }}"
+    kind: RecurringJob
+    resource_definition:
+      metadata:
+        name: backup-hourly
+        namespace: longhorn-system
+      spec:
+        concurrency: 2
+        cron: "5 */1 * * *"
+        groups:
+          - default
+        retain: 24 # Full Day
+        task: backup
+    state: present
+- name: Configure daily backup job
+  kubernetes.core.k8s:
+    api_version: longhorn.io/v1beta1
+    context: "{{ cluster }}"
+    kind: RecurringJob
+    resource_definition:
+      metadata:
+        name: backup-daily
+        namespace: longhorn-system
+      spec:
+        concurrency: 2
+        cron: "15 0 */1 * *"
+        groups:
+          - default
+        retain: 14 # Two Weeks
+        task: backup
+    state: present
+- name: Configure weekly backup job
+  kubernetes.core.k8s:
+    api_version: longhorn.io/v1beta1
+    context: "{{ cluster }}"
+    kind: RecurringJob
+    resource_definition:
+      metadata:
+        name: backup-weekly
+        namespace: longhorn-system
+      spec:
+        concurrency: 2
+        cron: "30 1 * * 0"
+        groups:
+          - default
+        retain: 8 # Two Months
+        task: backup
+    state: present
