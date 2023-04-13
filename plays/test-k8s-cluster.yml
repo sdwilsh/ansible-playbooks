@@ -19,6 +19,7 @@
         - longhorn
       vars:
         longhorn_s3: "{{ hostvars[groups['kairos_test'] | first].longhorn_s3 }}"
+        longhorn_values: "{{ hostvars[groups['kairos_test'] | first].longhorn_values }}"
     - ansible.builtin.import_tasks: k8s/rabbitmq-operator/tasks.yml
       tags:
         - rabbitmq

@@ -1,2 +1,8 @@
 ---
 ansible_user: kairos
+
+longhorn_values:
+  defaultSettings:
+    backup-target: s3://{{ longhorn_s3.bucket }}@communication-closet/
+    backup-target-credential-secret: backup-target-credentials
+    backupstorePollInterval: 600

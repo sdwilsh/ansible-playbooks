@@ -33,10 +33,7 @@
         chart: longhorn
         repo: https://charts.longhorn.io
         valuesContent: |-
-          defaultSettings:
-            backup-target: s3://{{ longhorn_s3.bucket }}@communication-closet/
-            backup-target-credential-secret: backup-target-credentials
-            backupstorePollInterval: 600
+          {{ longhorn_values }}
         version: "1.4.1"
     state: present
 - name: Configure Longhorn Ingress
