@@ -32,7 +32,8 @@
     },
     {
       "fileMatch": [
-        "^roles/.+/tasks/.+\\.yml$"
+        "^roles/.+/tasks/.+\\.yml$",
+        "^roles/k8s/.+/tasks\\.yml$"
       ],
       "datasourceTemplate": "docker",
       "matchStrings": [

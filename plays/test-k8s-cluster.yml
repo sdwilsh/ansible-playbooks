@@ -25,6 +25,9 @@
     - ansible.builtin.import_tasks: k8s/rabbitmq-operator/tasks.yml
       tags:
         - rabbitmq
+    - ansible.builtin.import_tasks: k8s/unifi/tasks.yml
+      tags:
+        - unifi
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default

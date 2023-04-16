@@ -1,0 +1,105 @@
+---
+- name: Create a namespace for unifi
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Namespace
+    name: unifi-controller
+    state: present
+
+- name: Create Unifi PersistantVolumeClaim
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: PersistentVolumeClaim
+    resource_definition:
+      metadata:
+        name: unifi-controller-pvc
+        namespace: unifi-controller
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 4Gi
+        storageClassName: longhorn-crypto-global
+    state: present
+- name: Create Unifi Deployment
+  kubernetes.core.k8s:
+    api_version: apps/v1
+    context: "{{ cluster }}"
+    kind: Deployment
+    resource_definition:
+      metadata:
+        name: unifi-controller
+        namespace: unifi-controller
+      spec:
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: unifi-controller
+        template:
+          metadata:
+            labels:
+              app.kubernetes.io/name: unifi-controller
+          spec:
+            containers:
+              - name: unifi-controller
+                # rennovate:
+                image: lscr.io/linuxserver/unifi-controller:7.3.83
+                env:
+                  - name: MEM_LIMIT
+                    value: "1024"
+                  - name: MEM_STARTUP
+                    value: "1024"
+                  - name: TZ
+                    value: America/Los_Angeles
+                # https://help.ui.com/hc/en-us/articles/218506997-UniFi-Network-Required-Ports-Reference
+                ports:
+                  - name: stun
+                    containerPort: 3478
+                    protocol: UDP
+                  - name: deviceapi
+                    containerPort: 8080
+                    protocol: TCP
+                  - name: web
+                    containerPort: 8443
+                    protocol: TCP
+                volumeMounts:
+                  - name: unifi-controller-config
+                    mountPath: /config
+            volumes:
+              - name: unifi-controller-config
+                persistentVolumeClaim:
+                  claimName: unifi-controller-pvc
+    state: present
+
+#
+# Services
+#
+- name: Create Service for Unifi controller
+  kubernetes.core.k8s:
+    api_version: v1
+    context: "{{ cluster }}"
+    kind: Service
+    name: traefik-dashboard-service
+    namespace: unifi-controller
+    resource_definition:
+      spec:
+        ports:
+          - name: stun
+            port: 3478
+            protocol: UDP
+            targetPort: stun
+          - name: deviceapi
+            port: 8080
+            protocol: TCP
+            targetPort: deviceapi
+          - name: web
+            port: 8443
+            protocol: TCP
+            targetPort: web
+        selector:
+          app.kubernetes.io/name: unifi-controller
+        type: LoadBalancer
+    state: present
+# TODO: ingress, which probably obsoletes the service above!
