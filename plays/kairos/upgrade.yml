@@ -17,7 +17,7 @@
       register: osreleasefile
     - name: Extract current version
       ansible.builtin.set_fact:
-        os_release: "{{ osreleasefile['content'] | b64decode | regex_findall('^KAIROS_VERSION=\"(.*)\"$', multiline=True) | first }}"
+        os_release: "{{ osreleasefile['content'] | b64decode | regex_findall('^KAIROS_VERSION_ID=\"(.*)\"$', multiline=True) | last }}"
     - name: Print os version
       ansible.builtin.debug:
         var: os_release
