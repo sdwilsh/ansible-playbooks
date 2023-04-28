@@ -12,11 +12,6 @@ k3s:
   args:
 {% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
-{% else %}
-    - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
-{% endif %}
-    - --disable=traefik,servicelb
-    - --node-taint key=value:NoExecute
     # S3 Backup
     - --etcd-s3
     - --etcd-s3-access-key={{ hostvars[host].k3s_s3.access_key }}
@@ -24,7 +19,14 @@ k3s:
     - --etcd-s3-endpoint=firstlightweaveslivingsong.hogs.tswn.us:9000
     - --etcd-s3-secret-key={{ hostvars[host].k3s_s3.secret_key }}
     - --etcd-s3-skip-ssl-verify
-    - --etcd-s3-folder={{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}
+    - --etcd-s3-folder={{ host }}
+{% else %}
+    - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
+{% endif %}
+    - --disable=traefik,servicelb
+{% if hostvars[host].k3s_no_execute | default(False) %}
+    - --node-taint key=value:NoExecute
+{% endif %}
 {% else %}
 k3s-agent:
 {% endif %}
