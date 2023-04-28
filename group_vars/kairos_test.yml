@@ -18,8 +18,6 @@ calico_values:
         - cidr: fded:827c:76b5::/48
           encapsulation: "None"
 
-# Test cluser has minimal nodes, and does not have a need for data safety.
-longhorn_default_replicas: "1"
 longhorn_s3:
   access_key: longhorn-test
   bucket: longhorn-test

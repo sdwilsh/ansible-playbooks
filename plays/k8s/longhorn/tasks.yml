@@ -78,7 +78,7 @@
       provisioner: driver.longhorn.io
       allowVolumeExpansion: yes
       parameters:
-        numberOfReplicas: "{{ longhorn_default_replicas }}"
+        numberOfReplicas: "3"
         staleReplicaTimeout: "2880" # 48 hours in minutes
         fromBackup: ""
         encrypted: "true"
