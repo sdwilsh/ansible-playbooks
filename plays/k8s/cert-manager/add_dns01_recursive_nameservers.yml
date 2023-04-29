@@ -1,0 +1,9 @@
+---
+# Because of the split DNS that is used, we need to add some arguments to the cert-manager controller.
+# https://cert-manager.io/docs/configuration/acme/dns01/#setting-nameservers-for-dns01-self-check
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: --dns01-recursive-nameservers-only
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: --dns01-recursive-nameservers=alberto.ns.cloudflare.com:53,rosalyn.ns.cloudflare.com:53
