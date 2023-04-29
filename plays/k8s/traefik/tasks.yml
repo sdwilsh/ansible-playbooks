@@ -94,22 +94,6 @@
     state: present
 
 #
-# Secrets
-#
-- name: Create Secrets for traefik
-  kubernetes.core.k8s:
-    api_version: v1
-    context: "{{ cluster }}"
-    kind: Secret
-    name: traefik-hurricane-tokens
-    namespace: default
-    resource_definition:
-      stringData:
-        env_var: "tswn.us:{{ hurricane_txt_tokens['tswn.us'] }}"
-      type: Opaque
-    state: present
-
-#
 # Deployment
 #
 - name: Create Service for traefik's dashboard
@@ -136,22 +120,11 @@
                 image: traefik:v2.9
                 args:
                   - --api.insecure
-                  - --certificatesresolvers.hurricane.acme.dnschallenge=true
-                  - --certificatesresolvers.hurricane.acme.email=me@shawnwilsher.com
                   - --entrypoints.web.address=:80
                   - --entrypoints.websecure.address=:443
-                  - --entrypoints.websecure.http.tls.certresolver=hurricane
-                  - --entrypoints.websecure.http.tls.domains=*.tswn.us
                   - --providers.kubernetescrd
                   # TODO: remove once working
                   - --log.level=DEBUG
-                  - --certificatesresolvers.hurricane.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-                env:
-                  - name: HURRICANE_TOKENS
-                    valueFrom:
-                      secretKeyRef:
-                        name: traefik-hurricane-tokens
-                        key: env_var
                 ports:
                   - name: web
                     containerPort: 80
