@@ -10,86 +10,6 @@
     loop_var: resource
 
 #
-# User Setup
-#
-- name: Create ClusterRole for traefik
-  kubernetes.core.k8s:
-    api_version: rbac.authorization.k8s.io/v1
-    context: "{{ cluster }}"
-    kind: ClusterRole
-    name: traefik-role
-    resource_definition:
-      rules:
-          - apiGroups:
-              - ""
-            resources:
-              - services
-              - endpoints
-              - secrets
-            verbs:
-              - get
-              - list
-              - watch
-          - apiGroups:
-              - extensions
-              - networking.k8s.io
-            resources:
-              - ingresses
-              - ingressclasses
-            verbs:
-              - get
-              - list
-              - watch
-          - apiGroups:
-              - extensions
-              - networking.k8s.io
-            resources:
-              - ingresses/status
-            verbs:
-              - update
-          - apiGroups:
-              - traefik.containo.us
-            resources:
-              - middlewares
-              - middlewaretcps
-              - ingressroutes
-              - traefikservices
-              - ingressroutetcps
-              - ingressrouteudps
-              - tlsoptions
-              - tlsstores
-              - serverstransports
-            verbs:
-              - get
-              - list
-              - watch
-    state: present
-- name: Create ServiceAccount for traefik
-  kubernetes.core.k8s:
-    api_version: v1
-    context: "{{ cluster }}"
-    kind: ServiceAccount
-    name: traefik-account
-    namespace: default
-    state: present
-- name: Bind ClusterRole for traefik to traefik-account
-  kubernetes.core.k8s:
-    api_version: rbac.authorization.k8s.io/v1
-    context: "{{ cluster }}"
-    kind: ClusterRoleBinding
-    name: traefik-role-binding
-    resource_definition:
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: traefik-role
-      subjects:
-        - kind: ServiceAccount
-          name: traefik-account
-          namespace: default
-    state: present
-
-#
 # Deployment
 #
 - name: Create Service for traefik's dashboard
@@ -110,7 +30,7 @@
             labels:
               app.kubernetes.io/name: traefik
           spec:
-            serviceAccountName: traefik-account
+            serviceAccountName: traefik-ingress-controller
             containers:
               - name: traefik
                 image: traefik:v2.9

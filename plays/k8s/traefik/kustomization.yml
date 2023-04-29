@@ -4,3 +4,5 @@ kind: Kustomization
 
 resources:
   - https://raw.githubusercontent.com/traefik/traefik/v2.9.10/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.9.10/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
+  - serviceaccount.yml
