@@ -1,17 +1,13 @@
 ---
-#
-# Resource Configuration
-#
-- block:
-  - name: Fetch traefik CRD definition
-    ansible.builtin.get_url:
-      url: https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
-      dest: ./k8s/traefik/kubernetes-crd.definition-v1.yml
-    register: crd_definition
-  - name: Apply traefik CRD definition
-    kubernetes.core.k8s:
-      src: "{{ crd_definition.dest }}"
-      state: present
+- name: Install traefik via Kustomize
+  kubernetes.core.k8s:
+    context: "{{ cluster }}"
+    definition: "{{ resource }}"
+    state: present
+  loop: "{{ lookup('kubernetes.core.kustomize', dir='plays/k8s/traefik/').split('---\n') | map('from_yaml') }}"
+  loop_control:
+    label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
+    loop_var: resource
 
 #
 # User Setup
