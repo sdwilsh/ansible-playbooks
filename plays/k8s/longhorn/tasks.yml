@@ -36,24 +36,29 @@
           {{ longhorn_values }}
         version: "1.4.1"
     state: present
-- name: Configure Longhorn Ingress
+- name: Configure Longhorn IngressRoute
   kubernetes.core.k8s:
-    api_version: traefik.containo.us/v1alpha1
+    apply: yes
     context: "{{ cluster }}"
-    kind: IngressRoute
     resource_definition:
+      apiVersion: traefik.containo.us/v1alpha1
+      kind: IngressRoute
       metadata:
         name: longhorn-ingressroute
-        namespace: longhorn-system
+        namespace: default
       spec:
         entryPoints:
-          - web
+          - websecure
         routes:
-          - match: Host(`longhorn.hogs.tswn.us`)
+          - match: "Host(`{{ k3s_subdomain_prefix }}longhorn.hogs.tswn.us`)"
             kind: Rule
             services:
-              - name: longhorn-frontend
+              - kind: Service
+                name: longhorn-frontend
+                namespace: longhorn-system
                 port: 80
+        tls:
+          secretName: wildcard-hogs-tswn-us-secret
     state: present
 - name: Configure global encryption key
   kubernetes.core.k8s:
