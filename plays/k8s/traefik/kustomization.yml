@@ -13,5 +13,6 @@ resources:
   - serviceaccount.yml
   - deployment.yml
   - service.yml
+  - certificate.yml
 patchesStrategicMerge:
   - set_cluster_role_binding_namespace.yml

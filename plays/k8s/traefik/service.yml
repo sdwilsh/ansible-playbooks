@@ -12,7 +12,7 @@ spec:
       targetPort: dashboard
   selector:
     app.kubernetes.io/name: traefik
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service

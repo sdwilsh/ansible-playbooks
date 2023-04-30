@@ -1,0 +1,26 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-tswn-us-certificate
+  namespace: default
+spec:
+  secretName: wildcard-tswn-us-secret
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: "*.tswn.us"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-hogs-tswn-us-certificate
+  namespace: default
+spec:
+  secretName: wildcard-hogs-tswn-us-secret
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: "*.hogs.tswn.us"
+  dnsNames:
+    - "*.hogs.tswn.us"

@@ -36,3 +36,4 @@
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default
+    k3s_subdomain_prefix: test-

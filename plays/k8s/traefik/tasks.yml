@@ -9,3 +9,27 @@
   loop_control:
     label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
     loop_var: resource
+- name: Configure traefik dashboard IngressRoute
+  kubernetes.core.k8s:
+    apply: yes
+    context: "{{ cluster }}"
+    resource_definition:
+      apiVersion: traefik.containo.us/v1alpha1
+      kind: IngressRoute
+      metadata:
+        name: traefik-dashboard-ingressroute
+        namespace: default
+      spec:
+        entryPoints:
+          - websecure
+        routes:
+          - kind: Rule
+            match: "Host(`{{ k3s_subdomain_prefix }}traefik.hogs.tswn.us`)"
+            services:
+              - kind: Service
+                name: traefik-dashboard-service
+                namespace: traefik
+                port: 8080
+        tls:
+          secretName: wildcard-hogs-tswn-us-secret
+    state: present

@@ -214,6 +214,8 @@ bind_zones:
         ip: 10.10.0.104
 
       # At some point, this should ask the k3s control plane what the IP address is
+      - name: test-traefik.hogs
+        ip: 10.10.0.151
       - name: longhorn.hogs
         ip: 10.10.0.152
 
