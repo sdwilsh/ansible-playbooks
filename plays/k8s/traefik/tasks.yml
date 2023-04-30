@@ -1,6 +1,7 @@
 ---
 - name: Install traefik via Kustomize
   kubernetes.core.k8s:
+    apply: yes
     context: "{{ cluster }}"
     definition: "{{ resource }}"
     state: present
