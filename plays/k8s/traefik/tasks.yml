@@ -5,7 +5,7 @@
     context: "{{ cluster }}"
     definition: "{{ resource }}"
     state: present
-  loop: "{{ lookup('kubernetes.core.kustomize', dir='plays/k8s/traefik/').split('---\n') | map('from_yaml') }}"
+  loop: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/' + kustomization_overlay + '/traefik/').split('---\n') | map('from_yaml') }}"
   loop_control:
     label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
     loop_var: resource
