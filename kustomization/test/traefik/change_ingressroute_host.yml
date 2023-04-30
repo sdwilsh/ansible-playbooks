@@ -1,0 +1,5 @@
+---
+- op: replace
+  path: /spec/routes/0/services/0/match
+  value: Host(`test-traefik.hogs.tswn.us`)
+

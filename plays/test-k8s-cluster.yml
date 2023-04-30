@@ -16,7 +16,16 @@
         - cert-manager
       vars:
         certmanager_cloudflare_api_token: "{{ hostvars[groups['kairos_test'] | first].certmanager_cloudflare_api_token }}"
-    - ansible.builtin.import_tasks: k8s/traefik/tasks.yml
+    - name: Setup traefik via Kustomize
+      kubernetes.core.k8s:
+        apply: yes
+        context: "{{ cluster }}"
+        definition: "{{ resource }}"
+        state: present
+      loop: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/test/traefik/').split('---\n') | map('from_yaml') }}"
+      loop_control:
+        label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
+        loop_var: resource
       tags:
         - traefik
     - ansible.builtin.import_tasks: k8s/longhorn/tasks.yml
