@@ -63,8 +63,8 @@
         "^kustomization/.+/kustomization\\.yml$"
       ],
       "matchStrings": [
-        "#\\s*renovate:\\s(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s+newTag: (?<currentValue>.*?)\\n",
-        "#\\s*renovate:\\s(?<datasource>.*?)\\n\\s+- https://raw\\.githubusercontent\\.com/(?<depName>.*?)/(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s+newTag: (?<currentValue>.*?)\\n",
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\n\\s+- https://raw\\.githubusercontent\\.com/(?<depName>.*?)/(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
       ]
     }
   ]
