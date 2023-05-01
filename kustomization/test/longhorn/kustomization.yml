@@ -8,4 +8,4 @@ patchesJson6902:
   - path: change_ingressroute_host.yml
     target:
       kind: IngressRoute
-      name: longhorn-ingressroute
+      name: longhorn-frontend-ingressroute
