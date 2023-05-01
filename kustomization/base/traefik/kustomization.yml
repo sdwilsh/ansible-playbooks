@@ -5,13 +5,13 @@ kind: Kustomization
 images:
   - name: traefik
     # renovate: datasource=github-releases depName=traefik/traefik
-    newTag: v2.9.10
+    newTag: v2.10.1
 resources:
   - namespace.yml
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v2.9.10/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.10.1/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v2.9.10/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.10.1/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
   - ingressclass.yml
   - serviceaccount.yml
   - deployment.yml
