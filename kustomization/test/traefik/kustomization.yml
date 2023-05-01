@@ -13,3 +13,7 @@ patchesJson6902:
     target:
       kind: IngressRoute
       name: traefik-dashboard-ingressroute
+  - path: change_ingressroute_host.yml
+    target:
+      kind: IngressRoute
+      name: traefik-dashboard-https-redirect-ingressroute

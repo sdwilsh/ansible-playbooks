@@ -18,6 +18,7 @@ resources:
   - service.yml
   - certificate.yml
   - serverstransport.yml
+  - middleware.yml
   - ingressroute.yml
 patchesStrategicMerge:
   - set_cluster_role_binding_namespace.yml

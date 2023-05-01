@@ -16,3 +16,20 @@ spec:
           port: 8080
   tls:
     secretName: wildcard-hogs-tswn-us-secret
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-https-redirect-ingressroute
+  namespace: traefik
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      middlewares:
+        - name: http-to-https-middleware
+          namespace: traefik
+      services:
+        - kind: TraefikService
+          name: noop@internal
