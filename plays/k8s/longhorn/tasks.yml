@@ -36,30 +36,16 @@
           {{ longhorn_values }}
         version: "1.4.1"
     state: present
-- name: Configure Longhorn IngressRoute
+- name: Setup Longhorn via Kustomize
   kubernetes.core.k8s:
     apply: yes
     context: "{{ cluster }}"
-    resource_definition:
-      apiVersion: traefik.containo.us/v1alpha1
-      kind: IngressRoute
-      metadata:
-        name: longhorn-ingressroute
-        namespace: default
-      spec:
-        entryPoints:
-          - websecure
-        routes:
-          - match: "Host(`{{ k3s_subdomain_prefix }}longhorn.hogs.tswn.us`)"
-            kind: Rule
-            services:
-              - kind: Service
-                name: longhorn-frontend
-                namespace: longhorn-system
-                port: 80
-        tls:
-          secretName: wildcard-hogs-tswn-us-secret
+    definition: "{{ resource }}"
     state: present
+  loop: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/' + kustomization_overlay + '/longhorn/').split('---\n') | map('from_yaml') }}"
+  loop_control:
+    label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
+    loop_var: resource
 - name: Configure global encryption key
   kubernetes.core.k8s:
     api_version: v1
