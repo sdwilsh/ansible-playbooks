@@ -9,5 +9,9 @@ patchesJson6902:
     target:
       kind: IngressRoute
       name: longhorn-frontend-ingressroute
+  - path: change_ingressroute_host.yml
+    target:
+      kind: IngressRoute
+      name: longhorn-frontend-https-redirect-ingressroute
 resources:
   - setting.yml
