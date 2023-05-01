@@ -1,0 +1,7 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: backup-target
+  namespace: longhorn-system
+value: s3://longhorn-test@communication-closet/
