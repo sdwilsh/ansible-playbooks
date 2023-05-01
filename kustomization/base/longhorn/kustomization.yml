@@ -6,3 +6,4 @@ resources:
     # renovate: datasource=github-releases
   # - https://raw.githubusercontent.com/longhorn/longhorn/v1.4.1/deploy/longhorn.yaml
   - ingressroute.yml
+  - storageclass.yml
