@@ -9,9 +9,3 @@ certmanager_cloudflare_api_token: !vault |
           6639306633623766380a623631393064386337323532306564653237356264363561373663356163
           61383336646539353535343761303762343263623038623961616133656235306534623032346161
           6632386137366238393638346265323066613936643738386539
-
-longhorn_values:
-  defaultSettings:
-    backup-target: s3://{{ longhorn_s3.bucket }}@communication-closet/
-    backup-target-credential-secret: backup-target-credentials
-    backupstorePollInterval: 600

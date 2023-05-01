@@ -9,3 +9,5 @@ patchesJson6902:
     target:
       kind: IngressRoute
       name: longhorn-frontend-ingressroute
+resources:
+  - setting.yml
