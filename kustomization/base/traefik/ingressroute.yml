@@ -9,7 +9,6 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`traefik.hogs.tswn.us`)
       services:
         - kind: Service
           name: traefik-dashboard-service
