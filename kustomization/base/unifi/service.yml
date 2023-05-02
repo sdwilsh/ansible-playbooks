@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-dashboard-service
+  namespace: unifi-controller
+spec:
+  ports:
+    - name: stun
+      port: 3478
+      protocol: UDP
+      targetPort: stun
+    - name: deviceapi
+      port: 8080
+      protocol: TCP
+      targetPort: deviceapi
+    - name: web
+      port: 8443
+      protocol: TCP
+      targetPort: web
+  selector:
+    app.kubernetes.io/name: unifi-controller
+  type: LoadBalancer
