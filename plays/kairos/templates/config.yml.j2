@@ -10,6 +10,8 @@ users:
 {% if hostvars[host].k3s_controlplane %}
 k3s:
   args:
+    - --flannel-iface=man
+    - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipv4 | ansible.utils.ipaddr('address') | first }}
 {% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
     # S3 Backup
@@ -29,6 +31,9 @@ k3s:
 {% endif %}
 {% else %}
 k3s-agent:
+  args:
+    - --flannel-iface=man
+    - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipv4 | ansible.utils.ipaddr('address') | first }}
 {% endif %}
   enabled: true
   env:
@@ -47,13 +52,45 @@ stages:
         NTP: {{ common__ntp_pool }}
         FallbackNTP: ""
     - files:
-        - path: /etc/systemd/network/01-man.network
+        - path: /etc/systemd/network/01-trunk.network
+          permissions: 0644
+          content: |
+            [Link]
+            Name=trunk
+            [Match]
+            Name=enp2s1
+            [Network]
+            VLAN=man
+            VLAN=home
+        - path: /etc/systemd/network/10-man.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name=man
+            Kind=vlan
+            [VLAN]
+            Id=10
+        - path: /etc/systemd/network/10-man.network
           permissions: 0644
           content: |
             [Match]
-            Name=enp2s1
-
+            Name=man
             [Network]
             Address={{ hostvars[host].common__ip_addresses | ansible.utils.ipv4 | first }}
-            Gateway={{ hostvars[host].common__gateway_v4_address }}
+            Gateway=10.10.0.1
             DNS={{ hostvars[host].common__nameservers.addresses | ansible.utils.ipv4 | first }}
+        - path: /etc/systemd/network/10-home.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name=home
+            Kind=vlan
+            [VLAN]
+            Id=117
+        - path: /etc/systemd/network/10-home.network
+          permissions: 0644
+          content: |
+            [Match]
+            Name=home
+            [Network]
+            Gateway=10.117.0.1

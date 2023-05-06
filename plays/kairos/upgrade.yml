@@ -11,6 +11,22 @@
       register: config
       vars:
         host: "{{ inventory_hostname }}"
+    # If the config changes, including files that should no longer exist, we want to make sure the new config is what applies.
+    - name: Remove old network files
+      block:
+        - name: Collect all network configuration files
+          ansible.builtin.find:
+            paths: /etc/systemd/network/
+          register: collected_network_files
+        - name: Remove all collected network files
+          ansible.builtin.file:
+            path: "{{ item.path }}"
+            state: absent
+          become: yes
+          loop: "{{ collected_network_files.files }}"
+          loop_control:
+            label: "{{ item.path }}"
+      when: config.changed
     - name: Read in current version
       ansible.builtin.slurp:
         src: /etc/os-release
