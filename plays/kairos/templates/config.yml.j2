@@ -60,37 +60,29 @@ stages:
             [Match]
             Name=enp2s1
             [Network]
-            VLAN=man
-            VLAN=home
-        - path: /etc/systemd/network/10-man.netdev
+{% for network in hostvars[host].kairos_managed_networks %}
+            VLAN={{ network.name }}
+{% endfor %}
+{% for network in hostvars[host].kairos_managed_networks %}
+        - path: /etc/systemd/network/10-{{ network.name }}.netdev
           permissions: 0644
           content: |
             [NetDev]
-            Name=man
+            Name={{ network.name }}
             Kind=vlan
             [VLAN]
-            Id=10
-        - path: /etc/systemd/network/10-man.network
+            Id={{ network.vlan_id }}
+        - path: /etc/systemd/network/10-{{ network.name }}.network
           permissions: 0644
           content: |
             [Match]
-            Name=man
+            Name={{ network.name }}
             [Network]
-            Address={{ hostvars[host].common__ip_addresses | ansible.utils.ipv4 | first }}
-            Gateway=10.10.0.1
-            DNS={{ hostvars[host].common__nameservers.addresses | ansible.utils.ipv4 | first }}
-        - path: /etc/systemd/network/10-home.netdev
-          permissions: 0644
-          content: |
-            [NetDev]
-            Name=home
-            Kind=vlan
-            [VLAN]
-            Id=117
-        - path: /etc/systemd/network/10-home.network
-          permissions: 0644
-          content: |
-            [Match]
-            Name=home
-            [Network]
-            Gateway=10.117.0.1
+{% if 'address' in network %}
+            Address={{ network.address }}
+{% endif %}
+{% if 'gateway' in network %}
+            DNS={{ network.gateway }}
+            Gateway={{ network.gateway }}
+{% endif %}
+{% endfor %}
