@@ -46,37 +46,54 @@
           - "{{ kairos_version | replace('+', '-') }}"
       become: yes
       when: os_release != kairos_version
-    - name: Drain and Reboot
-      block:
-        # TODO(sdwilsh): This does not work today because we need to be able to select specific pods.  See
-        #                https://github.com/ansible-collections/kubernetes.core/issues/474
-        # - name: Drain
-        #   kubernetes.core.k8s_drain:
-        #     delete_options:
-        #       delete_emptydir_data: yes
-        #       force: yes
-        #       ignore_daemonsets: yes
-        #     name: "{{ inventory_hostname_short }}"
-        #     state: drain
-        #   delegate_to: localhost
-        - name: Drain
-          ansible.builtin.shell:
-            cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --pod-selector='app!=csi-attacher,app!=csi-provisioner' --kubeconfig ~/.kube/config"
-          delegate_to: localhost
-        - name: Reboot
-          ansible.builtin.reboot:
-            pre_reboot_delay: 60 # seconds
-            connect_timeout: 240 # seconds
-            test_command: "{{ reboot_test_command }}"
-          become: yes
-        - name: Uncordon
-          kubernetes.core.k8s_drain:
-            name: "{{ inventory_hostname_short }}"
-            state: uncordon
-          delegate_to: localhost
-      # At most, one at a time
-      throttle: 1
-      when: os_release != kairos_version or config.changed
+    - name: Note if the host needs to be rebooted
+      ansible.builtin.set_fact:
+        reboot_required: "{{ os_release != kairos_version or config.changed }}"
+    - name: Schedule Drain and Reboot
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        group: ToReboot
+      changed_when: no
+      delegate_to: localhost
+      loop: "{{ ansible_play_batch }}"
+      when: hostvars[item].reboot_required
   vars:
     # renovate: depName=quay.io/kairos/kairos-ubuntu-22-lts
     kairos_version: "v2.0.3-k3sv1.26.4+k3s1"
+
+- name: Serially drain and reboot hosts that need to be rebooted
+  hosts: ToReboot
+  gather_facts: no
+  order: sorted
+  serial:
+    - 1 # This will always be the control plane node.
+    - 1 # This will be the first control plane & worker node.
+    - 3 # The remaining control plane & worker node plus any worker nodes in chunks of three.
+  strategy: free
+  tasks:
+    # TODO(sdwilsh): This does not work today because we need to be able to select specific pods.  See
+    #                https://github.com/ansible-collections/kubernetes.core/issues/474
+    # - name: Drain
+    #   kubernetes.core.k8s_drain:
+    #     delete_options:
+    #       delete_emptydir_data: yes
+    #       force: yes
+    #       ignore_daemonsets: yes
+    #     name: "{{ inventory_hostname_short }}"
+    #     state: drain
+    #   delegate_to: localhost
+    - name: Drain
+      ansible.builtin.shell:
+        cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --pod-selector='app!=csi-attacher,app!=csi-provisioner' --kubeconfig ~/.kube/config"
+      delegate_to: localhost
+    - name: Reboot
+      ansible.builtin.reboot:
+        pre_reboot_delay: 60 # seconds
+        connect_timeout: 240 # seconds
+        test_command: "{{ reboot_test_command }}"
+      become: yes
+    - name: Uncordon
+      kubernetes.core.k8s_drain:
+        name: "{{ inventory_hostname_short }}"
+        state: uncordon
+      delegate_to: localhost
