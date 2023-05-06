@@ -9,15 +9,6 @@ k3s_token: !vault |
           35333637376133646166666330386664356363663562663733643461613563616464663336343035
           3061373465613931336437306531313464343163656562653532
 
-calico_values:
-  installation:
-    calicoNetwork:
-      ipPools:
-        - cidr: 172.0.0.0/16
-          encapsulation: "None"
-        - cidr: fded:827c:76b5::/48
-          encapsulation: "None"
-
 longhorn_s3:
   access_key: longhorn-test
   bucket: longhorn-test
