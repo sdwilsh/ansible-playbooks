@@ -45,14 +45,17 @@
         update_cache: yes
         upgrade: yes
       register: pacman
-    # This only works because there's only a single host active today.
-    - name: Add hosts to group that will be rebooted
+    - name: Note if the host needs to be rebooted
+      ansible.builtin.set_fact:
+        reboot_required: "{{ pacman.changed }}"
+    - name: Schedule Reboot
       ansible.builtin.add_host:
-        name: "{{ inventory_hostname }}"
+        name: "{{ item }}"
         group: ToReboot
       changed_when: no
       delegate_to: localhost
-      when: pacman.changed
+      loop: "{{ ansible_play_batch }}"
+      when: hostvars[item].reboot_required
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
@@ -74,27 +77,21 @@
       async: 1800 # 30 minutes, mostly becuase a Pi 2 is slow.
       become: yes
       poll: 5
-- name: Determine if any Ubuntu hosts need to be rebooted after updating
-  hosts: localhost
-  gather_facts: no
-  tasks:
     - name: Determine if a reboot is required
       ansible.builtin.stat:
         path: /var/run/reboot-required
-      register: reboot_required
-      delegate_to: "{{ hostname }}"
-      loop: "{{ groups.Ubuntu }}"
-      loop_control:
-        loop_var: hostname
-    - name: Add hosts to group that will be rebooted
+      register: reboot_required_stat
+    - name: Note if the host needs to be rebooted
+      ansible.builtin.set_fact:
+        reboot_required: "{{ reboot_required_stat.stat.exists }}"
+    - name: Schedule Reboot
       ansible.builtin.add_host:
-        name: "{{ item.hostname }}"
+        name: "{{ item }}"
         group: ToReboot
       changed_when: no
-      loop: "{{ reboot_required.results }}"
-      loop_control:
-        label: "{{ item.hostname }}"
-      when: item.stat.exists
+      delegate_to: localhost
+      loop: "{{ ansible_play_batch }}"
+      when: hostvars[item].reboot_required
 
 - name: Reboot hosts that need to be rebooted
   hosts: ToReboot
