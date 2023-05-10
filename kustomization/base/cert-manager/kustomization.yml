@@ -4,7 +4,7 @@ kind: Kustomization
 
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/cert-manager/cert-manager/releases/download/v1.11.1/cert-manager.yaml
+  - https://github.com/cert-manager/cert-manager/releases/download/v1.11.2/cert-manager.yaml
   - clusterissuer.yml
 patchesJson6902:
   - path: add_dns01_recursive_nameservers.yml
