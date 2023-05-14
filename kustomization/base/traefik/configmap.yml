@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dynamic-config
+  namespace: traefik
+data:
+  dynamic.toml: |
+    # Dynamic configuration
+    [[tls.certificates]]
+    certFile = "/certs/wildcard-hogs-tswn-us/tls.crt"
+    keyFile = "/certs/wildcard-hogs-tswn-us/tls.key"
+    [[tls.certificates]]
+    certFile = "/certs/wildcard-tswn-us/tls.crt"
+    keyFile = "/certs/wildcard-tswn-us/tls.key"
