@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: wildcard-tswn-us-certificate
-  namespace: default
+  namespace: traefik
 spec:
   secretName: wildcard-tswn-us-secret
   issuerRef:
@@ -15,7 +15,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: wildcard-hogs-tswn-us-certificate
-  namespace: default
+  namespace: traefik
 spec:
   secretName: wildcard-hogs-tswn-us-secret
   issuerRef:

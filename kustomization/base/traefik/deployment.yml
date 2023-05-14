@@ -24,6 +24,7 @@ spec:
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
             - --global.checknewversion=false
+            - --providers.file.filename=/config/dynamic.toml
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
             - --accesslog
@@ -34,3 +35,23 @@ spec:
               containerPort: 443
             - name: dashboard
               containerPort: 8080
+          volumeMounts:
+            - name: dynamic-config
+              mountPath: /config
+              readOnly: true
+            - name: wildcard-hogs-tswn-us
+              mountPath: /certs/wildcard-hogs-tswn-us
+              readOnly: true
+            - name: wildcard-tswn-us
+              mountPath: /certs/wildcard-tswn-us
+              readOnly: true
+      volumes:
+        - name: dynamic-config
+          configMap:
+            name: dynamic-config
+        - name: wildcard-hogs-tswn-us
+          secret:
+            secretName: wildcard-hogs-tswn-us-secret
+        - name: wildcard-tswn-us
+          secret:
+            secretName: wildcard-tswn-us-secret

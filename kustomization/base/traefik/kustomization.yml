@@ -12,11 +12,12 @@ resources:
   - https://raw.githubusercontent.com/traefik/traefik/v2.10.1/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
     # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/traefik/traefik/v2.10.1/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - configmap.yml
+  - certificate.yml
   - ingressclass.yml
   - serviceaccount.yml
   - deployment.yml
   - service.yml
-  - certificate.yml
   - serverstransport.yml
   - middleware.yml
   - ingressroute.yml
