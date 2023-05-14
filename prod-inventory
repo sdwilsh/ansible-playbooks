@@ -23,11 +23,10 @@ mariadb02.hogs.tswn.us ansible_host=10.10.0.26
 mariadb03.hogs.tswn.us ansible_host=10.10.0.27
 
 [kairos_test_node]
-test-node01.hogs.tswn.us ansible_host=10.10.0.102
-test-node02.hogs.tswn.us ansible_host=10.10.0.103
+test-node01.hogs.tswn.us ansible_host=10.10.0.101
+test-node02.hogs.tswn.us ansible_host=10.10.0.102
+test-node03.hogs.tswn.us ansible_host=10.10.0.103
 
-[kairos_test_controlplane]
-test-controlplane01.hogs.tswn.us ansible_host=10.10.0.101
 [kairos_test_controlplane:children]
 kairos_test_node
 

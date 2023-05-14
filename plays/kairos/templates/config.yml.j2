@@ -26,9 +26,6 @@ k3s:
     - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
 {% endif %}
     - --disable=traefik,servicelb
-{% if hostvars[host].k3s_no_execute | default(False) %}
-    - --node-taint key=value:NoExecute
-{% endif %}
 {% else %}
 k3s-agent:
   args:

@@ -2,4 +2,3 @@
 reboot_test_command: systemctl is-active --quiet k3s
 
 k3s_controlplane: yes
-k3s_no_execute: no
