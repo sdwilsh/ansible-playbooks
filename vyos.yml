@@ -413,30 +413,6 @@
         - nat
 
 #
-# vyos_tanzu
-#
-
-- hosts: vyos_tanzu
-  gather_facts: false
-  tasks:
-    - name: Setup routing for TANZU-MAN and TANZU-WORK
-      vyos.vyos.vyos_config:
-        lines:
-          - set interfaces ethernet eth1 vif 95 policy route 'TANZU-MAN'
-          - set policy route 'TANZU-MAN' rule 10 set table 10
-          - set protocols static table 10 route 0.0.0.0/0 next-hop 10.2.0.70
-          - set protocols static table 10 route 10.10.0.0/24 next-hop 10.2.0.72
-          - set protocols static table 10 route 10.117.0.0/23 next-hop 10.2.0.72
-          - set interfaces ethernet eth1 vif 95 policy route 'TANZU-MAN'
-          - set policy route 'TANZU-WORK' rule 10 set table 20
-          - set protocols static table 20 route 0.0.0.0/0 next-hop 10.2.0.70
-          - set protocols static table 20 route 10.10.0.0/24 next-hop 10.2.0.72
-          - set protocols static table 20 route 10.117.0.0/23 next-hop 10.2.0.72
-          - set interfaces ethernet eth1 vif 96 policy route 'TANZU-WORK'
-      tags:
-        - routing
-
-#
 # vyos_wan
 #
 

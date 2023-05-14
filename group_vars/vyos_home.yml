@@ -397,12 +397,6 @@ vyos_static_routes__config:
         - dest: 10.82.0.0/24
           next_hops:
             - forward_router_address: 10.2.0.78
-        - dest: 10.95.0.0/23
-          next_hops:
-            - forward_router_address: 10.2.0.75
-        - dest: 10.96.0.0/23
-          next_hops:
-            - forward_router_address: 10.2.0.75
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:
