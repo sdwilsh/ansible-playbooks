@@ -23,6 +23,7 @@ spec:
             - --api.insecure=true
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
+            - --global.checknewversion=false
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
             - --accesslog
