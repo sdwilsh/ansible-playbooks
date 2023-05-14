@@ -1,6 +1,6 @@
 #cloud-config
 
-hostname: {{ hostvars[host].inventory_hostname_short }}
+hostname: {{ hostvars[host].inventory_hostname }}
 
 users:
   - name: kairos
@@ -10,10 +10,13 @@ users:
 {% if hostvars[host].k3s_controlplane %}
 k3s:
   args:
-    - --flannel-iface=man
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipv4 | ansible.utils.ipaddr('address') | first }}
+    - --node-name={{ hostvars[host].inventory_hostname_short }}
 {% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
+    - --flannel-backend=none
+    - --disable-network-policy
+    - --cluster-cidr=172.16.0.0/16
     # S3 Backup
     - --etcd-s3
     - --etcd-s3-access-key={{ hostvars[host].k3s_s3.access_key }}

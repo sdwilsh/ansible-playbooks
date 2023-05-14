@@ -1,0 +1,13 @@
+---
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  calicoNetwork:
+    containerIPForwarding: "Enabled"
+    ipPools:
+      - encapsulation: VXLAN
+        cidr: 172.16.0.0/16
+  controlPlaneNodeSelector:
+    node-role.kubernetes.io/control-plane: "true"
