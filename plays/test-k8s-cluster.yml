@@ -3,9 +3,6 @@
   gather_facts: false
   tasks:
     # Internal services
-    - ansible.builtin.import_tasks: k8s/purelb/tasks.yml
-      tags:
-        - purelb
     - ansible.builtin.import_tasks: k8s/cert-manager/tasks.yml
       tags:
         - cert-manager
