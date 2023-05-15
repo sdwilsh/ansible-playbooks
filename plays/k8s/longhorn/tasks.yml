@@ -1,11 +1,10 @@
 ---
 - name: Create a namespace for Longhorn
   kubernetes.core.k8s:
-    apply: yes
     context: "{{ cluster }}"
     state: present
     resource_definition:
-      api_version: v1
+      apiVersion: v1
       kind: Namespace
       metadata:
         name: longhorn-system
@@ -37,13 +36,3 @@
       stringData:
         CRYPTO_KEY_VALUE: "{{ longhorn_default_crypto_passphrase }}"
         CRYPTO_KEY_PROVIDER: secret
-- name: Setup Longhorn via Kustomize
-  kubernetes.core.k8s:
-    apply: yes
-    context: "{{ cluster }}"
-    definition: "{{ resource }}"
-    state: present
-  loop: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/' + kustomization_overlay + '/longhorn/').split('---\n') | map('from_yaml') }}"
-  loop_control:
-    label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
-    loop_var: resource

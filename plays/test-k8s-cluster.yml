@@ -16,18 +16,6 @@
         - cert-manager
       vars:
         certmanager_cloudflare_api_token: "{{ hostvars[groups['kairos_test'] | first].certmanager_cloudflare_api_token }}"
-    - name: Setup traefik via Kustomize
-      kubernetes.core.k8s:
-        apply: yes
-        context: "{{ cluster }}"
-        definition: "{{ resource }}"
-        state: present
-      loop: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/test/traefik/').split('---\n') | map('from_yaml') }}"
-      loop_control:
-        label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
-        loop_var: resource
-      tags:
-        - traefik
     - ansible.builtin.import_tasks: k8s/longhorn/tasks.yml
       tags:
         - longhorn
@@ -37,19 +25,6 @@
     - ansible.builtin.import_tasks: k8s/rabbitmq-operator/tasks.yml
       tags:
         - rabbitmq
-    - name: Setup unifi via Kustomize
-      kubernetes.core.k8s:
-        apply: yes
-        context: "{{ cluster }}"
-        definition: "{{ resource }}"
-        state: present
-      loop: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/test/unifi/').split('---\n') | map('from_yaml') }}"
-      loop_control:
-        label: "{{ resource.apiVersion }}.{{ resource.kind }} {{ resource.metadata.name }}"
-        loop_var: resource
-      tags:
-        - unifi
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default
-    kustomization_overlay: test
