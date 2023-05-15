@@ -1,0 +1,17 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: calico
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    path: kustomization/base/calico
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: calico-system
+  syncPolicy:
+    automated: {}
