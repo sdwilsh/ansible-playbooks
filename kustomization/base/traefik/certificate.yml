@@ -10,6 +10,8 @@ spec:
     name: letsencrypt
     kind: ClusterIssuer
   commonName: "*.tswn.us"
+  dnsNames:
+    - "*.tswn.us"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
