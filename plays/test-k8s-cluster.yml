@@ -17,9 +17,6 @@
       vars:
         longhorn_default_crypto_passphrase: "{{ hostvars[groups['kairos_test'] | first].longhorn_default_crypto_passphrase }}"
         longhorn_s3: "{{ hostvars[groups['kairos_test'] | first].longhorn_s3 }}"
-    - ansible.builtin.import_tasks: k8s/rabbitmq-operator/tasks.yml
-      tags:
-        - rabbitmq
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default
