@@ -11,7 +11,7 @@ spec:
     - kind: Rule
       services:
         - kind: Service
-          name: traefik-dashboard-service
+          name: traefik-dashboard-svc
           namespace: traefik
           port: 8080
   tls: {}

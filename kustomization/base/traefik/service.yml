@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: traefik-dashboard-service
+  name: traefik-dashboard-svc
   namespace: traefik
 spec:
   ports:
@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: traefik-service
+  name: traefik-svc
   namespace: traefik
 spec:
   ports:
