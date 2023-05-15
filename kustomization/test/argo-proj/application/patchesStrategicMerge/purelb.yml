@@ -1,0 +1,9 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: purelb
+  namespace: argocd
+spec:
+  source:
+    path: kustomization/test/purelb

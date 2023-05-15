@@ -4,10 +4,9 @@ kind: Kustomization
 
 bases:
   - ../../base/argo-proj
-resources:
-  - application/argo-proj.yml
-  - application/longhorn.yml
-  - application/purelb.yml
-  - application/traefik.yml
 patchesStrategicMerge:
   - application/patchesStrategicMerge/argo-cd.yml
+  - application/patchesStrategicMerge/argo-proj.yml
+  - application/patchesStrategicMerge/longhorn.yml
+  - application/patchesStrategicMerge/purelb.yml
+  - application/patchesStrategicMerge/traefik.yml

@@ -5,7 +5,11 @@ kind: Kustomization
 resources:
   - project.yml
   - application/argo-cd.yml
+  - application/argo-proj.yml
   - application/calico.yml
   - application/cert-manager.yml
+  - application/longhorn.yml
   - application/minio.yml
+  - application/purelb.yml
   - application/tigera-operator.yml
+  - application/traefik.yml
