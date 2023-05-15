@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/sdwilsh/ansible-playbooks
-    path: kustomization/base/argo-cd
+    path: kustomization/test/argo-proj
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
