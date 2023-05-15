@@ -28,6 +28,7 @@ k3s:
     - --flannel-backend=none
     - --disable-network-policy
     - --cluster-cidr=172.16.0.0/16
+    - --service-cidr=172.17.0.0/16
     - --disable=traefik,servicelb
 {% else %}
 k3s-agent:
