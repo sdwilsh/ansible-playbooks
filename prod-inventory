@@ -73,6 +73,5 @@ vyos_cloud
 vyos_guest
 vyos_home
 vyos_remote
-vyos_tanzu
 vyos_wan
 vyos_work
