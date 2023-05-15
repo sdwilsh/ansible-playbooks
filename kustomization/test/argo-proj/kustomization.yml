@@ -5,4 +5,5 @@ kind: Kustomization
 bases:
   - ../../base/argo-proj
 resources:
+  - application/purelb.yml
   - application/traefik.yml
