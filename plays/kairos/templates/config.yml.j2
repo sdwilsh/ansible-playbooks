@@ -14,9 +14,6 @@ k3s:
     - --node-name={{ hostvars[host].inventory_hostname_short }}
 {% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
-    - --flannel-backend=none
-    - --disable-network-policy
-    - --cluster-cidr=172.16.0.0/16
     # S3 Backup
     - --etcd-s3
     - --etcd-s3-access-key={{ hostvars[host].k3s_s3.access_key }}
@@ -28,6 +25,9 @@ k3s:
 {% else %}
     - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
 {% endif %}
+    - --flannel-backend=none
+    - --disable-network-policy
+    - --cluster-cidr=172.16.0.0/16
     - --disable=traefik,servicelb
 {% else %}
 k3s-agent:
