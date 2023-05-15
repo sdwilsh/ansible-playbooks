@@ -6,5 +6,6 @@ bases:
   - ../../base/argo-proj
 resources:
   - application/argo-proj.yml
+  - application/longhorn.yml
   - application/purelb.yml
   - application/traefik.yml
