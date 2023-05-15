@@ -9,3 +9,5 @@ resources:
   - application/longhorn.yml
   - application/purelb.yml
   - application/traefik.yml
+patchesStrategicMerge:
+  - application/patchesStrategicMerge/argo-cd.yml

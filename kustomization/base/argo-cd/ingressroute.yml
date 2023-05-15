@@ -1,0 +1,37 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-ingressroute
+  namespace: argocd
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      middlewares:
+        - name: http-to-https-middleware
+          namespace: traefik
+      services:
+        - kind: Service
+          name: argocd-server
+          port: 443
+          serversTransport: insecure-skip-verify-https
+  tls: {}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-https-redirect-ingressroute
+  namespace: argocd
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      middlewares:
+        - name: http-to-https-middleware
+          namespace: traefik
+      services:
+        - kind: TraefikService
+          name: noop@internal

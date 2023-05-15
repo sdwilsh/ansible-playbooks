@@ -7,5 +7,7 @@ resources:
   - namespace.yml
   # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.7.2/manifests/ha/install.yaml
+  - ingressroute.yml
+  - serverstransport.yml
 patchesStrategicMerge:
   - set_tracking_by_annotation.yml
