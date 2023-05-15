@@ -2,11 +2,6 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    # External services exposed internally
-    - ansible.builtin.import_tasks: k8s/minio/tasks.yml
-      tags:
-        - minio
-
     # Internal services
     - ansible.builtin.import_tasks: k8s/purelb/tasks.yml
       tags:

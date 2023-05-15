@@ -20,7 +20,7 @@
       stringData:
         AWS_ACCESS_KEY_ID: "{{ longhorn_s3.access_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ longhorn_s3.secret_key }}"
-        AWS_ENDPOINTS: http://minio-svc.default.svc.cluster.local:9000
+        AWS_ENDPOINTS: http://minio-svc.minio.svc.cluster.local:9000
       type: Opaque
     state: present
 - name: Configure global encryption key
