@@ -12,7 +12,7 @@
       tags:
         - longhorn
       vars:
-        longhorn_default_crypto_passphrase: "{{ hostvars[groups['kairos_test'] | first].longhorn_default_crypto_passphrase }}"
+        longhorn_default_crypto_passphrase: "{{ hostvars[groups['kairos_test_controlplane'] | first].longhorn_default_crypto_passphrase }}"
         longhorn_s3: "{{ hostvars[groups['kairos_test'] | first].longhorn_s3 }}"
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
