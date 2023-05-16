@@ -8,7 +8,6 @@ spec:
   project: default
   source:
     repoURL: https://github.com/sdwilsh/ansible-playbooks
-    path: kustomization/test/purelb
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
