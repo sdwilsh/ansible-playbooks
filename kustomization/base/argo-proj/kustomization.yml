@@ -11,6 +11,7 @@ resources:
   - application/longhorn.yml
   - application/mariadb-galera.yml
   - application/minio.yml
+  - application/phpmyadmin.yml
   - application/purelb.yml
   - application/tigera-operator.yml
   - application/traefik.yml
