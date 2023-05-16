@@ -14,6 +14,12 @@
       vars:
         longhorn_default_crypto_passphrase: "{{ hostvars[groups['kairos_test_controlplane'] | first].longhorn_default_crypto_passphrase }}"
         longhorn_s3: "{{ hostvars[groups['kairos_test'] | first].longhorn_s3 }}"
+    - ansible.builtin.import_tasks: k8s/mariadb/tasks.yml
+      tags:
+        - mariadb
+      vars:
+        mariabackup_password: "{{ hostvars[groups['kairos_test'] | first].mariabackup_password }}"
+        mysql_root_password: "{{ hostvars[groups['kairos_test'] | first].mysql_root_password }}"
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default

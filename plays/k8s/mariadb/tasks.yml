@@ -1,0 +1,25 @@
+---
+- name: Create a namespace for phpmyadmin
+  kubernetes.core.k8s:
+    context: "{{ cluster }}"
+    state: present
+    resource_definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: mariadb
+- name: Create Secret for the passwords
+  kubernetes.core.k8s:
+    apply: yes
+    context: "{{ cluster }}"
+    resource_definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: mariadb-passwords
+        namespace: mariadb
+      stringData:
+        mariadb-root-password: "{{ mysql_root_password }}"
+        mariadb-galera-mariabackup-password: "{{ mariabackup_password }}"
+      type: Opaque
+    state: present

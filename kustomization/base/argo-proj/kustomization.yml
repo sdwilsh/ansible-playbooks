@@ -9,6 +9,7 @@ resources:
   - application/calico.yml
   - application/cert-manager.yml
   - application/longhorn.yml
+  - application/mariadb-galera.yml
   - application/minio.yml
   - application/purelb.yml
   - application/tigera-operator.yml
