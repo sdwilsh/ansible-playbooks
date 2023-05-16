@@ -212,6 +212,8 @@ bind_zones:
         ip: 10.10.0.151
       - name: test-longhorn.hogs
         ip: 10.10.0.151
+      - name: test-phpmyadmin.hogs
+        ip: 10.10.0.151
       - name: test-traefik.hogs
         ip: 10.10.0.151
 

@@ -1,0 +1,24 @@
+---
+- name: Create a namespace for phpmyadmin
+  kubernetes.core.k8s:
+    context: "{{ cluster }}"
+    state: present
+    resource_definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: phpmyadmin
+- name: Create Secret for the root password
+  kubernetes.core.k8s:
+    apply: yes
+    context: "{{ cluster }}"
+    resource_definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: mysql-root-password
+        namespace: phpmyadmin
+      stringData:
+        password: "{{ mysql_root_password }}"
+      type: Opaque
+    state: present

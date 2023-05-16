@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base/phpmyadmin
+patchesJson6902:
+  - path: change_ingressroute_host.yml
+    target:
+      kind: IngressRoute
+      name: phpmyadmin-ingressroute
+  - path: change_ingressroute_host.yml
+    target:
+      kind: IngressRoute
+      name: phpmyadmin-https-redirect-ingressroute
+  - path: set_pma_absolute_uri.yml
+    target:
+      kind: Deployment
+      name: phpmyadmin-deployment

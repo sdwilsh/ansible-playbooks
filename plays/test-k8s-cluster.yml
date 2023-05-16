@@ -20,6 +20,11 @@
       vars:
         mariabackup_password: "{{ hostvars[groups['kairos_test'] | first].mariabackup_password }}"
         mysql_root_password: "{{ hostvars[groups['kairos_test'] | first].mysql_root_password }}"
+    - ansible.builtin.import_tasks: k8s/phpmyadmin/tasks.yml
+      tags:
+        - phpmyadmin
+      vars:
+        mysql_root_password: "{{ hostvars[groups['kairos_test'] | first].mysql_root_password }}"
   vars:
     # Right now, I only have the test cluster, but this will need to change in the future!
     cluster: default
