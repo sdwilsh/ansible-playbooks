@@ -11,5 +11,5 @@
       spec:
         chart: rabbitmq-cluster-operator
         repo: https://charts.bitnami.com/bitnami
-        version: "3.2.10"
+        version: "3.4.1"
     state: present
