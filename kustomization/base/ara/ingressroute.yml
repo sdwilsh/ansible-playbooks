@@ -1,0 +1,31 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ara-ingressroute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      services:
+        - kind: Service
+          name: ara-svc
+          port: 80
+  tls: {}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ara-https-redirect-ingressroute
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      middlewares:
+        - name: http-to-https-middleware
+          namespace: traefik
+      services:
+        - kind: TraefikService
+          name: noop@internal

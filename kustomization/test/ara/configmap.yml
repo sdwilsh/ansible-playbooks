@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ara-settings-configmap
+  namespace: ara
+data:
+  settings.yaml: |
+    ALLOWED_HOSTS:
+      - test-ara.hogs.tswn.us
+    CORS_ORIGIN_WHITELIST:
+      - https://test-ara.hogs.tswn.us
