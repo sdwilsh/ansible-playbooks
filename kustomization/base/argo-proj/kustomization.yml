@@ -14,5 +14,6 @@ resources:
   - application/minio.yml
   - application/phpmyadmin.yml
   - application/purelb.yml
+  - application/rabbitmq-cluster-operator.yml
   - application/tigera-operator.yml
   - application/traefik.yml
