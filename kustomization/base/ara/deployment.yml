@@ -43,7 +43,7 @@ spec:
           # This project really doesn't do versions...
           image: quay.io/recordsansible/ara-api:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           volumeMounts:
             - name: settings
               mountPath: /opt/ara
