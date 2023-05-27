@@ -19,7 +19,7 @@ spec:
             - name: ARA_DATABASE_ENGINE
               value: django.db.backends.mysql
             - name: ARA_DATABASE_HOST
-              value: mariadb-galera
+              value: ara-mariadb-galera
             - name: ARA_DATABASE_NAME
               value: ara
             - name: ARA_DATABASE_PASSWORD
