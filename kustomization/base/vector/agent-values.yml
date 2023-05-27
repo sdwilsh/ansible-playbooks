@@ -1,3 +1,33 @@
 ---
 fullnameOverride: vector-agent
 role: Agent
+
+customConfig:
+  api:
+    enabled: no
+  data_dir: /vector-data-dir
+  sinks:
+    aggregator:
+      address: vector-aggregator:6000
+      inputs:
+        - host_metrics
+        - internal_metrics
+        - kubernetes_logs
+      type: vector
+  sources:
+    host_metrics:
+      filesystem:
+        devices:
+          excludes:
+            - binfmt_misc
+        filesystems:
+          excludes:
+            - binfmt_misc
+        mountPoints:
+          excludes:
+            - "*/proc/sys/fs/binfmt_misc"
+      type: host_metrics
+    internal_metrics:
+      type: internal_metrics
+    kubernetes_logs:
+      type: kubernetes_logs
