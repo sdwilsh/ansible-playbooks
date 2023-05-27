@@ -1,0 +1,26 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: prune-old-logs
+spec:
+  schedule: "@hourly"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hourly-prune
+              image: python:3
+              imagePullPolicy: Always
+              args:
+                - |
+                  pip install --no-cache-dir ara &&
+                  ara playbook prune --days 30 --confirm
+              command:
+                - bash
+                - -c
+              env:
+                - name: ARA_API_CLIENT
+                  value: http
+          restartPolicy: OnFailure

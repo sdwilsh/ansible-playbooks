@@ -1,0 +1,6 @@
+---
+- op: add
+  path: /spec/jobTemplate/spec/template/spec/containers/0/env/-
+  value:
+    name: ARA_API_SERVER
+    value: https://test-ara.hogs.tswn.us

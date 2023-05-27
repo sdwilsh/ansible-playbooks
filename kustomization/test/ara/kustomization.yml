@@ -13,5 +13,9 @@ patchesJson6902:
     target:
       kind: IngressRoute
       name: ara-https-redirect-ingressroute
+  - path: add_address_in_job_env.yml
+    target:
+      kind: CronJob
+      name: prune-old-logs
 resources:
   - configmap.yml
