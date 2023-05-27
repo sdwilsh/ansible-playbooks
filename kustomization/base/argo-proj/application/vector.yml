@@ -12,13 +12,13 @@ spec:
       targetRevision: 0.22.0
       helm:
         valueFiles:
-          - $values/kustomization/vector/agent-values.yml
+          - $values/kustomization/base/vector/agent-values.yml
     - chart: vector
       repoURL: https://helm.vector.dev
       targetRevision: 0.22.0
       helm:
         valueFiles:
-          - $values/kustomization/vector/aggregator-values.yml
+          - $values/kustomization/base/vector/aggregator-values.yml
     - ref: values
       repoURL: https://github.com/sdwilsh/ansible-playbooks
       targetRevision: HEAD
