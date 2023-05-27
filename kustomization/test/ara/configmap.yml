@@ -6,7 +6,9 @@ metadata:
   namespace: ara
 data:
   settings.yaml: |
-    ALLOWED_HOSTS:
-      - test-ara.hogs.tswn.us
-    CORS_ORIGIN_WHITELIST:
-      - https://test-ara.hogs.tswn.us
+    ---
+    default:
+      ALLOWED_HOSTS:
+        - test-ara.hogs.tswn.us
+      CORS_ORIGIN_WHITELIST:
+        - https://test-ara.hogs.tswn.us
