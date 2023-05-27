@@ -18,9 +18,6 @@ spec:
             value: ara
           - name: existingSecret
             value: ara-credentials
-          - name: image.tag
-            # renovate: datasource=docker depName=bitnami/mariadb-galera
-            value: 10.11.3
           - name: namespaceOverride
             value: ara
           - name: persistence.size
