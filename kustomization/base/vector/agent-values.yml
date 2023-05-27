@@ -3,8 +3,11 @@ fullnameOverride: vector-agent
 role: Agent
 
 customConfig:
+  # API is enabled for the liveness probe.
   api:
-    enabled: no
+    enabled: yes
+    address: 127.0.0.1:8686
+    playground: no
   data_dir: /vector-data-dir
   sinks:
     aggregator:
