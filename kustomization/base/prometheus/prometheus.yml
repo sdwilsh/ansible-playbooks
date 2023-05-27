@@ -1,0 +1,16 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+spec:
+  additionalScrapeConfigs:
+    key: additional-scrape-configs.yaml
+    name: additional-scrape-config-secret
+  serviceAccountName: prometheus-service-account
+  # This selector doesn't do anything, but is needed for `additionalScrapeConfigs` to work.
+  # Ideally, we'd set a ScrapeConfig, but that is not documented and I failed to get it to work.
+  serviceMonitorNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: vector
+  version: v2.44.0

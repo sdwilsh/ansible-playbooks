@@ -1,0 +1,4 @@
+---
+- op: add
+  path: /spec/routes/0/match
+  value: Host(`test-prometheus.hogs.tswn.us`)

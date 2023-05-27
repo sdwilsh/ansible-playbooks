@@ -14,5 +14,6 @@ patchesStrategicMerge:
   - application/patchesStrategicMerge/argo-proj.yml
   - application/patchesStrategicMerge/longhorn.yml
   - application/patchesStrategicMerge/phpmyadmin.yml
+  - application/patchesStrategicMerge/prometheus.yml
   - application/patchesStrategicMerge/purelb.yml
   - application/patchesStrategicMerge/traefik.yml

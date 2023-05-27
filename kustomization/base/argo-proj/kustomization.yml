@@ -13,6 +13,7 @@ resources:
   - application/mariadb-galera.yml
   - application/minio.yml
   - application/phpmyadmin.yml
+  - application/prometheus.yml
   - application/prometheus-operator.yml
   - application/purelb.yml
   - application/rabbitmq-cluster-operator.yml

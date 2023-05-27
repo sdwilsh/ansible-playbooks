@@ -80,3 +80,14 @@ secrets:
           6463313461646362630a366164653530616561323634353033353166646363323366313738333366
           34633565636463363661643338386238636435316262643962363762346461626361393661663136
           3435663135353239376263376239663732323736303430363635
+  - namespace: prometheus
+    name: additional-scrape-config-secret
+    stringData:
+      additional-scrape-configs.yaml: |
+        - enable_http2: no
+          job_name: vector-aggregator
+          metrics_path: /metrics
+          scrape_interval: 5s
+          static_configs:
+            - targets:
+              - vector-aggregator.vector.svc.cluster.local:9090
