@@ -13,10 +13,14 @@ customConfig:
     prom_exporter:
       address: 0.0.0.0:9090
       inputs:
+        - datadog_agent
         - internal_metrics
         - vector
       type: prometheus_exporter
   sources:
+    datadog_agent:
+      address: 0.0.0.0:8282
+      type: datadog_agent
     internal_metrics:
       type: internal_metrics
     vector:
