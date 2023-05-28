@@ -20,16 +20,10 @@ customConfig:
     aggregator:
       address: vector-aggregator:6000
       inputs:
-        - host_metrics
         - internal_metrics
         - kubernetes_logs
-      type: vector
-    stdout:
-      type: console
-      inputs:
         - podname_to_nodename_host_metrics
-      encoding:
-        codec: json
+      type: vector
   sources:
     host_metrics:
       filesystem:
