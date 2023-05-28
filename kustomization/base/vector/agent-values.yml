@@ -9,6 +9,13 @@ customConfig:
     address: 127.0.0.1:8686
     playground: no
   data_dir: /vector-data-dir
+  transforms:
+    podname_to_nodename_host_metrics:
+      inputs:
+        - host_metrics
+      source: |-
+        .tags.host = get_env_var!("VECTOR_SELF_NODE_NAME")
+      type: remap
   sinks:
     aggregator:
       address: vector-aggregator:6000
@@ -20,7 +27,7 @@ customConfig:
     stdout:
       type: console
       inputs:
-        - host_metrics
+        - podname_to_nodename_host_metrics
       encoding:
         codec: json
   sources:
