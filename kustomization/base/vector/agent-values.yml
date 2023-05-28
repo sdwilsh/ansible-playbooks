@@ -17,6 +17,12 @@ customConfig:
         - internal_metrics
         - kubernetes_logs
       type: vector
+    stdout:
+      type: console
+      inputs:
+        - host_metrics
+      encoding:
+        codec: json
   sources:
     host_metrics:
       filesystem:
