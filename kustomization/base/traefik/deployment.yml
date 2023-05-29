@@ -25,13 +25,9 @@ spec:
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
             - --global.checknewversion=false
-            - --metrics.datadog=true
-            - --metrics.datadog.address=vector-aggregator.vector.svc.cluster.local:8282
             - --providers.file.filename=/config/dynamic.toml
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
-            - --tracing.datadog=true
-            - --tracing.datadog.localAgentHostPort=vector-aggregator.vector.svc.cluster.local:8282
           ports:
             - name: web
               containerPort: 80
