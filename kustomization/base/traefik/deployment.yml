@@ -25,7 +25,7 @@ spec:
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
             - --global.checknewversion=false
-            - --providers.file.filename=/config/dynamic.toml
+            - --providers.file.filename=/config/traefik.yml
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
           ports:
@@ -36,7 +36,7 @@ spec:
             - name: dashboard
               containerPort: 8080
           volumeMounts:
-            - name: dynamic-config
+            - name: traefik-config
               mountPath: /config
               readOnly: true
             - name: wildcard-hogs-tswn-us
@@ -46,9 +46,9 @@ spec:
               mountPath: /certs/wildcard-tswn-us
               readOnly: true
       volumes:
-        - name: dynamic-config
-          configMap:
-            name: dynamic-config
+        - configMap:
+            name: traefik-config
+          name: traefik-config
         - name: wildcard-hogs-tswn-us
           secret:
             secretName: wildcard-hogs-tswn-us-secret
