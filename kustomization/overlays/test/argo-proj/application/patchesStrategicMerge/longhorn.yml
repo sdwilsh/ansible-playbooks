@@ -2,8 +2,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-proj
+  name: longhorn
   namespace: argocd
 spec:
   source:
-    path: kustomization/test/argo-proj
+    path: kustomization/overlays/test/longhorn

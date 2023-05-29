@@ -2,6 +2,6 @@
 - op: add
   path: /spec/sources/-
   value:
-    path: kustomization/test/ara
+    path: kustomization/overlays/test/ara
     repoURL: https://github.com/sdwilsh/ansible-playbooks
     targetRevision: HEAD

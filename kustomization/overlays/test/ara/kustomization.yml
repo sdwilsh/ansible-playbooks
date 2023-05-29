@@ -8,7 +8,7 @@ configMapGenerator:
       - configmap/settings.yml
 namespace: ara
 resources:
-  - ../../base/ara
+  - ../../../base/ara
 patchesJson6902:
   - path: change_ingressroute_host.yml
     target:

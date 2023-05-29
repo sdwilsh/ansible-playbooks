@@ -6,4 +6,4 @@ metadata:
   namespace: argocd
 spec:
   source:
-    path: kustomization/test/argo-cd
+    path: kustomization/overlays/test/argo-cd

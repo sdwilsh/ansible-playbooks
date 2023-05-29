@@ -2,8 +2,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus
+  name: purelb
   namespace: argocd
 spec:
   source:
-    path: kustomization/test/prometheus
+    path: kustomization/overlays/test/purelb
