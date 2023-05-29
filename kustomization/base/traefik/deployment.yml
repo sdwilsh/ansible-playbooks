@@ -54,13 +54,6 @@ spec:
           args:
             - --config-dir
             - /etc/vector/
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: vector-api
-          ports:
-            - containerPort: 8686
-              name: vector-api
           volumeMounts:
             - mountPath: /shared-logs
               name: shared-logs
