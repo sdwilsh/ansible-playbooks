@@ -10,7 +10,7 @@ spec:
   serviceAccountName: prometheus-service-account
   # This selector doesn't do anything, but is needed for `additionalScrapeConfigs` to work.
   # Ideally, we'd set a ScrapeConfig, but that is not documented and I failed to get it to work.
-  serviceMonitorNamespaceSelector:
+  serviceMonitorSelector:
     matchLabels:
       kubernetes.io/metadata.name: vector
   version: v2.44.0
