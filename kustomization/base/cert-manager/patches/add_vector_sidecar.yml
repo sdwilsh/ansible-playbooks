@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  template:
+    spec:
+      containers:
+        - args:
+            - --config-dir
+            - /etc/vector/
+          image: timberio/vector
+          name: vector
+          securityContext:
+            runAsNonRoot: false
+          volumeMounts:
+            - mountPath: /etc/vector/
+              name: vector-config
+            - mountPath: /vector-data-dir
+              name: vector-data
+      volumes:
+        - name: vector-config
+          projected:
+            defaultMode: 420
+            sources:
+              - configMap:
+                  name: vector-config
+        - emptyDir: {}
+          name: vector-data

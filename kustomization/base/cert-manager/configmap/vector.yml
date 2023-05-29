@@ -1,0 +1,21 @@
+---
+# API is enabled for the liveness probe.
+api:
+  enabled: true
+  address: 127.0.0.1:8686
+  playground: false
+data_dir: /vector-data-dir
+sinks:
+  aggregator:
+    address: vector-aggregator.vector.svc.cluster.local:6000
+    inputs:
+      - internal_metrics
+      - certmanager_metrics
+    type: vector
+sources:
+  certmanager_metrics:
+    endpoints:
+      - http://localhost:9402/metrics
+    type: prometheus_scrape
+  internal_metrics:
+    type: internal_metrics
