@@ -17,6 +17,8 @@ images:
     # renovate: datasource=docker depName=timberio/vector
     newTag: 0.30.0-distroless-libc
 namespace: traefik
+patches:
+  - path: patches/set_cluster_role_binding_namespace.yml
 resources:
   - namespace.yml
     # renovate: datasource=github-releases
@@ -30,5 +32,3 @@ resources:
   - service.yml
   - middleware.yml
   - ingressroute.yml
-patchesStrategicMerge:
-  - set_cluster_role_binding_namespace.yml
