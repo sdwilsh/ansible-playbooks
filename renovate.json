@@ -61,7 +61,8 @@
     },
     {
       "fileMatch": [
-        "^kustomization/.+/.+/kustomization\\.yml$"
+        "^kustomization/.+/.+/kustomization\\.yml$",
+        "^kustomization/.+/.+/.+/kustomization\\.yml$"
       ],
       "matchStrings": [
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+newTag: (?<currentValue>.*?)\\n",
