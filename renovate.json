@@ -50,13 +50,14 @@
       ]
     },
     {
-      "datasourceTemplate": "helm",
+      "datasourceTemplate": "docker",
       "fileMatch": [
-        "^plays/k8s/.+/tasks\\.yml$"
+        "^kustomization/.+/.+/.*values\\.yml$"
       ],
       "matchStrings": [
-        "spec:\\n +chart: (?<depName>.*?)(?:\\n +repo: (?<registryUrl>.*?))?(?:\\n +valuesContent: \\|-\\n[\\s\\S]*?)?\\n +version: \"(?<currentValue>.*?)\""
-      ]
+        "image:\\n\\s+repository:\\s+(?<depName>.*?)\\n\\s+tag:\\s+(?<currentValue>.*?)\\n"
+      ],
+      "versioningTemplate": "docker"
     },
     {
       "fileMatch": [

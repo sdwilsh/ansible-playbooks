@@ -20,6 +20,8 @@ spec:
           image: traefik
           args:
             - --accesslog
+            - --accesslog.filepath=/shared-logs/access.log
+            - --accesslog.format=json
             - --api.dashboard=true
             - --api.insecure=true
             - --entrypoints.web.address=:80
@@ -36,6 +38,8 @@ spec:
             - name: dashboard
               containerPort: 8080
           volumeMounts:
+            - mountPath: /shared-logs
+              name: shared-logs
             - name: traefik-config
               mountPath: /config
               readOnly: true
@@ -45,10 +49,40 @@ spec:
             - name: wildcard-tswn-us
               mountPath: /certs/wildcard-tswn-us
               readOnly: true
+        - name: vector
+          image: timberio/vector
+          args:
+            - --config-dir
+            - /etc/vector/
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: vector-api
+          ports:
+            - containerPort: 8686
+              name: vector-api
+          volumeMounts:
+            - mountPath: /shared-logs
+              name: shared-logs
+              readOnly: true
+            - mountPath: /etc/vector/
+              name: vector-config
+            - mountPath: /vector-data-dir
+              name: vector-data
       volumes:
+        - emptyDir: {}
+          name: shared-logs
         - configMap:
             name: traefik-config
           name: traefik-config
+        - name: vector-config
+          projected:
+            defaultMode: 420
+            sources:
+              - configMap:
+                  name: vector-config
+        - emptyDir: {}
+          name: vector-data
         - name: wildcard-hogs-tswn-us
           secret:
             secretName: wildcard-hogs-tswn-us-secret

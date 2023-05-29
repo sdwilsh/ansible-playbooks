@@ -29,3 +29,7 @@ customConfig:
       address: 0.0.0.0:6000
       type: vector
       version: "2"
+
+image:
+  repository: timberio/vector
+  tag: 0.30.0-distroless-libc

@@ -3,9 +3,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 configMapGenerator:
-  # - name: vector-config
-  #   files:
-  #     - configmap/vector.yml
+  - name: vector-config
+    files:
+      - configmap/vector.yml
   - name: traefik-config
     files:
       - configmap/traefik.yml
@@ -13,6 +13,9 @@ images:
   - name: traefik
     # renovate: datasource=github-releases depName=traefik/traefik
     newTag: v2.10.1
+  - name: timberio/vector
+    # renovate: datasource=docker depName=timeberio/vector
+    newTag: 0.30.0-distroless-libc
 namespace: traefik
 resources:
   - namespace.yml

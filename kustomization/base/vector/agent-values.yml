@@ -41,3 +41,7 @@ customConfig:
       type: internal_metrics
     kubernetes_logs:
       type: kubernetes_logs
+
+image:
+  repository: timberio/vector
+  tag: 0.30.0-distroless-libc
