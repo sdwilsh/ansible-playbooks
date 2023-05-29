@@ -8,3 +8,4 @@ resources:
   - namespace.yml
   - prometheus.yml
   - rbac.yml
+  - rules/disk.yml

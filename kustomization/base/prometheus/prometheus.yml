@@ -7,6 +7,7 @@ spec:
   additionalScrapeConfigs:
     key: additional-scrape-configs.yaml
     name: additional-scrape-config-secret
+  ruleSelector: {}
   serviceAccountName: prometheus-service-account
   # This selector doesn't do anything, but is needed for `additionalScrapeConfigs` to work.
   # Ideally, we'd set a ScrapeConfig, but that is not documented and I failed to get it to work.
