@@ -16,6 +16,9 @@ patches:
       kind: Deployment
       name: cert-manager
   - path: patches/add_vector_sidecar.yml
+    target:
+      kind: Deployment
+      name: cert-manager
   - path: patches/increase_replicas.yml
   - path: patches/remove_metrics_service.yml
 resources:

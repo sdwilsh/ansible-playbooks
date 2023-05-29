@@ -14,10 +14,13 @@ images:
     # renovate: datasource=github-releases depName=traefik/traefik
     newTag: v2.10.1
   - name: timberio/vector
-    # renovate: datasource=docker depName=timberio/vector
     newTag: 0.30.0-distroless-libc
 namespace: traefik
 patches:
+  - path: patches/add_vector_sidecar.yml
+    target:
+      kind: Deployment
+      name: traefik-deployment
   - path: patches/set_cluster_role_binding_namespace.yml
 resources:
   - namespace.yml
