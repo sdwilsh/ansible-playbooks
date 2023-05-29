@@ -17,6 +17,12 @@ customConfig:
         - internal_metrics
         - vector
       type: prometheus_exporter
+    stdout:
+      encoding:
+        codec: json
+      inputs:
+        - datadog_agent
+      type: console
   sources:
     datadog_agent:
       address: 0.0.0.0:8282
