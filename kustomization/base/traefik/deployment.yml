@@ -24,9 +24,12 @@ spec:
             - --accesslog.format=json
             - --api.dashboard=true
             - --api.insecure=true
+            - --entrypoints.metrics.address=:9090
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
             - --global.checknewversion=false
+            - --metrics.prometheus=true
+            - --metrics.prometheus.entryPoint=metrics
             - --providers.file.filename=/config/traefik.yml
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
@@ -37,6 +40,8 @@ spec:
               containerPort: 443
             - name: dashboard
               containerPort: 8080
+            - name: metrics
+              containerPort: 9090
           volumeMounts:
             - mountPath: /shared-logs
               name: shared-logs

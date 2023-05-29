@@ -19,11 +19,16 @@ sinks:
     inputs:
       - internal_metrics
       - parsed_access_log
+      - traefik_metrics
     type: vector
 sources:
   access_log:
     include:
       - /shared-logs/access.log
     type: file
+  traefik_metrics:
+    endpoints:
+      - http://localhost:9090/metrics
+    type: prometheus_scrape
   internal_metrics:
     type: internal_metrics
