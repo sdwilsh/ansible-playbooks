@@ -45,10 +45,10 @@ spec:
           ports:
             - containerPort: 8000
           volumeMounts:
-            - name: settings
-              mountPath: /opt/ara
+            - mountPath: /opt/ara
+              name: settings
               readOnly: true
       volumes:
-        - name: settings
-          configMap:
-            name: ara-settings-configmap
+        - configMap:
+            name: settings-configmap
+          name: settings
