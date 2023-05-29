@@ -37,7 +37,7 @@ spec:
                   name: ara-credentials
                   key: django-secret-key
             - name: ARA_SETTINGS
-              value: /opt/ara/settings.yaml
+              value: /opt/ara/settings.yml
             - name: ARA_TIME_ZONE
               value: America/Los_Angeles
           # This project really doesn't do versions...
