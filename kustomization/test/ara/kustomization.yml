@@ -21,5 +21,3 @@ patchesJson6902:
     target:
       kind: CronJob
       name: prune-old-logs
-resources:
-  - configmap.yml
