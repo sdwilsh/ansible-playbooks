@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - ../../base/longhorn
+  - setting.yml
 patchesJson6902:
   - path: change_ingressroute_host.yml
     target:
@@ -13,5 +14,3 @@ patchesJson6902:
     target:
       kind: IngressRoute
       name: longhorn-frontend-https-redirect-ingressroute
-resources:
-  - setting.yml
