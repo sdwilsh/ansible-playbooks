@@ -8,6 +8,7 @@ patches:
       kind: Deployment
       name: cert-manager
   - path: patches/increase_replicas.yml
+  - path: patches/remove_metrics_service.yml
 resources:
   # renovate: datasource=github-releases
   - https://github.com/cert-manager/cert-manager/releases/download/v1.12.1/cert-manager.yaml
