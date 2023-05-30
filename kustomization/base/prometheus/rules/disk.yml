@@ -12,21 +12,14 @@ spec:
         - alert: utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} disk used!"
-          expr: (100 * host_filesystem_used_ratio{filesystem="ext4"}) > 80
+          expr: (100 * host_filesystem_used_ratio{filesystem="ext4"}) > 85
           for: 5m
           labels:
             severity: warning
-        - alert: utilization-very-high
-          annotations:
-            description: "{{ $value }}% of {{ $labels.host }} disk used!"
-          expr: (100 * host_filesystem_used_ratio{filesystem="ext4"}) > 90
-          for: 5m
-          labels:
-            severity: error
         - alert: utilization-dangerously-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} disk used!"
           expr: (100 * host_filesystem_used_ratio{filesystem="ext4"}) > 95
-          for: 5m
+          for: 15m
           labels:
-            severity: critical
+            severity: page
