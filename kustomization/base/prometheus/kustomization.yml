@@ -9,3 +9,4 @@ resources:
   - prometheus.yml
   - rbac.yml
   - rules/disk.yml
+  - rules/memory.yml
