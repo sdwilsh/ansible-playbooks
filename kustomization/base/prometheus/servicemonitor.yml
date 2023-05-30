@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: vector-monitor
+  labels:
+    app.kubernetes.io/name: vector
+spec:
+  endpoints:
+    - enableHttp2: false
+      interval: 5s
+      path: /metrics
+      port: prom-exporter
+  namespaceSelector:
+    matchNames:
+      - vector
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: Aggregator
+      app.kubernetes.io/instance: vector
+      app.kubernetes.io/name: vector
