@@ -11,11 +11,12 @@ images:
     newTag: 0.30.0-distroless-libc
 namespace: argocd
 patches:
-  - path: patches/set_tracking_by_annotation.yml
   - target:
       kind: Deployment
       name: argocd-metrics-scrape
     path: patches/add_vector_sidecar.yml
+  - path: patches/set_kustomize_buildOptions.yml
+  - path: patches/set_tracking_by_annotation.yml
 resources:
   - namespace.yml
   # renovate: datasource=github-releases
