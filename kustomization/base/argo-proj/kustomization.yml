@@ -19,4 +19,5 @@ resources:
   - application/rabbitmq-cluster-operator.yml
   - application/tigera-operator.yml
   - application/traefik.yml
-  - application/vector.yml
+  - application/vector-agent.yml
+  - application/vector-aggregator.yml

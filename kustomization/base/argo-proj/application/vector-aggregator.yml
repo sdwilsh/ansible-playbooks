@@ -8,10 +8,10 @@ spec:
   project: default
   source:
     repoURL: https://github.com/sdwilsh/ansible-playbooks
+    path: kustomization/base/vector-agent
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
-    path: kustomization/base/vector-agent
     namespace: vector-agent
   syncPolicy:
     automated: {}
