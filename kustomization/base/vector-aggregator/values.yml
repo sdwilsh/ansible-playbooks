@@ -1,6 +1,10 @@
 ---
-fullnameOverride: vector-aggregator
+fullnameOverride: aggregator
 role: Aggregator
+
+autoscaling:
+  enabled: yes
+  minReplicas: 2
 
 customConfig:
   # API is enabled for the liveness probe.

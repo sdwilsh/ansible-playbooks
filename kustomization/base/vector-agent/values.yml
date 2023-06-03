@@ -1,5 +1,5 @@
 ---
-fullnameOverride: vector-agent
+fullnameOverride: agent
 role: Agent
 
 customConfig:
@@ -18,7 +18,7 @@ customConfig:
       type: remap
   sinks:
     aggregator:
-      address: vector-aggregator:6000
+      address: aggregator.vector-aggregator.svc.cluster.local:6000
       inputs:
         - internal_metrics
         - kubernetes_logs
@@ -41,10 +41,6 @@ customConfig:
       type: internal_metrics
     kubernetes_logs:
       type: kubernetes_logs
-
-image:
-  repository: timberio/vector
-  tag: 0.30.0-distroless-libc
 
 service:
   enabled: false

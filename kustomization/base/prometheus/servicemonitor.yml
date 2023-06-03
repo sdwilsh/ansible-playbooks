@@ -8,14 +8,15 @@ metadata:
 spec:
   endpoints:
     - enableHttp2: false
+      honorTimestamps: true
       interval: 5s
       path: /metrics
       port: prom-exporter
   namespaceSelector:
     matchNames:
-      - vector
+      - vector-aggregator
   selector:
     matchLabels:
       app.kubernetes.io/component: Aggregator
-      app.kubernetes.io/instance: vector
+      app.kubernetes.io/instance: vector-aggregator
       app.kubernetes.io/name: vector
