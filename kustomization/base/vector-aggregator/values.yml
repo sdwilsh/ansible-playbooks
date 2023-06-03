@@ -2,6 +2,19 @@
 fullnameOverride: aggregator
 role: Aggregator
 
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      # Seperate aggregator pods so if a host goes down, the service doesn't go down.
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: in
+                values:
+                  - vector-aggregator
+          topologyKey: kubernetes.io/hostname
+
 autoscaling:
   enabled: yes
   minReplicas: 2
