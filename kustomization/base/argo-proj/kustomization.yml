@@ -12,6 +12,7 @@ resources:
   - application/longhorn.yml
   - application/mariadb-galera.yml
   - application/minio.yml
+  - application/opensearch-operator.yml
   - application/phpmyadmin.yml
   - application/prometheus.yml
   - application/prometheus-operator.yml
