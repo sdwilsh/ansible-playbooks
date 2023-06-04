@@ -7,7 +7,7 @@ api:
 data_dir: /vector-data-dir
 sinks:
   aggregator:
-    address: vector-aggregator.vector.svc.cluster.local:6000
+    address: aggregator.vector-aggregator.svc.cluster.local:6000
     inputs:
       - internal_metrics
       - argocd_metrics
