@@ -14,6 +14,7 @@ affinity:
                 values:
                   - vector-aggregator
           topologyKey: kubernetes.io/hostname
+        weight: 100
 
 autoscaling:
   enabled: yes
