@@ -10,7 +10,7 @@ affinity:
           labelSelector:
             matchExpressions:
               - key: app.kubernetes.io/instance
-                operator: in
+                operator: In
                 values:
                   - vector-aggregator
           topologyKey: kubernetes.io/hostname
