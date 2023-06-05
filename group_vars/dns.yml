@@ -39,14 +39,6 @@ bind_zones:
         ip: "10.1.0.31"
       - name: "flex-mini-office.unifi"
         ip: "10.1.0.32"
-      - name: "den-ap.unifi"
-        ip: "10.1.0.50"
-      - name: "living-ap.unifi"
-        ip: "10.1.0.51"
-      - name: "kitchen-ap.unifi"
-        ip: "10.1.0.52"
-      - name: "upper-hallway-ip.unifi"
-        ip: "10.1.0.53"
 
       # Transit Network
       - name: "cloud.routers.hogs"
@@ -198,6 +190,16 @@ bind_zones:
         ip: "10.10.0.85"
       - name: "work02.routers.hogs"
         ip: "10.10.0.86"
+      - name: backyard-ap.hogs
+        ip: 10.10.0.90
+      - name: den-ap.hogs
+        ip: 10.10.0.91
+      - name: living-ap.hogs
+        ip: 10.10.0.92
+      - name: kitchen-ap.hogs
+        ip: 10.10.0.93
+      - name: upper-hallway-ip.hogs
+        ip: 10.10.0.94
       - name: test-node01.hogs
         ip: 10.10.0.101
       - name: test-node02.hogs
