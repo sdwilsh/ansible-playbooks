@@ -164,12 +164,12 @@ bind_zones:
         ip: "10.10.0.31"
       - name: "power-failover.hogs"
         ip: "10.10.0.32"
-      - name: "aggregation-upper.hogs.tswn.us"
-        ip: "10.10.0.40"
-      - name: "aggregation-lower.hogs.tswn.us"
-        ip: "10.10.0.41"
-      - name: "switch-upper.hogs"
-        ip: "10.10.0.42"
+      - name: aggregation-upper.hogs
+        ip: 10.10.0.40
+      - name: aggregation-lower.hogs
+        ip: 10.10.0.41
+      - name: backyard-switch.hogs
+        ip: 10.10.0.44
       - name: "kvm01.hogs"
         ip: "10.10.0.50"
       - name: "kvm02.hogs"
