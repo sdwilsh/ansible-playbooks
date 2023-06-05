@@ -193,6 +193,7 @@
           - "set protocols static table 10 route 0.0.0.0/0 next-hop {{ tunnel }}"
           - set policy route CLOUD rule 10 set table 10
           - set protocols static table 10 route 10.1.0.0/24 next-hop 10.2.0.72
+          - set protocols static table 10 route 10.10.0.0/24 next-hop 10.2.0.72
           - set protocols static table 10 route 10.117.0.0/23 next-hop 10.2.0.72
       vars:
         tunnel: >-
