@@ -23,5 +23,5 @@ patches:
   - path: patches/remove_metrics_service.yml
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/cert-manager/cert-manager/releases/download/v1.12.1/cert-manager.yaml
+  - https://github.com/cert-manager/cert-manager/releases/download/v1.12.2/cert-manager.yaml
   - clusterissuer.yml
