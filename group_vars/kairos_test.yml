@@ -1,5 +1,8 @@
 ---
 k3s_controlplane_group: kairos_test_controlplane
+k3s_controlplane_san:
+  - 10.10.0.99
+  - test-k3s.hogs.tswn.us
 k3s_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           36306365376334356263616563386333313763333535383232383761613961346266643638663535

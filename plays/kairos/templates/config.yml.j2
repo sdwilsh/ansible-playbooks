@@ -30,6 +30,9 @@ k3s:
     - --cluster-cidr=172.16.0.0/16
     - --service-cidr=172.17.0.0/16
     - --disable=traefik,servicelb
+{% for tls_san in hostvars[host].k3s_controlplane_san %}
+    - --tls-san={{ tls_san }}
+{% endfor %}
 {% else %}
 k3s-agent:
   args:

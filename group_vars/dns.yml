@@ -200,6 +200,8 @@ bind_zones:
         ip: 10.10.0.93
       - name: upper-hallway-ip.hogs
         ip: 10.10.0.94
+      - name: test-k3s.hogs
+        ip: 10.10.0.99
       - name: test-node01.hogs
         ip: 10.10.0.101
       - name: test-node02.hogs

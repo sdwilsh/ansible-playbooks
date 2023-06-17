@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kube-vip
+patches:
+  - path: patches/set_vip_address.yml
+    target:
+      kind: DaemonSet
+      name: kube-vip-ds
+resources:
+  - ../../../base/kube-vip

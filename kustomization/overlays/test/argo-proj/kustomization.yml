@@ -12,6 +12,7 @@ patchesJson6902:
 patchesStrategicMerge:
   - application/patchesStrategicMerge/argo-cd.yml
   - application/patchesStrategicMerge/argo-proj.yml
+  - application/patchesStrategicMerge/kube-vip.yml
   - application/patchesStrategicMerge/longhorn.yml
   - application/patchesStrategicMerge/phpmyadmin.yml
   - application/patchesStrategicMerge/prometheus.yml
