@@ -90,6 +90,8 @@
         pod_selectors:
           - app!=csi-attacher
           - app!=csi-provisioner
+          - longhorn.io/instance-manager-type!=engine
+          - longhorn.io/instance-manager-type!=replica
     - name: Reboot
       ansible.builtin.reboot:
         pre_reboot_delay: 60 # seconds
