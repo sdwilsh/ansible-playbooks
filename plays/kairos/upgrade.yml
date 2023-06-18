@@ -84,8 +84,12 @@
     #   delegate_to: localhost
     - name: Drain
       ansible.builtin.shell:
-        cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --pod-selector='app!=csi-attacher,app!=csi-provisioner' --kubeconfig ~/.kube/config"
+        cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --pod-selector='{{ pod_selectors | join(',') }}' --kubeconfig ~/.kube/config"
       delegate_to: localhost
+      vars:
+        pod_selectors:
+          - app!=csi-attacher
+          - app!=csi-provisioner
     - name: Reboot
       ansible.builtin.reboot:
         pre_reboot_delay: 60 # seconds
