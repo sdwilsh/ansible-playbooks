@@ -3,7 +3,6 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: http-to-https-middleware
-  namespace: traefik
 spec:
   redirectScheme:
     scheme: https
