@@ -59,7 +59,7 @@
       when: hostvars[item].reboot_required
   vars:
     # renovate: depName=quay.io/kairos/kairos-ubuntu-22-lts
-    kairos_version: "v2.1.0-k3sv1.26.4+k3s1"
+    kairos_version: "v2.2.1-k3sv1.26.4+k3s1"
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
