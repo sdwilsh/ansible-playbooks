@@ -83,7 +83,7 @@ stages:
             [Match]
             Name={{ network.name }}
             [Network]
-{% if 'address' in network %}
+{% if 'address' in network and network['address'] %}
             Address={{ network.address }}
 {% endif %}
 {% if 'gateway' in network %}
