@@ -39,9 +39,6 @@ vyos_dns_forwarding__allow_from:
 vyos_dns_forwarding__listen_addresses:
   # localhost
   - 127.0.0.1
-  # UNIFI-MAN
-  - 10.1.0.1
-  - "10.1.0.{{ vyos__host_id_ipv4 }}"
   # MAN
   - 10.10.0.1
   - "10.10.0.{{ vyos__host_id_ipv4 }}"
@@ -57,38 +54,6 @@ vyos_dns_forwarding__listen_addresses:
 
 vyos_dhcp_server__failover_name: maccabeus-HA
 vyos_dhcp_server__networks:
-  - name: "UNIFI-MAN"
-    default_router: "10.1.0.1"
-    own_dns: true
-    range:
-      start: "10.1.0.150"
-      stop: "10.1.0.250"
-    subnet: "10.1.0.0/24"
-    static_mapping:
-      - name: "usw-pro-48"
-        ip: "10.1.0.11"
-        mac: "74:83:c2:4a:ff:e6"
-      - name: "flex-porch"
-        ip: "10.1.0.30"
-        mac: "74:83:c2:49:e6:2c"
-      - name: "flex-office-sdwilsh"
-        ip: "10.1.0.31"
-        mac: "74:83:c2:49:e6:4d"
-      - name: "flex-mini-office"
-        ip: "10.1.0.32"
-        mac: "74:83:c2:ff:8f:eb"
-      - name: "den-ap"
-        ip: "10.1.0.50"
-        mac: "78:8a:20:0f:45:b0"
-      - name: "living-ap"
-        ip: "10.1.0.51"
-        mac: "78:8a:20:ff:1c:0c"
-      - name: "kitchen-ap"
-        ip: "10.1.0.52"
-        mac: "78:8a:20:0f:e4:84"
-      - name: "upper-hallway-ap"
-        ip: "10.1.0.53"
-        mac: "fc:ec:da:79:81:6c"
   - name: "MAN"
     default_router: "10.10.0.1"
     own_dns: true
@@ -142,10 +107,6 @@ vyos_dhcp_server__networks:
     subnet: "10.117.0.0/23"
 
 vyos_firewall__zones:
-  - name: "UNIFI-MAN"
-    description: "unifi management vlan ({{ ansible_managed }})"
-    interfaces:
-      - "{{ vyos__lan_interface }}"
   - name: "SYNC"
     description: "VRRP and other related synchronizations connection ({{ ansible_managed }})"
     interfaces:
@@ -244,7 +205,6 @@ vyos_firewall_global__group:
       description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
       afi: "ipv4"
       members:
-        - address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
@@ -324,10 +284,8 @@ vyos_firewall_global__group:
 
 vyos_interfaces__ethernet:
   - name: "{{ vyos__lan_interface }}"
-    description: "UNIFI-MAN - management vlan for Unifi devices ({{ ansible_managed }})"
+    description: LAN Trunk
     enabled: true
-    ipv4:
-      - address: "10.1.0.{{ vyos__host_id_ipv4 }}/24"
     vifs:
       - vlan_id: 2
         description: TRANSIT - router-to-router traffic
@@ -395,14 +353,6 @@ vyos_system__name_servers:
   - "127.0.0.1"
 
 vyos_vrrp__groups:
-  - hello_source_address: "10.1.0.{{ vyos__host_id_ipv4 }}"
-    interface: "{{ vyos__lan_interface }}"
-    name: UNIFI-MAN-v4
-    peer_address: "10.1.0.{{ vyos__peer_host_id_ipv4 }}"
-    priority: "{{ vyos__vrrp_priority }}"
-    sync_group: MAIN
-    virtual_address: 10.1.0.1/24
-    vrid: 1
   - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
     interface: "{{ vyos__lan_interface }}.2"
     name: TRANSIT-v4

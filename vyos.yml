@@ -192,7 +192,6 @@
         lines:
           - "set protocols static table 10 route 0.0.0.0/0 next-hop {{ tunnel }}"
           - set policy route CLOUD rule 10 set table 10
-          - set protocols static table 10 route 10.1.0.0/24 next-hop 10.2.0.72
           - set protocols static table 10 route 10.10.0.0/24 next-hop 10.2.0.72
           - set protocols static table 10 route 10.117.0.0/23 next-hop 10.2.0.72
       vars:
@@ -255,9 +254,6 @@
     #
     - set_fact:
         lan_interfaces_with_wan_access:
-          # UNIFI-MAN
-          - interface: "{{ vyos__lan_interface }}"
-            ipv4_network: "10.1.0.0/24"
           # MAN
           - interface: "{{ vyos__lan_interface }}.10"
             ipv4_network: "10.10.0.0/24"
@@ -313,7 +309,7 @@
           - "set service dhcp-server global-parameters 'option space ubnt;'"
           - "set service dhcp-server global-parameters 'option ubnt.unifi-address code 1 = ip-address;'"
           - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
-          - "set service dhcp-server shared-network-name UNIFI-MAN subnet 10.1.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
+          - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.82.0.2;'"
         save: yes
       tags:
         - services
