@@ -4,7 +4,7 @@ kind: Kustomization
 
 images:
   - name: registry.gitlab.com/purelb/purelb/lbnodeagent
-    newTag: v0.7.0
+    newTag: v0.7.1
   - name: registry.gitlab.com/purelb/purelb/allocator
     newTag: v0.7.0
   # Versions past 0.7.0 switch to a single image
