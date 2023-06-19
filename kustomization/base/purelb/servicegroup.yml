@@ -3,7 +3,6 @@ apiVersion: purelb.io/v1
 kind: ServiceGroup
 metadata:
   name: default
-  namespace: purelb
 spec:
   local:
     v4pool:
