@@ -4,3 +4,8 @@
   protocol: icmp
   icmp:
     type_name: any
+- description: Allow access to MAN services
+  action: accept
+  destination:
+    group:
+      address_group: MAN-SERVICES-v4

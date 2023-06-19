@@ -8,3 +8,13 @@ spec:
     v4pool:
       aggregation: default
       subnet: 10.10.0.0/24
+---
+apiVersion: purelb.io/v1
+kind: ServiceGroup
+metadata:
+  name: man-servicegroup
+spec:
+  local:
+    v4pool:
+      aggregation: default
+      subnet: 10.11.0.0/23

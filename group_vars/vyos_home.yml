@@ -177,6 +177,11 @@ vyos_firewall_global__group:
       members:
         # docker-vm.hogs.tswn.us
         - address: "10.10.0.6"
+    - name: MAN-SERVICES-v4
+      description: Kubernetes services exposed to the MAN zone
+      afi: ipv4
+      members:
+        - address: 10.11.1.1-10.11.1.50
     - name: MARIADB-SERVER-v4
       afi: ipv4
       members:
