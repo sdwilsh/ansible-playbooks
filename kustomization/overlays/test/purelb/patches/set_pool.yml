@@ -1,10 +1,8 @@
 ---
----
 apiVersion: purelb.io/v1
 kind: ServiceGroup
 metadata:
-  name: default
-  namespace: purelb
+  name: this-is-ignored-but-is-required
 spec:
   local:
     v4pool:
