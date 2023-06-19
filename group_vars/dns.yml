@@ -30,16 +30,6 @@ bind_zones:
       - name: "tartarus01"
         ip: "149.248.37.12"
 
-      # UNIFI-MAN Network
-      - name: "usw-pro-48.unifi"
-        ip: "10.1.0.11"
-      - name: "flex-porch.unifi"
-        ip: "10.1.0.30"
-      - name: "flex-office-sdwilsh.unifi"
-        ip: "10.1.0.31"
-      - name: "flex-mini-office.unifi"
-        ip: "10.1.0.32"
-
       # Transit Network
       - name: "cloud.routers.hogs"
         ip: "10.2.0.78"
@@ -160,8 +150,15 @@ bind_zones:
         ip: 10.10.0.40
       - name: aggregation-lower.hogs
         ip: 10.10.0.41
+      - name: usw-pro-48.hogs
+        ip: 10.10.0.42
+      - name: flex-office-sdwilsh.hogs
+        ip: 10.10.0.43
       - name: backyard-switch.hogs
         ip: 10.10.0.44
+      - name: flex-porch.hogs
+        ip: 10.10.0.45
+
       - name: "kvm01.hogs"
         ip: "10.10.0.50"
       - name: "kvm02.hogs"
