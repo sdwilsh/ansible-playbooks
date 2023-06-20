@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: http-to-https-middleware
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true

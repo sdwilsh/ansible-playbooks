@@ -221,6 +221,8 @@ bind_zones:
         ip: 10.10.0.151
       - name: test-traefik.hogs
         ip: 10.10.0.151
+      - name: test-traefik-man.hogs
+        ip: 10.11.1.26
 
       # Services Networks
       - name: "installation02"

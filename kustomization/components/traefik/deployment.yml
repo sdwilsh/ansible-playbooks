@@ -32,6 +32,7 @@ spec:
             - --providers.file.filename=/config/traefik.yml
             - --providers.kubernetescrd
             - --providers.kubernetescrd.allowCrossNamespace=true
+            - --providers.kubernetesingress=true
           ports:
             - name: web
               containerPort: 80

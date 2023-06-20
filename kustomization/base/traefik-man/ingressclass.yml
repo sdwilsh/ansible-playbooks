@@ -1,0 +1,11 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: traefik-man-ingressclass
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: true
+  labels:
+    app.kubernetes.io/component: controller
+spec:
+  controller: traefik.io/ingress-controller
