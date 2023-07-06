@@ -10,7 +10,7 @@ helmCharts:
     valuesFile: values.yml
 images:
   - name: timberio/vector
-    newTag: 0.30.0-distroless-libc
+    newTag: 0.31.0-distroless-libc
 namespace: vector-agent
 resources:
   - namespace.yml

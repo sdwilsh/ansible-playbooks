@@ -14,7 +14,7 @@ images:
     # renovate: datasource=github-releases depName=traefik/traefik
     newTag: v2.10.3
   - name: timberio/vector
-    newTag: 0.30.0-distroless-libc
+    newTag: 0.31.0-distroless-libc
 patches:
   - path: patches/add_vector_sidecar.yml
     target:
