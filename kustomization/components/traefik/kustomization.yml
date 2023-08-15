@@ -22,9 +22,9 @@ patches:
       name: traefik-deployment
 resources:
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v2.10.3/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.10.4/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v2.10.3/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.10.4/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
   - certificate.yml
   - serviceaccount.yml
   - deployment.yml
