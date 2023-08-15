@@ -9,10 +9,16 @@ ansible_cron__vault_password: !vault |
           3564646339343435610a393539386438666562333034373166396130626138356136616238633164
           38613962316365316261363534366632643563643539646533373439343065373436
 
+# TODO(sdwilsh): remove me when the new system is fully deployed
 common__ansible_key: "AAAAC3NzaC1lZDI1NTE5AAAAIMiRn+dJyIkJ22qrkuMlNC33xxS7VUwkYRY/55Wf4ryq"
 common__ansible_key_type: "ssh-ed25519"
 common__gateway_v4_address: "10.117.0.1"
 common__gateway_v6_address: "fd36:3eb3:43b0:75::1"
+common__keys:
+  - type: ssh-ed25519
+    key: AAAAC3NzaC1lZDI1NTE5AAAAIMiRn+dJyIkJ22qrkuMlNC33xxS7VUwkYRY/55Wf4ryq
+  - type: ecdsa-sha2-nistp521
+    key: AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBADeenEyrep9ip2RGNSQ9XcYg1gQusJTm3nX7U6BPiEAqNQblkZAnj6DvvR5Mvh3bj9Kt2WL9FCAhuQtjnKM2jxTbAFQGeb4J/j1/0GRCW9Q1HC+mg+AiSfEbbGcJ8fvK61FsdXsXOC0Jos2D1u0nOHSTCjkcuAlqV4/KFqlA0VKCHI85w==
 common__unix_groups:
   - name: "ansible"
     gid: 2000
