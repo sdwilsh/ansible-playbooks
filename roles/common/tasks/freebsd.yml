@@ -23,38 +23,30 @@
     - "pkg"
 
 # Dependencies
-- name: "Install latest version of Python"
-  ansible.builtin.package:
-    name: "python38"
-    state: "present"
-- name: "Symlink python38 to python3"
-  ansible.builtin.file:
-    src: "/usr/local/bin/python3.8"
-    dest: "/usr/local/bin/python3"
-    owner: "root"
-    group: "wheel"
-    mode: "o=rwx,g=rx,o=rx"
-    state: "link"
 - name: "Install latest version of sudo"
   ansible.builtin.package:
     name: "sudo"
     state: "present"
-- name: "Install latest version of pip"
+- name: Install latest version of pip
   ansible.builtin.package:
-    name: "py38-pip"
-    state: "present"
-- name: "Symlink pip to pip3"
+    name: devel/py-pip
+    state: present
+- name: Symlink python39 to python3
   ansible.builtin.file:
-    src: "/usr/local/bin/pip-3.8"
-    dest: "/usr/local/bin/pip3"
-    owner: "root"
-    group: "wheel"
-    mode: "o=rwx,g=rx,o=rx"
-    state: "link"
-- name: "Install latest version of setuptools"
-  ansible.builtin.package:
-    name: "py38-setuptools"
-    state: "present"
+    src: /usr/local/bin/python3.9
+    dest: /usr/local/bin/python3
+    owner: root
+    group: wheel
+    mode: o=rwx,g=rx,o=rx
+    state: link
+- name: Symlink pip to pip3
+  ansible.builtin.file:
+    src: /usr/local/bin/pip-3.9
+    dest: /usr/local/bin/pip3
+    owner: root
+    group: wheel
+    mode: o=rwx,g=rx,o=rx
+    state: link
 
 # Networking
 - name: "Set hostname"

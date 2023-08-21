@@ -5,10 +5,10 @@
     name: "mysql80-server"
     state: "present"
   notify: "Restart mysql"
-- name: "Install latest version of PyMySQL"
+- name: Install latest version of PyMySQL
   ansible.builtin.package:
-    name: "py38-pymysql"
-    state: "present"
+    name: databases/py-pymysql
+    state: present
 - name: "Enable service at start"
   ansible.builtin.copy:
     content: |
