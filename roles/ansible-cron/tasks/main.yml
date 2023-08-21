@@ -20,7 +20,7 @@
   when: ansible_distribution == "Ubuntu"
 - name: "Ensure ansible is installed"
   ansible.builtin.package:
-    name: "{% if ansible_distribution == 'FreeBSD' %}py38-ansible{% else %}ansible{% endif %}"
+    name: "{% if ansible_distribution == 'FreeBSD' %}sysutils/ansible{% else %}ansible{% endif %}"
     state: "present"
 - name: "Ensure python deps are installed"
   ansible.builtin.pip:
