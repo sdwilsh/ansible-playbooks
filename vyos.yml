@@ -142,9 +142,16 @@
           - "set service ssh listen-address {{ vyos__ssh_address_ipv4 }}"
           - set service ssh disable-password-authentication
           - set system login user ansible full-name 'ansible'
-          - "set system login user ansible authentication public-keys 'sdwilsh-dev' key '{{ common__ansible_key }}'"
-          - "set system login user ansible authentication public-keys 'sdwilsh-dev' type '{{ common__ansible_key_type }}'"
         save: yes
+      tags:
+        - services
+        - ssh
+    - name: Deploy public keys to ansible user
+      vyos.vyos.vyos_config:
+        lines:
+          - "set system login user ansible authentication public-keys '{{ item.description }}' key '{{ item.key }}'"
+          - "set system login user ansible authentication public-keys '{{ item.description }}' type '{{ item.type }}'"
+      loop: "{{ common__keys }}"
       tags:
         - services
         - ssh
