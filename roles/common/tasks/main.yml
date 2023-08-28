@@ -25,12 +25,6 @@
     uid: "{{ item.uid }}"
   become: yes
   loop: "{{ common__unix_users }}"
-# TODO(sdwilsh): remove me when the new system is fully deployed
-- name: "Deploy ansible user's public key"
-  ansible.posix.authorized_key:
-    user: "ansible"
-    state: "present"
-    key: "{{ common__ansible_key_type }} {{ common__ansible_key }}"
 - name: Deploy public keys to ansible user
   ansible.posix.authorized_key:
     user: ansible
