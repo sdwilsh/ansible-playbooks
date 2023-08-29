@@ -31,6 +31,8 @@
     state: present
     key: "{{ item.type }} {{ item.key }}"
   loop: "{{ common__keys }}"
+  loop_control:
+    label: "{{ item.description }}"
 - name: Setup sudoers
   template:
     src: sudoers.j2

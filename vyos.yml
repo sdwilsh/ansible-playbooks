@@ -152,6 +152,8 @@
           - "set system login user ansible authentication public-keys '{{ item.description }}' key '{{ item.key }}'"
           - "set system login user ansible authentication public-keys '{{ item.description }}' type '{{ item.type }}'"
       loop: "{{ common__keys }}"
+      loop_control:
+        label: "{{ item.description }}"
       tags:
         - services
         - ssh
