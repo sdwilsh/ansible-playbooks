@@ -36,6 +36,18 @@
         name: US/Pacific
       tags:
         - timedatectl
+    - name: Disable ATX support
+      ansible.builtin.copy:
+        content: "{{ override | to_nice_yaml(indent=4, explicit_start=True) }}"
+        dest: /etc/kvmd/override.d/disable-atx.yaml
+        mode: u=r,g=r,o=r
+        owner: root
+        group: root
+      vars:
+        override:
+          kvmd:
+            atx:
+              type: disabled
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
