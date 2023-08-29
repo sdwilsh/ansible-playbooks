@@ -17,6 +17,25 @@
       loop: "{{ common__keys }}"
       loop_control:
         label: "{{ item.description }}"
+      tags:
+        - ssh
+    - name: Configure timesyncd
+      ansible.builtin.copy:
+        content: |
+          [Time]
+          NTP=pool.ntp.hogs.tswn.us
+        dest: /etc/systemd/timesyncd.conf
+        mode: u=r,g=r,o=r
+        owner: root
+        group: root
+      tags:
+        - ntp
+        - timesyncd
+    - name: Set timezone to US/Pacific
+      community.general.timezone:
+        name: US/Pacific
+      tags:
+        - timedatectl
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
