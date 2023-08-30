@@ -66,6 +66,23 @@
         state: present
       tags:
         - hostname
+    - name: Configure Networking
+      ansible.builtin.copy:
+        content: |
+          [Match]
+          Name=eth0
+
+          [Network]
+          DNSSEC=no
+          Address={{ common__ip_addresses | first }}
+          Gateway={{ common__gateway_v4_address }}
+          DNS={{ common__nameservers.addresses | ansible.utils.ipv4 | first }}
+        dest: /etc/systemd/network/eth0.network
+        mode: u=r,g=r,o=r
+        owner: root
+        group: root
+      tags:
+        - networking
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro

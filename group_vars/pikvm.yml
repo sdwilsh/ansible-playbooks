@@ -1,2 +1,7 @@
 ---
 ansible_ssh_user: root
+
+common__gateway_v4_address: 10.10.0.1
+common__nameservers:
+  addresses:
+    - 10.10.0.1
