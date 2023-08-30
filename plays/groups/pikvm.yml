@@ -70,3 +70,5 @@
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
       changed_when: no
+      tags:
+        - always
