@@ -50,6 +50,8 @@
           kvmd:
             atx:
               type: disabled
+      tags:
+        - atx
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
