@@ -83,6 +83,63 @@
         group: root
       tags:
         - networking
+    - name: Configure KVM Switch
+      ansible.builtin.copy:
+        content: "{{ override | to_nice_yaml(indent=4, explicit_start=True) }}"
+        dest: /etc/kvmd/override.d/kvm-switch.yaml
+        mode: u=r,g=r,o=r
+        owner: root
+        group: root
+      vars:
+        override:
+          kvmd:
+            gpio:
+              drivers:
+                ez:
+                  type: ezcoo
+                  protocol: 2
+                  device: /dev/ttyUSB0
+              scheme:
+                ch0_led:
+                  driver: ez
+                  pin: 0
+                  mode: input
+                ch1_led:
+                  driver: ez
+                  pin: 1
+                  mode: input
+                ch2_led:
+                  driver: ez
+                  pin: 2
+                  mode: input
+                ch3_led:
+                  driver: ez
+                  pin: 3
+                  mode: input
+                ch0_button:
+                  driver: ez
+                  pin: 0
+                  mode: output
+                  switch: false
+                ch1_button:
+                  driver: ez
+                  pin: 1
+                  mode: output
+                  switch: false
+                ch2_button:
+                  driver: ez
+                  pin: 2
+                  mode: output
+                  switch: false
+                ch3_button:
+                  driver: ez
+                  pin: 3
+                  mode: output
+                  switch: false
+              view:
+                table: "{{ pikvm__hosts }}"
+      tags:
+        - kvm-switch
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
