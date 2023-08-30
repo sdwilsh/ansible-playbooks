@@ -1,6 +1,8 @@
 - name: Mount the filesystem as rw
   hosts: pikvm
   gather_facts: no
+  tags:
+    - always
   tasks:
     - name: Mount the filesystem as rw
       ansible.builtin.raw: rw
