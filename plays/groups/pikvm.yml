@@ -38,6 +38,21 @@
         name: US/Pacific
       tags:
         - timedatectl
+    - name: Configure snmpd
+      ansible.builtin.copy:
+        content: |
+          rocommunity hogs
+        dest: /etc/snmp/snmpd.conf
+        mode: u=r,g=r,o=r
+        owner: root
+        group: root
+      tags:
+        - snmpd
+    - name: Enable snmpd
+      ansible.builtin.systemd:
+        name: snmpd
+        enabled: yes
+        state: started
     - name: Disable ATX support
       ansible.builtin.copy:
         content: "{{ override | to_nice_yaml(indent=4, explicit_start=True) }}"
