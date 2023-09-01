@@ -197,16 +197,10 @@ bind_zones:
         ip: 10.10.0.93
       - name: upper-hallway-ip.hogs
         ip: 10.10.0.94
-      - name: test-k3s.hogs
-        ip: 10.10.0.99
-      - name: test-node01.hogs
+      - name: k3s.hogs
+        ip: 10.10.0.100
+      - name: node01.hogs
         ip: 10.10.0.101
-      - name: test-node02.hogs
-        ip: 10.10.0.102
-      - name: test-node03.hogs
-        ip: 10.10.0.103
-      - name: test-worker01.hogs
-        ip: 10.10.0.104
 
       # At some point, this should ask the k3s control plane what the IP address is
       - name: test-ara.hogs

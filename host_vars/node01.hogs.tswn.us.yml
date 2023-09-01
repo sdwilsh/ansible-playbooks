@@ -1,8 +1,10 @@
 ---
 common__gateway_v4_address: 10.10.0.1
 common__ip_addresses:
-  - 10.10.0.104/24
-  - 10.11.0.43/23
+  - 10.10.0.101/24
+  - 10.11.0.41/23
 common__nameservers:
   addresses:
     - 10.10.0.1
+
+k3s_cluster_init: yes
