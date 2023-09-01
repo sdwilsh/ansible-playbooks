@@ -10,6 +10,11 @@ certmanager_cloudflare_api_token: !vault |
           61383336646539353535343761303762343263623038623961616133656235306534623032346161
           6632386137366238393638346265323066613936643738386539
 
+common__gateway_v4_address: 10.10.0.1
+common__nameservers:
+  addresses:
+    - 10.10.0.1
+
 kairos_managed_networks:
   - name: man
     address: "{{ common__ip_addresses | ansible.utils.ipaddr('10.10.0.0/24') | first }}"
