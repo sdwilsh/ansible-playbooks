@@ -65,7 +65,7 @@ stages:
             [Link]
             Name=trunk
             [Match]
-            Name=enp2s1
+            Name=enxc*
             [Network]
 {% for network in hostvars[host].kairos_managed_networks %}
             VLAN={{ network.name }}
