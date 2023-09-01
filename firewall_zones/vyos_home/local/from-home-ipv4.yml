@@ -32,3 +32,10 @@
   action: "drop"
   destination:
     address: "10.117.1.255"
+- description: Allow specific hosts
+  action: accept
+  state:
+    new: true
+  source:
+    group:
+      address_group: SERVICE-TALKERS-v4
