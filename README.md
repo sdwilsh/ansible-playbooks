@@ -90,7 +90,13 @@ ssh provision@{{ hostname }} echo 'success!'
 ```
 
 ```
-    ansible-playbook -l {{ hostname }} provision.yml -u provision --ask-pass --ask-become-pass --ssh-common-args="-o PasswordAuthentication=yes"
+ansible-playbook \
+    -l {{ hostname }} \
+    plays/provision.yml \
+    -u provision \
+    --ask-pass \
+    --ask-become-pass \
+    --ssh-common-args="-o PasswordAuthentication=yes"
 ```
 
 Note: The user `provision` will be removed automatically when the `common` role is run not as that user.
