@@ -9,5 +9,5 @@ spec:
       containers:
       - env:
         - name: address
-          value: 10.10.0.99
+          value: 10.10.0.100
         name: kube-vip
