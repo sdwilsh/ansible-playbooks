@@ -19,6 +19,10 @@ vyos_dns_forwarding__domain_servers:
     servers:
       - 10.10.0.3
       - 10.10.0.4
+  - domain: 0.11.10.in-addr.arpa
+    servers:
+      - 10.10.0.3
+      - 10.10.0.4
   - domain: 0.117.10.in-addr.arpa
     servers:
       - 10.10.0.3
