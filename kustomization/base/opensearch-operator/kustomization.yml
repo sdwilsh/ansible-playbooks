@@ -4,7 +4,7 @@ kind: Kustomization
 
 helmCharts:
   - name: opensearch-operator
-    version: 2.3.1
+    version: 2.3.2
     repo: https://opster.github.io/opensearch-k8s-operator/
 namespace: opensearch-operator
 resources:
