@@ -32,7 +32,7 @@ vyos_firewall__zones:
     description: "Work device network ({{ ansible_managed }})"
     interfaces:
       - eth1.15
-vyos_firewall__zones_path: "./firewall_zones/vyos_work"
+vyos_firewall__zones_root_path: firewall_zones/vyos_work
 
 vyos_firewall_global__group:
   address_group:

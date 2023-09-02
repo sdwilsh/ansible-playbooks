@@ -54,7 +54,7 @@ vyos_firewall__zones:
   - name: "WAN"
     interfaces:
       - "eth0"
-vyos_firewall__zones_path: "./firewall_zones/vyos_remote"
+vyos_firewall__zones_root_path: firewall_zones/vyos_remote
 
 vyos_interfaces__ethernet:
   - name: "eth0"

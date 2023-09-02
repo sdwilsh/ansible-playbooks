@@ -23,7 +23,7 @@ vyos_firewall__zones:
     description: Unifi Controller
     interfaces:
       - eth1.82
-vyos_firewall__zones_path: ./firewall_zones/vyos_cloud
+vyos_firewall__zones_root_path: firewall_zones/vyos_cloud
 
 vyos_firewall_global__group:
   address_group:

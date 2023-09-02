@@ -149,7 +149,7 @@ vyos_firewall__zones:
     firewall_name: "WAN"
     interfaces:
       - "pppoe0"
-vyos_firewall__zones_path: "./firewall_zones/vyos_home"
+vyos_firewall__zones_root_path: firewall_zones/vyos_home
 
 vyos_firewall_global__group:
   address_group:

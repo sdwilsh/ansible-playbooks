@@ -83,6 +83,9 @@
         name: "vyos-firewall"
       tags:
         - firewall
+      vars:
+        # Path should be relative to the play we are executing.
+        vyos_firewall__zones_path: "../{{ vyos_firewall__zones_root_path }}"
 
     #
     # Static Routes
