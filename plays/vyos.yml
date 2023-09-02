@@ -269,6 +269,9 @@
           # MAN
           - interface: "{{ vyos__lan_interface }}.10"
             ipv4_network: "10.10.0.0/24"
+          # SERVICES
+          - interface: "{{ vyos__lan_interface }}.11"
+            ipv4_network: "10.11.0.0/23"
           # IOT
           - interface: "{{ vyos__lan_interface }}.66"
             ipv4_network: "10.66.0.0/24"
