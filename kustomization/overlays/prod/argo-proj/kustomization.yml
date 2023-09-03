@@ -1,0 +1,26 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+resources:
+  - ../../../base/argo-proj
+patches:
+  - path: patches/set_argo-cd_path.yml
+    target:
+      kind: Application
+      name: argo-cd
+  - path: patches/set_argo-proj_path.yml
+    target:
+      kind: Application
+      name: argo-proj
+  - path: patches/set_kube-vip_path.yml
+    target:
+      kind: Application
+      name: kube-vip
+  - path: patches/set_purelb_path.yml
+    target:
+      kind: Application
+      name: purelb
+resources:
+  - ../../../base/argo-proj
