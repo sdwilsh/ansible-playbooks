@@ -4,6 +4,7 @@ kind: Kustomization
 
 configMapGenerator:
   - name: vector-config
+    namespace: cert-manager
     files:
       - configmap/vector.yml
 images:
