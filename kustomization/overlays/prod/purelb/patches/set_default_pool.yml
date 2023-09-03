@@ -6,4 +6,5 @@ metadata:
 spec:
   local:
     v4pool:
-      pool: 10.10.0.150-10.10.0.174
+      # This really shouldn't be used!
+      pool: 10.10.0.200-10.10.0.201

@@ -4,11 +4,11 @@ kind: Kustomization
 
 namespace: purelb
 patches:
-  - path: patches/set_pool.yml
+  - path: patches/set_default_pool.yml
     target:
       name: default
       kind: ServiceGroup
-  - path: patches/set_pool_for_man.yml
+  - path: patches/set_man_pool.yml
     target:
       name: man-servicegroup
       kind: ServiceGroup
