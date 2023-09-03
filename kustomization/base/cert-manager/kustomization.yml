@@ -9,7 +9,6 @@ configMapGenerator:
 images:
   - name: timberio/vector
     newTag: 0.32.1-distroless-libc
-namespace: cert-manager
 patches:
   - path: patches/add_dns01_recursive_nameservers.yml
     target:
