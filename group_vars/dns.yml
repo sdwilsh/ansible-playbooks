@@ -203,18 +203,6 @@ bind_zones:
         ip: 10.10.0.101
 
       # At some point, this should ask the k3s control plane what the IP address is
-      - name: test-ara.hogs
-        ip: 10.10.0.151
-      - name: test-argo-cd.hogs
-        ip: 10.10.0.151
-      - name: test-longhorn.hogs
-        ip: 10.10.0.151
-      - name: test-phpmyadmin.hogs
-        ip: 10.10.0.151
-      - name: test-prometheus.hogs
-        ip: 10.10.0.151
-      - name: test-traefik.hogs
-        ip: 10.10.0.151
       - name: traefik-man.hogs
         ip: 10.11.1.0
 
@@ -224,9 +212,6 @@ bind_zones:
         aliases:
           - "unifi"
           - "unifi.hogs"
-
-      - name: map.minecraft
-        ip: 10.96.0.136
 
       # NONET Network
       - name: "front-porch.camera.hogs"
