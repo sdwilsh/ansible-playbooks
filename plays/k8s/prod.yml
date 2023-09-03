@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - ansible.builtin.import_tasks: cert-manager/tasks.yml
+      tags:
+        - cert-manager
+      vars:
+        certmanager_cloudflare_api_token: "{{ hostvars[groups['kairos_prod'] | first].certmanager_cloudflare_api_token }}"
+  vars:
+    cluster: default
