@@ -177,11 +177,6 @@ vyos_firewall_global__group:
       members:
         # docker-vm.hogs.tswn.us
         - address: "10.10.0.6"
-    - name: MAN-SERVICES-v4
-      description: Kubernetes services exposed to the MAN zone
-      afi: ipv4
-      members:
-        - address: 10.11.1.1-10.11.1.50
     - name: MARIADB-SERVER-v4
       afi: ipv4
       members:
@@ -247,6 +242,21 @@ vyos_firewall_global__group:
       members:
         - address: "10.10.0.18"
   network_group:
+    - name: HOME-SERVICES-v4
+      description: Kubernetes Services for the HOME network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.32/27
+    - name: MAN-SERVICES-v4
+      description: Kubernetes Services for the MAN network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.0/27
+    - name: MOBILE-WIREGUARD-v4
+      description: Mobile wireguard clients
+      afi: ipv4
+      members:
+        - address: 10.117.2.0/24
     - name: "REMOTE-VPN-v4"
       description: "Subnets that can be used as a VPN through REMOTE-TUN"
       members:
@@ -257,11 +267,6 @@ vyos_firewall_global__group:
         - address: "192.168.0.0/16"
         - address: "172.16.0.0/12"
         - address: "10.0.0.0/8"
-    - name: MOBILE-WIREGUARD-v4
-      description: Mobile wireguard clients
-      afi: ipv4
-      members:
-        - address: 10.117.2.0/24
   port_group:
     - name: "CIFS"
       description: "{{ ansible_managed }}"

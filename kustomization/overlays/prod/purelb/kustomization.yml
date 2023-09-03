@@ -8,9 +8,9 @@ patches:
     target:
       name: default
       kind: ServiceGroup
-  - path: patches/set_man_pool.yml
+  - path: patches/set_home_pool.yml
     target:
-      name: man-servicegroup
+      name: home-servicegroup
       kind: ServiceGroup
 resources:
   - ../../../base/purelb

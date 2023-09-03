@@ -1,4 +1,5 @@
 ---
+# The default service group should only be used to deploy to the management network.
 apiVersion: purelb.io/v1
 kind: ServiceGroup
 metadata:
@@ -7,12 +8,12 @@ spec:
   local:
     v4pool:
       aggregation: default
-      subnet: 10.10.0.0/24
+      subnet: 10.11.0.0/23
 ---
 apiVersion: purelb.io/v1
 kind: ServiceGroup
 metadata:
-  name: man-servicegroup
+  name: home-servicegroup
 spec:
   local:
     v4pool:

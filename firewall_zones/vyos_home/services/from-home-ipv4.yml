@@ -9,3 +9,8 @@
   source:
     group:
       address_group: SERVICE-TALKERS-v4
+- description: Allow access to HOME services
+  action: accept
+  destination:
+    group:
+      network_group: HOME-SERVICES-v4
