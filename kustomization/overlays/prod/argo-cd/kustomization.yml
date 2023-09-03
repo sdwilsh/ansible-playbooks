@@ -4,9 +4,9 @@ kind: Kustomization
 
 namespace: argocd
 patches:
-  - path: patches/change_ingressroute_host.yml
+  - path: patches/change_ingress_host.yml
     target:
-      kind: IngressRoute
-      name: argocd-.*ingressroute
+      kind: Ingress
+      name: argocd-.*ingress
 resources:
   - ../../../base/argo-cd

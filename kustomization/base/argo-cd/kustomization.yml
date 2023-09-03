@@ -21,6 +21,6 @@ resources:
   - namespace.yml
   # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.2/manifests/ha/install.yaml
-  - ingressroute.yml
+  - ingress.yml
   - serverstransport.yml
   - deployment.yml

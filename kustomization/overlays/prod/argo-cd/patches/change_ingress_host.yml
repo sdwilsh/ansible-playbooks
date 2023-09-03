@@ -1,0 +1,4 @@
+---
+- op: add
+  path: /spec/rules/0/host
+  value: argo-cd.hogs.tswn.us
