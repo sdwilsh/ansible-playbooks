@@ -7,6 +7,6 @@ patches:
   - path: patches/change_ingress_host.yml
     target:
       kind: Ingress
-      name: argocd-.*ingress
+      name: argo-cd-ingress
 resources:
   - ../../../base/argo-cd

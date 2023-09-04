@@ -3,11 +3,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: traefik-man-ingressclass
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: argo-cd-ingress
 spec:
+  ingressClassName: traefik-man-ingressclass
   rules:
     - http:
         paths:
@@ -17,4 +17,4 @@ spec:
                 port:
                   number: 443
             path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix
