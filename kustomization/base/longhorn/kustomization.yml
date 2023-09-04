@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
     # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/longhorn/longhorn/v1.5.1/deploy/longhorn.yaml
-  - ingressroute.yml
+  - ingress.yml
   - storageclass.yml
   - recurringjob.yml
   - setting.yml
