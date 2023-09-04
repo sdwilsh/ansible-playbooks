@@ -1,10 +1,10 @@
----
-apiVersion: longhorn.io/v1beta2
-kind: Setting
-metadata:
-  name: backup-target-credential-secret
-  namespace: longhorn-system
-value: backup-target-credentials
+# ---
+# apiVersion: longhorn.io/v1beta2
+# kind: Setting
+# metadata:
+#   name: backup-target-credential-secret
+#   namespace: longhorn-system
+# value: backup-target-credentials
 ---
 apiVersion: longhorn.io/v1beta2
 kind: Setting
