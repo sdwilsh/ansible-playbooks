@@ -13,5 +13,4 @@ patches:
 resources:
   - namespace.yml
   - ingressclass.yml
-  - middleware.yml
   - ingress.yml

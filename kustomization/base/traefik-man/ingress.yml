@@ -3,11 +3,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: traefik-man-ingressclass
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: traefik-dashboard-ingress
 spec:
+  ingressClassName: traefik-man-ingressclass
   rules:
     - http:
         paths:
@@ -17,24 +17,4 @@ spec:
                 port:
                   number: 8080
             path: /
-            pathType: ImplementationSpecific
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    kubernetes.io/ingress.class: traefik-man-ingressclass
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: traefik-man-http-to-https-middleware@kubernetescrd
-  name: traefik-dashboard-https-redirect-ingress
-spec:
-  rules:
-    - http:
-        paths:
-          - backend:
-              service:
-                name: traefik-dashboard-svc
-                port:
-                  number: 8080
-            path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix

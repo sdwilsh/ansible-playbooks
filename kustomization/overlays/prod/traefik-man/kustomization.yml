@@ -8,5 +8,10 @@ patches:
     target:
       kind: Ingress
       name: traefik-dashboard-.*ingress
+  # Uncomment to debug production issues!
+  # - path: patches/set_debug_log_level.yml
+  #   target:
+  #     kind: Deployment
+  #     name: traefik-deployment
 resources:
   - ../../../base/traefik-man
