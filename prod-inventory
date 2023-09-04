@@ -30,7 +30,7 @@ kairos_node
 
 [kairos_worker]
 temp-worker01.hogs.tswn.us ansible_host=10.10.0.110
-temp-worker01.hogs.tswn.us ansible_host=10.10.0.111
+temp-worker02.hogs.tswn.us ansible_host=10.10.0.111
 [kairos_worker:children]
 kairos_node
 
