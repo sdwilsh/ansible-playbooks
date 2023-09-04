@@ -38,7 +38,7 @@ k3s:
 {% else %}
 k3s-agent:
   args:
-    - --flannel-iface=man
+    - --flannel-iface=services
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.10.0.0/24') | ansible.utils.ipaddr('address') | first }}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
 {% endif %}
@@ -59,7 +59,7 @@ stages:
         NTP: {{ common__ntp_pool }}
         FallbackNTP: ""
     - files:
-{% if "bonds" in hostvars[host].common__interfaces %}
+{% if "common__interfaces" in hostvars[host] and "bonds" in hostvars[host].common__interfaces %}
 {% for bond in hostvars[host].common__interfaces.bonds %}
         - path: /etc/systemd/network/01-{{ bond.name }}.netdev
           permissions: 0644
