@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: this-is-ignored-but-is-required
+data:
+  server.insecure: "true"

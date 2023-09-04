@@ -15,6 +15,10 @@ patches:
       kind: Deployment
       name: argocd-metrics-scrape
     path: patches/add_vector_sidecar.yml
+  - target:
+      kind: ConfigMap
+      name: argocd-cmd-params-cm
+    path: patches/set_server_insecure.yml # Secured by Traefik
   - path: patches/set_kustomize_buildOptions.yml
   - path: patches/set_tracking_by_annotation.yml
 resources:
