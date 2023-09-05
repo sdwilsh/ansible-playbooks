@@ -28,3 +28,4 @@ patches:
       name: purelb
 resources:
   - ../../../base/argo-proj
+  - application/prometheus-operator.yml
