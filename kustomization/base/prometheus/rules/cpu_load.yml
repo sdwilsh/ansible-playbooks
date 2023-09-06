@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: disk-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: general.cpu_load
+      interval: 5m
+      rules:
+        - alert: utilization-high
+          annotations:
+            description: "{{ $value }}% of {{ $labels.host }} cpu utilization!"
+          expr: (100 * sum by (host)(host_load15) / sum by (host)(host_logical_cpus)) > 85
+          for: 5m
+          labels:
+            severity: warning
+        - alert: utilization-dangerously-high
+          annotations:
+            description: "{{ $value }}% of {{ $labels.host }} cpu utilization!"
+          expr: (100 * sum by (host)(host_load15) / sum by (host)(host_logical_cpus)) > 95
+          for: 15m
+          labels:
+            severity: page
