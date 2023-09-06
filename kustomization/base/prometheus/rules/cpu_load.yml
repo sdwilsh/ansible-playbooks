@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: disk-rules
+  name: cpu-rules
   namespace: prometheus
 spec:
   groups:
