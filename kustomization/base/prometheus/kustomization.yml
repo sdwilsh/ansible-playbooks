@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: prometheus
 resources:
-  - ingressroute.yml
+  - ingress.yml
   - namespace.yml
   - prometheus.yml
   - rbac.yml
