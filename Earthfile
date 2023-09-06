@@ -3,7 +3,7 @@ FROM alpine
 
 kustomize-build:
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize versioning=docker
-    ARG KUSTOMIZE_VERSION=v5.0.1
+    ARG KUSTOMIZE_VERSION=v5.1.1
     FROM registry.k8s.io/kustomize/kustomize:$KUSTOMIZE_VERSION
     COPY kustomization kustomization
     RUN ls
