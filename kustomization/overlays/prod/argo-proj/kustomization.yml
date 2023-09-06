@@ -30,3 +30,4 @@ resources:
   - ../../../base/argo-proj
   - application/prometheus-operator.yml
   - application/prometheus.yml
+  - application/traefik-man.yml
