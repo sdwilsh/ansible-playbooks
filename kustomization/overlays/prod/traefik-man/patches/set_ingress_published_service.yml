@@ -1,0 +1,6 @@
+---
+- op: add
+  path: /spec/template/spec/containers/1/args/-
+  # This is the namespace/service-name to handle Ingress.
+  value: --providers.kubernetesingress.ingressendpoint.publishedservice=traefik-man/traefik-svc
+  
