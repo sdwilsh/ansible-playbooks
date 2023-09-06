@@ -5,7 +5,7 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: longhorn-frontend-ingressroute
+  name: longhorn-frontend-ingress
   namespace: longhorn-system
 spec:
   ingressClassName: traefik-man-ingressclass

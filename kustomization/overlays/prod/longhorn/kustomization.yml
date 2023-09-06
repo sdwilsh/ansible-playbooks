@@ -6,6 +6,6 @@ patches:
   - path: patches/change_ingress_host.yml
     target:
       kind: Ingress
-      name: longhorn-frontend-ingressroute
+      name: longhorn-frontend-ingress
 resources:
   - ../../../base/longhorn
