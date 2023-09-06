@@ -5,4 +5,4 @@ metadata:
   name: this-is-ignored-but-is-required
 spec:
   source:
-    path: kustomization/overlays/prod/argo-cd
+    path: kustomization/overlays/prod/longhorn
