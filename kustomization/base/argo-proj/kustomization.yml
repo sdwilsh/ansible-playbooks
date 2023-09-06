@@ -13,7 +13,6 @@ resources:
   - application/longhorn.yml
   # - application/mariadb-galera.yml
   # - application/opensearch-operator.yml
-  # - application/prometheus.yml
   - application/purelb.yml
   - application/tigera-operator.yml
   # - application/traefik.yml
