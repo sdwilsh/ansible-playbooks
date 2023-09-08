@@ -6,4 +6,4 @@ namespace: prometheus-operator
 resources:
   - namespace.yml
   # renovate: datasource=github-releases
-  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
+  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.68.0/bundle.yaml
