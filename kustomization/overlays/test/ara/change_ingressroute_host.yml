@@ -1,4 +1,0 @@
----
-- op: add
-  path: /spec/routes/0/match
-  value: Host(`test-ara.hogs.tswn.us`)

@@ -107,7 +107,7 @@
   ansible.builtin.cron:
     name: "ARA_API_SERVER"
     env: yes
-    job: "http://ara.hogs.tswn.us:8000"
+    job: "https://ara.hogs.tswn.us"
     user: "ansible"
     state: present
 - name: "Create ansible-cron script"

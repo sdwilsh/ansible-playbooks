@@ -26,6 +26,9 @@ spec:
             value: longhorn-crypto-global
           - name: podAntiAffinityPreset
             value: hard
+      - path: kustomization/overlays/prod/ara
+        repoURL: https://github.com/sdwilsh/ansible-playbooks
+        targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

@@ -9,6 +9,6 @@ data:
     ---
     default:
       ALLOWED_HOSTS:
-        - test-ara.hogs.tswn.us
+        - ara.hogs.tswn.us
       CORS_ORIGIN_WHITELIST:
-        - https://test-ara.hogs.tswn.us
+        - https://ara.hogs.tswn.us

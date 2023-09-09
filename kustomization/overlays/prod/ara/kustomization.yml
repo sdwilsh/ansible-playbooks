@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: settings-configmap
+    files:
+      - configmap/settings.yml
+namespace: ara
+patches:
+  - path: patches/add_address_in_job_env.yml
+    target:
+      kind: CronJob
+      name: prune-old-logs
+  - path: patches/change_ingress_host.yml
+    target:
+      kind: IngressRoute
+      name: ara-ingress
+resources:
+  - ../../../components/ara

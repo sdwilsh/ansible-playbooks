@@ -2,6 +2,37 @@
 - hosts: localhost
   gather_facts: false
   tasks:
+    - name: Create namespace for secret
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: "{{ secret.namespace }}"
+      loop: "{{ secrets }}"
+      loop_control:
+        label: "{{ secret.namespace }}"
+        loop_var: secret
+    - name: Create secret
+      kubernetes.core.k8s:
+        apply: yes
+        context: "{{ cluster }}"
+        resource_definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: "{{ secret.name }}"
+            namespace: "{{ secret.namespace }}"
+          stringData: "{{ secret.stringData }}"
+          type: Opaque
+        state: present
+      loop: "{{ secrets }}"
+      loop_control:
+        label: "{{ secret.namespace }}/{{ secret.name }}"
+        loop_var: secret
+
     - ansible.builtin.import_tasks: cert-manager/tasks.yml
       tags:
         - cert-manager
@@ -15,3 +46,4 @@
         longhorn_s3: "{{ hostvars[groups['kairos_prod'] | first].longhorn_s3 }}"
   vars:
     cluster: default
+    secrets: "{{ hostvars[groups['kairos_prod'] | first].secrets }}"

@@ -121,8 +121,6 @@ bind_zones:
         ip: "10.10.0.11"
       - name: "rack-switch01.hogs.tswn.us"
         ip: "10.10.0.15"
-      - name: ara.hogs
-        ip: 10.10.0.17
       - name: "server.zabbix.hogs"
         ip: "10.10.0.18"
       - name: "snmp.zabbix.hogs"
@@ -205,6 +203,8 @@ bind_zones:
         ip: 10.10.0.104
 
       # At some point, this should ask the k3s control plane what the IP address is
+      - name: ara.hogs
+        ip: 10.11.1.0
       - name: argo-cd.hogs
         ip: 10.11.1.0
       - name: longhorn.hogs

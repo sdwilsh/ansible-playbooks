@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: ara
 resources:
   - deployment.yml
-  - ingressroute.yml
+  - ingress.yml
   - service.yml
   - cronjob.yml
