@@ -4,7 +4,6 @@ kind: Kustomization
 
 resources:
   - project.yml
-  # - application/ara.yml
   - application/argo-cd.yml
   - application/argo-proj.yml
   - application/calico.yml
