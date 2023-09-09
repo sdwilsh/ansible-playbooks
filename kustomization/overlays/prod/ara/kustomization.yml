@@ -14,7 +14,7 @@ patches:
       name: prune-old-logs
   - path: patches/change_ingress_host.yml
     target:
-      kind: IngressRoute
+      kind: Ingress
       name: ara-ingress
 resources:
   - ../../../components/ara
