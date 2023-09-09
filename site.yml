@@ -22,7 +22,9 @@
       when:
         - ansible_distribution == 'Ubuntu'
         - common__zabbix_enabled
-    - role: "ansible-cron"
+    - role: ansible-cron
+      tags:
+        - ansible-cron
     - role: "devsec.hardening.ssh_hardening"
       vars:
         ssh_kerberos_supprt: no
