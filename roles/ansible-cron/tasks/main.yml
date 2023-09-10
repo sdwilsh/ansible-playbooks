@@ -119,7 +119,7 @@
       export ANSIBLE_LOG_PATH=/var/log/ansible.log
       export ANSIBLE_CALLBACK_PLUGINS=$({{ ansible_python.executable }} -m ara.setup.callback_plugins)
       export ARA_API_CLIENT=http
-      export ARA_API_SERVER=http://ara.hogs.tswn.us
+      export ARA_API_SERVER=https://ara.hogs.tswn.us
       export ARA_CALLBACK_THREADS=4
 
       # Adding up to 15 minutes of jitter so not all machines hit resources at the same time.
