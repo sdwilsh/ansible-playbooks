@@ -10,7 +10,7 @@ roles:
     version: master
   - name: mrlesmithjr.zfs
   - name: nickjj.docker
-    version: v2.2.0
+    version: v2.4.0
 collections:
   - name: ansible.posix
     version: 1.5.4
