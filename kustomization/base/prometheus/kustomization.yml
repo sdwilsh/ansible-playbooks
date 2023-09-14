@@ -8,6 +8,7 @@ resources:
   - namespace.yml
   - prometheus.yml
   - rbac.yml
+  - rules/argocd.yml
   - rules/cpu_load.yml
   - rules/disk.yml
   - rules/memory.yml

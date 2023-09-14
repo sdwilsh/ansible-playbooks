@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: argocd-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: apps
+      interval: 5m
+      rules:
+        - alert: out_of_sync
+          annotations:
+            description: "{{ $labels.name }} is reported as out of sync for more than 15 minutes!"
+          expr: count by (name) (argocd_app_info{sync_status="OutOfSync"}) > 0
+          for: 15m
+          labels:
+            severity: warning
