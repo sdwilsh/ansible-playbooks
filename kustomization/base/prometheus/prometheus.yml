@@ -4,6 +4,7 @@ kind: Prometheus
 metadata:
   name: prometheus
 spec:
+  logLevel: debug # temporary in order to debug dropped data
   ruleSelector: {}
   serviceAccountName: prometheus-service-account
   serviceMonitorSelector:
