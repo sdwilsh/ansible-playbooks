@@ -18,7 +18,7 @@ affinity:
 
 autoscaling:
   enabled: yes
-  minReplicas: 2
+  minReplicas: 1
 
 customConfig:
   # API is enabled for the liveness probe.
