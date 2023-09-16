@@ -8,4 +8,4 @@
   action: accept
   destination:
     group:
-      network_group: MAN-SERVICES-v4
+      address_group: MAN-SERVICES-v4

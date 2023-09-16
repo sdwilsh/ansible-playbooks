@@ -177,6 +177,16 @@ vyos_firewall_global__group:
       members:
         # docker-vm.hogs.tswn.us
         - address: "10.10.0.6"
+    - name: HOME-SERVICES-v4
+      description: Kubernetes Services for the HOME network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.32-10.11.1.63
+    - name: MAN-SERVICES-v4
+      description: Kubernetes Services for the MAN network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.0-10.11.1.31
     - name: MARIADB-SERVER-v4
       afi: ipv4
       members:
@@ -242,16 +252,6 @@ vyos_firewall_global__group:
       members:
         - address: "10.10.0.18"
   network_group:
-    - name: HOME-SERVICES-v4
-      description: Kubernetes Services for the HOME network.
-      afi: ipv4
-      members:
-        - address: 10.11.1.32/27
-    - name: MAN-SERVICES-v4
-      description: Kubernetes Services for the MAN network.
-      afi: ipv4
-      members:
-        - address: 10.11.1.0/27
     - name: MOBILE-WIREGUARD-v4
       description: Mobile wireguard clients
       afi: ipv4

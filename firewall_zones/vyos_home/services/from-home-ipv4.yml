@@ -13,4 +13,4 @@
   action: accept
   destination:
     group:
-      network_group: HOME-SERVICES-v4
+      address_group: HOME-SERVICES-v4
