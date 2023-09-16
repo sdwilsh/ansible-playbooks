@@ -1,0 +1,11 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: my-community-kubevirt-hyperconverged
+  namespace: operators
+spec:
+  channel: stable
+  name: community-kubevirt-hyperconverged
+  source: operatorhubio-catalog
+  sourceNamespace: olm
