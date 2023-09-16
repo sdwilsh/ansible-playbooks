@@ -6,4 +6,5 @@ metadata:
 spec:
   local:
     v4pool:
-      pool: 10.11.1.32/27
+      pool: 10.11.1.32-10.11.1.63
+      subnet: 10.11.0.0/23
