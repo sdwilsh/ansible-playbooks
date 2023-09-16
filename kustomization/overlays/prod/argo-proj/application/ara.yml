@@ -8,7 +8,7 @@ spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: ara
   sources:
     - chart: mariadb-galera
       repoURL: https://charts.bitnami.com/bitnami
