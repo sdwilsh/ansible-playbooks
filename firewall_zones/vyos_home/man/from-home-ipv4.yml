@@ -38,22 +38,3 @@
   source:
     group:
       address_group: "FILE-SERVER-v4"
-- description: Allow MariaDB connections from specific hosts
-  action: accept
-  destination:
-    group:
-      address_group: MARIADB-SERVER-v4
-  protocol: tcp
-  state:
-    new: yes
-  source:
-    group:
-      address_group: MARIADB-TALKERS-v4
-- description: Allow ARA Connections
-  action: accept
-  protocol: tcp
-  state:
-    new: true
-  destination:
-    address: 10.10.0.17
-    port: 8000
