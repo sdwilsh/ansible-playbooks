@@ -9,6 +9,13 @@ spec:
     - name: apps
       interval: 5m
       rules:
+        - alert: unhealthy
+          annotations:
+            description: "{{ $labels.name }} is reported as unhealthy for more than 5 minutes!"
+          expr: count by (name) (argocd_app_info{health_status!="Healthy"}) > 0
+          for: 5m
+          labels:
+            severity: warning
         - alert: out_of_sync
           annotations:
             description: "{{ $labels.name }} is reported as out of sync for more than 15 minutes!"
