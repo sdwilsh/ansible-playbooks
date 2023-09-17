@@ -17,4 +17,5 @@ patches:
       kind: Ingress
       name: ara-ingress
 resources:
+  - namespace.yml
   - ../../../components/ara
