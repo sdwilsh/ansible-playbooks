@@ -17,7 +17,6 @@ common__nameservers:
 
 kairos_managed_networks:
   - name: man
-    address: "{{ common__ip_addresses | ansible.utils.ipaddr('10.10.0.0/24') | first }}"
     vlan_id: 10
   - name: services
     address: "{{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | first }}"

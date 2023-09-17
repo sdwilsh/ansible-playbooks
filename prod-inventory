@@ -18,15 +18,15 @@ loki.hogs.tswn.us ansible_host=10.117.0.23
 monitor.house.gem.hogs.tswn.us ansible_host=10.117.0.24
 
 [kairos_node]
-node01.hogs.tswn.us ansible_host=10.10.0.101
+node01.hogs.tswn.us ansible_host=10.11.0.101
 
 [kairos_controlplane:children]
 kairos_node
 
 [kairos_worker]
-worker01.hogs.tswn.us ansible_host=10.10.0.104
-temp-worker01.hogs.tswn.us ansible_host=10.10.0.110
-temp-worker02.hogs.tswn.us ansible_host=10.10.0.111
+worker01.hogs.tswn.us ansible_host=10.11.0.104
+temp-worker01.hogs.tswn.us ansible_host=10.11.0.110
+temp-worker02.hogs.tswn.us ansible_host=10.11.0.111
 [kairos_worker:children]
 kairos_node
 
