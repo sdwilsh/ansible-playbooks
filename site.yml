@@ -38,7 +38,6 @@
     - name: "Flush handlers from core roles"
       ansible.builtin.meta: "flush_handlers"
 - import_playbook: "plays/groups/dns.yml"
-- import_playbook: plays/groups/mariadb.yml
 - import_playbook: plays/groups/pikvm.yml
 - import_playbook: plays/hosts/docker.hogs.tswn.us.yml
 - import_playbook: "plays/hosts/docker-ssd.hogs.tswn.us.yml"
