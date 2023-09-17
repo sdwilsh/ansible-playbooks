@@ -1,0 +1,48 @@
+---
+apiVersion: mariadb.mmontes.io/v1alpha1
+kind: MariaDB
+metadata:
+  name: ara-galera-db
+spec:
+  database: ara
+  galera:
+    enabled: true
+    primary:
+      podIndex: 0
+      automaticFailover: true
+    recovery:
+      clusterBootstrapTimeout: 10m
+      clusterHealthyTimeout: 3m
+      enabled: true
+      podRecoveryTimeout: 5m
+      podSyncTimeout: 5m
+    replicaThreads: 1
+    sst: mariabackup
+    volumeClaimTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 300Mi
+      storageClassName: longhorn-crypto-global
+  image:
+    repository: mariadb
+    pullPolicy: IfNotPresent
+  passwordSecretKeyRef:
+    key: mariadb-password
+    name: ara-credentials
+  podSecurityContext:
+    runAsUser: 0
+  rootPasswordSecretKeyRef:
+    key: mariadb-root-password
+    name: ara-credentials
+  port: 3306
+  replicas: 3
+  username: ara
+  volumeClaimTemplate:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 4Gi
+    storageClassName: longhorn-crypto-global

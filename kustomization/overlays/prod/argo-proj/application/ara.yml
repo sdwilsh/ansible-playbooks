@@ -9,28 +9,9 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: ara
-  sources:
-    - chart: mariadb-galera
-      repoURL: https://charts.bitnami.com/bitnami
-      targetRevision: 7.5.5
-      helm:
-        parameters:
-          - name: db.name
-            value: ara
-          - name: db.user
-            value: ara
-          - name: existingSecret
-            value: ara-credentials
-          - name: namespaceOverride
-            value: ara
-          - name: persistence.size
-            value: 4Gi
-          - name: persistence.storageClass
-            value: longhorn-crypto-global
-          - name: podAntiAffinityPreset
-            value: hard
-    - path: kustomization/overlays/prod/ara
-      repoURL: https://github.com/sdwilsh/ansible-playbooks
-      targetRevision: HEAD
+  source:
+    path: kustomization/overlays/prod/ara
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
   syncPolicy:
     automated: {}

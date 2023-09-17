@@ -1,0 +1,18 @@
+---
+apiVersion: helm.mariadb.mmontes.io/v1alpha1
+kind: MariadbOperator
+metadata:
+  name: mariadb-operator
+spec:
+  clusterName: cluster.local
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      scrapeTimeout: 25s
+  webhook:
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      scrapeTimeout: 25s
