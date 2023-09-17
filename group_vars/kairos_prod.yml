@@ -1,7 +1,7 @@
 ---
 k3s_controlplane_group: kairos_controlplane
 k3s_controlplane_san:
-  - 10.10.0.100
+  - 10.11.0.100
   - k3s.hogs.tswn.us
 k3s_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256

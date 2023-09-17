@@ -9,3 +9,8 @@
   destination:
     group:
       address_group: MAN-SERVICES-v4
+- description: Allow SERVICE-TALKERS access
+  action: accept
+  source:
+    group:
+      address_group: SERVICE-TALKERS-v4
