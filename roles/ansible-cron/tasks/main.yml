@@ -22,20 +22,17 @@
   ansible.builtin.package:
     name: "{% if ansible_distribution == 'FreeBSD' %}sysutils/ansible{% else %}ansible{% endif %}"
     state: "present"
-- name: "Ensure python deps are installed"
+- name: Ensure python deps are installed
   ansible.builtin.pip:
-    extra_args: "--user"
+    extra_args: --user
     name: "{{ item }}"
-    state: "latest"
+    state: latest
   become: yes
-  become_user: "ansible"
+  become_user: ansible
   loop:
-    - "ara"
-    - "jmespath" # For community.general.json_query
-    - "netaddr"
-    # Can be removed once we have 2.13 or later
-    # See https://github.com/ansible/ansible/issues/77624
-    - "resolvelib<0.6.0"
+    - ara
+    - jmespath # For community.general.json_query
+    - netaddr
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
