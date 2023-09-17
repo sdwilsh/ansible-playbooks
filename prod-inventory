@@ -17,11 +17,6 @@ harvest.hogs.tswn.us ansible_host=10.117.0.17
 loki.hogs.tswn.us ansible_host=10.117.0.23
 monitor.house.gem.hogs.tswn.us ansible_host=10.117.0.24
 
-[mariadb]
-mariadb01.hogs.tswn.us ansible_host=10.10.0.25
-mariadb02.hogs.tswn.us ansible_host=10.10.0.26
-mariadb03.hogs.tswn.us ansible_host=10.10.0.27
-
 [kairos_node]
 node01.hogs.tswn.us ansible_host=10.10.0.101
 
