@@ -2,10 +2,6 @@
 - hosts: docker.hogs.tswn.us
   become: yes
   roles:
-    - role: ara-docker
-      tags:
-        - docker
-        - ara
     - role: docker-esphome
       tags:
         - docker
