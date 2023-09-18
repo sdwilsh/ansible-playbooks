@@ -11,11 +11,11 @@ spec:
       podIndex: 0
       automaticFailover: true
     recovery:
-      clusterBootstrapTimeout: 10m
-      clusterHealthyTimeout: 3m
+      clusterBootstrapTimeout: 10m0s
+      clusterHealthyTimeout: 3m0s
       enabled: true
-      podRecoveryTimeout: 5m
-      podSyncTimeout: 5m
+      podRecoveryTimeout: 5m0s
+      podSyncTimeout: 5m0s
     replicaThreads: 1
     sst: mariabackup
     volumeClaimTemplate:
