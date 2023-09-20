@@ -15,6 +15,6 @@ resources:
   # - application/opensearch-operator.yml
   - application/purelb.yml
   - application/tigera-operator.yml
-  # - application/traefik.yml
+  - application/traefik-crds.yml
   - application/vector-agent.yml
   - application/vector-aggregator.yml
