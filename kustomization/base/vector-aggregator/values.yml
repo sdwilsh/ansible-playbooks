@@ -16,10 +16,6 @@ affinity:
           topologyKey: kubernetes.io/hostname
         weight: 100
 
-autoscaling:
-  enabled: yes
-  minReplicas: 1
-
 customConfig:
   # API is enabled for the liveness probe.
   api:
