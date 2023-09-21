@@ -4,6 +4,6 @@ kind: Component
 
 images:
   - name: ubuntu
-    newTag: "22.04"
+    newTag: "23.10"
 resources:
   - pod.yml
