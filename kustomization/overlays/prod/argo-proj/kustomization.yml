@@ -29,6 +29,7 @@ patches:
 resources:
   - ../../../base/argo-proj
   - application/ara.yml
+  - application/network-addons-operator.yml
   - application/olm-operators.yml
   - application/prometheus.yml
   - application/traefik-man.yml

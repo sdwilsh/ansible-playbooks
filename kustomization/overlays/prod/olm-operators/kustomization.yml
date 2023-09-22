@@ -4,5 +4,4 @@ kind: Kustomization
 
 resources:
   - mariadboperator.yml
-  - networkaddonsconfig.yml
   - subscriptions.yml
