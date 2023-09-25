@@ -119,6 +119,10 @@ bind_zones:
         ip: "10.10.0.10"
       - name: "ipmi.dadab.hogs"
         ip: "10.10.0.11"
+      - name: impi-chanttogreen.hogs
+        ip: 10.10.0.12
+      - name: chanttogreen.hogs
+        ip: 10.10.0.13
       - name: "rack-switch01.hogs.tswn.us"
         ip: "10.10.0.15"
       - name: "server.zabbix.hogs"
