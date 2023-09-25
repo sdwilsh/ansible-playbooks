@@ -119,7 +119,7 @@ bind_zones:
         ip: "10.10.0.10"
       - name: "ipmi.dadab.hogs"
         ip: "10.10.0.11"
-      - name: impi-chanttogreen.hogs
+      - name: ipmi-chanttogreen.hogs
         ip: 10.10.0.13
       - name: chanttogreen.hogs
         ip: 10.10.0.14
