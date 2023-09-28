@@ -3,6 +3,7 @@
   "extends": [
     "config:base"
   ],
+  "configMigration": true,
   "packageRules": [
     {
       "matchPackageNames": ["quay.io/kairos/kairos-ubuntu-22-lts"],
