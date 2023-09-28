@@ -111,7 +111,7 @@
               - "localhost:8091/health/zwave"
             timeout: "5s"
           # renovate:
-          image: zwavejs/zwave-js-ui:8.26.0
+          image: zwavejs/zwave-js-ui:9.0.1
           networks:
             - "zwave"
           volumes:
