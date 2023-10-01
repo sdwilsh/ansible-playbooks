@@ -58,17 +58,16 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    # renovate: depName=quay.io/kairos/kairos-ubuntu-22-lts
-    kairos_version: "v2.3.1-k3sv1.26.6+k3s1"
+    kairos_version: "v2.4.0-k3sv1.27.3+k3s1"
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
   gather_facts: no
   order: sorted
   serial:
-    - 1 # This will always be the control plane node.
-    - 1 # This will be the first control plane & worker node.
-    - 3 # The remaining control plane & worker node plus any worker nodes in chunks of three.
+    - 1 # This will always be the first control plane node.
+    - 1 # This will be the second node.
+    - 3 # The remaining nodes in chunks of three.
   strategy: free
   tasks:
     # TODO(sdwilsh): This does not work today because we need to be able to select specific pods.  See
