@@ -4,4 +4,4 @@ kind: Kustomization
 
 resources:
   # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml
+  - https://raw.githubusercontent.com/projectcalico/calico/v3.26.2/manifests/tigera-operator.yaml
