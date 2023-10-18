@@ -67,6 +67,7 @@ common__ntp_pool: "pool.ntp.hogs.tswn.us"
 docker__users:
   - "ansible"
   - "zabbix"
+docker__pip_docker_compose_state: present
 
 reboot_test_command: whoami
 ssh_listen_to: "{{ common__ip_addresses | ansible.netcommon.ipaddr('address') }}"
