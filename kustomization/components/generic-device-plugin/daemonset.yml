@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: generic-device-plugin
-  namespace: kube-system
   labels:
     app.kubernetes.io/name: generic-device-plugin
 spec:
@@ -23,20 +22,7 @@ spec:
         effect: NoSchedule
       containers:
       - image: ghcr.io/squat/generic-device-plugin
-        args:
-        - --device
-        - |
-          name: cdrom
-          groups:
-            - paths:
-                - path: /dev/cdrom
-                - path: /dev/sg0
-        - --device
-        - |
-          name: quicksync
-          groups:
-            - paths:
-                - path: /dev/dri
+        args: []
         name: generic-device-plugin
         resources:
           requests:

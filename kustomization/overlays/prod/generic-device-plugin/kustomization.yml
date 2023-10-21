@@ -5,5 +5,14 @@ kind: Kustomization
 components:
   - ../../../components/generic-device-plugin
 namespace: generic-device-plugin
+patches:
+  - target:
+      kind: DaemonSet
+      name: generic-device-plugin
+    path: patches/add_cdrom.yml
+  - target:
+      kind: DaemonSet
+      name: generic-device-plugin
+    path: patches/add_quicksync.yml
 resources:
   - namespace.yml

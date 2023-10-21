@@ -1,0 +1,12 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value:  --device
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: |
+    name: cdrom
+    groups:
+      - paths:
+          - path: /dev/cdrom
+          - path: /dev/sg0
