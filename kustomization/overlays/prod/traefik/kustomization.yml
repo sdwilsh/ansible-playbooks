@@ -9,7 +9,7 @@ patches:
   - path: patches/change_ingress_host.yml
     target:
       kind: Ingress
-      name: traefik-dashboard-.*ingress
+      name: traefik-dashboard-ingress
   - path: patches/set_ingress_published_service.yml
     target:
       kind: Deployment
