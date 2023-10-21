@@ -1,0 +1,17 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: generic-device-plugin
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: generic-device-plugin
+  source:
+    path: kustomization/overlays/prod/generic-device-plugin
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}

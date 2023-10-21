@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: ghcr.io/squat/generic-device-plugin
+    # Alas, this is currently not versioned: https://github.com/squat/generic-device-plugin/issues/24
+    newTag: latest
+resources:
+  - daemonset.yml
