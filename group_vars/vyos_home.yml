@@ -207,6 +207,11 @@ vyos_firewall_global__group:
         - address: "10.117.0.27"
         # sdwilsh-desktop
         - address: "10.117.0.31"
+    - name: OPEN-SERVICES-v4
+      description: Kubernetes Services for the any local network network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.64-10.11.1.95
     - name: "PEER-v4"
       description: "IP Addresses of our Peer Router ({{ ansible_managed }})"
       afi: "ipv4"

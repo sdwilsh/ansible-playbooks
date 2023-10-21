@@ -19,3 +19,14 @@ spec:
     v4pool:
       aggregation: default
       subnet: 10.11.0.0/23
+---
+# This is not firewalled off for anything on the home network.
+apiVersion: purelb.io/v1
+kind: ServiceGroup
+metadata:
+  name: open-servicegroup
+spec:
+  local:
+    v4pool:
+      aggregation: default
+      subnet: 10.11.0.0/23

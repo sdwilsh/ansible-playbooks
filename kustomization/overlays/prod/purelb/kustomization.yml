@@ -12,5 +12,9 @@ patches:
     target:
       name: home-servicegroup
       kind: ServiceGroup
+  - path: patches/set_open_pool.yml
+    target:
+      name: open-servicegroup
+      kind: ServiceGroup
 resources:
   - ../../../base/purelb

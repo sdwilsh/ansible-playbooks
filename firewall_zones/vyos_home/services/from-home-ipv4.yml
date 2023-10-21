@@ -14,3 +14,8 @@
   destination:
     group:
       address_group: HOME-SERVICES-v4
+- description: Allow access to OPEN services
+  action: accept
+  destination:
+    group:
+      address_group: OPEN-SERVICES-v4
