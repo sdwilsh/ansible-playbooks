@@ -215,6 +215,8 @@ bind_zones:
         ip: 10.11.1.0
       - name: prometheus.hogs
         ip: 10.11.1.0
+      - name: traefik-home.hogs
+        ip: 10.11.1.0
       - name: traefik-man.hogs
         ip: 10.11.1.0
 
