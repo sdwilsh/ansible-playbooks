@@ -208,17 +208,15 @@ bind_zones:
         ip: 10.11.0.104
       # At some point, this should ask the k3s control plane what the IP address is
       - name: ara.hogs
-        ip: 10.11.1.0
+        ip: 10.11.1.64
       - name: argo-cd.hogs
-        ip: 10.11.1.0
+        ip: 10.11.1.64
       - name: longhorn.hogs
-        ip: 10.11.1.0
+        ip: 10.11.1.64
       - name: prometheus.hogs
-        ip: 10.11.1.0
-      - name: traefik-home.hogs
-        ip: 10.11.1.0
-      - name: traefik-man.hogs
-        ip: 10.11.1.0
+        ip: 10.11.1.64
+      - name: traefik.hogs
+        ip: 10.11.1.64
 
       # Services Networks
       - name: "installation02"

@@ -7,7 +7,6 @@ metadata:
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: traefik-dashboard-ingress
 spec:
-  ingressClassName: traefik-man-ingressclass
   rules:
     - http:
         paths:

@@ -8,7 +8,6 @@ metadata:
   name: longhorn-frontend-ingress
   namespace: longhorn-system
 spec:
-  ingressClassName: traefik-man-ingressclass
   rules:
     - http:
         paths:

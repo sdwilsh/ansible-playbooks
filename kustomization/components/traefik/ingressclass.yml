@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
-  name: traefik-man-ingressclass
+  name: traefik-ingressclass
   annotations:
     ingressclass.kubernetes.io/is-default-class: true
   labels:

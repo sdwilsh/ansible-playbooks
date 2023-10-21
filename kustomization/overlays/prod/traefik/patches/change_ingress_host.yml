@@ -1,4 +1,4 @@
 ---
 - op: add
   path: /spec/rules/0/host
-  value: traefik-man.hogs.tswn.us
+  value: traefik.hogs.tswn.us
