@@ -32,4 +32,3 @@ resources:
   - application/generic-device-plugin.yml
   - application/olm-operators.yml
   - application/prometheus.yml
-  - application/traefik-man.yml
