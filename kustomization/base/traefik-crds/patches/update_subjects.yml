@@ -6,7 +6,4 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: traefik-ingress-controller
-    namespace: traefik-home
-  - kind: ServiceAccount
-    name: traefik-ingress-controller
     namespace: traefik-man
