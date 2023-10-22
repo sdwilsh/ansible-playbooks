@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rips-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Ti
+  mountOptions:
+    - nfsver=4
+  nfs:
+    path: /mnt/rust0/nfs/mkv
+    server: chanttogreen.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain

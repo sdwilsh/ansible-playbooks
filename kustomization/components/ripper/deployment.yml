@@ -31,13 +31,8 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
-            - mountPath: /out
-              name: rips
       volumes:
         # Temporary as I play around with this.
         - emptyDir:
             medium: Memory
           name: config
-        # Temporary as I play around with this.
-        - emptyDir: {}
-          name: rips

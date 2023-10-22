@@ -9,3 +9,10 @@
   protocol: tcp
   destination:
     port: "80"
+- description: Allow access to NFS server
+  action: accept
+  protocol: tcp
+  destination:
+    group:
+      address_group: FILE-SERVER-v4
+      port_group: NFS

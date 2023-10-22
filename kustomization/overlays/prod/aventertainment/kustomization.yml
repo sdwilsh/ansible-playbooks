@@ -6,6 +6,10 @@ components:
   - ../../../components/ripper
 namespace: aventertainment
 patches:
+  - path: patches/add_ripper_volumes.yml
+    target:
+      kind: Deployment
+      name: ripper-deployment
   - path: patches/change_ripper_ingress_host.yml
     target:
       kind: Ingress
@@ -16,3 +20,5 @@ patches:
       name: ripper-ingress
 resources:
   - namespace.yml
+  - persistentvolume.yml
+  - persistentvolumeclaim.yml

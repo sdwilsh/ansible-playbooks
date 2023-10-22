@@ -165,12 +165,14 @@ vyos_firewall_global__group:
       afi: "ipv4"
       members:
         - address: "10.117.0.23"
-    - name: "FILE-SERVER-v4"
+    - name: FILE-SERVER-v4
       description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
-      afi: "ipv4"
+      afi: ipv4
       members:
         # firstlightweaveslivingsong.hogs.tswn.us
-        - address: "10.117.0.10"
+        - address: 10.117.0.10
+        # chanttogreen.hogs.tswn.us
+        - address: 10.10.0.14
     - name: "HASS-CIFS-from-MAN-v4"
       description: "IP Addresses from MAN that can talk to HASS Samba Server ({{ ansible_managed }})"
       afi: "ipv4"
@@ -275,8 +277,7 @@ vyos_firewall_global__group:
       description: "{{ ansible_managed }}"
       members:
         - port: "53"
-    - name: "NFS"
-      description: "{{ ansible_managed }}"
+    - name: NFS
       members:
         - port: "111"
         - port: "674"
