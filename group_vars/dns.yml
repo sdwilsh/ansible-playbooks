@@ -105,8 +105,6 @@ bind_zones:
         ip: "10.117.0.50"
 
       # MAN Network
-      - name: "al-cygni.hogs"
-        ip: "10.10.0.2"
       - name: "ns1"
         ip: "10.10.0.3"
       - name: "ns2"
@@ -131,17 +129,6 @@ bind_zones:
         ip: "10.10.0.19"
       - name: "sdwilsh-dev.hogs"
         ip: "10.10.0.20"
-      - name: mariadb.hogs
-        ip:
-          - 10.10.0.25
-          # - 10.10.0.26
-          # - 10.10.0.27
-      - name: mariadb01.hogs
-        ip: 10.10.0.25
-      - name: mariadb02.hogs
-        ip: 10.10.0.26
-      - name: mariadb03.hogs
-        ip: 10.10.0.27
       - name: "ups01.hogs"
         ip: "10.10.0.30"
       - name: "ups02.hogs"
