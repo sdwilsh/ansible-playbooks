@@ -4,3 +4,8 @@
   protocol: icmp
   icmp:
     type_name: any
+- description: Allow access to proxied services
+  action: accept
+  protocol: tcp
+  destination:
+    port: "80"

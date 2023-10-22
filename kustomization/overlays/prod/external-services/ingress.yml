@@ -4,16 +4,18 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: ripper-ingress
+  name: nas-ingress
 spec:
   rules:
-    - http:
+    - host: nas.hogs.tswn.us
+      http:
         paths:
           - backend:
               service:
-                name: ripper-svc
+                name: nas-svc
                 port:
-                  number: 80
+                  name: http
             path: /
             pathType: Prefix

@@ -226,6 +226,11 @@ vyos_firewall_global__group:
         - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "172.16.5.{{ vyos__peer_host_id_ipv4 }}"
+    - name: PROXIED-SERVICES-v4
+      description: Services not on the SERVICES network that are proxied through it.
+      members:
+        # chanttogreen.hogs.tswn.us
+        - address: 10.10.0.13
     - name: SERVICE-TALKERS-v4
       description: IP Addresses allowed to talk to all services
       members:

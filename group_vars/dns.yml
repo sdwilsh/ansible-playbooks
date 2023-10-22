@@ -215,6 +215,8 @@ bind_zones:
         ip: 10.11.1.64
       - name: longhorn.hogs
         ip: 10.11.1.64
+      - name: nas.hogs
+        ip: 10.11.1.64
       - name: prometheus.hogs
         ip: 10.11.1.64
       - name: ripper.hogs
