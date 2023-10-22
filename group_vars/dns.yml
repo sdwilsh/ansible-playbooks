@@ -109,8 +109,6 @@ bind_zones:
         ip: "10.10.0.5"
       - name: harvest.hogs
         ip: 10.10.0.6
-        aliases:
-          - opensprinkler.hogs
       - name: "docker.hogs"
         ip: "10.10.0.8"
       - name: "ipmi.firstlightweaveslivingsong.hogs"
@@ -203,6 +201,8 @@ bind_zones:
       - name: longhorn.hogs
         ip: 10.11.1.64
       - name: nas.hogs
+        ip: 10.11.1.64
+      - name: opensprinkler.hogs
         ip: 10.11.1.64
       - name: prometheus.hogs
         ip: 10.11.1.64

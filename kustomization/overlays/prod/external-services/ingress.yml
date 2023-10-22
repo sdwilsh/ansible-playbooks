@@ -6,7 +6,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: nas-ingress
+  name: external-services-ingress
 spec:
   rules:
     - host: nas.hogs.tswn.us
@@ -15,6 +15,16 @@ spec:
           - backend:
               service:
                 name: nas-svc
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+    - host: opensprinkler.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: opensprinkler-svc
                 port:
                   name: http
             path: /

@@ -8,7 +8,9 @@
   action: accept
   protocol: tcp
   destination:
-    port: "80"
+    group:
+      address_group: PROXIED-SERVICES-v4
+      port_group: PROXIED-PORTS
 - description: Allow access to NFS server
   action: accept
   protocol: tcp

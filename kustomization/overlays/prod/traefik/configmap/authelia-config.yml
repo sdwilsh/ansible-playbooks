@@ -27,6 +27,10 @@ access_control:
       networks:
         - man
       policy: bypass
+    - domain: opensprinkler.hogs.tswn.us
+      networks:
+        - home
+      policy: bypass
     - domain: "*.hogs.tswn.us"
       networks:
         - home

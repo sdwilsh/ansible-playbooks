@@ -231,6 +231,8 @@ vyos_firewall_global__group:
     - name: PROXIED-SERVICES-v4
       description: Services not on the SERVICES network that are proxied through it.
       members:
+        # harvest.hogs.tswn.us
+        - address: 10.10.0.6
         # chanttogreen.hogs.tswn.us
         - address: 10.10.0.14
     - name: SERVICE-TALKERS-v4
@@ -285,6 +287,10 @@ vyos_firewall_global__group:
     - name: NTP
       members:
         - port: 123
+    - name: PROXIED-PORTS
+      members:
+        - port: 80
+        - port: 8080
     - name: "UNIFI-DEVICE-TCP"
       description: "Ports used by the Unifi Controller to talk to devices over TCP ({{ ansible_managed }})"
       members:
