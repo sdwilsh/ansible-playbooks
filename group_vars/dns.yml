@@ -217,6 +217,8 @@ bind_zones:
         ip: 10.11.1.64
       - name: prometheus.hogs
         ip: 10.11.1.64
+      - name: ripper.hogs
+        ip: 10.11.1.64
       - name: traefik.hogs
         ip: 10.11.1.64
 

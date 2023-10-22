@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ripper-deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ripper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ripper
+    spec:
+      containers:
+        - name: docker-ripper
+          image: rix1337/docker-ripper
+          ports:
+            - containerPort: 9090
+          resources:
+            requests:
+              squat.ai/cdrom: 1
+              cpu: 250m
+              memory: 1Gi
+            limits:
+              squat.ai/cdrom: 1
+              cpu: 1000m
+              memory: 4Gi
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /out
+              name: rips
+      volumes:
+        # Temporary as I play around with this.
+        - emptyDir:
+            medium: Memory
+          name: config
+        # Temporary as I play around with this.
+        - emptyDir: {}
+          name: rips
