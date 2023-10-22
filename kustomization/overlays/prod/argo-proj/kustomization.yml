@@ -29,6 +29,7 @@ patches:
 resources:
   - ../../../base/argo-proj
   - application/ara.yml
+  - application/aventertainment.yml
   - application/generic-device-plugin.yml
   - application/olm-operators.yml
   - application/prometheus.yml
