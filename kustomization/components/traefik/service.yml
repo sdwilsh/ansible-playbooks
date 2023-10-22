@@ -18,6 +18,7 @@ kind: Service
 metadata:
   name: traefik-svc
 spec:
+  externalTrafficPolicy: Local
   ports:
     - name: web
       protocol: TCP

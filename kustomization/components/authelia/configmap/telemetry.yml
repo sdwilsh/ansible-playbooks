@@ -1,0 +1,5 @@
+# ---
+# https://www.authelia.com/configuration/telemetry/introduction/
+telemetry:
+  metrics:
+    enabled: false

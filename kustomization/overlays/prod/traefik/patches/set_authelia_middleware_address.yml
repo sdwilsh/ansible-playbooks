@@ -1,0 +1,8 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  forwardAuth:
+    address: http://authelia-svc.traefik.svc.cluster.local:9091/api/verify?rd=https%3A%2F%2Fauth.tswn.us%2F

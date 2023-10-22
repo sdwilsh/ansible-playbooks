@@ -1,0 +1,15 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: forwardauth-authelia-middleware
+spec:
+  forwardAuth:
+    # Anyone who uses this component should patch in an address line that looks like this:
+    # address: http://authelia-svc.<namespace>.svc.cluster.local:9091/api/verify?rd=<url-encoded-domain>
+    authResponseHeaders:
+      - Remote-Email
+      - Remote-Groups
+      - Remote-Name
+      - Remote-User
+    trustForwardHeader: true

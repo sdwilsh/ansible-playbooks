@@ -211,6 +211,8 @@ bind_zones:
         ip: 10.11.1.64
       - name: argo-cd.hogs
         ip: 10.11.1.64
+      - name: auth
+        ip: 10.11.1.64
       - name: longhorn.hogs
         ip: 10.11.1.64
       - name: prometheus.hogs

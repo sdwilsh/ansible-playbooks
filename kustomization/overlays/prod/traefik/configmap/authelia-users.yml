@@ -1,0 +1,7 @@
+# ---
+users:
+  sdwilsh:
+    disabled: false
+    displayname: Shawn
+    password: $argon2id$v=19$m=65536,t=3,p=4$d+0GxNVFTe3vv38Ic4Ssrw$N7MNzSrpEIpMDsQqk8Rxy8ellmYZRUVCNu02svY6pf8
+    email: sdwilsh@pm.me
