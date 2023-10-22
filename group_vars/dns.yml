@@ -57,10 +57,6 @@ bind_zones:
         ip: "10.117.0.13"
       - name: "energy.hogs"
         ip: "10.117.0.16"
-      - name: "harvest.hogs"
-        ip: "10.117.0.17"
-        aliases:
-          - "opensprinkler.hogs"
       - name: "cortana.hogs"
         ip: "10.117.0.19"
         aliases:
@@ -111,6 +107,10 @@ bind_zones:
         ip: "10.10.0.4"
       - name: "vcenter.hogs"
         ip: "10.10.0.5"
+      - name: harvest.hogs
+        ip: 10.10.0.6
+        aliases:
+          - opensprinkler.hogs
       - name: "docker.hogs"
         ip: "10.10.0.8"
       - name: "ipmi.firstlightweaveslivingsong.hogs"
