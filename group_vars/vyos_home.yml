@@ -230,7 +230,7 @@ vyos_firewall_global__group:
       description: Services not on the SERVICES network that are proxied through it.
       members:
         # chanttogreen.hogs.tswn.us
-        - address: 10.10.0.13
+        - address: 10.10.0.14
     - name: SERVICE-TALKERS-v4
       description: IP Addresses allowed to talk to all services
       members:
