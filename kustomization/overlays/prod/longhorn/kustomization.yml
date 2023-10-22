@@ -7,5 +7,9 @@ patches:
     target:
       kind: Ingress
       name: longhorn-frontend-ingress
+  - path: patches/set_ingress_middleware.yml
+    target:
+      kind: Ingress
+      name: longhorn-frontend-ingress
 resources:
   - ../../../base/longhorn
