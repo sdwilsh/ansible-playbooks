@@ -18,5 +18,9 @@ patches:
     target:
       kind: Ingress
       name: ara-ingress
+  - path: patches/set_ingress_middleware.yml
+    target:
+      kind: Ingress
+      name: ara-ingress
 resources:
   - namespace.yml
