@@ -268,10 +268,10 @@
     - name: Setup SERVICES route
       vyos.vyos.vyos_config:
         lines:
+          - set protocols static table 11 interface-route 0.0.0.0/0 next-hop-interface wg0
           - set policy route SERVICES rule 10 destination group network-group RFC1918-v4
           - set policy route SERVICES rule 10 set table main
           - set policy route SERVICES rule 20 set table 11
-          - set protocols static table 11 interface-route 0.0.0.0/0 next-hop-interface wg0
           - set interfaces ethernet eth1 vif 11 policy route 'SERVICES'
         save: yes
       tags:
