@@ -13,7 +13,7 @@ images:
     newTag: 7.5.187
   - name: mongodb/mongodb-community-server
     # Unifi only officially supports 3.6-4.4. 
-    newTag: 4.4.25-ubuntu2004
+    newTag: 5.0.21-ubuntu2004
 resources:
   - deployment.yml
   - ingress.yml
