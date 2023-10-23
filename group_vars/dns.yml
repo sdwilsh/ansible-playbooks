@@ -212,6 +212,8 @@ bind_zones:
         ip: 10.11.1.64
       - name: unifi
         ip: 10.11.1.64
+      - name: unifi-inform
+        ip: 10.11.1.65
 
       # Services Networks
       - name: "installation02"
