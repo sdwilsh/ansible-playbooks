@@ -1,12 +1,15 @@
 ---
 - hosts: localhost
   gather_facts: false
+  vars_prompt:
+    - name: host
+      prompt: What is the innventory hostname to generate a host configuration for?
+      private: no
   tasks:
     - name: Sanity Check
       ansible.builtin.assert:
-        fail_msg: Pass host in inventory to playbook invocation with `ansible-playbook plays/kairos/host_conf.yml --extra-vars "host=HOST"
+        fail_msg: "Specified host '{{ host }}' does not meet the requirements."
         that:
-          - host is defined
           - host in hostvars
           - "'k3s_token' in hostvars[host]"
       tags:
