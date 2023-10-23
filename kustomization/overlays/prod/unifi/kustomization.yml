@@ -14,6 +14,10 @@ patches:
     target:
       kind: Ingress
       name: una-ingress
+  - path: patches/set_una_ingress_middleware.yml
+    target:
+      kind: Ingress
+      name: una-ingress
   - path: patches/set_una_pvc_storageClassName.yml
     target:
       kind: PersistentVolumeClaim

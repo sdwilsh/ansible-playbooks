@@ -31,7 +31,7 @@ access_control:
       networks:
         - home
       policy: bypass
-    - domain: "*.hogs.tswn.us"
+    - domain: "*.tswn.us"
       networks:
         - home
       policy: one_factor
