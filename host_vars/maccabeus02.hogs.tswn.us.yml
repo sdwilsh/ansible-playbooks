@@ -18,10 +18,7 @@ vyos_interfaces__wireguard:
       - name: "tartarus01"
         allowed_ips:
           ipv4:
-            - network: "10.10.1.6/32"
-            - network: "10.117.2.0/24"
-            - network: "224.0.0.5/32"
-            - network: "224.0.0.6/32"
+            - network: 0.0.0.0/0
         ipv4:
           - address: "149.248.37.12"
         persistent_keepalive_sec: 15

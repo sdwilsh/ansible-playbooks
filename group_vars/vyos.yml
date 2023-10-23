@@ -42,12 +42,14 @@ vyos_ospf_interfaces__config: []
 vyos_ospfv2__neighbors: []
 vyos_ospfv2_parameters__router_id: "10.9.0.{{ vyos__host_id_ipv4 }}"
 vyos_ospfv2__areas:
-  - area_id: "0"
-    authentication: "md5"
+  # Home Routers
+  - area_id: 0
+    authentication: md5
     network:
       - address: 10.10.0.0/24
       - address: 10.10.1.0/30
       - address: 10.10.1.4/30
+      - address: 10.11.0.0/23
       - address: 10.117.0.0/23
       - address: 10.117.2.0/24
   # WAN Routers

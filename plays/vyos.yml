@@ -234,25 +234,29 @@
 - hosts: vyos_home
   gather_facts: false
   tasks:
-    - name: "Setup Outbound OSPF Redistribution"
+    - name: Setup Outbound OSPF Redistribution
       vyos.vyos.vyos_config:
         lines:
-          - "set policy access-list 150 description 'Outbound OSPF Redistribution'"
-          - "set policy access-list 150 rule 10 action 'permit'"
-          - "set policy access-list 150 rule 10 destination any"
-          - "set policy access-list 150 rule 10 source inverse-mask '0.0.1.255'"
-          - "set policy access-list 150 rule 10 source network '10.117.0.0'"
-          - "set policy access-list 150 rule 20 action 'permit'"
-          - "set policy access-list 150 rule 20 destination any"
-          - "set policy access-list 150 rule 20 source inverse-mask '0.0.0.255'"
-          - "set policy access-list 150 rule 20 source network '10.10.0.0'"
-          - "set policy access-list 150 rule 1000 action 'deny'"
-          - "set policy access-list 150 rule 1000 destination any"
-          - "set policy access-list 150 rule 1000 source any"
-          - "set protocols ospf access-list 150 export 'connected'"
+          - set policy access-list 150 description 'Outbound OSPF Redistribution'
+          - set policy access-list 150 rule 10 action 'permit'
+          - set policy access-list 150 rule 10 destination any
+          - set policy access-list 150 rule 10 source inverse-mask '0.0.1.255'
+          - set policy access-list 150 rule 10 source network '10.117.0.0'
+          - set policy access-list 150 rule 15 action 'permit'
+          - set policy access-list 150 rule 15 destination any
+          - set policy access-list 150 rule 15 source inverse-mask '0.0.1.255'
+          - set policy access-list 150 rule 15 source network '10.11.0.0'
+          - set policy access-list 150 rule 20 action 'permit'
+          - set policy access-list 150 rule 20 destination any
+          - set policy access-list 150 rule 20 source inverse-mask '0.0.0.255'
+          - set policy access-list 150 rule 20 source network '10.10.0.0'
+          - set policy access-list 150 rule 1000 action 'deny'
+          - set policy access-list 150 rule 1000 destination any
+          - set policy access-list 150 rule 1000 source any
+          - set protocols ospf access-list 150 export 'connected'
         save: yes
       tags:
-        - "ospf"
+        - ospf
 
     - name: "Setup WAN load-balancing"
       vyos.vyos.vyos_config:
@@ -260,6 +264,18 @@
           - "set protocols static interface-route 0.0.0.0/0 next-hop-interface pppoe0 distance 10"
       tags:
         - "routing"
+
+    - name: Setup SERVICES route
+      vyos.vyos.vyos_config:
+        lines:
+          - set policy route SERVICES rule 10 destination group network-group RFC1918-v4
+          - set policy route SERVICES rule 10 set table main
+          - set policy route SERVICES rule 20 set table 11
+          - set protocols static table 11 interface-route 0.0.0.0/0 next-hop-interface wg0
+          - set interfaces ethernet eth1 vif 11 policy route 'SERVICES'
+        save: yes
+      tags:
+        - routing
 
     #
     # NAT
@@ -397,7 +413,7 @@
           - "set nat source rule {{ (rule_number + 1) * 10 }} source address {{ item }}"
           - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
       loop:
-        - 10.82.0.0/24
+        - 10.11.0.0/23
       loop_control:
         index_var: rule_number
       tags:
@@ -414,11 +430,11 @@
         - description: unifi-inform
           port: 8080
           protocol: tcp
-          translation_address: 10.82.0.2
+          translation_address: 10.11.1.65
         - description: unifi-stun
           port: 3478
           protocol: udp
-          translation_address: 10.82.0.2
+          translation_address: 10.11.1.65
       loop_control:
         index_var: rule_number
       tags:

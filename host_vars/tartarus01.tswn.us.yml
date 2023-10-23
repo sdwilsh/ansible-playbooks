@@ -26,7 +26,10 @@ vyos_firewall_global__group:
       description: The v4 address of the Unifi Controller
       afi: ipv4
       members:
-        - address: 10.82.0.2
+        # unifi.tswn.us
+        - address: 10.11.1.64
+        # unifi-inform.tswn.us
+        - address: 10.11.1.65
   port_group:
     - name: UNIFI-DEVICE-TCP
       description: Ports used by the Unifi Controller to talk to devices over TCP
@@ -36,6 +39,10 @@ vyos_firewall_global__group:
       description: Ports used by the Unifi Controller to talk to devices over UDP
       members:
         - port: 3478
+    - name: UNIFI-WEB-TCP
+      description: Ports used by the Unifi Controller for clients
+      members:
+        - port: 443
 
 vyos_firewall__zones:
   - name: CLOUD
@@ -64,36 +71,38 @@ vyos_interfaces__ethernet:
       - address: "149.248.37.12/23"
 
 vyos_interfaces__wireguard:
-  - name: "wg0"
-    description: "maccabeus01 site-to-site"
+  - name: wg0
+    description: maccabeus01 wg0
     ipv4:
-      - address: "10.10.1.2/30"
+      - address: 10.10.1.2/30
     mtu: "1280"
     peers:
-      - name: "maccabeus01"
+      - name: maccabeus01
         allowed_ips:
           ipv4:
-            - network: "0.0.0.0/0"
-            - network: "10.117.0.0/23"
-            - network: "10.10.1.1/32"
-        persistent_keepalive_sec: "15"
+            - network: 0.0.0.0/0
+            - network: 10.10.1.1/32
+            - network: 10.11.0.0/23
+            - network: 10.117.0.0/23
+        persistent_keepalive_sec: 15
         pubkey: "{{ hostvars['maccabeus01.hogs.tswn.us'].wireguard__pubkey }}"
-    port: "51820"
-  - name: "wg1"
-    description: "maccabeus02 site-to-site"
+    port: 51820
+  - name: wg1
+    description: maccabeus02 wg0
     ipv4:
-      - address: "10.10.1.6/30"
+      - address: 10.10.1.6/30
     mtu: "1280"
     peers:
-      - name: "maccabeus02"
+      - name: maccabeus02
         allowed_ips:
           ipv4:
-            - network: "0.0.0.0/0"
-            - network: "10.117.0.0/23"
-            - network: "10.10.1.5/32"
-        persistent_keepalive_sec: "15"
+            - network: 0.0.0.0/0
+            - network: 10.10.1.1/32
+            - network: 10.11.0.0/23
+            - network: 10.117.0.0/23
+        persistent_keepalive_sec: 15
         pubkey: "{{ hostvars['maccabeus02.hogs.tswn.us'].wireguard__pubkey }}"
-    port: "51821"
+    port: 51821
   - name: "wg2"
     description: "mobile devices vpn"
     ipv4:
