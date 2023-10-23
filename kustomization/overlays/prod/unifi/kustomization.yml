@@ -14,7 +14,7 @@ patches:
     target:
       kind: Ingress
       name: una-ingress
-  - path: patches/set_una_ingress_middleware.yml
+  - path: patches/set_una_ingress_annotations.yml
     target:
       kind: Ingress
       name: una-ingress

@@ -3,5 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
   name: this-is-ignored-but-is-required
