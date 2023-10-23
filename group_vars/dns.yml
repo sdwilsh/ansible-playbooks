@@ -215,12 +215,6 @@ bind_zones:
       - name: unifi-inform
         ip: 10.11.1.65
 
-      # Services Networks
-      - name: "installation02"
-        ip: "10.82.0.2"
-        aliases:
-          - "unifi.hogs"
-
       # NONET Network
       - name: "front-porch.camera.hogs"
         ip: "10.67.0.12"
