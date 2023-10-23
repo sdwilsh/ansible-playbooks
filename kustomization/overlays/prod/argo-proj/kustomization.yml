@@ -35,3 +35,4 @@ resources:
   - application/olm-operators.yml
   - application/prometheus.yml
   - application/traefik.yml
+  - application/unifi.yml

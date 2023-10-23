@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: una-init-mongodb-configmap
+    files:
+      - configmap/generate-init-mongo.sh
+images:
+  - name: busybox
+    newTag: 1.36.1
+  - name: lscr.io/linuxserver/unifi-network-application
+    newTag: 7.5.187
+  - name: mongodb/mongodb-community-server
+    # Unifi only officially supports 3.6-4.4. 
+    newTag: 4.4.25-ubuntu2004
+resources:
+  - deployment.yml
+  - ingress.yml
+  - persistentvolumeclaim.yml
+  - serverstransport.yml
+  - service.yml

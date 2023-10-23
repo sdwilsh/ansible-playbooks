@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/unifi-network-application
+namespace: unifi
+patches:
+  - path: patches/add_una_svc_annotations.yml
+    target:
+      kind: Service
+      name: una-unifi-svc
+  - path: patches/set_una_ingress_host.yml
+    target:
+      kind: Ingress
+      name: una-ingress
+  - path: patches/set_una_pvc_storageClassName.yml
+    target:
+      kind: PersistentVolumeClaim
+      name: .*-pvc
+resources:
+  - namespace.yml

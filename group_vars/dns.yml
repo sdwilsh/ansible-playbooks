@@ -210,12 +210,13 @@ bind_zones:
         ip: 10.11.1.64
       - name: traefik.hogs
         ip: 10.11.1.64
+      - name: unifi
+        ip: 10.11.1.64
 
       # Services Networks
       - name: "installation02"
         ip: "10.82.0.2"
         aliases:
-          - "unifi"
           - "unifi.hogs"
 
       # NONET Network

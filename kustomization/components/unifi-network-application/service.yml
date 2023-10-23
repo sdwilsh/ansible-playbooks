@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+  name: una-unifi-svc
+spec:
+  ports:
+    - name: una-web
+      port: 443
+      protocol: TCP
+      targetPort: una-web
+    - name: device-api
+      port: 8080
+      protocol: TCP
+    - name: device-discover
+      port: 10001
+      protocol: UDP
+    - name: device-stun
+      port: 3478
+      protocol: UDP
+  selector:
+    app.kubernetes.io/name: unifi-network-application
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: una-mongodb-svc
+spec:
+  ports:
+    - name: db
+      port: 27017
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: unifi-mongodb
