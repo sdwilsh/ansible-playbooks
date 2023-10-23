@@ -192,26 +192,18 @@ bind_zones:
       - name: worker01.hogs
         ip: 10.11.0.104
       # At some point, this should ask the k3s control plane what the IP address is
-      - name: ara.hogs
-        ip: 10.11.1.64
-      - name: argo-cd.hogs
-        ip: 10.11.1.64
-      - name: auth
-        ip: 10.11.1.64
-      - name: longhorn.hogs
-        ip: 10.11.1.64
-      - name: nas.hogs
-        ip: 10.11.1.64
-      - name: opensprinkler.hogs
-        ip: 10.11.1.64
-      - name: prometheus.hogs
-        ip: 10.11.1.64
-      - name: ripper.hogs
-        ip: 10.11.1.64
       - name: traefik.hogs
         ip: 10.11.1.64
-      - name: unifi
-        ip: 10.11.1.64
+        aliases:
+          - ara.hogs
+          - argo-cd.hogs
+          - auth
+          - longhorn.hogs
+          - nas.hogs
+          - opensprinkler.hogs
+          - prometheus.hogs
+          - ripper.hogs
+          - unifi
       - name: unifi-inform
         ip: 10.11.1.65
 
