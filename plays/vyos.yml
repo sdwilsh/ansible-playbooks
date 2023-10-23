@@ -271,7 +271,9 @@
           - set protocols static table 11 interface-route 0.0.0.0/0 next-hop-interface wg0
           - set policy route SERVICES rule 10 destination group network-group RFC1918-v4
           - set policy route SERVICES rule 10 set table main
+          - set policy route SERVICES rule 20 source group address-group OPEN-SERVICES-v4
           - set policy route SERVICES rule 20 set table 11
+          - set policy route SERVICES rule 30 set table main
           - set interfaces ethernet eth1 vif 11 policy route 'SERVICES'
         save: yes
       tags:
