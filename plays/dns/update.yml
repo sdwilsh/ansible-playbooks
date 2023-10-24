@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - ansible.builtin.set_fact:
+        root_dir: "{{ playbook_dir }}/../.."
+        root_relative_dir: plays/dns
+        component_dir: "{{ playbook_dir }}/../../kustomization/components/hogs-bind9-config"
+    - name: Load DNS variables
+      ansible.builtin.include_vars:
+        file: "{{ root_dir }}/group_vars/dns.yml"
+    - name: Generate bind9 configuration
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/configmap/etc_named.conf"
+        src: templates/etc_named.conf.j2
+    - name: Generate component kustomization
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/kustomization.yml"
+        src: templates/kustomization.yml.j2
