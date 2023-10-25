@@ -51,6 +51,10 @@ k3s-agent:
 
 stages:
   initramfs:
+    - name: Set inotify max values
+      sysctl:
+        fs.inotify.max_user_instances: "8192"
+        fs.inotify.max_user_watches: "524288"
     - name: Setup NTP
       systemctl:
         enable:
