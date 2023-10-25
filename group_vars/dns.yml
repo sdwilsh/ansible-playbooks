@@ -70,24 +70,12 @@ bind_zones:
           - "frigate.hogs"
       - name: "monitor.house.gem.hogs"
         ip: "10.117.0.24"
-      - name: "enduringbias.hogs"
-        ip: "10.117.0.26"
-        aliases:
-          - "smokeping.hogs"
-      - name: "iona.hogs"
-        ip: "10.117.0.27"
-        aliases:
-          - "blueiris.hogs"
-      - name: "viseron.hogs"
-        ip: "10.117.0.29"
       - name: "docker-ssd.hogs"
         ip: "10.117.0.30"
         aliases:
           - "factorio"
           - "valheim"
           - "valheim.hogs"
-      - name: "deepstack.hogs"
-        ip: "10.117.0.32"
       - name: "zabbix.hogs"
         ip: "10.117.0.33"
       - name: "hue.hogs"
@@ -220,5 +208,4 @@ bind_zones:
       - 10.11.0
       - 10.67.0
       - 10.82.0
-      - 10.96.0
       - 10.117.0
