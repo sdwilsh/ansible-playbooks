@@ -3,16 +3,56 @@
   gather_facts: false
   tasks:
     - ansible.builtin.set_fact:
+        ansible_default_ipv4:
+          address: 10.10.0.3 # Fake being ns1 for now
         root_dir: "{{ playbook_dir }}/../.."
+
+    # The next several tasks setup our variable environment the same as it would if it was running
+    # the actual role.
+    - name: Determine role install path
+      ansible.builtin.shell:
+        chdir: "{{ root_dir }}"
+        cmd: ansible-config dump | grep DEFAULT_ROLES_PATH | egrep -o "\[.*"
+      changed_when: no
+      register: output
+    - ansible.builtin.set_fact:
+        ansible_all_ipv4_addresses:
+          - "{{ ansible_default_ipv4.address }}"
+        ansible_all_ipv6_addresses: []
+        ansible_hostname: ns1.tswn.us
+        component_dir: "{{ root_dir }}/kustomization/components/hogs-bind9-config"
+        roles_paths: "{{ output.stdout | from_yaml + [root_dir + '/roles' ] }}"
         root_relative_dir: plays/dns
-        component_dir: "{{ playbook_dir }}/../../kustomization/components/hogs-bind9-config"
-    - name: Load DNS variables
+    - name: Load bertvv.bind default variables
+      ansible.builtin.include_vars:
+        file: "{{ lookup('first_found', candidates) }}"
+      vars:
+        candidates: "{{ roles_paths | product(['/bertvv.bind/defaults/main.yml']) | map('join', '') }}"
+    - name: Load Debian variables
+      ansible.builtin.include_vars:
+        file: "{{ lookup('first_found', candidates) }}"
+      vars:
+        candidates: "{{ roles_paths | product(['/bertvv.bind/vars/Debian.yml']) | map('join', '') }}"
+    - name: Load DNS variables that override some of what we've already loaded
       ansible.builtin.include_vars:
         file: "{{ root_dir }}/group_vars/dns.yml"
+    - name: Create a new serial number, which is based on UTC UNIX time
+      ansible.builtin.command:
+        cmd: date -u +%Y%m%d%H%M%S
+      changed_when: no
+      register: timestamp
+
+    # Now we are all setup to run some of the tasks to generate things!
+    - name: Generate zone files
+      ansible.builtin.include_tasks: tasks/zones.yml
+      vars:
+        bind_zone_dir: "{{ component_dir }}/configmap/zones"
     - name: Generate bind9 configuration
       ansible.builtin.template:
         dest: "{{ component_dir }}/configmap/etc_named.conf"
-        src: templates/etc_named.conf.j2
+        src: "{{ lookup('first_found', candidates) }}"
+      vars:
+        candidates: "{{ roles_paths | product(['/bertvv.bind/templates/etc_named.conf.j2']) | map('join', '') }}"
     - name: Generate component kustomization
       ansible.builtin.template:
         dest: "{{ component_dir }}/kustomization.yml"
