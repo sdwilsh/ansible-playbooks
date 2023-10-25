@@ -1,0 +1,60 @@
+; Hash: 38e02c2bcc668d9b112defdc2a422573 20231025043636
+; Reverse zone file for tswn.us
+;
+; Ansible managed
+;
+
+$TTL 1W
+$ORIGIN 0.10.10.in-addr.arpa.
+
+@ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
+  20231025043636
+  1D
+  1H
+  1W
+  1D )
+
+                       IN  NS   ns1.tswn.us.
+                       IN  NS   ns2.tswn.us.
+
+3                      IN  PTR  ns1.tswn.us.
+4                      IN  PTR  ns2.tswn.us.
+5                      IN  PTR  vcenter.hogs.tswn.us.
+6                      IN  PTR  harvest.hogs.tswn.us.
+8                      IN  PTR  docker.hogs.tswn.us.
+10                     IN  PTR  ipmi.firstlightweaveslivingsong.hogs.tswn.us.
+11                     IN  PTR  ipmi.dadab.hogs.tswn.us.
+13                     IN  PTR  ipmi-chanttogreen.hogs.tswn.us.
+14                     IN  PTR  chanttogreen.hogs.tswn.us.
+15                     IN  PTR  rack-switch01.hogs.tswn.us.tswn.us.
+18                     IN  PTR  server.zabbix.hogs.tswn.us.
+19                     IN  PTR  snmp.zabbix.hogs.tswn.us.
+20                     IN  PTR  sdwilsh-dev.hogs.tswn.us.
+30                     IN  PTR  ups01.hogs.tswn.us.
+31                     IN  PTR  ups02.hogs.tswn.us.
+32                     IN  PTR  power-failover.hogs.tswn.us.
+40                     IN  PTR  aggregation-upper.hogs.tswn.us.
+41                     IN  PTR  aggregation-lower.hogs.tswn.us.
+42                     IN  PTR  usw-pro-48.hogs.tswn.us.
+43                     IN  PTR  flex-office-sdwilsh.hogs.tswn.us.
+44                     IN  PTR  backyard-switch.hogs.tswn.us.
+45                     IN  PTR  flex-porch.hogs.tswn.us.
+50                     IN  PTR  kvm01.hogs.tswn.us.
+51                     IN  PTR  kvm02.hogs.tswn.us.
+52                     IN  PTR  kvm03.hogs.tswn.us.
+53                     IN  PTR  esxi-intel01.hogs.tswn.us.
+54                     IN  PTR  esxi-intel02.hogs.tswn.us.
+55                     IN  PTR  esxi-intel03.hogs.tswn.us.
+56                     IN  PTR  esxi-intel04.hogs.tswn.us.
+70                     IN  PTR  centurylink.routers.hogs.tswn.us.
+79                     IN  PTR  cloud01.routers.hogs.tswn.us.
+80                     IN  PTR  cloud02.routers.hogs.tswn.us.
+82                     IN  PTR  guest01.routers.hogs.tswn.us.
+83                     IN  PTR  guest02.routers.hogs.tswn.us.
+85                     IN  PTR  work01.routers.hogs.tswn.us.
+86                     IN  PTR  work02.routers.hogs.tswn.us.
+90                     IN  PTR  backyard-ap.hogs.tswn.us.
+91                     IN  PTR  den-ap.hogs.tswn.us.
+92                     IN  PTR  living-ap.hogs.tswn.us.
+93                     IN  PTR  kitchen-ap.hogs.tswn.us.
+94                     IN  PTR  upper-hallway-ip.hogs.tswn.us.

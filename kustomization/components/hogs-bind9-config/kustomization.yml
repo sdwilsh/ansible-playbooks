@@ -1,0 +1,23 @@
+#
+# Ansible managed
+#
+#
+# plays/dns/templates/kustomization.yml.j2
+#
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: hogs-bind9-etc-named-conf-configmap
+    files:
+      - configmap/etc_named.conf
+  - name: hogs-bind9-gen-zones-configmap
+    files:
+      - configmap/zones/tswn.us
+      - configmap/zones/0.10.10.in-addr.arpa
+      - configmap/zones/0.11.10.in-addr.arpa
+      - configmap/zones/0.67.10.in-addr.arpa
+      - configmap/zones/0.82.10.in-addr.arpa
+      - configmap/zones/0.96.10.in-addr.arpa
+      - configmap/zones/0.117.10.in-addr.arpa

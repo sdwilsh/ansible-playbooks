@@ -1,0 +1,41 @@
+; Hash: e561df8d54384d27035f63e49c9cdf5f 20231025043636
+; Reverse zone file for tswn.us
+;
+; Ansible managed
+;
+
+$TTL 1W
+$ORIGIN 0.117.10.in-addr.arpa.
+
+@ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
+  20231025043636
+  1D
+  1H
+  1W
+  1D )
+
+                       IN  NS   ns1.tswn.us.
+                       IN  NS   ns2.tswn.us.
+
+1                      IN  PTR  maccabeus.hogs.tswn.us.
+5                      IN  PTR  mysql.hogs.tswn.us.
+9                      IN  PTR  lighterthansome.hogs.tswn.us.
+10                     IN  PTR  firstlightweaveslivingsong.hogs.tswn.us.
+12                     IN  PTR  palamok.hogs.tswn.us.
+13                     IN  PTR  nvidia-shield.hogs.tswn.us.
+16                     IN  PTR  energy.hogs.tswn.us.
+19                     IN  PTR  cortana.hogs.tswn.us.
+22                     IN  PTR  luxor.hogs.tswn.us.
+23                     IN  PTR  loki.hogs.tswn.us.
+24                     IN  PTR  monitor.house.gem.hogs.tswn.us.
+26                     IN  PTR  enduringbias.hogs.tswn.us.
+27                     IN  PTR  iona.hogs.tswn.us.
+29                     IN  PTR  viseron.hogs.tswn.us.
+30                     IN  PTR  docker-ssd.hogs.tswn.us.
+32                     IN  PTR  deepstack.hogs.tswn.us.
+33                     IN  PTR  zabbix.hogs.tswn.us.
+34                     IN  PTR  hue.hogs.tswn.us.
+46                     IN  PTR  house.gem.hogs.tswn.us.
+48                     IN  PTR  maccabeus01.hogs.tswn.us.
+49                     IN  PTR  maccabeus02.hogs.tswn.us.
+50                     IN  PTR  0.ntp.hogs.tswn.us.

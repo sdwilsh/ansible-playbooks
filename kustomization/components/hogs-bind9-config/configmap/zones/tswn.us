@@ -1,0 +1,115 @@
+; Hash: e1eb0006e22faca561596e2d232c2369 20231025043422
+; Zone file for tswn.us
+;
+; Ansible managed
+;
+
+$ORIGIN tswn.us.
+$TTL 1W
+
+@ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
+  20231025043422
+  1D
+  1H
+  1W
+  1D )
+
+                           IN  NS     ns1.tswn.us.
+                           IN  NS     ns2.tswn.us.
+
+
+
+pool.ntp.hogs              IN  A      10.117.0.50
+tartarus01                 IN  A      149.248.37.12
+cloud.routers.hogs         IN  A      10.2.0.78
+guest.routers.hogs         IN  A      10.2.0.81
+work.routers.hogs          IN  A      10.2.0.84
+maccabeus.hogs             IN  A      10.117.0.1
+home                       IN  CNAME  maccabeus.hogs
+mysql.hogs                 IN  A      10.117.0.5
+lighterthansome.hogs       IN  A      10.117.0.9
+firstlightweaveslivingsong.hogs       IN  A      10.117.0.10
+palamok.hogs               IN  A      10.117.0.12
+mqtt.hogs                  IN  CNAME  palamok.hogs
+nvidia-shield.hogs         IN  A      10.117.0.13
+energy.hogs                IN  A      10.117.0.16
+cortana.hogs               IN  A      10.117.0.19
+homeassistant.hogs         IN  CNAME  cortana.hogs
+luxor.hogs                 IN  A      10.117.0.22
+loki.hogs                  IN  A      10.117.0.23
+frigate.hogs               IN  CNAME  loki.hogs
+monitor.house.gem.hogs       IN  A      10.117.0.24
+enduringbias.hogs          IN  A      10.117.0.26
+smokeping.hogs             IN  CNAME  enduringbias.hogs
+iona.hogs                  IN  A      10.117.0.27
+blueiris.hogs              IN  CNAME  iona.hogs
+viseron.hogs               IN  A      10.117.0.29
+docker-ssd.hogs            IN  A      10.117.0.30
+factorio                   IN  CNAME  docker-ssd.hogs
+valheim                    IN  CNAME  docker-ssd.hogs
+valheim.hogs               IN  CNAME  docker-ssd.hogs
+deepstack.hogs             IN  A      10.117.0.32
+zabbix.hogs                IN  A      10.117.0.33
+hue.hogs                   IN  A      10.117.0.34
+house.gem.hogs             IN  A      10.117.0.46
+maccabeus01.hogs           IN  A      10.117.0.48
+maccabeus02.hogs           IN  A      10.117.0.49
+0.ntp.hogs                 IN  A      10.117.0.50
+ns1                        IN  A      10.10.0.3
+ns2                        IN  A      10.10.0.4
+vcenter.hogs               IN  A      10.10.0.5
+harvest.hogs               IN  A      10.10.0.6
+docker.hogs                IN  A      10.10.0.8
+ipmi.firstlightweaveslivingsong.hogs       IN  A      10.10.0.10
+ipmi.dadab.hogs            IN  A      10.10.0.11
+ipmi-chanttogreen.hogs       IN  A      10.10.0.13
+chanttogreen.hogs          IN  A      10.10.0.14
+rack-switch01.hogs.tswn.us       IN  A      10.10.0.15
+server.zabbix.hogs         IN  A      10.10.0.18
+snmp.zabbix.hogs           IN  A      10.10.0.19
+sdwilsh-dev.hogs           IN  A      10.10.0.20
+ups01.hogs                 IN  A      10.10.0.30
+ups02.hogs                 IN  A      10.10.0.31
+power-failover.hogs        IN  A      10.10.0.32
+aggregation-upper.hogs       IN  A      10.10.0.40
+aggregation-lower.hogs       IN  A      10.10.0.41
+usw-pro-48.hogs            IN  A      10.10.0.42
+flex-office-sdwilsh.hogs       IN  A      10.10.0.43
+backyard-switch.hogs       IN  A      10.10.0.44
+flex-porch.hogs            IN  A      10.10.0.45
+kvm01.hogs                 IN  A      10.10.0.50
+kvm02.hogs                 IN  A      10.10.0.51
+kvm03.hogs                 IN  A      10.10.0.52
+esxi-intel01.hogs          IN  A      10.10.0.53
+esxi-intel02.hogs          IN  A      10.10.0.54
+esxi-intel03.hogs          IN  A      10.10.0.55
+esxi-intel04.hogs          IN  A      10.10.0.56
+centurylink.routers.hogs       IN  A      10.10.0.70
+cloud01.routers.hogs       IN  A      10.10.0.79
+cloud02.routers.hogs       IN  A      10.10.0.80
+guest01.routers.hogs       IN  A      10.10.0.82
+guest02.routers.hogs       IN  A      10.10.0.83
+work01.routers.hogs        IN  A      10.10.0.85
+work02.routers.hogs        IN  A      10.10.0.86
+backyard-ap.hogs           IN  A      10.10.0.90
+den-ap.hogs                IN  A      10.10.0.91
+living-ap.hogs             IN  A      10.10.0.92
+kitchen-ap.hogs            IN  A      10.10.0.93
+upper-hallway-ip.hogs       IN  A      10.10.0.94
+k3s.hogs                   IN  A      10.11.0.100
+node01.hogs                IN  A      10.11.0.101
+worker01.hogs              IN  A      10.11.0.104
+traefik.hogs               IN  A      10.11.1.64
+ara.hogs                   IN  CNAME  traefik.hogs
+argo-cd.hogs               IN  CNAME  traefik.hogs
+auth                       IN  CNAME  traefik.hogs
+longhorn.hogs              IN  CNAME  traefik.hogs
+nas.hogs                   IN  CNAME  traefik.hogs
+opensprinkler.hogs         IN  CNAME  traefik.hogs
+prometheus.hogs            IN  CNAME  traefik.hogs
+ripper.hogs                IN  CNAME  traefik.hogs
+unifi                      IN  CNAME  traefik.hogs
+unifi-inform               IN  A      10.11.1.65
+front-porch.camera.hogs       IN  A      10.67.0.12
+front-north-west.camera.hogs       IN  A      10.67.0.13
+front-north-east.camera.hogs       IN  A      10.67.0.14
