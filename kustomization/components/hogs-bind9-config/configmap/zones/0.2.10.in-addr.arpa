@@ -1,0 +1,22 @@
+; Hash: 16a05995397c016338e264e46f19d9e2 20231025053240
+; Reverse zone file for tswn.us
+;
+; Ansible managed
+;
+
+$TTL 1W
+$ORIGIN 0.2.10.in-addr.arpa.
+
+@ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
+  20231025053240
+  1D
+  1H
+  1W
+  1D )
+
+                       IN  NS   ns1.tswn.us.
+                       IN  NS   ns2.tswn.us.
+
+78                     IN  PTR  cloud.routers.hogs.tswn.us.
+81                     IN  PTR  guest.routers.hogs.tswn.us.
+84                     IN  PTR  work.routers.hogs.tswn.us.
