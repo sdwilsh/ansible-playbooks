@@ -5,3 +5,5 @@ metadata:
   annotations:
     purelb.io/service-group: open-servicegroup
   name: this-is-ignored-but-is-required
+spec:
+  loadBalancerIP: 10.11.1.64
