@@ -58,7 +58,7 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    kairos_version: "v2.4.0-k3sv1.27.3+k3s1"
+    kairos_version: "v2.4.1-k3sv1.27.3+k3s1"
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
