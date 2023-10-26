@@ -6,8 +6,11 @@ metadata:
 spec:
   calicoNetwork:
     containerIPForwarding: "Enabled"
+    hostPorts: null
     ipPools:
-      - encapsulation: VXLAN
+      - blockSize: 26
         cidr: 172.16.0.0/16
+        encapsulation: VXLAN
+    linuxDataplane: BPF
   controlPlaneNodeSelector:
     node-role.kubernetes.io/control-plane: "true"
