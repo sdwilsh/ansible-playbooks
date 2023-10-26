@@ -14,6 +14,5 @@ resources:
   - application/operator-lifecycle-manager.yml
   # - application/opensearch-operator.yml
   - application/purelb.yml
-  - application/tigera-operator.yml
   - application/vector-agent.yml
   - application/vector-aggregator.yml

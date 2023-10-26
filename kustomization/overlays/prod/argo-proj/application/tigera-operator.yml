@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/sdwilsh/ansible-playbooks
-    path: kustomization/base/tigera-operator
+    path: kustomization/overlays/prod/tigera-operator
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc

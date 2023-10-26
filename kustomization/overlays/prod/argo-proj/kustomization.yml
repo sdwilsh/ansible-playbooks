@@ -34,5 +34,6 @@ resources:
   - application/generic-device-plugin.yml
   - application/olm-operators.yml
   - application/prometheus.yml
+  - application/tigera-operator.yml
   - application/traefik.yml
   - application/unifi.yml
