@@ -1,0 +1,18 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value:  --device
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  # Note that the vendor and product start out as 1a64:089a until the first inference when they
+  # switch to 18d1:9302.  See
+  # https://github.com/google-coral/edgetpu/issues/536#issuecomment-1033056048 as source of truth.
+  value: |
+    name: coraltpu
+    groups:
+      - usb:
+          - product: 089a
+            vendor: 1a6e
+      - usb:
+          - product: 9302
+            vendor: 18d1
