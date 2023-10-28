@@ -5,6 +5,6 @@ metadata:
   name: kubernetes-services-endpoint
   namespace: tigera-operator
 data:
-  # k3s.hogs.tswn.us, but I want to avoid the DNS lookup.
-  KUBERNETES_SERVICE_HOST: 10.11.0.100
+  # For now, reference the only control plane node to avoid kube-vip and dns.
+  KUBERNETES_SERVICE_HOST: 10.11.0.101
   KUBERNETES_SERVICE_PORT: "6443"
