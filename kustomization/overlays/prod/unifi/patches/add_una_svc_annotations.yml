@@ -6,3 +6,5 @@ metadata:
     purelb.io/service-group: open-servicegroup
     traefik.ingress.kubernetes.io/service.serverstransport: unifi-una-unifi-serverstransport@kubernetescrd
   name: this-is-ignored-but-is-required
+spec:
+  loadBalancerIP: 10.11.1.65
