@@ -1,16 +1,15 @@
 ---
 common__interfaces:
-  bonds:
-    - bridge_name: trunk
-      mode: active-backup
-      name: bond0
-      slaves:
-        - mac: c8:7f:54:93:57:58
-          primary: yes
-        - mac: 6c:4b:90:62:87:98
+  interfaces:
+    # Gigabit interface mac is 6c:4b:90:62:87:98
+    - mac: c8:7f:54:93:57:58
+      name: uplink
+      network:
+        address: 10.11.0.101/23
+        gateway: 10.11.0.1
+
 
 common__ip_addresses:
-  - 10.10.0.101/24
   - 10.11.0.101/23
 
 k3s_cluster_init: yes

@@ -56,86 +56,30 @@ stages:
         NTP: {{ common__ntp_pool }}
         FallbackNTP: ""
     - files:
-{% if "common__interfaces" in hostvars[host] and "bonds" in hostvars[host].common__interfaces %}
-{% for bond in hostvars[host].common__interfaces.bonds %}
-        - path: /etc/systemd/network/01-{{ bond.name }}.netdev
+{% if "common__interfaces" in hostvars[host] and "interfaces" in hostvars[host].common__interfaces %}
+{% for iface in hostvars[host].common__interfaces.interfaces %}
+        - path: /etc/systemd/network/01-{{ iface.name }}.network
           permissions: 0644
           content: |
+            [Match]
+            PermanentMACAddress={{ iface.mac }}
             [NetDev]
-            Name={{ bond.name }}
-            Kind=bond
-            [Bond]
-            Mode={{ bond.mode }}
-            PrimaryReselectPolicy=always
-            MIIMonitorSec=1s
-        - path: /etc/systemd/network/01-{{ bond.name }}.network
-          permissions: 0644
-          content: |
-            [Match]
-            Name={{ bond.name }}
+            Name={{ iface.name }}
             [Network]
-            Bridge={{ bond.bridge_name }}
-        - path: /etc/systemd/network/02-{{ bond.bridge_name }}.netdev
-          permissions: 0644
-          content: |
-            [NetDev]
-            Name=trunk
-            Kind=bridge
-        - path: /etc/systemd/network/02-{{ bond.bridge_name }}.network
-          permissions: 0644
-          content: |
-            [Match]
-            Name={{ bond.bridge_name }}
-            [Network]
-{% for network in hostvars[host].kairos_managed_networks %}
-            VLAN={{ network.name }}
-{% endfor %}
-{% for slave in bond.slaves %}
-        - path: /etc/systemd/network/05-slave-{{ slave.mac | replace(':', '-') }}-{{ bond.name }}.network
-          permissions: 0644
-          content: |
-            [Match]
-            PermanentMACAddress={{ slave.mac }}
-            [Network]
-            Bond={{ bond.name }}
-{% if slave.primary | default(false) %}
-            PrimarySlave=true
-{% endif %}
-{% endfor %}
+            Address={{ iface.network.address }}
+            DNS={{ iface.network.gateway }}
+            Gateway={{ iface.network.gateway }}
 {% endfor %}
 {% else %}
-        - path: /etc/systemd/network/01-trunk.network
+        - path: /etc/systemd/network/01-uplink.network
           permissions: 0644
           content: |
             [Link]
-            Name=trunk
+            Name=uplink
             [Match]
             Name=en*
             [Network]
-{% for network in hostvars[host].kairos_managed_networks %}
-            VLAN={{ network.name }}
-{% endfor %}
+            Address={{ common__ip_addresses | first }}
+            DNS={{ common__nameservers.addresses | join(' ') }}
+            Gateway={{ common__gateway_v4_address }}
 {% endif %}
-{% for network in hostvars[host].kairos_managed_networks %}
-        - path: /etc/systemd/network/10-{{ network.name }}.netdev
-          permissions: 0644
-          content: |
-            [NetDev]
-            Name={{ network.name }}
-            Kind=vlan
-            [VLAN]
-            Id={{ network.vlan_id }}
-        - path: /etc/systemd/network/10-{{ network.name }}.network
-          permissions: 0644
-          content: |
-            [Match]
-            Name={{ network.name }}
-            [Network]
-{% if 'address' in network and network['address'] %}
-            Address={{ network.address }}
-{% endif %}
-{% if 'gateway' in network %}
-            DNS={{ network.gateway }}
-            Gateway={{ network.gateway }}
-{% endif %}
-{% endfor %}
