@@ -64,23 +64,28 @@ stages:
             [Match]
             PermanentMACAddress={{ iface.mac }}
             [Link]
-            Name={{ iface.name }}
+            AlternativeName={{ iface.name }}
         - path: /etc/systemd/network/02-{{ iface.name }}.network
           permissions: 0644
           content: |
             [Match]
-            Name={{ iface.name }}
+            PermanentMACAddress={{ iface.mac }}
             [Network]
             Address={{ iface.network.address }}
             DNS={{ iface.network.gateway }}
             Gateway={{ iface.network.gateway }}
 {% endfor %}
 {% else %}
-        - path: /etc/systemd/network/01-uplink.network
+        - path: /etc/systemd/network/01-uplink.link
           permissions: 0644
           content: |
             [Link]
-            Name=uplink
+            AlternativeName=uplink
+            [Match]
+            Name=en*
+        - path: /etc/systemd/network/01-uplink.network
+          permissions: 0644
+          content: |
             [Match]
             Name=en*
             [Network]
