@@ -192,9 +192,6 @@ bind_zones:
           - opensprinkler.hogs
           - prometheus.hogs
           - ripper.hogs
-          - unifi
-      - name: unifi-inform
-        ip: 10.11.1.65
 
       # NONET Network
       - name: "front-porch.camera.hogs"
@@ -203,6 +200,12 @@ bind_zones:
         ip: "10.67.0.13"
       - name: "front-north-east.camera.hogs"
         ip: "10.67.0.14"
+
+      # SERVICE82
+      - name: unifi
+        ip: 10.82.0.2
+        aliases:
+          - unifi-inform
     networks:
       - 10.2.0
       - 10.10.0

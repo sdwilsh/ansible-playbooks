@@ -415,7 +415,7 @@
           - "set nat source rule {{ (rule_number + 1) * 10 }} source address {{ item }}"
           - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
       loop:
-        - 10.11.0.0/23
+        - 10.82.0.0/24
       loop_control:
         index_var: rule_number
       tags:
@@ -432,11 +432,11 @@
         - description: unifi-inform
           port: 8080
           protocol: tcp
-          translation_address: 10.11.1.65
+          translation_address: 10.82.0.2
         - description: unifi-stun
           port: 3478
           protocol: udp
-          translation_address: 10.11.1.65
+          translation_address: 10.82.0.2
       loop_control:
         index_var: rule_number
       tags:

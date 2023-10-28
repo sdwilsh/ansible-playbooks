@@ -30,6 +30,8 @@ vyos_firewall_global__group:
         - address: 10.11.1.64
         # unifi-inform.tswn.us
         - address: 10.11.1.65
+        # docker-based controller
+        - address: 10.82.0.2
   port_group:
     - name: UNIFI-DEVICE-TCP
       description: Ports used by the Unifi Controller to talk to devices over TCP
