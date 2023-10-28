@@ -58,12 +58,17 @@ stages:
     - files:
 {% if "common__interfaces" in hostvars[host] and "interfaces" in hostvars[host].common__interfaces %}
 {% for iface in hostvars[host].common__interfaces.interfaces %}
-        - path: /etc/systemd/network/01-{{ iface.name }}.network
+        - path: /etc/systemd/network/01-{{ iface.name }}.link
           permissions: 0644
           content: |
             [Match]
             PermanentMACAddress={{ iface.mac }}
-            [NetDev]
+            [Link]
+            Name={{ iface.name }}
+        - path: /etc/systemd/network/02-{{ iface.name }}.network
+          permissions: 0644
+          content: |
+            [Match]
             Name={{ iface.name }}
             [Network]
             Address={{ iface.network.address }}
