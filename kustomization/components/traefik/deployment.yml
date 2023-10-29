@@ -43,6 +43,8 @@ spec:
               containerPort: 443
             - name: dashboard
               containerPort: 8080
+            - name: mqtts
+              containerPort: 8883
             - name: metrics
               containerPort: 9090
           volumeMounts:

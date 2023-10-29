@@ -26,6 +26,9 @@ spec:
     - name: websecure
       protocol: TCP
       port: 443
+    - name: mqtts
+      protocol: TCP
+      port: 8883
   selector:
     app.kubernetes.io/name: traefik
   type: LoadBalancer
