@@ -24,6 +24,7 @@ spec:
             - --api.dashboard=true
             - --api.insecure=true
             - --entrypoints.metrics.address=:9090
+            - --entrypoints.mqtts.address=:8883
             - --entrypoints.web.address=:80
             - --entrypoints.web.http.redirections.entrypoint.scheme=https
             - --entrypoints.web.http.redirections.entrypoint.to=websecure
