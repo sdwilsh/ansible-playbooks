@@ -348,20 +348,6 @@
         - services
         - dhcp-server
 
-    - name: "Setup dynamic dns"
-      vyos.vyos.vyos_config:
-        lines:
-          - "set service dns dynamic interface pppoe0 service dyndns host-name {{ item.hostname }}"
-          - "set service dns dynamic interface pppoe0 service dyndns login {{ item.hostname }}"
-          - "set service dns dynamic interface pppoe0 service dyndns password {{ item.password }}"
-          - "set service dns dynamic interface pppoe0 service dyndns server dyn.dns.he.net"
-        save: yes
-      loop: "{{ vyos__dynamic_dns_hosts }}"
-      no_log: yes
-      tags:
-        - services
-        - dynamic-dns
-
     - name: "Setup snmp"
       vyos.vyos.vyos_config:
         lines:
