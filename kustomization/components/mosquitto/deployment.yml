@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto-deployment
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mosquitto
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mosquitto
+    spec:
+      containers:
+        - image: eclipse-mosquitto
+          name: mosquitto
+          ports:
+            - containerPort: 1883
+          resources:
+            limits:
+              cpu: 500m
+              memory: 200Mi
+            requests:
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /mosquitto/config.d
+              name: mosquitto-config
+            - mountPath: /mosquitto/config
+              name: mosquitto-default-config
+            - mountPath: /mosquitto/data
+              name: mosquitto-data
+      initContainers:
+        - command:
+            - /bin/sh
+            - -c
+            - /scripts/create_password.conf.sh
+          image: eclipse-mosquitto
+          name: mosquitto-password-conf
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /mosquitto/data/password-conf-data
+              name: password-conf-data
+            - mountPath: /scripts
+              name: mosquitto-scripts
+            - mountPath: /mosquitto/data
+              name: mosquitto-data
+      securityContext:
+        fsGroup: 1883 #mosquitto
+        runAsGroup: 1883 # mosquitto
+        runAsUser: 1883 # mosquitto
+      volumes:
+        - emptyDir:
+            medium: Memory
+          name: mosquitto-config
+        - name: mosquitto-default-config
+          configMap:
+            name: mosquitto-default-config-configmap
+        - name: mosquitto-data
+          persistentVolumeClaim:
+            claimName: mosquitto-data-pvc
+        - name: mosquitto-scripts
+          configMap:
+            defaultMode: 0777
+            name: mosquitto-scripts-configmap
+        - name: password-conf-data
+          secret:
+            secretName: mosquitto-password-conf-secret

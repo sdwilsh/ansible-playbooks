@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: mosquitto-default-config-configmap
+    files:
+      - configmap/default-config/mosquitto.conf
+  - name: mosquitto-scripts-configmap
+    files:
+      - configmap/scripts/create_password.conf.sh
+images:
+  - name: eclipse-mosquitto
+    newTag: 2.0.18
+resources:
+  - persistentvolumeclaim.yml
+  - deployment.yml
+  - service.yml
