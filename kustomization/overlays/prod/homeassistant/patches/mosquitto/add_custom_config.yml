@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      volumes:
+        - emptyDir:
+            $patch: delete
+          name: mosquitto-config
+          configMap:
+            name: mosquitto-config-configmap

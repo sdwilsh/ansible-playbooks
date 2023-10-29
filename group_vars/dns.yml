@@ -52,8 +52,6 @@ bind_zones:
         ip: "10.117.0.10"
       - name: "palamok.hogs"
         ip: "10.117.0.12"
-        aliases:
-          - "mqtt.hogs"
       - name: "nvidia-shield.hogs"
         ip: "10.117.0.13"
       - name: "energy.hogs"
@@ -188,6 +186,7 @@ bind_zones:
           - argo-cd.hogs
           - auth
           - longhorn.hogs
+          - mqtt.hogs
           - nas.hogs
           - opensprinkler.hogs
           - prometheus.hogs

@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/mosquitto
+configMapGenerator:
+  - files:
+      - configmap/mosquitto-config/homeassistant.conf
+    name: mosquitto-config-configmap
+namespace: homeassistant
+patches:
+  - path: patches/mosquitto/add_custom_config.yml
+    target:
+      kind: Deployment
+      name: mosquitto-deployment
+resources:
+  - namespace.yml
+  - ingressroutetcp.yml

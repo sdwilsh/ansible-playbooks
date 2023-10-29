@@ -95,7 +95,7 @@
         device_com: "COM2"
         name: "House"
       mqtt:
-        broker: "mqtt.hogs.tswn.us"
+        broker: "palamok.hogs.tswn.us"
         username: "brultech-serial2mqtt"
         password: "{{ docker_brultech_serial2mqtt__mqtt_password }}"
         home_assistant:
