@@ -1,8 +1,8 @@
 # Mosquitto Component
 
-This will deploy the [Mosquitto](https://mosquitto.org/).  This runs as as the `mosquitto` user
+This will deploy the [Mosquitto](https://mosquitto.org/). This runs as as the `mosquitto` user
 from the [`mosquitto` Docker image](https://github.com/eclipse/mosquitto/tree/master/docker/2.0),
-which runs with a `uid` and `gid` of `1883`.  This component can run under a `restricted`
+which runs with a `uid` and `gid` of `1883`. This component can run under a `restricted`
 [pod security standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/).
 
 # Example Usage
@@ -13,7 +13,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../components/mosquitto
+  - https://github.com/marinatedconcrete/config/kustomization/components/mosquitto
 ```
 
 See below for additionally required patches and secrets.
@@ -40,7 +40,7 @@ stringData:
 ### Add Configuration Options
 
 If you want to change the [configuration](https://mosquitto.org/man/mosquitto-conf-5.html) of
-`mosquitto`, you can patch in your own config files.  You can place as many `.conf` files as you
+`mosquitto`, you can patch in your own config files. You can place as many `.conf` files as you
 would like in the `ConfigMap`.
 
 #### `kustomization.yml`
@@ -58,6 +58,7 @@ patches:
 ```
 
 #### `configmap/logging.conf`
+
 ```
 connection_messages true
 log_type all

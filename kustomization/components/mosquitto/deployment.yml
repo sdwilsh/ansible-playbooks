@@ -27,7 +27,7 @@ spec:
                 - --unix
                 - /mosquitto/socket
                 - -t
-                - '#'
+                - "#"
                 - -E
                 - -i
                 - healthcheck
