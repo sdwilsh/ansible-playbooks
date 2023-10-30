@@ -19,6 +19,20 @@ spec:
           name: mosquitto
           ports:
             - containerPort: 1883
+              name: mqtt
+          readinessProbe:
+            exec:
+              command:
+                - /usr/bin/mosquitto_sub
+                - --unix
+                - /mosquitto/socket
+                - -t
+                - '#'
+                - -E
+                - -i
+                - healthcheck
+            initialDelaySeconds: 5
+            periodSeconds: 60
           resources:
             limits:
               cpu: 500m
