@@ -60,11 +60,13 @@ patches:
 #### `configmap/logging.conf`
 
 ```
-connection_messages true
 log_type all
 ```
 
 #### `patches/add_custom_config.yml`
+
+This patch is taking advantage of the `$patch: delete` functionality of Kustomize to remove the
+`emptyDir` configuration and instead mount the `ConfigMap` that was just defined.
 
 ```yaml
 ---
