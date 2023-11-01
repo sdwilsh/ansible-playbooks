@@ -31,3 +31,7 @@
     state: present
     uid: 1000
   become: yes
+- import_tasks: starship.yml
+  vars:
+    # renovate: repository=starship/starship
+    version: v1.16.0

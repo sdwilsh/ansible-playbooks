@@ -1,0 +1,49 @@
+---
+- block:
+    - name: Ensure download directory exists
+      ansible.builtin.file:
+        group: "{{ zsh__user }}"
+        owner: "{{ zsh__user }}"
+        path: "/home/{{ zsh__user }}/.local/download"
+        state: directory
+    - name: Fetch archive sha256
+      ansible.builtin.get_url:
+        dest: "/home/{{ zsh__user }}/.local/download/starship.tar.gz.sha256"
+        group: "{{ zsh__user }}"
+        owner: "{{ zsh__user }}"
+        url: "{{ download_base }}{{ download_file }}.sha256"
+      register: fetch_sha256 
+    - name: Consume archive sha256
+      ansible.builtin.slurp:
+        src: "/home/{{ zsh__user }}/.local/download/starship.tar.gz.sha256"
+      register: sha256
+    - name: Fetch archive
+      ansible.builtin.get_url:
+        dest: "/home/{{ zsh__user }}/.local/download/starship.tar.gz"
+        group: "{{ zsh__user }}"
+        owner: "{{ zsh__user }}"
+        url: "{{ download_base }}{{ download_file }}"
+      register: fetch_archive
+    - name: Write out sha256sum check file
+      ansible.builtin.copy:
+        content: "{{ sha256['content'] | b64decode | trim }} starship.tar.gz"
+        dest: "/home/{{ zsh__user }}/.local/download/starship.sha256sum"
+        group: "{{ zsh__user }}"
+        owner: "{{ zsh__user }}"
+      when: fetch_archive.changed
+    - name: Checksum
+      ansible.builtin.shell:
+        chdir: "/home/{{ zsh__user }}/.local/download"
+        cmd: "sha256sum --check /home/{{ zsh__user }}/.local/download/starship.sha256sum"
+      when: fetch_archive.changed
+    - name: Install
+      ansible.builtin.unarchive:
+        dest: "/home/{{ zsh__user }}/.local/bin/"
+        group: "{{ zsh__user }}"
+        owner: "{{ zsh__user }}"
+        remote_src: yes
+        src: "/home/{{ zsh__user }}/.local/download/starship.tar.gz"
+      when: fetch_archive.changed
+  vars:
+    download_base: "https://github.com/starship/starship/releases/download/{{ version }}/"
+    download_file: "starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"

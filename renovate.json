@@ -58,6 +58,17 @@
     },
     {
       "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "fileMatch": [
+        "^roles/devsetup/tasks/main\\.yml$"
+      ],
+      "matchStrings": [
+        "#\\s*renovate:\\srepository=(?<depName>.*?)\\n\\s+version: (?<currentValue>.*?)\\n"
+      ],
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "datasourceTemplate": "docker",
       "fileMatch": [
         "^kustomization/.+/.+/.*values\\.yml$"
