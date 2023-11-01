@@ -1,0 +1,33 @@
+---
+# tasks file for devsetup
+- name: Install Required Packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  loop:
+    - zsh
+- name: Create sdwilsh group
+  ansible.builtin.group:
+    name: sdwilsh
+    gid: 1000
+    state: present
+  become: yes
+- name: Create sdwilsh user
+  ansible.builtin.user:
+    group: sdwilsh
+    groups:
+      - adm
+      - dialout
+      - cdrom
+      - sudo
+      - dip
+      - plugdev
+      - lxd
+      - docker
+    home: /home/sdwilsh
+    name: sdwilsh
+    shell: /bin/zsh
+    state: present
+    uid: 1000
+  become: yes

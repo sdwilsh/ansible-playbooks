@@ -37,6 +37,7 @@
   tasks:
     - name: "Flush handlers from core roles"
       ansible.builtin.meta: "flush_handlers"
+- import_playbook: plays/groups/dev.yml
 - import_playbook: "plays/groups/dns.yml"
 - import_playbook: plays/groups/pikvm.yml
 - import_playbook: plays/hosts/docker.hogs.tswn.us.yml
