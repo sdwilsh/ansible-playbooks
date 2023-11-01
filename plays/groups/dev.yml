@@ -4,5 +4,3 @@
   roles:
     - role: devsetup
     - role: marinatedconcrete.config.zsh
-      vars:
-        zsh__user: sdwilsh
