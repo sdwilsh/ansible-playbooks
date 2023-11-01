@@ -19,23 +19,12 @@
       register: sha256
     - name: Fetch archive
       ansible.builtin.get_url:
+        checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
         dest: "/home/{{ zsh__user }}/.local/download/starship.tar.gz"
         group: "{{ zsh__user }}"
         owner: "{{ zsh__user }}"
         url: "{{ download_base }}{{ download_file }}"
       register: fetch_archive
-    - name: Write out sha256sum check file
-      ansible.builtin.copy:
-        content: "{{ sha256['content'] | b64decode | trim }} starship.tar.gz"
-        dest: "/home/{{ zsh__user }}/.local/download/starship.sha256sum"
-        group: "{{ zsh__user }}"
-        owner: "{{ zsh__user }}"
-      when: fetch_archive.changed
-    - name: Checksum
-      ansible.builtin.shell:
-        chdir: "/home/{{ zsh__user }}/.local/download"
-        cmd: "sha256sum --check /home/{{ zsh__user }}/.local/download/starship.sha256sum"
-      when: fetch_archive.changed
     - name: Install
       ansible.builtin.unarchive:
         dest: "/home/{{ zsh__user }}/.local/bin/"
