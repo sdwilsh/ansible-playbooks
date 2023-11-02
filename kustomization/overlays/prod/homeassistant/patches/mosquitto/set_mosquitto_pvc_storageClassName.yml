@@ -1,11 +1,4 @@
 ---
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: this-is-ignored-but-is-required
-spec:
-  volumeClaimTemplates:
-    - metadata:
-        name: mosquitto-data
-      spec:
-        storageClassName: longhorn-crypto-global
+- op: add
+  path: /spec/volumeClaimTemplates/0/storageClassName
+  value: longhorn-crypto-global
