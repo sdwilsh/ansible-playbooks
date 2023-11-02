@@ -14,6 +14,10 @@ patches:
     target:
       kind: StatefulSet
       name: mosquitto-statefulset
+  - path: patches/mosquitto/set_mosquitto_pvc_storageClassName.yml
+    target:
+      kind: StatefulSet
+      name: mosquitto-statefulset
 resources:
   - namespace.yml
   - ingressroutetcp.yml
