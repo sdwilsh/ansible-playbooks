@@ -12,8 +12,8 @@ namespace: homeassistant
 patches:
   - path: patches/mosquitto/add_custom_config.yml
     target:
-      kind: Deployment
-      name: mosquitto-deployment
+      kind: StatefulSet
+      name: mosquitto-statefulset
 resources:
   - namespace.yml
   - ingressroutetcp.yml

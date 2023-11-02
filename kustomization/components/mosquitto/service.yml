@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: mosquitto-svc
 spec:
+  clusterIP: None
   ports:
     - name: mqtt
       port: 1883

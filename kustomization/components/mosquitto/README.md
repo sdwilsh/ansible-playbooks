@@ -53,7 +53,7 @@ configMapGenerator:
 patches:
   - path: patches/add_custom_config.yml
     target:
-      kind: Deployment
+      kind: StatefulSet
       name: mosquitto-deployment
 ```
 
@@ -71,7 +71,7 @@ This patch is taking advantage of the `$patch: delete` functionality of Kustomiz
 ```yaml
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: this-is-ignored-but-is-required
 spec:

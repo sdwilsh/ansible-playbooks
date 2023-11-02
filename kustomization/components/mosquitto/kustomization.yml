@@ -13,6 +13,5 @@ images:
   - name: eclipse-mosquitto
     newTag: 2.0.18
 resources:
-  - persistentvolumeclaim.yml
-  - deployment.yml
+  - statefulset.yml
   - service.yml

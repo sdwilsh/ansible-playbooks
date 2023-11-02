@@ -1,14 +1,14 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: mosquitto-deployment
+  name: mosquitto-statefulset
 spec:
-  strategy:
-    type: Recreate
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: mosquitto
+  serviceName: mosquitto-svc
   template:
     metadata:
       labels:
@@ -87,9 +87,6 @@ spec:
         - name: mosquitto-default-config
           configMap:
             name: mosquitto-default-config-configmap
-        - name: mosquitto-data
-          persistentVolumeClaim:
-            claimName: mosquitto-data-pvc
         - name: mosquitto-scripts
           configMap:
             defaultMode: 0777
@@ -97,3 +94,12 @@ spec:
         - name: password-conf-data
           secret:
             secretName: mosquitto-password-conf-secret
+  volumeClaimTemplates:
+    - metadata:
+        name: mosquitto-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
