@@ -19,3 +19,10 @@ PROMPT="%F{cyan}%n@%m%f:%F{green}%5(~Q…%4dQ%~)%f %(!.#.$) "
 RPROMPT="%F{cyan}%* %D{%m/%d}%f"
 export EDITOR=vim
 {% endraw %}
+
+# Setup ssh-agent
+if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+  exec ssh-agent zsh
+  ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+  export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+fi
