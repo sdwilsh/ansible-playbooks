@@ -22,7 +22,7 @@ export EDITOR=vim
 
 # Setup ssh-agent
 if [ ! -S ~/.ssh/ssh_auth_sock ]; then
-  exec ssh-agent zsh
+  eval `ssh-agent -s`
   ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
   export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 fi
