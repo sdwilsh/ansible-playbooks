@@ -33,7 +33,7 @@ resources:
   - application/external-services.yml
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
-  - application/olm-operators.yml
+  - application/operators.yml
   - application/prometheus.yml
   - application/tigera-operator.yml
   - application/traefik.yml
