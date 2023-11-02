@@ -31,8 +31,11 @@
     state: present
     uid: 1000
   become: yes
-- import_tasks: starship.yml
-  vars:
-    # renovate: repository=starship/starship
-    version: v1.16.0
+- name: Download & Install Software
+  ansible.builtin.include_tasks:
+    file: sha256-download.yml
+  loop:
+    - executable: starship
+      sha256: "https://github.com/starship/starship/releases/download/v1.16.0/starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz.sha256"
+      targz: "https://github.com/starship/starship/releases/download/v1.16.0/starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
 - import_tasks: shell.yml

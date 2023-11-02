@@ -63,9 +63,8 @@
         "^roles/devsetup/tasks/main\\.yml$"
       ],
       "matchStrings": [
-        "#\\s*renovate:\\srepository=(?<depName>.*?)\\n\\s+version: (?<currentValue>.*?)\\n"
-      ],
-      "versioningTemplate": "docker"
+        "(?:sha256|targz):\\s+\"https://github\\.com/(?<depName>.*?)/releases/download/(?<currentValue>.*?)/"
+      ]
     },
     {
       "customType": "regex",
