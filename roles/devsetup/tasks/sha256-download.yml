@@ -12,9 +12,10 @@
     owner: sdwilsh
     url: "{{ item.sha256 }}"
   register: fetch_sha256 
-- name: Consume archive sha256
+- name: Consume sha256
   ansible.builtin.slurp:
     src: "~sdwilsh/.local/download/{{ item.executable }}.sha256"
+  changed_when: no
   register: sha256
 - name: Fetch archive
   ansible.builtin.get_url:
@@ -25,11 +26,28 @@
     url: "{{ item.targz }}"
   register: fetch_archive
   when: "'targz' in item"
-- name: Install
+- name: Install from Archive
   ansible.builtin.unarchive:
     dest: ~sdwilsh/.local/bin/
     group: sdwilsh
     owner: sdwilsh
     remote_src: yes
     src: "~sdwilsh/.local/download/{{ item.executable }}.tar.gz"
-  when: fetch_archive.changed
+  when: "'targz' in item and fetch_archive.changed"
+- name: Fetch Executable
+  ansible.builtin.get_url:
+    checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
+    dest: "~sdwilsh/.local/download/{{ item.executable }}"
+    group: sdwilsh
+    owner: sdwilsh
+    url: "{{ item.bin }}"
+  when: "'bin' in item"
+- name: Install Executable
+  ansible.builtin.copy:
+    dest: ~sdwilsh/.local/bin/
+    group: sdwilsh
+    mode: u=rx,g=rx
+    owner: sdwilsh
+    remote_src: yes
+    src: "~sdwilsh/.local/download/{{ item.executable }}"
+  when: "'bin' in item"

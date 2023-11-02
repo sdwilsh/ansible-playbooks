@@ -36,6 +36,13 @@
     file: sha256-download.yml
   loop:
     - executable: starship
+      # renovate: datasource=github-releases
       sha256: "https://github.com/starship/starship/releases/download/v1.16.0/starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz.sha256"
+      # renovate: datasource=github-releases
       targz: "https://github.com/starship/starship/releases/download/v1.16.0/starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
+    - executable: kubectl
+      # renovate: datasource=github-releases depName=kubernetes/kubernetes
+      sha256: https://dl.k8s.io/release/v1.28.3/bin/linux/amd64/kubectl.sha256
+      # renovate: datasource=github-releases depName=kubernetes/kubernetes
+      bin: https://dl.k8s.io/release/v1.28.3/bin/linux/amd64/kubectl
 - import_tasks: shell.yml
