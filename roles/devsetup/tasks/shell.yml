@@ -1,0 +1,17 @@
+---
+- name: Set up zsh config
+  ansible.builtin.template:
+    src: zshrc.j2
+    dest: ~sdwilsh/.zshrc
+    mode: u+rw-x,o-rwx,g-rwx
+    owner: sdwilsh
+    group: sdwilsh
+  become: yes
+- name: Set up zsh environment
+  ansible.builtin.template:
+    src: zshenv.j2
+    dest: ~sdwilsh/.zshenv
+    mode: u+rw-x,o-rwx,g-rwx
+    owner: sdwilsh
+    group: sdwilsh
+  become: yes

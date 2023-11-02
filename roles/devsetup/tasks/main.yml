@@ -35,3 +35,4 @@
   vars:
     # renovate: repository=starship/starship
     version: v1.16.0
+- import_tasks: shell.yml
