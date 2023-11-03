@@ -10,9 +10,6 @@ resources:
   - application/cert-manager.yml
   - application/kube-vip.yml
   - application/longhorn.yml
-  # - application/mariadb-galera.yml
-  - application/operator-lifecycle-manager.yml
-  # - application/opensearch-operator.yml
   - application/purelb.yml
   - application/vector-agent.yml
   - application/vector-aggregator.yml
