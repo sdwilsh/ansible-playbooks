@@ -5,6 +5,13 @@ metadata:
   name: prometheus
 spec:
   ruleSelector: {}
+  securityContext:
+    fsGroup: 65536
+    runAsGroup: 65536
+    runAsNonRoot: true
+    runAsUser: 65536
+    seccompProfile:
+      type: RuntimeDefault
   serviceAccountName: prometheus-service-account
   serviceMonitorSelector:
     matchLabels:
