@@ -32,6 +32,7 @@ resources:
   - application/aventertainment.yml
   - application/external-services.yml
   - application/generic-device-plugin.yml
+  - application/kubevirt.yml
   - application/homeassistant.yml
   - application/prometheus.yml
   - application/tigera-operator.yml
