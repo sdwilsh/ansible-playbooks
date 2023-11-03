@@ -4,4 +4,4 @@ kind: Component
 
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/kubevirt/kubevirt/releases/download/v1.0.0/kubevirt-operator.yaml
+  - https://github.com/kubevirt/kubevirt/releases/download/v1.0.1/kubevirt-operator.yaml
