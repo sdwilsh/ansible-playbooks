@@ -15,3 +15,6 @@ spec:
     namespace: prometheus
   syncPolicy:
     automated: {}
+    syncOptions:
+      # The CRDs are too big, and therefore need to be applied server-side.
+      - ServerSideApply=true
