@@ -6,3 +6,5 @@ components:
   - ../../../components/kubevirt-operator
   - ../../../components/multus
 namespace: kubevirt
+resources:
+  - kubevirt.yml
