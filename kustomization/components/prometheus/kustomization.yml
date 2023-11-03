@@ -1,15 +1,12 @@
 ---
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
 
-namespace: prometheus
 resources:
   - ingress.yml
-  - namespace.yml
   - prometheus.yml
   - rbac.yml
   - rules/argocd.yml
   - rules/cpu_load.yml
   - rules/disk.yml
   - rules/memory.yml
-  - servicemonitor.yml
