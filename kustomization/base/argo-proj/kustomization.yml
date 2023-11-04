@@ -6,7 +6,6 @@ resources:
   - project.yml
   - application/argo-cd.yml
   - application/argo-proj.yml
-  - application/calico.yml
   - application/cert-manager.yml
   - application/kube-vip.yml
   - application/longhorn.yml

@@ -2,13 +2,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tigera-operator
+  name: calico
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/sdwilsh/ansible-playbooks
-    path: kustomization/overlays/prod/tigera-operator
+    path: kustomization/overlays/prod/calico
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc

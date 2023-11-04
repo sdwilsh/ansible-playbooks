@@ -6,3 +6,4 @@ components:
   - ../../../components/tigera-operator
 resources:
   - configmap.yml
+  - installation.yml

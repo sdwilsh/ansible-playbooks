@@ -30,11 +30,11 @@ resources:
   - ../../../base/argo-proj
   - application/ara.yml
   - application/aventertainment.yml
+  - application/calico.yml
   - application/external-services.yml
   - application/generic-device-plugin.yml
   - application/kubevirt.yml
   - application/homeassistant.yml
   - application/prometheus.yml
-  - application/tigera-operator.yml
   - application/traefik.yml
   - application/unifi.yml
