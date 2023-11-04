@@ -1,13 +1,23 @@
-VERSION 0.6
+VERSION 0.7
 FROM alpine
 
+helm:
+    # renovate: datasource=github-releases depName=helm/helm
+    ARG HELM_VERSION=v3.13.1
+    ARG TARGETARCH
+    ARG TARGETOS
+    RUN wget https://get.helm.sh/helm-$HELM_VERSION-$TARGETOS-$TARGETARCH.tar.gz
+    RUN tar -xvzf helm-$HELM_VERSION-$TARGETOS-$TARGETARCH.tar.gz
+    RUN mv $TARGETOS-$TARGETARCH/helm /usr/local/bin/
+    SAVE ARTIFACT /usr/local/bin/helm /binary
+
 kustomize-build:
-    # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize versioning=docker
+    # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
     ARG KUSTOMIZE_VERSION=v5.2.1
     FROM registry.k8s.io/kustomize/kustomize:$KUSTOMIZE_VERSION
+    COPY +helm/binary /usr/local/bin/helm
     COPY kustomization kustomization
-    RUN ls
-    RUN find kustomization/overlays/prod/ -mindepth 1 -maxdepth 1 -type d -print | xargs -r -n1 kustomize build > /dev/null
+    RUN find kustomization/overlays/prod/ -mindepth 1 -maxdepth 1 -type d -print | xargs -r -n1 kustomize build --enable-helm > /dev/null
 
 renovate-validate:
     # renovate: datasource=docker depName=renovate/renovate versioning=docker
