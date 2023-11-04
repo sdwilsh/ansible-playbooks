@@ -10,6 +10,13 @@
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
       "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
+    },
+    {
+      "groupName": "multus",
+      "matchFileNames": [
+        "kustomization/components/multus/kustomization.yml"
+      ],
+      "minimumReleaseAge": "1 month"
     }
   ],
   "customManagers": [
