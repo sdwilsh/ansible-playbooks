@@ -76,8 +76,7 @@
         "^roles/devsetup/tasks/main\\.yml$"
       ],
       "matchStrings": [
-        "#\\s+renovate:\\s+datasource=(?<datasource>.*?)\\s+(?:bin|sha256|targz):\\s+\"?https://github\\.com/(?<depName>.*?)/releases/download/(?<currentValue>.*?)/",
-        "#\\s+renovate:\\s+datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)\\s+(?:bin|sha256|targz):\\s+\"?https://.*/(?<currentValue>v.*?)/"
+        "#\\s+renovate:\\s+datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)\\s+[a-z]+_version:\\s+(?<currentValue>.*?)\\n"
       ]
     },
     {
