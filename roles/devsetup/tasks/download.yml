@@ -5,7 +5,7 @@
     owner: sdwilsh
     path: ~sdwilsh/.local/download
     state: directory
-- name: Fetch sha256
+- name: "Fetch {{ item.executable }} sha256"
   ansible.builtin.get_url:
     dest: "~sdwilsh/.local/download/{{ item.executable }}.sha256"
     group: sdwilsh
@@ -13,13 +13,13 @@
     url: "{{ item.sha256 }}"
   register: fetch_sha256 
   when: "'sha256' in item"
-- name: Consume sha256
+- name: "Consume {{ item.executable }} sha256"
   ansible.builtin.slurp:
     src: "~sdwilsh/.local/download/{{ item.executable }}.sha256"
   changed_when: no
   register: sha256
   when: "'sha256' in item"
-- name: Fetch archive
+- name: "Fetch {{ item.executable }} archive"
   ansible.builtin.get_url:
     checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
     dest: "~sdwilsh/.local/download/{{ item.executable }}.tar.gz"
@@ -28,7 +28,7 @@
     url: "{{ item.targz }}"
   register: fetch_archive
   when: "'targz' in item"
-- name: Install from Archive
+- name: "Install {{ item.executable }} from Archive"
   ansible.builtin.unarchive:
     dest: ~sdwilsh/.local/bin/
     group: sdwilsh
@@ -36,7 +36,7 @@
     remote_src: yes
     src: "~sdwilsh/.local/download/{{ item.executable }}.tar.gz"
   when: "'targz' in item and fetch_archive.changed"
-- name: Fetch Executable
+- name: "Fetch {{ item.executable }} Executable"
   ansible.builtin.get_url:
     checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
     dest: "~sdwilsh/.local/download/{{ item.executable }}"
@@ -44,14 +44,14 @@
     owner: sdwilsh
     url: "{{ item.bin }}"
   when: "'bin' in item and 'sha256' in item"
-- name: Fetch Executable No Check
+- name: "Fetch {{ item.executable }} Executable Without SHA256 Check"
   ansible.builtin.get_url:
     dest: "~sdwilsh/.local/download/{{ item.executable }}"
     group: sdwilsh
     owner: sdwilsh
     url: "{{ item.bin }}"
   when: "'bin' in item and not 'sha256' in item"
-- name: Install Executable
+- name: "Install {{ item.executable }} Executable"
   ansible.builtin.copy:
     dest: ~sdwilsh/.local/bin/
     group: sdwilsh
