@@ -34,6 +34,7 @@ resources:
   - application/external-services.yml
   - application/generic-device-plugin.yml
   - application/kubevirt.yml
+  - application/mariadb.yml
   - application/homeassistant.yml
   - application/prometheus.yml
   - application/traefik.yml
