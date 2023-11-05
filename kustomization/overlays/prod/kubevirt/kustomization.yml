@@ -4,9 +4,11 @@ kind: Kustomization
 
 components:
   - ../../../components/kubevirt-cdi-operator
+  - ../../../components/kubevirt-cna-operator
   - ../../../components/kubevirt-operator
   - ../../../components/multus
 namespace: kubevirt
 resources:
   - kubevirt.yml
   - cdi.yml
+  - networkaddonsconfig.yml
