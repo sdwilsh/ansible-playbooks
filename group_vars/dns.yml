@@ -128,7 +128,7 @@ bind_zones:
         ip: 10.10.0.42
       - name: flex-office-sdwilsh.hogs
         ip: 10.10.0.43
-      - name: backyard-switch.hogs
+      - name: sdwilsh-desk.hogs
         ip: 10.10.0.44
       - name: flex-porch.hogs
         ip: 10.10.0.45
