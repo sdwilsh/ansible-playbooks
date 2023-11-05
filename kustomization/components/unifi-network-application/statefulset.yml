@@ -1,14 +1,14 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: una-unifi-deployment
+  name: una-unifi-statefulset
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: unifi-network-application
-  strategy:
-    type: Recreate
+  serviceName: una-unifi-svc
   template:
     metadata:
       labels:
@@ -65,21 +65,26 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: una-unifi-network-application-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: una-mongodb-deployment
+  name: una-mongodb-statefulset
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: unifi-mongodb
-  strategy:
-    type: Recreate
+  serviceName: una-mongodb-svc
   template:
     metadata:
       labels:
@@ -148,6 +153,12 @@ spec:
             defaultMode: 0777
             name: una-init-mongodb-configmap
           name: init-mongodb-script
-        - name: data
-          persistentVolumeClaim:
-            claimName: una-mongodb-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

@@ -15,8 +15,7 @@ images:
     # Unifi only officially supports 3.6-4.4. 
     newTag: 4.4.25-ubuntu2004
 resources:
-  - deployment.yml
+  - statefulset.yml
   - ingress.yml
-  - persistentvolumeclaim.yml
   - serverstransport.yml
   - service.yml

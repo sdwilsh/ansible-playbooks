@@ -20,7 +20,7 @@ patches:
       name: una-ingress
   - path: patches/set_una_pvc_storageClassName.yml
     target:
-      kind: PersistentVolumeClaim
-      name: .*-pvc
+      kind: StatefulSet
+      name: una-.*-statefulset
 resources:
   - namespace.yml

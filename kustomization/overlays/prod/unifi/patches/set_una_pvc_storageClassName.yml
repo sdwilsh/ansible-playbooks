@@ -1,7 +1,4 @@
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: this-is-ignored-but-is-required
-spec:
-  storageClassName: longhorn-crypto-global
+- op: add
+  path: /spec/volumeClaimTemplates/0/spec/storageClassName
+  value: longhorn-crypto-global
