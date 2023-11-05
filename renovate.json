@@ -12,6 +12,13 @@
       "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
     },
     {
+      "groupName": "mariadb-operator",
+      "matchFileNames": [
+        "kustomization/components/mariadb-operator/kustomization.yml"
+      ],
+      "minimumReleaseAge": "1 week"
+    },
+    {
       "groupName": "multus",
       "matchFileNames": [
         "kustomization/components/multus/kustomization.yml"
@@ -93,7 +100,7 @@
       "matchStrings": [
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+newTag: (?<currentValue>.*?)\\n",
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\n\\s+- https://raw\\.githubusercontent\\.com/(?<depName>.*?)/(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\n\\s+- https://github\\.com/(?<depName>.*?)/releases/download/(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+- https://github\\.com/(?<depName>.*?)/releases/download/(?<currentValue>.*?)/"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
     }
