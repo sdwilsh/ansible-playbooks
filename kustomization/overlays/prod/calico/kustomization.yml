@@ -6,4 +6,5 @@ components:
   - ../../../components/tigera-operator
 resources:
   - configmap.yml
+  - felixconfiguration.yml
   - installation.yml

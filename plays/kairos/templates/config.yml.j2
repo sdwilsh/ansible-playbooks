@@ -56,40 +56,66 @@ stages:
         NTP: {{ common__ntp_pool }}
         FallbackNTP: ""
     - files:
-{% if "common__interfaces" in hostvars[host] and "interfaces" in hostvars[host].common__interfaces %}
-{% for iface in hostvars[host].common__interfaces.interfaces %}
-        - path: /etc/systemd/network/01-{{ iface.name }}.link
+{% if "common__interfaces" in hostvars[host] and "bonds" in hostvars[host].common__interfaces %}
+{% for bond in hostvars[host].common__interfaces.bonds %}
+        - path: /etc/systemd/network/01-{{ bond.name }}.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name={{ bond.name }}
+            Kind=bond
+            [Bond]
+            Mode={{ bond.mode }}
+            PrimaryReselectPolicy=always
+            MIIMonitorSec=1s
+        - path: /etc/systemd/network/01-{{ bond.name }}.network
           permissions: 0644
           content: |
             [Match]
-            PermanentMACAddress={{ iface.mac }}
-            [Link]
-            AlternativeName={{ iface.name }}
-        - path: /etc/systemd/network/02-{{ iface.name }}.network
-          permissions: 0644
-          content: |
-            [Match]
-            PermanentMACAddress={{ iface.mac }}
+            Name={{ bond.name }}
             [Network]
-            Address={{ iface.network.address }}
-            DNS={{ iface.network.gateway }}
-            Gateway={{ iface.network.gateway }}
+            Bridge={{ bond.bridge_name }}
+{% for slave in bond.slaves %}
+        - path: /etc/systemd/network/05-slave-{{ slave.mac | replace(':', '-') }}-{{ bond.name }}.network
+          permissions: 0644
+          content: |
+            [Match]
+            PermanentMACAddress={{ slave.mac }}
+            [Network]
+            Bond={{ bond.name }}
+{% if slave.primary | default(false) %}
+            PrimarySlave=true
+{% endif %}
+{% endfor %}
+        - path: /etc/systemd/network/02-{{ bond.bridge_name }}.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name={{ bond.bridge_name }}
+            Kind=bridge
 {% endfor %}
 {% else %}
-        - path: /etc/systemd/network/01-uplink.link
-          permissions: 0644
-          content: |
-            [Link]
-            AlternativeName=uplink
-            [Match]
-            Name=en*
-        - path: /etc/systemd/network/01-uplink.network
+        - path: /etc/systemd/network/01-en.network
           permissions: 0644
           content: |
             [Match]
             Name=en*
+            [Network]
+            Bridge=uplink
+        - path: /etc/systemd/network/02-uplink.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name=uplink
+            Kind=bridge
+            MACAddress={{ (hostvars[host].common__interfaces.interfaces | first).mac }}
+{% endif %}
+        - path: /etc/systemd/network/10-uplink.network
+          permissions: 0644
+          content: |
+            [Match]
+            Name=uplink
             [Network]
             Address={{ common__ip_addresses | first }}
             DNS={{ common__nameservers.addresses | join(' ') }}
             Gateway={{ common__gateway_v4_address }}
-{% endif %}
