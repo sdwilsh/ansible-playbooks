@@ -38,7 +38,7 @@
         file: "{{ root_dir }}/group_vars/dns.yml"
     - name: Create a new serial number, which is based on UTC UNIX time
       ansible.builtin.command:
-        cmd: date -u +%Y%m%d%H%M%S
+        cmd: date -u +%s
       changed_when: no
       register: timestamp
 
