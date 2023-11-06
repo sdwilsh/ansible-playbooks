@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: traefik-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: traefik
@@ -13,6 +13,16 @@ spec:
       labels:
         app.kubernetes.io/name: traefik
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - traefik
+              topologyKey: kubernetes.io/hostname
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
