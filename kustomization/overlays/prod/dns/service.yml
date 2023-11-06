@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bind9-service
+spec:
+  loadBalancerIP: 10.11.1.66
+  ports:
+    - protocol: TCP
+      port: 53
+      name: bind9-tcp
+    - protocol: UDP
+      port: 53
+      name: bind9-udp
+  selector:
+    app.kubernetes.io/name: bind9
+  type: LoadBalancer

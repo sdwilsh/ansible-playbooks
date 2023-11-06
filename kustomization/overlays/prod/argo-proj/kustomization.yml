@@ -30,6 +30,7 @@ resources:
   - ../../../base/argo-proj
   - application/ara.yml
   - application/aventertainment.yml
+  - application/dns.yml
   - application/calico.yml
   - application/external-services.yml
   - application/generic-device-plugin.yml
