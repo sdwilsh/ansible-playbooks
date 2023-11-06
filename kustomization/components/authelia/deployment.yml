@@ -12,6 +12,16 @@ spec:
       labels:
         app.kubernetes.io/name: authelia
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - authelia
+              topologyKey: kubernetes.io/hostname
       enableServiceLinks: false
       containers:
         - name: authelia
