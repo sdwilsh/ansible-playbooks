@@ -110,8 +110,8 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
-            - mountPath: /data/db
-              name: db
+            - mountPath: /data
+              name: data
             - mountPath: /docker-entrypoint-initdb.d/init-mongo.js
               name: init-mongodb
               readOnly: true
@@ -155,7 +155,7 @@ spec:
           name: init-mongodb-script
   volumeClaimTemplates:
     - metadata:
-        name: db
+        name: data
       spec:
         accessModes:
           - ReadWriteOnce
