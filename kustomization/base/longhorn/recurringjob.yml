@@ -22,7 +22,7 @@ spec:
   cron: "5 */1 * * *"
   groups:
     - default
-  retain: 24 # Full Day
+  retain: 96 # Four Days
   task: snapshot
 ---
 apiVersion: longhorn.io/v1beta1
