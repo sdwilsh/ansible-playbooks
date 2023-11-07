@@ -8,7 +8,7 @@ configMapGenerator:
       - configmap/vector.yml
 images:
   - name: timberio/vector
-    newTag: 0.33.1-distroless-libc
+    newTag: 0.34.0-distroless-libc
 namespace: argocd
 patches:
   - target:
