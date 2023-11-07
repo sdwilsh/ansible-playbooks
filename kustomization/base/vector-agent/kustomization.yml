@@ -4,7 +4,7 @@ kind: Kustomization
 
 helmCharts:
   - name: vector
-    version: 0.27.0
+    version: 0.28.0
     repo: https://helm.vector.dev
     releaseName: vector-agent
     valuesFile: values.yml
