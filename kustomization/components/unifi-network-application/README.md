@@ -27,7 +27,7 @@ patches:
   - path: patches/set_una_ingress_host.yml
     target:
       kind: Ingress
-      name: una-ingress
+      name: unifi-network-application-ingress
 ```
 
 #### `patches/set_una_ingress_host.yml`
@@ -48,12 +48,12 @@ patches:
   - path: patches/add_una_svc_serverstransport.yml
     target:
       kind: Service
-      name: una-unifi-svc
+      name: unifi-network-application-svc
 ```
 
 #### `patches/add_una_svc_serverstransport.yml`
 
-The format of the annotation value is: `<deployed-namespace>-una-unifi-serverstransport@kubernetescrd`.
+The format of the annotation value is: `<deployed-namespace>-unifi-network-application-serverstransport@kubernetescrd`.
 
 ```yaml
 ---
@@ -61,7 +61,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    traefik.ingress.kubernetes.io/service.serverstransport: unifi-una-unifi-serverstransport@kubernetescrd
+    traefik.ingress.kubernetes.io/service.serverstransport: unifi-unifi-network-application-serverstransport@kubernetescrd
   name: this-is-ignored-but-is-required
 ```
 
