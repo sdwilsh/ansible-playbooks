@@ -12,9 +12,9 @@ images:
     newTag: 1.36.1
   - name: lscr.io/linuxserver/unifi-network-application
     newTag: 7.5.187
-  - name: mongodb/mongodb-community-server
+  - name: mongodb
     # Unifi only officially supports 3.6-4.4, but mongo 4.4 is only supported until Feb 2024.
-    newTag: 4.4.25-ubuntu2004
+    newTag: 5.0.22
 resources:
   - statefulset.yml
   - ingress.yml

@@ -15,7 +15,7 @@ spec:
         app.kubernetes.io/name: unifi-network-application
     spec:
       containers:
-        - image: mongodb/mongodb-community-server
+        - image: mongo
           lifecycle:
             preStop:
               exec:
@@ -46,7 +46,7 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
-            - mountPath: /data
+            - mountPath: /data/db
               name: mongodb-data
             - mountPath: /docker-entrypoint-initdb.d/init-mongo.js
               name: init-mongodb
