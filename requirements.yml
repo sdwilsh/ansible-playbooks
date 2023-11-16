@@ -16,7 +16,7 @@ collections:
   - name: community.mysql
     version: 3.7.2
   - name: community.zabbix
-    version: 2.1.0
+    version: 2.2.0
   - name: devsec.hardening
     version: 8.8.0
   - name: kubernetes.core
