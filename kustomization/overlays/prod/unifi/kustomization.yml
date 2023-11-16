@@ -9,18 +9,18 @@ patches:
   - path: patches/add_una_svc_annotations.yml
     target:
       kind: Service
-      name: una-unifi-svc
+      name: unifi-network-application-svc
   - path: patches/set_una_ingress_host.yml
     target:
       kind: Ingress
-      name: una-ingress
+      name: unifi-network-application-ingress
   - path: patches/set_una_ingress_annotations.yml
     target:
       kind: Ingress
-      name: una-ingress
+      name: unifi-network-application-ingress
   - path: patches/set_una_pvc_storageClassName.yml
     target:
       kind: StatefulSet
-      name: una-.*-statefulset
+      name: unifi-network-application-statefulset
 resources:
   - namespace.yml

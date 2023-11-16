@@ -2,3 +2,6 @@
 - op: add
   path: /spec/volumeClaimTemplates/0/spec/storageClassName
   value: longhorn-crypto-global
+- op: add
+  path: /spec/volumeClaimTemplates/1/spec/storageClassName
+  value: longhorn-crypto-global

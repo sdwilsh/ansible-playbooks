@@ -4,7 +4,7 @@ kind: Service
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/service.serversscheme: https
-  name: una-unifi-svc
+  name: unifi-network-application-svc
 spec:
   ports:
     - name: una-web
@@ -23,15 +23,3 @@ spec:
   selector:
     app.kubernetes.io/name: unifi-network-application
   type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: una-mongodb-svc
-spec:
-  ports:
-    - name: db
-      port: 27017
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: unifi-mongodb

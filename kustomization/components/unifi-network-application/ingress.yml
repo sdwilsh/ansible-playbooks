@@ -2,14 +2,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: una-ingress
+  name: unifi-network-application-ingress
 spec:
   rules:
     - http:
         paths:
           - backend:
               service:
-                name: una-unifi-svc
+                name: unifi-network-application-svc
                 port:
                   name: una-web
             path: /

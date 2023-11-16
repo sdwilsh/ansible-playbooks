@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: una-unifi-statefulset
+  name: unifi-network-application-statefulset
 spec:
   replicas: 1
   selector:
@@ -15,6 +15,45 @@ spec:
         app.kubernetes.io/name: unifi-network-application
     spec:
       containers:
+        - image: mongodb/mongodb-community-server
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - mongo admin /scripts/shutdown-mongo.js
+          livenessProbe:
+            tcpSocket:
+              port: 27017
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          name: mongodb
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /data
+              name: mongodb-data
+            - mountPath: /docker-entrypoint-initdb.d/init-mongo.js
+              name: init-mongodb
+              readOnly: true
+              subPath: init-mongo.js
+            - mountPath: /scripts
+              name: mongodb-scripts
         - env:
             - name: MEM_LIMIT
               value: "1024"
@@ -23,7 +62,7 @@ spec:
             - name: MONGO_DBNAME
               value: unifi
             - name: MONGO_HOST
-              value: una-mongodb-svc
+              value: 127.0.0.1
             - name: MONGO_PASS
               valueFrom:
                 secretKeyRef:
@@ -36,7 +75,13 @@ spec:
             - name: TZ
               value: America/Los_Angeles
           image: lscr.io/linuxserver/unifi-network-application
-          name: unifi-network-application
+          livenessProbe:
+            httpGet:
+              port: una-web
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          name: unifi
           # https://help.ui.com/hc/en-us/articles/218506997-UniFi-Network-Required-Ports-Reference
           ports:
             - name: una-web
@@ -51,6 +96,12 @@ spec:
             - name: device-stun
               containerPort: 3478
               protocol: UDP
+          readinessProbe:
+            httpGet:
+              port: una-web
+              scheme: HTTPS
+            initialDelaySeconds: 15
+            periodSeconds: 15
           resources:
             limits:
               cpu: 2000m
@@ -63,59 +114,8 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
-            - name: config
+            - name: unifi-config
               mountPath: /config
-  volumeClaimTemplates:
-    - metadata:
-        name: config
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: una-mongodb-statefulset
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: unifi-mongodb
-  serviceName: una-mongodb-svc
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: unifi-mongodb
-    spec:
-      containers:
-        - image: mongodb/mongodb-community-server
-          name: controller
-          # https://help.ui.com/hc/en-us/articles/218506997-UniFi-Network-Required-Ports-Reference
-          ports:
-            - name: db
-              containerPort: 27017
-              protocol: TCP
-          resources:
-            limits:
-              cpu: 2000m
-              memory: 2Gi
-            requests:
-              cpu: 500m
-              memory: 1Gi
-          securityContext:
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-          volumeMounts:
-            - mountPath: /data
-              name: data
-            - mountPath: /docker-entrypoint-initdb.d/init-mongo.js
-              name: init-mongodb
-              readOnly: true
-              subPath: init-mongo.js
       initContainers:
         - env:
             - name: MONGO_PASS
@@ -144,18 +144,26 @@ spec:
             - mountPath: /docker-entrypoint-initdb.d
               name: init-mongodb
             - mountPath: /scripts
-              name: init-mongodb-script
+              name: mongodb-scripts
       volumes:
         - emptyDir:
             medium: Memory
           name: init-mongodb
         - configMap:
             defaultMode: 0777
-            name: una-init-mongodb-configmap
-          name: init-mongodb-script
+            name: una-mongodb-scripts-configmap
+          name: mongodb-scripts
   volumeClaimTemplates:
     - metadata:
-        name: data
+        name: mongodb-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: unifi-config
       spec:
         accessModes:
           - ReadWriteOnce

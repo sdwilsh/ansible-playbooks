@@ -10,7 +10,14 @@ echo "db.getSiblingDB(\"unifi\")
     user: \"unifi\",
     pwd: \"${MONGO_PASS}\",
     roles: [
-      {role: \"dbOwner\", db: \"unifi\"},
+      {role: \"dbOwner\", db: \"unifi\"}
+    ]
+  });
+db.getSiblingDB(\"unifi_stat\")
+  .createUser({
+    user: \"unifi\",
+    pwd: \"${MONGO_PASS}\",
+    roles: [
       {role: \"dbOwner\", db: \"unifi_stat\"}
     ]
   });" > /docker-entrypoint-initdb.d/init-mongo.js

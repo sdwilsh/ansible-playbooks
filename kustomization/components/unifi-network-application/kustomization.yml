@@ -3,16 +3,17 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 configMapGenerator:
-  - name: una-init-mongodb-configmap
+  - name: una-mongodb-scripts-configmap
     files:
       - configmap/generate-init-mongo.sh
+      - configmap/shutdown-mongo.js
 images:
   - name: busybox
     newTag: 1.36.1
   - name: lscr.io/linuxserver/unifi-network-application
     newTag: 7.5.187
   - name: mongodb/mongodb-community-server
-    # Unifi only officially supports 3.6-4.4. 
+    # Unifi only officially supports 3.6-4.4, but mongo 4.4 is only supported until Feb 2024.
     newTag: 4.4.25-ubuntu2004
 resources:
   - statefulset.yml
