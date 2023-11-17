@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: mariadb
-    newTag: 11.1.2
+    newTag: 11.1.3
 resources:
   - cronjob.yml
   - deployment.yml
