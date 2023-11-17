@@ -13,6 +13,6 @@ patches:
 resources:
   - namespace.yml
   # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.9.1/manifests/ha/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.9.1/manifests/install.yaml
   - ingress.yml
   - serverstransport.yml
