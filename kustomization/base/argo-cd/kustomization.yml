@@ -2,19 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-configMapGenerator:
-  - name: vector-config
-    files:
-      - configmap/vector.yml
-images:
-  - name: timberio/vector
-    newTag: 0.34.0-distroless-libc
 namespace: argocd
 patches:
-  - target:
-      kind: Deployment
-      name: argocd-metrics-scrape
-    path: patches/add_vector_sidecar.yml
   - target:
       kind: ConfigMap
       name: argocd-cmd-params-cm
@@ -27,4 +16,3 @@ resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.9.1/manifests/ha/install.yaml
   - ingress.yml
   - serverstransport.yml
-  - deployment.yml
