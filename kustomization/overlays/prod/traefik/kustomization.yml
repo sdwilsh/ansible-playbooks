@@ -5,13 +5,22 @@ kind: Kustomization
 components:
   - ../../../components/authelia
   - ../../../components/traefik
-namespace: traefik
 configMapGenerator:
   - name: authelia-configmap
     files:
       - configmap/authelia-config.yml
       - configmap/authelia-users.yml
+images:
+  - name: quay.io/opstree/redis-sentinel
+    newTag: v7.0.12
+  - name: quay.io/opstree/redis
+    newTag: v7.0.12
+namespace: traefik
 patches:
+  - path: patches/add_authelia_redis_secrets.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
   - path: patches/allow_external_name_services.yml
     target:
       kind: Deployment
@@ -56,3 +65,5 @@ patches:
 resources:
   - namespace.yml
   - persistentvolumeclaim.yml
+  - redisreplication.yml
+  - redissentinel.yml

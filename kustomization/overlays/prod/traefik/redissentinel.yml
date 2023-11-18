@@ -1,0 +1,35 @@
+---
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: RedisSentinel
+metadata:
+  name: authelia-redis
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - authelia-redis-sentinel
+          topologyKey: kubernetes.io/hostname
+  clusterSize: 3
+  podSecurityContext:
+    fsGroup: 1000 # redis
+    runAsUser: 1000 # redis
+  redisSentinelConfig: 
+    redisReplicationName : authelia-redis-replication
+  kubernetesConfig:
+    image: quay.io/opstree/redis-sentinel
+    imagePullPolicy: IfNotPresent
+    redisSecret:
+      key: session_redis_high_availability_sentinel_password
+      name: authelia-config-secret
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 101m
+        memory: 128Mi
