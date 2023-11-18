@@ -1,0 +1,12 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: OperatorConfiguration
+metadata:
+  name: this-is-ignored-but-is-required
+configuration:
+  kubernetes:
+    # Prevent nodes in the same cluster from being on the same host.
+    enable_pod_antiaffinity: true
+
+    # Allow any namespace to define a cluster.
+    watched_namespace: "*"
