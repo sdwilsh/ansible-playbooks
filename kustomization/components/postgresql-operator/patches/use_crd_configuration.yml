@@ -1,0 +1,15 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: postgres-operator
+          env:
+            - $patch: delete
+              name: CONFIG_MAP_NAME
+            - name: POSTGRES_OPERATOR_CONFIGURATION_OBJECT
+              value: postgresql-operator-default-configuration
