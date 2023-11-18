@@ -7,4 +7,5 @@ helmCharts:
     version: 0.15.9
     repo: https://ot-container-kit.github.io/helm-charts/
     releaseName: redis-operator
+    includeCRDs: true
     valuesFile: values.yml
