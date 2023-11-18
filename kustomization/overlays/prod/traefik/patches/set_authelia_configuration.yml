@@ -17,15 +17,3 @@
 - op: add
   path: /spec/template/spec/containers/0/args/-
   value: /config/prod/authelia-config.yml
-# Add PVC mounts for /db
-- op: add
-  path: /spec/template/spec/volumes/-
-  value:
-    name: db
-    persistentVolumeClaim:
-      claimName: authelia-db-pvc
-- op: add
-  path: /spec/template/spec/containers/0/volumeMounts/-
-  value: 
-    mountPath: /db
-    name: db

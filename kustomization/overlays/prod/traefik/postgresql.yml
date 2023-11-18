@@ -1,0 +1,18 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: authelia-storage-pg 
+spec:
+  teamId: authelia
+  volume:
+    size: 1Gi
+    storageClass: longhorn-crypto-global
+  numberOfInstances: 2
+  preparedDatabases:
+    authelia:
+      defaultUsers: true
+      schemas:
+        public: {}
+  postgresql:
+    version: "15"

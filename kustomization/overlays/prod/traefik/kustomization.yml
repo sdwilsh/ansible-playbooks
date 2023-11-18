@@ -17,6 +17,10 @@ images:
     newTag: v7.0.12
 namespace: traefik
 patches:
+  - path: patches/add_authelia_postgres_secrets.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
   - path: patches/add_authelia_redis_secrets.yml
     target:
       kind: Deployment
@@ -64,6 +68,6 @@ patches:
   #     name: traefik-deployment
 resources:
   - namespace.yml
-  - persistentvolumeclaim.yml
+  - postgresql.yml
   - redisreplication.yml
   - redissentinel.yml

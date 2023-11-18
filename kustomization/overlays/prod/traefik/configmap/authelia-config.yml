@@ -54,8 +54,11 @@ session:
 
 # https://www.authelia.com/configuration/storage/introduction/
 storage: 
-  local:
-    path: /db/db.sqlite3
+  postgres:
+    database: authelia
+    host: authelia-storage-pg.traefik.svc.cluster.local
+    tls:
+      skip_verify: true
 
 # https://www.authelia.com/configuration/notifications/introduction/
 notifier:
