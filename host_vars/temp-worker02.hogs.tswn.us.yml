@@ -1,6 +1,0 @@
----
-common__interfaces:
-  interfaces:
-    - mac: 00:50:56:86:50:e3
-common__ip_addresses:
-  - 10.11.0.111/23
