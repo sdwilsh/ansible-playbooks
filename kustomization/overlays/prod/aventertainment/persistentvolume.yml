@@ -10,5 +10,5 @@ spec:
     storage: 2Ti
   nfs:
     path: /mnt/rust0/nfs/mkv
-    server: nfs-svc.external-services.svc.cluster.local
+    server: nfs-svc.external-svc.svc.cluster.local
   persistentVolumeReclaimPolicy: Retain
