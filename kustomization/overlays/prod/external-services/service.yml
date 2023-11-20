@@ -15,7 +15,7 @@ kind: Service
 metadata:
   name: nfs-svc
 spec:
-  externalName: 10.11.0.14 # chanttogreen.hogs.tswn.us
+  externalName: services-nfs.hogs.tswn.us
   type: ExternalName
 ---
 apiVersion: v1

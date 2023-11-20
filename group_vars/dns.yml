@@ -172,6 +172,8 @@ bind_zones:
       - name: upper-hallway-ip.hogs
         ip: 10.10.0.94
 
+      - name: services-nfs.hogs
+        ip: 10.11.0.14
       - name: k3s.hogs
         ip: 10.11.0.100
       - name: node01.hogs
