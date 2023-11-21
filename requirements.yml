@@ -20,6 +20,6 @@ collections:
   - name: devsec.hardening
     version: 8.8.0
   - name: kubernetes.core
-    version: 2.4.0
+    version: 3.0.0
   - name: vyos.vyos
     version: 4.1.0
