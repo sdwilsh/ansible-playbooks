@@ -8,7 +8,7 @@ spec:
   - image: ubuntu
     name: ubuntu
     args:
-      - "apt-get update && apt-get install -y iputils-ping iproute2 && /bin/sleep 365d" 
+      - "apt-get update && apt-get install -y dnsutils iputils-ping iproute2 && /bin/sleep 365d"
     command:
       - /bin/bash
       - -c
