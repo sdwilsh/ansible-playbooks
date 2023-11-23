@@ -10,17 +10,15 @@ patches:
     target:
       kind: Application
       name: argo-cd
-  - path: patches/set_argo-proj_path.yml
-    target:
-      kind: Application
-      name: argo-proj
   - path: patches/set_longhorn_path.yml
     target:
       kind: Application
       name: longhorn
 resources:
+  - project.yml
   - ../../../base/argo-proj
   - application/ara.yml
+  - application/argo-proj.yml
   - application/aventertainment.yml
   - application/calico.yml
   - application/cert-manager.yml
