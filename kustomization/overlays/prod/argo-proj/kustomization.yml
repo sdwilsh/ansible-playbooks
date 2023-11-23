@@ -9,7 +9,6 @@ resources:
   - application/argo-cd.yml
   - application/argo-proj.yml
   - application/aventertainment.yml
-  - application/calico.yml
   - application/cert-manager.yml
   - application/dns.yml
   - application/external-services.yml
