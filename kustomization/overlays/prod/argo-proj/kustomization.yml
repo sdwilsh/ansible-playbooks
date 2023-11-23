@@ -14,10 +14,6 @@ patches:
     target:
       kind: Application
       name: argo-proj
-  - path: patches/set_kube-vip_path.yml
-    target:
-      kind: Application
-      name: kube-vip
   - path: patches/set_longhorn_path.yml
     target:
       kind: Application
@@ -36,6 +32,7 @@ resources:
   - application/external-services.yml
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
+  - application/kube-vip.yml
   - application/kubevirt.yml
   - application/mariadb.yml
   - application/postgresql.yml

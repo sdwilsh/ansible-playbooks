@@ -1,11 +1,10 @@
 ---
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
 
 images:
  - name: ghcr.io/kube-vip/kube-vip
    newTag: v0.6.3
-namespace: kube-vip
 resources:
   - namespace.yml
   - rbac.yml

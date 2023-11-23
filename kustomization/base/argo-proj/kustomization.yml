@@ -6,6 +6,5 @@ resources:
   - project.yml
   - application/argo-cd.yml
   - application/argo-proj.yml
-  - application/kube-vip.yml
   - application/longhorn.yml
   - application/purelb.yml
