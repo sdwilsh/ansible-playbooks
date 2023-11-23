@@ -42,3 +42,4 @@ resources:
   - application/redis.yml
   - application/traefik.yml
   - application/unifi.yml
+  - application/vector.yml

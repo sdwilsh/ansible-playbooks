@@ -10,5 +10,3 @@ resources:
   - application/kube-vip.yml
   - application/longhorn.yml
   - application/purelb.yml
-  - application/vector-agent.yml
-  - application/vector-aggregator.yml

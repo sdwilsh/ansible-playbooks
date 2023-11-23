@@ -14,7 +14,7 @@ spec:
       port: prom-exporter
   namespaceSelector:
     matchNames:
-      - vector-aggregator
+      - vector
   selector:
     matchLabels:
       app.kubernetes.io/component: Aggregator
