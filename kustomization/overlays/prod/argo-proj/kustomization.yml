@@ -10,10 +10,6 @@ patches:
     target:
       kind: Application
       name: argo-cd
-  - path: patches/set_longhorn_path.yml
-    target:
-      kind: Application
-      name: longhorn
 resources:
   - project.yml
   - ../../../base/argo-proj
@@ -28,6 +24,7 @@ resources:
   - application/homeassistant.yml
   - application/kube-vip.yml
   - application/kubevirt.yml
+  - application/longhorn.yml
   - application/mariadb.yml
   - application/purelb.yml
   - application/postgresql.yml

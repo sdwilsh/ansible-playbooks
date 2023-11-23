@@ -18,9 +18,5 @@ patches:
     target:
       kind: Ingress
       name: unifi-network-application-ingress
-  - path: patches/set_una_pvc_storageClassName.yml
-    target:
-      kind: StatefulSet
-      name: unifi-network-application-statefulset
 resources:
   - namespace.yml

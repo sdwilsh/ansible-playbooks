@@ -38,12 +38,6 @@
         - cert-manager
       vars:
         certmanager_cloudflare_api_token: "{{ hostvars[groups['kairos_prod'] | first].certmanager_cloudflare_api_token }}"
-    - ansible.builtin.import_tasks: longhorn/tasks.yml
-      tags:
-        - longhorn
-      vars:
-        longhorn_default_crypto_passphrase: "{{ hostvars[groups['kairos_controlplane'] | first].longhorn_default_crypto_passphrase }}"
-        longhorn_s3: "{{ hostvars[groups['kairos_prod'] | first].longhorn_s3 }}"
   vars:
     cluster: default
     secrets: "{{ hostvars[groups['kairos_prod'] | first].secrets }}"

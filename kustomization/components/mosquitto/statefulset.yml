@@ -103,3 +103,4 @@ spec:
         resources:
           requests:
             storage: 1Gi
+        storageClassName: longhorn-encrypted

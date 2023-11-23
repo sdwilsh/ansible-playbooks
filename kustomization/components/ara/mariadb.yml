@@ -24,7 +24,7 @@ spec:
       resources:
         requests:
           storage: 300Mi
-      storageClassName: longhorn-crypto-global
+      storageClassName: longhorn-encrypted
   image:
     repository: mariadb
     pullPolicy: IfNotPresent
@@ -45,4 +45,4 @@ spec:
     resources:
       requests:
         storage: 4Gi
-    storageClassName: longhorn-crypto-global
+    storageClassName: longhorn-encrypted

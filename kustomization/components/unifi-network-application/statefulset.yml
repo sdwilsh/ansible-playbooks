@@ -162,6 +162,7 @@ spec:
         resources:
           requests:
             storage: 1Gi
+        storageClassName: longhorn-encrypted
     - metadata:
         name: unifi-config
       spec:
@@ -170,3 +171,4 @@ spec:
         resources:
           requests:
             storage: 1Gi
+        storageClassName: longhorn-encrypted

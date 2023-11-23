@@ -7,7 +7,7 @@ spec:
   teamId: authelia
   volume:
     size: 1Gi
-    storageClass: longhorn-crypto-global
+    storageClass: longhorn-encrypted
   numberOfInstances: 2
   preparedDatabases:
     authelia:
