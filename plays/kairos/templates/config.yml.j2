@@ -19,19 +19,17 @@ k3s:
 {% else %}
     - --server https://{{ hostvars[groups[hostvars[host].k3s_controlplane_group] | first].inventory_hostname }}:6443
 {% endif %}
-    - --flannel-backend=none
-    - --disable-network-policy
     - --cluster-cidr=172.16.0.0/16
     - --service-cidr=172.17.0.0/16
     - --disable=traefik,servicelb
-    - --disable-kube-proxy
+    - --disable-helm-controller
 {% for tls_san in hostvars[host].k3s_controlplane_san %}
     - --tls-san={{ tls_san }}
 {% endfor %}
 {% else %}
 k3s-agent:
   args:
-    - --flannel-iface=services
+    - --flannel-iface=uplink
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
 {% endif %}
