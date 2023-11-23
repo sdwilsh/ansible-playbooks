@@ -4,16 +4,9 @@ kind: Kustomization
 
 namespace: argocd
 resources:
-  - ../../../base/argo-proj
-patches:
-  - path: patches/set_argo-cd_path.yml
-    target:
-      kind: Application
-      name: argo-cd
-resources:
   - project.yml
-  - ../../../base/argo-proj
   - application/ara.yml
+  - application/argo-cd.yml
   - application/argo-proj.yml
   - application/aventertainment.yml
   - application/calico.yml
