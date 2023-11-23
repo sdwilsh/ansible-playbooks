@@ -18,10 +18,6 @@ patches:
     target:
       kind: Application
       name: longhorn
-  - path: patches/set_purelb_path.yml
-    target:
-      kind: Application
-      name: purelb
 resources:
   - ../../../base/argo-proj
   - application/ara.yml
@@ -35,6 +31,7 @@ resources:
   - application/kube-vip.yml
   - application/kubevirt.yml
   - application/mariadb.yml
+  - application/purelb.yml
   - application/postgresql.yml
   - application/prometheus.yml
   - application/redis.yml

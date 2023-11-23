@@ -7,4 +7,3 @@ resources:
   - application/argo-cd.yml
   - application/argo-proj.yml
   - application/longhorn.yml
-  - application/purelb.yml
