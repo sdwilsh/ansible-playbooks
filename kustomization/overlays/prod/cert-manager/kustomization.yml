@@ -2,6 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+components:
+  - ../../../components/cert-manager
 configMapGenerator:
   - name: vector-config
     namespace: cert-manager
@@ -22,6 +24,4 @@ patches:
   - path: patches/increase_replicas.yml
   - path: patches/remove_metrics_service.yml
 resources:
-  # renovate: datasource=github-releases
-  - https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
   - clusterissuer.yml

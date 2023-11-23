@@ -31,6 +31,7 @@ resources:
   - application/ara.yml
   - application/aventertainment.yml
   - application/calico.yml
+  - application/cert-manager.yml
   - application/dns.yml
   - application/external-services.yml
   - application/generic-device-plugin.yml
