@@ -116,6 +116,6 @@ stages:
             [Match]
             Name=uplink
             [Network]
-            Address={{ common__ip_addresses | first }}
-            DNS={{ common__nameservers.addresses | join(' ') }}
-            Gateway={{ common__gateway_v4_address }}
+            Address={{ hostvars[host].common__ip_addresses | first }}
+            DNS={{ hostvars[host].common__nameservers.addresses | join(' ') }}
+            Gateway={{ hostvars[host].common__gateway_v4_address }}
