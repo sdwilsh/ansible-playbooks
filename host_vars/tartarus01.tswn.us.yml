@@ -152,10 +152,6 @@ vyos_ospf_interfaces__config:
       priority: "{{ hostvars['maccabeus02.hogs.tswn.us'].vyos__vrrp_priority }}"
 
 vyos_ospfv2__neighbors:
-  - neighbor_id: 10.2.1.1
-    priority: "{{ hostvars['cloud01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
-  - neighbor_id: 10.2.1.5
-    priority: "{{ hostvars['cloud02.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
   - neighbor_id: "10.10.1.1"
     priority: "{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__vrrp_priority }}"
   - neighbor_id: "10.10.1.5"
