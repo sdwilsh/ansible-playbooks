@@ -1,4 +1,4 @@
-; Hash: c1a9a4015b34b21f3c112b34d1f4f1b6 1700792082
+; Hash: 5613b6df88eed5098edacf239f0a772c 1700843262
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1700792082
+  1700843262
   1D
   1H
   1W
@@ -21,7 +21,6 @@ $TTL 1W
 
 pool.ntp.hogs              IN  A      10.117.0.50
 tartarus01                 IN  A      149.248.37.12
-cloud.routers.hogs         IN  A      10.2.0.78
 guest.routers.hogs         IN  A      10.2.0.81
 work.routers.hogs          IN  A      10.2.0.84
 maccabeus.hogs             IN  A      10.117.0.1
@@ -78,8 +77,6 @@ esxi-intel02.hogs          IN  A      10.10.0.54
 esxi-intel03.hogs          IN  A      10.10.0.55
 esxi-intel04.hogs          IN  A      10.10.0.56
 centurylink.routers.hogs       IN  A      10.10.0.70
-cloud01.routers.hogs       IN  A      10.10.0.79
-cloud02.routers.hogs       IN  A      10.10.0.80
 guest01.routers.hogs       IN  A      10.10.0.82
 guest02.routers.hogs       IN  A      10.10.0.83
 work01.routers.hogs        IN  A      10.10.0.85

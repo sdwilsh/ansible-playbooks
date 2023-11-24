@@ -32,8 +32,6 @@ bind_zones:
         ip: "149.248.37.12"
 
       # Transit Network
-      - name: "cloud.routers.hogs"
-        ip: "10.2.0.78"
       - name: "guest.routers.hogs"
         ip: "10.2.0.81"
       - name: "work.routers.hogs"
@@ -149,10 +147,6 @@ bind_zones:
         ip: "10.10.0.56"
       - name: "centurylink.routers.hogs"
         ip: "10.10.0.70"
-      - name: "cloud01.routers.hogs"
-        ip: "10.10.0.79"
-      - name: "cloud02.routers.hogs"
-        ip: "10.10.0.80"
       - name: "guest01.routers.hogs"
         ip: "10.10.0.82"
       - name: "guest02.routers.hogs"

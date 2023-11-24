@@ -40,10 +40,6 @@ kairos_prod
 docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
 docker.hogs.tswn.us ansible_host=10.10.0.8
 
-[vyos_cloud]
-cloud01.routers.hogs.tswn.us ansible_host=10.10.0.79
-cloud02.routers.hogs.tswn.us ansible_host=10.10.0.80
-
 [vyos_guest]
 guest01.routers.hogs.tswn.us ansible_host=10.10.0.82
 guest02.routers.hogs.tswn.us ansible_host=10.10.0.83
