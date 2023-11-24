@@ -94,8 +94,6 @@ bind_zones:
         ip: "10.10.0.5"
       - name: harvest.hogs
         ip: 10.10.0.6
-      - name: "docker.hogs"
-        ip: "10.10.0.8"
       - name: "ipmi.firstlightweaveslivingsong.hogs"
         ip: "10.10.0.10"
       - name: "ipmi.dadab.hogs"
@@ -106,10 +104,6 @@ bind_zones:
         ip: 10.10.0.14
       - name: "rack-switch01.hogs.tswn.us"
         ip: "10.10.0.15"
-      - name: "server.zabbix.hogs"
-        ip: "10.10.0.18"
-      - name: "snmp.zabbix.hogs"
-        ip: "10.10.0.19"
       - name: "sdwilsh-dev.hogs"
         ip: "10.10.0.20"
       - name: "ups01.hogs"
