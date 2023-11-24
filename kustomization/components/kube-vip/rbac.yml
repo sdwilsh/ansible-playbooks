@@ -14,7 +14,10 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - endpoints
       - nodes
+      - services
+      - services/status
     verbs:
       - list
       - get

@@ -23,20 +23,22 @@ spec:
       - args:
         - manager
         env:
-        - name: vip_arp
-          value: "true"
-        - name: port
-          value: "6443"
-        - name: vip_cidr
-          value: "32"
         - name: cp_enable
           value: "true"
         - name: cp_namespace
           value: kube-vip
+        - name: port
+          value: "6443"
+        - name: svc_election
+          value: "true"
+        - name: svc_enable
+          value: "true"
+        - name: vip_arp
+          value: "true"
         - name: vip_ddns
           value: "false"
-        - name: svc_enable
-          value: "false"
+        - name: vip_cidr
+          value: "32"
         - name: vip_leaderelection
           value: "true"
         - name: vip_leaseduration
