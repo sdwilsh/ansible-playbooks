@@ -15,7 +15,6 @@ resources:
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
   - application/kube-vip.yml
-  - application/kubevirt.yml
   - application/longhorn.yml
   - application/postgresql.yml
   - application/prometheus.yml
