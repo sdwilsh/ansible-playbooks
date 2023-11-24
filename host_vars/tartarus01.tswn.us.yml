@@ -88,12 +88,12 @@ vyos_interfaces__wireguard:
         pubkey: "{{ hostvars['maccabeus01.hogs.tswn.us'].wireguard__pubkey }}"
     port: 51820
   - name: wg1
-    description: maccabeus02 wg0
+    description: hogs02.routers.hogs.tswn.us wg0
     ipv4:
       - address: 10.10.1.6/30
     mtu: "1280"
     peers:
-      - name: maccabeus02
+      - name: hogs01.routers.hogs.tswn.us
         allowed_ips:
           ipv4:
             - network: 0.0.0.0/0
@@ -101,7 +101,7 @@ vyos_interfaces__wireguard:
             - network: 10.11.0.0/23
             - network: 10.117.0.0/23
         persistent_keepalive_sec: 15
-        pubkey: "{{ hostvars['maccabeus02.hogs.tswn.us'].wireguard__pubkey }}"
+        pubkey: "{{ hostvars['hogs01.routers.hogs.tswn.us'].wireguard__pubkey }}"
     port: 51821
   - name: "wg2"
     description: "mobile devices vpn"
@@ -126,9 +126,9 @@ vyos_interfaces__wireguard:
     port: "51822"
 
 vyos_ospf_interfaces__config:
-  - name: "wg0"
+  - name: wg0
     address_family:
-    - afi: "ipv4"
+    - afi: ipv4
       authentication:
         md5_key:
           key_id: 1
@@ -136,26 +136,26 @@ vyos_ospf_interfaces__config:
       cost: 10 # 1G
       dead_interval: 5
       hello_interval: 2
-      network: "point-to-point"
+      network: point-to-point
+      priority: "{{ hostvars['hogs01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - name: wg1
+    address_family:
+    - afi: ipv4
+      authentication:
+        md5_key:
+          key_id: 1
+          key: "{{ vyos__ospf_authentication_key }}"
+      cost: 10 # 1G
+      dead_interval: 5
+      hello_interval: 2
+      network: point-to-point
       priority: "{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__vrrp_priority }}"
-  - name: "wg1"
-    address_family:
-    - afi: "ipv4"
-      authentication:
-        md5_key:
-          key_id: 1
-          key: "{{ vyos__ospf_authentication_key }}"
-      cost: 10 # 1G
-      dead_interval: 5
-      hello_interval: 2
-      network: "point-to-point"
-      priority: "{{ hostvars['maccabeus02.hogs.tswn.us'].vyos__vrrp_priority }}"
 
 vyos_ospfv2__neighbors:
   - neighbor_id: "10.10.1.1"
     priority: "{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__vrrp_priority }}"
-  - neighbor_id: "10.10.1.5"
-    priority: "{{ hostvars['maccabeus02.hogs.tswn.us'].vyos__vrrp_priority }}"
+  - neighbor_id: 10.10.1.5
+    priority: "{{ hostvars['hogs01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
 
 vyos_ospfv2_parameters__router_id: "149.248.37.12"
 

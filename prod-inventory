@@ -46,7 +46,9 @@ guest02.routers.hogs.tswn.us ansible_host=10.10.0.83
 
 [vyos_home]
 maccabeus01.hogs.tswn.us ansible_host=10.10.0.48
-maccabeus02.hogs.tswn.us ansible_host=10.10.0.49
+
+[vyos_hogs]
+hogs01.routers.hogs.tswn.us ansible_host=10.10.0.79
 
 [vyos_remote]
 tartarus01.tswn.us ansible_host=149.248.37.12
