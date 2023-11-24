@@ -57,10 +57,6 @@ patches:
     target:
       kind: Ingress
       name: traefik-dashboard-ingress
-  - path: patches/set_load_balancer.yml
-    target:
-      kind: Service
-      name: traefik-svc
   - path: patches/update_subjects.yml
     target:
       kind: ClusterRoleBinding
