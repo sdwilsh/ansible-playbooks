@@ -11,12 +11,3 @@
   source:
     group:
       address_group: SERVICE-TALKERS-v4
-- description: Allow access to Unifi Web port
-  action: accept
-  state:
-    new: true
-  destination:
-    address: 10.82.0.2
-    group:
-      port_group: UNIFI-WEB-TCP
-  protocol: tcp
