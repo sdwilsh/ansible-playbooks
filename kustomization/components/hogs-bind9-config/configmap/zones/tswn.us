@@ -1,4 +1,4 @@
-; Hash: b39e80d6ed3c420e98cbf00a745a3b74 1700449992
+; Hash: c1a9a4015b34b21f3c112b34d1f4f1b6 1700792082
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1700449992
+  1700792082
   1D
   1H
   1W
@@ -93,6 +93,7 @@ services-nfs.hogs          IN  A      10.11.0.14
 k3s.hogs                   IN  A      10.11.0.100
 node01.hogs                IN  A      10.11.0.101
 worker01.hogs              IN  A      10.11.0.104
+worker02.hogs              IN  A      10.11.0.104
 traefik.hogs               IN  A      10.11.1.64
 ara.hogs                   IN  CNAME  traefik.hogs
 argo-cd.hogs               IN  CNAME  traefik.hogs

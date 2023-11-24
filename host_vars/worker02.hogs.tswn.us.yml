@@ -1,0 +1,13 @@
+---
+common__interfaces:
+  bonds:
+    - bridge_name: uplink
+      mode: active-backup
+      name: bond0
+      slaves:
+        - mac: 08:bf:b8:56:45:e8
+          primary: yes
+        - mac: 6c:4b:90:5a:9b:95
+
+common__ip_addresses:
+  - 10.11.0.105/23
