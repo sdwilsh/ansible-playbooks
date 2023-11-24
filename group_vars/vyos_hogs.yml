@@ -1,0 +1,351 @@
+---
+
+vyos_vrrp__conntrack_sync:
+  interface: eth1.9
+  peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+  sync_group: MAIN
+
+vyos_dns_forwarding__allow_from:
+  - 10.0.0.0/8
+  - 127.0.0.0/8
+  - 192.168.1.0/24
+vyos_dns_forwarding__listen_addresses:
+  # localhost
+  - 127.0.0.1
+  # MAN
+  - 10.10.0.1
+  - "10.10.0.{{ vyos__host_id_ipv4 }}"
+  # SERVICES
+  - 10.11.0.1
+  - "10.11.0.{{ vyos__host_id_ipv4 }}"
+  # IOT
+  - 10.66.0.1
+  - "10.66.0.{{ vyos__host_id_ipv4 }}"
+  # NOWAN
+  - 10.67.0.1
+  - "10.67.0.{{ vyos__host_id_ipv4 }}"
+  # HOME
+  - 10.117.0.1
+  - "10.117.0.{{ vyos__host_id_ipv4 }}"
+
+vyos_dhcp_server__failover_name: hogs-HA
+vyos_dhcp_server__networks:
+  - name: MAN
+    default_router: 10.10.0.1
+    own_dns: true
+    range:
+      start: 10.10.0.200
+      stop: 10.10.0.250
+    subnet: 10.10.0.0/24
+  - name: IOT
+    default_router: 10.66.0.1
+    own_dns: true
+    range:
+      start: 10.66.0.10
+      stop: 10.66.0.250
+    subnet: 10.66.0.0/24
+  - name: NOWAN
+    default_router: 10.67.0.1
+    own_dns: true
+    range:
+      start: 10.67.0.10
+      stop: 10.67.0.250
+    subnet: 10.67.0.0/24
+  - name: HOME
+    default_router: 10.117.0.1
+    own_dns: true
+    range:
+      start: 10.117.1.1
+      stop: 10.117.1.254
+    static_mapping:
+      - name: lighterthansome
+        ip: 10.117.0.9
+        mac: 04:cf:4b:1f:99:e2
+      - name: printer
+        ip: 10.117.0.14
+        mac: b4:22:00:59:aa:78gt
+      - name: lutron
+        ip: 10.117.0.18
+        mac: 50:8c:b1:1d:4d:1f
+      - name: roku-mainbed
+        ip: 10.117.0.20
+        mac: d8:31:34:5f:6c:35
+      - name: roku-den
+        ip: 10.117.0.21
+        mac: d8:31:34:66:95:f1
+      - name: hue
+        ip: 10.117.0.34
+        mac: ec:b5:fa:9b:c1:f6
+    subnet: 10.117.0.0/23
+
+vyos_firewall__zones:
+  - name: HOME
+    interfaces:
+      - eth1.117
+  - name: IOT
+    interfaces:
+      - eth1.66
+  - name: LOCAL
+    local-zone: yes
+  - name: MAN
+    interfaces:
+      - eth1.10
+  - name: NOWAN
+    interfaces:
+      - eth1.67
+  - name: REMOTE-TUN
+    interfaces:
+      - wg0
+  - name: SERVICES
+    interfaces:
+      - eth0.11
+  - name: SYNC
+    interfaces:
+      - eth1.9
+  - name: TRANSIT
+    interfaces:
+      - eth0.2
+vyos_firewall__zones_root_path: firewall_zones/vyos_hogs
+
+vyos_firewall_global__group:
+  address_group:
+    - name: CAMERAS-v4
+      description: The v4 IP camera addresses
+      afi: ipv4
+      members:
+        - address: 10.67.0.12 # front-porch.camera.hogs.tswn.us
+        - address: 10.67.0.13 # front-north-west.camera.hogs.tswn.us
+        - address: 10.67.0.14 # front-north-west.camera.hogs.tswn.us
+    - name: CAMERA-TALKERS-v4
+      description: The v4 addresses of devices that can talk to the cameras
+      afi: ipv4
+      members:
+        - address: 10.117.0.23 # loki.hogs.tswn.us
+    - name: FILE-SERVER-v4
+      description: IP Addresses for the NFS Server
+      afi: ipv4
+      members:
+        # firstlightweaveslivingsong.hogs.tswn.us
+        - address: 10.117.0.10
+        # chanttogreen.hogs.tswn.us
+        - address: 10.10.0.14
+    - name: HOME-SERVICES-v4
+      description: Kubernetes Services for the HOME network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.32-10.11.1.63
+    - name: MAN-SERVICES-v4
+      description: Kubernetes Services for the MAN network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.0-10.11.1.31
+    - name: NTP-SERVICES-v4
+      description: NTP Hosts
+      members:
+        - address: 10.117.0.50
+    - name: NOWAN-TALKERS-from-HOME-v4
+      description: IP Addresses allowed to talk to devices on NOWAN and IOT
+      members:
+        # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.0.9
+        # cortana.hogs.tswn.us
+        - address: 10.117.0.19
+        # iona.hogs.tswn.us
+        - address: 10.117.0.27
+        # sdwilsh-desktop
+        - address: 10.117.0.31
+    - name: OPEN-SERVICES-v4
+      description: Kubernetes Services for the any local network network.
+      afi: ipv4
+      members:
+        - address: 10.11.1.64-10.11.1.95
+    - name: PEER-v4
+      description: IP Addresses of our Peer Router
+      afi: ipv4
+      members:
+        - address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.11.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
+        - address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
+    - name: PROXIED-SERVICES-v4
+      description: Services not on the SERVICES network that are proxied through it.
+      members:
+        # harvest.hogs.tswn.us
+        - address: 10.10.0.6
+        # chanttogreen.hogs.tswn.us
+        - address: 10.10.0.14
+    - name: SERVICE-TALKERS-v4
+      description: IP Addresses allowed to talk to all services
+      members:
+        # sdwilsh-dev.hogs.tswn.us (sdwilsh-dev)
+        - address: 10.10.0.20
+        # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.0.9
+        # sdwilsh-desktop
+        - address: 10.117.0.31
+    - name: UNIFI-v4
+      description: The v4 address of the Unifi Controller
+      afi: ipv4
+      members:
+        # unifi.tswn.us
+        - address: 10.11.1.64
+        # unifi-inform.tswn.us
+        - address: 10.11.1.65
+    - name: VCENTER-v4
+      description: vCenter IP Addresses
+      afi: ipv4
+      members:
+        - address: 10.10.0.5
+  network_group:
+    - name: MOBILE-WIREGUARD-v4
+      description: Mobile wireguard clients
+      afi: ipv4
+      members:
+        - address: 10.117.2.0/24
+    - name: REMOTE-VPN-v4
+      description: Subnets that can be used as a VPN through REMOTE-TUN
+      afi: ipv4
+      members:
+        - address: 10.117.2.0/24
+    - name: RFC1918-v4
+      members:
+        - address: 192.168.0.0/16
+        - address: 172.16.0.0/12
+        - address: 10.0.0.0/8
+  port_group:
+    - name: DNS
+      members:
+        - port: 53
+    - name: NTP
+      members:
+        - port: 123
+    - name: PROXIED-PORTS
+      members:
+        - port: 80
+        - port: 8080
+    - name: UNIFI-DEVICE-TCP
+      description: Ports used by the Unifi Controller to talk to devices over TCP
+      members:
+        - port: 8080
+    - name: UNIFI-DEVICE-UDP
+      description: Ports used by the Unifi Controller to talk to devices over UDP
+      members:
+        - port: 3478
+    - name: UNIFI-WEB-TCP
+      description: Ports used by the Unifi Controller for clients
+      members:
+        - port: 443
+
+vyos_interfaces__ethernet:
+  - name: eth0
+    enabled: true
+    vifs:
+      - vlan_id: 2
+        description: TRANSIT - router-to-router traffic
+        ipv4:
+          - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 11
+        description: SERVICES - Services from Kubernetes
+        ipv4:
+          - address: "10.11.0.{{ vyos__host_id_ipv4 }}/23"
+  - name: eth1
+    enabled: true
+    vifs:
+      - vlan_id: 9
+        description: SYNC - used for router synchronization communication
+        ipv4:
+          - address: "10.9.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 10
+        description: MAN
+        ipv4:
+          - address: "10.10.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 66
+        description: IOT - WAN access, but not much else
+        ipv4:
+          - address: "10.66.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 67
+        description: NOWAN - no WAN or other access
+        ipv4:
+          - address: "10.67.0.{{ vyos__host_id_ipv4 }}/24"
+      - vlan_id: 117
+        description: HOME - home network
+        ipv4:
+          - address: "10.117.0.{{ vyos__host_id_ipv4 }}/23"
+
+vyos_ospf_interfaces__config:
+  - name: wg0
+    address_family:
+      - afi: ipv4
+        authentication:
+          md5_key:
+            key_id: 1
+            key: "{{ vyos__ospf_authentication_key }}"
+        cost: 10 # 1G
+        dead_interval: 5
+        hello_interval: 2
+        network: point-to-point
+
+# This uses a local DNS forwarding server, so use that.
+vyos_system__name_servers:
+  - 127.0.0.1
+
+vyos_vrrp__groups:
+  - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth0.2
+    name: TRANSIT-v4
+    peer_address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.2.0.72/24
+    vrid: 2
+  - hello_source_address: "10.9.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.9
+    name: SYNC-v4
+    peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.9.0.1/24
+    vrid: 9
+  - hello_source_address: "10.10.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.10
+    name: MAN-v4
+    peer_address: "10.10.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.10.0.1/24
+    vrid: 10
+  - hello_source_address: "10.11.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth0.11
+    name: SERVICES-v4
+    peer_address: "10.11.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.11.0.1/23
+    vrid: 11
+  - hello_source_address: "10.66.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.66
+    name: IOT-v4
+    peer_address: "10.66.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.66.0.1/24
+    vrid: 66
+  - hello_source_address: "10.67.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.67
+    name: NOWAN-v4
+    peer_address: "10.67.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.67.0.1/24
+    vrid: 67
+  - hello_source_address: "10.117.0.{{ vyos__host_id_ipv4 }}"
+    interface: eth1.117
+    name: HOME-v4
+    peer_address: "10.117.0.{{ vyos__peer_host_id_ipv4 }}"
+    priority: "{{ vyos__vrrp_priority }}"
+    sync_group: MAIN
+    virtual_address: 10.117.0.1/23
+    vrid: 117

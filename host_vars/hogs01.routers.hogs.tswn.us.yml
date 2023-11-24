@@ -1,0 +1,28 @@
+---
+
+vyos__host_id_ipv4: 79
+# This should be 80, but for now, we're using maccabeus01 to minimize downtime.
+vyos__peer_host_id_ipv4: 48
+vyos__vrrp_priority: 100
+
+vyos_interfaces__wireguard:
+  - name: wg0
+    description: tartarus01 site-to-site
+    ipv4:
+      - address: 10.10.1.5/30
+    mtu: 1280
+    peers:
+      - name: tartarus01
+        allowed_ips:
+          ipv4:
+            - network: 0.0.0.0/0
+        ipv4:
+          - address: 149.248.37.12
+        persistent_keepalive_sec: 15
+        port: 51821
+        pubkey: "{{ hostvars['tartarus01.tswn.us'].wireguard__pubkey }}"
+
+vyos_ospfv2__neighbors:
+  - neighbor_id: 10.10.1.6
+
+wireguard__pubkey: "cP6RzKmrP3UjyI/Gue5KN1oYbD6kGkVEHT7xBWshZBE="
