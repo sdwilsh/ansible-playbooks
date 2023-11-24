@@ -52,12 +52,20 @@ bind_zones:
         ip: "10.117.0.12"
       - name: "nvidia-shield.hogs"
         ip: "10.117.0.13"
+      - name: printer.hogs
+        ip: 10.117.0.14
       - name: "energy.hogs"
         ip: "10.117.0.16"
+      - name: lutron.hogs
+        ip: 10.117.0.18
       - name: "cortana.hogs"
         ip: "10.117.0.19"
         aliases:
           - "homeassistant.hogs"
+      - name: roku-mainbed.hogs
+        ip: 10.117.0.20
+      - name: roku-den.hogs
+        ip: 10.117.0.21
       - name: "luxor.hogs"
         ip: "10.117.0.22"
       - name: "loki.hogs"
