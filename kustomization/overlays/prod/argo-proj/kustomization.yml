@@ -17,7 +17,6 @@ resources:
   - application/kube-vip.yml
   - application/kubevirt.yml
   - application/longhorn.yml
-  - application/mariadb.yml
   - application/postgresql.yml
   - application/prometheus.yml
   - application/redis.yml
