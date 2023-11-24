@@ -1,0 +1,16 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: ara-database-pg 
+spec:
+  teamId: ara
+  volume:
+    size: 5Gi
+    storageClass: longhorn-encrypted
+  numberOfInstances: 2
+  preparedDatabases:
+    ara:
+      defaultUsers: true
+  postgresql:
+    version: "15"
