@@ -61,9 +61,9 @@ work01.routers.hogs.tswn.us ansible_host=10.10.0.85
 work02.routers.hogs.tswn.us ansible_host=10.10.0.86
 
 [vyos:children]
-vyos_cloud
 vyos_guest
 vyos_home
+vyos_hogs
 vyos_remote
 vyos_wan
 vyos_work
