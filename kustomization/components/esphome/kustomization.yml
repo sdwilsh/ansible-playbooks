@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: esphome/esphome
+    newTag: 2023.11.4
+resources:
+  - service.yml
+  - statefulset.yml

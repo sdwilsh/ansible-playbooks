@@ -84,6 +84,12 @@ bind_zones:
         ip: "10.117.0.33"
       - name: "hue.hogs"
         ip: "10.117.0.34"
+      - name: living-dash.hogs
+        ip: 10.117.0.35
+      - name: office-bluetooth-proxy.hogs
+        ip: 10.117.0.36
+      - name: living-bluetooth-proxy.hogs
+        ip: 10.117.0.37
       - name: "house.gem.hogs"
         ip: "10.117.0.46"
       - name: "maccabeus01.hogs"
@@ -182,13 +188,13 @@ bind_zones:
         ip: 10.11.0.104
       - name: worker02.hogs
         ip: 10.11.0.104
-      # At some point, this should ask the k3s control plane what the IP address is
       - name: traefik.hogs
         ip: 10.11.1.64
         aliases:
           - ara.hogs
           - argo-cd.hogs
           - auth
+          - esphome.hogs
           - longhorn.hogs
           - mqtt.hogs
           - nas.hogs

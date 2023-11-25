@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/esphome
   - ../../../components/mosquitto
 configMapGenerator:
   - files:
@@ -16,4 +17,5 @@ patches:
       name: mosquitto-statefulset
 resources:
   - namespace.yml
+  - ingress.yml
   - ingressroutetcp.yml

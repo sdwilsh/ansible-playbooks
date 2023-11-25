@@ -12,3 +12,11 @@
     group:
       address_group: NTP-SERVICES-v4
       port_group: NTP
+- description: Allow Access to ESPHOME Devices
+  action: accept
+  state:
+    new: true
+  destination:
+    group:
+      address_group: ESPHOME-v4
+      port_group: ESPHOME

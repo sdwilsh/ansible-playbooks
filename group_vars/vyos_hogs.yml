@@ -121,6 +121,13 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.117.0.23 # loki.hogs.tswn.us
+    - name: ESPHOME-v4
+      description: ESPHOME Device Addresses
+      afi: ipv4
+      members:
+        - address: 10.117.0.35 # living-dash.hogs.tsnw.us
+        - address: 10.117.0.36 # office-bluetooth-proxy.hogs.tswn.us
+        - address: 10.117.0.37 # living-bluetooth-proxy.hogs.tswn.us
     - name: FILE-SERVER-v4
       description: IP Addresses for the NFS Server
       afi: ipv4
@@ -219,6 +226,11 @@ vyos_firewall_global__group:
     - name: DNS
       members:
         - port: 53
+    - name: ESPHOME
+      description: Ports needed to access ESPHOME devices.
+      members:
+        - port: 3232 # ESP32 OTA Update Port
+        - port: 6053 # Native API Component Port
     - name: NTP
       members:
         - port: 123
