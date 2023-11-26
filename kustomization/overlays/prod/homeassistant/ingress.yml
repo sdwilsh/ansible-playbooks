@@ -5,7 +5,7 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: esphome-ingress
+  name: homeassistant-ingress
 spec:
   rules:
     - host: esphome.hogs.tswn.us
