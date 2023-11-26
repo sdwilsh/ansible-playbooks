@@ -60,8 +60,6 @@ bind_zones:
         ip: 10.117.0.18
       - name: "cortana.hogs"
         ip: "10.117.0.19"
-        aliases:
-          - "homeassistant.hogs"
       - name: roku-mainbed.hogs
         ip: 10.117.0.20
       - name: roku-den.hogs
@@ -195,6 +193,8 @@ bind_zones:
           - argo-cd.hogs
           - auth
           - esphome.hogs
+          - homeassistant.hogs
+          - homeassistant-config.hogs
           - longhorn.hogs
           - mqtt.hogs
           - nas.hogs

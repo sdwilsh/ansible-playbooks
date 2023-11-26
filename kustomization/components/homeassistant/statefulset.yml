@@ -1,0 +1,114 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: homeassistant-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homeassistant
+  serviceName: homeassistant-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: homeassistant
+    spec:
+      containers:
+        - env:
+            - name: DEFAULT_WORKSPACE
+              value: /config/workspace/homeassistant.code-workspace
+            - name: DOCKER_MODS
+              value: linuxserver/mods:code-server-extension-arguments
+            # Home Assistant config files are owned by root.
+            - name: GUID
+              value: "0"
+            # Home Assistant config files are owned by root.
+            - name: PUID
+              value: "0"
+            - name: TZ
+              value: America/Los_Angeles
+            # See https://github.com/hassio-addons/addon-vscode/blob/main/vscode/vscode.extensions
+            - name: VSCODE_EXTENSION_IDS
+              value: emilast.LogFileHighlighter|esbenp.prettier-vscode|ESPHome.esphome-vscode|keesschollaart.vscode-home-assistant|lukas-tr.materialdesignicons-intellisense|oderwat.indent-rainbow|redhat.vscode-yaml|usernamehw.errorlens|vscodevim.vim
+          image: lscr.io/linuxserver/code-server
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: code-web
+              scheme: HTTP
+            initialDelaySeconds: 60 # Extensions can take a while to install!
+            periodSeconds: 15
+          name: code-server
+          ports:
+            - name: code-web
+              containerPort: 8443
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: code-web
+              scheme: HTTP
+            initialDelaySeconds: 60 # Extensions can take a while to install!
+            periodSeconds: 15
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+            requests:
+              cpu: 250m
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config/workspace/homeassistant.code-workspace
+              name: code-workspace
+              subPath: homeassistant.code-workspace
+            - mountPath: /homeassistant-config
+              name: homeassistant-config
+        - image: ghcr.io/home-assistant/home-assistant
+          livenessProbe:
+            httpGet:
+              port: hass-web
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          name: homeassistant
+          ports:
+            - name: hass-web
+              containerPort: 8123
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: hass-web
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+            requests:
+              cpu: 250m
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: homeassistant-config
+      volumes:
+        - name: code-workspace
+          configMap:
+            name: code-workspace-configmap
+  volumeClaimTemplates:
+    - metadata:
+        name: homeassistant-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-encrypted

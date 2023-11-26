@@ -4,6 +4,7 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: homeassistant-ingress
 spec:
@@ -16,5 +17,25 @@ spec:
                 name: esphome-svc
                 port:
                   name: web
+            path: /
+            pathType: Prefix
+    - host: homeassistant.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: homeassistant-svc
+                port:
+                  name: hass-web
+            path: /
+            pathType: Prefix
+    - host: homeassistant-config.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: homeassistant-svc
+                port:
+                  name: code-web
             path: /
             pathType: Prefix

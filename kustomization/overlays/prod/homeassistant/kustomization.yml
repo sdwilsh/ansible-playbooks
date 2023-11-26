@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/esphome
+  - ../../../components/homeassistant
   - ../../../components/mosquitto
 configMapGenerator:
   - files:
