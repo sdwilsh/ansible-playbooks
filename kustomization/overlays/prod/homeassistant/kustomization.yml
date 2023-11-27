@@ -20,3 +20,4 @@ resources:
   - namespace.yml
   - ingress.yml
   - ingressroutetcp.yml
+  - postgresql.yml

@@ -1,0 +1,16 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: homeassistant-recorder-pg 
+spec:
+  teamId: homeassistant
+  volume:
+    size: 30Gi
+    storageClass: longhorn-encrypted
+  numberOfInstances: 2
+  preparedDatabases:
+    homeassistant:
+      defaultUsers: true
+  postgresql:
+    version: "15"
