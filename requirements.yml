@@ -18,7 +18,7 @@ collections:
   - name: community.zabbix
     version: 2.1.0
   - name: devsec.hardening
-    version: 8.8.0
+    version: 9.0.0
   - name: kubernetes.core
     version: 2.4.0
   - name: vyos.vyos
