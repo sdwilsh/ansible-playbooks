@@ -27,6 +27,15 @@ renovate-validate:
     COPY renovate.json .
     RUN renovate-config-validator
 
+shellcheck-lint:
+    # renovate: datasource=docker depName=koalaman/shellcheck-alpine versioning=docker
+    ARG SHELLCHECK_VERSION=v0.9.0
+    FROM koalaman/shellcheck-alpine:$SHELLCHECK_VERSION
+    WORKDIR /mnt
+    COPY . .
+    RUN find . -name "*.sh" -print | xargs -r -n1 shellcheck
+
 lint:
     BUILD +kustomize-build
     BUILD +renovate-validate
+    BUILD +shellcheck-lint
