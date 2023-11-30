@@ -1,0 +1,32 @@
+# TODO:
+# 1) this should add an initContainer to create the secrets.yaml file
+# 2) component needs to have a config map that contains the stock configuration.yaml file
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - env:
+            - name: RECORDER_DATABASE_NAME
+              value: homeassistant
+            - name: RECORDER_HOSTNAME
+              value: homeassistant-recorder-pg
+            - name: RECORDER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: homeassistant-owner-user.homeassistant-recorder-pg.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: RECORDER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: homeassistant-owner-user.homeassistant-recorder-pg.credentials.postgresql.acid.zalan.do
+                  key: password
+            - name: RECORDER_PURGE_KEEP_DAYS
+              value: "30"
+            - name: RECORDER_SCHEME
+              value: postgresql
+          name: recorder-config

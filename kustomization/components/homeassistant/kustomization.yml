@@ -6,6 +6,9 @@ configMapGenerator:
   - name: code-workspace-configmap
     files:
       - configmap/homeassistant.code-workspace
+  - name: scripts-configmap
+    files:
+      - configmap/scripts/generate_recorder_config.sh
 images:
   - name: ghcr.io/home-assistant/home-assistant
     newTag: 2023.11.3

@@ -98,10 +98,37 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: homeassistant-config
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - /scripts/generate_recorder_config.sh
+          image: busybox
+          name: recorder-config
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 30m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: homeassistant-config
+            - mountPath: /scripts
+              name: scripts
       volumes:
         - name: code-workspace
           configMap:
             name: code-workspace-configmap
+        - name: scripts
+          configMap:
+            defaultMode: 0777
+            name: scripts-configmap
   volumeClaimTemplates:
     - metadata:
         name: homeassistant-config
