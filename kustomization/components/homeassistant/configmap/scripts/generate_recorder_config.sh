@@ -34,39 +34,39 @@ rm -f $dest
 echo "---
 # This file is generated in an initContainer, and any modifications will be
 # dropped at the next restart!
-" > /config/recorder.yaml
+" > $dest
 
 if [ -n "${RECORDER_AUTO_PURGE}" ]; then
     echo "Setting auto_purge: ${RECORDER_AUTO_PURGE}"
-    echo "auto_purge: ${RECORDER_AUTO_PURGE}" >> /config/recorder.yaml
+    echo "auto_purge: ${RECORDER_AUTO_PURGE}" >> $dest
 fi
 
 if [ -n "${RECORDER_AUTO_REPACK}" ]; then
     echo "Setting auto_repack: ${RECORDER_AUTO_REPACK}"
-    echo "auto_repack: ${RECORDER_AUTO_REPACK}" >> /config/recorder.yaml
+    echo "auto_repack: ${RECORDER_AUTO_REPACK}" >> $dest
 fi
 
 if [ -n "${RECORDER_COMMIT_INTERVAL}" ]; then
     echo "Setting commit_interval: ${RECORDER_COMMIT_INTERVAL}"
-    echo "commit_interval: ${RECORDER_COMMIT_INTERVAL}" >> /config/recorder.yaml
+    echo "commit_interval: ${RECORDER_COMMIT_INTERVAL}" >> $dest
 fi
 
 if [ -n "${RECORDER_DB_MAX_RETRIES}" ]; then
     echo "Setting db_max_retries: ${RECORDER_DB_MAX_RETRIES}"
-    echo "db_max_retries: ${RECORDER_DB_MAX_RETRIES}" >> /config/recorder.yaml
+    echo "db_max_retries: ${RECORDER_DB_MAX_RETRIES}" >> $dest
 fi
 
 if [ -n "${RECORDER_DB_RETRY_WAIT}" ]; then
     echo "Setting db_retry_wait: ${RECORDER_DB_RETRY_WAIT}"
-    echo "db_retry_wait: ${RECORDER_DB_RETRY_WAIT}" >> /config/recorder.yaml
+    echo "db_retry_wait: ${RECORDER_DB_RETRY_WAIT}" >> $dest
 fi
 
 echo "Setting db_url: ********"
-echo "db_url: ${db_url}" >> /config/recorder.yaml
+echo "db_url: ${db_url}" >> $dest
 
 if [ -n "${RECORDER_PURGE_KEEP_DAYS}" ]; then
     echo "Setting purge_keep_days: ${RECORDER_PURGE_KEEP_DAYS}"
-    echo "purge_keep_days: ${RECORDER_PURGE_KEEP_DAYS}" >> /config/recorder.yaml
+    echo "purge_keep_days: ${RECORDER_PURGE_KEEP_DAYS}" >> $dest
 fi
 
 chmod u=r,g=,o= $dest
