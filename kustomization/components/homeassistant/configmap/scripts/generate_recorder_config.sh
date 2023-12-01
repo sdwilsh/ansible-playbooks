@@ -30,6 +30,7 @@ if [ -z "${db_url}" ]; then
 fi 
 
 recorder_dest=/config/recorder.yaml
+echo "Creating ${recorder_dest}..."
 rm -f $recorder_dest
 echo "---
 # This file is generated in an initContainer, and any modifications will be
