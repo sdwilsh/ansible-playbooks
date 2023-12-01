@@ -102,9 +102,9 @@ spec:
         - command:
             - sh
             - -c
-            - /scripts/generate_recorder_config.sh
+            - /scripts/generate_config.sh
           image: busybox
-          name: recorder-config
+          name: generate-config
           resources:
             limits:
               cpu: 100m

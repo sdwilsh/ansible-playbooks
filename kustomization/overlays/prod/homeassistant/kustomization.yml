@@ -12,7 +12,7 @@ configMapGenerator:
     name: mosquitto-config-configmap
 namespace: homeassistant
 patches:
-  - path: patches/homeassistant/setup_recorder.yml
+  - path: patches/homeassistant/setup_config.yml
     target:
       kind: StatefulSet
       name: homeassistant-statefulset

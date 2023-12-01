@@ -1,6 +1,3 @@
-# TODO:
-# 1) this should add an initContainer to create the secrets.yaml file
-# 2) component needs to have a config map that contains the stock configuration.yaml file
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -11,6 +8,8 @@ spec:
     spec:
       initContainers:
         - env:
+            - name: HTTP_TRUSTED_PROXIES
+              value: 172.16.0.0/16
             - name: RECORDER_DATABASE_NAME
               value: homeassistant
             - name: RECORDER_HOSTNAME
@@ -29,4 +28,4 @@ spec:
               value: "30"
             - name: RECORDER_SCHEME
               value: postgresql
-          name: recorder-config
+          name: generate-config
