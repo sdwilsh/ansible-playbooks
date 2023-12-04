@@ -74,5 +74,5 @@ chmod u=r,g=,o= $recorder_dest
 
 echo "Successfully setup recorder configuration at ${recorder_dest}"
 
-echo "recorder: !include recorder.yaml" >> $config_dest
-echo "Successfully added recorder configuration to ${config_dest}"
+echo "recorder: !include recorder.yaml" >> "${config_dest:?}"
+echo "Successfully added recorder configuration to ${config_dest:?}"

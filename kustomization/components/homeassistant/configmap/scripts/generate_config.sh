@@ -18,7 +18,9 @@ scene: !include scenes.yaml
 script: !include scripts.yaml
 " > $config_dest
 
-source /scripts/generate_http_config.sh
-source /scripts/generate_recorder_config.sh
+# shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_http_config.sh
+. /scripts/generate_http_config.sh
+# shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_recorder_config.sh
+. /scripts/generate_recorder_config.sh
 
 echo "Successfully setup configuration at ${config_dest}"

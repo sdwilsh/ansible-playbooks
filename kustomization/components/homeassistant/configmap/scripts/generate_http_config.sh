@@ -19,5 +19,5 @@ trusted_proxies: ${HTTP_TRUSTED_PROXIES}
 
 echo "Successfully setup configuration at ${http_dest}"
 
-echo "http: !include http.yaml" >> $config_dest
-echo "Successfully added http configuration to ${config_dest}"
+echo "http: !include http.yaml" >> "${config_dest:?}"
+echo "Successfully added http configuration to ${config_dest:?}"
