@@ -1,4 +1,4 @@
-; Hash: 77a6af33804a72d7af48c85a7300db43 1700979854
+; Hash: 85336513546f897e5c34ea0b37193e74 1701652412
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1700979854
+  1701652412
   1D
   1H
   1W
@@ -49,6 +49,8 @@ hue.hogs                   IN  A      10.117.0.34
 living-dash.hogs           IN  A      10.117.0.35
 office-bluetooth-proxy.hogs       IN  A      10.117.0.36
 living-bluetooth-proxy.hogs       IN  A      10.117.0.37
+fan-mainbed.hogs           IN  A      10.117.0.42
+fan-office.hogs            IN  A      10.117.0.43
 house.gem.hogs             IN  A      10.117.0.46
 maccabeus01.hogs           IN  A      10.117.0.48
 0.ntp.hogs                 IN  A      10.117.0.50

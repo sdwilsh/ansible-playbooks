@@ -88,6 +88,10 @@ bind_zones:
         ip: 10.117.0.36
       - name: living-bluetooth-proxy.hogs
         ip: 10.117.0.37
+      - name: fan-mainbed.hogs
+        ip: 10.117.0.42
+      - name: fan-office.hogs
+        ip: 10.117.0.43
       - name: "house.gem.hogs"
         ip: "10.117.0.46"
       - name: "maccabeus01.hogs"
