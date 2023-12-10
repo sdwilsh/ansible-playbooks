@@ -12,8 +12,6 @@ bind_dnssec_enable: no
 bind_dnssec_validation: auto
 bind_listen_ipv4:
   - "any"
-bind_listen_ipv6:
-  - "any"
 bind_zones:
   - name: "tswn.us"
     create_reverse_zones: true
