@@ -121,6 +121,28 @@ spec:
               name: homeassistant-config
             - mountPath: /scripts
               name: scripts
+        - command:
+            - sh
+            - -c
+            - /scripts/manage_hacs.sh
+          image: busybox
+          name: manage-hacs
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 30m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: homeassistant-config
+            - mountPath: /scripts
+              name: scripts
       volumes:
         - name: code-workspace
           configMap:
