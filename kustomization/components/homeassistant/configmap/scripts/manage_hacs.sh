@@ -10,7 +10,7 @@ cd /config/custom_components
 rm -f hacs.zip
 
 if [ -f hacs/manifest.json ]; then
-    current_version=$(grep version < hacs/manifest.json | awk '{print $2}')
+    current_version=$(grep version < hacs/manifest.json | awk -F '"' '{print $4}')
     if [ "$current_version" = "$hacs_version" ]; then
         echo "HACS already at version $hacs_version; nothing to do!"
         exit 0
