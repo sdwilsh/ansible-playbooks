@@ -10,7 +10,7 @@ configMapGenerator:
       - configmap/setup_var_cache_bind.sh
 images:
   - name: ubuntu
-    newTag: "22.04"
+    newTag: "24.04"
   - name: ubuntu/bind9
     newTag: 9.18-22.04_beta
 namespace: dns
