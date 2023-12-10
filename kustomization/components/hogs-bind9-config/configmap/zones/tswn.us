@@ -1,4 +1,4 @@
-; Hash: 85336513546f897e5c34ea0b37193e74 1701652412
+; Hash: 14b4cdb54074982322cf0ac3f18ef568 1702251358
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1701652412
+  1702251358
   1D
   1H
   1W
@@ -44,7 +44,6 @@ docker-ssd.hogs            IN  A      10.117.0.30
 factorio                   IN  CNAME  docker-ssd.hogs
 valheim                    IN  CNAME  docker-ssd.hogs
 valheim.hogs               IN  CNAME  docker-ssd.hogs
-zabbix.hogs                IN  A      10.117.0.33
 hue.hogs                   IN  A      10.117.0.34
 living-dash.hogs           IN  A      10.117.0.35
 office-bluetooth-proxy.hogs       IN  A      10.117.0.36

@@ -78,8 +78,6 @@ bind_zones:
           - "factorio"
           - "valheim"
           - "valheim.hogs"
-      - name: "zabbix.hogs"
-        ip: "10.117.0.33"
       - name: "hue.hogs"
         ip: "10.117.0.34"
       - name: living-dash.hogs
