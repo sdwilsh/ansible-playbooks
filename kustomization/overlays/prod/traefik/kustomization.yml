@@ -57,6 +57,10 @@ patches:
     target:
       kind: Ingress
       name: traefik-dashboard-ingress
+  - path: patches/set_traefik_service_ip.yml
+    target:
+      kind: Service
+      name: traefik-svc
   - path: patches/update_subjects.yml
     target:
       kind: ClusterRoleBinding
