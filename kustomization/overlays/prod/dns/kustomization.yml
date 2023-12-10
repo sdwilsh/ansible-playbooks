@@ -8,6 +8,11 @@ configMapGenerator:
   - name: scripts-configmap
     files:
       - configmap/setup_var_cache_bind.sh
+generatorOptions:
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=true
+  labels:
+    app.kubernetes.io/name: bind9
 images:
   - name: ubuntu
     newTag: "22.04"
