@@ -84,6 +84,10 @@ bind_zones:
         ip: 10.117.0.36
       - name: living-bluetooth-proxy.hogs
         ip: 10.117.0.37
+      - name: laundry-gas-detector.hogs
+        ip: 10.117.0.40
+      - name: kitchen-gas-detector.hogs
+        ip: 10.117.0.41
       - name: fan-mainbed.hogs
         ip: 10.117.0.42
       - name: fan-office.hogs
