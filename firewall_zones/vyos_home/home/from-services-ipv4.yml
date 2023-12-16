@@ -20,3 +20,11 @@
     group:
       address_group: ESPHOME-v4
       port_group: ESPHOME
+- description: Allow Access to Shelly Devices
+  action: accept
+  state:
+    new: true
+  destination:
+    group:
+      address_group: SHELLY-v4
+      port_group: SHELLY

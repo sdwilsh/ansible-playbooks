@@ -199,6 +199,13 @@ vyos_firewall_global__group:
         - address: 10.117.0.9
         # sdwilsh-desktop
         - address: 10.117.0.31
+    - name: SHELLY-v4
+      description: Shelly devices that Home Assistant needs to be able to talk to.
+      members:
+        # laundry-gas-detector.hogs.tswn.us
+        - address: 10.117.0.40
+        # kitchen-gas-detector.hogs.tswn.us
+        - address: 10.117.0.41
     - name: UNIFI-v4
       description: The v4 address of the Unifi Controller
       afi: ipv4
@@ -244,6 +251,10 @@ vyos_firewall_global__group:
       members:
         - port: 80
         - port: 8080
+    - name: SHELLY
+      members:
+        - port: 80
+        - port: 5683
     - name: UNIFI-DEVICE-TCP
       description: Ports used by the Unifi Controller to talk to devices over TCP
       members:
