@@ -25,3 +25,4 @@ resources:
   - ingress.yml
   - ingressroutetcp.yml
   - postgresql.yml
+  - service.yml
