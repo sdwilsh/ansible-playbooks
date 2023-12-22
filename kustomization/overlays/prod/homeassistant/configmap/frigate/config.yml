@@ -11,12 +11,9 @@ cameras:
     ffmpeg:
       hwaccel_args: preset-vaapi
       inputs:
-        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+        - path: rtsp://127.0.0.1:8554/front-porch
           roles:
             - record
-        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=1
-          roles:
-            - rtmp
         - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
@@ -36,12 +33,9 @@ cameras:
     ffmpeg:
       hwaccel_args: preset-vaapi
       inputs:
-        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+        - path: rtsp://127.0.0.1:8554/front-north-east
           roles:
             - record
-        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=1
-          roles:
-            - rtmp
         - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
@@ -57,6 +51,13 @@ detectors:
   coral:
     type: edgetpu
     device: usb
+go2rtc:
+  rtsp:
+    username: frigate
+    password: "{FRIGATE_RTSP_PASSWORD}"
+  streams:
+    front-north-east: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+    front-porch: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
 mqtt:
   host: mosquitto-svc.homeassistant.svc.cluster.local
   user: frigate
