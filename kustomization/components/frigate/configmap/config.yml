@@ -1,8 +1,0 @@
----
-# This should be overridden by consumers of the component.  It does, however,
-# allow frigate to start, even if it would be useless.
-cameras: {}
-mqtt:
-  enabled: no
-telemetry:
-  version_check: no

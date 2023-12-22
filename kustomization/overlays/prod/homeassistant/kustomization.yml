@@ -8,8 +8,7 @@ components:
   - ../../../components/homeassistant
   - ../../../components/mosquitto
 configMapGenerator:
-  - behavior: replace
-    files:
+  - files:
       - configmap/frigate/config.yml
     name: frigate-configmap
   - files:
