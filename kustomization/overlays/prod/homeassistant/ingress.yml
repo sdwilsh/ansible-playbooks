@@ -19,6 +19,16 @@ spec:
                   name: web
             path: /
             pathType: Prefix
+    - host: frigate.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: frigate-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: homeassistant.hogs.tswn.us
       http:
         paths:

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate-svc
+spec:
+  selector:
+    app.kubernetes.io/name: frigate
+  ports:
+    - protocol: TCP
+      port: 5000
+      name: web
+    - protocol: TCP
+      port: 8554
+      name: rtsp

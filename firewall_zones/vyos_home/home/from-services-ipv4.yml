@@ -28,10 +28,3 @@
     group:
       address_group: SHELLY-v4
       port_group: SHELLY
-- description: Allow access to proxied services
-  action: accept
-  protocol: tcp
-  destination:
-    group:
-      address_group: PROXIED-SERVICES-v4
-      port_group: PROXIED-PORTS

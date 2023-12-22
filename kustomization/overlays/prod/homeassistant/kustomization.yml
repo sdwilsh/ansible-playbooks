@@ -4,14 +4,23 @@ kind: Kustomization
 
 components:
   - ../../../components/esphome
+  - ../../../components/frigate
   - ../../../components/homeassistant
   - ../../../components/mosquitto
 configMapGenerator:
+  - behavior: replace
+    files:
+      - configmap/frigate/config.yml
+    name: frigate-configmap
   - files:
       - configmap/mosquitto-config/homeassistant.conf
     name: mosquitto-config-configmap
 namespace: homeassistant
 patches:
+  - path: patches/frigate/add_frigate_env_vars.yml
+    target:
+      kind: StatefulSet
+      name: frigate-statefulset
   - path: patches/homeassistant/setup_config.yml
     target:
       kind: StatefulSet
@@ -25,4 +34,3 @@ resources:
   - ingress.yml
   - ingressroutetcp.yml
   - postgresql.yml
-  - service.yml

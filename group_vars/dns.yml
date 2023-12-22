@@ -66,8 +66,6 @@ bind_zones:
         ip: "10.117.0.22"
       - name: "loki.hogs"
         ip: "10.117.0.23"
-        aliases:
-          - "frigate.hogs"
       - name: "monitor.house.gem.hogs"
         ip: "10.117.0.24"
       - name: "docker-ssd.hogs"
@@ -197,6 +195,7 @@ bind_zones:
           - argo-cd.hogs
           - auth
           - esphome.hogs
+          - frigate.hogs
           - homeassistant.hogs
           - homeassistant-config.hogs
           - longhorn.hogs
