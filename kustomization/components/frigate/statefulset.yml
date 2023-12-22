@@ -54,7 +54,6 @@ spec:
               squat.ai/coraltpu: 1
               squat.ai/quicksync: 1
           securityContext:
-            allowPrivilegeEscalation: false
             capabilities:
               add:
                 - PERFMON
