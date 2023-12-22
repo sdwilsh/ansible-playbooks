@@ -40,6 +40,8 @@
     - executable: kubectl
       sha256: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/{{ deb_architecture[ansible_architecture] }}/kubectl.sha256"
       bin: https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/{{ deb_architecture[ansible_architecture] }}/kubectl
+    - executable: kustomize
+      targz: "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/{{ kustomize_version }}/kustomize_{{ kustomize_version }}_linux_{{ deb_architecture[ansible_architecture] }}.tar.gz"
     - executable: starship
       sha256: "https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz.sha256"
       targz: "https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
@@ -52,6 +54,8 @@
     argocd_version: v2.9.3
     # renovate: datasource=github-releases depName=kubernetes/kubernetes
     kubectl_version: v1.28.4
+    # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
+    kustomize_version: v5.0.3
     # renovate: datasource=github-releases depName=starship/starship
     starship_version: v1.16.0
     # renovate: datasource=github-releases depName=kubevirt/kubevirt

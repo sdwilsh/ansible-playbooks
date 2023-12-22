@@ -21,7 +21,7 @@
   when: "'sha256' in item"
 - name: "Fetch {{ item.executable }} archive"
   ansible.builtin.get_url:
-    checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
+    checksum: "{% if 'sha256' in item %}sha256:{{ sha256['content'] | b64decode | trim }}{% endif %}"
     dest: "~sdwilsh/.local/download/{{ item.executable }}.tar.gz"
     group: sdwilsh
     owner: sdwilsh
