@@ -55,6 +55,9 @@ spec:
               squat.ai/quicksync: 1
           securityContext:
             allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - PERFMON
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
