@@ -65,6 +65,8 @@ spec:
               mountPath: /config
             - name: frigate-db
               mountPath: /db
+            - name: frigate-media
+              mountPath: /media/frigate
             - name: frigate-shm
               mountPath: /dev/shm
             - name: frigate-tmp
