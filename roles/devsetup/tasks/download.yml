@@ -3,11 +3,11 @@
   ansible.builtin.file:
     group: sdwilsh
     owner: sdwilsh
-    path: ~sdwilsh/.local/download
+    path: ~sdwilsh/.cache/sdwilsh-ansible-devsetup
     state: directory
 - name: "Fetch {{ item.executable }} {{ item.version }} sha256"
   ansible.builtin.get_url:
-    dest: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}.sha256"
+    dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.sha256"
     group: sdwilsh
     owner: sdwilsh
     url: "{{ item.sha256 }}"
@@ -15,14 +15,14 @@
   when: "'sha256' in item"
 - name: "Consume {{ item.executable }} {{ item.version }} sha256"
   ansible.builtin.slurp:
-    src: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}.sha256"
+    src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.sha256"
   changed_when: no
   register: sha256
   when: "'sha256' in item"
 - name: "Fetch {{ item.executable }} {{ item.version }} archive"
   ansible.builtin.get_url:
     checksum: "{% if 'sha256' in item %}sha256:{{ sha256['content'] | b64decode | trim }}{% endif %}"
-    dest: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}.tar.gz"
+    dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.tar.gz"
     group: sdwilsh
     owner: sdwilsh
     url: "{{ item.targz }}"
@@ -34,19 +34,19 @@
     group: sdwilsh
     owner: sdwilsh
     remote_src: yes
-    src: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}.tar.gz"
+    src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.tar.gz"
   when: "'targz' in item and fetch_archive.changed"
 - name: "Fetch {{ item.executable }} {{ item.version }} Executable"
   ansible.builtin.get_url:
     checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
-    dest: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}"
+    dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}"
     group: sdwilsh
     owner: sdwilsh
     url: "{{ item.bin }}"
   when: "'bin' in item and 'sha256' in item"
 - name: "Fetch {{ item.executable }} {{ item.version }} Executable Without SHA256 Check"
   ansible.builtin.get_url:
-    dest: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}"
+    dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}"
     group: sdwilsh
     owner: sdwilsh
     url: "{{ item.bin }}"
@@ -58,5 +58,5 @@
     mode: u=rx,g=rx
     owner: sdwilsh
     remote_src: yes
-    src: "~sdwilsh/.local/download/{{ item.executable }}-{{ item.version }}"
+    src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}"
   when: "'bin' in item"
