@@ -61,9 +61,6 @@ vyos_dhcp_server__networks:
       - name: lighterthansome
         ip: 10.117.0.9
         mac: 04:cf:4b:1f:99:e2
-      - name: printer
-        ip: 10.117.0.14
-        mac: b4:22:00:59:aa:78gt
       - name: lutron
         ip: 10.117.0.18
         mac: 50:8c:b1:1d:4d:1f
