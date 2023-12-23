@@ -59,3 +59,13 @@ spec:
                   name: web
             path: /
             pathType: Prefix
+    - host: zwave-ws.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: zwavejs-svc
+                port:
+                  name: websocket
+            path: /
+            pathType: Prefix
