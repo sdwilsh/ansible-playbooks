@@ -206,7 +206,6 @@ bind_zones:
           - ripper.hogs
           - unifi
           - zwave.hogs
-          - zwave-ws.hogs
       - name: unifi-inform
         ip: 10.11.1.65
 
