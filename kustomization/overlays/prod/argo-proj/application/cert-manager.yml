@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/sdwilsh/ansible-playbooks
-    path: kustomization/base/cert-manager
+    path: kustomization/overlays/prod/cert-manager
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
