@@ -95,11 +95,15 @@
         device_com: "COM2"
         name: "House"
       mqtt:
-        broker: "palamok.hogs.tswn.us"
-        username: "brultech-serial2mqtt"
-        password: "{{ docker_brultech_serial2mqtt__mqtt_password }}"
+        broker: mqtt.hogs.tswn.us
         home_assistant:
           skip_packets: 19
+        password: "{{ docker_brultech_serial2mqtt__mqtt_password }}"
+        port: 8883
+        tls_options:
+          ca_certs: /etc/ssl/certs/ca-certificates.crt
+        username: brultech-serial2mqtt
+        usetls: yes
 
 - name: "Get brultech user info"
   ansible.builtin.getent:
