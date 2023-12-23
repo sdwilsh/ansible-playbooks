@@ -144,6 +144,11 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.11.1.32-10.11.1.63
+    - name: LUTRON-v4
+      description: Lutron Controller
+      afi: ipv4
+      members:
+        - address: 10.117.0.18 # lutron.hogs.tswn.us
     - name: MAN-SERVICES-v4
       description: Kubernetes Services for the MAN network.
       afi: ipv4
@@ -241,6 +246,17 @@ vyos_firewall_global__group:
       members:
         - port: 3232 # ESP32 OTA Update Port
         - port: 6053 # Native API Component Port
+    - name: LUTRON
+      description: Ports used to communicate with a Luton bridge
+      members:
+        # https://support.lutron.com/us/en/product/casetawireless/article/troubleshooting/what-are-the-network-requirements-for-caseta-and-ra2-select#Ports
+        - port: 1900
+        - port: 22
+        - port: 23
+        - port: 4548
+        - port: 5353
+        - port: 8081
+        - port: 8083
     - name: NTP
       members:
         - port: 123

@@ -37,3 +37,11 @@
   protocol: tcp
   state:
     new: true
+- action: accept
+  description: Allow Access to Luton Controller
+  destination:
+    group:
+      address_group: LUTRON-v4
+      port_group: LUTRON
+  state:
+    new: true
