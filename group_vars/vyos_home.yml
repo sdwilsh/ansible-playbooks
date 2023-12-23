@@ -166,11 +166,6 @@ vyos_firewall_global__group:
         - address: "10.67.0.12"
         - address: "10.67.0.13"
         - address: "10.67.0.14"
-    - name: "CAMERA-TALKERS-v4"
-      description: "The v4 addresses of devices that can talk to the cameras"
-      afi: "ipv4"
-      members:
-        - address: "10.117.0.23"
     - name: ESPHOME-v4
       description: ESPHOME Device Addresses
       afi: ipv4

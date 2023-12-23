@@ -122,11 +122,6 @@ vyos_firewall_global__group:
         - address: 10.67.0.12 # front-porch.camera.hogs.tswn.us
         - address: 10.67.0.13 # front-north-west.camera.hogs.tswn.us
         - address: 10.67.0.14 # front-north-west.camera.hogs.tswn.us
-    - name: CAMERA-TALKERS-v4
-      description: The v4 addresses of devices that can talk to the cameras
-      afi: ipv4
-      members:
-        - address: 10.117.0.23 # loki.hogs.tswn.us
     - name: ESPHOME-v4
       description: ESPHOME Device Addresses
       afi: ipv4

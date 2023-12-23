@@ -6,7 +6,3 @@
       tags:
         - "docker"
         - "zwavejs2mqtt"
-    - role: docker-frigate
-      tags:
-        - docker
-        - frigate
