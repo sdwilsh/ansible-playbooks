@@ -28,3 +28,12 @@
     group:
       address_group: SHELLY-v4
       port_group: SHELLY
+- action: accept
+  description: Allow Access to Big Ass Fans
+  destination:
+    group:
+      address_group: BIGASSFANS-v4
+    port: 31415
+  protocol: tcp
+  state:
+    new: true

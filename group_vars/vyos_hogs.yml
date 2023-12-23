@@ -115,6 +115,11 @@ vyos_firewall__zones_root_path: firewall_zones/vyos_hogs
 
 vyos_firewall_global__group:
   address_group:
+    - name: BIGASSFANS-v4
+      description: Big Ass Fans
+      members:
+        - address: 10.117.0.42 # fan-mainbed.hogs.tswn.us
+        - address: 10.117.0.43 # fan-office.hogs.tswn.us
     - name: CAMERAS-v4
       description: The v4 IP camera addresses
       afi: ipv4
