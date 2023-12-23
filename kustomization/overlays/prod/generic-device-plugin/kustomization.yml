@@ -18,5 +18,9 @@ patches:
       kind: DaemonSet
       name: generic-device-plugin
     path: patches/add_quicksync.yml
+  - target:
+      kind: DaemonSet
+      name: generic-device-plugin
+    path: patches/add_zstick7.yml
 resources:
   - namespace.yml
