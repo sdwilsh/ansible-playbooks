@@ -11,7 +11,7 @@ images:
   - name: busybox
     newTag: 1.36.1
   - name: lscr.io/linuxserver/unifi-network-application
-    newTag: 8.0.7
+    newTag: 8.0.24
   - name: mongo
     # Unifi only officially supports 3.6-4.4, but mongo 4.4 is only supported until Feb 2024.
     newTag: 7.0.4
