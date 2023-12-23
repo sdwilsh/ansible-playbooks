@@ -14,4 +14,4 @@ spec:
     - name: websocket
       protocol: TCP
       port: 3000
-      targetPort: web
+      targetPort: websocket
