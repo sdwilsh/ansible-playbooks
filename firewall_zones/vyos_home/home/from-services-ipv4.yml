@@ -45,3 +45,9 @@
       port_group: LUTRON
   state:
     new: true
+- action: accept
+  description: Allow Access to Printer
+  destination:
+    group:
+      address_group: PRINTER-v4
+      port_group: PRINTER

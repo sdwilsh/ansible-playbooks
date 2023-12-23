@@ -243,6 +243,9 @@ vyos_firewall_global__group:
         - address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
         - address: "172.16.5.{{ vyos__peer_host_id_ipv4 }}"
+    - name: PRINTER-v4
+      members:
+        - address: 10.117.0.14 # printer.hogs.tswn.us
     - name: PROXIED-SERVICES-v4
       description: Services not on the SERVICES network that are proxied through it.
       members:
@@ -333,6 +336,11 @@ vyos_firewall_global__group:
     - name: NTP
       members:
         - port: 123
+    - name: PRINTER
+      description: Ports used to connect to the Brother printer from SERVICES network.
+      members:
+        - port: 34068
+        - port: 161
     - name: PROXIED-PORTS
       members:
         - port: 80
