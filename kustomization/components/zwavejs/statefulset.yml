@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zwavejs-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zwavejs
+  serviceName: zwavejs-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: zwavejs
+    spec:
+      containers:
+        - image: zwavejs/zwave-js-ui
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /health/
+              port: web
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: zwavejs
+          ports:
+            - containerPort: 8091
+              name: web
+              protocol: TCP
+            - containerPort: 3000
+              name: websocket
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /health/
+              port: web
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+              squat.ai/zstick7: 1
+            requests:
+              cpu: 500m
+              memory: 400Mi
+              squat.ai/zstick7: 1
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /usr/src/app/store
+              name: zwavejs-store
+            - mountPath: /usr/src/app/store/settings.json
+              name: zwavejs-config
+              readOnly: true
+              subPath: settings.json
+      volumes:
+        - name: zwavejs-config
+          secret:
+            defaultMode: 420
+            secretName: zwavejs-secret
+  volumeClaimTemplates:
+    - metadata:
+        name: zwavejs-store
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: longhorn-encrypted

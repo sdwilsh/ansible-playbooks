@@ -205,6 +205,7 @@ bind_zones:
           - prometheus.hogs
           - ripper.hogs
           - unifi
+          - zwave.hogs
       - name: unifi-inform
         ip: 10.11.1.65
 
