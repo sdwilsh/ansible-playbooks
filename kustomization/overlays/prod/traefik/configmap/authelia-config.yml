@@ -29,6 +29,16 @@ access_control:
         - 10.117.0.23 # loki.hogs.tswn.us
         - 10.117.0.24 # monitor.house.gem.hogs.tswn.us
       policy: bypass
+    - domain: homeassistant.hogs.tswn.us
+      networks:
+        - home
+      policy: bypass
+      resources:
+        - ^/.external_auth=.$
+        - ^/api.*$
+        - ^/auth/token/.*$
+        - ^/service_worker.js$
+        - ^/static/.*$
     - domain: opensprinkler.hogs.tswn.us
       networks:
         - home
