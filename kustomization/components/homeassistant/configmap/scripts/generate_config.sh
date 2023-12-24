@@ -18,6 +18,8 @@ scene: !include scenes.yaml
 script: !include scripts.yaml
 " > $config_dest
 
+# shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_generic_hygrostat_config.sh
+. /scripts/generate_generic_hygrostat_config.sh
 # shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_http_config.sh
 . /scripts/generate_http_config.sh
 # shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_recorder_config.sh
