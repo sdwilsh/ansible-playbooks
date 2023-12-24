@@ -8,7 +8,7 @@ if [ -n "${INCLUDE_PLANT}" ]; then
     else
         echo "Creating empty ${plant_dest}..."
         echo "---
-[]
+{}
 " > $plant_dest
         echo "Successfully setup empty configuration at ${plant_dest}"
     fi
