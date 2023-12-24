@@ -12,6 +12,8 @@ spec:
               value: 172.16.0.0/16
             - name: INCLUDE_GENERIC_HYGROSTAT
               value: "1"
+            - name: INCLUDE_PLANT
+              value: "1"
             - name: RECORDER_DATABASE_NAME
               value: homeassistant
             - name: RECORDER_HOSTNAME
