@@ -1,5 +1,10 @@
 # ---
 users:
+  gwbraga:
+    disabled: false
+    displayname: Gabi
+    password: $argon2id$v=19$m=65536,t=3,p=4$i+Kwkz4n6H71MvCR9aox+Q$aMgqPVxQBjt25tUKLGYSAr6Zymp+Rs9ow27ESSdkdYg
+    email: gwbraga@gmail.com
   sdwilsh:
     disabled: false
     displayname: Shawn
