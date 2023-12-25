@@ -51,3 +51,10 @@
     group:
       address_group: PRINTER-v4
       port_group: PRINTER
+- description: Allow access to proxied services
+  action: accept
+  protocol: tcp
+  destination:
+    group:
+      address_group: PROXIED-SERVICES-v4
+      port_group: PROXIED-PORTS
