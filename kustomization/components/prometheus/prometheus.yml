@@ -16,4 +16,11 @@ spec:
   serviceMonitorSelector:
     matchLabels:
       app.kubernetes.io/name: vector
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn-encrypted
+        resources:
+          requests:
+            storage: 40Gi
   version: v2.44.0
