@@ -21,7 +21,13 @@ spec:
           image: timberio/vector
           name: vector
           securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
             runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /etc/vector/
               name: vector-config
