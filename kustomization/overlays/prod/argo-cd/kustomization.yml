@@ -4,6 +4,14 @@ kind: Kustomization
 
 components:
   - ../../../components/argo-cd
+  - ../../../components/vector-metrics-scraper
+configMapGenerator:
+  - name: vector-metrics-scraper-config
+    files:
+      - configmap/vector.yml
+images:
+  - name: timberio/vector
+    newTag: 0.34.1-distroless-libc
 namespace: argocd
 patches:
   - path: patches/change_ingress_host.yml
