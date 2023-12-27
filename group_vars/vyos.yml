@@ -15,22 +15,26 @@ vyos__ssh_address_ipv4: "10.10.0.{{ vyos__host_id_ipv4 }}"
 vyos_dns_forwarding__allow_from:
   - 127.0.0.0/8
 vyos_dns_forwarding__domain_servers:
+  - domain: 0.2.10.in-addr.arpa
+    servers:
+      - 10.11.1.66
   - domain: 0.10.10.in-addr.arpa
     servers:
-      - 10.10.0.3
-      - 10.10.0.4
+      - 10.11.1.66
   - domain: 0.11.10.in-addr.arpa
     servers:
-      - 10.10.0.3
-      - 10.10.0.4
+      - 10.11.1.66
+  - domain: 0.67.10.in-addr.arpa
+    servers:
+      - 10.11.1.66
   - domain: 0.117.10.in-addr.arpa
     servers:
-      - 10.10.0.3
-      - 10.10.0.4
+      - 10.11.1.66
   - domain: tswn.us
     servers:
       - 10.10.0.3
       - 10.10.0.4
+      - 10.11.1.66
 vyos_dns_forwarding__listen_addresses:
   # localhost
   - 127.0.0.1
