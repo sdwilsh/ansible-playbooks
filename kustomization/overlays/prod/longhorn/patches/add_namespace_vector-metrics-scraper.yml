@@ -1,0 +1,4 @@
+---
+- op: add
+  path: /metadata/namespace
+  value: longhorn-system

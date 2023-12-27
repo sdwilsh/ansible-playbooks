@@ -1,0 +1,21 @@
+---
+# API is enabled for the liveness probe.
+api:
+  enabled: true
+  address: 127.0.0.1:8686
+  playground: false
+data_dir: /vector-data-dir
+sinks:
+  aggregator:
+    address: aggregator.vector.svc.cluster.local:6000
+    inputs:
+      - internal_metrics
+      - longhorn_metrics
+    type: vector
+sources:
+  longhorn_metrics:
+    endpoints:
+      - http://longhorn-manager:9500/metrics
+    type: prometheus_scrape
+  internal_metrics:
+    type: internal_metrics
