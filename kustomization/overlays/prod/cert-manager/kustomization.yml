@@ -4,8 +4,9 @@ kind: Kustomization
 
 components:
   - ../../../components/cert-manager
+  - ../../../components/vector-metrics-scraper
 configMapGenerator:
-  - name: vector-config
+  - name: vector-metrics-scraper-config
     namespace: cert-manager
     files:
       - configmap/vector.yml
@@ -17,11 +18,10 @@ patches:
     target:
       kind: Deployment
       name: cert-manager
-  - path: patches/add_vector_sidecar.yml
+  - path: patches/increase_replicas.yml
+  - path: patches/add_namespace_vector-metrics-scraper.yml
     target:
       kind: Deployment
-      name: cert-manager
-  - path: patches/increase_replicas.yml
-  - path: patches/remove_metrics_service.yml
+      name: vector-metrics-scraper-deployment
 resources:
   - clusterissuer.yml

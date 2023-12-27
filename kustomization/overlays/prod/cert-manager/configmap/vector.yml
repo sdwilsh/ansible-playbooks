@@ -15,7 +15,7 @@ sinks:
 sources:
   certmanager_metrics:
     endpoints:
-      - http://localhost:9402/metrics
+      - http://cert-manager:9402/metrics
     type: prometheus_scrape
   internal_metrics:
     type: internal_metrics
