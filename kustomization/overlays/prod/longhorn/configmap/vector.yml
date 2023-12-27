@@ -15,7 +15,7 @@ sinks:
 sources:
   longhorn_metrics:
     endpoints:
-      - http://longhorn-manager:9500/metrics
+      - http://longhorn-backend:9500/metrics
     type: prometheus_scrape
   internal_metrics:
     type: internal_metrics
