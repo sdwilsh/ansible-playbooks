@@ -10,3 +10,4 @@ resources:
   - rules/cpu_load.yml
   - rules/disk.yml
   - rules/memory.yml
+  - rules/volume.yml

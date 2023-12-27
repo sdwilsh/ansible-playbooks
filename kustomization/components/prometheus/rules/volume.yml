@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: volume-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: general.volume
+      interval: 5m
+      rules:
+        - alert: utilization-high
+          annotations:
+            description: "{{ $value }}% of {{ $labels.pvc }} disk used!"
+          expr: (100 * longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) > 85
+          for: 5m
+          labels:
+            severity: warning
+        - alert: utilization-dangerously-high
+          annotations:
+            description: "{{ $value }}% of {{ $labels.pvc }} disk used!"
+          expr: (100 * longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) > 95
+          for: 15m
+          labels:
+            severity: page
