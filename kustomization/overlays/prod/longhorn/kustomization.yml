@@ -7,6 +7,7 @@ components:
   - ../../../components/vector-metrics-scraper
 configMapGenerator:
   - name: vector-metrics-scraper-config
+    namespace: longhorn-system
     files:
       - configmap/vector.yml
 images:
