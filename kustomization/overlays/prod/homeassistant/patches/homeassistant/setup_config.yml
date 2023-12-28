@@ -14,6 +14,8 @@ spec:
               value: "1"
             - name: INCLUDE_PLANT
               value: "1"
+            - name: INCLUDE_PROMETHEUS
+              value: "1"
             - name: RECORDER_DATABASE_NAME
               value: homeassistant
             - name: RECORDER_HOSTNAME

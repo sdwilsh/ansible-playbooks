@@ -7,6 +7,7 @@ components:
   - ../../../components/frigate
   - ../../../components/homeassistant
   - ../../../components/mosquitto
+  - ../../../components/vector-metrics-scraper
   - ../../../components/zwavejs
 configMapGenerator:
   - files:
@@ -15,6 +16,12 @@ configMapGenerator:
   - files:
       - configmap/mosquitto-config/homeassistant.conf
     name: mosquitto-config-configmap
+  - name: vector-metrics-scraper-config
+    files:
+      - configmap/vector/vector.yml
+images:
+  - name: timberio/vector
+    newTag: 0.34.1-distroless-libc
 namespace: homeassistant
 patches:
   - path: patches/frigate/add_frigate_env_vars.yml
@@ -29,6 +36,10 @@ patches:
     target:
       kind: StatefulSet
       name: mosquitto-statefulset
+  - path: patches/vector/add_bearer_token.yml
+    target:
+      kind: Deployment
+      name: vector-metrics-scraper-deployment
 resources:
   - namespace.yml
   - ingress.yml
