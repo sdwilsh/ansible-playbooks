@@ -22,7 +22,7 @@ sources:
     endpoints:
       - http://living-bluetooth-proxy.hogs.tswn.us/metrics
       - http://office-bluetooth-proxy.hogs.tswn.us/metrics
-    scrape_interval_secs: 60
+    scrape_interval_secs: 300 # 5 minutes
     type: prometheus_scrape
   homeassistant_metrics:
     auth:
