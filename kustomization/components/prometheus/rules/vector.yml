@@ -9,7 +9,7 @@ spec:
     - name: general.scrapes
       interval: 5m
       rules:
-        - alert: utilization-dangerously-high
+        - alert: scrape-dead
           annotations:
             description: "{{ $labels.component_type }} {{ $labels.component_id }} appears to be failing: {{ $labels.error_kind }}"
           expr: increase(vector_http_client_errors_total[1m]) > 2
