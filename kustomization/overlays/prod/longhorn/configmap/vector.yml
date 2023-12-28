@@ -16,6 +16,7 @@ sources:
   longhorn_metrics:
     endpoints:
       - http://${METRICS_IP:?unset_metrics_ip}:9500/metrics
+    instance_tag: vector_instance
     type: prometheus_scrape
   internal_metrics:
     type: internal_metrics

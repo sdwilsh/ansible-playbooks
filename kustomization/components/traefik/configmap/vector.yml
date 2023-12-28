@@ -29,6 +29,7 @@ sources:
   traefik_metrics:
     endpoints:
       - http://localhost:9090/metrics
+    instance_tag: vector_instance
     type: prometheus_scrape
   internal_metrics:
     type: internal_metrics
