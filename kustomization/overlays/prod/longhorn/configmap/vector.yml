@@ -15,7 +15,7 @@ sinks:
 sources:
   longhorn_metrics:
     endpoints:
-      - http://longhorn-backend:9500/metrics
+      - http://localhost:9500/metrics
     type: prometheus_scrape
   internal_metrics:
     type: internal_metrics
