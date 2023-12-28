@@ -9,8 +9,9 @@ sinks:
   aggregator:
     address: aggregator.vector.svc.cluster.local:6000
     inputs:
-      - internal_metrics
+      - esphome_metrics
       - homeassistant_metrics
+      - internal_metrics
     type: vector
 sources:
   esphome_metrics:
