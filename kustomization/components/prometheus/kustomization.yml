@@ -10,4 +10,5 @@ resources:
   - rules/cpu_load.yml
   - rules/disk.yml
   - rules/memory.yml
+  - rules/vector.yml
   - rules/volume.yml
