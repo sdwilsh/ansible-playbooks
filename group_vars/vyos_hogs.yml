@@ -248,6 +248,7 @@ vyos_firewall_global__group:
     - name: ESPHOME
       description: Ports needed to access ESPHOME devices.
       members:
+        - port: 80 # Prometheus Scrape
         - port: 3232 # ESP32 OTA Update Port
         - port: 6053 # Native API Component Port
     - name: LUTRON
