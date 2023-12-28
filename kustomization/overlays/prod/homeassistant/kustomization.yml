@@ -36,7 +36,7 @@ patches:
     target:
       kind: StatefulSet
       name: mosquitto-statefulset
-  - path: patches/vector/add_bearer_token.yml
+  - path: patches/vector/add_secrets.yml
     target:
       kind: Deployment
       name: vector-metrics-scraper-deployment
