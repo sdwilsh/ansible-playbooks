@@ -4,7 +4,7 @@ kind: Component
 
 helmCharts:
   - name: mariadb-operator
-    version: 0.22.0
+    version: 0.23.1
     repo: https://mariadb-operator.github.io/mariadb-operator
     releaseName: mariadb-operator
     valuesFile: values.yml
