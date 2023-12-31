@@ -27,13 +27,13 @@ customConfig:
     prom_exporter:
       address: 0.0.0.0:9090
       inputs:
+        - aggregation
         - internal_metrics
-        - vector
       type: prometheus_exporter
   sources:
     internal_metrics:
       type: internal_metrics
-    vector:
+    aggregation:
       address: 0.0.0.0:6000
       type: vector
       version: "2"
