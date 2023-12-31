@@ -273,6 +273,11 @@ vyos_firewall_global__group:
         - address: 10.11.1.64
         # unifi-inform.tswn.us
         - address: 10.11.1.65
+    - name: VALHEIM-v4
+      description: All Valheim servers
+      afi: ipv4
+      members:
+        - address: 10.11.1.67 # valheim-forerunner.tswn.us
     - name: VCENTER-v4
       description: vCenter IP Addresses
       afi: ipv4
@@ -354,6 +359,12 @@ vyos_firewall_global__group:
       description: "Ports used by the Unifi Controller for clients ({{ ansible_managed }})"
       members:
         - port: 443
+    - name: VALHEIM
+      description: Ports used by Valheim servers.  Each server uses three consecutive ports over UDP.
+      members:
+        - port: 2456
+        - port: 2457
+        - port: 2458
 
 vyos_interfaces__ethernet:
   - name: "{{ vyos__lan_interface }}"

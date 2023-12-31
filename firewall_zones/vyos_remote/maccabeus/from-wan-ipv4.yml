@@ -17,3 +17,12 @@
       address_group: UNIFI-v4
       port_group: UNIFI-DEVICE-UDP
   protocol: udp
+- action: accept
+  description: Allow Valheim Traffic
+  destination:
+    group:
+      address_group: VALHEIM-v4
+      port_group: VALHEIM
+  protocol: udp
+  state:
+    new: true

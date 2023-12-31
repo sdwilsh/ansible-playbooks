@@ -372,6 +372,18 @@
           port: 3478
           protocol: udp
           translation_address: 10.11.1.65
+        - description: valheim-forerunner
+          port: 2456
+          protocol: udp
+          translation_address: 10.11.1.67
+        - description: valheim-forerunner
+          port: 2457
+          protocol: udp
+          translation_address: 10.11.1.67
+        - description: valheim-forerunner
+          port: 2458
+          protocol: udp
+          translation_address: 10.11.1.67
       loop_control:
         index_var: rule_number
       tags:
