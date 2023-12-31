@@ -7,6 +7,3 @@
     - role: "factorio"
       tags:
         - "factorio"
-    - role: valheim
-      tags:
-        - "valheim"
