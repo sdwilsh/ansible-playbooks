@@ -50,7 +50,7 @@
     #
     # Firewall
     #
-    - name: "Set global firewall settings"
+    - name: Set global firewall settings
       vyos.vyos.vyos_firewall_global:
         config:
           config_trap: no
@@ -75,8 +75,8 @@
           validation: disable
         state: replaced
       tags:
-        - "firewall"
-        - "firewall-rules"
+        - firewall
+        - firewall-settings
 
     - name: "Set the firewall rules"
       ansible.builtin.import_role:

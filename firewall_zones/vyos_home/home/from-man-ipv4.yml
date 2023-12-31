@@ -12,28 +12,6 @@
     group:
       address_group: "NTP-SERVICES-v4"
       port_group: "NTP"
-- description: "Allow Zabbix Server Connections"
-  action: "accept"
-  protocol: "tcp"
-  state:
-    new: true
-  destination:
-    port: "10050"
-  source:
-    group:
-      address_group: "ZABBIX-SERVER-v4"
-- description: "Allow Zabbix Server Connections to MySQL"
-  action: "accept"
-  protocol: "tcp"
-  state:
-    new: true
-  destination:
-    group:
-      address_group: "MYSQL-SERVER-v4"
-    port: "3306"
-  source:
-    group:
-      address_group: "ZABBIX-SERVER-v4"
 - description: "Allow Connections to NFS"
   action: "accept"
   protocol: "tcp_udp"

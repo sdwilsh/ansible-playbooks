@@ -204,11 +204,6 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.11.1.0-10.11.1.31
-    - name: "MYSQL-SERVER-v4"
-      description: "The v4 mysql.hogs.tswn.us addresses"
-      afi: "ipv4"
-      members:
-        - address: "10.117.0.5"
     - name: NTP-SERVICES-v4
       description: NTP Hosts
       members:
@@ -283,11 +278,6 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.10.0.5
-    - name: "ZABBIX-SERVER-v4"
-      description: "The v4 server.zabbix.hogs.tswn.us addresses"
-      afi: "ipv4"
-      members:
-        - address: "10.10.0.18"
   network_group:
     - name: MOBILE-WIREGUARD-v4
       description: Mobile wireguard clients
