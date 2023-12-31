@@ -45,5 +45,4 @@
 - import_playbook: plays/hosts/lighterthansome.hogs.tswn.us.yml
 - import_playbook: "plays/hosts/loki.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/monitor.house.gem.hogs.tswn.us.yml"
-- import_playbook: "plays/hosts/mysql.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/sdwilsh-dev.hogs.tswn.us.yml"

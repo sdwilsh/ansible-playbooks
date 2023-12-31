@@ -40,8 +40,6 @@ bind_zones:
         ip: "10.117.0.1"
         aliases:
           - "home"
-      - name: "mysql.hogs"
-        ip: "10.117.0.5"
       - name: "lighterthansome.hogs"
         ip: "10.117.0.9"
       - name: "firstlightweaveslivingsong.hogs"

@@ -13,8 +13,6 @@ collections:
     version: 3.5.0
   - name: community.general
     version: 8.1.0
-  - name: community.mysql
-    version: 3.7.2
   - name: community.zabbix
     version: 2.1.0
   - name: devsec.hardening

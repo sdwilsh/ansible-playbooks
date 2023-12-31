@@ -6,9 +6,6 @@ lighterthansome.hogs.tswn.us ansible_host=10.117.0.9
 ns1.tswn.us ansible_host=10.10.0.3
 ns2.tswn.us ansible_host=10.10.0.4
 
-[jails]
-mysql.hogs.tswn.us ansible_host=10.117.0.5
-
 [pikvm]
 kvm01.hogs.tswn.us ansible_host=10.10.0.50
 
