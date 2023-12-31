@@ -20,7 +20,7 @@
     home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
     password: "{{ item.password | default('') }}"
-    shell: "{% if ansible_distribution == 'FreeBSD' %}/usr/local{% endif %}/bin/bash"
+    shell: /bin/bash
     state: present
     uid: "{{ item.uid }}"
   become: yes
@@ -52,14 +52,8 @@
   when: common__ip_addresses | length > 0
 
 # Platform-specific stuff
-- import_tasks: "freebsd.yml"
-  when: ansible_distribution == "FreeBSD"
 - import_tasks: "ubuntu.yml"
   when: ansible_distribution == "Ubuntu"
-
-# Zabbix Agent
-- ansible.builtin.import_tasks: zabbix-agent/main.yml
-  when: common__zabbix_enabled
 
 # Cleanup From Provisioning
 - name: Remove provision user

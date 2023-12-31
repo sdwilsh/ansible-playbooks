@@ -20,14 +20,6 @@
     state: "restarted"
   become: yes
 
-- name: "restart zabbix-agent"
-  ansible.builtin.service:
-    name: "zabbix_agentd"
-    state: "restarted"
-  become: yes
-  listen: "restart zabbix-agent"
-  when: "ansible_distribution == 'FreeBSD'"
-
 - name: "restart zabbix-agent with systemd"
   ansible.builtin.systemd:
     name: "zabbix-agent"

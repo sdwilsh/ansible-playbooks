@@ -1,4 +1,0 @@
----
-# Tasks for zabbix-agent installation and configuration.
-- import_tasks: "freebsd.yml" # zabbix-agent
-  when: "ansible_distribution == 'FreeBSD'"

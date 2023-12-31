@@ -14,7 +14,7 @@
     - "zabbix-agent"
 - name: "Ensure /etc/zabbix/zabbix_agent.d/ exists with the correct permissions"
   ansible.builtin.file:
-    group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
+    group: root
     mode: "u=rwx,g=rx,o=rx"
     owner: "root"
     path: "{{ common__etc_dir }}/zabbix/zabbix_agent.d/"
@@ -25,7 +25,7 @@
   ansible.builtin.template:
     dest: "{{ common__etc_dir }}/zabbix/zabbix_agentd.conf"
     owner: "root"
-    group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
+    group: root
     mode: "u=rw,g=r,o=r"
     src: "zabbix-agentd.conf.j2"
   notify: "restart zabbix-agent"

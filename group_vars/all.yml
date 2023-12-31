@@ -29,7 +29,7 @@ common__unix_users:
     uid: 2000
   - name: "localroot"
     uid: 5000
-    group: "{% if ansible_distribution == 'FreeBSD' %}wheel{% else %}root{% endif %}"
+    group: root
     password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           34613334653762323237396130303330323964346166366535316633383861326338353937333330
