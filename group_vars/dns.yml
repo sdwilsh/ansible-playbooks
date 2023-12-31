@@ -70,8 +70,6 @@ bind_zones:
         ip: "10.117.0.30"
         aliases:
           - "factorio"
-          - "valheim"
-          - "valheim.hogs"
       - name: "hue.hogs"
         ip: "10.117.0.34"
       - name: living-dash.hogs
@@ -206,6 +204,8 @@ bind_zones:
           - zwave.hogs
       - name: unifi-inform
         ip: 10.11.1.65
+      - name: valheim-forerunner
+        ip: 10.11.1.67
 
       # NONET Network
       - name: "front-porch.camera.hogs"

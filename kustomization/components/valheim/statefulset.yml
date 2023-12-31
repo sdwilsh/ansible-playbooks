@@ -1,0 +1,114 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: valheim-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: valheim
+  serviceName: valheim-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: valheim
+    spec:
+      containers:
+        - env:
+            - name: AUTO_BACKUP
+              value: "1"
+            - name: AUTO_BACKUP_DAYS_TO_LIVE
+              value: "7"
+            - name: AUTO_BACKUP_ON_SHUTDOWN
+              value: "1"
+            - name: AUTO_BACKUP_ON_UPDATE
+              value: "1"
+            - name: AUTO_BACKUP_PAUSE_WITH_NO_PLAYERS
+              value: "1"
+            - name: AUTO_UPDATE
+              value: "1"
+            - name: AUTO_UPDATE_PAUSE_WITH_PLAYERS
+              value: "1"
+            - name: GUID
+              value: "65536"
+            - name: HTTP_PORT
+              value: "9090"
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: valheim-secret
+                  key: password
+            - name: PORT
+              value: "2456"
+            - name: PUBLIC
+              value: "1"
+            - name: PUID
+              value: "65536"
+            - name: TZ
+              value: America/Los_Angeles
+          image: mbround18/valheim
+          livenessProbe:
+            exec:
+              command:
+                - pidof
+                - valheim_server.x86_64
+            periodSeconds: 60
+            timeoutSeconds: 3
+          name: valheim
+          ports:
+            - containerPort: 2456
+              protocol: UDP
+            - containerPort: 2457
+              protocol: UDP
+            - containerPort: 2458
+              protocol: UDP
+            - containerPort: 9090
+              name: metrics
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 4000m
+              memory: 16Gi
+            requests:
+              cpu: 500m
+              memory: 400Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /home/steam/backups
+              name: valheim-backups
+            - mountPath: /home/steam/valheim
+              name: valheim-steam
+            - mountPath: /home/steam/.config/unity3d/IronGate/Valheim
+              name: valheim-saves
+  volumeClaimTemplates:
+    - metadata:
+        name: valheim-backups
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 8Gi
+        storageClassName: longhorn-encrypted
+    - metadata:
+        name: valheim-saves
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 4Gi
+        storageClassName: longhorn-encrypted
+    - metadata:
+        name: valheim-steam
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-encrypted
