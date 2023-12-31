@@ -2,50 +2,6 @@
 
 ## Prerequisites
 
-### FreeBSD
-
-#### Install Core Dependencies
-
-Run this on the remote machine:
-```
-pkg install bash python37 sudo
-```
-
-#### Setup `sshd`
-
-Run this on the remote machine:
-```
-echo 'sshd_enable="YES"' >> /etc/rc.conf.d/sshd
-service sshd start
-```
-
-#### Create `provision` User
-
-This command creates the user `provision` that expires one hour after creation with the password `provision`
-
-Run this on the remote machine:
-```
-echo 'provision:::::+1h::/nonexistent:/bin/sh:provision' | adduser -G wheel -f - 
-```
-
-#### Enable `wheel` Group to Use Password-based `sudo`
-
-Run this on the remote machine:
-```
-sed -i '' 's/#\(.*%wheel.*ALL=(ALL).*ALL$\)/%wheel ALL=(ALL) ALL/' /usr/local/etc/sudoers
-```
-
-#### Set the Appropriate `host_vars`
-
-In this repository, setup a host_vars for the host with these contents:
-```
----
-ansible_python_interpreter: "/usr/local/bin/python3.7"
-ansible_remote_tmp: "/tmp/ansible"
-
-common__etc_dir: "/usr/local/etc"
-```
-
 ### VyOS
 
 #### Create `ansible` User
