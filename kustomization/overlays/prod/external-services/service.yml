@@ -13,14 +13,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nfs-svc
-spec:
-  externalName: services-nfs.hogs.tswn.us
-  type: ExternalName
----
-apiVersion: v1
-kind: Service
-metadata:
   name: opensprinkler-svc
 spec:
   externalName: harvest.hogs.tswn.us
