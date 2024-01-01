@@ -31,16 +31,16 @@ spec:
             limits:
               cpu: 50m
               memory: 20Mi
-        ports:
-          - containerPort: 8080
-            name: http
-        securityContext:
-          privileged: true
-        volumeMounts:
-          - name: device-plugin
-            mountPath: /var/lib/kubelet/device-plugins
-          - name: dev
-            mountPath: /dev
+          ports:
+            - containerPort: 8080
+              name: http
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: dev
+              mountPath: /dev
       volumes:
         - name: device-plugin
           hostPath:
