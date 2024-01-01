@@ -120,6 +120,10 @@ bind_zones:
         ip: "10.10.0.31"
       - name: "power-failover.hogs"
         ip: "10.10.0.32"
+      - name: cluster-switch.hogs
+        ip: 10.10.0.38
+      - name: cluster-failover-switch.hogs
+        ip: 10.10.0.39
       - name: aggregation-upper.hogs
         ip: 10.10.0.40
       - name: aggregation-lower.hogs
