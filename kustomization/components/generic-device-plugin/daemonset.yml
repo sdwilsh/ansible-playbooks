@@ -16,37 +16,37 @@ spec:
     spec:
       priorityClassName: system-node-critical
       tolerations:
-      - operator: Exists
-        effect: NoExecute
-      - operator: Exists
-        effect: NoSchedule
+        - operator: Exists
+          effect: NoExecute
+        - operator: Exists
+          effect: NoSchedule
       containers:
-      - image: ghcr.io/squat/generic-device-plugin
-        args: []
-        name: generic-device-plugin
-        resources:
-          requests:
-            cpu: 50m
-            memory: 10Mi
-          limits:
-            cpu: 50m
-            memory: 20Mi
+        - image: ghcr.io/squat/generic-device-plugin
+          args: []
+          name: generic-device-plugin
+          resources:
+            requests:
+              cpu: 50m
+              memory: 10Mi
+            limits:
+              cpu: 50m
+              memory: 20Mi
         ports:
-        - containerPort: 8080
-          name: http
+          - containerPort: 8080
+            name: http
         securityContext:
           privileged: true
         volumeMounts:
-        - name: device-plugin
-          mountPath: /var/lib/kubelet/device-plugins
-        - name: dev
-          mountPath: /dev
+          - name: device-plugin
+            mountPath: /var/lib/kubelet/device-plugins
+          - name: dev
+            mountPath: /dev
       volumes:
-      - name: device-plugin
-        hostPath:
-          path: /var/lib/kubelet/device-plugins
-      - name: dev
-        hostPath:
-          path: /dev
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: dev
+          hostPath:
+            path: /dev
   updateStrategy:
     type: RollingUpdate
