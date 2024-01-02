@@ -14,7 +14,7 @@ images:
   - name: quay.io/opstree/redis-sentinel
     newTag: v7.0.12
   - name: quay.io/opstree/redis
-    newTag: v7.0.12
+    newTag: v7.2.3
 namespace: traefik
 patches:
   - path: patches/add_authelia_postgres_secrets.yml
