@@ -4,12 +4,12 @@ kind: Kustomization
 
 helmCharts:
   - name: vector
-    version: 0.29.0
+    version: 0.29.1
     repo: https://helm.vector.dev
     releaseName: vector-agent
     valuesFile: agent-values.yml
   - name: vector
-    version: 0.29.0
+    version: 0.29.1
     repo: https://helm.vector.dev
     releaseName: vector-aggregator
     valuesFile: aggregator-values.yml
