@@ -7,5 +7,4 @@ images:
     newTag: 1.17.5
 resources:
   - deployment.yml
-  - ingress.yml
   - service.yml

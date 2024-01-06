@@ -10,15 +10,12 @@ patches:
     target:
       kind: Deployment
       name: ripper-deployment
-  - path: patches/change_ripper_ingress_host.yml
-    target:
-      kind: Ingress
-      name: ripper-ingress
   - path: patches/set_ingress_middleware.yml
     target:
       kind: Ingress
       name: ripper-ingress
 resources:
   - namespace.yml
+  - ingress.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml

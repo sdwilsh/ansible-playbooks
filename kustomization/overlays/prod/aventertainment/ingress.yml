@@ -5,10 +5,11 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: ripper-ingress
+  name: aventertainment-ingress
 spec:
   rules:
-    - http:
+    - host: ripper.hogs.tswn.us
+      http:
         paths:
           - backend:
               service:
