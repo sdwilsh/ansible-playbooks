@@ -22,7 +22,7 @@ spec:
               name: web
           resources:
             limits:
-              cpu: 200m
+              cpu: 2000m
               memory: 8Gi
               squat.ai/quicksync: 1
             requests:
