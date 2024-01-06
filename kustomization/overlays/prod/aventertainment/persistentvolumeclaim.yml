@@ -11,3 +11,16 @@ spec:
     requests:
       storage: 2Ti
   volumeName: rips-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 2Ti
+  volumeName: rips-pv
