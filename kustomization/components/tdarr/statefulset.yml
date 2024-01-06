@@ -63,22 +63,25 @@ spec:
               name: tdarr-configs
             - mountPath: /app/logs
               name: tdarr-logs
+            - mountPath: /app/server
+              name: tdarr-server
       securityContext:
         fsGroup: 65536
       volumes:
         - emptyDir:
-            medium: Memory
+          name: tdarr-configs
+        - emptyDir:
           name: tdarr-logs 
         - name: tdarr-cache
           persistentVolumeClaim:
             claimName: tdarr-cache-pvc
   volumeClaimTemplates:
     - metadata:
-        name: tdarr-configs
+        name: tdarr-server
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 4Gi
         storageClassName: longhorn-encrypted
