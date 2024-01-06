@@ -1,19 +1,28 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: tdarr-server-statefulset
+  name: tdarr-node-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app.kubernetes.io/name: tdarr-server
-  serviceName: tdarr-svc
+      app.kubernetes.io/name: tdarr-node
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: tdarr-server
+        app.kubernetes.io/name: tdarr-node
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - tdarr-node
+              topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: ffmpegVersion
@@ -25,9 +34,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: serverIP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
+              value: tdarr-svc
             - name: serverPort
               value: "8266"
             - name: PGID
@@ -36,15 +43,11 @@ spec:
               value: "65536"
             - name: TZ
               value: America/Los_Angeles
-            - name: webUIPort
-              value: "8265"
-          image: ghcr.io/haveagitgat/tdarr
+          image: ghcr.io/haveagitgat/tdarr_node
           name: tdarr
           ports:
-            - containerPort: 8265
-              name: web
-            - containerPort: 8266
-              name: server
+            - containerPort: 8268
+              name: client
           resources:
             limits:
               cpu: 1000m
@@ -68,17 +71,10 @@ spec:
       volumes:
         - emptyDir:
             medium: Memory
-          name: tdarr-logs 
+          name: tdarr-configs
+        - emptyDir:
+            medium: Memory
+          name: tdarr-logs
         - name: tdarr-cache
           persistentVolumeClaim:
             claimName: tdarr-cache-pvc
-  volumeClaimTemplates:
-    - metadata:
-        name: tdarr-configs
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
-        storageClassName: longhorn-encrypted

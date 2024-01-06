@@ -13,13 +13,3 @@ spec:
     - name: server
       protocol: TCP
       port: 8266
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tdarr-nodes-svc
-spec:
-  clusterIP: None
-  ports: []
-  selector:
-    app.kubernetes.io/name: tdarr-node
