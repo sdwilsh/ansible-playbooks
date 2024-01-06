@@ -52,8 +52,8 @@ spec:
               name: client
           resources:
             limits:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: 4000m
+              memory: 8Gi
             requests:
               cpu: 500m
           securityContext:
