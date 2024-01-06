@@ -12,3 +12,17 @@ spec:
     path: /mnt/rust0/nfs/mkv
     server: services-nfs.hogs.tswn.us
   persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Ti
+  nfs:
+    path: /mnt/rust0/nfs/media
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain

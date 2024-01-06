@@ -11,6 +11,14 @@ patches:
     target:
       kind: Deployment
       name: ripper-deployment
+  - path: patches/add_tdarr_node_volumes.yml
+    target:
+      kind: Deployment
+      name: tdarr-node-deployment
+  - path: patches/add_tdarr_server_volumes.yml
+    target:
+      kind: Deployment
+      name: tdarr-server-statefulset
 resources:
   - namespace.yml
   - ingress.yml

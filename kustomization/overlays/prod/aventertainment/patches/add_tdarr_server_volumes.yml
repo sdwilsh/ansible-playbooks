@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Statefulset
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: tdarr
+          volumeMounts:
+            - mountPath: /media
+              name: tdarr-media
+      volumes:
+        - name: tdarr-media
+          persistentVolumeClaim:
+            claimName: media-pvc
