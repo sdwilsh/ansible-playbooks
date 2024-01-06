@@ -11,10 +11,6 @@ patches:
     target:
       kind: Deployment
       name: ripper-deployment
-  - path: patches/set_ingress_middleware.yml
-    target:
-      kind: Ingress
-      name: ripper-ingress
 resources:
   - namespace.yml
   - ingress.yml
