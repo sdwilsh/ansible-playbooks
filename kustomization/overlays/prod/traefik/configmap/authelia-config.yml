@@ -38,6 +38,10 @@ access_control:
         - ^/auth/token/.*$
         - ^/service_worker.js$
         - ^/static/.*$
+    - domain: jellyfin.tswn.us
+      networks:
+        - home
+      policy: bypass
     - domain: opensprinkler.hogs.tswn.us
       networks:
         - home
