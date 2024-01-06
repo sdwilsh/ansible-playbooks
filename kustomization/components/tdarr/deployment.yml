@@ -8,6 +8,8 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: tdarr-node
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -32,7 +34,7 @@ spec:
             - name: nodeName
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
+                  fieldPath: spec.nodeName
             - name: serverIP
               value: tdarr-svc
             - name: serverPort
