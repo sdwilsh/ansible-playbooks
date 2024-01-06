@@ -18,3 +18,13 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
+    - host: tdarr.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: tdarr-svc
+                port:
+                  name: ui
+            path: /
+            pathType: Prefix

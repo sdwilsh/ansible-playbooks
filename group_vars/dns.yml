@@ -204,6 +204,7 @@ bind_zones:
           - opensprinkler.hogs
           - prometheus.hogs
           - ripper.hogs
+          - tdarr.hogs
           - unifi
           - zwave.hogs
       - name: unifi-inform

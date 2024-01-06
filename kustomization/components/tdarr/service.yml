@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tdarr-svc
+spec:
+  selector:
+    app.kubernetes.io/name: tdarr-server
+  ports:
+    - name: ui
+      protocol: TCP
+      port: 8265
+    - name: server
+      protocol: TCP
+      port: 8266

@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/ripper
+  - ../../../components/tdarr
 namespace: aventertainment
 patches:
   - path: patches/add_ripper_volumes.yml

@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tdarr-server-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-server
+  serviceName: tdarr-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tdarr-server
+    spec:
+      containers:
+        - env:
+            - name: ffmpegVersion
+              value: "6"
+            - name: inContainer
+              value: "true"
+            - name: nodeName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: serverIP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: serverPort
+              value: "8266"
+            - name: PGID
+              value: "65536"
+            - name: PUID
+              value: "65536"
+            - name: TZ
+              value: America/Los_Angeles
+            - name: webUIPort
+              value: "8265"
+          image: ghcr.io/haveagitgat/tdarr
+          name: tdarr
+          ports:
+            - containerPort: 8265
+              name: web
+            - containerPort: 8266
+              name: server
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+          securityContext:
+            allowPrivilegeEscalation: true
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /temp
+              name: tdarr-cache
+            - mountPath: /app/configs
+              name: tdarr-configs
+            - mountPath: /app/logs
+              name: tdarr-logs
+      securityContext:
+        fsGroup: 65536
+      volumes:
+        - emptyDir:
+            medium: Memory
+          name: tdarr-logs 
+        - name: tdarr-cache
+          persistentVolumeClaim:
+            claimName: tdarr-cache-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: tdarr-configs
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: longhorn-encrypted
