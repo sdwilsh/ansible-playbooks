@@ -82,3 +82,84 @@ spec:
           requests:
             storage: 1Gi
         storageClassName: longhorn-encrypted
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tdarr-node-statefulset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-node
+  serviceName: tdarr-nodes-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tdarr-node
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - tdarr-node
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - env:
+            - name: ffmpegVersion
+              value: "6"
+            - name: inContainer
+              value: "true"
+            - name: nodeName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: serverIP
+              value: tdarr-svc
+            - name: serverPort
+              value: "8266"
+            - name: PGID
+              value: "65536"
+            - name: PUID
+              value: "65536"
+            - name: TZ
+              value: America/Los_Angeles
+          image: ghcr.io/haveagitgat/tdarr_node
+          name: tdarr
+          ports:
+            - containerPort: 8268
+              name: client
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+          securityContext:
+            allowPrivilegeEscalation: true
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /temp
+              name: tdarr-cache
+            - mountPath: /app/configs
+              name: tdarr-configs
+            - mountPath: /app/logs
+              name: tdarr-logs
+      securityContext:
+        fsGroup: 65536
+      volumes:
+        - emptyDir:
+            medium: Memory
+          name: tdarr-configs
+        - emptyDir:
+            medium: Memory
+          name: tdarr-logs
+        - name: tdarr-cache
+          persistentVolumeClaim:
+            claimName: tdarr-cache-pvc
