@@ -9,6 +9,16 @@ metadata:
   name: aventertainment-ingress
 spec:
   rules:
+    - host: jellyfin.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: jellyfin-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: ripper.hogs.tswn.us
       http:
         paths:

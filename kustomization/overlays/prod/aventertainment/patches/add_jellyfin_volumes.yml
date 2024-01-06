@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: jellyfin
+          volumeMounts:
+            - mountPath: /media
+              name: jellyfin-media
+      volumes:
+        - name: jellyfin-media
+          persistentVolumeClaim:
+            claimName: media-pvc

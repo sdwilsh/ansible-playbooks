@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: jellyfin/jellyfin
+    newTag: 10.8.13
+resources:
+  - service.yml
+  - statefulset.yml
+  - storageclass.yml

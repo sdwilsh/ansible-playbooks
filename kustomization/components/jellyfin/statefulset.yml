@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellyfin-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+  serviceName: jellyfin-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jellyfin
+    spec:
+      containers:
+        - image: jellyfin/jellyfin
+          name: jellyfin
+          ports:
+            - containerPort: 8096
+              name: web
+          resources:
+            limits:
+              cpu: 200m
+              memory: 8Gi
+              squat.ai/quicksync: 1
+            requests:
+              cpu: 500m
+              squat.ai/quicksync: 1
+          securityContext:
+            allowPrivilegeEscalation: true
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: jellyfin-config
+            - mountPath: /cache
+              name: jellyfin-cache
+  volumeClaimTemplates:
+    - metadata:
+        name: jellyfin-cache
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: jellyfin-cache-storageclass
+    - metadata:
+        name: jellyfin-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-encrypted

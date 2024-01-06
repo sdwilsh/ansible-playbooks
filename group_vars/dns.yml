@@ -198,6 +198,7 @@ bind_zones:
           - frigate.hogs
           - homeassistant.hogs
           - homeassistant-config.hogs
+          - jellyfin
           - longhorn.hogs
           - mqtt.hogs
           - nas.hogs
