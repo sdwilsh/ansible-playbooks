@@ -17,7 +17,7 @@ patches:
       name: tdarr-node-deployment
   - path: patches/add_tdarr_server_volumes.yml
     target:
-      kind: Deployment
+      kind: StatefulSet
       name: tdarr-server-statefulset
 resources:
   - namespace.yml
