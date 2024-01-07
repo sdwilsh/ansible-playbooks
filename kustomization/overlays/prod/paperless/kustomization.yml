@@ -1,0 +1,29 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - https://github.com/marinatedconcrete/config/kustomization/components/paperless
+  - https://github.com/marinatedconcrete/config/kustomization/components/samba-upload
+images:
+  - name: ghcr.io/paperless-ngx/paperless-ngx
+    newTag: 2.3.0
+  - name: quay.io/opstree/redis
+    newTag: v7.2.3
+  - name: ghcr.io/servercontainers/samba:smbd-only-latest
+    digest: sha256:50d28991ed82de9e629534293ca38e9aaacf6757bc79b4fe14f5ace0041ac78e
+namespace: paperless
+patches:
+  - path: patches/set_paperless_customizations.yml
+    target:
+      kind: StatefulSet
+      name: paperless
+  - path: patches/set_samba_address.yml
+    target:
+      kind: Service
+      name: samba-svc
+resources:
+  - ingress.yml
+  - namespace.yml
+  - postgresql.yml
+  - redisreplication.yml

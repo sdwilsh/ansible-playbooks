@@ -1,0 +1,42 @@
+---
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: RedisReplication
+metadata:
+  name: paperless-redis-replication
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - paperless-redis-replication
+          topologyKey: kubernetes.io/hostname
+  clusterSize: 2
+  kubernetesConfig: 
+    image: quay.io/opstree/redis
+    imagePullPolicy: IfNotPresent
+    redisSecret:
+      key: redis_password
+      name: paperless-secrets
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 101m
+        memory: 128Mi
+  podSecurityContext:
+    fsGroup: 1000 # redis
+    runAsUser: 1000 # redis
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: longhorn-encrypted

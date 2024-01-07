@@ -1,0 +1,18 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: paperless-pg 
+spec:
+  teamId: paperless
+  volume:
+    size: 1Gi
+    storageClass: longhorn-encrypted
+  numberOfInstances: 2
+  preparedDatabases:
+    paperless:
+      defaultUsers: true
+      schemas:
+        public: {}
+  postgresql:
+    version: "15"
