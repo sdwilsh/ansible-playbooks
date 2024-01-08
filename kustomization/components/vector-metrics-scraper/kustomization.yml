@@ -4,6 +4,6 @@ kind: Component
 
 images:
   - name: timberio/vector
-    newTag: 0.34.2-distroless-libc
+    newTag: 0.35.0-distroless-libc
 resources:
   - deployment.yml

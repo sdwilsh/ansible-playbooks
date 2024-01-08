@@ -21,7 +21,7 @@ configMapGenerator:
       - configmap/vector/vector.yml
 images:
   - name: timberio/vector
-    newTag: 0.34.2-distroless-libc
+    newTag: 0.35.0-distroless-libc
 namespace: homeassistant
 patches:
   - path: patches/frigate/add_frigate_env_vars.yml
