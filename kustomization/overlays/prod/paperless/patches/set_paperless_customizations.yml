@@ -51,3 +51,7 @@ spec:
                   key: redis_url
                   name: paperless-secrets
           name: paperless
+          resources:
+            limits:
+              cpu: 4000m
+              memory: 8Gi
