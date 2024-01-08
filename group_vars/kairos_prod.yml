@@ -167,7 +167,7 @@ secrets:
           63333361626332323835653364376539376563613939613033643338653437616130356331323333
           3835303566616533300a373463323433643237666132656338643061666333376135616337313131
           3331
-      redis_url: "redis://:{{ _paperless_redis_password }}@paperless-redis-replication:6379"
+      redis_url: "redis://:{{ _paperless_redis_password }}@paperless-redis:6379"
       redis_password: "{{ _paperless_redis_password }}"
   - name: una-secret
     namespace: unifi

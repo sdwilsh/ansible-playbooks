@@ -1,20 +1,9 @@
 ---
 apiVersion: redis.redis.opstreelabs.in/v1beta2
-kind: RedisReplication
+kind: Redis
 metadata:
-  name: paperless-redis-replication
+  name: paperless-redis
 spec:
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - paperless-redis-replication
-          topologyKey: kubernetes.io/hostname
-  clusterSize: 2
   kubernetesConfig: 
     image: quay.io/opstree/redis
     imagePullPolicy: IfNotPresent

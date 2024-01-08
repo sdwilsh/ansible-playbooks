@@ -26,4 +26,4 @@ resources:
   - ingress.yml
   - namespace.yml
   - postgresql.yml
-  - redisreplication.yml
+  - redis.yml
