@@ -30,6 +30,10 @@ spec:
                   key: password
                   name: paperless-owner-user.paperless-pg.credentials.postgresql.acid.zalan.do
 
+            # Features
+            - name: PAPERLESS_CONSUMER_ENABLE_BARCODES
+              value: "1"
+
             # Frontend
             - name: PAPERLESS_BIND_ADDR
               valueFrom:
