@@ -7,11 +7,7 @@ spec:
   template:
     spec:
       containers:
-        - name: paperless
-          image: ghcr.io/paperless-ngx/paperless-ngx
-          ports:
-            - containerPort: 8000
-          env:
+        - env:
             # Database
             - name: PAPERLESS_DBENGINE
               value: postgresql
@@ -54,3 +50,4 @@ spec:
                 secretKeyRef:
                   key: redis_url
                   name: paperless-secrets
+          name: paperless
