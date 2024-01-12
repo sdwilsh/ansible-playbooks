@@ -4,7 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/jellyfin
-  - ../../../components/ripper
   - ../../../components/tdarr
 namespace: aventertainment
 patches:
@@ -12,10 +11,6 @@ patches:
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
-  - path: patches/add_ripper_volumes.yml
-    target:
-      kind: Deployment
-      name: ripper-deployment
   - path: patches/add_tdarr_node_volumes.yml
     target:
       kind: Deployment

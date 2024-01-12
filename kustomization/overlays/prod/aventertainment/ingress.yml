@@ -19,16 +19,6 @@ spec:
                   name: web
             path: /
             pathType: Prefix
-    - host: ripper.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: ripper-svc
-                port:
-                  number: 80
-            path: /
-            pathType: Prefix
     - host: tdarr.hogs.tswn.us
       http:
         paths:

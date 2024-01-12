@@ -207,7 +207,6 @@ bind_zones:
           - opensprinkler.hogs
           - paperless.hogs
           - prometheus.hogs
-          - ripper.hogs
           - tdarr.hogs
           - unifi
           - zwave.hogs
