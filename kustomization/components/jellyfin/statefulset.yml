@@ -20,6 +20,8 @@ spec:
           ports:
             - containerPort: 8096
               name: web
+            - containerPort: 7359
+              name: discovery
           resources:
             limits:
               cpu: 2000m

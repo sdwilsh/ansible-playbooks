@@ -24,3 +24,4 @@ resources:
   - ingress.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml
+  - service.yml
