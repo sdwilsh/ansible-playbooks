@@ -22,6 +22,8 @@ spec:
               name: web
             - containerPort: 7359
               name: discovery
+            - containerPort: 1900
+              name: ssdp
           resources:
             limits:
               cpu: 2000m
