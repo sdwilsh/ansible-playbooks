@@ -19,9 +19,12 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
+  - path: patches/set_jellyfin_service_ip.yml
+    target:
+      kind: Service
+      name: jellyfin-svc
 resources:
   - namespace.yml
   - ingress.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml
-  - service.yml
