@@ -11,7 +11,7 @@ images:
   - name: quay.io/opstree/redis
     newTag: v7.2.3
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
-    digest: sha256:50d28991ed82de9e629534293ca38e9aaacf6757bc79b4fe14f5ace0041ac78e
+    digest: sha256:617114fc6f2cb04de2ce6624b4c129814c75da883e1a369e3c881e847459bcf8
 namespace: paperless
 patches:
   - path: patches/set_paperless_customizations.yml
