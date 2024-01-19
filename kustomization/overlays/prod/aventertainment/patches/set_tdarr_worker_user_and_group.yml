@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "3000"
+            - name: PUID
+              value: "65536"
+          name: tdarr
+      securityContext:
+        fsGroup: 3000
