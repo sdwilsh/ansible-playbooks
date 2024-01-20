@@ -27,6 +27,10 @@ patches:
     target:
       kind: Service
       name: jellyfin-svc
+  - path: patches/set_tdarr_cache_pvc_size.yml
+    target:
+      kind: PersistentVolumeClaim
+      name: tdarr-cache-pvc
 resources:
   - namespace.yml
   - ingress.yml

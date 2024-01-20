@@ -5,7 +5,7 @@ metadata:
   name: tdarr-cache-storageclass
 parameters:
   dataLocality: best-effort
-  numberOfReplicas: "3"
+  numberOfReplicas: "1"
   replicaAutoBalance: best-effort
   diskSelector: nvme
 provisioner: driver.longhorn.io

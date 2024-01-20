@@ -9,4 +9,6 @@ spec:
   storageClassName: tdarr-cache-storageclass
   resources:
     requests:
+      # Size this according to:
+      # (Number of Workers) * (Max Jobs per Worker) * (Max Disk Size of File)
       storage: 100Gi
