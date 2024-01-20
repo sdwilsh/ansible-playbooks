@@ -9,7 +9,5 @@ images:
     newTag: 2.17.01
 resources:
   - deployment.yml
-  - persistentvolumeclaim.yml
   - service.yml
   - statefulset.yml
-  - storageclass.yml
