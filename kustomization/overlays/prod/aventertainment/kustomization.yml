@@ -19,6 +19,10 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
+  - path: patches/set_tdarr_server_user_and_group.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
   - path: patches/set_tdarr_worker_user_and_group.yml
     target:
       kind: Deployment
