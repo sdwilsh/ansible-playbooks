@@ -101,6 +101,9 @@ vyos_dhcp_server__networks:
       - name: "roku-den"
         ip: "10.117.0.21"
         mac: "d8:31:34:66:95:f1"
+      - name: fdm01
+        ip: 10.117.0.26
+        mac: 10:9c:70:28:27:38
       - name: "hue"
         ip: "10.117.0.34"
         mac: "ec:b5:fa:9b:c1:f6"
