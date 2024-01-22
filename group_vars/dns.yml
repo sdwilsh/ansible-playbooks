@@ -66,10 +66,8 @@ bind_zones:
         ip: "10.117.0.23"
       - name: "monitor.house.gem.hogs"
         ip: "10.117.0.24"
-      - name: "docker-ssd.hogs"
-        ip: "10.117.0.30"
-        aliases:
-          - "factorio"
+      - name: fdm01.hogs
+        ip: 10.117.0.26
       - name: "hue.hogs"
         ip: "10.117.0.34"
       - name: living-dash.hogs
