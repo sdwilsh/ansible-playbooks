@@ -6,7 +6,7 @@ metadata:
 spec:
   teamId: authelia
   volume:
-    size: 1Gi
+    size: 10Gi
     storageClass: longhorn-encrypted
   numberOfInstances: 2
   preparedDatabases:
