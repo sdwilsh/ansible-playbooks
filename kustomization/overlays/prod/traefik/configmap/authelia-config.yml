@@ -28,10 +28,6 @@ access_control:
         - man
         - 10.117.0.24 # monitor.house.gem.hogs.tswn.us
       policy: bypass
-    - domain: longhorn.hogs.tswn.us
-      networks:
-        - 10.117.0.31 # sdwilsh-desktop
-      policy: bypass
     - domain: homeassistant.hogs.tswn.us
       networks:
         - home
