@@ -251,6 +251,7 @@ vyos_firewall_global__group:
         - address: 10.10.0.6
         # chanttogreen.hogs.tswn.us
         - address: 10.10.0.14
+        - address: 10.117.0.26 # fdm01.hogs.tswn.us
         - address: 10.117.0.34 # hue.hogs.tswn.us
     - name: SERVICE-TALKERS-v4
       description: IP Addresses allowed to talk to all services
