@@ -111,22 +111,22 @@ vyos_interfaces__wireguard:
         persistent_keepalive_sec: 15
         pubkey: "{{ hostvars['hogs01.routers.hogs.tswn.us'].wireguard__pubkey }}"
     port: 51821
-  - name: "wg2"
-    description: "mobile devices vpn"
+  - name: wg2
+    description: mobile devices vpn
     ipv4:
-      - address: "10.117.2.1/24"
+      - address: 10.117.2.1/24
     peers:
-      - name: "sdwilsh-pixel6a"
+      - name: sdwilsh-pixel6a
         allowed_ips:
           ipv4:
-            - network: "10.117.2.11/32"
-        pubkey: "bj66TS/e9M1mbHvmc8JCbMR2t2ziEJ6tipyfBnYdJCE="
-      - name: "mango"
+            - network: 10.117.2.11/32
+        pubkey: bj66TS/e9M1mbHvmc8JCbMR2t2ziEJ6tipyfBnYdJCE=
+      - name: mango
         allowed_ips:
           ipv4:
-            - network: "10.117.2.12/32"
-        pubkey: "dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw="
-    port: "51822"
+            - network: 10.117.2.12/32
+        pubkey: dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw=
+    port: 51822
 
 vyos_ospf_interfaces__config:
   - name: wg0
