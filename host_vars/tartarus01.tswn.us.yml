@@ -57,22 +57,18 @@ vyos_firewall_global__group:
         - port: 2458
 
 vyos_firewall__zones:
-  - name: CLOUD
-    interfaces:
-      - wg3
-      - wg4
-  - name: "LOCAL"
+  - name: LOCAL
     local-zone: yes
-  - name: "MACCABEUS"
+  - name: MACCABEUS
     interfaces:
-      - "wg0"
-      - "wg1"
-  - name: "MOBILE"
+      - wg0
+      - wg1
+  - name: MOBILE
     interfaces:
-      - "wg2"
-  - name: "WAN"
+      - wg2
+  - name: WAN
     interfaces:
-      - "eth0"
+      - eth0
 vyos_firewall__zones_root_path: firewall_zones/vyos_remote
 
 vyos_interfaces__ethernet:
