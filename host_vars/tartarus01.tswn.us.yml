@@ -116,11 +116,6 @@ vyos_interfaces__wireguard:
     ipv4:
       - address: "10.117.2.1/24"
     peers:
-      - name: "sdwilsh-phone"
-        allowed_ips:
-          ipv4:
-            - network: "10.117.2.10/32"
-        pubkey: "tPhu26d+Maw1P/ksdNA995PsTmqnpmjzwiTHe2t36ms="
       - name: "sdwilsh-pixel6a"
         allowed_ips:
           ipv4:
