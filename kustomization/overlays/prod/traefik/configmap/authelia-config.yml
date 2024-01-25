@@ -36,6 +36,7 @@ access_control:
         - ^/.external_auth=.$
         - ^/api.*$
         - ^/auth/token.*$
+        - ^/hacsfiles/iconset.js$
         - ^/service_worker.js$
         - ^/static/.*$
     - domain: jellyfin.tswn.us
