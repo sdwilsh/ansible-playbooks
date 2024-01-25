@@ -2,6 +2,8 @@
 roles:
   - name: bertvv.bind
     version: v5.1.0
+  - name: mrlesmithjr.netplan
+    version: v0.4.1
   - name: nickjj.docker
     version: v2.4.0
 collections:

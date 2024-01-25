@@ -1,0 +1,5 @@
+---
+common__unix_groups:
+  - name: ansible
+    gid: 2000
+    sudo: true

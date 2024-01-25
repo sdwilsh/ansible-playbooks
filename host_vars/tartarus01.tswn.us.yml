@@ -127,6 +127,17 @@ vyos_interfaces__wireguard:
             - network: 10.117.2.12/32
         pubkey: dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw=
     port: 51822
+  - name: wg3
+    description: jellyfin vpn
+    ipv4:
+      - address: 172.31.42.1/24
+    peers:
+      - name: hogsflixplus01.tswn.us
+        allowed_ips:
+          ipv4:
+            - network: "{{ hostvars['hogsflixplus01.tswn.us'].wireguard__address | ansible.utils.ipaddr('address') }}/32"
+        pubkey: "{{ hostvars['hogsflixplus01.tswn.us'].wireguard__pubkey }}"
+    port: 51823
 
 vyos_ospf_interfaces__config:
   - name: wg0

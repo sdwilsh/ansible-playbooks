@@ -2,6 +2,7 @@
 
 # Roles that are managed by ansible-galaxy
 roles/bertvv.bind/
+roles/mrlesmithjr.netplan/
 roles/nickjj.docker/
 
 # Helm chart expansion by kustomize.  This isn't the suggested way, but home-prod isn't prod.
