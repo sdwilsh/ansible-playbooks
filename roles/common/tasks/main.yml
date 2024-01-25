@@ -7,40 +7,6 @@
   tags:
     - "always"
 
-- name: Create base unix groups
-  group:
-    name: "{{ item.name }}"
-    gid: "{{ item.gid }}"
-    state: present
-  become: yes
-  loop: "{{ common__unix_groups }}"
-- name: "Create base users"
-  ansible.builtin.user:
-    group: "{{ item.group | default(item.name) }}"
-    home: "/home/{{ item.name }}"
-    name: "{{ item.name }}"
-    password: "{{ item.password | default('') }}"
-    shell: /bin/bash
-    state: present
-    uid: "{{ item.uid }}"
-  become: yes
-  loop: "{{ common__unix_users }}"
-- name: Deploy public keys to ansible user
-  ansible.posix.authorized_key:
-    user: ansible
-    state: present
-    key: "{{ item.type }} {{ item.key }}"
-  loop: "{{ common__keys }}"
-  loop_control:
-    label: "{{ item.description }}"
-- name: Setup sudoers
-  template:
-    src: sudoers.j2
-    dest: "{{ common__etc_dir + '/sudoers.d/ansible' }}"
-    validate: 'visudo -cf %s'
-    mode: 0440
-  become: yes
-
 - import_tasks: "facts.yml"
 
 # Networking
@@ -54,15 +20,3 @@
 # Platform-specific stuff
 - import_tasks: "ubuntu.yml"
   when: ansible_distribution == "Ubuntu"
-
-# Cleanup From Provisioning
-- name: Remove provision user
-  user:
-    name: provision
-    state: absent
-  when: ansible_user != "provision"
-- name: Remove provision group
-  group:
-    name: provision
-    state: absent
-  when: ansible_user != "provision"

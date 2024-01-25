@@ -2,6 +2,7 @@
 - hosts: "all:!kairos:!pikvm:!vyos"
   become: yes
   roles:
+    - role: common-users
     - role: "common"
     - role: "common-rpi"
       when: ansible_local.rpi.is

@@ -9,11 +9,3 @@
     name: open-vm-tools
     state: present
   when: ansible_local.vmware.vm
-
-# Provisoning Cleanup
-- name: Remove ubuntu user
-  user:
-    name: ubuntu
-    state: absent
-    remove: yes
-  when: ansible_user != "ubuntu"

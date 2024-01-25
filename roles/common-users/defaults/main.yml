@@ -1,0 +1,13 @@
+---
+# Groups to create.  For example:
+# common__unix_groups:
+#   - name: "ansible"
+#     gid: 2000
+#     sudo: true
+common__unix_groups: []
+
+# Users to create.  For example:
+# common__unix_groups:
+#   - name: "ansible"
+#     gid: 2000
+common__unix_users: []

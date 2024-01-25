@@ -1,0 +1,63 @@
+---
+- name: Create base unix groups
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+    state: present
+  become: yes
+  loop: "{{ common__unix_groups }}"
+- name: Create base users
+  ansible.builtin.user:
+    group: "{{ item.group | default(item.name) }}"
+    home: "/home/{{ item.name }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password | default('') }}"
+    shell: /bin/bash
+    state: present
+    uid: "{{ item.uid }}"
+  become: yes
+  loop: "{{ common__unix_users }}"
+- name: Deploy public keys to ansible user
+  ansible.posix.authorized_key:
+    user: ansible
+    state: present
+    key: "{{ item.type }} {{ item.key }}"
+  loop: "{{ common__keys }}"
+  loop_control:
+    label: "{{ item.description }}"
+  become: yes
+- name: Setup sudoers
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/ansible
+    validate: 'visudo -cf %s'
+    mode: 0440
+  become: yes
+
+# Cleanup From Provisioning
+- name: Remove provision user
+  user:
+    name: provision
+    remove: yes
+    state: absent
+  become: yes
+  when: ansible_user != "provision"
+- name: Remove provision group
+  group:
+    name: provision
+    state: absent
+  become: yes
+  when: ansible_user != "provision"
+- name: Remove ubuntu user
+  user:
+    name: ubuntu
+    remove: yes
+    state: absent
+  become: yes
+  when: ansible_user != "ubuntu"
+- name: Remove ubuntu group
+  group:
+    name: ubuntu
+    state: absent
+  become: yes
+  when: ansible_user != "ubuntu"
