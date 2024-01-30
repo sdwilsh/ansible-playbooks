@@ -84,6 +84,8 @@ spec:
               name: valheim-steam
             - mountPath: /home/steam/.config/unity3d/IronGate/Valheim
               name: valheim-saves
+      securityContext:
+        fsGroup: 65536
   volumeClaimTemplates:
     - metadata:
         name: valheim-backups
