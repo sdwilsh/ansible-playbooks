@@ -195,7 +195,7 @@ vyos_firewall_global__group:
     - name: HFP-SSH-v4
       description: Addresses allowed to ssh to HFP machines.
       members:
-        - address: 10.10.0.20 # sdwilsh-dev
+        - address: 10.10.0.20 # sdwilsh-dev.hogs.tswn.us
     - name: HOME-SERVICES-v4
       description: Kubernetes Services for the HOME network.
       afi: ipv4
