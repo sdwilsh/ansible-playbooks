@@ -1,7 +1,7 @@
 ---
-- description: "Allow ICMP"
-  action: "accept"
-  protocol: "icmp"
+- description: Allow ICMP
+  action: accept
+  protocol: icmp
   icmp:
     type_name: any
 - description: Allow SSH

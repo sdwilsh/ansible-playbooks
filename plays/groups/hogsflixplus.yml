@@ -16,6 +16,7 @@
               mode: wireguard
               peers:
                 - allowed-ips:
+                    - 10.10.0.20/32 # sdwilsh-dev.hogs.tswn.us
                     - 10.11.1.1/32 # jellyfin
                     - 172.31.42.1/32 # tartarus01 wireguard tunnel address
                   endpoint: 149.248.37.12:51823
@@ -23,6 +24,8 @@
                   keys:
                     public: "{{ hostvars['tartarus01.tswn.us'].wireguard__pubkey }}"
               routes:
+                - to: 10.10.0.20/32 # sdwilsh-dev.hogs.tswn.us
+                  via: 172.31.42.1
                 - to: 10.11.1.1/32 # jellyfin
                   via: 172.31.42.1
           version: 2

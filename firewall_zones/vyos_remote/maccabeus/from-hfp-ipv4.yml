@@ -1,0 +1,20 @@
+---
+- description: Allow ICMP
+  action: accept
+  protocol: icmp
+  icmp:
+    type_name: any
+- description: Allow Jellyfin TCP Traffic
+  action: accept
+  destination:
+    group:
+      address_group: JELLYFIN-v4
+      port_group: JELLYFIN-TCP
+  protocol: tcp
+- description: Allow Jellyfin UDP Traffic
+  action: accept
+  destination:
+    group:
+      address_group: JELLYFIN-v4
+      port_group: JELLYFIN-UDP
+  protocol: udp

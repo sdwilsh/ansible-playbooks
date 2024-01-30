@@ -25,6 +25,14 @@ vyos__ssh_address_ipv4: 149.248.37.12
 
 vyos_firewall_global__group:
   address_group:
+    - name: HFP-SSH-v4
+      description: Addresses allowed to ssh to HFP machines.
+      members:
+        - address: 10.10.0.20 # sdwilsh-dev
+    - name: JELLYFIN-v4
+      description: The v4 address of the Jellyfin Server.
+      members:
+        - address: 10.11.1.1
     - name: UNIFI-v4
       description: The v4 address of the Unifi Controller
       afi: ipv4
@@ -37,6 +45,14 @@ vyos_firewall_global__group:
       members:
         - address: 10.11.1.67 # valheim-forerunner.tswn.us
   port_group:
+    - name: JELLYFIN-TCP
+      description: Ports used by the Jellyfin server
+      members:
+        - port: 80
+    - name: JELLYFIN-UDP
+      description: Ports used by the Jellyfin server
+      members:
+        - port: 7539
     - name: UNIFI-DEVICE-TCP
       description: Ports used by the Unifi Controller to talk to devices over TCP
       members:
@@ -69,6 +85,9 @@ vyos_firewall__zones:
   - name: WAN
     interfaces:
       - eth0
+  - name: HFP
+    interfaces:
+      - wg3
 vyos_firewall__zones_root_path: firewall_zones/vyos_remote
 
 vyos_interfaces__ethernet:
