@@ -185,7 +185,7 @@ bind_zones:
       - name: worker01.hogs
         ip: 10.11.0.104
       - name: worker02.hogs
-        ip: 10.11.0.104
+        ip: 10.11.0.105
       - name: paperless-samba.hogs
         ip: 10.11.1.32
       - name: traefik.hogs
