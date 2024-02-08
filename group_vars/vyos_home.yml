@@ -286,6 +286,7 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.11.1.67 # valheim-forerunner.tswn.us
+        - address: 10.11.1.68 # valheim-relic.tswn.us
     - name: VCENTER-v4
       description: vCenter IP Addresses
       afi: ipv4
@@ -373,6 +374,9 @@ vyos_firewall_global__group:
         - port: 2456
         - port: 2457
         - port: 2458
+        - port: 2459
+        - port: 2460
+        - port: 2461
 
 vyos_interfaces__ethernet:
   - name: "{{ vyos__lan_interface }}"

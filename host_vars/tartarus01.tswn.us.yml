@@ -44,6 +44,7 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.11.1.67 # valheim-forerunner.tswn.us
+        - address: 10.11.1.68 # valheim-relic.tswn.us
   port_group:
     - name: JELLYFIN-TCP
       description: Ports used by the Jellyfin server
@@ -71,6 +72,9 @@ vyos_firewall_global__group:
         - port: 2456
         - port: 2457
         - port: 2458
+        - port: 2459
+        - port: 2460
+        - port: 2461
 
 vyos_firewall__zones:
   - name: LOCAL

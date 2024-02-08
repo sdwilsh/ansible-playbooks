@@ -1,0 +1,26 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/valheim
+  - ../../../components/vector-metrics-scraper
+configMapGenerator:
+  - name: vector-metrics-scraper-config
+    files:
+      - configmap/vector.yml
+images:
+  - name: timberio/vector
+    newTag: 0.35.0-distroless-libc
+namespace: valheim-relic
+patches:
+  - path: patches/add_valheim_env_vars.yml
+    target:
+      kind: StatefulSet
+      name: valheim-statefulset
+  - path: patches/set_loadBalancerIP.yml
+    target:
+      kind: Service
+      name: valheim-svc
+resources:
+  - namespace.yml

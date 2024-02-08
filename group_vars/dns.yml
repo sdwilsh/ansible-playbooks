@@ -212,6 +212,8 @@ bind_zones:
         ip: 10.11.1.65
       - name: valheim-forerunner
         ip: 10.11.1.67
+      - name: valheim-relic
+        ip: 10.11.1.68
 
       # NONET Network
       - name: "front-porch.camera.hogs"

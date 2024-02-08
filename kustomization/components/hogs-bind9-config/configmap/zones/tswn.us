@@ -1,4 +1,4 @@
-; Hash: 91960a45c9b243e95f5cd5f5d0569d5c 1706792494
+; Hash: 8b9c186c3d29727328043196a955044d 1707366396
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1706792494
+  1707366396
   1D
   1H
   1W
@@ -117,6 +117,7 @@ unifi                      IN  CNAME  traefik.hogs
 zwave.hogs                 IN  CNAME  traefik.hogs
 unifi-inform               IN  A      10.11.1.65
 valheim-forerunner         IN  A      10.11.1.67
+valheim-relic              IN  A      10.11.1.68
 front-porch.camera.hogs       IN  A      10.67.0.12
 front-north-west.camera.hogs       IN  A      10.67.0.13
 front-north-east.camera.hogs       IN  A      10.67.0.14

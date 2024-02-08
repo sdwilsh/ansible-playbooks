@@ -363,6 +363,7 @@
           - "set nat destination rule {{ (rule_number + 1) * 10 }} inbound-interface eth0"
           - "set nat destination rule {{ (rule_number + 1) * 10 }} protocol '{{ item.protocol }}'"
           - "set nat destination rule {{ (rule_number + 1) * 10 }} translation address '{{ item.translation_address }}'"
+          - "set nat destination rule {{ (rule_number + 1) * 10 }} translation port '{{ item.translation_port | default(item.port) }}'"
       loop:
         - description: unifi-inform
           port: 8080
@@ -384,6 +385,21 @@
           port: 2458
           protocol: udp
           translation_address: 10.11.1.67
+        - description: valheim-relic
+          port: 2459
+          protocol: udp
+          translation_address: 10.11.1.68
+          translation_port: 2456
+        - description: valheim-relic
+          port: 2460
+          protocol: udp
+          translation_address: 10.11.1.68
+          translation_port: 2457
+        - description: valheim-relic
+          port: 2461
+          protocol: udp
+          translation_address: 10.11.1.68
+          translation_port: 2458
       loop_control:
         index_var: rule_number
       tags:
