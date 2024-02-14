@@ -14,6 +14,10 @@ images:
     digest: sha256:617114fc6f2cb04de2ce6624b4c129814c75da883e1a369e3c881e847459bcf8
 namespace: paperless
 patches:
+  - path: patches/increase_paperless_data_size.yml
+    target:
+      kind: PersistentVolumeClaim
+      name: paperless-data
   - path: patches/set_paperless_customizations.yml
     target:
       kind: StatefulSet
