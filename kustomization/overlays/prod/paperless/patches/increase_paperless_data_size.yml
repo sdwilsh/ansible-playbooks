@@ -6,4 +6,4 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 25G
+      storage: "25000148992"
