@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: tdarr-node-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: tdarr-node
@@ -16,6 +16,12 @@ spec:
         app.kubernetes.io/name: tdarr-node
     spec:
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExists
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
