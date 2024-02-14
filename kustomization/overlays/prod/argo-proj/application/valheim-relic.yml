@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: valheim-forerunner
+  name: valheim-relic
   namespace: argocd
 spec:
   project: default
