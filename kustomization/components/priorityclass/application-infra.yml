@@ -1,0 +1,6 @@
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: application-infra
+value: 1001000
