@@ -143,6 +143,7 @@ spec:
               name: homeassistant-config
             - mountPath: /scripts
               name: scripts
+      priorityClassName: critical-application
       volumes:
         - name: code-workspace
           configMap:

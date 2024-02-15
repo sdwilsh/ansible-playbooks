@@ -65,6 +65,7 @@ spec:
               name: tdarr-logs
             - mountPath: /app/server
               name: tdarr-server
+      priorityClassName: application
       securityContext:
         fsGroup: 65536
       volumes:

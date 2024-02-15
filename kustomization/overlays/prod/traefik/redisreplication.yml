@@ -32,6 +32,7 @@ spec:
   podSecurityContext:
     fsGroup: 1000 # redis
     runAsUser: 1000 # redis
+  priorityClassName: system-cluster-critical
   storage:
     volumeClaimTemplate:
       spec:

@@ -9,8 +9,9 @@ spec:
     size: 30Gi
     storageClass: longhorn-encrypted
   numberOfInstances: 2
+  podPriorityClassName: critical-application-infra
+  postgresql:
+    version: "15"
   preparedDatabases:
     homeassistant:
       defaultUsers: true
-  postgresql:
-    version: "15"

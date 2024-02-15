@@ -9,8 +9,9 @@ spec:
     size: 5Gi
     storageClass: longhorn-encrypted
   numberOfInstances: 2
+  podPriorityClassName: application-infra
+  postgresql:
+    version: "15"
   preparedDatabases:
     ara:
       defaultUsers: true
-  postgresql:
-    version: "15"

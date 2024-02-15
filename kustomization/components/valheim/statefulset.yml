@@ -84,6 +84,7 @@ spec:
               name: valheim-steam
             - mountPath: /home/steam/.config/unity3d/IronGate/Valheim
               name: valheim-saves
+      priorityClassName: application
       securityContext:
         fsGroup: 65536
   volumeClaimTemplates:

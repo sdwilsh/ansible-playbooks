@@ -68,6 +68,7 @@ spec:
               mountPath: /dev/shm
             - name: frigate-tmp
               mountPath: /tmp/cache
+      priorityClassName: critical-application
       volumes:
         - configMap:
             name: frigate-configmap

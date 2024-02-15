@@ -22,5 +22,9 @@ patches:
     target:
       kind: Service
       name: valheim-svc
+  - path: patches/set_priorityClassName.yml
+    target:
+      kind: StatefulSet
+      name: valheim-statefulset
 resources:
   - namespace.yml

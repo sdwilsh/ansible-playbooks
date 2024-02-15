@@ -145,6 +145,7 @@ spec:
               name: init-mongodb
             - mountPath: /scripts
               name: mongodb-scripts
+      priorityClassName: critical-application
       volumes:
         - emptyDir:
             medium: Memory

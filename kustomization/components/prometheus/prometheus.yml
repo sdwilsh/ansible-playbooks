@@ -4,6 +4,7 @@ kind: Prometheus
 metadata:
   name: prometheus
 spec:
+  priorityClassName: application
   ruleSelector: {}
   securityContext:
     fsGroup: 65536

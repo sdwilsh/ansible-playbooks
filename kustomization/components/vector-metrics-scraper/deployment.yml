@@ -33,6 +33,7 @@ spec:
               name: vector-config
             - mountPath: /vector-data-dir
               name: vector-data
+      priorityClassName: application
       volumes:
         - name: vector-config
           projected:

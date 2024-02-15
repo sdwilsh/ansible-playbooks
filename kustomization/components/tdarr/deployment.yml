@@ -74,6 +74,7 @@ spec:
               name: tdarr-configs
             - mountPath: /app/logs
               name: tdarr-logs
+      priorityClassName: opportunistic
       securityContext:
         fsGroup: 65536
       volumes:

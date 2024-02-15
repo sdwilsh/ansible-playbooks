@@ -8,6 +8,12 @@ patches:
       name: argocd-cmd-params-cm
     path: patches/set_server_insecure.yml # Secured by Traefik
   - path: patches/set_kustomize_buildOptions.yml
+  - path: patches/set_priorityClassName.yml
+    target:
+      kind: Deployment
+  - path: patches/set_priorityClassName.yml
+    target:
+      kind: StatefulSet
   - path: patches/set_tracking_by_annotation.yml
 resources:
   # renovate: datasource=github-releases

@@ -47,6 +47,7 @@ spec:
             - mountPath: /secrets
               name: component-secrets
               readOnly: true
+      priorityClassName: system-cluster-critical
       volumes:
         - configMap:
             name: authelia-component-configmap

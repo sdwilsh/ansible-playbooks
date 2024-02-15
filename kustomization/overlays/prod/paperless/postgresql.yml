@@ -9,10 +9,11 @@ spec:
     size: 1Gi
     storageClass: longhorn-encrypted
   numberOfInstances: 2
+  podPriorityClassName: critical-application-infra
+  postgresql:
+    version: "15"
   preparedDatabases:
     paperless:
       defaultUsers: true
       schemas:
         public: {}
-  postgresql:
-    version: "15"

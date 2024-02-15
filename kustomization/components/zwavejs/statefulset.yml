@@ -67,6 +67,7 @@ spec:
               name: zwavejs-config
               readOnly: true
               subPath: settings.json
+      priorityClassName: critical-application
       volumes:
         - name: zwavejs-config
           secret:

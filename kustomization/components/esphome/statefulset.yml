@@ -53,6 +53,7 @@ spec:
               mountPath: /cache
             - name: esphome-config
               mountPath: /config
+      priorityClassName: opportunistic
       volumes:
         - emptyDir: {}
           name: esphome-cache

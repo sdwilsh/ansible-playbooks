@@ -73,6 +73,7 @@ spec:
               name: scripts
             - mountPath: /zones
               name: zones
+      priorityClassName: system-cluster-critical
       securityContext:
         fsGroup: 101 # bind
       volumes:

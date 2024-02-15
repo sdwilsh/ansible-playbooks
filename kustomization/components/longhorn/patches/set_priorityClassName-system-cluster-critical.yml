@@ -1,0 +1,5 @@
+---
+# This works for DaemonSet, Deployment, and StatefulSet.
+- op: add # Add ensures that we do not override something that is otherwise set.
+  path: /spec/template/spec/priorityClassName
+  value: system-cluster-critical

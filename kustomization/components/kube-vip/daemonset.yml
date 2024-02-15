@@ -56,6 +56,7 @@ spec:
             - NET_RAW
             - SYS_TIME
       hostNetwork: true
+      priorityClassName: system-cluster-critical
       serviceAccountName: kube-vip
       tolerations:
       - effect: NoSchedule

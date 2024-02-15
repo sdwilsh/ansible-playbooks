@@ -2,6 +2,10 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
+patches:
+  - path: patches/set_priorityClassName.yml
+    target:
+      kind: Deployment
 resources:
   # renovate: datasource=github-releases
   - https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.yaml

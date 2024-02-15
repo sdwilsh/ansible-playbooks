@@ -76,6 +76,7 @@ spec:
               name: mosquitto-scripts
             - mountPath: /mosquitto/data
               name: mosquitto-data
+      priorityClassName: critical-application
       securityContext:
         fsGroup: 1883 #mosquitto
         runAsGroup: 1883 # mosquitto
