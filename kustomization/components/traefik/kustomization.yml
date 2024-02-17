@@ -22,9 +22,9 @@ patches:
       name: traefik-deployment
 resources:
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v2.10.7/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.11.0/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v2.10.7/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v2.11.0/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
   - certificate.yml
   - ingressclass.yml
   - ingress.yml
