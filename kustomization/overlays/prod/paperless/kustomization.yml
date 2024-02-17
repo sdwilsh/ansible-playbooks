@@ -7,7 +7,7 @@ components:
   - https://github.com/marinatedconcrete/config/kustomization/components/samba-upload
 images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
-    newTag: 2.5.2
+    newTag: 2.5.3
   - name: quay.io/opstree/redis
     newTag: v7.2.3
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
