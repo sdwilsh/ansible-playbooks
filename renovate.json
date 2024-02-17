@@ -24,6 +24,12 @@
         "kustomization/components/multus/kustomization.yml"
       ],
       "minimumReleaseAge": "1 month"
+    },
+    {
+      "groupName": "vector",
+      "matchPackagePatterns": [
+        "vector"
+      ]
     }
   ],
   "customManagers": [
