@@ -58,10 +58,13 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
+            # Overlay configuration via ConfigMap.
             - name: frigate-config
-              mountPath: /config
+              mountPath: /config/config.yml
+              readOnly: true
+              subPath: config.yml
             - name: frigate-db
-              mountPath: /db
+              mountPath: /config
             - name: frigate-media
               mountPath: /media/frigate
             - name: frigate-shm
