@@ -9,21 +9,25 @@ spec:
   cron: "15 */1 * * *"
   groups:
     - default
+    - game
+    - important
   retain: 24 # Full Day
   task: backup
 ---
 apiVersion: longhorn.io/v1beta1
 kind: RecurringJob
 metadata:
-  name: snapshot-hourly
+  name: filesystem-trim-monthly
   namespace: longhorn-system
 spec:
-  concurrency: 2
-  cron: "5 */1 * * *"
+  concurrency: 3
+  cron: "45 4 19 * *"
   groups:
     - default
-  retain: 48 # Two Days
-  task: snapshot
+    - game
+    - important
+    - no-backup
+  task: filesystem-trim
 ---
 apiVersion: longhorn.io/v1beta1
 kind: RecurringJob
@@ -35,7 +39,23 @@ spec:
   cron: "15 9 */1 * *"
   groups:
     - default
-  retain: 14 # Two Weeks
+    - important
+  retain: 7 # One Week
+  task: snapshot
+---
+apiVersion: longhorn.io/v1beta1
+kind: RecurringJob
+metadata:
+  name: snapshot-hourly
+  namespace: longhorn-system
+spec:
+  concurrency: 2
+  cron: "5 */1 * * *"
+  groups:
+    - default
+    - game
+    - important
+  retain: 36 # 1.5 Days
   task: snapshot
 ---
 apiVersion: longhorn.io/v1beta1
@@ -47,6 +67,6 @@ spec:
   concurrency: 2
   cron: "30 10 * * 0"
   groups:
-    - default
-  retain: 8 # Two Months
+    - important
+  retain: 4 # One Months
   task: snapshot
