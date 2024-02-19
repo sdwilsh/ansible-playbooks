@@ -1,0 +1,10 @@
+---
+- op: add
+  path: /metadata/labels
+  value:
+    # Use this PVC to configure attached PVs.
+    recurring-job.longhorn.io/source: enabled
+    # Opt out of the default group.
+    recurring-job-group.longhorn.io/default: disabled
+    # Opt into the important group.
+    recurring-job-group.longhorn.io/important: enabled

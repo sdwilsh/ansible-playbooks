@@ -89,6 +89,13 @@ spec:
         fsGroup: 65536
   volumeClaimTemplates:
     - metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
         name: valheim-backups
       spec:
         accessModes:
@@ -98,6 +105,13 @@ spec:
             storage: 8Gi
         storageClassName: longhorn-encrypted
     - metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
         name: valheim-saves
       spec:
         accessModes:

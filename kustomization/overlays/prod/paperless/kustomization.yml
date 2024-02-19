@@ -26,6 +26,9 @@ patches:
     target:
       kind: Service
       name: samba-svc
+  - path: patches/use_important_longhorn_group.yml
+    target:
+      kind: PersistentVolumeClaim
 resources:
   - ingress.yml
   - namespace.yml
