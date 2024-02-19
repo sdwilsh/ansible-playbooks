@@ -31,24 +31,31 @@
       ansible.builtin.slurp:
         src: /etc/os-release
       register: osreleasefile
-    - name: Extract current version
+    - name: Decode release metadata
       ansible.builtin.set_fact:
-        os_release: "{{ osreleasefile['content'] | b64decode | regex_findall('^KAIROS_VERSION_ID=\"(.*)\"$', multiline=True) | last }}"
-    - name: Print os version
+        contents: "{{ osreleasefile['content'] | b64decode }}"
+    - name: Extract metadata
+      ansible.builtin.set_fact:
+        # ex: 22.04-standard-amd64-generic-v2.5.0-k3sv1.27.9-k3s1
+        os_image_label: '{{ contents | regex_findall(''^KAIROS_IMAGE_LABEL="(.*)"$'', multiline=True) | last }}'
+    - name: Print os image
       ansible.builtin.debug:
-        var: os_release
+        var: os_image_label
+    - name: Print target image
+      ansible.builtin.debug:
+        var: target_image_label
     - name: Install update
       ansible.builtin.command:
         argv:
           - kairos-agent
           - upgrade
-          # v1.6.1-k3sv1.26.1+k3s1 => v1.6.1-k3sv1.26.1-k3s1
-          - "{{ kairos_version | replace('+', '-') }}"
-      become: yes
-      when: os_release != kairos_version
+          - --source
+          - "oci:quay.io/kairos/ubuntu:{{ target_image_label }}"
+      become: true
+      when: os_image_label != target_image_label
     - name: Note if the host needs to be rebooted
       ansible.builtin.set_fact:
-        reboot_required: "{{ os_release != kairos_version or config.changed }}"
+        reboot_required: "{{ os_image_label != target_image_label or config.changed }}"
     - name: Schedule Drain and Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
@@ -58,7 +65,7 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    kairos_version: "v2.4.1-k3sv1.27.3+k3s1"
+    target_image_label: 22.04-standard-amd64-generic-v2.5.0-k3sv1.28.5-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
