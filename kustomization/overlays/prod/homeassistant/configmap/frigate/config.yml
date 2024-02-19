@@ -46,7 +46,7 @@ cameras:
         # Trees & Sidewalk
         - 0,0,1053,0,988,128,962,310,823,303,723,397,648,521,512,542,508,332,609,231,667,187,662,115,0,223
 database:
-  path: /db/frigate.db
+  path: /config/frigate.db
 detectors:
   coral:
     type: edgetpu
