@@ -20,3 +20,4 @@ configMapGenerator:
       - configmap/zones/0.11.10.in-addr.arpa
       - configmap/zones/0.67.10.in-addr.arpa
       - configmap/zones/0.117.10.in-addr.arpa
+      - configmap/zones/42.31.172.in-addr.arpa

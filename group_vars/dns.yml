@@ -223,9 +223,14 @@ bind_zones:
       - name: "front-north-east.camera.hogs"
         ip: "10.67.0.14"
 
+      # hogsflixplus
+      - name: hogsflixplus01
+        ip: 172.31.42.2
+
     networks:
       - 10.2.0
       - 10.10.0
       - 10.11.0
       - 10.67.0
       - 10.117.0
+      - 172.31.42
