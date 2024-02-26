@@ -36,8 +36,18 @@
         content: ""
         dest: /etc/cloud/cloud-init.disabled
       become: yes
-    - name: Install WireGuard
+    - name: Install Packages
       ansible.builtin.apt:
-        name: wireguard
+        name: "{{ item }}"
         state: present
+      become: yes
+      loop:
+        - wireguard
+        - cargo
+    - name: Install jellyfin-remote-proxy
+      community.general.cargo:
+        name: jellyfin-remote-proxy
+        path: /usr/local
+        state: present
+        version: 0.1.1
       become: yes
