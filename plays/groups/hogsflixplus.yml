@@ -51,3 +51,65 @@
         state: present
         version: 0.1.1
       become: yes
+    - name: Ensure Configuration Directory Exists
+      ansible.builtin.file:
+        group: root
+        owner: root
+        path: /usr/local/etc/jellyfin-remote-proxy
+        state: directory
+      become: yes
+    - name: Configure jellyfin-remote-proxy
+      ansible.builtin.copy:
+        content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
+        dest: /usr/local/etc/jellyfin-remote-proxy/config.yml
+        mode: u=r,g=r,o=r
+        owner: root
+        group: root
+      vars:
+        config:
+          local:
+            interface: eth0
+            port: 80
+          remote:
+            address: 10.11.1.1
+      become: yes
+    - name: Setup jellyfin Group
+      ansible.builtin.group:
+        gid: 65533
+        name: jellyfin
+        state: present
+      become: yes
+    - name: Setup jellyfin User
+      ansible.builtin.user:
+        create_home: no
+        group: jellyfin
+        name: jellyfin
+        state: present
+        uid: 65533
+      become: yes
+    - name: Setup systemd
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Description=hogsflix+
+
+          [Service]
+          AmbientCapabilities=CAP_NET_BIND_SERVICE
+          CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+          ExecStart=/usr/local/bin/jellyfin-remote-proxy /usr/local/etc/jellyfin-remote-proxy/config.yml
+          Group=jellyfin
+          NoNewPrivileges=true
+          StandardError=syslog
+          StandardOutput=syslog
+          SyslogFacility=daemon
+          SyslogIdentifier=jellyfin
+          SyslogLevel=info
+          User=jellyfin
+
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/jellyfin.service
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      become: yes
