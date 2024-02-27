@@ -49,11 +49,11 @@ vyos_firewall_global__group:
     - name: JELLYFIN-TCP
       description: Ports used by the Jellyfin server
       members:
-        - port: 80
+        - port: 8096
     - name: JELLYFIN-UDP
       description: Ports used by the Jellyfin server
       members:
-        - port: 7539
+        - port: 7359
     - name: UNIFI-DEVICE-TCP
       description: Ports used by the Unifi Controller to talk to devices over TCP
       members:
