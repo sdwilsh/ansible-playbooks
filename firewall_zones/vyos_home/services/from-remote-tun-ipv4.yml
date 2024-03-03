@@ -48,3 +48,23 @@
   protocol: udp
   state:
     new: true
+- description: Allow Jellyfin TCP Traffic
+  action: accept
+  destination:
+    group:
+      address_group: JELLYFIN-v4
+      port_group: JELLYFIN-TCP
+  protocol: tcp
+  source:
+    group:
+      network_group: HFP-v4
+- description: Allow Jellyfin UDP Traffic
+  action: accept
+  destination:
+    group:
+      address_group: JELLYFIN-v4
+      port_group: JELLYFIN-UDP
+  protocol: udp
+  source:
+    group:
+      network_group: HFP-v4

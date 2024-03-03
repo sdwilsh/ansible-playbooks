@@ -201,6 +201,10 @@ vyos_firewall_global__group:
       afi: ipv4
       members:
         - address: 10.11.1.32-10.11.1.63
+    - name: JELLYFIN-v4
+      description: The v4 address of the Jellyfin Server.
+      members:
+        - address: 10.11.1.1
     - name: LUTRON-v4
       description: Lutron Controller
       afi: ipv4
@@ -293,6 +297,11 @@ vyos_firewall_global__group:
       members:
         - address: 10.10.0.5
   network_group:
+    - name: HFP-v4
+      description: hogsflixplus remote hosts
+      afi: ipv4
+      members:
+        - address: 172.31.42.0/24
     - name: MOBILE-WIREGUARD-v4
       description: Mobile wireguard clients
       afi: ipv4
@@ -323,6 +332,14 @@ vyos_firewall_global__group:
         - port: 80 # Prometheus Scrape
         - port: 3232 # ESP32 OTA Update Port
         - port: 6053 # Native API Component Port
+    - name: JELLYFIN-TCP
+      description: Ports used by the Jellyfin server
+      members:
+        - port: 8096
+    - name: JELLYFIN-UDP
+      description: Ports used by the Jellyfin server
+      members:
+        - port: 7359
     - name: LUTRON
       description: Ports used to communicate with a Luton bridge
       members:
