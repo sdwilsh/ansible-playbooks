@@ -124,3 +124,10 @@
         owner: root
         group: root
       become: yes
+    - name: Enable and Start Service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: jellyfin
+        state: started
+      become: yes
