@@ -226,6 +226,8 @@ bind_zones:
       # hogsflixplus
       - name: hogsflixplus01
         ip: 172.31.42.2
+      - name: hogsflixplus02
+        ip: 172.31.42.3
 
     networks:
       - 10.2.0

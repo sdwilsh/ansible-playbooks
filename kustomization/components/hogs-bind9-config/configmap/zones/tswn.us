@@ -1,4 +1,4 @@
-; Hash: dde6be900652ab3200476b37e9bbdfc3 1708914993
+; Hash: a8d62e39c36fed96230af5c46d18f630 1709492830
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1708914993
+  1709492830
   1D
   1H
   1W
@@ -122,3 +122,4 @@ front-porch.camera.hogs       IN  A      10.67.0.12
 front-north-west.camera.hogs       IN  A      10.67.0.13
 front-north-east.camera.hogs       IN  A      10.67.0.14
 hogsflixplus01             IN  A      172.31.42.2
+hogsflixplus02             IN  A      172.31.42.3
