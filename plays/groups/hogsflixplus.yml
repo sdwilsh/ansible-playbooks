@@ -36,6 +36,10 @@
         ssh_listen_to:
           - "{{ wireguard__address | ansible.netcommon.ipaddr('address') }}"
   tasks:
+    - name: Set Hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+      become: yes
     - name: Disable cloud-init
       ansible.builtin.copy:
         content: ""
