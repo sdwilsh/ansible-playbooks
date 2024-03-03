@@ -35,6 +35,8 @@
         ssh_kerberos_supprt: no
         ssh_listen_to:
           - "{{ wireguard__address | ansible.netcommon.ipaddr('address') }}"
+    - role: devsec.hardening.os_hardening
+      become: yes
   tasks:
     - name: Set Hostname
       ansible.builtin.hostname:
