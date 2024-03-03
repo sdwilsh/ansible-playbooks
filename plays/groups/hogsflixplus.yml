@@ -30,6 +30,11 @@
                   via: 172.31.42.1
           version: 2
       role: mrlesmithjr.netplan
+    - role: devsec.hardening.ssh_hardening
+      vars:
+        ssh_kerberos_supprt: no
+        ssh_listen_to:
+          - "{{ wireguard__address | ansible.netcommon.ipaddr('address') }}"
   tasks:
     - name: Disable cloud-init
       ansible.builtin.copy:
