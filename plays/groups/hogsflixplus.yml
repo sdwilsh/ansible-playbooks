@@ -55,35 +55,6 @@
       loop:
         - wireguard
         - cargo
-    - name: Install jellyfin-remote-proxy
-      community.general.cargo:
-        name: jellyfin-remote-proxy
-        path: /usr/local
-        state: present
-        version: 0.1.1
-      become: yes
-    - name: Ensure Configuration Directory Exists
-      ansible.builtin.file:
-        group: root
-        owner: root
-        path: /usr/local/etc/jellyfin-remote-proxy
-        state: directory
-      become: yes
-    - name: Configure jellyfin-remote-proxy
-      ansible.builtin.copy:
-        content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
-        dest: /usr/local/etc/jellyfin-remote-proxy/config.yml
-        mode: u=r,g=r,o=r
-        owner: root
-        group: root
-      vars:
-        config:
-          local:
-            interface: eth0
-            port: 80
-          remote:
-            address: 10.11.1.1
-      become: yes
     - name: Setup jellyfin Group
       ansible.builtin.group:
         gid: 65533
@@ -97,6 +68,42 @@
         name: jellyfin
         state: present
         uid: 65533
+      become: yes
+    - name: Ensure Configuration Directory Exists
+      ansible.builtin.file:
+        group: jellyfin
+        owner: root
+        path: /usr/local/etc/jellyfin-remote-proxy
+        state: directory
+      become: yes
+    - name: Configure jellyfin-remote-proxy
+      ansible.builtin.copy:
+        content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
+        dest: /usr/local/etc/jellyfin-remote-proxy/config.yml
+        mode: u=r,g=r
+        owner: jellyfin
+        group: jellyfin
+      vars:
+        config:
+          local:
+            interface: eth0
+            port: 80
+          remote:
+            address: 10.11.1.1
+      become: yes
+    - name: Install jellyfin-remote-proxy
+      community.general.cargo:
+        name: jellyfin-remote-proxy
+        path: /usr/local
+        state: present
+        version: 0.1.1
+      become: yes
+    - name: Set proper permissions on jellyfin-remote-proxy
+      ansible.builtin.file:
+        group: root
+        mode: u=rwx,g=rx,o=rx
+        owner: root
+        path: /usr/local/bin/jellyfin-remote-proxy
       become: yes
     - name: Setup systemd
       ansible.builtin.copy:
