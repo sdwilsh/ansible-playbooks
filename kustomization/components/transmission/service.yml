@@ -5,7 +5,7 @@ metadata:
   name: transmission-svc
 spec:
   selector:
-    app.kubernetes.io/name: tdarr-server
+    app.kubernetes.io/name: transmission
   ports:
     - name: http
       protocol: TCP
