@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: transmission-downloads-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Ti
+  nfs:
+    path: /mnt/rust0/nfs/transmission-downloads
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain

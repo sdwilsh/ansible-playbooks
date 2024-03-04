@@ -206,6 +206,7 @@ bind_zones:
           - paperless.hogs
           - prometheus.hogs
           - tdarr.hogs
+          - transmission.hogs
           - unifi
           - zwave.hogs
       - name: unifi-inform

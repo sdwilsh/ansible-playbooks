@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - command:
+            - /bin/sh
+            - -c
+            - /scripts/setup_wireguard.sh
+          image: alpine
+          name: setup-transmission
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_ADMIN
+              drop:
+                - ALL
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/wireguard
+              name: wireguard-conf
+            - mountPath: /scripts
+              name: wireguard-scripts
+      volumes:
+        - name: wireguard-scripts
+          configMap:
+            defaultMode: 0777
+            name: wireguard-scripts-configmap
+        - name: wireguard-conf
+          secret:
+            items:
+              - key: wg0
+                path: wg0.conf
+            secretName: transmission-secret

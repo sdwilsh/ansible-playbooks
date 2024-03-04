@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/transmission
+configMapGenerator:
+  - name: wireguard-scripts-configmap
+    files:
+      - configmap/scripts/setup_wireguard.sh
+images:
+  - name: alpine
+    newTag: 3.19.1
+  - name: lscr.io/linuxserver/transmission
+    newTag: 4.0.5-r0-ls223
+namespace: transmission
+patches:
+  - path: patches/add_downloads_mount.yml
+    target:
+      kind: StatefulSet
+      name: transmission-statefulset
+  - path: patches/add_protonvpn.yml
+    target:
+      kind: StatefulSet
+      name: transmission-statefulset
+resources:
+  - namespace.yml
+  - ingress.yml
+  - persistentvolume.yml
+  - persistentvolumeclaim.yml

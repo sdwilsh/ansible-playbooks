@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "65534"
+            - name: PUID
+              value: "3000"
+          name: transmission
+          volumeMounts:
+            - mountPath: /downloads
+              name: transmission-downloads
+      securityContext:
+        fsGroup: 65534
+      volumes:
+        - name: transmission-downloads
+          persistentVolumeClaim:
+            claimName: transmission-downloads-pvc
