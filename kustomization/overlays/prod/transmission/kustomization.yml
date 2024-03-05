@@ -5,12 +5,17 @@ kind: Kustomization
 components:
   - ../../../components/transmission
 configMapGenerator:
+  - name: dnsmasq-configmap
+    files:
+      - configmap/dnsmasq.conf
   - name: wireguard-scripts-configmap
     files:
       - configmap/scripts/setup_wireguard.sh
 images:
   - name: alpine
     newTag: 3.19.1
+  - name: dockurr/dnsmasq
+    newTag: "2.90"
   - name: lscr.io/linuxserver/transmission
     newTag: 4.0.5-r0-ls223
 namespace: transmission
