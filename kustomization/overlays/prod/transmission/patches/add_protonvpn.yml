@@ -7,6 +7,11 @@ spec:
   template:
     spec:
       containers:
+        - name: transmission
+          volumeMounts:
+            - mountPath: /etc/resolv.conf
+              name: dnsmasq
+              subPath: resolv.conf
         - name: dnsmasq
           image: dockurr/dnsmasq
           livenessProbe:
