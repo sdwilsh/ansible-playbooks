@@ -4,4 +4,4 @@ kind: Component
 
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.71.2/bundle.yaml
+  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.72.0/bundle.yaml
