@@ -7,7 +7,10 @@ spec:
   template:
     spec:
       containers:
-        - name: transmission
+        - env:
+            - name: DOCKER_MODS
+              value: ghcr.io/sdwilsh/transmission-protonvpn:main
+          name: transmission
           volumeMounts:
             - mountPath: /etc/resolv.conf
               name: dnsmasq
