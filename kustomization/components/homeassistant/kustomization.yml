@@ -19,7 +19,7 @@ images:
   - name: ghcr.io/home-assistant/home-assistant
     newTag: 2024.2.2
   - name: lscr.io/linuxserver/code-server
-    newTag: 4.21.1
+    newTag: 4.22.1
 resources:
   - service.yml
   - statefulset.yml
