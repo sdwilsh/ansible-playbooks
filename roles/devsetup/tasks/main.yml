@@ -64,6 +64,6 @@
     # renovate: datasource=github-releases depName=starship/starship
     starship_version: v1.17.1
     # renovate: datasource=github-releases depName=kubevirt/kubevirt
-    virtctl_version: v1.1.1
+    virtctl_version: v1.2.0
 
 - import_tasks: shell.yml
