@@ -23,6 +23,7 @@ resources:
   - application/prometheus.yml
   - application/redis.yml
   - application/traefik.yml
+  - application/transmission.yml
   - application/unifi.yml
   - application/valheim-forerunner.yml
   - application/valheim-relic.yml
