@@ -54,7 +54,6 @@ access_control:
 
 # https://www.authelia.com/configuration/session/introduction/
 session:
-  domain: tswn.us
   cookies:
     - domain: tswn.us
       authelia_url: https://auth.tswn.us
