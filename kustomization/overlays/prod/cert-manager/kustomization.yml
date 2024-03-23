@@ -12,7 +12,7 @@ configMapGenerator:
       - configmap/vector.yml
 images:
   - name: timberio/vector
-    newTag: 0.36.0-distroless-libc
+    newTag: 0.36.1-distroless-libc
 patches:
   - path: patches/add_dns01_recursive_nameservers.yml
     target:
