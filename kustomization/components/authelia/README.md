@@ -29,23 +29,6 @@ patches:
       kind: Middleware
       name: forwardauth-authelia-middleware
 ```
-#### `patches/set_authelia_middleware_address.yml`
-
-The address here follows this format:
-http://authelia-svc.<namespace>.svc.cluster.local:9091/api/verify?rd=<url-encoded-domain>
-
-See https://www.authelia.com/integration/kubernetes/traefik-ingress/#middleware
-
-```yaml
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: this-is-ignored-but-is-required
-spec:
-  forwardAuth:
-    address: http://authelia-svc.traefik.svc.cluster.local:9091/api/verify?rd=https%3A%2F%2Fauth.example.com%2F
-```
  
 ### Ingress Host
 
