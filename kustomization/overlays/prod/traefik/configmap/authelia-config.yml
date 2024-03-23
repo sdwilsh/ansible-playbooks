@@ -19,12 +19,16 @@ access_control:
       networks:
         - 10.117.0.0/23
         - 10.117.2.1/24
+    - name: kubernetes
+      networks:
+        - 10.11.0.0/23
     - name: man
       networks:
         - 10.10.0.0/24
   rules:
     - domain: ara.hogs.tswn.us
       networks:
+        - kubernetes
         - man
         - 10.117.0.24 # monitor.house.gem.hogs.tswn.us
       policy: bypass
