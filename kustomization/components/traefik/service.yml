@@ -20,15 +20,21 @@ metadata:
 spec:
   externalTrafficPolicy: Local
   ports:
+    - name: imapsecure
+      protocol: TCP
+      port: 993
+    - name: mqtts
+      protocol: TCP
+      port: 8883
+    - name: smtpsecure
+      protocol: TCP
+      port: 465
     - name: web
       protocol: TCP
       port: 80
     - name: websecure
       protocol: TCP
       port: 443
-    - name: mqtts
-      protocol: TCP
-      port: 8883
   selector:
     app.kubernetes.io/name: traefik
   type: LoadBalancer

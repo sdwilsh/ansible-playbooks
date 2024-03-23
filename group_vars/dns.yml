@@ -196,8 +196,9 @@ bind_zones:
           - auth
           - esphome.hogs
           - frigate.hogs
-          - homeassistant.hogs
           - homeassistant-config.hogs
+          - homeassistant.hogs
+          - imap.hogs
           - jellyfin
           - longhorn.hogs
           - mqtt.hogs
@@ -205,6 +206,7 @@ bind_zones:
           - opensprinkler.hogs
           - paperless.hogs
           - prometheus.hogs
+          - smtp.hogs
           - tdarr.hogs
           - transmission.hogs
           - unifi

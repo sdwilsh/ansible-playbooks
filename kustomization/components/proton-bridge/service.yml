@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proton-bridge-svc
+spec:
+  selector:
+    app.kubernetes.io/name: proton-bridge
+  ports:
+    - name: smtp
+      protocol: TCP
+      port: 25
+    - name: imap
+      protocol: TCP
+      port: 143

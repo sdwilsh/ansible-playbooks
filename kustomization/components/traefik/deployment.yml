@@ -33,8 +33,10 @@ spec:
             - --accesslog.format=json
             - --api.dashboard=true
             - --api.insecure=true
+            - --entrypoints.imapsecure.address=:993
             - --entrypoints.metrics.address=:9090
             - --entrypoints.mqtts.address=:8883
+            - --entrypoints.smtpsecure.address=:465
             - --entrypoints.web.address=:80
             - --entrypoints.web.http.redirections.entrypoint.scheme=https
             - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -47,16 +49,22 @@ spec:
             - --providers.kubernetescrd.allowCrossNamespace=true
             - --providers.kubernetesingress=true
           ports:
+            # Local Service
+            - name: dashboard
+              containerPort: 8080
+            # Proxy Ports
+            - name: imapsecure
+              containerPort: 993
+            - name: metrics
+              containerPort: 9090
+            - name: mqtts
+              containerPort: 8883
+            - name: smtpsecure
+              containerPort: 465
             - name: web
               containerPort: 80
             - name: websecure
               containerPort: 443
-            - name: dashboard
-              containerPort: 8080
-            - name: mqtts
-              containerPort: 8883
-            - name: metrics
-              containerPort: 9090
           volumeMounts:
             - mountPath: /shared-logs
               name: shared-logs

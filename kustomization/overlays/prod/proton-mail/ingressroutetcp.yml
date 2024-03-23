@@ -1,0 +1,28 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: proton-imap-ingressroutetcp
+spec:
+  entryPoints:
+    - imapsecure
+  routes:
+    - match: HostSNI(`imap.hogs.tswn.us`)
+      services:
+        - name: proton-bridge-svc
+          port: imap
+  tls: {}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: proton-smtp-ingressroutetcp
+spec:
+  entryPoints:
+    - smtpsecure
+  routes:
+    - match: HostSNI(`smtp.hogs.tswn.us`)
+      services:
+        - name: proton-bridge-svc
+          port: smtp
+  tls: {}

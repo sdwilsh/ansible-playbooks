@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: proton-bridge-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: proton-bridge
+  serviceName: proton-bridge-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: proton-bridge
+    spec:
+      containers:
+        - image: shenxn/protonmail-bridge
+          name: proton-bridge
+          ports:
+            - containerPort: 25
+            - containerPort: 143
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /root
+              name: data
+  volumeClaimTemplates:
+    - metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt into the no-backup group since it can easily be recreated.
+          recurring-job-group.longhorn.io/no-backup: enabled
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+        storageClassName: longhorn-encrypted
