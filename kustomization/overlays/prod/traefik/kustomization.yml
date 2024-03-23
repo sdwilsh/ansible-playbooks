@@ -41,10 +41,6 @@ patches:
     target:
       kind: Deployment
       name: authelia-deployment
-  - path: patches/set_authelia_middleware_address.yml
-    target:
-      kind: Middleware
-      name: forwardauth-authelia-middleware
   - path: patches/set_authelia_replicas.yml
     target:
       kind: Deployment

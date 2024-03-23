@@ -5,8 +5,7 @@ metadata:
   name: forwardauth-authelia-middleware
 spec:
   forwardAuth:
-    # Anyone who uses this component should patch in an address line that looks like this:
-    # address: http://authelia-svc.<namespace>.svc.cluster.local:9091/api/verify?rd=<url-encoded-domain>
+    address: http://authelia-svc.traefik.svc.cluster.local:9091/api/authz/forward-auth
     authResponseHeaders:
       - Remote-Email
       - Remote-Groups

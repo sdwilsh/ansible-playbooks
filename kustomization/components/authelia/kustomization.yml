@@ -9,7 +9,7 @@ configMapGenerator:
       - configmap/telemetry.yml
 images:
   - name: ghcr.io/authelia/authelia
-    newTag: 4.37.5
+    newTag: 4.38.6
 resources:
   - deployment.yml
   - ingress.yml
