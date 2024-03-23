@@ -1,13 +1,6 @@
 ---
-- name: Mount the filesystem as rw
-  hosts: pikvm
-  gather_facts: no
-  tasks:
-    - name: Mount the filesystem as rw
-      ansible.builtin.raw: rw
-      changed_when: no
 - name: Setup ansible_distribution-based Groups
-  hosts: all:!kairos:!vyos
+  hosts: all:!kairos:!vyos:!pikvm
   gather_facts: yes
   gather_subset:
     - "!all"
@@ -21,17 +14,9 @@
       changed_when: no
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
-  post_tasks:
-    - name: Mount the filesystem as ro
-      ansible.builtin.raw: ro
-      changed_when: no
-      when: "'pikvm' in group_names"
 
-#
-# ansible_disbribution-Specific Update Logic
-#
-
-- hosts: Archlinux # ansible_disbrution == Archlinux
+- name: Perform Updates for PiKVM Hosts
+  hosts: pikvm
   gather_facts: no
   order: sorted
   pre_tasks:
@@ -40,14 +25,10 @@
       changed_when: no
       when: "'pikvm' in group_names"
   tasks:
-    - name: Update packages with pacman
-      community.general.pacman:
-        update_cache: yes
-        upgrade: yes
-      register: pacman
-    - name: Note if the host needs to be rebooted
-      ansible.builtin.set_fact:
-        reboot_required: "{{ pacman.changed }}"
+    - name: Update with pikvm-update
+      ansible.builtin.shell:
+        cmd: pikvm-update --no-reboot
+      become: yes
     - name: Schedule Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
@@ -55,12 +36,10 @@
       changed_when: no
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
-      when: hostvars[item].reboot_required
-  post_tasks:
-    - name: Mount the filesystem as ro
-      ansible.builtin.raw: ro
-      changed_when: no
-      when: "'pikvm' in group_names"
+
+#
+# ansible_disbribution-Specific Update Logic
+#
 
 - name: Perform Updates for Ubuntu hosts
   hosts: Ubuntu # ansible_disbrution == Ubuntu
