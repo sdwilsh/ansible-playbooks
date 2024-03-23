@@ -31,7 +31,7 @@ spec:
             - --config
             - /config/component/telemetry.yml
           env:
-            - name: AUTHELIA_JWT_SECRET_FILE
+            - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
               value: /secrets/jwt_secret
             - name: AUTHELIA_SESSION_SECRET_FILE
               value: /secrets/session_secret
