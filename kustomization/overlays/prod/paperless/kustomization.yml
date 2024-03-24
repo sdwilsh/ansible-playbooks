@@ -3,15 +3,18 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - https://github.com/marinatedconcrete/config/kustomization/components/paperless
-  - https://github.com/marinatedconcrete/config/kustomization/components/samba-upload
+  - ../../../components/paperless
 images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
     newTag: 2.6.3
-  - name: quay.io/opstree/redis
-    newTag: v7.2.3
+  - name: ghcr.io/paperless-ngx/tika
+    newTag: 2.9.1-minimal
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
     digest: sha256:41e6de7c5125765e63f924a4b7c82041a1913bf223b12f86bdeb26533123bf09
+  - name: gotenberg/gotenberg
+    newTag: 8.3.0
+  - name: quay.io/opstree/redis
+    newTag: v7.2.3
 namespace: paperless
 patches:
   - path: patches/increase_paperless_data_size.yml
