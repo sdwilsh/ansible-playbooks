@@ -65,7 +65,7 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    target_image_label: 22.04-standard-amd64-generic-v2.5.0-k3sv1.28.5-k3s1
+    target_image_label: 22.04-standard-amd64-generic-v3.0.1-k3sv1.28.5-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
@@ -74,7 +74,7 @@
   serial:
     - 1 # This will always be the first control plane node.
     - 1 # This will be the second node.
-    - 3 # The remaining nodes in chunks of three.
+    - 2 # The remaining nodes in chunks of two.
   strategy: free
   tasks:
     # TODO(sdwilsh): This does not work today because we need to be able to select specific pods.  See
@@ -96,6 +96,7 @@
         pod_selectors:
           - app!=csi-attacher
           - app!=csi-provisioner
+          - longhorn.io/instance-manager-type!=aio
           - longhorn.io/instance-manager-type!=engine
           - longhorn.io/instance-manager-type!=replica
     - name: Reboot
