@@ -18,27 +18,6 @@ See below for additionally required patches and secrets.
 
 ## Required Patches
 
-### Set Ingress Host
-
-#### `kustomization.yml`
-
-```yaml
-patches:
-  - path: patches/set_una_ingress_host.yml
-    target:
-      kind: Ingress
-      name: unifi-network-application-ingress
-```
-
-#### `patches/set_una_ingress_host.yml`
-
-```yaml
----
-- op: add
-  path: /spec/rules/0/host
-  value: unifi.example.com
-```
-
 ### Add ServersTransport to Service
 
 #### `kustomization.yml`

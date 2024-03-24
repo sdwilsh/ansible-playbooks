@@ -10,13 +10,6 @@ patches:
     target:
       kind: Service
       name: unifi-network-application-svc
-  - path: patches/set_una_ingress_host.yml
-    target:
-      kind: Ingress
-      name: unifi-network-application-ingress
-  - path: patches/set_una_ingress_annotations.yml
-    target:
-      kind: Ingress
-      name: unifi-network-application-ingress
 resources:
   - namespace.yml
+  - ingress.yml

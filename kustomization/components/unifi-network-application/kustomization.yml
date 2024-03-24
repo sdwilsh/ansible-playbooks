@@ -13,10 +13,8 @@ images:
   - name: lscr.io/linuxserver/unifi-network-application
     newTag: 8.1.113
   - name: mongo
-    # Unifi only officially supports 3.6-4.4, but mongo 4.4 is only supported until Feb 2024.
     newTag: 7.0.7
 resources:
   - statefulset.yml
-  - ingress.yml
   - serverstransport.yml
   - service.yml
