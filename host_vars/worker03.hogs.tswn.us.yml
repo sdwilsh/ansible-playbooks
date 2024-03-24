@@ -1,0 +1,7 @@
+---
+common__interfaces:
+  interfaces:
+    - mac: 9c:6b:00:34:5d:fb
+
+common__ip_addresses:
+  - 10.11.0.106/23
