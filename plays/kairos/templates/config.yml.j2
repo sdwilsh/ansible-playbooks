@@ -41,6 +41,29 @@ k3s-agent:
 {% endif %}
 
 stages:
+{% if "kairos__disks_to_format" in hostvars[host] and hostvars[host].kairos__disks_to_format | length > 0 %}
+  boot:
+{% for disk in hostvars[host].kairos__disks_to_format %}
+    - name: Prep disk '{{ disk }}'
+      directories:
+        - path: /usr/local/disk/{{ disk }}
+          permissions: 0600
+          owner: 0
+          group: 0
+      layout:
+        device:
+          path: /dev/disk/by-id/{{ disk }}
+        expand_partitions:
+          size: 0 # Full Disk
+        add_partitions:
+          - pLabel: primary
+            filesystem: ext4
+    - name: Mount disk '{{ disk }}'
+      comamnds:
+        # Mount partition 1
+        - mount -o rw /dev/disk/by-id/{{ disk }}-part1 /usr/local/disk/{{ disk }}
+{% endfor %}
+{% endif %}
   initramfs:
     - name: Set inotify max values
       sysctl:

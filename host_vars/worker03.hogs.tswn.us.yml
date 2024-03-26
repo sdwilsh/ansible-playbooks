@@ -5,3 +5,6 @@ common__interfaces:
 
 common__ip_addresses:
   - 10.11.0.106/23
+
+kairos__disks_to_format:
+  - ata-Samsung_SSD_870_EVO_1TB_S6PTNZ0RA28535W
