@@ -7,6 +7,7 @@
       ansible.builtin.template:
         dest: /oem/90_custom.yaml
         src: templates/config.yml.j2
+        validate: kairos validate %s
       become: yes
       register: config
       vars:
