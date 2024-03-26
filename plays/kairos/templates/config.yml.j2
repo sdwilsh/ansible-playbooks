@@ -44,24 +44,29 @@ stages:
 {% if "kairos__disks_to_format" in hostvars[host] and hostvars[host].kairos__disks_to_format | length > 0 %}
   boot:
 {% for disk in hostvars[host].kairos__disks_to_format %}
-    - name: Prep disk '{{ disk }}'
+{% if 'nvme' in disk %}
+{% set partition_path = "%sp1" % disk %}
+{% else %}
+{% set partition_path = "%s1" % disk %}
+{% endif %}
+    - name: Prep disk {{ disk }}
       directories:
-        - path: /usr/local/disk/{{ disk }}
+        - path: /usr/local/disk{{ loop.index0 }}
           permissions: 0600
           owner: 0
           group: 0
       layout:
         device:
-          path: /dev/disk/by-id/{{ disk }}
+          path: {{ disk }}
         expand_partitions:
           size: 0 # Full Disk
         add_partitions:
           - pLabel: primary
             filesystem: ext4
-    - name: Mount disk '{{ disk }}'
-      comamnds:
-        # Mount partition 1
-        - mount -o rw /dev/disk/by-id/{{ disk }}-part1 /usr/local/disk/{{ disk }}
+    - name: Mount disk {{ disk }}
+      commands:
+        - rm -rf /usr/local/disk{{ loop.index0 }}/*
+        - mount -o rw {{ partition_path }} /usr/local/disk{{ loop.index0 }}
 {% endfor %}
 {% endif %}
   initramfs:
