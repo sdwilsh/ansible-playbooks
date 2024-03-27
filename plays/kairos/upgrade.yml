@@ -98,3 +98,5 @@
         name: "{{ inventory_hostname_short }}"
         state: uncordon
       delegate_to: localhost
+      retries: 3
+      delay: 10
