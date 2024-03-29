@@ -1,4 +1,4 @@
-# ---
+---
 # https://www.authelia.com/configuration/miscellaneous/introduction/#theme
 theme: dark
 
@@ -84,8 +84,11 @@ storage:
 
 # https://www.authelia.com/configuration/notifications/introduction/
 notifier:
-  filesystem:
-    filename: /db/notification.txt
+  smtp:
+    address: submission://proton-bridge-svc.proton-mail.svc.cluster.local:25
+    sender: no-reply@tswn.us
+    tls:
+      skip_verify: true
 
 ntp:
   address: pool.ntp.hogs.tswn.us:123

@@ -25,6 +25,10 @@ patches:
     target:
       kind: Deployment
       name: authelia-deployment
+  - path: patches/add_authelia_smtp_secrets.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
   - path: patches/allow_external_name_services.yml
     target:
       kind: Deployment
