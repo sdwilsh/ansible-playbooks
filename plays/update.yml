@@ -29,6 +29,8 @@
       ansible.builtin.shell:
         cmd: pikvm-update --no-reboot
       become: yes
+      failed_when: pikvm_update.rc not in [0, 100]
+      register: pikvm_update
     - name: Schedule Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
@@ -36,6 +38,7 @@
       changed_when: no
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
+      when: hostvars[item].pikvm_update.rc == 100
 
 #
 # ansible_disbribution-Specific Update Logic
