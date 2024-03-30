@@ -75,18 +75,16 @@
   serial:
     - 1 # This will always be the first control plane node.
     - 1 # This will be the second node.
+    - 1 # This will be the third node.
     - 2 # The remaining nodes in chunks of two.
   strategy: free
   tasks:
     - name: Drain
-      kubernetes.core.k8s_drain:
-        delete_options:
-          delete_emptydir_data: yes
-          force: yes
-          ignore_daemonsets: yes
-        name: "{{ inventory_hostname_short }}"
-        state: drain
+      ansible.builtin.shell:
+        cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --pod-selector='{{ pod_selectors | join(',') }}' --kubeconfig ~/.kube/config"
       delegate_to: localhost
+      vars:
+        pod_selectors: []
     - name: Reboot
       ansible.builtin.reboot:
         pre_reboot_delay: 60 # seconds
