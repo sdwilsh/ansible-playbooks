@@ -41,6 +41,7 @@ spec:
             - --entrypoints.web.http.redirections.entrypoint.scheme=https
             - --entrypoints.web.http.redirections.entrypoint.to=websecure
             - --entrypoints.websecure.address=:443
+            - --entrypoints.websecure-ext.address=:8443
             - --global.checknewversion=false
             - --metrics.prometheus=true
             - --metrics.prometheus.entryPoint=metrics
@@ -65,6 +66,8 @@ spec:
               containerPort: 80
             - name: websecure
               containerPort: 443
+            - name: websecure-ext
+              containerPort: 8443
           volumeMounts:
             - mountPath: /shared-logs
               name: shared-logs
