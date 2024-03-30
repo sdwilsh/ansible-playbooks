@@ -66,7 +66,7 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    target_image_label: 22.04-standard-amd64-generic-v3.0.1-k3sv1.28.5-k3s1
+    target_image_label: 22.04-standard-amd64-generic-v3.0.3-k3sv1.29.3-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
