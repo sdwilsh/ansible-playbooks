@@ -2,25 +2,6 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: authelia-storage-pg 
-spec:
-  teamId: authelia
-  volume:
-    size: 10Gi
-    storageClass: longhorn-encrypted
-  numberOfInstances: 2
-  podPriorityClassName: critical-application-infra
-  postgresql:
-    version: "15"
-  preparedDatabases:
-    authelia:
-      defaultUsers: true
-      schemas:
-        public: {}
----
-apiVersion: acid.zalan.do/v1
-kind: postgresql
-metadata:
   name: authelia-storage-16-pg
 spec:
   clone:
