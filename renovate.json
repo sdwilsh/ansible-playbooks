@@ -105,7 +105,8 @@
       "matchStrings": [
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+newTag: (?<currentValue>.*?)\\n",
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\n\\s+- https://raw\\.githubusercontent\\.com/(?<depName>.*?)/(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+- https://github\\.com/(?<depName>.*?)/releases/download/(?<currentValue>.*?)/"
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+- https://github\\.com/(?<depName>.*?)/releases/download/(?<currentValue>.*?)/",
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\n\\s+- https://github\\.com/(?<depName>.*?)/raw/(?<currentValue>.*?)/"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
     }
