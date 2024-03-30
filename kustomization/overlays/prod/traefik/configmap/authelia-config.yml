@@ -1,7 +1,4 @@
 ---
-# https://www.authelia.com/configuration/miscellaneous/introduction/#theme
-theme: dark
-
 # https://www.authelia.com/configuration/first-factor/introduction/
 authentication_backend:
   password_reset:
@@ -56,6 +53,18 @@ access_control:
         - home
       policy: one_factor
 
+# https://www.authelia.com/configuration/notifications/introduction/
+notifier:
+  smtp:
+    address: submission://proton-bridge-svc.proton-mail.svc.cluster.local:25
+    sender: no-reply@tswn.us
+    tls:
+      skip_verify: true
+
+ntp:
+  address: pool.ntp.hogs.tswn.us:123
+  version: 4
+
 # https://www.authelia.com/configuration/session/introduction/
 session:
   cookies:
@@ -82,14 +91,5 @@ storage:
     tls:
       skip_verify: true
 
-# https://www.authelia.com/configuration/notifications/introduction/
-notifier:
-  smtp:
-    address: submission://proton-bridge-svc.proton-mail.svc.cluster.local:25
-    sender: no-reply@tswn.us
-    tls:
-      skip_verify: true
-
-ntp:
-  address: pool.ntp.hogs.tswn.us:123
-  version: 4
+# https://www.authelia.com/configuration/miscellaneous/introduction/#theme
+theme: dark
