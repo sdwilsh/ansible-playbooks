@@ -26,3 +26,9 @@
   protocol: udp
   state:
     new: true
+- action: accept
+  description: Allow HTTPS
+  destination:
+    group:
+      port_group: TRAEFIK-EXT
+  protocol: tcp

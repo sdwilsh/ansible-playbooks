@@ -68,3 +68,10 @@
   source:
     group:
       network_group: HFP-v4
+- description: Allow traefik-external Endpoint Traffic
+  action: accept
+  destination:
+    group:
+      address_group: TRAEFIK-v4
+      port_group: TRAEFIK-EXT
+  protocol: tcp

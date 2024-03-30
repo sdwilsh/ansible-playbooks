@@ -277,6 +277,11 @@ vyos_firewall_global__group:
         - address: 10.117.0.40
         # kitchen-gas-detector.hogs.tswn.us
         - address: 10.117.0.41
+    - name: TRAEFIK-v4
+      afi: ipv4
+      members:
+        # traefik.hogs.tswn.us
+        - address: 10.11.1.64
     - name: UNIFI-v4
       description: The v4 address of the Unifi Controller
       afi: ipv4
@@ -373,6 +378,9 @@ vyos_firewall_global__group:
       members:
         - port: 80
         - port: 5683
+    - name: TRAEFIK-EXT
+      members:
+        - port: 8443
     - name: UNIFI-DEVICE-TCP
       description: "Ports used by the Unifi Controller to talk to devices over TCP ({{ ansible_managed }})"
       members:

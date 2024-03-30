@@ -16,3 +16,8 @@
   destination:
     port: 51820-51823
   protocol: udp
+- description: Allow HTTPS
+  action: accept
+  destination:
+    port: 443
+  protocol: tcp

@@ -344,6 +344,11 @@
           - "set nat destination rule {{ (rule_number + 1) * 10 }} translation address '{{ item.translation_address }}'"
           - "set nat destination rule {{ (rule_number + 1) * 10 }} translation port '{{ item.translation_port | default(item.port) }}'"
       loop:
+        - description: traefik
+          port: 443
+          protocol: tcp
+          translation_address: 10.11.1.64
+          translation_port: 8443
         - description: unifi-inform
           port: 8080
           protocol: tcp
