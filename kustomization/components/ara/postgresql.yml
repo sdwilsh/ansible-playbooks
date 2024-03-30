@@ -7,7 +7,7 @@ spec:
   teamId: ara
   volume:
     size: 5Gi
-    storageClass: longhorn-encrypted-no-replica
+    storageClass: longhorn-encrypted-replicated-database
   numberOfInstances: 2
   podPriorityClassName: application-infra
   postgresql:
