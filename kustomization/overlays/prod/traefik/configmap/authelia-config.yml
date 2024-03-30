@@ -77,7 +77,7 @@ session:
 # https://www.authelia.com/configuration/storage/introduction/
 storage: 
   postgres:
-    address: tcp://authelia-storage-pg.traefik.svc.cluster.local:5432
+    address: tcp://authelia-storage-16-pg.traefik.svc.cluster.local:5432
     database: authelia
     tls:
       skip_verify: true
