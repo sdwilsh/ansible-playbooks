@@ -19,18 +19,18 @@ spec:
             - name: ARA_DATABASE_ENGINE
               value: django.db.backends.postgresql
             - name: ARA_DATABASE_HOST
-              value: ara-database-pg 
+              value: ara-database-16-pg
             - name: ARA_DATABASE_NAME
               value: ara
             - name: ARA_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ara-owner-user.ara-database-pg.credentials.postgresql.acid.zalan.do
+                  name: ara-owner-user.ara-database-16-pg.credentials.postgresql.acid.zalan.do
                   key: password
             - name: ARA_DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: ara-owner-user.ara-database-pg.credentials.postgresql.acid.zalan.do
+                  name: ara-owner-user.ara-database-16-pg.credentials.postgresql.acid.zalan.do
                   key: username
             - name: ARA_DATABASE_PORT
               value: "5432"

@@ -1,8 +1,7 @@
----
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: ara-database-pg 
+  name: ara-database-16-pg
 spec:
   teamId: ara
   volume:
@@ -11,7 +10,7 @@ spec:
   numberOfInstances: 2
   podPriorityClassName: application-infra
   postgresql:
-    version: "15"
+    version: "16"
   preparedDatabases:
     ara:
       defaultUsers: true
