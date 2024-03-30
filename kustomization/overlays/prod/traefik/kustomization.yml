@@ -33,14 +33,6 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
-  - path: patches/change_authelia_ingress_host.yml
-    target:
-      kind: Ingress
-      name: authelia-ingress
-  - path: patches/change_traefik_ingress_host.yml
-    target:
-      kind: Ingress
-      name: traefik-dashboard-ingress
   - path: patches/set_authelia_configuration.yml
     target:
       kind: Deployment
@@ -53,10 +45,6 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
-  - path: patches/set_traefik_ingress_middleware.yml
-    target:
-      kind: Ingress
-      name: traefik-dashboard-ingress
   - path: patches/set_traefik_service_ip.yml
     target:
       kind: Service

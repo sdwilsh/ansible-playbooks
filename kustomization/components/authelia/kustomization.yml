@@ -12,6 +12,5 @@ images:
     newTag: 4.38.6
 resources:
   - deployment.yml
-  - ingress.yml
   - service.yml
   - middleware.yml

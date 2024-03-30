@@ -27,7 +27,6 @@ resources:
   - https://raw.githubusercontent.com/traefik/traefik/v2.11.0/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
   - certificate.yml
   - ingressclass.yml
-  - ingress.yml
   - serviceaccount.yml
   - deployment.yml
   - service.yml
