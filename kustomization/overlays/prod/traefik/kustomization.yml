@@ -60,6 +60,7 @@ patches:
   #     name: traefik-deployment
 resources:
   - namespace.yml
+  - ingress.yml
   - postgresql.yml
   - redisreplication.yml
   - redissentinel.yml
