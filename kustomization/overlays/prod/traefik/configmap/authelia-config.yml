@@ -52,6 +52,8 @@ access_control:
       networks:
         - home
       policy: one_factor
+    - domain: "*.tswn.us"
+      policy: two_factor
 
 # https://www.authelia.com/configuration/notifications/introduction/
 notifier:
@@ -93,3 +95,9 @@ storage:
 
 # https://www.authelia.com/configuration/miscellaneous/introduction/#theme
 theme: dark
+
+totp:
+  issuer: auth.tswn.us
+
+webauthn:
+  display_name: auth.tswn.us
