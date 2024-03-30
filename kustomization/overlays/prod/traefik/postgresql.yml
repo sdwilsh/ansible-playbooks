@@ -4,8 +4,6 @@ kind: postgresql
 metadata:
   name: authelia-storage-16-pg
 spec:
-  clone:
-    cluster: authelia-storage-pg
   teamId: authelia
   volume:
     size: 10Gi
