@@ -193,6 +193,7 @@ bind_zones:
       - name: traefik.hogs
         ip: 10.11.1.64
         aliases:
+          - factorio-relic-admin
           - ara.hogs
           - argo-cd.hogs
           - auth
@@ -219,6 +220,8 @@ bind_zones:
         ip: 10.11.1.67
       - name: valheim-relic
         ip: 10.11.1.68
+      - name: factorio-relic
+        ip: 10.11.1.69
 
       # NONET Network
       - name: "front-porch.camera.hogs"

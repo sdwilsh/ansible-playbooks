@@ -31,3 +31,12 @@
       port_group: VALHEIM
   state:
     new: true
+- action: accept
+  description: Allow Factorio Traffic
+  protocol: udp
+  source:
+    group:
+      address_group: FACTORIO-v4
+      port_group: FACTORIO
+  state:
+    new: true

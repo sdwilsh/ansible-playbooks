@@ -178,6 +178,10 @@ vyos_firewall_global__group:
         - address: 10.117.0.35 # living-dash.hogs.tsnw.us
         - address: 10.117.0.36 # office-bluetooth-proxy.hogs.tswn.us
         - address: 10.117.0.37 # living-bluetooth-proxy.hogs.tswn.us
+    - name: FACTORIO-v4
+      afi: ipv4
+      members:
+        - address: 10.11.1.69 # factorio-relic.tswn.us
     - name: FILE-SERVER-v4
       description: "IP Addresses for the NFS Server ({{ ansible_managed }})"
       afi: ipv4
@@ -337,6 +341,10 @@ vyos_firewall_global__group:
         - port: 80 # Prometheus Scrape
         - port: 3232 # ESP32 OTA Update Port
         - port: 6053 # Native API Component Port
+    - name: FACTORIO
+      description: Ports used by the Factorio server.
+      members:
+        - port: 34197
     - name: JELLYFIN-TCP
       description: Ports used by the Jellyfin server
       members:

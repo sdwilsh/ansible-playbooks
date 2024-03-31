@@ -384,6 +384,10 @@
           protocol: udp
           translation_address: 10.11.1.68
           translation_port: 2458
+        - description: factorio-relic
+          port: 34197
+          protocol: udp
+          translation_address: 10.11.1.69
       loop_control:
         index_var: rule_number
       tags:

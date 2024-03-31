@@ -14,6 +14,7 @@ resources:
   - application/cert-manager.yml
   - application/dns.yml
   - application/external-services.yml
+  - application/factorio-relic.yml
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
   - application/kube-vip.yml

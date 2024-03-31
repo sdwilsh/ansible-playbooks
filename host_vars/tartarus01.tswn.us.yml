@@ -25,6 +25,10 @@ vyos__ssh_address_ipv4: 149.248.37.12
 
 vyos_firewall_global__group:
   address_group:
+    - name: FACTORIO-v4
+      afi: ipv4
+      members:
+        - address: 10.11.1.69 # factorio-relic.tswn.us
     - name: HFP-SSH-v4
       description: Addresses allowed to ssh to HFP machines.
       members:
@@ -46,6 +50,10 @@ vyos_firewall_global__group:
         - address: 10.11.1.67 # valheim-forerunner.tswn.us
         - address: 10.11.1.68 # valheim-relic.tswn.us
   port_group:
+    - name: FACTORIO
+      description: Ports used by the Factorio server.
+      members:
+        - port: 34197
     - name: JELLYFIN-TCP
       description: Ports used by the Jellyfin server
       members:
