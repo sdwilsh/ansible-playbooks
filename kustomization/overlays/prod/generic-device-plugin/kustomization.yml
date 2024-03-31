@@ -9,10 +9,6 @@ patches:
   - target:
       kind: DaemonSet
       name: generic-device-plugin
-    path: patches/add_cdrom.yml
-  - target:
-      kind: DaemonSet
-      name: generic-device-plugin
     path: patches/add_coraltpu.yml
   - target:
       kind: DaemonSet
