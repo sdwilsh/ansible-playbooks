@@ -102,5 +102,5 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 500Gi
+            storage: 100Gi
         storageClassName: longhorn-encrypted
