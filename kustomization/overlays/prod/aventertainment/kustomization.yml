@@ -7,7 +7,7 @@ components:
   - ../../../components/tdarr
 namespace: aventertainment
 patches:
-  - path: patches/add_jellyfin_nodeName.yml
+  - path: patches/add_jellyfin_hardware_acc_reqs.yml
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
