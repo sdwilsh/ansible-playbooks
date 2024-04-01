@@ -13,7 +13,15 @@ patches:
   - target:
       kind: DaemonSet
       name: generic-device-plugin
+    path: patches/add_kfd.yml
+  - target:
+      kind: DaemonSet
+      name: generic-device-plugin
     path: patches/add_quicksync.yml
+  - target:
+      kind: DaemonSet
+      name: generic-device-plugin
+    path: patches/add_render.yml
   - target:
       kind: DaemonSet
       name: generic-device-plugin

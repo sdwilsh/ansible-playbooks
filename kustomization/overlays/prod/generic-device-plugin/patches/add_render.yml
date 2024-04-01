@@ -1,0 +1,11 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value:  --device
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: |
+    name: kfd
+    groups:
+      - paths:
+          - path: /dev/dri/renderD128
