@@ -18,4 +18,8 @@ spec:
             requests:
               squat.ai/kfd: 1
               squat.ai/render: 1
+          securityContext:
+            supplementalGroups:
+              - 44 # video
+              - 109 # render
       nodeName: worker03
