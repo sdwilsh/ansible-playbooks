@@ -5,7 +5,7 @@
 - op: add
   path: /spec/template/spec/containers/0/args/-
   value: |
-    name: kfd
+    name: render
     groups:
       - paths:
           - path: /dev/dri/renderD128
