@@ -5,6 +5,10 @@ kind: Kustomization
 components:
   - ../../../components/jellyfin
   - ../../../components/tdarr
+images:
+  - name: jellyfin/jellyfin
+    newTag: unstable
+    digest: sha256:0ab274f2e0b725e7a00ef43c7bb05072e2ef1fb7074b0b102a511ff8e34225f7
 namespace: aventertainment
 patches:
   - path: patches/add_jellyfin_hardware_acc_reqs.yml
