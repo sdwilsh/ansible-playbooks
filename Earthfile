@@ -13,7 +13,7 @@ helm:
 
 kustomize-build:
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
-    ARG KUSTOMIZE_VERSION=v5.3.0
+    ARG KUSTOMIZE_VERSION=v5.4.1
     FROM registry.k8s.io/kustomize/kustomize:$KUSTOMIZE_VERSION
     COPY +helm/binary /usr/local/bin/helm
     COPY kustomization kustomization

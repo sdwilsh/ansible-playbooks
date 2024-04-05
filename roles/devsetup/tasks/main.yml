@@ -60,7 +60,7 @@
     # renovate: datasource=github-releases depName=kubernetes/kubernetes
     kubectl_version: v1.28.5
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
-    kustomize_version: v5.3.0
+    kustomize_version: v5.4.1
     # renovate: datasource=github-releases depName=starship/starship
     starship_version: v1.18.2
     # renovate: datasource=github-releases depName=kubevirt/kubevirt
