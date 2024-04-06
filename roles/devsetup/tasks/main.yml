@@ -58,7 +58,7 @@
     # renovate: datasource=github-releases depName=argoproj/argo-cd
     argocd_version: v2.10.6
     # renovate: datasource=github-releases depName=kubernetes/kubernetes
-    kubectl_version: v1.28.5
+    kubectl_version: v1.29.3
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
     kustomize_version: v5.4.1
     # renovate: datasource=github-releases depName=starship/starship
