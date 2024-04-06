@@ -8,6 +8,7 @@ spec:
     - name: discovery
       port: 7359
       protocol: UDP
+      targetPort: 7360
     - name: ssdb
       port: 1900
       protocol: UDP

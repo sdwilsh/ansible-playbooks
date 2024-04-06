@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 images:
+  - name: alpine/socat
+    newTag: 1.7.4.4
   - name: jellyfin/jellyfin
     newTag: 10.8.13
 resources:

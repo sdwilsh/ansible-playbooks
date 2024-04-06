@@ -20,8 +20,6 @@ spec:
           ports:
             - containerPort: 8096
               name: web
-            - containerPort: 7359
-              name: discovery
             - containerPort: 1900
               name: ssdp
           resources:
@@ -42,6 +40,29 @@ spec:
               name: jellyfin-config
             - mountPath: /cache
               name: jellyfin-cache
+        - args:
+            - -v
+            - UDP-LISTEN:7360,fork,reuseaddr
+            - UDP-DATAGRAM:127.255.255.255:7359,broadcast
+          image: alpine/socat
+          name: udp-broadcast-proxy
+          ports:
+            - containerPort: 7360
+              name: discovery
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
       priorityClassName: application
   volumeClaimTemplates:
     - metadata:
