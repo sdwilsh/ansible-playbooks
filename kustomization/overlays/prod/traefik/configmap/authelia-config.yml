@@ -12,6 +12,10 @@ authentication_backend:
 access_control:
   default_policy: deny
   networks:
+    - name: cluster
+      networks:
+        - 172.16.0.0/16
+        - 172.17.0.0/16
     - name: home
       networks:
         - 10.117.0.0/23
@@ -25,6 +29,7 @@ access_control:
   rules:
     - domain: ara.hogs.tswn.us
       networks:
+        - cluster
         - kubernetes
         - man
         - 10.117.0.24 # monitor.house.gem.hogs.tswn.us
