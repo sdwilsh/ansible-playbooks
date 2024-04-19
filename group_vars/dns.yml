@@ -134,6 +134,8 @@ bind_zones:
         ip: 10.10.0.44
       - name: flex-porch.hogs
         ip: 10.10.0.45
+      - name: backyard-switch.hogs
+        ip: 10.10.0.46
 
       - name: "kvm01.hogs"
         ip: "10.10.0.50"
