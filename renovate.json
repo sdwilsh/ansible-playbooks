@@ -58,6 +58,15 @@
     {
       "customType": "regex",
       "fileMatch": [
+        "^kustomization\\/.*\\.sh$"
+      ],
+      "matchStrings": [
+        "\\srenovate:\\s+datasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s*[a-zA-Z_]+=\"(?<currentValue>.*?)\""
+      ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
         "^roles/.+/tasks/.+\\.yml$"
       ],
       "datasourceTemplate": "docker",
