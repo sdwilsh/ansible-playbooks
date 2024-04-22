@@ -3,7 +3,7 @@
 set -e
 
 # renovate: datasource=github-releases depName=hacs/integration
-hacs_version="1.33.0"
+hacs_version="1.34.0"
 
 mkdir -p /config/custom_components
 cd /config/custom_components
