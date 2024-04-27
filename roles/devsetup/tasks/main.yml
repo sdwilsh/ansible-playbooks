@@ -1,11 +1,23 @@
 ---
 # tasks file for devsetup
+- name: Add Required Repositories
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    state: present
+  become: yes
+  loop:
+    - ppa:fish-shell/release-3
+- name: Update Apt Cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
 - name: Install Required Packages
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   become: yes
   loop:
+    - fish
     - zsh
 - name: Create sdwilsh group
   ansible.builtin.group:
@@ -27,7 +39,7 @@
       - docker
     home: /home/sdwilsh
     name: sdwilsh
-    shell: /bin/zsh
+    shell: /usr/bin/fish
     state: present
     uid: 1000
   become: yes

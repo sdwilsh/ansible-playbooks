@@ -1,4 +1,12 @@
 ---
+- name: Set up fish config
+  ansible.builtin.template:
+    src: config.fish.j2
+    dest: ~sdwilsh/.config/fish/config.fish
+    mode: u+rw-x,o-rwx,g-rwx
+    owner: sdwilsh
+    group: sdwilsh
+  become: yes
 - name: Set up zsh config
   ansible.builtin.template:
     src: zshrc.j2
