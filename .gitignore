@@ -1,5 +1,7 @@
 .ansible_vault_password
 
+collections/
+
 # Roles that are managed by ansible-galaxy
 roles/bertvv.bind/
 roles/mrlesmithjr.netplan/
