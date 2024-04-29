@@ -137,12 +137,12 @@ bind_zones:
       - name: backyard-switch.hogs
         ip: 10.10.0.46
 
-      - name: "kvm01.hogs"
-        ip: "10.10.0.50"
-      - name: "kvm02.hogs"
-        ip: "10.10.0.51"
-      - name: "kvm03.hogs"
-        ip: "10.10.0.52"
+      - name: kvm01.hogs
+        ip: 10.10.0.50
+      - name: kvm02.hogs
+        ip: 10.10.0.51
+      - name: kvm03.hogs
+        ip: 10.10.0.52
       - name: "esxi-intel01.hogs"
         ip: "10.10.0.53"
       - name: "esxi-intel02.hogs"

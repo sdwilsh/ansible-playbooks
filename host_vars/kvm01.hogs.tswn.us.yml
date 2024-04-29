@@ -6,4 +6,4 @@ pikvm__hosts:
   - ["#esxi-intel01", ch0_led, ch0_button]
   - ["#esxi-intel02", ch1_led, ch1_button]
   - ["#esxi-intel03", ch2_led, ch2_button]
-  # - ["#storage1", ch3_led, ch3_button]
+  - ["#worker01", ch3_led, ch3_button]

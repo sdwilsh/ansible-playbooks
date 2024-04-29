@@ -1,0 +1,6 @@
+---
+common__ip_addresses:
+  - 10.10.0.51/24
+
+pikvm__hosts:
+  - ["#worker02", ch0_led, ch0_button]
