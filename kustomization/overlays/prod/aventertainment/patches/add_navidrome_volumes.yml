@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: navidrome
+          volumeMounts:
+            - mountPath: /music
+              name: navidrome-media
+              readOnly: true
+              subPath: music
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+      volumes:
+        - name: navidrome-media
+          persistentVolumeClaim:
+            claimName: media-pvc

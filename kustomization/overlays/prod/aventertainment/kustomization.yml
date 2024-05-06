@@ -4,11 +4,14 @@ kind: Kustomization
 
 components:
   - ../../../components/jellyfin
+  - ../../../components/navidrome
   - ../../../components/tdarr
 images:
   - name: jellyfin/jellyfin
     newTag: unstable
     digest: sha256:0ab274f2e0b725e7a00ef43c7bb05072e2ef1fb7074b0b102a511ff8e34225f7
+  - name: deluan/navidrome
+    newTag: 0.52.0
 namespace: aventertainment
 patches:
   - path: patches/add_jellyfin_hardware_acc_reqs.yml
@@ -19,6 +22,10 @@ patches:
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
+  - path: patches/add_navidrome_volumes.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
   - path: patches/add_tdarr_node_volumes.yml
     target:
       kind: Deployment
@@ -27,6 +34,10 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
+  - path: patches/set_navidrome_baseurl.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
   - path: patches/set_tdarr_server_user_and_group.yml
     target:
       kind: StatefulSet

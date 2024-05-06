@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: navidrome-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: navidrome
+  serviceName: navidrome-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: navidrome
+    spec:
+      containers:
+        - env:
+            - name: ND_ADDRESS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ND_CACHEFOLDER
+              value: /cache
+            - name: ND_IMAGECACHESIZE
+              value: 256Mi
+            - name: ND_TRANSCODINGCACHESIZE
+              value: 256Mi
+          image: deluan/navidrome
+          name: navidrome
+          ports:
+            - containerPort: 4533
+              name: navidrome-web
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+            requests:
+              cpu: 250m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /cache
+              name: navidrome-cache
+            - mountPath: /data
+              name: navidrome-data
+      priorityClassName: application
+      volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+          name: navidrome-cache
+  volumeClaimTemplates:
+    - metadata:
+        name: navidrome-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-encrypted

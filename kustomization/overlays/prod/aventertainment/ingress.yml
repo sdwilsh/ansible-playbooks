@@ -19,6 +19,16 @@ spec:
                   name: web
             path: /
             pathType: Prefix
+    - host: navidrome.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: navidrome-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: tdarr.hogs.tswn.us
       http:
         paths:
