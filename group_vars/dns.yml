@@ -208,6 +208,7 @@ bind_zones:
           - longhorn.hogs
           - mqtt.hogs
           - nas.hogs
+          - navidrome
           - opensprinkler.hogs
           - paperless.hogs
           - prometheus.hogs
