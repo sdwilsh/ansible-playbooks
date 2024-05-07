@@ -90,6 +90,22 @@ bind_zones:
         ip: "10.117.0.48"
       - name: "0.ntp.hogs"
         ip: "10.117.0.50"
+      - name: sonos-den.hogs
+        ip: 10.117.0.60
+      - name: sonos-den-sub.hogs
+        ip: 10.117.0.61
+      - name: sonos-living.hogs
+        ip: 10.117.0.62
+      - name: sonos-living-sub.hogs
+        ip: 10.117.0.63
+      - name: sonos-move.hogs
+        ip: 10.117.0.66
+      - name: sonos-mainbed.hogs
+        ip: 10.117.0.67
+      - name: sonos-office.hogs
+        ip: 10.117.0.68
+      - name: sonos-dining.hogs
+        ip: 10.117.0.69
 
       # MAN Network
       - name: "ns1"

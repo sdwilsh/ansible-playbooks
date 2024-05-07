@@ -82,6 +82,30 @@ vyos_dhcp_server__networks:
       - name: fan-office
         ip: 10.117.0.43
         mac: 20:f8:5e:53:30:8d
+      - name: sonos-den
+        ip: 10.117.0.60
+        mac: 34:7e:5c:9e:fd:f3
+      - name: sonos-den-sub
+        ip: 10.117.0.61
+        mac: 54:2a:1b:1e:a5:6e
+      - name: sonos-living
+        ip: 10.117.0.62
+        mac: 48:a6:b8:bb:47:32
+      - name: sonos-living-sub
+        ip: 10.117.0.63
+        mac: 54:2a:1b:14:a8:6a
+      - name: sonos-move
+        ip: 10.117.0.66
+        mac: 48:a6:b8:ef:9e:88
+      - name: sonos-mainbed
+        ip: 10.117.0.67
+        mac: 54:2a:1b:d0:41:f8
+      - name: sonos-office
+        ip: 10.117.0.68
+        mac: f0:f6:c1:f5:41:b3
+      - name: sonos-dining
+        ip: 10.117.0.69
+        mac: 34:7e:5c:d1:2d:62
     subnet: 10.117.0.0/23
 
 vyos_firewall__zones:
