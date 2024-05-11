@@ -8,6 +8,7 @@
   loop: "{{ common__unix_groups }}"
 - name: Create base users
   ansible.builtin.user:
+    expires: -1
     group: "{{ item.group | default(item.name) }}"
     home: "/home/{{ item.name }}"
     name: "{{ item.name }}"
