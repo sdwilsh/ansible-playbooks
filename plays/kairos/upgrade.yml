@@ -54,6 +54,7 @@
           - --source
           - "oci:quay.io/kairos/ubuntu:{{ recovery_image_label }}"
       become: true
+      when: os_image_label != target_image_label
     - name: Install update
       ansible.builtin.command:
         argv:
@@ -76,7 +77,7 @@
       when: hostvars[item].reboot_required
   vars:
     recovery_image_label: 22.04-standard-amd64-generic-v3.0.3-k3sv1.29.3-k3s1
-    target_image_label: 22.04-standard-amd64-generic-v3.0.3-k3sv1.29.3-k3s1
+    target_image_label: 24.04-standard-amd64-generic-v3.0.10-k3sv1.29.3-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
