@@ -45,6 +45,15 @@
     - name: Print target image
       ansible.builtin.debug:
         var: target_image_label
+    - name: Install Recovery Update
+      ansible.builtin.command:
+        argv:
+          - kairos-agent
+          - upgrade
+          - --recovery
+          - --source
+          - "oci:quay.io/kairos/ubuntu:{{ recovery_image_label }}"
+      become: true
     - name: Install update
       ansible.builtin.command:
         argv:
@@ -66,6 +75,7 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
+    recovery_image_label: 22.04-standard-amd64-generic-v3.0.3-k3sv1.29.3-k3s1
     target_image_label: 22.04-standard-amd64-generic-v3.0.3-k3sv1.29.3-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
