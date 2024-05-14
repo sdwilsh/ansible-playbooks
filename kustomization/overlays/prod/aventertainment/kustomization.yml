@@ -8,8 +8,7 @@ components:
   - ../../../components/tdarr
 images:
   - name: jellyfin/jellyfin
-    newTag: unstable
-    digest: sha256:0ab274f2e0b725e7a00ef43c7bb05072e2ef1fb7074b0b102a511ff8e34225f7
+    newTag: 10.9.1
   - name: deluan/navidrome
     newTag: 0.52.0
 namespace: aventertainment
