@@ -121,13 +121,6 @@ stages:
             Kind=bridge
 {% endfor %}
 {% else %}
-        - path: /etc/systemd/network/01-en.network
-          permissions: 0644
-          content: |
-            [Match]
-            Name=en*
-            [Network]
-            Bridge=uplink
         - path: /etc/systemd/network/02-uplink.netdev
           permissions: 0644
           content: |
@@ -135,6 +128,13 @@ stages:
             Name=uplink
             Kind=bridge
             MACAddress={{ (hostvars[host].common__interfaces.interfaces | first).mac }}
+        - path: /etc/systemd/network/01-en.network
+          permissions: 0644
+          content: |
+            [Match]
+            Name=en*
+            [Network]
+            Bridge=uplink
 {% endif %}
         - path: /etc/systemd/network/10-uplink.network
           permissions: 0644
