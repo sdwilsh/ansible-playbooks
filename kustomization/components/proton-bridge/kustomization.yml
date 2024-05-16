@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: shenxn/protonmail-bridge
-    newTag: 3.9.1-1
+    newTag: 3.11.0-1
 resources:
   - service.yml
   - statefulset.yml
