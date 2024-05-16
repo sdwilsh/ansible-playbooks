@@ -4,18 +4,18 @@ kind: Kustomization
 
 helmCharts:
   - name: vector
-    version: 0.32.1
+    version: 0.33.0
     repo: https://helm.vector.dev
     releaseName: vector-agent
     valuesFile: agent-values.yml
   - name: vector
-    version: 0.32.1
+    version: 0.33.0
     repo: https://helm.vector.dev
     releaseName: vector-aggregator
     valuesFile: aggregator-values.yml
 images:
   - name: timberio/vector
-    newTag: 0.37.1-distroless-libc
+    newTag: 0.38.0-distroless-libc
 namespace: vector
 resources:
   - namespace.yml
