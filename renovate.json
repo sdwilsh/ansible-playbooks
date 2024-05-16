@@ -26,6 +26,12 @@
       "minimumReleaseAge": "1 month"
     },
     {
+      "groupName": "tdarr",
+      "matchPackagePatterns": [
+        "tdarr"
+      ]
+    },
+    {
       "groupName": "vector",
       "matchPackagePatterns": [
         "vector"
