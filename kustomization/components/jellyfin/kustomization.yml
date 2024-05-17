@@ -6,7 +6,7 @@ images:
   - name: alpine/socat
     newTag: 1.7.4.4
   - name: jellyfin/jellyfin
-    newTag: 10.9.1
+    newTag: 10.9.2
 resources:
   - service.yml
   - statefulset.yml
