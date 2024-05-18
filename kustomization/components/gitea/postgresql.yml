@@ -1,0 +1,16 @@
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: gitea-database-16-pg
+spec:
+  teamId: gitea
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database
+  numberOfInstances: 2
+  podPriorityClassName: application-infra
+  postgresql:
+    version: "16"
+  preparedDatabases:
+    gitea: 
+      defaultUsers: true

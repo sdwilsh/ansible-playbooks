@@ -1,0 +1,52 @@
+---
+redis-cluster:
+  enabled: false
+postgresql:
+  enabled: false
+postgresql-ha:
+  enabled: false
+
+persistence:
+  enabled: true
+  storageClass: longhorn-encrypted
+
+gitea:
+  additionalConfigFromEnvs:
+    - name: GITEA__CACHE__HOST
+      valueFrom:
+        secretKeyRef:
+          name: gitea-secrets
+          key: redis_cache_url
+    - name: GITEA__DATABASE__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: gitea-owner-user.gitea-database-16-pg.credentials.postgresql.acid.zalan.do
+          key: password
+    - name: GITEA__DATABASE__USER
+      valueFrom:
+        secretKeyRef:
+          name: gitea-owner-user.gitea-database-16-pg.credentials.postgresql.acid.zalan.do
+          key: username
+    - name: GITEA__QUEUE__CONN_STR
+      valueFrom:
+        secretKeyRef:
+          name: gitea-secrets
+          key: redis_queue_url
+  config:
+    database:
+      DB_TYPE: postgres
+      HOST: gitea-database-16-pg:5432
+      NAME: gitea
+      SCHEMA: data
+      SSL_MODE: require
+    session:
+      PROVIDER: db
+    cache:
+      ADAPTER: redis
+    queue:
+      TYPE: redis
+    indexer:
+      ISSUE_INDEXER_TYPE: db
+      REPO_INDEXER_ENABLED: true
+  image:
+    rootless: true
