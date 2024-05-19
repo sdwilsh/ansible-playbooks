@@ -12,11 +12,6 @@ persistence:
 
 gitea:
   additionalConfigFromEnvs:
-    - name: GITEA__CACHE__HOST
-      valueFrom:
-        secretKeyRef:
-          name: gitea-secrets
-          key: redis_cache_url
     - name: GITEA__DATABASE__PASSWD
       valueFrom:
         secretKeyRef:
@@ -27,11 +22,6 @@ gitea:
         secretKeyRef:
           name: gitea-owner-user.gitea-database-16-pg.credentials.postgresql.acid.zalan.do
           key: username
-    - name: GITEA__QUEUE__CONN_STR
-      valueFrom:
-        secretKeyRef:
-          name: gitea-secrets
-          key: redis_queue_url
     - name: GITEA__SERVER__HTTP_ADDR
       valueFrom:
         fieldRef:
@@ -45,10 +35,6 @@ gitea:
       SSL_MODE: require
     session:
       PROVIDER: db
-    cache:
-      ADAPTER: redis
-    queue:
-      TYPE: redis
     indexer:
       ISSUE_INDEXER_TYPE: db
       REPO_INDEXER_ENABLED: true

@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - command:
+            - /usr/sbin/config_environment.sh
+          env:
+            - name: GITEA__CACHE__ADAPTER
+              value: redis
+            - name: GITEA__CACHE__HOST
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: redis_cache_url
+            - name: GITEA__QUEUE__CONN_STR
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: redis_queue_url
+            - name: GITEA__QUEUE__TYPE
+              value: redis
+          name: init-app-ini

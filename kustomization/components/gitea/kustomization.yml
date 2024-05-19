@@ -15,4 +15,3 @@ patches:
       name: gitea-test-connection
 resources:
   - postgresql.yml
-  - redis.yml
