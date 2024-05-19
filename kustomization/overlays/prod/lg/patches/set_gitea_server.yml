@@ -7,6 +7,7 @@ spec:
   template:
     spec:
       initContainers:
+        - name: init-directories # This must run before init-app-ini
         - command:
             - /usr/sbin/config_environment.sh
           env:
