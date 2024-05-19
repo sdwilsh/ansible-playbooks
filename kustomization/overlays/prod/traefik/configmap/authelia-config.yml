@@ -77,6 +77,9 @@ identity_providers:
           - profile
         userinfo_signed_response_alg: none
         token_endpoint_auth_method: client_secret_basic
+    jwks:
+      - algorithm: RS256
+        key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
 
 # https://www.authelia.com/configuration/notifications/introduction/
 notifier:

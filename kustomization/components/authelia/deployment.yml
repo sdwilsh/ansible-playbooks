@@ -37,6 +37,8 @@ spec:
               value: /secrets/session_secret
             - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
               value: /secrets/storage_encryption_key
+            - name: X_AUTHELIA_CONFIG_FILTERS
+              value: template
           image: ghcr.io/authelia/authelia
           ports:
             - containerPort: 9091

@@ -17,6 +17,10 @@ images:
     newTag: v7.2.3
 namespace: traefik
 patches:
+  - path: patches/add_authelia_identity_providers_secrets.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
   - path: patches/add_authelia_postgres_secrets.yml
     target:
       kind: Deployment
