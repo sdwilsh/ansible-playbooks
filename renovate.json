@@ -32,6 +32,12 @@
       ]
     },
     {
+      "groupName": "traefik",
+      "matchPackagePatterns": [
+        "traefik"
+      ]
+    },
+    {
       "groupName": "vector",
       "matchPackagePatterns": [
         "vector"
