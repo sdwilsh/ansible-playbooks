@@ -10,11 +10,19 @@ patches:
     target:
       kind: Deployment
       name: gitea
+  - path: patches/set_gitea_openid.yml
+    target:
+      kind: Deployment
+      name: gitea
   - path: patches/set_gitea_redis.yml
     target:
       kind: Deployment
       name: gitea
   - path: patches/set_gitea_server.yml
+    target:
+      kind: Deployment
+      name: gitea
+  - path: patches/set_gitea_service.yml
     target:
       kind: Deployment
       name: gitea
