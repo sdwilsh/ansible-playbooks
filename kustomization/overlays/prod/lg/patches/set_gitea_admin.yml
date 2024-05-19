@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - env:
+            - name: GITEA__ADMIN__EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: admin_email
+            - name: GITEA__ADMIN__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: admin_password
+            - name: GITEA__ADMIN__USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: admin_username
+          name: init-app-ini
+        - env:
+            - name: GITEA_ADMIN_PASSWORD
+              value: null
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: admin_password
+            - name: GITEA_ADMIN_USERNAME
+              value: null
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-secrets
+                  key: admin_username
+          name: configure-gitea

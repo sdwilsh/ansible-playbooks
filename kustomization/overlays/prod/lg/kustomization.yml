@@ -6,6 +6,10 @@ components:
   - ../../../components/gitea
 namespace: lg
 patches:
+  - path: patches/set_gitea_admin.yml
+    target:
+      kind: Deployment
+      name: gitea
   - path: patches/set_gitea_redis.yml
     target:
       kind: Deployment
