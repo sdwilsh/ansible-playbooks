@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - command:
+            - /usr/sbin/config_environment.sh
+          env:
+            - name: GITEA__SERVER__DOMAIN
+              value: lg-git.tswn.us
+            - name: GITEA__SERVER__PROTOCOL
+              value: http
+            - name: GITEA__SERVER__ROOT_URL
+              value: https://lg-git.tswn.us
+          name: init-app-ini

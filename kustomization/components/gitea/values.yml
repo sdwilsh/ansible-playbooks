@@ -33,6 +33,8 @@ gitea:
       NAME: gitea
       SCHEMA: data
       SSL_MODE: require
+    server:
+      HTTP_PORT: 3000
     session:
       PROVIDER: db
     indexer:
