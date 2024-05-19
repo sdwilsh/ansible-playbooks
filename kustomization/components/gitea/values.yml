@@ -32,6 +32,10 @@ gitea:
         secretKeyRef:
           name: gitea-secrets
           key: redis_queue_url
+    - name: GITEA__SERVER__HTTP_ADDR
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
   config:
     database:
       DB_TYPE: postgres
