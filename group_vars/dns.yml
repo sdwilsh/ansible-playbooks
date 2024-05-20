@@ -256,6 +256,12 @@ bind_zones:
         ip: 172.31.42.2
       - name: hogsflixplus02
         ip: 172.31.42.3
+      - name: hogsflixplus03
+        ip: 172.31.42.4
+      - name: hogsflixplus04
+        ip: 172.31.42.5
+      - name: hogsflixplus05
+        ip: 172.31.42.6
 
     networks:
       - 10.2.0

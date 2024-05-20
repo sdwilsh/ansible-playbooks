@@ -9,6 +9,9 @@ ns2.tswn.us ansible_host=10.10.0.4
 [hogsflixplus]
 hogsflixplus01.tswn.us ansible_host=172.31.42.2
 hogsflixplus02.tswn.us ansible_host=172.31.42.3
+hogsflixplus03.tswn.us ansible_host=172.31.42.4
+hogsflixplus04.tswn.us ansible_host=172.31.42.5
+hogsflixplus05.tswn.us ansible_host=172.31.42.6
 
 [pikvm]
 kvm01.hogs.tswn.us ansible_host=10.10.0.50

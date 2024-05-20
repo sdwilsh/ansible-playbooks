@@ -176,6 +176,21 @@ vyos_interfaces__wireguard:
           ipv4:
             - network: "{{ hostvars['hogsflixplus02.tswn.us'].wireguard__address | ansible.utils.ipaddr('address') }}/32"
         pubkey: "{{ hostvars['hogsflixplus02.tswn.us'].wireguard__pubkey }}"
+      - name: hogsflixplus03.tswn.us
+        allowed_ips:
+          ipv4:
+            - network: "{{ hostvars['hogsflixplus03.tswn.us'].wireguard__address | ansible.utils.ipaddr('address') }}/32"
+        pubkey: "{{ hostvars['hogsflixplus03.tswn.us'].wireguard__pubkey }}"
+      - name: hogsflixplus04.tswn.us
+        allowed_ips:
+          ipv4:
+            - network: "{{ hostvars['hogsflixplus04.tswn.us'].wireguard__address | ansible.utils.ipaddr('address') }}/32"
+        pubkey: "{{ hostvars['hogsflixplus04.tswn.us'].wireguard__pubkey }}"
+      - name: hogsflixplus05.tswn.us
+        allowed_ips:
+          ipv4:
+            - network: "{{ hostvars['hogsflixplus05.tswn.us'].wireguard__address | ansible.utils.ipaddr('address') }}/32"
+        pubkey: "{{ hostvars['hogsflixplus05.tswn.us'].wireguard__pubkey }}"
     port: 51823
 
 vyos_ospf_interfaces__config:
