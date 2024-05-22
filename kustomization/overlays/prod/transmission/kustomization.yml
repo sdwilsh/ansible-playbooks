@@ -14,7 +14,7 @@ configMapGenerator:
       - configmap/scripts/setup_wireguard.sh
 images:
   - name: alpine
-    newTag: 3.19.1
+    newTag: 3.20.0
   - name: dockurr/dnsmasq
     newTag: "2.90"
   - name: lscr.io/linuxserver/transmission
