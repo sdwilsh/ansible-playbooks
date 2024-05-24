@@ -29,12 +29,6 @@
     - role: "devsec.hardening.ssh_hardening"
       vars:
         ssh_kerberos_supprt: no
-        ssh_kex:
-          # TODO: enable after upgrades to 22.04 are complete
-          # See https://github.com/dev-sec/ansible-collection-hardening/issues/500
-          # - "sntrup761x25519-sha512@openssh.com"
-          - "curve25519-sha256@libssh.org"
-          - "diffie-hellman-group-exchange-sha256"
   tasks:
     - name: "Flush handlers from core roles"
       ansible.builtin.meta: "flush_handlers"
