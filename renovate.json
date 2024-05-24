@@ -6,6 +6,31 @@
   "configMigration": true,
   "packageRules": [
     {
+      "automerge": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchPackageNames": [
+        "bind9",
+        "certmanager",
+        "earthly",
+        "esphome",
+        "frigate",
+        "gitea",
+        "jellyfin",
+        "mosquitto",
+        "navidrome",
+        "paperless",
+        "proton-bridge",
+        "traefik",
+        "transmission",
+        "vector",
+        "zwavejs"
+      ]
+    },
+    {
       "matchPackageNames": [
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
