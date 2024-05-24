@@ -242,6 +242,8 @@ bind_zones:
         ip: 10.11.1.68
       - name: factorio-relic
         ip: 10.11.1.69
+      - name: lg-git-ssh
+        ip: 10.11.1.70
 
       # NONET Network
       - name: "front-porch.camera.hogs"

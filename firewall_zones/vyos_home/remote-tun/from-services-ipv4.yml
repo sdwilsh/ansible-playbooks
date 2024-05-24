@@ -40,3 +40,12 @@
       port_group: FACTORIO
   state:
     new: true
+- action: accept
+  description: Allow LG Git SSH Traffic
+  protocol: tcp
+  source:
+    group:
+      address_group: LG-GIT-SSH-v4
+      port_group: LG-GIT-SSH
+  state:
+    new: true

@@ -26,6 +26,10 @@ patches:
     target:
       kind: Deployment
       name: gitea
+  - path: patches/set_gitea_ssh_service.yml
+    target:
+      kind: Service
+      name: gitea-ssh
 resources:
   - namespace.yml
   - ingress.yml

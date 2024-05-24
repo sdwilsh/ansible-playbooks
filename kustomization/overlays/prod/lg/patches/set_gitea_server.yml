@@ -17,4 +17,8 @@ spec:
               value: http
             - name: GITEA__SERVER__ROOT_URL
               value: https://lg-git.tswn.us
+            - name: GITEA__SERVER__SSH_DOMAIN
+              value: lg-git-ssh.tswn.us
+            - name: GITEA__SERVER__SSH_PORT
+              value: "2222"
           name: init-app-ini

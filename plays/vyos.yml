@@ -388,6 +388,10 @@
           port: 34197
           protocol: udp
           translation_address: 10.11.1.69
+        - description: lg-git-ssh
+          port: 2222
+          protocol: tcp
+          translation_address: 10.11.1.70
       loop_control:
         index_var: rule_number
       tags:

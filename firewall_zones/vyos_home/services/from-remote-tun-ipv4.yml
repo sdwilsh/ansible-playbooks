@@ -84,3 +84,12 @@
   protocol: udp
   state:
     new: true
+- action: accept
+  description: Allow LG Git SSH Traffic
+  destination:
+    group:
+      address_group: LG-GIT-SSH-v4
+      port_group: LG-GIT-SSH
+  protocol: tcp
+  state:
+    new: true

@@ -233,6 +233,10 @@ vyos_firewall_global__group:
       description: The v4 address of the Jellyfin Server.
       members:
         - address: 10.11.1.1
+    - name: LG-GIT-SSH-v4
+      afi: ipv4
+      members:
+        - address: 10.11.1.70
     - name: LUTRON-v4
       description: Lutron Controller
       afi: ipv4
@@ -377,6 +381,9 @@ vyos_firewall_global__group:
       description: Ports used by the Jellyfin server
       members:
         - port: 7359
+    - name: LG-GIT-SSH
+      members:
+        - port: 2222
     - name: LUTRON
       description: Ports used to communicate with a Luton bridge
       members:

@@ -26,6 +26,10 @@ gitea:
       valueFrom:
         fieldRef:
           fieldPath: status.podIP
+    - name: GITEA__SERVER__SSH_LISTEN_HOST
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
   config:
     database:
       DB_TYPE: postgres
