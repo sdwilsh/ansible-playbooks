@@ -9,7 +9,6 @@ configMapGenerator:
   - name: authelia-configmap
     files:
       - configmap/authelia-config.yml
-      - configmap/authelia-users.yml
 images:
   - name: quay.io/opstree/redis-sentinel
     newTag: v7.2.3
