@@ -62,6 +62,12 @@ access_control:
       networks:
         - home
       policy: one_factor
+    - domain: lg-git.tswn.us
+      policy: two_factor
+      subject:
+        - group:lg-git
+    - domain: lg-git.tswn.us
+      policy: deny
     - domain: "*.tswn.us"
       policy: two_factor
 
