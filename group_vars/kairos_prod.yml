@@ -18,7 +18,7 @@ secrets:
     stringData:
       # Path in lookup is relative to play that runs this.
       authelia-users.yml: |-
-          "{{ lookup('file', '../../secrets/kairos_prod/traefik/authelia-users.yml') }}"
+          {{ lookup('file', '../../secrets/kairos_prod/traefik/authelia-users.yml') }}
       identity_providers_oidc_hmac_secret: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           61316337343162623864393463663430643239623430663364373933333865326161613664643937
