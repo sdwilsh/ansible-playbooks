@@ -2,16 +2,25 @@
 users:
   adelous:
     disabled: false
-    displayname: '{{ secret "/secrets/authelia/user/adelous/displayname" }}'
-    email: '{{ secret "/secrets/authelia/user/adelous/email" }}'
-    password: '{{ secret "/secrets/authelia/user/adelous/password" }}'
+    displayname: |
+      {{- fileContent  "/secrets/authelia/user/adelous/displayname" }}
+    email: |
+      {{- fileContent "/secrets/authelia/user/adelous/email" }}
+    password: |
+      {{- fileContent "/secrets/authelia/user/adelous/password" }}
   gwbraga:
     disabled: false
-    displayname: '{{ secret "/secrets/authelia/user/gwbraga/displayname" }}'
-    email: '{{ secret "/secrets/authelia/user/gwbraga/email" }}'
-    password: '{{ secret "/secrets/authelia/user/gwbraga/password" }}'
+    displayname: |
+      {{- fileContent  "/secrets/authelia/user/gwbraga/displayname" }}
+    email: |
+      {{- fileContent "/secrets/authelia/user/gwbraga/email" }}
+    password: |
+      {{- fileContent "/secrets/authelia/user/gwbraga/password" }}
   sdwilsh:
     disabled: false
-    displayname: '{{ secret "/secrets/authelia/user/sdwilsh/displayname" }}'
-    email: '{{ secret "/secrets/authelia/user/sdwilsh/email" }}'
-    password: '{{ secret "/secrets/authelia/user/sdwilsh/password" }}'
+    displayname: |
+      {{- fileContent  "/secrets/authelia/user/sdwilsh/displayname" }}
+    email: |
+      {{- fileContent "/secrets/authelia/user/sdwilsh/email" }}
+    password: |
+      {{- fileContent "/secrets/authelia/user/sdwilsh/password" }}
