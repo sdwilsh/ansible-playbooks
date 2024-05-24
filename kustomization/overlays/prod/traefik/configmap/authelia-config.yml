@@ -5,7 +5,7 @@ authentication_backend:
     # Not compatible with readonly files
     disable: true
   file:
-    path: /config/prod/authelia-users.yml
+    path: /secrets/authelia/users/authelia-users.yml
     watch: true
 
 # https://www.authelia.com/configuration/security/access-control/
