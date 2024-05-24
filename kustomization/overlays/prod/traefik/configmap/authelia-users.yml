@@ -1,5 +1,10 @@
 ---
 users:
+  Adelous:
+    disabled: false
+    displayname: Travis
+    email: ktcord@gmail.com
+    password: $argon2id$v=19$m=65536,t=3,p=4$H8LcK+cAcyp9Ao0v5hDdzw$4+yn3ckYCuZGvcMinvBRIidOj50u7fodpoVbnXdZZyw
   gwbraga:
     disabled: false
     displayname: Gabi
@@ -10,8 +15,3 @@ users:
     displayname: Shawn
     email: sdwilsh@pm.me
     password: $argon2id$v=19$m=65536,t=3,p=4$d+0GxNVFTe3vv38Ic4Ssrw$N7MNzSrpEIpMDsQqk8Rxy8ellmYZRUVCNu02svY6pf8
-  Adelous:
-    disabled: false
-    displayname: Travis
-    email: ktcord@gmail.com
-    password: $argon2id$v=19$m=65536,t=3,p=4$H8LcK+cAcyp9Ao0v5hDdzw$4+yn3ckYCuZGvcMinvBRIidOj50u7fodpoVbnXdZZyw
