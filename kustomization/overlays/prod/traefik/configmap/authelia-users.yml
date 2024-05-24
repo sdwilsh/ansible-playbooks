@@ -1,26 +1,17 @@
 ---
 users:
-  adelous:
-    disabled: false
-    displayname: |
-      {{- fileContent  "/secrets/authelia/user/adelous/displayname" }}
-    email: |
-      {{- fileContent "/secrets/authelia/user/adelous/email" }}
-    password: |
-      {{- fileContent "/secrets/authelia/user/adelous/password" }}
   gwbraga:
     disabled: false
-    displayname: |
-      {{- fileContent  "/secrets/authelia/user/gwbraga/displayname" }}
-    email: |
-      {{- fileContent "/secrets/authelia/user/gwbraga/email" }}
-    password: |
-      {{- fileContent "/secrets/authelia/user/gwbraga/password" }}
+    displayname: Gabi
+    email: gwbraga@gmail.com
+    password: $argon2id$v=19$m=65536,t=3,p=4$i+Kwkz4n6H71MvCR9aox+Q$aMgqPVxQBjt25tUKLGYSAr6Zymp+Rs9ow27ESSdkdYg
   sdwilsh:
     disabled: false
-    displayname: |
-      {{- fileContent  "/secrets/authelia/user/sdwilsh/displayname" }}
-    email: |
-      {{- fileContent "/secrets/authelia/user/sdwilsh/email" }}
-    password: |
-      {{- fileContent "/secrets/authelia/user/sdwilsh/password" }}
+    displayname: Shawn
+    email: sdwilsh@pm.me
+    password: $argon2id$v=19$m=65536,t=3,p=4$d+0GxNVFTe3vv38Ic4Ssrw$N7MNzSrpEIpMDsQqk8Rxy8ellmYZRUVCNu02svY6pf8
+  Adelous:
+    disabled: false
+    displayname: Travis
+    email: ktcord@gmail.com
+    password: $argon2id$v=19$m=65536,t=3,p=4$H8LcK+cAcyp9Ao0v5hDdzw$4+yn3ckYCuZGvcMinvBRIidOj50u7fodpoVbnXdZZyw
