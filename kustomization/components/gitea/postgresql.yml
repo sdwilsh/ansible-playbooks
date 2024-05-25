@@ -8,7 +8,7 @@ spec:
     size: 10Gi
     storageClass: longhorn-encrypted-replicated-database
   numberOfInstances: 2
-  podPriorityClassName: application-infra
+  podPriorityClassName: critical-application-infra
   postgresql:
     version: "16"
   preparedDatabases:

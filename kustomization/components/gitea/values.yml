@@ -46,6 +46,8 @@ postgresql:
 postgresql-ha:
   enabled: false
 
+priorityClassName: critical-application
+
 redis-cluster:
   enabled: false
 
