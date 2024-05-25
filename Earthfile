@@ -1,6 +1,10 @@
 VERSION 0.7
 FROM alpine
 
+#
+# Depedency Targets
+#
+
 helm:
     # renovate: datasource=github-releases depName=helm/helm
     ARG HELM_VERSION=v3.15.1
@@ -10,6 +14,10 @@ helm:
     RUN tar -xvzf helm-$HELM_VERSION-$TARGETOS-$TARGETARCH.tar.gz
     RUN mv $TARGETOS-$TARGETARCH/helm /usr/local/bin/
     SAVE ARTIFACT /usr/local/bin/helm /binary
+
+#
+# Workflows
+#
 
 kustomize-build:
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
