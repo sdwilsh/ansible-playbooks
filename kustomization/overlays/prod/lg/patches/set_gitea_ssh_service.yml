@@ -5,6 +5,7 @@ metadata:
   name: this-is-ignored-but-is-required
 spec:
   clusterIP: null
+  externalTrafficPolicy: Local
   loadBalancerIP: 10.11.1.70
   ports:
     - name: ssh
