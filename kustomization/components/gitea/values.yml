@@ -1,15 +1,4 @@
 ---
-redis-cluster:
-  enabled: false
-postgresql:
-  enabled: false
-postgresql-ha:
-  enabled: false
-
-persistence:
-  enabled: true
-  storageClass: longhorn-encrypted
-
 gitea:
   additionalConfigFromEnvs:
     - name: GITEA__DATABASE__PASSWD
@@ -46,3 +35,16 @@ gitea:
       REPO_INDEXER_ENABLED: true
   image:
     rootless: true
+
+persistence:
+  enabled: true
+  storageClass: longhorn-encrypted
+
+postgresql:
+  enabled: false
+
+postgresql-ha:
+  enabled: false
+
+redis-cluster:
+  enabled: false
