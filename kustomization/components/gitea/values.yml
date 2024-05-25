@@ -48,3 +48,8 @@ postgresql-ha:
 
 redis-cluster:
   enabled: false
+
+service:
+  ssh:
+    externalTrafficPolicy: Local
+    type: LoadBalancer
