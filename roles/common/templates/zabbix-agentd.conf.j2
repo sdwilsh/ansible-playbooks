@@ -1,8 +1,0 @@
-# {{ ansible_managed }}
-
-Hostname={{ inventory_hostname }}
-Include={{ common__etc_dir }}/zabbix/zabbix_agent.d/*.conf
-LogType=file
-LogFile=/var/log/zabbix/zabbix-agent.log
-Server=server.zabbix.hogs.tswn.us
-ServerActive=server.zabbix.hogs.tswn.us

@@ -19,19 +19,3 @@
     name: "systemd-resolved"
     state: "restarted"
   become: yes
-
-- name: "restart zabbix-agent with systemd"
-  ansible.builtin.systemd:
-    name: "zabbix-agent"
-    state: "restarted"
-  become: yes
-  listen: "restart zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu' and ansible_architecture == 'armv7l'"
-
-- name: "restart zabbix-agent2 with systemd"
-  ansible.builtin.systemd:
-    name: "zabbix-agent2"
-    state: "restarted"
-  become: yes
-  listen: "restart zabbix-agent"
-  when: "ansible_distribution == 'Ubuntu' and (ansible_architecture == 'x86_64' or ansible_architecture == 'aarch64')"

@@ -34,6 +34,3 @@ common__etc_dir: "/etc"
 common__ntp_pool: "pool.ntp.hogs.tswn.us"
 # If the machine should be a ntp server or not.
 common__be_ntp_server: no
-
-# If Zabbix should be setup and managed.
-common__zabbix_enabled: no
