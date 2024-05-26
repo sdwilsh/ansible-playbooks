@@ -3,6 +3,7 @@ fish_add_path ~/.cargo/bin
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
+    set -gx EDITOR vim
     starship init fish | source
     fish_vi_key_bindings
     jj util completion fish | source
