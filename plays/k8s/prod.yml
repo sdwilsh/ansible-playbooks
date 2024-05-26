@@ -17,7 +17,7 @@
         loop_var: secret
     - name: Create secret
       kubernetes.core.k8s:
-        apply: yes
+        apply: true
         context: "{{ cluster }}"
         resource_definition:
           apiVersion: v1

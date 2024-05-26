@@ -16,7 +16,7 @@
   ansible.builtin.apt_repository:
     repo: "ppa:ansible/ansible"
     state: "present"
-  become: yes
+  become: true
   when: ansible_distribution == "Ubuntu"
 - name: "Ensure ansible is installed"
   ansible.builtin.package:
@@ -27,7 +27,7 @@
     extra_args: --user
     name: "{{ item }}"
     state: latest
-  become: yes
+  become: true
   become_user: ansible
   loop:
     - ara
@@ -36,7 +36,7 @@
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
-    append: yes
+    append: true
     name: "ansible"
     groups:
       - "srcs"
@@ -44,11 +44,11 @@
   ansible.builtin.git:
     repo: "https://github.com/sdwilsh/ansible-playbooks.git"
     dest: "/src/ansible-playbooks"
-    update: no
+    update: false
 - name: "Ensure /src/ansible-playbooks is owned by ansible"
   ansible.builtin.file:
     state: "directory"
-    recurse: yes
+    recurse: true
     path: "/src/ansible-playbooks"
     owner: "ansible"
     group: "ansible"
@@ -68,7 +68,7 @@
     owner: "ansible"
     path: "/var/log/ansible.log"
     state: "touch"
-  changed_when: no
+  changed_when: false
 - name: "Install logrotate conf for ansible logs"
   when: ansible_os_family == "Debian"
   ansible.builtin.template:
@@ -80,14 +80,14 @@
 - name: Set environment in cron file for ARA API Client
   ansible.builtin.cron:
     name: "ARA_API_CLIENT"
-    env: yes
+    env: true
     job: "http"
     user: "ansible"
     state: present
 - name: Set environment in cron file for ARA API Client
   ansible.builtin.cron:
     name: "ARA_API_SERVER"
-    env: yes
+    env: true
     job: "https://ara.hogs.tswn.us"
     user: "ansible"
     state: present

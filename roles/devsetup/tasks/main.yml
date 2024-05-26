@@ -4,18 +4,18 @@
   ansible.builtin.apt_repository:
     repo: "{{ item }}"
     state: present
-  become: yes
+  become: true
   loop:
     - ppa:fish-shell/release-3
 - name: Update Apt Cache
   ansible.builtin.apt:
-    update_cache: yes
-  become: yes
+    update_cache: true
+  become: true
 - name: Install Required Packages
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
-  become: yes
+  become: true
   loop:
     - fish
     - zsh
@@ -24,7 +24,7 @@
     name: sdwilsh
     gid: 1000
     state: present
-  become: yes
+  become: true
 - name: Create sdwilsh user
   ansible.builtin.user:
     group: sdwilsh
@@ -42,7 +42,7 @@
     shell: /usr/bin/fish
     state: present
     uid: 1000
-  become: yes
+  become: true
 - name: Download & Install Software
   ansible.builtin.include_tasks:
     file: download.yml

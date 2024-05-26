@@ -14,7 +14,7 @@
   ansible.builtin.template:
     src: "hosts.j2"
     dest: "/etc/hosts"
-  become: yes
+  become: true
   when: common__ip_addresses | length > 0
 
 # Platform-specific stuff

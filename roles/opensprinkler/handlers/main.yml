@@ -13,7 +13,7 @@
   ansible.builtin.copy:
     dest: "{{ opensprinkler_user.home }}/ospi"
     mode: "u=rwx,g=rx,o=rx"
-    remote_src: yes
+    remote_src: true
     src: "/src/OpenSprinkler-Firmware/OpenSprinkler"
   notify: "restart opensprinkler"
 - name: "restart opensprinkler"

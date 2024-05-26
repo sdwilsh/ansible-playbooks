@@ -8,7 +8,7 @@ bind_acls:
       - "10.10.0.4"
 bind_allow_query:
   - "any"
-bind_dnssec_enable: no
+bind_dnssec_enable: false
 bind_dnssec_validation: auto
 bind_listen_ipv4:
   - "any"

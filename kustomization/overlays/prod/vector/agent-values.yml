@@ -5,9 +5,9 @@ role: Agent
 customConfig:
   # API is enabled for the liveness probe.
   api:
-    enabled: yes
+    enabled: true
     address: 127.0.0.1:8686
-    playground: no
+    playground: false
   data_dir: /vector-data-dir
   transforms:
     podname_to_nodename_host_metrics:

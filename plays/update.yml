@@ -1,7 +1,7 @@
 ---
 - name: Setup ansible_distribution-based Groups
   hosts: all:!kairos:!vyos:!pikvm
-  gather_facts: yes
+  gather_facts: true
   gather_subset:
     - "!all"
     - "!min"
@@ -11,31 +11,31 @@
       ansible.builtin.add_host:
         name: "{{ item }}"
         group: "{{ hostvars[item]['ansible_facts']['distribution'] }}"
-      changed_when: no
+      changed_when: false
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
 
 - name: Perform Updates for PiKVM Hosts
   hosts: pikvm
-  gather_facts: no
+  gather_facts: false
   order: sorted
   pre_tasks:
     - name: Mount the filesystem as rw
       ansible.builtin.raw: rw
-      changed_when: no
+      changed_when: false
       when: "'pikvm' in group_names"
   tasks:
     - name: Update with pikvm-update
       ansible.builtin.shell:
         cmd: pikvm-update --no-reboot
-      become: yes
+      become: true
       failed_when: pikvm_update.rc not in [0, 100]
       register: pikvm_update
     - name: Schedule Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
         group: ToReboot
-      changed_when: no
+      changed_when: false
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].pikvm_update.rc == 100
@@ -46,18 +46,18 @@
 
 - name: Perform Updates for Ubuntu hosts
   hosts: Ubuntu # ansible_disbrution == Ubuntu
-  gather_facts: no
+  gather_facts: false
   order: "sorted"
   tasks:
     - name: "Update packages with apt"
       ansible.builtin.apt:
-        autoclean: yes
-        autoremove: yes
+        autoclean: true
+        autoremove: true
         name: "*"
         state: "latest"
-        update_cache: yes
+        update_cache: true
       async: 3600 # 60 minutes, mostly becuase a Pi 2 is slow.
-      become: yes
+      become: true
       poll: 5
     - name: Determine if a reboot is required
       ansible.builtin.stat:
@@ -70,19 +70,19 @@
       ansible.builtin.add_host:
         name: "{{ item }}"
         group: ToReboot
-      changed_when: no
+      changed_when: false
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
 
 - name: Reboot hosts that need to be rebooted
   hosts: ToReboot
-  gather_facts: no
+  gather_facts: false
   order: sorted
   pre_tasks:
     - name: Mount the filesystem as rw
       ansible.builtin.raw: rw
-      changed_when: no
+      changed_when: false
       when: "'pikvm' in group_names"
   serial: 1
   tasks:
@@ -91,4 +91,4 @@
         msg: Reboot to apply updates initiated by Ansible
         pre_reboot_delay: 60
         test_command: "{{ reboot_test_command }}"
-      become: yes
+      become: true

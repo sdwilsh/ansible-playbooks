@@ -6,7 +6,7 @@
     mode: u+rw-x,o-rwx,g-rwx
     owner: sdwilsh
     group: sdwilsh
-  become: yes
+  become: true
 - name: Set up zsh config
   ansible.builtin.template:
     src: zshrc.j2
@@ -14,7 +14,7 @@
     mode: u+rw-x,o-rwx,g-rwx
     owner: sdwilsh
     group: sdwilsh
-  become: yes
+  become: true
 - name: Set up zsh environment
   ansible.builtin.template:
     src: zshenv.j2
@@ -22,4 +22,4 @@
     mode: u+rw-x,o-rwx,g-rwx
     owner: sdwilsh
     group: sdwilsh
-  become: yes
+  become: true

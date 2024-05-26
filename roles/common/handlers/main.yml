@@ -4,13 +4,13 @@
   ansible.builtin.reboot:
     pre_reboot_delay: 60
     test_command: "{{ reboot_test_command }}"
-  become: yes
+  become: true
   listen: "reboot"
 
 - name: "restart networking interfaces"
   ansible.builtin.command:
     cmd: "bash -c 'ifdown --force {{ interfaces | join(' ') }}; sleep 1; ifup {{ interfaces | join(' ') }}'"
-  become: yes
+  become: true
   vars:
     interfaces: "{{ [ ansible_default_ipv4.interface ] + common__additional_ethernet_interfaces | default([]) | map(attribute='name') }}"
 
@@ -18,4 +18,4 @@
   ansible.builtin.systemd:
     name: "systemd-resolved"
     state: "restarted"
-  become: yes
+  become: true

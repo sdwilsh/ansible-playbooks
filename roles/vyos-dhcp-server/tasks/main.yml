@@ -3,7 +3,7 @@
 - name: Setup DHCP
   vyos.vyos.vyos_config:
     src: dhcp-server_config.j2
-    save: yes
+    save: true
 - name: Setup DHCP DNS Servers
   vyos.vyos.vyos_config:
     lines:

@@ -5,7 +5,7 @@
   ansible.builtin.group:
     name: "spi"
     state: "present"
-    system: yes
+    system: true
 - name: "Setup udve rules for spi"
   ansible.builtin.copy:
     content: |
@@ -32,7 +32,7 @@
       - "srcs"
     name: "opensprinkler"
     state: "present"
-    system: yes
+    system: true
   notify: "restart opensprinkler"
   register: opensprinkler_user
 - name: Ensure dependencies are installed
@@ -52,13 +52,13 @@
     group: "opensprinkler"
     owner: "opensprinkler"
     path: "/src/OpenSprinkler-Firmware"
-    recurse: yes
+    recurse: true
     state: "directory"
 - name: Copy statup script
   ansible.builtin.copy:
     dest: "/etc/init.d/opensprinkler"
     mode: "u=rwx,g=rx,o=rx"
-    remote_src: yes
+    remote_src: true
     src: "/src/OpenSprinkler-Firmware/OpenSprinkler.launch"
   notify: "restart opensprinkler"
   when: firmware.changed
@@ -87,4 +87,4 @@
 - name: Ensure service is started on boot
   ansible.builtin.service:
     name: "opensprinkler"
-    enabled: yes
+    enabled: true

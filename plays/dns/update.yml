@@ -13,7 +13,7 @@
       ansible.builtin.shell:
         chdir: "{{ root_dir }}"
         cmd: ansible-config dump | grep DEFAULT_ROLES_PATH | egrep -o "\[.*"
-      changed_when: no
+      changed_when: false
       register: output
     - ansible.builtin.set_fact:
         ansible_all_ipv4_addresses:
@@ -39,7 +39,7 @@
     - name: Create a new serial number, which is based on UTC UNIX time
       ansible.builtin.command:
         cmd: date -u +%s
-      changed_when: no
+      changed_when: false
       register: timestamp
 
     # Now we are all setup to run some of the tasks to generate things!

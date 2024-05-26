@@ -17,7 +17,7 @@ vyos__wan_centurylink_password: !vault |
 vyos_firewall__zones:
   - name: LOCAL
     description: "{{ ansible_managed }}"
-    local-zone: yes
+    local-zone: true
   - name: TRANSIT
     description: "Transit traffic beween local routers ({{ ansible_managed }})"
     interfaces:

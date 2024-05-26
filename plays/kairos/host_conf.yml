@@ -4,7 +4,7 @@
   vars_prompt:
     - name: host
       prompt: What is the innventory hostname to generate a host configuration for?
-      private: no
+      private: false
   tasks:
     - name: Sanity Check
       ansible.builtin.assert:

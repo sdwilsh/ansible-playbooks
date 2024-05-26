@@ -1,6 +1,6 @@
 ---
 birdseye:
-  enabled: yes
+  enabled: true
   mode: continuous
 cameras:
   Front_Porch:
@@ -68,8 +68,8 @@ objects:
     - dog
     - person
 record:
-  enabled: yes
+  enabled: true
   events:
     pre_capture: 10
 snapshots:
-  enabled: yes
+  enabled: true

@@ -33,7 +33,7 @@ vyos_firewall__zones:
     interfaces:
       - eth1.131
   - name: LOCAL
-    local-zone: True
+    local-zone: true
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:

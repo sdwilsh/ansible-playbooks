@@ -2,11 +2,11 @@
 # tasks file for docker-networks
 - name: "Create MAN network"
   community.docker.docker_network:
-    attachable: yes
+    attachable: true
     driver: "macvlan"
     driver_options:
       parent: "{{ docker_networks__parent_interface }}.10"
-    enable_ipv6: yes
+    enable_ipv6: true
     ipam_driver: "default"
     ipam_config:
       - subnet: "10.10.0.0/24"
@@ -22,11 +22,11 @@
     - common__additional_ethernet_interfaces | selectattr("name", "match", docker_networks__parent_interface + ".10") | list | length > 0
 - name: "Create HOME network"
   community.docker.docker_network:
-    attachable: yes
+    attachable: true
     driver: "macvlan"
     driver_options:
       parent: "{{ docker_networks__parent_interface }}.117"
-    enable_ipv6: yes
+    enable_ipv6: true
     ipam_driver: "default"
     ipam_config:
       - subnet: "10.117.0.0/23"

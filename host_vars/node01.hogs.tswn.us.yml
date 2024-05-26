@@ -6,11 +6,11 @@ common__interfaces:
       name: bond0
       slaves:
         - mac: c8:7f:54:93:57:58
-          primary: yes
+          primary: true
         - mac: 6c:4b:90:62:87:98
 
 
 common__ip_addresses:
   - 10.11.0.101/23
 
-k3s_cluster_init: yes
+k3s_cluster_init: true

@@ -166,7 +166,7 @@ vyos_firewall__zones:
       - "{{ vyos__lan_interface }}.117"
   - name: "LOCAL"
     description: "{{ ansible_managed }}"
-    local-zone: yes
+    local-zone: true
   - name: "REMOTE-TUN"
     interfaces:
       - "wg0"

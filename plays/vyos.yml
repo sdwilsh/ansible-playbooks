@@ -53,25 +53,25 @@
     - name: Set global firewall settings
       vyos.vyos.vyos_firewall_global:
         config:
-          config_trap: no
+          config_trap: false
           group: "{{ vyos_firewall_global__group | default({}) }}"
-          log_martians: yes
+          log_martians: true
           ping:
-            all: yes
-            broadcast: no
+            all: true
+            broadcast: false
           route_redirects:
             - afi: ipv4
               icmp_redirects:
-                receive: no
-                send: yes
-              ip_src_route: no
+                receive: false
+                send: true
+              ip_src_route: false
             - afi: ipv6
               icmp_redirects:
-                receive: no
-                send: yes
-              ip_src_route: no
-          syn_cookies: yes
-          twa_hazards_protection: yes
+                receive: false
+                send: true
+              ip_src_route: false
+          syn_cookies: true
+          twa_hazards_protection: true
           validation: disable
         state: replaced
       tags:
@@ -145,7 +145,7 @@
           - "set service ssh listen-address {{ vyos__ssh_address_ipv4 }}"
           - set service ssh disable-password-authentication
           - set system login user ansible full-name 'ansible'
-        save: yes
+        save: true
       tags:
         - services
         - ssh
@@ -203,7 +203,7 @@
           - set policy access-list 150 rule 1000 destination any
           - set policy access-list 150 rule 1000 source any
           - set protocols ospf access-list 150 export 'connected'
-        save: yes
+        save: true
       tags:
         - ospf
 
@@ -224,7 +224,7 @@
           - set policy route SERVICES rule 20 set table 11
           - set policy route SERVICES rule 30 set table main
           - set interfaces ethernet eth1 vif 11 policy route 'SERVICES'
-        save: yes
+        save: true
       tags:
         - routing
 
@@ -271,7 +271,7 @@
           - "set service dhcp-server global-parameters 'option ubnt.unifi-address code 1 = ip-address;'"
           - "set service dhcp-server global-parameters 'class &quot;ubnt&quot; { match if substring (option vendor-class-identifier, 0, 4) = &quot;ubnt&quot;; option vendor-class-identifier &quot;ubnt&quot;; vendor-option-space ubnt; }'"
           - "set service dhcp-server shared-network-name MAN subnet 10.10.0.0/24 subnet-parameters 'option ubnt.unifi-address 10.11.1.65;'"
-        save: yes
+        save: true
       tags:
         - services
         - dhcp-server
@@ -284,7 +284,7 @@
           - "set service snmp trap-target 10.10.0.19 port 1162"
           - "set service snmp community hogs authorization ro"
           - "set service snmp community hogs client 10.10.0.18"
-        save: yes
+        save: true
       tags:
         - "services"
         - "snmp"
@@ -308,7 +308,7 @@
           - "set policy access-list 150 rule 1000 destination any"
           - "set policy access-list 150 rule 1000 source any"
           - "set protocols ospf access-list 150 export 'connected'"
-        save: yes
+        save: true
       tags:
         - "ospf"
 
@@ -318,7 +318,7 @@
           - "set protocols static table 10 route 0.0.0.0/0 next-hop 10.117.0.1"
           - "set policy route VPN rule 10 set table 10"
           - "set interfaces wireguard wg2 policy route 'VPN'"
-        save: yes
+        save: true
       tags:
         - "routing"
 

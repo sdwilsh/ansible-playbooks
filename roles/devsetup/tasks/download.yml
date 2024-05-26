@@ -16,7 +16,7 @@
 - name: "Consume {{ item.executable }} {{ item.version }} sha256"
   ansible.builtin.slurp:
     src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.sha256"
-  changed_when: no
+  changed_when: false
   register: sha256
   when: "'sha256' in item"
 - name: "Fetch {{ item.executable }} {{ item.version }} archive"
@@ -33,7 +33,7 @@
     dest: ~sdwilsh/.local/bin/
     group: sdwilsh
     owner: sdwilsh
-    remote_src: yes
+    remote_src: true
     src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.tar.gz"
   when: "'targz' in item and fetch_archive.changed"
 - name: "Fetch {{ item.executable }} {{ item.version }} Executable"
@@ -57,6 +57,6 @@
     group: sdwilsh
     mode: u=rx,g=rx
     owner: sdwilsh
-    remote_src: yes
+    remote_src: true
     src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}"
   when: "'bin' in item"

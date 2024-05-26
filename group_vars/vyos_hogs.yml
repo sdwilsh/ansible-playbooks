@@ -116,7 +116,7 @@ vyos_firewall__zones:
     interfaces:
       - eth1.66
   - name: LOCAL
-    local-zone: yes
+    local-zone: true
   - name: MAN
     interfaces:
       - eth1.10

@@ -12,12 +12,12 @@
     rule_sets_ipv4:
       - name: "DROP-AND-LOG-v4"
         description: "Fallback rule to automatically drop and log traffic on zone pairs that do not have rules defined."
-        enable_default_log: yes
+        enable_default_log: true
         default_action: "drop"
     rule_sets_ipv6:
       - name: "DROP-AND-LOG-v6"
         description: "Fallback rule to automatically drop and log traffic on zone pairs that do not have rules defined."
-        enable_default_log: yes
+        enable_default_log: true
         default_action: "drop"
   tags:
     - "firewall-rules"
@@ -54,7 +54,7 @@
     - "firewall-rules"
 - name: "Set Zone Policy"
   vyos.vyos.vyos_config:
-    save: yes
+    save: true
     src: "zone-policy.j2"
   tags:
     - "firewall-zones"

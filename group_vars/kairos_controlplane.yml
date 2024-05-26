@@ -1,7 +1,7 @@
 ---
 reboot_test_command: systemctl is-active --quiet k3s
 
-k3s_controlplane: yes
+k3s_controlplane: true
 k3s_s3:
   access_key: kairos-test
   secret_key: !vault |

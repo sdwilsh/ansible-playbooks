@@ -1,6 +1,6 @@
 ---
 - hosts: "all:!kairos:!pikvm:!vyos"
-  become: yes
+  become: true
   roles:
     - role: common-users
     - role: "common"
@@ -11,7 +11,7 @@
         - ansible-cron
     - role: "devsec.hardening.ssh_hardening"
       vars:
-        ssh_kerberos_supprt: no
+        ssh_kerberos_supprt: false
   tasks:
     - name: "Flush handlers from core roles"
       ansible.builtin.meta: "flush_handlers"

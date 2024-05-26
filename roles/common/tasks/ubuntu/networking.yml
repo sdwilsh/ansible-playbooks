@@ -26,7 +26,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: "present"
-  become: yes
+  become: true
   loop:
     - "bridge-utils"
     - "ifenslave"
@@ -38,7 +38,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: "present"
-  become: yes
+  become: true
   loop:
     - "linux-modules-extra-raspi"
   tags:
@@ -53,17 +53,17 @@
     mode: "u=r,g=r,o=r"
     owner: "root"
     group: "root"
-  become: yes
+  become: true
   tags:
     - "networking"
 - name: "Disable accepting of router advertisments on additional interfaces"
   ansible.posix.sysctl:
     name: "net.ipv6.conf.{{ item.name | replace('.', '/') }}.accept_ra"
     state: "present"
-    sysctl_set: yes
+    sysctl_set: true
     value: "0"
-    reload: no
-  become: yes
+    reload: false
+  become: true
   loop: "{{ common__additional_ethernet_interfaces }}"
   notify: "restart networking interfaces"
   tags:
@@ -77,21 +77,21 @@
     owner: "root"
     src: "network-interfaces.j2"
     validate: "ifup --no-act -i %s -a"
-  become: yes
+  become: true
   notify: "restart networking interfaces"
   tags:
     - "networking"
 - name: "Ensure networking is enabled and unmasked"
   ansible.builtin.systemd:
-    enabled: yes
-    masked: no
+    enabled: true
+    masked: false
     name: "networking"
   tags:
     - "networking"
 
 - name: "Ensure systemd-networkd[.socket] is stopped and disabled"
   ansible.builtin.systemd:
-    enabled: no
+    enabled: false
     name: "{{ item }}"
     state: "stopped"
   loop:

@@ -96,7 +96,7 @@ vyos_firewall_global__group:
 
 vyos_firewall__zones:
   - name: LOCAL
-    local-zone: yes
+    local-zone: true
   - name: MACCABEUS
     interfaces:
       - wg0

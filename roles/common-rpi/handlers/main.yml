@@ -4,12 +4,12 @@
 - name: "Rebuild cm4io-fan kernel module"
   ansible.builtin.shell:
     cmd: "dkms build -m cm4io-fan -v 0.1.1"
-  become: yes
+  become: true
   listen: "build cm4io-fan"
   notify: "install cm4io-fan"
 - name: "Install cm4io-fan kernel module"
   ansible.builtin.shell:
     cmd: "dkms install -m cm4io-fan -v 0.1.1"
-  become: yes
+  become: true
   listen: "install cm4io-fan"
   notify: "reboot"

@@ -504,17 +504,17 @@ _paperless_redis_password: !vault |
 
 _zwavejsui_config:
   gateway:
-    disableChangelog: yes
-    logEnabled: yes
+    disableChangelog: true
+    logEnabled: true
     logLevel: info
   mqtt:
-    disabled: yes
+    disabled: true
   ui:
-    darkMode: yes
+    darkMode: true
   zwave:
     port: /dev/zwave
     commandsTimeout: 30
-    logEnabled: yes
+    logEnabled: true
     logLevel: info
     securityKeys:
       S0_Legacy: !vault |
@@ -549,8 +549,8 @@ _zwavejsui_config:
           3963636239336161320a326563346538386663653463396366333633393761386531663962393561
           31613565356362376634356336386636626262356237363762313061333832393533643235376139
           3035646435623634326365353662363133663364633436623466
-    logToFile: no
-    serverEnabled: yes
-    enableStatistics: yes
+    logToFile: false
+    serverEnabled: true
+    enableStatistics: true
     serverPort: 3000
     disclaimerVersion: 1

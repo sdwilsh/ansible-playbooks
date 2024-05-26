@@ -3,7 +3,7 @@
 - name: Set timezone to US/Pacific
   community.general.timezone:
     name: US/Pacific
-  become: yes
+  become: true
   become_method: sudo
 - name: Ensure chrony is installed
   ansible.builtin.apt:
@@ -21,4 +21,4 @@
   ansible.builtin.systemd:
     name: "chrony"
     state: "{% if chrony_conf.changed %}restarted{% else %}started{% endif %}"
-    enabled: yes
+    enabled: true

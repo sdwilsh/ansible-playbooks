@@ -8,7 +8,7 @@
         dest: /oem/90_custom.yaml
         src: templates/config.yml.j2
         validate: kairos validate %s
-      become: yes
+      become: true
       register: config
       vars:
         host: "{{ inventory_hostname }}"
@@ -23,7 +23,7 @@
           ansible.builtin.file:
             path: "{{ item.path }}"
             state: absent
-          become: yes
+          become: true
           loop: "{{ collected_network_files.files }}"
           loop_control:
             label: "{{ item.path }}"
@@ -71,7 +71,7 @@
       ansible.builtin.add_host:
         name: "{{ item }}"
         group: ToReboot
-      changed_when: no
+      changed_when: false
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
@@ -81,7 +81,7 @@
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
-  gather_facts: no
+  gather_facts: false
   order: sorted
   serial:
     - 1 # This will always be the first control plane node.
@@ -101,7 +101,7 @@
         pre_reboot_delay: 60 # seconds
         connect_timeout: 240 # seconds
         test_command: "{{ reboot_test_command }}"
-      become: yes
+      become: true
     - name: Uncordon
       kubernetes.core.k8s_drain:
         name: "{{ inventory_hostname_short }}"

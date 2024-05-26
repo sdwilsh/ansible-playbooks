@@ -15,7 +15,7 @@ vyos_dns_forwarding__listen_addresses: []
 vyos_firewall__zones:
   - name: LOCAL
     description: "{{ ansible_managed }}"
-    local-zone: True
+    local-zone: true
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:

@@ -1,4 +1,4 @@
 ---
-ansible_cron__interval: no # Only run on reboot
+ansible_cron__interval: false # Only run on reboot
 
 common__ip_addresses: [] # Networking not managed by Ansible

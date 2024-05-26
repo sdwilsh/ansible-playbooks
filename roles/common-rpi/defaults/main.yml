@@ -1,9 +1,9 @@
 ---
 # defaults file for common-rpi
-common_rpi__audio: no
+common_rpi__audio: false
 common_rpi__cm4io_fan: {}
-common_rpi__cpu_i2c: no
-common_rpi__gpu_mem: no
+common_rpi__cpu_i2c: false
+common_rpi__gpu_mem: false
 common_rpi__dtoverlays: []
 common_rpi__i2c_rtc: ""
-common_rpi__overclock: no
+common_rpi__overclock: false
