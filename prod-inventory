@@ -19,7 +19,6 @@ kvm02.hogs.tswn.us ansible_host=10.10.0.51
 
 [rpi]
 harvest.hogs.tswn.us ansible_host=10.10.0.6
-loki.hogs.tswn.us ansible_host=10.117.0.23
 monitor.house.gem.hogs.tswn.us ansible_host=10.117.0.24
 
 [kairos_node]

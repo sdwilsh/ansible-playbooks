@@ -38,6 +38,5 @@
 - import_playbook: "plays/hosts/docker-ssd.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/harvest.hogs.tswn.us.yml"
 - import_playbook: plays/hosts/lighterthansome.hogs.tswn.us.yml
-- import_playbook: "plays/hosts/loki.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/monitor.house.gem.hogs.tswn.us.yml"
 - import_playbook: "plays/hosts/sdwilsh-dev.hogs.tswn.us.yml"

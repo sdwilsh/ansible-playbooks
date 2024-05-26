@@ -1,8 +1,0 @@
----
-- hosts: "loki.hogs.tswn.us"
-  become: yes
-  roles:
-    - role: "docker-zwavejs2mqtt"
-      tags:
-        - "docker"
-        - "zwavejs2mqtt"

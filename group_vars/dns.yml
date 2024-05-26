@@ -62,8 +62,6 @@ bind_zones:
         ip: 10.117.0.21
       - name: "luxor.hogs"
         ip: "10.117.0.22"
-      - name: "loki.hogs"
-        ip: "10.117.0.23"
       - name: "monitor.house.gem.hogs"
         ip: "10.117.0.24"
       - name: fdm01.hogs
