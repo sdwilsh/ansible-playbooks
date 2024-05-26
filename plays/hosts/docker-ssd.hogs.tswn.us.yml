@@ -1,9 +1,0 @@
----
-- hosts: "docker-ssd.hogs.tswn.us"
-  become: true
-  roles:
-    - role: nickjj.docker
-      tags: ["docker"]
-    - role: "factorio"
-      tags:
-        - "factorio"

@@ -42,7 +42,6 @@ kairos_worker
 kairos_prod
 
 [vms]
-docker-ssd.hogs.tswn.us ansible_host=10.117.0.30
 docker.hogs.tswn.us ansible_host=10.10.0.8
 
 [vyos_guest]
