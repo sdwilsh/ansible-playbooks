@@ -35,7 +35,7 @@
       vars:
         ssh_kerberos_supprt: false
         ssh_listen_to:
-          - "{{ wireguard__address | ansible.netcommon.ipaddr('address') }}"
+          - "{{ wireguard__address | ansible.utils.ipaddr('address') }}"
     - role: devsec.hardening.os_hardening
       become: true
   tasks:
