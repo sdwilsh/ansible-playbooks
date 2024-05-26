@@ -1,5 +1,6 @@
 ---
-- hosts: dev
-  become: yes
+- name: Play for dev hosts
+  hosts: dev
+  become: true
   roles:
     - role: devsetup

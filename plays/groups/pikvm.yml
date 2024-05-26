@@ -1,15 +1,15 @@
 - name: Mount the filesystem as rw
   hosts: pikvm
-  gather_facts: no
+  gather_facts: false
   tags:
     - always
   tasks:
     - name: Mount the filesystem as rw
       ansible.builtin.raw: rw
-      changed_when: no
-- name: Configure PiKVM Devices 
+      changed_when: false
+- name: Configure PiKVM Devices
   hosts: pikvm
-  gather_facts: yes
+  gather_facts: true
   tasks:
     - name: Deploy public keys to root user
       ansible.posix.authorized_key:
@@ -51,7 +51,7 @@
     - name: Enable snmpd
       ansible.builtin.systemd:
         name: snmpd
-        enabled: yes
+        enabled: true
         state: started
     - name: Disable ATX support
       ansible.builtin.copy:
@@ -74,7 +74,7 @@
         - hostname
     - name: Set UI Hostname
       ansible.builtin.lineinfile:
-        backrefs: yes
+        backrefs: true
         line: "\\1{{ inventory_hostname }}"
         path: /etc/kvmd/meta.yaml
         regexp: r"^(\s+host:\s+).*"gm
@@ -158,6 +158,6 @@
   post_tasks:
     - name: Mount the filesystem as ro
       ansible.builtin.raw: ro
-      changed_when: no
+      changed_when: false
       tags:
         - always

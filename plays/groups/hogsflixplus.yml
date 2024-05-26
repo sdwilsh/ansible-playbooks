@@ -1,8 +1,9 @@
 ---
-- hosts: hogsflixplus
+- name: Play for hogsflixplus hosts
+  hosts: hogsflixplus
   roles:
     - role: common-users
-    - become: yes
+    - become: true
       netplan_configuration:
         network:
           ethernets:
@@ -32,26 +33,26 @@
       role: mrlesmithjr.netplan
     - role: devsec.hardening.ssh_hardening
       vars:
-        ssh_kerberos_supprt: no
+        ssh_kerberos_supprt: false
         ssh_listen_to:
           - "{{ wireguard__address | ansible.netcommon.ipaddr('address') }}"
     - role: devsec.hardening.os_hardening
-      become: yes
+      become: true
   tasks:
     - name: Set Hostname
       ansible.builtin.hostname:
         name: "{{ inventory_hostname }}"
-      become: yes
+      become: true
     - name: Disable cloud-init
       ansible.builtin.copy:
         content: ""
         dest: /etc/cloud/cloud-init.disabled
-      become: yes
+      become: true
     - name: Install Packages
       ansible.builtin.apt:
         name: "{{ item }}"
         state: present
-      become: yes
+      become: true
       loop:
         - wireguard
         - cargo
@@ -60,22 +61,22 @@
         gid: 65533
         name: jellyfin
         state: present
-      become: yes
+      become: true
     - name: Setup jellyfin User
       ansible.builtin.user:
-        create_home: no
+        create_home: false
         group: jellyfin
         name: jellyfin
         state: present
         uid: 65533
-      become: yes
+      become: true
     - name: Ensure Configuration Directory Exists
       ansible.builtin.file:
         group: jellyfin
         owner: root
         path: /usr/local/etc/jellyfin-remote-proxy
         state: directory
-      become: yes
+      become: true
     - name: Configure jellyfin-remote-proxy
       ansible.builtin.copy:
         content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
@@ -90,21 +91,21 @@
             port: 80
           remote:
             address: 10.11.1.1
-      become: yes
+      become: true
     - name: Install jellyfin-remote-proxy
       community.general.cargo:
         name: jellyfin-remote-proxy
         path: /usr/local
         state: present
         version: 0.1.1
-      become: yes
+      become: true
     - name: Set proper permissions on jellyfin-remote-proxy
       ansible.builtin.file:
         group: root
         mode: u=rwx,g=rx,o=rx
         owner: root
         path: /usr/local/bin/jellyfin-remote-proxy
-      become: yes
+      become: true
     - name: Setup systemd
       ansible.builtin.copy:
         content: |
@@ -130,11 +131,11 @@
         mode: u=rw,g=r,o=r
         owner: root
         group: root
-      become: yes
+      become: true
     - name: Enable and Start Service
       ansible.builtin.systemd:
-        daemon_reload: yes
-        enabled: yes
+        daemon_reload: true
+        enabled: true
         name: jellyfin
         state: started
-      become: yes
+      become: true
