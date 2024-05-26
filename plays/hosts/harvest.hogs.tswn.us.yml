@@ -1,5 +1,6 @@
---- 
-- hosts: "harvest.hogs.tswn.us"
+---
+- name: Play for harvest.hogs.tswn.us
   become: true
+  hosts: harvest.hogs.tswn.us
   roles:
     - role: opensprinkler

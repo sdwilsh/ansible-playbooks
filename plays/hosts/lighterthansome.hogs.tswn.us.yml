@@ -1,6 +1,6 @@
 ---
-- hosts: lighterthansome.hogs.tswn.us
-  roles: []
+- name: Play for lighterthansome.hogs.tswn.us
+  hosts: lighterthansome.hogs.tswn.us
   tasks:
     # OneDrive
     - name: Add OpenSuSE Build Service repository
@@ -9,15 +9,15 @@
           ansible.builtin.get_url:
             dest: /etc/apt/keyrings/obs-onedrive.asc
             url: "https://download.opensuse.org/repositories/home:/npreining:/debian-ubuntu-onedrive/xUbuntu_{{ ansible_distribution_version }}/Release.key"
-          become: yes
+          become: true
         - name: Add the repo
           ansible.builtin.apt_repository:
             filename: onedrive.list
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/obs-onedrive.asc] https://download.opensuse.org/repositories/home:/npreining:/debian-ubuntu-onedrive/xUbuntu_{{ ansible_distribution_version }}/ ./"
             state: present
-          become: yes
+          become: true
     - name: Install OneDrive
       ansible.builtin.apt:
-        install_recommends: no
+        install_recommends: false
         name: onedrive
         state: present
