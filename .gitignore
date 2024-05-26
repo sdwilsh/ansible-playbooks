@@ -1,11 +1,8 @@
 .ansible_vault_password
 
-collections/
-
-# Roles that are managed by ansible-galaxy
-roles/bertvv.bind/
-roles/mrlesmithjr.netplan/
-roles/nickjj.docker/
+# Roles and Collections that are managed by ansible-galaxy.
+external_collections/
+external_roles/
 
 # Helm chart expansion by kustomize.  This isn't the suggested way, but home-prod isn't prod.
 kustomization/**/charts
