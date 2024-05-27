@@ -31,7 +31,7 @@ k3s:
 # See k3s-agent.service.j2
 k3s-agent:
   args:
-    - --flannel-iface=uplink
+    - --flannel-iface=services
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
 {% endif %}
@@ -85,7 +85,9 @@ stages:
         FallbackNTP: ""
     - files:
 {% if "common__interfaces" in hostvars[host] and "bonds" in hostvars[host].common__interfaces %}
+        # This host has multiple NICs with a bond for failover.
 {% for bond in hostvars[host].common__interfaces.bonds %}
+        # Setup {{ bond.name }}.
         - path: /etc/systemd/network/01-{{ bond.name }}.netdev
           permissions: 0644
           content: |
@@ -103,6 +105,24 @@ stages:
             Name={{ bond.name }}
             [Network]
             Bridge={{ bond.bridge_name }}
+        # Setup the bridge for the bond.
+        - path: /etc/systemd/network/02-{{ bond.bridge_name }}.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name={{ bond.bridge_name }}
+            Kind=bridge
+        # Setup Supported VLANs for {{ bond.bridge_name }}.
+        - path: /etc/systemd/network/01-{{ bond.bridge_name }}.network
+          permissions: 0644
+          content: |
+            [Match]
+            Name={{ bond.bridge_name }}
+            [Network]
+{% for network in hostvars[host].kairos_managed_networks %}
+            VLAN={{ network.name }}
+{% endfor %}
+        # Slaves for {{ bond.name }}.
 {% for slave in bond.slaves %}
         - path: /etc/systemd/network/05-slave-{{ slave.mac | replace(':', '-') }}-{{ bond.name }}.network
           permissions: 0644
@@ -115,14 +135,9 @@ stages:
             PrimarySlave=true
 {% endif %}
 {% endfor %}
-        - path: /etc/systemd/network/02-{{ bond.bridge_name }}.netdev
-          permissions: 0644
-          content: |
-            [NetDev]
-            Name={{ bond.bridge_name }}
-            Kind=bridge
 {% endfor %}
 {% else %}
+        # This host only has a single NIC.
         - path: /etc/systemd/network/02-uplink.netdev
           permissions: 0644
           content: |
@@ -130,20 +145,39 @@ stages:
             Name=uplink
             Kind=bridge
             MACAddress={{ (hostvars[host].common__interfaces.interfaces | first).mac }}
-        - path: /etc/systemd/network/01-en.network
+        # Setup Supported VLANs for the interface and link the bridge to it.
+        - path: /etc/systemd/network/01-uplink.network
           permissions: 0644
           content: |
             [Match]
             Name=en*
             [Network]
             Bridge=uplink
+{% for network in hostvars[host].kairos_managed_networks %}
+            VLAN={{ network.name }}
+{% endfor %}
 {% endif %}
-        - path: /etc/systemd/network/10-uplink.network
+        # VLAN setup for any managed networks.
+{% for network in hostvars[host].kairos_managed_networks %}
+        - path: /etc/systemd/network/10-{{ network.name }}.netdev
+          permissions: 0644
+          content: |
+            [NetDev]
+            Name={{ network.name }}
+            Kind=vlan
+            [VLAN]
+            Id={{ network.vlan_id }}
+        - path: /etc/systemd/network/10-{{ network.name }}.network
           permissions: 0644
           content: |
             [Match]
-            Name=uplink
+            Name={{ network.name }}
             [Network]
-            Address={{ hostvars[host].common__ip_addresses | first }}
-            DNS={{ hostvars[host].common__nameservers.addresses | join(' ') }}
-            Gateway={{ hostvars[host].common__gateway_v4_address }}
+{% if 'address' in network and network['address'] %}
+            Address={{ network.address }}
+{% endif %}
+{% if 'gateway' in network %}
+            DNS={{ network.gateway }}
+            Gateway={{ network.gateway }}
+{% endif %}
+{% endfor %}
