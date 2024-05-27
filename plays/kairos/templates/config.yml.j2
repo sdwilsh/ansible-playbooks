@@ -27,6 +27,8 @@ k3s:
     - --tls-san={{ tls_san }}
 {% endfor %}
 {% else %}
+# Note that Kairos does not update this after first-install.  The service unit is managed by ansible.
+# See k3s-agent.service.j2
 k3s-agent:
   args:
     - --flannel-iface=uplink

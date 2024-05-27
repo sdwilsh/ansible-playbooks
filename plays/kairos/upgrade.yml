@@ -28,6 +28,13 @@
           loop_control:
             label: "{{ item.path }}"
       when: config.changed
+    - name: Ensure k3s-agent service file is up-to-date
+      ansible.builtin.template:
+        dest: /etc/systemd/system/k3s-agent.service.d/override.conf
+        src: templates/k3s-agent.service.j2
+      become: true
+      register: k3s_agent_service
+      when: not k3s_controlplane
     - name: Read in current version
       ansible.builtin.slurp:
         src: /etc/os-release
@@ -66,7 +73,7 @@
       when: os_image_label != target_image_label
     - name: Note if the host needs to be rebooted
       ansible.builtin.set_fact:
-        reboot_required: "{{ os_image_label != target_image_label or config.changed }}"
+        reboot_required: "{{ os_image_label != target_image_label or config.changed or k3s_agent_service.changed }}"
     - name: Schedule Drain and Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
