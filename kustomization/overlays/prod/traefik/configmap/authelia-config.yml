@@ -108,18 +108,18 @@ session:
   cookies:
     - domain: tswn.us
       authelia_url: https://auth.tswn.us
-  # redis:
-  #   high_availability:
-  #     sentinel_name: myMaster
-  #     nodes:
-  #       - host: authelia-redis-sentinel-0.authelia-redis-sentinel-headless.traefik.svc.cluster.local
-  #         port: 26379
-  #       - host: authelia-redis-sentinel-1.authelia-redis-sentinel-headless.traefik.svc.cluster.local
-  #         port: 26379
-  #       - host: authelia-redis-sentinel-2.authelia-redis-sentinel-headless.traefik.svc.cluster.local
-  #         port: 26379
-  #   host: authelia-redis-replication.traefik.svc.cluster.local
-  #   port: 6379
+  redis:
+    high_availability:
+      sentinel_name: myMaster
+      nodes:
+        - host: authelia-redis-sentinel-0.authelia-redis-sentinel-headless.traefik.svc.cluster.local
+          port: 26379
+        - host: authelia-redis-sentinel-1.authelia-redis-sentinel-headless.traefik.svc.cluster.local
+          port: 26379
+        - host: authelia-redis-sentinel-2.authelia-redis-sentinel-headless.traefik.svc.cluster.local
+          port: 26379
+    host: authelia-redis-replication.traefik.svc.cluster.local
+    port: 6379
 
 # https://www.authelia.com/configuration/storage/introduction/
 storage: 
