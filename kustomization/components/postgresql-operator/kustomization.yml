@@ -13,10 +13,10 @@ patches:
       name: postgres-operator
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/zalando/postgres-operator/raw/v1.11.0/manifests/operatorconfiguration.crd.yaml
+  - https://github.com/zalando/postgres-operator/raw/v1.12.0/manifests/operatorconfiguration.crd.yaml
   # renovate: datasource=github-releases
-  - https://github.com/zalando/postgres-operator/raw/v1.11.0/manifests/postgresql-operator-default-configuration.yaml
+  - https://github.com/zalando/postgres-operator/raw/v1.12.0/manifests/postgresql-operator-default-configuration.yaml
   # renovate: datasource=github-releases
-  - https://github.com/zalando/postgres-operator/raw/v1.11.0/manifests/operator-service-account-rbac.yaml
+  - https://github.com/zalando/postgres-operator/raw/v1.12.0/manifests/operator-service-account-rbac.yaml
   # renovate: datasource=github-releases
-  - https://github.com/zalando/postgres-operator/raw/v1.11.0/manifests/postgres-operator.yaml
+  - https://github.com/zalando/postgres-operator/raw/v1.12.0/manifests/postgres-operator.yaml
