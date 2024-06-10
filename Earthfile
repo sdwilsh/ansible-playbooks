@@ -17,7 +17,7 @@ helm:
 
 tracked-files:
     # renovate: datasource=docker depName=alpine/git
-    ARG GIT_VERSION=2.45.1
+    ARG GIT_VERSION=2.45.2
     FROM alpine/git:$GIT_VERSION
     RUN mkdir local_files
     RUN mkdir tracked_files
