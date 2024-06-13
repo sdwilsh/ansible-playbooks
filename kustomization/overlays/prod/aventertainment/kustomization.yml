@@ -37,6 +37,10 @@ patches:
     target:
       kind: StatefulSet
       name: navidrome-statefulset
+  - path: patches/set_navidrome_service_ip.yml
+    target:
+      kind: Service
+      name: navidrome-svc
   - path: patches/set_tdarr_server_user_and_group.yml
     target:
       kind: StatefulSet
