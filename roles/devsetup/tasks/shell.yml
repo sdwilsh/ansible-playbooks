@@ -1,8 +1,8 @@
 ---
 - name: Set up fish config
   ansible.builtin.copy:
-    src: .config/fish
-    dest: ~sdwilsh/.config/fish
+    src: .config/fish/
+    dest: ~sdwilsh/.config/fish/
     mode: u+rw-x,o-rwx,g-rwx
     owner: sdwilsh
     group: sdwilsh
