@@ -4,9 +4,9 @@ kind: Component
 
 images:
   - name: ghcr.io/haveagitgat/tdarr
-    newTag: 2.19.01
+    newTag: 2.22.01
   - name: ghcr.io/haveagitgat/tdarr_node
-    newTag: 2.19.01
+    newTag: 2.22.01
 resources:
   - deployment.yml
   - service.yml
