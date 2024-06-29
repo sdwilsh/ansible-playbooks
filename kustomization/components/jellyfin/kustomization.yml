@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: alpine/socat
-    newTag: 1.7.4.4
+    newTag: 1.8.0.0
   - name: jellyfin/jellyfin
     newTag: 10.9.6
 resources:
