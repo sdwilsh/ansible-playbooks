@@ -218,6 +218,7 @@ bind_zones:
           - homeassistant-config.hogs
           - homeassistant.hogs
           - imap.hogs
+          - immich.hogs
           - jellyfin
           - lg-git
           - longhorn.hogs
