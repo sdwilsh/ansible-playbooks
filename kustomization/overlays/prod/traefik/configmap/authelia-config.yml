@@ -52,6 +52,7 @@ access_control:
       policy: bypass
       resources:
         - ^/.well-known/immich$
+        - ^/api/oauth/authorize$
         - ^/api/server-info/.*$
     - domain: jellyfin.tswn.us
       networks:
