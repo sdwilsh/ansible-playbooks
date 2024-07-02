@@ -75,6 +75,20 @@ identity_providers:
   oidc:
     clients:
       - authorization_policy: two_factor
+        client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG
+        client_name: Immitch
+        client_secret: $pbkdf2-sha512$310000$omxinbTJUu.5YlmzWZTyhw$n5isxHk/CeWL9EhtQppgnyUUBlGO64icMFj26ZGj4ekwnbg.tunfss9t4kRHOhWyOd.3EQnfJKFngXM8A/pqeQ
+        public: false
+        redirect_uris:
+          - app.immich:/
+          - https://immich.tswn.us/auth/login
+          - https://immich.tswn.us/auth/user-settings
+        scopes:
+          - email
+          - openid
+          - profile
+        userinfo_signed_response_alg: none
+      - authorization_policy: two_factor
         client_id: eAsie4x9acvgRmD.KnZHnHm0puL0J39Bsv8NBOSEyZcIQ-NYwH-YB1N.eiZJuCGl.10RCf~5
         client_name: LG Gitea
         client_secret: $pbkdf2-sha512$310000$0jkP5WESMf3CEhy/YWHW2A$BgqIFihKFIzWxsaoP.XSIYtIgsVHPy49EiYni3qQqczDYTJqd1arcfStrAjE/vQ9mSgZFaEeS.g2iJmp2KSAeg

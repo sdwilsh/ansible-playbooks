@@ -9,7 +9,7 @@ metadata:
   name: lg-ingress
 spec:
   rules:
-    - host: immich.hogs.tswn.us
+    - host: immich.tswn.us
       http:
         paths:
           - backend:
