@@ -46,6 +46,12 @@ access_control:
         - ^/hacsfiles/iconset.js$
         - ^/service_worker.js$
         - ^/static/.*$
+    - domain: immich.tswn.us
+      networks:
+        - home
+      policy: bypass
+      resources:
+        - ^/api/server-info/ping$
     - domain: jellyfin.tswn.us
       networks:
         - home
