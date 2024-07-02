@@ -53,6 +53,7 @@ access_control:
       resources:
         - ^/.well-known/immich$
         - ^/api/oauth/authorize$
+        - ^/api/oauth/callback$
         - ^/api/server-info/.*$
     - domain: jellyfin.tswn.us
       networks:
