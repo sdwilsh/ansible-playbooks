@@ -51,6 +51,7 @@ access_control:
         - home
       policy: bypass
       resources:
+        - ^/.well-known/immich$
         - ^/api/server-info/ping$
         - ^/server-info/.*$
     - domain: jellyfin.tswn.us
