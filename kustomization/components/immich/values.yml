@@ -3,8 +3,8 @@ env:
   DB_PASSWORD:
     valueFrom:
       secretKeyRef:
-        key: db_password
-        name: immich-secrets
+        key: admin_password
+        name: immich-postgresql-secrets
   TZ: America/Los_Angeles
 
 image:
@@ -20,6 +20,13 @@ immich:
 
 postgresql:
   enabled: true
+  global:
+    postgresql:
+      auth:
+        existingSecret: immich-postgresql-secrets
+        secretKeys:
+          adminPasswordKey: admin_password
+          userPasswordKey: user_password
 
 priorityClassName: application
 
