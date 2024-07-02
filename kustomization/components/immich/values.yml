@@ -3,7 +3,7 @@ env:
   DB_PASSWORD:
     valueFrom:
       secretKeyRef:
-        key: admin_password
+        key: user_password
         name: immich-postgresql-secrets
   TZ: America/Los_Angeles
 
