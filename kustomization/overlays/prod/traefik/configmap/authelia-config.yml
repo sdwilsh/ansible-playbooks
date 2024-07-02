@@ -52,6 +52,7 @@ access_control:
       policy: bypass
       resources:
         - ^/api/server-info/ping$
+        - ^/server-info/features$
     - domain: jellyfin.tswn.us
       networks:
         - home
