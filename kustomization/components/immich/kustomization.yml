@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+helmCharts:
+  - name: immich
+    version: 0.7.0
+    repo: https://immich-app.github.io/immich-charts
+    releaseName: immich
+    valuesFile: values.yml
+resources:
+  - persistentvolumeclaim.yml

@@ -1,0 +1,27 @@
+---
+env:
+  DB_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        key: db_password
+        name: immich-secrets
+  TZ: America/Los_Angeles
+
+image:
+  # renovate: datasource=github-releases depName=immich-app
+  tag: v1.106.4
+
+immich:
+  metrics:
+    enabled: true
+  persistence:
+    library:
+      existingClaim: immich-data-pvc
+
+postgresql:
+  enabled: true
+
+priorityClassName: application
+
+redis:
+  enabled: true

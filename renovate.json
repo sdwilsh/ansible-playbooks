@@ -19,6 +19,7 @@
         "esphome",
         "frigate",
         "gitea",
+        "immich",
         "jellyfin",
         "mosquitto",
         "navidrome",
@@ -138,7 +139,8 @@
         "^kustomization/.+/.+/.*values\\.yml$"
       ],
       "matchStrings": [
-        "image:\\n\\s+repository:\\s+(?<depName>.*?)\\n\\s+tag:\\s+(?<currentValue>.*?)\\n"
+        "image:\\n\\s+repository:\\s+(?<depName>.*?)\\n\\s+tag:\\s+(?<currentValue>.*?)\\n",
+        "'#\\srenovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s+tag:\\s(?<currentValue>.*?)\\n"
       ],
       "versioningTemplate": "docker"
     },

@@ -17,6 +17,7 @@ resources:
   - application/factorio-relic.yml
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
+  - application/immich.yml
   - application/kube-vip.yml
   - application/longhorn.yml
   - application/paperless.yml
