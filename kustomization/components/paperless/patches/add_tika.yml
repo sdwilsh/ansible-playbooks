@@ -13,6 +13,11 @@ spec:
             - --chromium-disable-javascript=true
             - --chromium-allow-list=file:///tmp/.*
           image: docker.io/gotenberg/gotenberg
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
           name: gotenberg
           resources:
             requests:
