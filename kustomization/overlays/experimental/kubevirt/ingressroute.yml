@@ -1,0 +1,21 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubevirt-ingressroute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cdi-image-upload.hogs.tswn.us`)
+      middlewares:
+        - name: forwardauth-authelia-middleware
+          namespace: traefik
+      services:
+        - kind: Service
+          name: cdi-uploadproxy
+          port: 443
+          scheme: https
+          serversTransport: insecure-skip-verify-serverstransport
+  tls: {}

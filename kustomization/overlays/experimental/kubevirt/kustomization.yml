@@ -11,5 +11,7 @@ namespace: kubevirt
 resources:
   - kubevirt.yml
   - cdi.yml
-  - ingress.yml
+  - ingressroute.yml
   - networkaddonsconfig.yml
+  - serverstransport.yml
+  - storageclass.yml
