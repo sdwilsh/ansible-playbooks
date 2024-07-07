@@ -213,6 +213,7 @@ bind_zones:
           - ara.hogs
           - argo-cd.hogs
           - auth
+          - cdi-image-upload.hogs
           - esphome.hogs
           - frigate.hogs
           - homeassistant-config.hogs
