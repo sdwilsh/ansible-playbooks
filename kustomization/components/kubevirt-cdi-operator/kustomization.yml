@@ -10,3 +10,5 @@ patches:
 resources:
   # renovate: datasource=github-releases
   - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.59.0/cdi-operator.yaml
+  # renovate: datasource=github-releases
+  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.59.0/cdi-cr.yaml
