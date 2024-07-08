@@ -1,0 +1,20 @@
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/k3s server \
+    --flannel-iface=services \
+    --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }} \
+    --node-name={{ inventory_hostname_short }} \
+{% if k3s_cluster_init | default(False) %}
+    --cluster-init \
+{% else %}
+    --server https://{{ hostvars[groups[k3s_controlplane_group] | first].inventory_hostname }}:6443 \
+{% endif %}
+    --cluster-cidr=172.16.0.0/16 \
+    --service-cidr=172.17.0.0/16 \
+    --disable=traefik,servicelb \
+    --disable-helm-controller \
+{% for tls_san in k3s_controlplane_san %}
+    --tls-san={{ tls_san }} \
+{% endfor %}
+    --kube-apiserver-arg=allow-privileged=true

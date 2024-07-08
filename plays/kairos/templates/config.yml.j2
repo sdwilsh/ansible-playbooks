@@ -10,8 +10,11 @@ users:
 {% endfor %}
 
 {% if hostvars[host].k3s_controlplane %}
+# Note that Kairos does not update this after first-install.  The service unit is managed by ansible.
+# See k3s.service.j2
 k3s:
   args:
+    - --flannel-iface=services
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
 {% if hostvars[host].k3s_cluster_init | default(False) %}
