@@ -5,6 +5,11 @@ kind: Component
 images:
   - name: ghcr.io/k8snetworkplumbingwg/multus-cni
     newTag: v4.0.2-thick
+patches:
+  - path: patches/update_volume_mounts_for_k3s.yml
+    target:
+      kind: DaemonSet
+      name: kube-multus-ds
 resources:
   # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/v4.0.2/deployments/multus-daemonset-thick.yml
