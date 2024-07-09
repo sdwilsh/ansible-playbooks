@@ -6,6 +6,11 @@ metadata:
 spec:
   template:
     spec:
+      containers:
+        - name: kube-multus
+          volumeMounts:
+            - name: cnibin
+              mountPath: /host/opt/cni/bin
       volumes:
         - name: cni
           hostPath:
