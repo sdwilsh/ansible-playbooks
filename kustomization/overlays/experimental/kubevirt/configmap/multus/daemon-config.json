@@ -1,5 +1,5 @@
 {
-    "binDir": "/host/opt/cni/bin",
+    "binDir": "/host/var/lib/rancher/k3s/data/current/bin",
     "chrootDir": "/hostroot",
     "clusterNetwork": "/host/etc/cni/net.d/10-flannel.conflist",
     "cniConfigDir": "/host/etc/cni/net.d",
@@ -12,7 +12,12 @@
     "multusNamespace": "kubevirt",
     "socketDir": "/host/run/multus/",
     "systemNamespaces": [
-        "kube-system"
+        "cert-manager",
+        "generic-device-plugin",
+        "kube-system",
+        "kube-vip",
+        "scratch",
+        "longhorn-system"
     ],
     "type": "multus"
 }

@@ -10,7 +10,7 @@ spec:
         - name: kube-multus
           volumeMounts:
             - name: cnibin
-              mountPath: /host/opt/cni/bin
+              mountPath: /host/var/lib/rancher/k3s/data/current/bin/
       volumes:
         - name: cni
           hostPath:
