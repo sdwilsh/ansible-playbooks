@@ -33,10 +33,7 @@ spec:
     homeassistant:
       defaultUsers: true
   sidecars:
-    - args:
-        - --config-dir
-        - /etc/vector/
-      image: timberio/vector:0.39.0-distroless-libc
+    - image: timberio/vector:0.39.0-distroless-libc
       name: vector
       securityContext:
         allowPrivilegeEscalation: false
