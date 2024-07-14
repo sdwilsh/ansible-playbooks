@@ -9,22 +9,10 @@ sinks:
   aggregator:
     address: aggregator.vector.svc.cluster.local:6000
     inputs:
-      - esphome_metrics
       - homeassistant_metrics
       - internal_metrics
     type: vector
 sources:
-  esphome_metrics:
-    auth:
-      strategy: basic
-      user: vector
-      password: ${ESPHOME_PASSWORD:?unset_esphome_password}
-    endpoints:
-      - http://living-bluetooth-proxy.hogs.tswn.us/metrics
-      - http://office-bluetooth-proxy.hogs.tswn.us/metrics
-    instance_tag: vector_instance
-    scrape_interval_secs: 300 # 5 minutes
-    type: prometheus_scrape
   homeassistant_metrics:
     auth:
       strategy: bearer
