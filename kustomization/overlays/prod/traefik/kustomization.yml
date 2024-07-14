@@ -9,6 +9,11 @@ configMapGenerator:
   - name: authelia-configmap
     files:
       - configmap/authelia-config.yml
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yaml
+    options:
+      disableNameSuffixHash: true
 images:
   - name: quay.io/opstree/redis-sentinel
     newTag: v7.2.3
