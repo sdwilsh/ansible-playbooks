@@ -19,6 +19,11 @@ configMapGenerator:
   - name: vector-metrics-scraper-config
     files:
       - configmap/vector/vector.yml
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yml
+    options:
+      disableNameSuffixHash: true
 images:
   - name: timberio/vector
     newTag: 0.39.0-distroless-libc

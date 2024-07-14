@@ -157,6 +157,18 @@
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\n\\s+- https://github\\.com/(?<depName>.*?)/raw/(?<currentValue>.*?)/"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "fileMatch": [
+        "^kustomization/.+/.+/postgresql\\.yml$",
+        "^kustomization/.+/.+/.+/postgresql\\.yml$"
+      ],
+      "matchStrings": [
+        "image:\\s+(?<depName>.*?):\\s+(?<currentValue>.*?)\\n"
+      ],
+      "versioningTemplate": "docker"
     }
   ]
 }
