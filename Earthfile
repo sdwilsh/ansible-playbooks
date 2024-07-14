@@ -7,7 +7,7 @@ FROM alpine
 
 helm:
     # renovate: datasource=github-releases depName=helm/helm
-    ARG HELM_VERSION=v3.15.2
+    ARG HELM_VERSION=v3.15.3
     ARG TARGETARCH
     ARG TARGETOS
     RUN wget https://get.helm.sh/helm-$HELM_VERSION-$TARGETOS-$TARGETARCH.tar.gz
