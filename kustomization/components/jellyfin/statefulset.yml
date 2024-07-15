@@ -72,7 +72,7 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 10Gi
+            storage: 20Gi
         storageClassName: jellyfin-cache-storageclass
     - metadata:
         name: jellyfin-config
