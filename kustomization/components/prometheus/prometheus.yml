@@ -17,6 +17,7 @@ spec:
   serviceMonitorSelector:
     matchLabels:
       app.kubernetes.io/name: vector
+  retention: 12w
   storage:
     volumeClaimTemplate:
       metadata:
