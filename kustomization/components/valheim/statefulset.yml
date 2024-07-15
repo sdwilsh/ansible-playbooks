@@ -102,7 +102,7 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 8Gi
+            storage: 20Gi
         storageClassName: longhorn-encrypted
     - metadata:
         labels:
@@ -118,7 +118,7 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 4Gi
+            storage: 10Gi
         storageClassName: longhorn-encrypted
     - metadata:
         name: valheim-steam
