@@ -4,6 +4,12 @@ kind: Kustomization
 
 components:
   - ../../../components/paperless
+configMapGenerator:
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yaml
+    options:
+      disableNameSuffixHash: true
 images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
     newTag: 2.11.0
