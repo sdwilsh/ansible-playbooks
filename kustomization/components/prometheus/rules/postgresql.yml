@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: postgresql-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: patroni.status
+      interval: 5m
+      rules:
+        - alert: postgres-not-running
+          annotations:
+            description: "Postgres not running in {{ $labels.name }}!"
+          expr: patroni_postgresql_running == 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: postgres-dead
+          annotations:
+            description: "Postgres not running in {{ $labels.name }}!"
+          expr: patroni_postgresql_running == 0
+          for: 15m
+          labels:
+            severity: page
