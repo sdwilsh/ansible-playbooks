@@ -162,11 +162,11 @@
       "customType": "regex",
       "datasourceTemplate": "docker",
       "fileMatch": [
-        "^kustomization/.+/.+/postgresql\\.yml$",
-        "^kustomization/.+/.+/.+/postgresql\\.yml$"
+        "^kustomization/components/.+/postgresql\\.yml$",
+        "^kustomization/overlays/.+/.+/postgresql\\.yml$"
       ],
       "matchStrings": [
-        "image:\\s+(?<depName>.*?):\\s+(?<currentValue>.*?)\\n"
+        "image:\\s+(?<depName>.*?):(?<currentValue>.*?)\\n"
       ],
       "versioningTemplate": "docker"
     }
