@@ -21,8 +21,6 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
-  clone:
-    cluster: paperless-pg
   teamId: paperless
   volume:
     size: 30Gi
