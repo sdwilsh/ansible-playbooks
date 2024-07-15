@@ -2,7 +2,7 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: paperless-pg 
+  name: paperless-16-pg
 spec:
   additionalVolumes:
     - mountPath: /etc/vector
@@ -21,14 +21,16 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
+  clone:
+    cluster: paperless-pg
   teamId: paperless
   volume:
-    size: 20Gi
-    storageClass: longhorn-encrypted
-  numberOfInstances: 2
+    size: 30Gi
+    storageClass: longhorn-encrypted-replicated-database
+  numberOfInstances: 3
   podPriorityClassName: critical-application-infra
   postgresql:
-    version: "15"
+    version: "16"
   preparedDatabases:
     paperless:
       defaultUsers: true
