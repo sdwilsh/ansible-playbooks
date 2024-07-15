@@ -32,6 +32,13 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "branch",
+      "matchPackageNames": [
+        "samba"
+      ]
+    },
+    {
       "matchPackageNames": [
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
