@@ -176,6 +176,18 @@
         "image:\\s+(?<depName>.*?):(?<currentValue>.*?)\\n"
       ],
       "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "prometheus/prometheus",
+      "fileMatch": [
+        "^kustomization/components/.+/prometheus\\.yml$",
+        "^kustomization/overlays/.+/.+/prometheus\\.yml$"
+      ],
+      "matchStrings": [
+        "version:\\s+(?<currentValue>v.*?)\\n"
+      ]
     }
   ]
 }
