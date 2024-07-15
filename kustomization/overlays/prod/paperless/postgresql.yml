@@ -23,7 +23,7 @@ spec:
         emptyDir: {}
   teamId: paperless
   volume:
-    size: 1Gi
+    size: 20Gi
     storageClass: longhorn-encrypted
   numberOfInstances: 2
   podPriorityClassName: critical-application-infra
