@@ -2,6 +2,12 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
+configMapGenerator:
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yaml
+    options:
+      disableNameSuffixHash: true
 resources:
   - cronjob.yml
   - deployment.yml
