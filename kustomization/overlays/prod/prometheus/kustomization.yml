@@ -7,6 +7,10 @@ components:
   - ../../../components/prometheus-operator
 namespace: prometheus
 patches:
+  - path: patches/set_alertmanager_configuration.yml
+    target:
+      kind: Alertmanager
+      name: alertmanager
   - path: patches/set_alertmanager_externalUrl.yml
     target:
       kind: Alertmanager
@@ -21,5 +25,6 @@ patches:
       name: prometheus
 resources:
   - namespace.yml
+  - alertmanagerconfig.yml
   - ingress.yml
   - servicemonitor.yml
