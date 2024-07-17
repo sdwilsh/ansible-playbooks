@@ -9,14 +9,14 @@ spec:
     - name: general.cpu_load
       interval: 5m
       rules:
-        - alert: utilization-high
+        - alert: cpu-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} cpu utilization!"
           expr: (100 * sum by (host)(host_load15) / sum by (host)(host_logical_cpus)) > 85
           for: 5m
           labels:
             severity: warning
-        - alert: utilization-dangerously-high
+        - alert: cpu-utilization-dangerously-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} cpu utilization!"
           expr: (100 * sum by (host)(host_load15) / sum by (host)(host_logical_cpus)) > 95

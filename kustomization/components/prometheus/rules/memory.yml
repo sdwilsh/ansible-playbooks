@@ -9,14 +9,14 @@ spec:
     - name: general.memory
       interval: 5m
       rules:
-        - alert: utilization-high
+        - alert: memory-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} memory used!"
           expr: (100 * host_memory_used_bytes / host_memory_total_bytes) > 90
           for: 5m
           labels:
             severity: warning
-        - alert: utilization-dangerously-high
+        - alert: memory-utilization-dangerously-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} memory used!"
           expr: (100 * host_memory_used_bytes / host_memory_total_bytes) > 98

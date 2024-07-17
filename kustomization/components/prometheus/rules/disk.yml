@@ -9,14 +9,14 @@ spec:
     - name: general.disk
       interval: 5m
       rules:
-        - alert: utilization-high
+        - alert: disk-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} disk used!"
           expr: (100 * host_filesystem_used_ratio{filesystem="ext4"}) > 85
           for: 5m
           labels:
             severity: warning
-        - alert: utilization-dangerously-high
+        - alert: disk-dangerously-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} disk used!"
           expr: (100 * host_filesystem_used_ratio{filesystem="ext4"}) > 95
