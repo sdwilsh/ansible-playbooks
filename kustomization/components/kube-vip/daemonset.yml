@@ -90,6 +90,10 @@ spec:
           value: "true"
         - name: vip_leaseduration
           value: "5"
+        - name: vip_nodename
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         - name: vip_renewdeadline
           value: "3"
         - name: vip_retryperiod
