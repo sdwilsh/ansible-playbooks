@@ -4,7 +4,13 @@ kind: Prometheus
 metadata:
   name: prometheus
 spec:
+  alerting:
+    alertmanagers:
+      - namespace: prometheus
+        name: alertmanager-operated
+        port: web
   priorityClassName: application
+  retention: 12w
   ruleSelector: {}
   securityContext:
     fsGroup: 65536
@@ -17,7 +23,6 @@ spec:
   serviceMonitorSelector:
     matchLabels:
       app.kubernetes.io/name: vector
-  retention: 12w
   storage:
     volumeClaimTemplate:
       metadata:

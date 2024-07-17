@@ -1,0 +1,7 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  externalUrl: https://prometheus.hogs.tswn.us/

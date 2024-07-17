@@ -1,0 +1,7 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  externalUrl: https://alertmanager.hogs.tswn.us/

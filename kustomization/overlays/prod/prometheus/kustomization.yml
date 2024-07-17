@@ -7,14 +7,19 @@ components:
   - ../../../components/prometheus-operator
 namespace: prometheus
 patches:
-  - path: patches/change_ingress_host.yml
+  - path: patches/set_alertmanager_externalUrl.yml
     target:
-      kind: Ingress
-      name: prometheus-ingress
+      kind: Alertmanager
+      name: alertmanager
   - path: patches/set_ingress_middleware.yml
     target:
       kind: Ingress
       name: prometheus-ingress
+  - path: patches/set_prometheus_externalUrl.yml
+    target:
+      kind: Prometheus
+      name: prometheus
 resources:
   - namespace.yml
+  - ingress.yml
   - servicemonitor.yml
