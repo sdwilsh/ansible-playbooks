@@ -1,4 +1,0 @@
----
-- op: add
-  path: /spec/rules/0/host
-  value: prometheus.hogs.tswn.us

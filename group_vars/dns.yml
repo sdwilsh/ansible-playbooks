@@ -210,6 +210,7 @@ bind_zones:
         ip: 10.11.1.64
         aliases:
           - factorio-relic-admin
+          - alertmanager.hogs
           - ara.hogs
           - argo-cd.hogs
           - auth
