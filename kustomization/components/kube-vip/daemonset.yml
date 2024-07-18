@@ -100,6 +100,9 @@ spec:
           value: "1"
         image: ghcr.io/kube-vip/kube-vip
         name: kube-vip
+        ports:
+          - containerPort: 2113
+            name: metrics
         securityContext:
           capabilities:
             add:

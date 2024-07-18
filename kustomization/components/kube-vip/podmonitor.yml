@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kube-vip-podmonitor
+spec:
+  namespaceSelector:
+    matchNames:
+      - kube-vip
+  podTargetLabels:
+    - app.kubernetes.io/name
+  podMetricsEndpoints:
+    - interval: 15s
+      port: metrics
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-vip-svc-ds

@@ -9,6 +9,7 @@ spec:
       - namespace: prometheus
         name: alertmanager-operated
         port: web
+  podMonitorNamespaceSelector: {}
   priorityClassName: application
   retention: 12w
   ruleSelector: {}

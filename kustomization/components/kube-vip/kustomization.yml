@@ -9,3 +9,4 @@ resources:
   - namespace.yml
   - rbac.yml
   - daemonset.yml
+  - podmonitor.yml
