@@ -84,7 +84,7 @@ spec:
         - name: cp_namespace
           value: kube-vip
         - name: prometheus_server
-          value: ":2113"
+          value: ":2114"
         - name: svc_election
           value: "true"
         - name: svc_enable
@@ -106,7 +106,7 @@ spec:
         image: ghcr.io/kube-vip/kube-vip
         name: kube-vip
         ports:
-          - containerPort: 2113
+          - containerPort: 2114
             name: metrics
         securityContext:
           capabilities:
