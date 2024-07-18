@@ -29,6 +29,8 @@ spec:
           value: kube-vip
         - name: lb_port
           value: "6443"
+        - name: prometheus_server
+          value: ":2113"
         - name: vip_arp
           value: "true"
         - name: vip_leaderelection
@@ -41,6 +43,9 @@ spec:
           value: "1"
         image: ghcr.io/kube-vip/kube-vip
         name: kube-vip
+        ports:
+          - containerPort: 2113
+            name: metrics
         securityContext:
           capabilities:
             add:
