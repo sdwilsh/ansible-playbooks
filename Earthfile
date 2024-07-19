@@ -33,7 +33,7 @@ tracked-files:
 
 kustomize-build:
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
-    ARG KUSTOMIZE_VERSION=v5.4.2
+    ARG KUSTOMIZE_VERSION=v5.4.3
     FROM registry.k8s.io/kustomize/kustomize:$KUSTOMIZE_VERSION
     COPY +helm/binary /usr/local/bin/helm
     COPY kustomization kustomization
