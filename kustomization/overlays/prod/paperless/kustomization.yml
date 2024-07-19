@@ -16,7 +16,7 @@ images:
   - name: ghcr.io/paperless-ngx/tika
     newTag: 2.9.1-minimal
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
-    digest: sha256:510faa6ec6418d29c825b1fc6aeb9ec514a46a4a66b2b6136b9f8150f7407f5e
+    digest: sha256:4538a1420917155343739a02c53b4f46cbd977e2fc9d47dfe52a5d381128fee2
   - name: gotenberg/gotenberg
     newTag: 8.8.1
   - name: quay.io/opstree/redis
