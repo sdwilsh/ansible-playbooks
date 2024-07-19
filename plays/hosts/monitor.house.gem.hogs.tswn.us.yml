@@ -4,3 +4,5 @@
   hosts: monitor.house.gem.hogs.tswn.us
   roles:
     - role: docker-brultech-serial2mqtt
+      tags:
+        - brultech-serial2mqtt

@@ -110,7 +110,7 @@
     database: "passwd"
     key: "brultech"
 - name: "Launch brultech-serial2mqtt container"
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_name: "brultech"
     definition:
       services:
@@ -130,8 +130,9 @@
             - "/etc/localtime:/etc/localtime:ro"
             - "/etc/timezone:/etc/timezone:ro"
             - "/home/brultech/config:/config:ro"
-    pull: true
-    restarted: "{{ config.changed | bool }}"
+    pull: always
+    state: "{% if config.changed | bool %}restarted{% else %}present{% endif %}"
+    wait: true
   register: status
   vars:
     ansible_python_interpreter: "/usr/bin/env python3-docker"
@@ -139,4 +140,4 @@
     brultech_uid: "{{ getent_passwd[\"brultech\"].1 }}"
 - ansible.builtin.assert:
     that:
-      - "status.services.serial2mqtt.brultech_serial2mqtt_1.state.running"
+      - not status.failed
