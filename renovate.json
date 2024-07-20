@@ -35,7 +35,7 @@
       "automerge": true,
       "automergeType": "branch",
       "matchPackageNames": [
-        "samba"
+        "ghcr.io/servercontainers/samba"
       ]
     },
     {
