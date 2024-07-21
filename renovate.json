@@ -45,6 +45,19 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "branch",
+      "groupName": "immich",
+      "matchPackagePatterns": [
+        "ghcr.io/immich-app/immich-machine-learning",
+        "ghcr.io/immich-app/immich-server"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "minimumReleaseAge": "1 day"
+    },
+    {
       "matchPackageNames": [
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
