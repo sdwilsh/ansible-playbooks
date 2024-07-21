@@ -25,8 +25,8 @@ spec:
               name: http
           resources:
             limits:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: 2000m
+              memory: 4Gi
             requests:
               cpu: 500m
           securityContext:
