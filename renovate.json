@@ -53,17 +53,12 @@
       ]
     },
     {
-      "automerge": true,
-      "automergeType": "branch",
-      "groupName": "immich",
+      "description": "Group for all immich updates",
+      "groupName": "immich-app",
       "matchPackagePatterns": [
         "ghcr.io/immich-app/immich-machine-learning",
         "ghcr.io/immich-app/immich-server"
-      ],
-      "matchUpdateTypes": [
-        "patch"
-      ],
-      "minimumReleaseAge": "1 day"
+      ]
     },
     {
       "matchPackageNames": [
@@ -92,17 +87,11 @@
       ]
     },
     {
-      "automerge": true,
-      "automergeType": "branch",
+      "description": "Group for all vector updates",
       "groupName": "vector",
       "matchPackagePatterns": [
         "vector"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "minimumReleaseAge": "3 days"
+      ]
     }
   ],
   "customManagers": [
