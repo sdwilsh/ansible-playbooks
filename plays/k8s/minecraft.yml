@@ -38,7 +38,7 @@
         state: present
     - name: Create Minecraft BlueMap IngressRoute
       kubernetes.core.k8s:
-        api_version: traefik.containo.us/v1alpha1
+        api_version: traefik.io/v1alpha1
         context: "{{ cluster }}"
         kind: IngressRoute
         name: minecraft-bluemap-ingressroute
