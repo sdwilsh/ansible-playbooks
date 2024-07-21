@@ -45,6 +45,14 @@
       ]
     },
     {
+      "description": "Group for all traefik updates",
+      "groupName": "traefik",
+      "matchPackagePatterns": [
+        "traefik/traefik",
+        "traefik"
+      ]
+    },
+    {
       "automerge": true,
       "automergeType": "branch",
       "groupName": "immich",
