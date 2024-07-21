@@ -6,6 +6,7 @@
   "configMigration": true,
   "packageRules": [
     {
+      "description": "Automatic Minor and Patch Updates",
       "automerge": true,
       "automergeType": "branch",
       "matchUpdateTypes": [
@@ -34,6 +35,7 @@
       "minimumReleaseAge": "3 days"
     },
     {
+      "description": "Automatic Digest Updates",
       "automerge": true,
       "automergeType": "branch",
       "matchPackageNames": [
