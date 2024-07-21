@@ -13,29 +13,35 @@
         "patch"
       ],
       "matchPackageNames": [
-        "bind9",
-        "certmanager",
-        "earthly",
-        "esphome",
-        "frigate",
-        "gitea",
-        "immich",
-        "jellyfin",
-        "mosquitto",
-        "navidrome",
-        "paperless",
-        "proton-bridge",
-        "traefik",
-        "transmission",
-        "vector",
-        "zwavejs"
-      ]
+        "argoproj/argo-cd",
+        "cert-manager/cert-manager",
+        "deluan/navidrome",
+        "earthly/earthly",
+        "eclipse-mosquitto",
+        "esphome/esphome",
+        "ghcr.io/paperless-ngx/paperless-ngx",
+        "gotenberg/gotenberg",
+        "helm/helm",
+        "jellyfin/jellyfin",
+        "lscr.io/linuxserver/transmission",
+        "mbround18/valheim",
+        "prometheus/prometheus",
+        "shenxn/protonmail-bridge",
+        "traefik/traefik",
+        "ubuntu/bind9",
+        "zwavejs/zwave-js-ui"
+      ],
+      "minimumReleaseAge": "3 days"
     },
     {
       "automerge": true,
       "automergeType": "branch",
       "matchPackageNames": [
+        "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/servercontainers/samba"
+      ],
+      "matchUpdateTypes": [
+        "digest"
       ]
     },
     {
@@ -65,16 +71,17 @@
       ]
     },
     {
-      "groupName": "traefik",
-      "matchPackagePatterns": [
-        "traefik"
-      ]
-    },
-    {
+      "automerge": true,
+      "automergeType": "branch",
       "groupName": "vector",
       "matchPackagePatterns": [
         "vector"
-      ]
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "minimumReleaseAge": "3 days"
     }
   ],
   "customManagers": [
