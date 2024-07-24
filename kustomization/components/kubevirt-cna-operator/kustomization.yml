@@ -4,6 +4,6 @@ kind: Component
 
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.94.2/network-addons-config.crd.yaml
+  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.94.3/network-addons-config.crd.yaml
   # renovate: datasource=github-releases
-  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.94.2/operator.yaml
+  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.94.3/operator.yaml
