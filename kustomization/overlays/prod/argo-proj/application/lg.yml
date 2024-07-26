@@ -5,7 +5,7 @@ metadata:
   name: lg
   namespace: argocd
 spec:
-  project: lg
+  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: lg 
