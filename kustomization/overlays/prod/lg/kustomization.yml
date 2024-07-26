@@ -4,6 +4,9 @@ kind: Kustomization
 
 components:
   - ../../../components/gitea
+images:
+  - name: gitea/gitea
+    newTag: 1.22.1-rootless
 namespace: lg
 patches:
   - path: patches/set_gitea_admin.yml
