@@ -18,3 +18,23 @@ spec:
       - kind: Secret
   sourceRepos:
     - "*"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: lg
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: lg
+      server: https://kubernetes.default.svc
+  orphanedResources:
+    warn: true
+    ignore:
+      # Ignore all secrets - those should be managed by Ansible
+      - kind: Secret
+  permitOnlyProjectScopedClusters: true
+  sourceRepos:
+    - https://github.com/sdwilsh/ansible-playbooks

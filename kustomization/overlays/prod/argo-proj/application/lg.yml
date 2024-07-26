@@ -1,0 +1,17 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lg
+  namespace: argocd
+spec:
+  project: lg
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lg 
+  source:
+    path: kustomization/overlays/prod/lg
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}

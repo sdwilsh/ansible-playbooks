@@ -19,6 +19,7 @@ resources:
   - application/homeassistant.yml
   - application/immich.yml
   - application/kube-vip.yml
+  - application/lg.yml
   - application/longhorn.yml
   - application/paperless.yml
   - application/postgresql.yml
