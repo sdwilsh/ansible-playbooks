@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: manyfold-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: manyfold
+  serviceName: manyfold-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: manyfold
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "65534"
+            - name: PUID
+              value: "65534"
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: manyfold-secret
+                  key: SECRET_KEY_BASE
+          image: ghcr.io/manyfold3d/manyfold-solo
+          name: manyfold
+          ports:
+            - containerPort: 3214
+              name: web
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - SETUID
+                - SETGID
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: manyfold-config
+            - mountPath: /libraries
+              name: manyfold-libraries
+            - mountPath: /run
+              name: manyfold-run
+            - mountPath: /tmp
+              name: manyfold-tmp
+            - mountPath: /usr/src/app/log
+              name: manyfold-app-log
+            - mountPath: /usr/src/app/tmp
+              name: manyfold-app-tmp
+      priorityClassName: application
+      securityContext:
+        fsGroup: 65534
+      volumes:
+        - name: manyfold-app-log
+          emptyDir: {}
+        - name: manyfold-app-tmp
+          emptyDir: {}
+        - name: manyfold-run
+          emptyDir:
+            medium: Memory
+        - name: manyfold-tmp
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: manyfold-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: longhorn-encrypted
+    - metadata:
+        name: manyfold-libraries
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-encrypted

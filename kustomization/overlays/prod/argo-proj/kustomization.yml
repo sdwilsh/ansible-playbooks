@@ -21,6 +21,7 @@ resources:
   - application/kube-vip.yml
   - application/lg.yml
   - application/longhorn.yml
+  - application/manyfold.yml
   - application/paperless.yml
   - application/postgresql.yml
   - application/prometheus.yml

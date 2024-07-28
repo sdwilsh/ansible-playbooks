@@ -224,6 +224,7 @@ bind_zones:
           - jellyfin
           - lg-git
           - longhorn.hogs
+          - manyfold.hogs
           - mqtt.hogs
           - nas.hogs
           - navidrome
