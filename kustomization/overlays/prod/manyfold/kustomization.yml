@@ -5,6 +5,8 @@ kind: Kustomization
 components:
   - ../../../components/manyfold
 images:
+  - name: busybox
+    newTag: 1.36.1
   - name: ghcr.io/manyfold3d/manyfold-solo
     newTag: 0.74.2
 namespace: manyfold
