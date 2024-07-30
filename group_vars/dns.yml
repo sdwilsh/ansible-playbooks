@@ -223,6 +223,7 @@ bind_zones:
           - immich
           - jellyfin
           - lg-git
+          - lg-penpot
           - longhorn.hogs
           - manyfold.hogs
           - mqtt.hogs
