@@ -10,7 +10,7 @@ roles:
     src: https://github.com/mrlesmithjr/ansible-netplan.git
     version: master
   - name: nickjj.docker
-    version: v2.4.0
+    version: v2.5.0
 collections:
   - name: ansible.posix
     version: 1.5.4
