@@ -115,6 +115,20 @@ identity_providers:
           - profile
         userinfo_signed_response_alg: none
         token_endpoint_auth_method: client_secret_basic
+      - authorization_policy: two_factor
+        client_id: jluhY5vutnbXx-caYcIxVM1-KdeVkPdelVuViZdI~iiiA5DshyX_h0KQY2DVON7W1ZneUI7D
+        client_name: LG Penpot
+        client_secret: $pbkdf2-sha512$310000$sf.jhb1T5QMDNIuC0.mMDA$vhEGNaqGh29USkzkRPShkIjo3U./9IoQuoRt/eiE0j.VdIa/zb4GzbZui.l6ypaT9LfwsGsM/peEQr5.Hfh6aw
+        public: false
+        redirect_uris:
+          - https://lg-git.tswn.us/user/oauth2/authelia/callback
+        scopes:
+          - openid
+          - groups
+          - email
+          - profile
+        userinfo_signed_response_alg: none
+        token_endpoint_auth_method: client_secret_basic
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
