@@ -121,7 +121,7 @@ identity_providers:
         client_secret: $pbkdf2-sha512$310000$sf.jhb1T5QMDNIuC0.mMDA$vhEGNaqGh29USkzkRPShkIjo3U./9IoQuoRt/eiE0j.VdIa/zb4GzbZui.l6ypaT9LfwsGsM/peEQr5.Hfh6aw
         public: false
         redirect_uris:
-          - https://lg-git.tswn.us/user/oauth2/authelia/callback
+          - https://lg-penpot.tswn.us/api/auth/oauth/oidc/callback
         scopes:
           - openid
           - groups
