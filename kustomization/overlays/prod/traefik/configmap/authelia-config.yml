@@ -82,6 +82,12 @@ access_control:
         - group:lg-git
     - domain: lg-git.tswn.us
       policy: deny
+    - domain: lg-penpot.tswn.us
+      policy: two_factor
+      subject:
+        - group:lg-penpot
+    - domain: lg-penpot.tswn.us
+      policy: deny
     - domain: "*.tswn.us"
       policy: two_factor
 
@@ -124,7 +130,6 @@ identity_providers:
           - https://lg-penpot.tswn.us/api/auth/oauth/oidc/callback
         scopes:
           - openid
-          - groups
           - email
           - profile
         userinfo_signed_response_alg: none
