@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: PENPOT_PUBLIC_URI
+              value: https://lg-penpot.tswn.us
+          name: penpot-backend
+        - env:
+            - name: PENPOT_PUBLIC_URI
+              value: https://lg-penpot.tswn.us
+          name: penpot-exporter
+        - env:
+            - name: PENPOT_PUBLIC_URI
+              value: https://lg-penpot.tswn.us
+          name: penpot-frontend

@@ -19,3 +19,13 @@ spec:
                   name: http
             path: /
             pathType: Prefix
+    - host: lg-penpot.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: penpot-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix

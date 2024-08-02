@@ -4,9 +4,18 @@ kind: Kustomization
 
 components:
   - ../../../components/gitea
+  - ../../../components/penpot
 images:
   - name: gitea/gitea
     newTag: 1.22.1-rootless
+  - name: penpotapp/backend
+    newTag: 2.1.1
+  - name: penpotapp/exporter
+    newTag: 2.1.1
+  - name: penpotapp/frontend
+    newTag: 2.1.1
+  - name: timberio/vector
+    newTag: 0.39.0-distroless-libc
 namespace: lg
 patches:
   - path: patches/set_gitea_admin.yml
@@ -33,6 +42,18 @@ patches:
     target:
       kind: Service
       name: gitea-ssh
+  - path: patches/set_penpot_flags.yml
+    target:
+      kind: StatefulSet
+      name: penpot-statefulset
+  - path: patches/set_penpot_openid.yml
+    target:
+      kind: StatefulSet
+      name: penpot-statefulset
+  - path: patches/set_penpot_public_uri.yml
+    target:
+      kind: StatefulSet
+      name: penpot-statefulset
 resources:
   - namespace.yml
   - ingress.yml
