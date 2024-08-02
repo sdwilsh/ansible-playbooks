@@ -60,7 +60,8 @@
       "groupName": "immich-app",
       "matchPackagePatterns": [
         "ghcr.io/immich-app/immich-machine-learning",
-        "ghcr.io/immich-app/immich-server"
+        "ghcr.io/immich-app/immich-server",
+        "immich"
       ]
     },
     {
