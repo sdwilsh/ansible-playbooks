@@ -11,7 +11,7 @@ configMapGenerator:
       - configmap/vector.yml
 images:
   - name: timberio/vector
-    newTag: 0.39.0-distroless-libc
+    newTag: 0.40.0-distroless-libc
 namespace: argocd
 patches:
   - path: patches/change_ingress_host.yml
