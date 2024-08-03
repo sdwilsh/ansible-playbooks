@@ -43,6 +43,20 @@
     remote_src: true
     src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.tar.gz"
   when: "'targz' in item and fetch_archive.changed"
+# .deb
+- name: "Fetch {{ item.executable }} {{ item.version }} deb"
+  ansible.builtin.get_url:
+    checksum: "{% if 'sha256' in item %}{{ sha256 }}{% endif %}"
+    dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.deb"
+    group: sdwilsh
+    owner: sdwilsh
+    url: "{{ item.deb }}"
+  register: fetch_deb
+  when: "'deb' in item"
+- name: "Install {{ item.executable }} {{ item.version }} from deb"
+  ansible.builtin.apt:
+    deb: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.deb"
+  when: "'deb' in item and fetch_deb.changed"
 # Raw Executable
 - name: "Fetch {{ item.executable }} {{ item.version }} Executable"
   ansible.builtin.get_url:
