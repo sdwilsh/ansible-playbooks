@@ -19,6 +19,7 @@ access_control:
     - name: dev
       networks:
         - 10.11.0.25 # sdwilsh-dev on cluster network
+        - 10.117.0.9 # lighterthansome.hogs.tswn.us
     - name: home
       networks:
         - 10.117.0.0/23
