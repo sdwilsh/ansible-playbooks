@@ -5,6 +5,7 @@
     owner: sdwilsh
     path: ~sdwilsh/.cache/sdwilsh-ansible-devsetup
     state: directory
+# SHA256
 - name: "Fetch {{ item.executable }} {{ item.version }} sha256"
   ansible.builtin.get_url:
     dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.sha256"
@@ -17,11 +18,17 @@
   ansible.builtin.slurp:
     src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.sha256"
   changed_when: false
-  register: sha256
+  register: sha256_raw
   when: "'sha256' in item"
+- name: Set sha256 for subsequent steps
+  ansible.builtin.set_fact:
+    sha256: "sha256:{{ sha256_raw['content'] | b64decode | trim | split | first }}"
+  changed_when: false
+  when: "'sha256' in item"
+# .tar.gz
 - name: "Fetch {{ item.executable }} {{ item.version }} archive"
   ansible.builtin.get_url:
-    checksum: "{% if 'sha256' in item %}sha256:{{ sha256['content'] | b64decode | trim }}{% endif %}"
+    checksum: "{% if 'sha256' in item %}{{ sha256 }}{% endif %}"
     dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.tar.gz"
     group: sdwilsh
     owner: sdwilsh
@@ -36,9 +43,10 @@
     remote_src: true
     src: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}.tar.gz"
   when: "'targz' in item and fetch_archive.changed"
+# Raw Executable
 - name: "Fetch {{ item.executable }} {{ item.version }} Executable"
   ansible.builtin.get_url:
-    checksum: "sha256:{{ sha256['content'] | b64decode | trim }}"
+    checksum: "{{ sha256 }}"
     dest: "~sdwilsh/.cache/sdwilsh-ansible-devsetup/{{ item.executable }}-{{ item.version }}"
     group: sdwilsh
     owner: sdwilsh
@@ -51,6 +59,7 @@
     owner: sdwilsh
     url: "{{ item.bin }}"
   when: "'bin' in item and not 'sha256' in item"
+# Install
 - name: "Install {{ item.executable }} Executable"
   ansible.builtin.copy:
     dest: "~sdwilsh/.local/bin/{{ item.executable }}"
