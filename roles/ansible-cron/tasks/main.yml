@@ -117,7 +117,7 @@
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing roles"
       ansible-galaxy role install --force-with-deps -r requirements.yml
       /usr/bin/logger -p user.notice -t ansible-cron -- "Running ansible"
-      ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ ansible_fqdn }} site.yml
+      ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ inventory_hostname }} site.yml
     dest: "/home/ansible/ansible-cron.sh"
     mode: "u=rx,g=rx,o=r"
     owner: "ansible"
