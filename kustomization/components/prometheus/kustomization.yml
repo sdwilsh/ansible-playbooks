@@ -13,3 +13,4 @@ resources:
   - rules/postgresql.yml
   - rules/vector.yml
   - rules/volume.yml
+  - storageclass.yml

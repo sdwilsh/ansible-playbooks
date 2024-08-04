@@ -34,7 +34,7 @@ spec:
           # Opt into the no-backup group since it can easily be recreated.
           recurring-job-group.longhorn.io/no-backup: enabled
       spec:
-        storageClassName: longhorn-encrypted
+        storageClassName: prometheus-storageclass
         resources:
           requests:
             storage: 60Gi

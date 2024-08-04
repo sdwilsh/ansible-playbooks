@@ -1,0 +1,13 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: prometheus-storageclass
+allowVolumeExpansion: true
+parameters:
+  dataLocality: best-effort
+  fromBackup: ""
+  numberOfReplicas: "2"
+  staleReplicaTimeout: "2880" # 48 hours in minutes
+provisioner: driver.longhorn.io
+reclaimPolicy: Retain
