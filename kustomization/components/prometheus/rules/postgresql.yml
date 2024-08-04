@@ -12,14 +12,14 @@ spec:
         - alert: postgresql-not-running
           annotations:
             description: "Postgres not running in {{ $labels.name }}!"
-          expr: patroni_postgresql_running == 0
+          expr: patroni_postgres_running == 0
           for: 5m
           labels:
             severity: warning
         - alert: postgresql-dead
           annotations:
             description: "Postgres not running in {{ $labels.name }}!"
-          expr: patroni_postgresql_running == 0
+          expr: patroni_postgres_running == 0
           for: 15m
           labels:
             severity: page
