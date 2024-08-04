@@ -38,3 +38,16 @@ parameters:
   numberOfReplicas: "1"
 provisioner: driver.longhorn.io
 reclaimPolicy: Retain
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-unencrypted
+allowVolumeExpansion: true
+parameters:
+  dataLocality: best-effort
+  fromBackup: ""
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "2880" # 48 hours in minutes
+provisioner: driver.longhorn.io
+reclaimPolicy: Retain
