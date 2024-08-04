@@ -12,7 +12,7 @@ spec:
         - alert: memory-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} memory used!"
-          expr: (100 * host_memory_used_bytes / host_memory_total_bytes) > 90
+          expr: (100 * host_memory_used_bytes / host_memory_total_bytes) > 90 < 98
           for: 5m
           labels:
             severity: warning

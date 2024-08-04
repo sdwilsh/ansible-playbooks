@@ -12,7 +12,7 @@ spec:
         - alert: cpu-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} cpu utilization!"
-          expr: (100 * sum by (host)(host_load15) / sum by (host)(host_logical_cpus)) > 85
+          expr: (100 * sum by (host)(host_load15) / sum by (host)(host_logical_cpus)) > 85 < 95
           for: 5m
           labels:
             severity: warning

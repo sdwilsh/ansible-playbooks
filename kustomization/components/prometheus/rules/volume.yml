@@ -12,7 +12,7 @@ spec:
         - alert: longhorn-volume-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.pvc }} disk used!"
-          expr: (100 * longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) > 85
+          expr: (100 * longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) > 85 < 95
           for: 5m
           labels:
             severity: warning

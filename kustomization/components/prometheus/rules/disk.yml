@@ -12,7 +12,7 @@ spec:
         - alert: disk-utilization-high
           annotations:
             description: "{{ $value }}% of {{ $labels.host }} disk used!"
-          expr: (100 * host_filesystem_used_ratio{device="/dev/disk/by-label/COS_PERSISTENT"}) > 85
+          expr: (100 * host_filesystem_used_ratio{device="/dev/disk/by-label/COS_PERSISTENT"}) > 85 < 95
           for: 5m
           labels:
             severity: warning
