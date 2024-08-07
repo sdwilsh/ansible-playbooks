@@ -13,7 +13,7 @@ images:
   - name: penpotapp/exporter
     newTag: 2.1.1
   - name: penpotapp/frontend
-    newTag: 2.1.1
+    newTag: 2.1.2
   - name: timberio/vector
     newTag: 0.40.0-distroless-libc
 namespace: lg
