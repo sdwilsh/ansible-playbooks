@@ -11,7 +11,7 @@ images:
   - name: penpotapp/backend
     newTag: 2.1.1
   - name: penpotapp/exporter
-    newTag: 2.1.1
+    newTag: 2.1.2
   - name: penpotapp/frontend
     newTag: 2.1.1
   - name: timberio/vector
