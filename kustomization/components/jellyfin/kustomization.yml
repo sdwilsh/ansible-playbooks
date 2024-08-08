@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: jellyfin/jellyfin
-    newTag: 10.9.8
+    newTag: 10.9.9
 resources:
   - service.yml
   - statefulset.yml
