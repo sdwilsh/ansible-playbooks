@@ -67,6 +67,7 @@
         create_home: false
         group: jellyfin
         name: jellyfin
+        password: "*"
         state: present
         uid: 65533
       become: true
@@ -115,6 +116,7 @@
           [Service]
           AmbientCapabilities=CAP_NET_BIND_SERVICE
           CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+          Environment="RUST_LOG=INFO"
           ExecStart=/usr/local/bin/jellyfin-remote-proxy /usr/local/etc/jellyfin-remote-proxy/config.yml
           Group=jellyfin
           NoNewPrivileges=true
