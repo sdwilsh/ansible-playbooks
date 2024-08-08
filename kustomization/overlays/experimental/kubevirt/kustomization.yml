@@ -10,7 +10,6 @@ components:
   - ../../../components/kubevirt-cdi-operator
   - ../../../components/kubevirt-cna-operator
   - ../../../components/kubevirt-operator
-  - ../../../components/multus
 namespace: kubevirt
 patches:
   - path: patches/multus/add_config.yml
