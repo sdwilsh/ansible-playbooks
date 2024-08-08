@@ -51,17 +51,17 @@
       "description": "Group for all traefik updates",
       "groupName": "traefik",
       "matchPackageNames": [
-        "/traefik/traefik/",
-        "/traefik/"
+        "traefik/traefik",
+        "traefik"
       ]
     },
     {
       "description": "Group for all immich updates",
       "groupName": "immich-app",
       "matchPackageNames": [
-        "/ghcr.io/immich-app/immich-machine-learning/",
-        "/ghcr.io/immich-app/immich-server/",
-        "/immich/"
+        "ghcr.io/immich-app/immich-machine-learning",
+        "ghcr.io/immich-app/immich-server",
+        "immich"
       ]
     },
     {
@@ -87,14 +87,14 @@
     {
       "groupName": "tdarr",
       "matchPackageNames": [
-        "/tdarr/"
+        "**tdarr**"
       ]
     },
     {
       "description": "Group for all vector updates",
       "groupName": "vector",
       "matchPackageNames": [
-        "/vector/"
+        "**vector"
       ]
     }
   ],
