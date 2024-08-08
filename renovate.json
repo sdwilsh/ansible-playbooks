@@ -85,6 +85,12 @@
       "minimumReleaseAge": "1 month"
     },
     {
+      "groupName": "penpot",
+      "matchPackageNames": [
+        "penpotapp/**"
+      ]
+    },
+    {
       "groupName": "tdarr",
       "matchPackageNames": [
         "**tdarr**"
