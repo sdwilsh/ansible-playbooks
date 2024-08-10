@@ -122,6 +122,7 @@ stages:
             [Match]
             Name={{ bond.bridge_name }}
             [Network]
+            LinkLocalAddressing=no
 {% for network in hostvars[host].kairos_managed_networks %}
             VLAN={{ network.name }}
 {% endfor %}
