@@ -148,14 +148,22 @@ stages:
             Name=uplink
             Kind=bridge
             MACAddress={{ (hostvars[host].common__interfaces.interfaces | first).mac }}
+        # Link the single NIC to the uplink bridge.
+        - path: /etc/systemd/network/01-{{ (hostvars[host].common__interfaces.interfaces | first).name }}.network
+          permissions: 0644
+          content: |
+            [Match]
+            Name={{ (hostvars[host].common__interfaces.interfaces | first).name }}
+            [Network]
+            Bridge=uplink
         # Setup Supported VLANs for the interface and link the bridge to it.
         - path: /etc/systemd/network/01-uplink.network
           permissions: 0644
           content: |
             [Match]
-            Name=en*
+            Name=uplink
             [Network]
-            Bridge=uplink
+            LinkLocalAddressing=no
 {% for network in hostvars[host].kairos_managed_networks %}
             VLAN={{ network.name }}
 {% endfor %}
