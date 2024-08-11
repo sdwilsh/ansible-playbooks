@@ -93,7 +93,7 @@
     {
       "groupName": "tdarr",
       "matchPackageNames": [
-        "**tdarr**"
+        "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
       ]
     },
     {
