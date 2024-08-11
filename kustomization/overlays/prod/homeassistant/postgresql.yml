@@ -21,8 +21,6 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
-  clone:
-    cluster: homeassistant-recorder-pg
   teamId: homeassistant
   volume:
     size: 50Gi
