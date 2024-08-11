@@ -1,4 +1,6 @@
 ---
+auth:
+  enabled: False
 birdseye:
   enabled: true
   mode: continuous
@@ -14,17 +16,15 @@ cameras:
         - path: rtsp://127.0.0.1:8554/front-porch
           roles:
             - record
-        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
+        - path: 
+            rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
     motion:
       mask:
-        # Camera Timestamp
-        - 875,0,1280,0,1280,70,875,70
-        # Rain Chain
-        - 860,471,844,587,825,720,899,720,919,598,930,467,936,342,939,210,921,99,905,0,831,0,857,219,860,346
-        # Trees
-        - 0,263,0,0,588,0,648,47,657,317,470,393,471,296
+        - 0.684,0,1,0,1,0.097,0.684,0.097
+        - 0.672,0.654,0.659,0.815,0.645,1,0.702,1,0.718,0.831,0.727,0.649,0.731,0.475,0.734,0.292,0.72,0.138,0.707,0,0.649,0,0.67,0.304,0.672,0.481
+        - 0.367,0.405,0,0.374,0,0,0.46,0.003,0.503,0.063,0.507,0.225,0.365,0.223
   Front_North_East:
     detect:
       fps: 5
@@ -36,15 +36,16 @@ cameras:
         - path: rtsp://127.0.0.1:8554/front-north-east
           roles:
             - record
-        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
+        - path: 
+            rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
     motion:
       mask:
-        # Camera Timestamp
-        - 875,0,1280,0,1280,70,875,70
-        # Trees & Sidewalk
-        - 0,0,1053,0,988,128,962,310,823,303,723,397,648,521,512,542,508,332,609,231,667,187,662,115,0,223
+        - 0.684,0,1,0,1,0.097,0.684,0.097
+        - 0.753,0.385,0.667,0.37,0.522,0.221,0.516,0,0.814,0
+    objects:
+      mask: 0.004,0.221,0.518,0.12,0.523,0.355,0.757,0.373,0.76,0,0.001,0.001
 database:
   path: /config/frigate.db
 detectors:
@@ -54,14 +55,16 @@ detectors:
 go2rtc:
   rtsp:
     username: frigate
-    password: "{FRIGATE_RTSP_PASSWORD}"
+    password: '{FRIGATE_RTSP_PASSWORD}'
   streams:
-    front-north-east: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
-    front-porch: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+    front-north-east: 
+      rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+    front-porch: 
+      rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
 mqtt:
   host: mosquitto-svc.homeassistant.svc.cluster.local
   user: frigate
-  password: "{FRIGATE_MQTT_PASSWORD}"
+  password: '{FRIGATE_MQTT_PASSWORD}'
 objects:
   track:
     - cat
@@ -73,3 +76,5 @@ record:
     pre_capture: 10
 snapshots:
   enabled: true
+ui:
+  time_format: 24hour

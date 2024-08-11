@@ -58,11 +58,6 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
-            # Overlay configuration via ConfigMap.
-            - name: frigate-config
-              mountPath: /config/config.yml
-              readOnly: true
-              subPath: config.yml
             - name: frigate-db
               mountPath: /config
             - name: frigate-media
@@ -71,6 +66,32 @@ spec:
               mountPath: /dev/shm
             - name: frigate-tmp
               mountPath: /tmp/cache
+      initContainers:
+        - command:
+            - cp
+            - /config/kubernetes-config.yml
+            - /config/config.yml
+          image: busybox
+          name: install-config
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 30m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: frigate-config
+              mountPath: /config/kubernetes-config.yml
+              readOnly: true
+              subPath: config.yml
+            - name: frigate-db
+              mountPath: /config
       priorityClassName: critical-application
       volumes:
         - configMap:
