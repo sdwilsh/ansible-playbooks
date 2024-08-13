@@ -193,3 +193,7 @@ stages:
             Gateway={{ network.gateway }}
 {% endif %}
 {% endfor %}
+  fs:
+    - name: Ensure kairos owns files in its user directory
+      commands:
+        - chown -R kairos:kairos ~kairos
