@@ -6,9 +6,9 @@ components:
   - ../../../components/immich
 images:
   - name: ghcr.io/immich-app/immich-server
-    newTag: v1.111.0
+    newTag: v1.112.1
   - name: ghcr.io/immich-app/immich-machine-learning
-    newTag: v1.111.0
+    newTag: v1.112.1
 namespace: immich
 resources:
   - namespace.yml
