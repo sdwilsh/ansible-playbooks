@@ -194,6 +194,7 @@ stages:
 {% endif %}
 {% endfor %}
   fs:
+    # This step can go away once https://github.com/kairos-io/packages/pull/1011 is released.
     - name: Ensure kairos owns files in its user directory
       commands:
         - chown -R kairos:kairos ~kairos
