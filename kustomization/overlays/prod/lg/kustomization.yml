@@ -9,11 +9,11 @@ images:
   - name: gitea/gitea
     newTag: 1.22.1-rootless
   - name: penpotapp/backend
-    newTag: 2.1.2
+    newTag: 2.1.3
   - name: penpotapp/exporter
-    newTag: 2.1.2
+    newTag: 2.1.3
   - name: penpotapp/frontend
-    newTag: 2.1.2
+    newTag: 2.1.3
   - name: timberio/vector
     newTag: 0.40.0-distroless-libc
 namespace: lg
