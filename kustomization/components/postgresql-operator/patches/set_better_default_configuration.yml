@@ -5,6 +5,9 @@ metadata:
   name: this-is-ignored-but-is-required
 configuration:
   kubernetes:
+    # Enables setting kubernetes owernship references.
+    enable_owner_references: true
+
     # Prevent nodes in the same cluster from being on the same host.
     enable_pod_antiaffinity: true
 
