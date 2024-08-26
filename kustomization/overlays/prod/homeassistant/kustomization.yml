@@ -28,7 +28,7 @@ images:
   - name: busybox
     newTag: 1.36.1
   - name: timberio/vector
-    newTag: 0.40.0-distroless-libc
+    newTag: 0.40.1-distroless-libc
 namespace: homeassistant
 patches:
   - path: patches/frigate/add_frigate_env_vars.yml
