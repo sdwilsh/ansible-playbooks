@@ -4,7 +4,7 @@ kind: Component
 
 helmCharts:
   - name: redis-operator
-    version: 0.18.0
+    version: 0.18.1
     repo: https://ot-container-kit.github.io/helm-charts/
     releaseName: redis-operator
     includeCRDs: true
