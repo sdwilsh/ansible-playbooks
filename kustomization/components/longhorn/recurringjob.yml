@@ -67,7 +67,7 @@ spec:
     - default
     - game
     - important
-  retain: 36 # 1.5 Days
+  retain: 24 # 1 Day
   task: snapshot
 ---
 apiVersion: longhorn.io/v1beta1
