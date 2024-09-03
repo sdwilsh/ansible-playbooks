@@ -91,7 +91,7 @@
       when: hostvars[item].reboot_required
   vars:
     recovery_image_label: 22.04-standard-amd64-generic-v3.0.14-k3sv1.29.3-k3s1
-    target_image_label: 22.04-standard-amd64-generic-v3.1.1-k3sv1.30.2-k3s1
+    target_image_label: 24.04-standard-amd64-generic-v3.1.2-k3sv1.30.4-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
