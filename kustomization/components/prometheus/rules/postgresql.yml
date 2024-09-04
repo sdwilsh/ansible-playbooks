@@ -23,3 +23,10 @@ spec:
           for: 15m
           labels:
             severity: page
+        - alert: postgresql-lagging-replica
+          annotations:
+            description: "Postgres replica not streaming in {{ $labels.name }}!"
+          expr: patroni_replica == 1 and patroni_postgres_streaming == 0
+          for: 15m
+          labels:
+            severity: page
