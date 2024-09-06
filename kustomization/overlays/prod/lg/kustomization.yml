@@ -7,7 +7,7 @@ components:
   - ../../../components/penpot
 images:
   - name: gitea/gitea
-    newTag: 1.22.1-rootless
+    newTag: 1.22.2-rootless
   - name: penpotapp/backend
     newTag: 2.1.3
   - name: penpotapp/exporter
