@@ -102,7 +102,7 @@ identity_providers:
         client_secret: $pbkdf2-sha512$310000$omxinbTJUu.5YlmzWZTyhw$n5isxHk/CeWL9EhtQppgnyUUBlGO64icMFj26ZGj4ekwnbg.tunfss9t4kRHOhWyOd.3EQnfJKFngXM8A/pqeQ
         public: false
         redirect_uris:
-          - app.immich:/
+          - app.immich:///oauth-callback
           - https://immich.tswn.us/auth/login
           - https://immich.tswn.us/auth/user-settings
         scopes:
