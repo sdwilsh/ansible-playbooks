@@ -15,7 +15,7 @@ images:
   - name: penpotapp/frontend
     newTag: 2.1.4
   - name: timberio/vector
-    newTag: 0.40.1-distroless-libc
+    newTag: 0.41.0-distroless-libc
 namespace: lg
 patches:
   - path: patches/set_gitea_admin.yml
