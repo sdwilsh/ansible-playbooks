@@ -2,7 +2,7 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: vyos-work02
+  name: vyos-work01
 spec:
   running: true
   template:
@@ -50,7 +50,7 @@ spec:
       volumes:
         - name: disk
           persistentVolumeClaim:
-            claimName: work02-pvc
+            claimName: work01-pvc
         - name: install
           persistentVolumeClaim:
             claimName: vyos-1.5-rolling-202409060006-generic-amd64
