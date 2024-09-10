@@ -101,7 +101,7 @@ vyos_vrrp__conntrack_sync:
   sync_group: MAIN
 vyos_vrrp__groups:
   - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth0
+    interface: eth0.2
     name: TRANSIT-v4
     peer_address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"
