@@ -6,4 +6,5 @@ namespace: routers
 resources:
   - namespace.yml
   - networkattachmentdefinition.yml
-  - virtualmachinepool.yml
+  - persistentvolumeclaim/work02.routers.hogs.tswn.us.yml
+  - virtualmachine/work02.routers.hogs.tswn.us.yml
