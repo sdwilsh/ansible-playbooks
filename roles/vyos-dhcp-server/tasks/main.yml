@@ -2,47 +2,8 @@
 # tasks file for vyos-dhcp-server
 - name: Setup DHCP
   vyos.vyos.vyos_config:
-    src: dhcp-server_config.j2
+    lines: "{{ lookup('template', 'templates/dhcp-server_config.yml.j2') | from_yaml }}"
     save: true
-- name: Setup DHCP DNS Servers
-  vyos.vyos.vyos_config:
-    lines:
-      - >-
-        set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
-        {{ item.default_router }}
-      - >-
-        set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
-        {{ (item.subnet | ansible.utils.ipaddr('network'))[:-1] }}{{ vyos__host_id_ipv4 }}
-      - >-
-        set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server
-        {{ (item.subnet | ansible.utils.ipaddr('network'))[:-1] }}{{ vyos__peer_host_id_ipv4 }}
-  loop: "{{ vyos_dhcp_server__networks }}"
-  loop_control:
-    label: "{{ item.name }} ({{ item.subnet }})"
-  when: "item.own_dns"
-  tags:
-    - services
-    - dhcp-server
-- name: Setup DHCP DNS Servers
-  vyos.vyos.vyos_config:
-    lines:
-      - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server 1.1.1.2"
-      - "set service dhcp-server shared-network-name {{ item.name }} subnet {{ item.subnet }} name-server 1.0.0.2"
-  loop: "{{ vyos_dhcp_server__networks }}"
-  loop_control:
-    label: "{{ item.name }} ({{ item.subnet }})"
-  when: "not item.own_dns"
-  tags:
-    - services
-    - dhcp-server
-- name: Setup DHCP Static Assignments
-  vyos.vyos.vyos_config:
-    lines:
-      - "set service dhcp-server shared-network-name {{ item.0.name }} subnet {{ item.0.subnet }} static-mapping {{ item.1.name }} mac-address {{ item.1.mac }}"
-      - "set service dhcp-server shared-network-name {{ item.0.name }} subnet {{ item.0.subnet }} static-mapping {{ item.1.name }} ip-address {{ item.1.ip }}"
-  loop: "{{ vyos_dhcp_server__networks | subelements('static_mapping', skip_missing=true) }}"
-  loop_control:
-    label: "{{ item.0.name }}: {{ item.1.name }} ({{ item.1.ip }})"
   tags:
     - services
     - dhcp-server
