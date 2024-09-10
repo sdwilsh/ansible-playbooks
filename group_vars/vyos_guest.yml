@@ -3,6 +3,7 @@ vyos_dhcp_server__failover_name: guest-HA
 vyos_dhcp_server__networks:
   - name: GUEST
     default_router: 10.131.0.1
+    id: 131
     own_dns: false
     range:
       start: 10.131.0.100
@@ -10,6 +11,7 @@ vyos_dhcp_server__networks:
     subnet: 10.131.0.0/24
   - name: CULTIVAR
     default_router: 10.150.0.1
+    id: 150
     own_dns: true
     range:
       start: 10.150.0.100
@@ -27,25 +29,25 @@ vyos_firewall__zones:
   - name: CULTIVAR
     description: "cultivar network ({{ ansible_managed }})"
     interfaces:
-      - eth1.150
+      - eth0.150
   - name: GUEST
     description: "guest network ({{ ansible_managed }})"
     interfaces:
-      - eth1.131
+      - eth0.131
   - name: LOCAL
     local-zone: true
   - name: MAN
     description: "management vlan ({{ ansible_managed }})"
     interfaces:
-      - eth1.10
+      - eth0.10
   - name: TRANSIT
     description: "Transit between local routers ({{ ansible_managed }})"
     interfaces:
-      - eth0
+      - eth0.2
   - name: SYNC
     description: "Synchronization traffic (like VRRP, DHCP, etc) ({{ ansible_managed }})"
     interfaces:
-      - eth1.9
+      - eth0.9
 vyos_firewall__zones_root_path: firewall_zones/vyos_guest
 
 vyos_firewall_global__group:
@@ -85,12 +87,12 @@ vyos_firewall_global__group:
 
 vyos_interfaces__ethernet:
   - name: eth0
-    description: "TRANSIT - router-to-router traffic ({{ ansible_managed }})"
-    ipv4:
-      - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
-  - name: eth1
     description: "Trunk ({{ ansible_managed }})"
     vifs:
+      - vlan_id: 2
+        description: "TRANSIT - router-to-router traffic ({{ ansible_managed }})"
+        ipv4:
+          - address: "10.2.0.{{ vyos__host_id_ipv4 }}/24"
       - vlan_id: 9
         description: "SYNC - used for router synchronization communication ({{ ansible_managed }})"
         ipv4:
@@ -121,12 +123,12 @@ vyos_system__name_servers:
   - "127.0.0.1"
 
 vyos_vrrp__conntrack_sync:
-  interface: eth1.9
+  interface: eth0.9
   peer_address: "10.9.0.{{ vyos__peer_host_id_ipv4 }}"
   sync_group: MAIN
 vyos_vrrp__groups:
   - hello_source_address: "10.2.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth0
+    interface: eth0.2
     name: TRANSIT-v4
     peer_address: "10.2.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"
@@ -134,7 +136,7 @@ vyos_vrrp__groups:
     virtual_address: 10.2.0.81/24
     vrid: 2
   - hello_source_address: "10.131.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth1.131
+    interface: eth0.131
     name: GUEST-v4
     peer_address: "10.131.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"
@@ -142,7 +144,7 @@ vyos_vrrp__groups:
     virtual_address: 10.131.0.1/24
     vrid: 131
   - hello_source_address: "10.150.0.{{ vyos__host_id_ipv4 }}"
-    interface: eth1.150
+    interface: eth0.150
     name: CULTIVAR-v4
     peer_address: "10.150.0.{{ vyos__peer_host_id_ipv4 }}"
     priority: "{{ vyos__vrrp_priority }}"

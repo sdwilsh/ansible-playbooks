@@ -2,8 +2,6 @@
 - description: Allow ICMP
   action: accept
   protocol: icmp
-  icmp:
-    type_name: any
 - description: Accept Luxor controller traffic
   action: accept
   protocol: tcp

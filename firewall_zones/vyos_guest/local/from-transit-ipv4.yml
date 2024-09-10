@@ -7,5 +7,3 @@
 - description: Allow ICMP
   action: accept
   protocol: icmp
-  icmp:
-    type_name: any
