@@ -1,0 +1,25 @@
+---
+{% for group in vyos_vrrp__groups %}
+{% if "description" in group %}
+- set high-availability vrrp group {{ group.name }} description '{{ group.description }}'
+{% endif %}
+- set high-availability vrrp group {{ group.name }} address '{{ group.virtual_address }}'
+- set high-availability vrrp group {{ group.name }} hello-source-address '{{ group.hello_source_address }}'
+- set high-availability vrrp group {{ group.name }} interface '{{ group.interface }}'
+- set high-availability vrrp group {{ group.name }} peer-address '{{ group.peer_address }}'
+- set high-availability vrrp group {{ group.name }} priority '{{ group.priority }}'
+- set high-availability vrrp group {{ group.name }} vrid '{{ group.vrid }}'
+{% if "sync_group" in group %}
+- set high-availability vrrp sync-group {{ group.sync_group }} member '{{ group.name }}'
+{% endif %}
+{% endfor %}
+
+{% if vyos_vrrp__conntrack_sync | length > 0 %}
+{% for protocol in vyos_vrrp__conntrack_sync.accept_protocols | default(['icmp', 'udp', 'tcp']) %}
+- set service conntrack-sync accept-protocol '{{ protocol }}'
+{% endfor %}
+- set service conntrack-sync event-listen-queue-size '{{ vyos_vrrp__conntrack_sync.event_listen_queue_size | default(8) }}'
+- set service conntrack-sync failover-mechanism vrrp sync-group '{{ vyos_vrrp__conntrack_sync.sync_group }}'
+- set service conntrack-sync interface {{ vyos_vrrp__conntrack_sync.interface }} peer '{{ vyos_vrrp__conntrack_sync.peer_address }}'
+- set service conntrack-sync sync-queue-size '{{ vyos_vrrp__conntrack_sync.sync_queue_size | default(8) }}'
+{% endif %}
