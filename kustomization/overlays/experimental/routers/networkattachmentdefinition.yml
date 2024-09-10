@@ -1,0 +1,15 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: trunk
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/uplink
+spec:
+  config: >
+    {
+      "cniVersion": "0.3.1",
+      "name": "trunk",
+      "type": "bridge",
+      "bridge": "uplink"
+    }
