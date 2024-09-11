@@ -16,6 +16,8 @@ common__nameservers:
     - 10.11.0.1
 
 kairos_managed_networks:
+  - name: transit
+    vlan_id: 2
   - name: services
     address: "{{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | first }}"
     gateway: 10.11.0.1
