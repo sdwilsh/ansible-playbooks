@@ -23,3 +23,13 @@ spec:
           for: 15m
           labels:
             severity: page
+        - alert: longhorn-disk-not-ready
+          annotations:
+            description: "{{ $labels.disk }} on {{ $labels.node }} is not ready because {{ $labels.condition_reason }}"
+          expr: longhorn_disk_status{condition="ready"} == 0
+          for: 15m
+        - alert: longhorn-disk-not-schedulable
+          annotations:
+            description: "{{ $labels.disk }} on {{ $labels.node }} cannot be scheduled because {{ $labels.condition_reason }}"
+          expr: longhorn_disk_status{condition="schedulable"} == 0
+          for: 15m
