@@ -31,10 +31,6 @@ spec:
               disk:
                 bus: virtio
               bootOrder: 2
-            - name: install
-              cdrom:
-                bus: sata
-              bootOrder: 3
           interfaces:
             - name: trunk
               bridge: {}
@@ -51,6 +47,3 @@ spec:
         - name: disk
           persistentVolumeClaim:
             claimName: work01-pvc
-        - name: install
-          persistentVolumeClaim:
-            claimName: vyos-1.5-rolling-202409060006-generic-amd64
