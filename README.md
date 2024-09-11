@@ -69,6 +69,7 @@ kubectl config set-context --current --namespace=$(NAMESPACE)
 
 ```
 virtctl image-upload pvc ubuntu-22.04-live-server-amd64 \
+    --access-mode=ReadWriteMany \
     --image-path ubuntu-22.04.4-live-server-amd64.iso \
     --size=3Gi \
     --storage-class=image-upload-storageclass \
