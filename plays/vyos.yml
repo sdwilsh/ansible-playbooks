@@ -407,15 +407,15 @@
     - name: Setup default route
       vyos.vyos.vyos_config:
         lines:
-          - "set protocols static interface-route 0.0.0.0/0 next-hop-interface {{ vyos_wan__outbound_interface }}"
+          - "set protocols static route 0.0.0.0/0 interface '{{ vyos_wan__outbound_interface }}'"
       tags:
         - routing
 
     - name: Setup NAT masquerade rules
       vyos.vyos.vyos_config:
         lines:
-          - "set nat source rule {{ (rule_number + 1) * 10 }} outbound-interface {{ vyos_wan__outbound_interface }}"
-          - "set nat source rule {{ (rule_number + 1) * 10 }} source address {{ item }}"
+          - "set nat source rule {{ (rule_number + 1) * 10 }} outbound-interface name '{{ vyos_wan__outbound_interface }}'"
+          - "set nat source rule {{ (rule_number + 1) * 10 }} source address '{{ item }}'"
           - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
       loop:
         - 10.0.0.0/8

@@ -1,0 +1,41 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vyos-centurylink
+spec:
+  running: true
+  template:
+    spec:
+      domain:
+        cpu:
+          cores: 2
+          threads: 4
+        devices:
+          autoattachPodInterface: false
+          disks:
+            - name: disk
+              disk:
+                bus: virtio
+              bootOrder: 2
+          interfaces:
+            - name: eth0
+              bridge: {}
+            - name: eth1
+              bridge: {}
+        resources:
+          requests:
+            memory: 4Gi
+      networks:
+        - name: eth0
+          multus:
+            networkName: trunk
+        - name: eth1 
+          multus:
+            networkName: trunk
+      priorityClassName: critical-application-infra
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - name: disk
+          persistentVolumeClaim:
+            claimName: centurylink-pvc

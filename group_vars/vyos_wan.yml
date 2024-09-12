@@ -53,8 +53,10 @@ vyos_firewall_global__group:
 
 vyos_interfaces__ethernet:
   - name: eth0
-    description: "CenturyLink PPPOE ({{ ansible_managed }})"
-    enabled: true
+    description: "Trunk ({{ ansible_managed }})"
+    vifs:
+      - vlan_id: 201
+        description: "CenturyLink PPPOE ({{ ansible_managed }})"
   - name: eth1
     description: "Trunk ({{ ansible_managed }})"
     vifs:
@@ -74,7 +76,7 @@ vyos_interfaces__pppoe:
       user: "{{ vyos__wan_centurylink_username }}"
     mss: 1452
     mtu: 1492
-    source_interface: eth0
+    source_interface: eth0.201
 
 vyos_static_routes__config:
   - address_families:

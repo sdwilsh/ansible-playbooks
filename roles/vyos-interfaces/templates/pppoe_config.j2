@@ -1,9 +1,0 @@
-{%- for pppoe in vyos_interfaces__pppoe -%}
-set firewall options interface {{ pppoe.name }} adjust-mss {{ pppoe.mss }}
-set interfaces pppoe {{ pppoe.name }} authentication password {{ pppoe.authentication.password }}
-set interfaces pppoe {{ pppoe.name }} authentication user {{ pppoe.authentication.user }}
-set interfaces pppoe {{ pppoe.name }} default-route none
-set interfaces pppoe {{ pppoe.name }} mtu {{ pppoe.mtu }}
-set interfaces pppoe {{ pppoe.name }} no-peer-dns
-set interfaces pppoe {{ pppoe.name }} source-interface {{ pppoe.source_interface }}
-{% endfor -%}
