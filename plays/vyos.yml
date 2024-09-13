@@ -328,6 +328,7 @@
           - "set nat source rule {{ (rule_number + 1) * 10 }} outbound-interface eth0"
           - "set nat source rule {{ (rule_number + 1) * 10 }} source address {{ item }}"
           - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
+        save: true
       loop:
         - 10.11.0.0/23
       loop_control:
@@ -343,6 +344,7 @@
           - "set nat destination rule {{ (rule_number + 1) * 10 }} protocol '{{ item.protocol }}'"
           - "set nat destination rule {{ (rule_number + 1) * 10 }} translation address '{{ item.translation_address }}'"
           - "set nat destination rule {{ (rule_number + 1) * 10 }} translation port '{{ item.translation_port | default(item.port) }}'"
+        save: true
       loop:
         - description: traefik
           port: 443
