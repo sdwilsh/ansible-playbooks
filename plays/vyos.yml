@@ -408,6 +408,7 @@
       vyos.vyos.vyos_config:
         lines:
           - "set protocols static route 0.0.0.0/0 interface '{{ vyos_wan__outbound_interface }}'"
+        save: true
       tags:
         - routing
 
@@ -417,6 +418,7 @@
           - "set nat source rule {{ (rule_number + 1) * 10 }} outbound-interface name '{{ vyos_wan__outbound_interface }}'"
           - "set nat source rule {{ (rule_number + 1) * 10 }} source address '{{ item }}'"
           - "set nat source rule {{ (rule_number + 1) * 10 }} translation address masquerade"
+        save: true
       loop:
         - 10.0.0.0/8
         - 172.16.0.0/12
@@ -425,5 +427,3 @@
         index_var: rule_number
       tags:
         - nat
-
-
