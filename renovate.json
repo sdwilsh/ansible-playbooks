@@ -102,6 +102,16 @@
       "matchPackageNames": [
         "**vector"
       ]
+    },
+    {
+      "description": "Run vyos updates once a week",
+      "groupName": "vyos",
+      "matchPackageNames": [
+        "vyos"
+      ],
+      "schedule": [
+        "after 4pm on friday"
+      ]
     }
   ],
   "customManagers": [
@@ -160,6 +170,7 @@
     {
       "customType": "regex",
       "fileMatch": [
+        "^group_vars/vyos\\.yml$",
         "^roles/devsetup/tasks/main\\.yml$"
       ],
       "matchStrings": [
