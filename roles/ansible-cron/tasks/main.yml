@@ -78,12 +78,6 @@
       #!/usr/bin/env bash
       set -e
 
-      export ANSIBLE_LOG_PATH=/var/log/ansible.log
-      export ANSIBLE_CALLBACK_PLUGINS=$({{ ansible_python.executable }} -m ara.setup.callback_plugins)
-      export ARA_API_CLIENT=http
-      export ARA_API_SERVER=https://ara.hogs.tswn.us
-      export ARA_CALLBACK_THREADS=4
-
       # Adding up to 15 minutes of jitter so not all machines hit resources at the same time.
       _SLEEP_DURATION=$(( RANDOM %= 900 ))
       echo "Sleeping for ${_SLEEP_DURATION} seconds before starting..."
@@ -91,17 +85,28 @@
       sleep ${_SLEEP_DURATION}
 
       cd /src/ansible-playbooks
+
       /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
       git pull --rebase
+
       /usr/bin/logger -p user.notice -t ansible-cron -- "Setting up and activating venv"
       rm -rf .venv
       python3 -m venv .venv
       source .venv/bin/activate
       pip install -r requirements.txt
+
+      export ANSIBLE_LOG_PATH=/var/log/ansible.log
+      export ANSIBLE_CALLBACK_PLUGINS=$({{ ansible_python.executable }} -m ara.setup.callback_plugins)
+      export ARA_API_CLIENT=http
+      export ARA_API_SERVER=https://ara.hogs.tswn.us
+      export ARA_CALLBACK_THREADS=4
+
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing collections"
       ansible-galaxy collection install --force -U -p external_collections/ -r requirements.yml
+
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing roles"
       ansible-galaxy role install --force-with-deps -p external_roles/ -r requirements.yml
+
       /usr/bin/logger -p user.notice -t ansible-cron -- "Running ansible"
       ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ inventory_hostname }} site.yml
     dest: "/home/ansible/ansible-cron.sh"
