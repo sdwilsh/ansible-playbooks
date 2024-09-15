@@ -18,6 +18,6 @@
 
 - name: "Setup Wireguard"
   vyos.vyos.vyos_config:
-    src: "wireguard_config.j2"
+    lines: "{{ lookup('template', 'templates/wireguard_config.yml.j2') | from_yaml }}"
     save: true
   when: "vyos_interfaces__wireguard | default([]) | length > 0"

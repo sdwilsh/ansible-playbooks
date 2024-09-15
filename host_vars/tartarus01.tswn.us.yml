@@ -136,6 +136,7 @@ vyos_interfaces__wireguard:
         persistent_keepalive_sec: 15
         pubkey: "{{ hostvars['maccabeus01.hogs.tswn.us'].wireguard__pubkey }}"
     port: 51820
+    privkey: "{{ wireguard__privkey }}"
   - name: wg1
     description: hogs02.routers.hogs.tswn.us wg0
     ipv4:
@@ -152,6 +153,7 @@ vyos_interfaces__wireguard:
         persistent_keepalive_sec: 15
         pubkey: "{{ hostvars['hogs01.routers.hogs.tswn.us'].wireguard__pubkey }}"
     port: 51821
+    privkey: "{{ wireguard__privkey }}"
   - name: wg2
     description: mobile devices vpn
     ipv4:
@@ -168,6 +170,7 @@ vyos_interfaces__wireguard:
             - network: 10.117.2.12/32
         pubkey: dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw=
     port: 51822
+    privkey: "{{ wireguard__privkey }}"
   - name: wg3
     description: jellyfin vpn
     ipv4:
@@ -199,6 +202,7 @@ vyos_interfaces__wireguard:
             - network: "{{ hostvars['hogsflixplus05.tswn.us'].wireguard__address | ansible.utils.ipaddr('address') }}/32"
         pubkey: "{{ hostvars['hogsflixplus05.tswn.us'].wireguard__pubkey }}"
     port: 51823
+    privkey: "{{ wireguard__privkey }}"
 
 vyos_ospf_interfaces__config:
   - name: wg0
@@ -246,4 +250,12 @@ vyos_static_routes__config:
 vyos_system__name_servers:
   - "127.0.0.1"
 
+wireguard__privkey: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62306262626166313039376234306564333664303061666639333162636566306263386133656130
+          3162346632323933343062623136363365363035633131310a613339373135393965333831353430
+          62346161346364383335346632363666396263633732346166393866363832303664376136353537
+          3762373566633835340a393062626636303061633039336534306365663438613132343165343465
+          66333430336439653565653834313739323430613835353330303638643430333630616339633666
+          6565343133316431633366346238653862663836656232383463
 wireguard__pubkey: "Dwdz7rWR4y8uMW3s4MWZwe1+rR0Bqiigms7Aku51ghU="
