@@ -1,6 +1,6 @@
 {%- macro set_description(zone) -%}
     {%- if "description" in zone and zone.description -%}
-        set zone-policy zone {{ zone.name }} description '{{ zone.description }}'
+        set firewall zone {{ zone.name }} description '{{ zone.description }}'
     {%- endif %}
 {%- endmacro %}
 
@@ -13,20 +13,20 @@
 
     {%- for from_zone in from_zones -%}
 {% if afi == "ipv4" -%}
-set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall name '{{ firewall_name }}'
+set firewall zone {{ zone.name }} from {{ from_zone }} firewall name '{{ firewall_name }}'
 {% elif afi == "ipv6" -%}
-set zone-policy zone {{ zone.name }} from {{ from_zone }} firewall ipv6-name '{{ firewall_name }}'
+set firewall zone {{ zone.name }} from {{ from_zone }} firewall ipv6-name '{{ firewall_name }}'
 {% endif -%}
     {% endfor -%}
 {%- endmacro %}
 
 {%- macro set_interface(zone, interface) -%}
-set zone-policy zone {{ zone.name }} interface '{{ interface }}'
+set firewall zone {{ zone.name }} interface '{{ interface }}'
 {%- endmacro %}
 
 {%- macro set_interfaces(zone) -%}
     {% if "local-zone" in zone and zone["local-zone"] -%}
-        set zone-policy zone {{ zone.name }} local-zone
+        set firewall zone {{ zone.name }} local-zone
     {% endif %}
     {%- for interface in zone.interfaces %}
         {{- set_interface(zone, interface) }}
@@ -42,14 +42,14 @@ set zone-policy zone {{ zone.name }} interface '{{ interface }}'
 {% if expected_firewall_name in firewall_names -%}
     {{- set_firewall(zone, expected_firewall_name) -}}
 {% else -%}
-set zone-policy zone {{ zone.name }} from {{ from_zone.name }} firewall {% if afi == "ipv6" %}ipv6-{% endif %}name 'DROP-AND-LOG-{{ afi[-2:] }}'
+set firewall zone {{ zone.name }} from {{ from_zone.name }} firewall {% if afi == "ipv6" %}ipv6-{% endif %}name 'DROP-AND-LOG-{{ afi[-2:] }}'
 {% endif -%}
     {% endfor -%}
 {%- endmacro %}
 
 
 {%- for zone in vyos_firewall__zones -%}
-set zone-policy zone {{ zone.name }} default-action 'drop'
+set firewall zone {{ zone.name }} default-action 'drop'
 {{ set_description(zone) }}
 {{ set_zone_firewalls(zone, "ipv4") }}
 {{ set_zone_firewalls(zone, "ipv6") }}
