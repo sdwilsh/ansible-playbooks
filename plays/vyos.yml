@@ -231,7 +231,8 @@
     #
     # NAT
     #
-    - ansible.builtin.set_fact:
+    - name: Set lan_interfaces_with_wan_access
+      ansible.builtin.set_fact:
         lan_interfaces_with_wan_access:
           # MAN
           - interface: "{{ vyos__lan_interface }}.10"
