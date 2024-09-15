@@ -1,0 +1,8 @@
+---
+exclude_paths:
+  - .github/
+  - external_collections/
+  - external_roles/
+skip_list:
+  - name[template]
+use_default_rules: true
