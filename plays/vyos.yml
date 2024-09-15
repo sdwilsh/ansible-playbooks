@@ -313,15 +313,15 @@
       tags:
         - "ospf"
 
-    - name: "Setup default VPN route"
+    - name: Setup default VPN route
       vyos.vyos.vyos_config:
         lines:
-          - "set protocols static table 10 route 0.0.0.0/0 next-hop 10.117.0.1"
-          - "set policy route VPN rule 10 set table 10"
-          - "set interfaces wireguard wg2 policy route 'VPN'"
+          - set protocols static table 10 route 0.0.0.0/0 next-hop 10.117.0.1
+          - set policy route VPN rule 10 set table '10'
+          - set policy route VPN interface 'wg2'
         save: true
       tags:
-        - "routing"
+        - routing
 
     - name: Setup NAT masquerade rules
       vyos.vyos.vyos_config:
