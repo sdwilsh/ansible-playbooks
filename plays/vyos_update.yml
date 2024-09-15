@@ -1,0 +1,71 @@
+---
+- name: Determine what routers need to be updated
+  gather_facts: false
+  hosts: vyos
+  tasks:
+    - name: Get current version
+      vyos.vyos.vyos_facts:
+        gather_subset:
+          - min
+    - name: Schedule Update
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        group: ToUpdate
+      changed_when: false
+      delegate_to: localhost
+      loop: "{{ ansible_play_batch }}"
+      when: hostvars[item].ansible_net_version != "VyOS " + vyos_version
+- name: Update routers
+  gather_facts: false
+  hosts: ToUpdate
+  order: sorted
+  serial: 1
+  tasks:
+    - name: Ensure download directory exists
+      ansible.builtin.file:
+        path: ~/.cache/vyos_builds
+        state: directory
+      delegate_to: localhost
+    - name: "Download {{ vyos_version }}"
+      ansible.builtin.get_url:
+        dest: "~/.cache/vyos_builds/vyos-{{ vyos_version }}-generic-amd64.iso"
+        url: "https://github.com/vyos/vyos-nightly-build/releases/download/{{ vyos_version }}/vyos-{{ vyos_version }}-generic-amd64.iso"
+      delegate_to: localhost
+      register: image
+    # TODO: verify download with minisign
+    - name: "Copy {{ vyos_version }} to remote system"
+      ansible.netcommon.net_put:
+        dest: "vyos-{{ vyos_version }}-generic-amd64.iso"
+        src: "{{ image['dest'] }}"
+    - name: "Install {{ vyos_version }} to remote system"
+      block:
+        - name: Add system image
+          ansible.netcommon.cli_command:
+            check_all: true
+            command: "add system image vyos-{{ vyos_version }}-generic-amd64.iso"
+            newline: true
+            prompt:
+              - name this image
+              - new image as the default
+              - copy it to the new image
+              - copy SSH host keys
+            answer:
+              - "{{ vyos_version }}"
+              - "yes"
+              - "yes"
+              - "yes"
+        - name: Reboot into new image
+          ansible.netcommon.cli_command:
+            check_all: true
+            command: reboot
+            prompt:
+              - you sure
+            answer:
+              - "yes"
+      always:
+        - name: Wait for connection
+          ansible.builtin.wait_for_connection:
+            delay: 10
+        - name: Cleanup uploaded file on remote system
+          ansible.netcommon.cli_command:
+            command: "rm vyos-{{ vyos_version }}-generic-amd64.iso"
