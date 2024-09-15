@@ -1,6 +1,7 @@
 ---
 # tasks file for ansible-cron
-- ansible.builtin.assert:
+- name: Sanity Check
+  ansible.builtin.assert:
     that: "ansible_cron__inventory_file == 'prod-inventory' or ansible_cron__inventory_file == 'testing-inventory'"
     fail_msg: "Please set ansible_cron__inventory_file to the correct inventory file in host_vars/{{ inventory_hostname }}.yml"
 
@@ -9,30 +10,10 @@
     name:
       - cron
       - python3-pip
+      - python3-venv
       - software-properties-common
     state: present
   when: ansible_distribution == "Ubuntu"
-- name: "Install Ansible PPA Repository"
-  ansible.builtin.apt_repository:
-    repo: "ppa:ansible/ansible"
-    state: "present"
-  become: true
-  when: ansible_distribution == "Ubuntu"
-- name: "Ensure ansible is installed"
-  ansible.builtin.package:
-    name: ansible
-    state: "present"
-- name: Ensure python deps are installed
-  ansible.builtin.pip:
-    extra_args: --user
-    name: "{{ item }}"
-    state: latest
-  become: true
-  become_user: ansible
-  loop:
-    - ara
-    - jmespath # For community.general.json_query
-    - netaddr
 
 - name: Add ansible user to srcs group
   ansible.builtin.user:
@@ -112,10 +93,15 @@
       cd /src/ansible-playbooks
       /usr/bin/logger -p user.notice -t ansible-cron -- "Pulling updates to /src/ansible-playbooks"
       git pull --rebase
+      /usr/bin/logger -p user.notice -t ansible-cron -- "Setting up and activating venv"
+      rm -rf .venv
+      python3 -m venv .venv
+      source .venv/bin/activate
+      pip install -r requirements.txt
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing collections"
-      ansible-galaxy collection install -U -r requirements.yml
+      ansible-galaxy collection install --force -U -p external_collections/ -r requirements.yml
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing roles"
-      ansible-galaxy role install --force-with-deps -r requirements.yml
+      ansible-galaxy role install --force-with-deps -p external_roles/ -r requirements.yml
       /usr/bin/logger -p user.notice -t ansible-cron -- "Running ansible"
       ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ inventory_hostname }} site.yml
     dest: "/home/ansible/ansible-cron.sh"
