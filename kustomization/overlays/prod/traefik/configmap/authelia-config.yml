@@ -30,6 +30,16 @@ access_control:
     - name: man
       networks:
         - 10.10.0.0/24
+    - name: sonos
+      networks:
+        - 10.117.0.60 # sonos-den.hogs
+        - 10.117.0.61 # sonos-den-sub.hogs
+        - 10.117.0.62 # sonos-living.hogs
+        - 10.117.0.63 # sonos-living-sub.hogs
+        - 10.117.0.66 # sonos-move.hogs
+        - 10.117.0.67 # sonos-mainbed.hogs
+        - 10.117.0.68 # sonos-office.hogs
+        - 10.117.0.69 # sonos-dining.hogs
   rules:
     - domain: ara.hogs.tswn.us
       networks:
