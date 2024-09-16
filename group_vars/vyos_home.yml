@@ -224,6 +224,8 @@ vyos_firewall_global__group:
       description: Addresses allowed to ssh to HFP machines.
       members:
         - address: 10.10.0.20 # sdwilsh-dev.hogs.tswn.us
+        - address: 10.117.0.9 # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.2.13 # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
     - name: HOME-SERVICES-v4
       description: Kubernetes Services for the HOME network.
       afi: ipv4
@@ -296,12 +298,10 @@ vyos_firewall_global__group:
     - name: SERVICE-TALKERS-v4
       description: IP Addresses allowed to talk to all services
       members:
-        # sdwilsh-dev.hogs.tswn.us (sdwilsh-dev)
-        - address: 10.10.0.20
-        # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
-        - address: 10.117.0.9
-        # sdwilsh-desktop
-        - address: 10.117.0.31
+        - address: 10.10.0.20 # sdwilsh-dev.hogs.tswn.us (sdwilsh-dev)
+        - address: 10.117.0.9 # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.2.13 # lighterthansome.hogs.tswn.us (sdwilsh-laptop)
+        - address: 10.117.0.31 # sdwilsh-desktop
     - name: SHELLY-v4
       description: Shelly devices that Home Assistant needs to be able to talk to.
       members:

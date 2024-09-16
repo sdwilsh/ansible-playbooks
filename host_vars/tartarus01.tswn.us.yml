@@ -169,6 +169,16 @@ vyos_interfaces__wireguard:
           ipv4:
             - network: 10.117.2.12/32
         pubkey: dPKLI79wCJyq5kWvU7hqkixcTWBB2xhBhv46g8088Hw=
+      - name: lighterthansome
+        allowed_ips:
+          ipv4:
+            - network: 10.117.2.13/32
+        pubkey: "{{ hostvars['lighterthansome.hogs.tswn.us'].wireguard__pubkey }}"
+      - name: sdwilsh-pixel9profold
+        allowed_ips:
+          ipv4:
+            - network: 10.117.2.14/32
+        pubkey: St6gAn78zkyNazyfIQHk9iYbfz/+vfcAOksgZk19SQM=
     port: 51822
     privkey: "{{ wireguard__privkey }}"
   - name: wg3
