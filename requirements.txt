@@ -1,4 +1,4 @@
-ansible-dev-tools ==24.8.0
+ansible-dev-tools ==24.9.0
 ansible-pylibssh ==1.2.2
 ara ==1.7.2
 kubernetes ==30.1.0
