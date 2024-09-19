@@ -12,7 +12,7 @@ configMapGenerator:
 images:
   - name: traefik
     # renovate: datasource=github-releases depName=traefik/traefik
-    newTag: v3.1.3
+    newTag: v3.1.4
   - name: timberio/vector
     newTag: 0.41.1-distroless-libc
 patches:
@@ -22,9 +22,9 @@ patches:
       name: traefik-deployment
 resources:
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v3.1.2/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v3.1.3/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v3.1.2/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v3.1.3/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
   - certificate.yml
   - ingressclass.yml
   - serviceaccount.yml
