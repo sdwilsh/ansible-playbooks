@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: zwavejs/zwave-js-ui
-    newTag: 9.18.1
+    newTag: 9.19.0
 resources:
   - statefulset.yml
   - service.yml
