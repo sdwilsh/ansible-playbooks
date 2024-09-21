@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: deluan/navidrome
-    newTag: 0.53.0
+    newTag: 0.53.1
 resources:
   - service.yml
   - statefulset.yml
