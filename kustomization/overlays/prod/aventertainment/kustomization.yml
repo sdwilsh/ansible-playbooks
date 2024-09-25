@@ -10,7 +10,7 @@ images:
   - name: jellyfin/jellyfin
     newTag: 10.9.11
   - name: deluan/navidrome
-    newTag: 0.53.1
+    newTag: 0.53.2
 namespace: aventertainment
 patches:
   - path: patches/add_jellyfin_hardware_acc_reqs.yml
