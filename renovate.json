@@ -109,6 +109,7 @@
       "matchPackageNames": [
         "vyos"
       ],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-rolling-(?<patch>\\d+)$",
       "schedule": [
         "after 4pm on friday"
       ]
