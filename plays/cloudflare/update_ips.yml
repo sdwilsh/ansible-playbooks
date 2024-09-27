@@ -1,0 +1,37 @@
+---
+- name: Fetch Cloudflare IPs and Update Local Files
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create scratch directory
+      ansible.builtin.tempfile:
+        state: directory
+      register: scratch_dir
+    - name: Fetch current IPv4 Addresses
+      ansible.builtin.get_url:
+        dest: "{{ scratch_dir.path }}/cloudflare-ips-v4"
+        mode: u=rw
+        url: https://www.cloudflare.com/ips-v4/
+      register: ips_v4_file
+    - name: Consume ~/.cache/cloudflare-ips-v4
+      ansible.builtin.slurp:
+        src: "{{ ips_v4_file.dest }}"
+      changed_when: false
+      register: ips_v4_raw
+    - name: Set Facts Used Later
+      ansible.builtin.set_fact:
+        ips_v4: "{{ ips_v4_raw['content'] | b64decode | trim | split('\n') | sort }}"
+        root_dir: "{{ playbook_dir }}/../.."
+      changed_when: false
+    - name: Update traefik entrypoint
+      ansible.builtin.lineinfile:
+        line: "            - --entrypoints.websecure-ext.forwardedHeaders.trustedIPs={{ ips_v4 | join(',') }}"
+        path: "{{ root_dir }}/kustomization/components/traefik/deployment.yml"
+        regexp: "- --entrypoints\\.websecure-ext\\.forwardedHeaders\\.trustedIPs="
+    - name: Update tartarus01 Firewall Network Group
+      ansible.builtin.replace:
+        after: "(?m)^    - name: CLOUDFLARE_IPS\n      members:$"
+        before: "^  port_group:$"
+        path: "{{ root_dir }}/host_vars/tartarus01.tswn.us.yml"
+        regexp: (?:(\s+)(?:- address:.*$))+
+        replace: "{% for ip_v4 in ips_v4 %}\\1- address: {{ ip_v4 }}\n{%- endfor %}"

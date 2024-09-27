@@ -32,6 +32,9 @@
     group:
       port_group: TRAEFIK-EXT
   protocol: tcp
+  source:
+    group:
+      network_group: CLOUDFLARE_IPS
 - action: accept
   description: Allow Factorio Traffic
   destination:
