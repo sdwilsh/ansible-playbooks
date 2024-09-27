@@ -1,120 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
   "configMigration": true,
-  "packageRules": [
-    {
-      "description": "Automatic Minor and Patch Updates",
-      "automerge": true,
-      "automergeType": "branch",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchPackageNames": [
-        "alpine",
-        "argoproj/argo-cd",
-        "cert-manager/cert-manager",
-        "deluan/navidrome",
-        "earthly/earthly",
-        "eclipse-mosquitto",
-        "esphome/esphome",
-        "ghcr.io/paperless-ngx/paperless-ngx",
-        "gotenberg/gotenberg",
-        "helm/helm",
-        "jellyfin/jellyfin",
-        "lscr.io/linuxserver/transmission",
-        "mbround18/valheim",
-        "prometheus/prometheus",
-        "shenxn/protonmail-bridge",
-        "traefik/traefik",
-        "ubuntu/bind9",
-        "zwavejs/zwave-js-ui"
-      ],
-      "minimumReleaseAge": "3 days"
-    },
-    {
-      "description": "Automatic Digest Updates",
-      "automerge": true,
-      "automergeType": "branch",
-      "matchPackageNames": [
-        "ghcr.io/blakeblackshear/frigate",
-        "ghcr.io/servercontainers/samba"
-      ],
-      "matchUpdateTypes": [
-        "digest"
-      ]
-    },
-    {
-      "description": "Group for all traefik updates",
-      "groupName": "traefik",
-      "matchPackageNames": [
-        "traefik/traefik",
-        "traefik"
-      ]
-    },
-    {
-      "description": "Group for all immich updates",
-      "groupName": "immich-app",
-      "matchPackageNames": [
-        "ghcr.io/immich-app/immich-machine-learning",
-        "ghcr.io/immich-app/immich-server",
-        "immich"
-      ]
-    },
-    {
-      "matchPackageNames": [
-        "quay.io/kairos/kairos-ubuntu-22-lts"
-      ],
-      "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
-    },
-    {
-      "groupName": "mariadb-operator",
-      "matchFileNames": [
-        "kustomization/components/mariadb-operator/kustomization.yml"
-      ],
-      "minimumReleaseAge": "1 week"
-    },
-    {
-      "groupName": "multus",
-      "matchFileNames": [
-        "kustomization/components/multus/kustomization.yml"
-      ],
-      "minimumReleaseAge": "1 month"
-    },
-    {
-      "groupName": "penpot",
-      "matchPackageNames": [
-        "penpotapp/**"
-      ]
-    },
-    {
-      "groupName": "tdarr",
-      "matchPackageNames": [
-        "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
-      ]
-    },
-    {
-      "description": "Group for all vector updates",
-      "groupName": "vector",
-      "matchPackageNames": [
-        "**vector"
-      ]
-    },
-    {
-      "description": "Run vyos updates once a week",
-      "groupName": "vyos",
-      "matchPackageNames": [
-        "vyos"
-      ],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-rolling-(?<patch>\\d+)$",
-      "schedule": [
-        "after 4pm on friday"
-      ]
-    }
-  ],
   "customManagers": [
     {
       "customType": "regex",
@@ -228,5 +114,121 @@
         "version:\\s+(?<currentValue>v.*?)\\n"
       ]
     }
-  ]
+  ],
+  "extends": [
+    "config:best-practices"
+  ],
+  "packageRules": [
+    {
+      "description": "Automatic Minor and Patch Updates",
+      "automerge": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchPackageNames": [
+        "alpine",
+        "argoproj/argo-cd",
+        "cert-manager/cert-manager",
+        "deluan/navidrome",
+        "earthly/earthly",
+        "eclipse-mosquitto",
+        "esphome/esphome",
+        "ghcr.io/paperless-ngx/paperless-ngx",
+        "gotenberg/gotenberg",
+        "helm/helm",
+        "jellyfin/jellyfin",
+        "lscr.io/linuxserver/transmission",
+        "mbround18/valheim",
+        "prometheus/prometheus",
+        "shenxn/protonmail-bridge",
+        "traefik/traefik",
+        "ubuntu/bind9",
+        "zwavejs/zwave-js-ui"
+      ],
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": "Automatic Digest Updates",
+      "automerge": true,
+      "automergeType": "branch",
+      "matchPackageNames": [
+        "ghcr.io/blakeblackshear/frigate",
+        "ghcr.io/servercontainers/samba"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ]
+    },
+    {
+      "description": "Group for all traefik updates",
+      "groupName": "traefik",
+      "matchPackageNames": [
+        "traefik/traefik",
+        "traefik"
+      ]
+    },
+    {
+      "description": "Group for all immich updates",
+      "groupName": "immich-app",
+      "matchPackageNames": [
+        "ghcr.io/immich-app/immich-machine-learning",
+        "ghcr.io/immich-app/immich-server",
+        "immich"
+      ]
+    },
+    {
+      "matchPackageNames": [
+        "quay.io/kairos/kairos-ubuntu-22-lts"
+      ],
+      "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
+    },
+    {
+      "groupName": "mariadb-operator",
+      "matchFileNames": [
+        "kustomization/components/mariadb-operator/kustomization.yml"
+      ],
+      "minimumReleaseAge": "1 week"
+    },
+    {
+      "groupName": "multus",
+      "matchFileNames": [
+        "kustomization/components/multus/kustomization.yml"
+      ],
+      "minimumReleaseAge": "1 month"
+    },
+    {
+      "groupName": "penpot",
+      "matchPackageNames": [
+        "penpotapp/**"
+      ]
+    },
+    {
+      "groupName": "tdarr",
+      "matchPackageNames": [
+        "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
+      ]
+    },
+    {
+      "description": "Group for all vector updates",
+      "groupName": "vector",
+      "matchPackageNames": [
+        "**vector"
+      ]
+    },
+    {
+      "description": "Run vyos updates once a week",
+      "groupName": "vyos",
+      "matchPackageNames": [
+        "vyos"
+      ],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-rolling-(?<patch>\\d+)$",
+      "schedule": [
+        "after 4pm on friday"
+      ]
+    }
+  ],
+  "separateMinorPatch": true,
+  "timezone": "America/Los_Angeles"
 }
