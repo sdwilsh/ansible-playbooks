@@ -18,7 +18,7 @@ images:
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
     digest: sha256:74f9a43a47c7791498db4ade68647b4a6af5199ca825dbf792fd206ccd8b73ed
   - name: gotenberg/gotenberg
-    newTag: 8.10.0
+    newTag: 8.11.0@sha256:e60da3ecc52050303c3886630aa7ed82f9486660b82a1ce6e5bf253c3b0764d4
   - name: quay.io/opstree/redis
     newTag: v7.2.3
 namespace: paperless
