@@ -8,7 +8,7 @@ images:
   - name: busybox
     newTag: 1.37.0@sha256:768e5c6f5cb6db0794eec98dc7a967f40631746c32232b78a3105fb946f3ab83
   - name: ghcr.io/manyfold3d/manyfold-solo
-    newTag: 0.80.1
+    newTag: 0.81.0@sha256:37e84093382a4802a2b0e52cd28e4fd756488772ea2a4b654bca93205dab3c69
 namespace: manyfold
 resources:
   - namespace.yml
