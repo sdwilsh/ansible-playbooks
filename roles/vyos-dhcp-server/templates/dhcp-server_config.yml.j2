@@ -27,7 +27,7 @@
   set service dhcp-server shared-network-name {{ shared_network.name }} subnet {{ shared_network.subnet }} static-mapping
   {{ mapping.name }} mac-address '{{ mapping.mac }}'
 - >-
-  set service dhcp-server shared-network-name {{ shared_netowrk.name }} subnet {{ shared_network.subnet }} static-mapping
+  set service dhcp-server shared-network-name {{ shared_network.name }} subnet {{ shared_network.subnet }} static-mapping
   {{ mapping.name }} ip-address '{{ mapping.ip }}'
 {% endfor %}
 {% endif %}
