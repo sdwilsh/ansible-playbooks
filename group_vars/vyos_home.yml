@@ -68,6 +68,17 @@ vyos_dhcp_server__networks:
       - name: "sdwilsh-desk-switch"
         ip: "10.10.0.16"
         mac: "2c:c8:1b:9c:21:29"
+  - name: SERVICES
+    default_router: 10.11.0.1
+    own_dns: true
+    range:
+      start: 10.11.0.240
+      stop: 10.11.0.249
+    subnet: 10.11.0.0/24
+    static_mapping:
+      - name: hdhomerun01
+        ip: 10.11.0.200
+        mac: 00:18:dd:0a:94:94
   - name: "IOT"
     default_router: "10.66.0.1"
     own_dns: true

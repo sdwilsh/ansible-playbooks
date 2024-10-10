@@ -37,6 +37,17 @@ vyos_dhcp_server__networks:
       start: 10.10.0.200
       stop: 10.10.0.250
     subnet: 10.10.0.0/24
+  - name: SERVICES
+    default_router: 10.11.0.1
+    own_dns: true
+    range:
+      start: 10.11.0.240
+      stop: 10.11.0.249
+    subnet: 10.11.0.0/24
+    static_mapping:
+      - name: hdhomerun01
+        ip: 10.11.0.200
+        mac: 00:18:dd:0a:94:94
   - name: IOT
     default_router: 10.66.0.1
     own_dns: true
