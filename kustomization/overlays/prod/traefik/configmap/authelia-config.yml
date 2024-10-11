@@ -167,6 +167,10 @@ session:
   cookies:
     - domain: tswn.us
       authelia_url: https://auth.tswn.us
+    - domain: lg-penpot.tswn.us
+      authelia_url: https://auth.tswn.us
+      inactivity: 60m
+      expiration: 4h
   redis:
     high_availability:
       sentinel_name: myMaster
