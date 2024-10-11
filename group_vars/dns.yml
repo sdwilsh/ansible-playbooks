@@ -235,6 +235,7 @@ bind_zones:
           - smtp.hogs
           - tdarr.hogs
           - transmission.hogs
+          - tvheadend.hogs
           - unifi
           - zwave.hogs
       - name: unifi-inform
