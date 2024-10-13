@@ -135,7 +135,7 @@
     wait: true
   register: status
   vars:
-    ansible_python_interpreter: "/usr/bin/env python3-docker"
+    ansible_python_interpreter: /usr/local/bin/python3-docker
     brultech_gid: "{{ getent_passwd[\"brultech\"].2 }}"
     brultech_uid: "{{ getent_passwd[\"brultech\"].1 }}"
 - ansible.builtin.assert:

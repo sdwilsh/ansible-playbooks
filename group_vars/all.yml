@@ -58,7 +58,6 @@ common__ntp_pool: "pool.ntp.hogs.tswn.us"
 # Ensure certain users are always added to the docker group.
 docker__users:
   - "ansible"
-docker__pip_docker_compose_state: present
 
 reboot_test_command: whoami
 ssh_listen_to: "{{ common__ip_addresses | ansible.utils.ipaddr('address') }}"
