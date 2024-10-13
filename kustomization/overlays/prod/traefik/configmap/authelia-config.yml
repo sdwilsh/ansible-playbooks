@@ -162,6 +162,11 @@ ntp:
   address: pool.ntp.hogs.tswn.us:123
   version: 4
 
+# https://www.authelia.com/configuration/miscellaneous/server/
+server:
+  buffers:
+    read: 8192
+
 # https://www.authelia.com/configuration/session/introduction/
 session:
   cookies:
