@@ -1,5 +1,6 @@
 ---
 ansible_cron__interval: "daily"
+ansible_python_interpreter: /usr/bin/python3.12
 
 common__ip_addresses:
   - 10.10.0.6/24
