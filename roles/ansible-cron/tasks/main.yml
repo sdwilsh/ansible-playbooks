@@ -9,6 +9,7 @@
   ansible.builtin.apt:
     name:
       - cron
+      - libonig-dev
       - python3-pip
       - python3-venv
       - software-properties-common
