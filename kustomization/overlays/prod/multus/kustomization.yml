@@ -6,7 +6,7 @@ components:
   - ../../../components/multus
 images:
   - name: ghcr.io/k8snetworkplumbingwg/multus-cni
-    newTag: v4.1.2@sha256:03862c2399c296042fcbdd69683715f10c742eb99a130f741f54184afecad2de
+    newTag: v4.1.3@sha256:9751856cacc8f0924e9d1099de7442666845348498fe5324d3c768af9907f2b3
 namespace: multus
 patches:
   - path: patches/add_config.yml
