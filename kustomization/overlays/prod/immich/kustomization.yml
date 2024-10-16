@@ -6,9 +6,9 @@ components:
   - ../../../components/immich
 images:
   - name: ghcr.io/immich-app/immich-server
-    newTag: v1.116.2@sha256:effd3d44202964c5f53af85e0fd0f2ca5287c989a43c4d55ba71133eb148bed3
+    newTag: v1.118.2@sha256:f158810c90f80162f9b08729bbaec963731f12662960be38ff93093b78a0bbdf
   - name: ghcr.io/immich-app/immich-machine-learning
-    newTag: v1.116.2@sha256:60d6d3b7090c664b76adabd00c06674e25c5a91419e374bff4e7cf2ee5dd920a
+    newTag: v1.118.2@sha256:4d89a309fd08a93649f1ae4a7572ae98f09d66b4c1dfb7916b71d31dec7eda38
 namespace: immich
 resources:
   - namespace.yml
