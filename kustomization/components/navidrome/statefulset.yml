@@ -25,7 +25,7 @@ spec:
             - name: ND_IMAGECACHESIZE
               value: 256Mi
             - name: ND_TRANSCODINGCACHESIZE
-              value: 256Mi
+              value: 1792Mi
           image: deluan/navidrome
           name: navidrome
           ports:
@@ -35,7 +35,7 @@ spec:
           resources:
             limits:
               cpu: 2000m
-              memory: 4Gi
+              memory: 6Gi
             requests:
               cpu: 250m
           securityContext:
@@ -54,7 +54,7 @@ spec:
       volumes:
         - emptyDir:
             medium: Memory
-            sizeLimit: 512Mi
+            sizeLimit: 2Gi
           name: navidrome-cache
   volumeClaimTemplates:
     - metadata:
