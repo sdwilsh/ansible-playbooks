@@ -15,7 +15,7 @@ images:
   - name: penpotapp/frontend
     newTag: 2.2.0@sha256:b725df199487d88d50bb96716fd50d39621c75549b12862bcc3ea68537ef1b7e
   - name: timberio/vector
-    newTag: 0.41.1-distroless-libc
+    newTag: 0.42.0-distroless-libc@sha256:252e66723a0921c1e6bdfc057bb7d1181078f5c17cdfc19a7a9db98283da30e5
 namespace: lg
 patches:
   - path: patches/set_gitea_admin.yml
