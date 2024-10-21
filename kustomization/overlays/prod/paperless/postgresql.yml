@@ -35,7 +35,7 @@ spec:
       schemas:
         public: {}
   sidecars:
-    - image: timberio/vector:0.41.1-distroless-libc
+    - image: timberio/vector:0.42.0-distroless-libc
       name: vector
       securityContext:
         allowPrivilegeEscalation: false
