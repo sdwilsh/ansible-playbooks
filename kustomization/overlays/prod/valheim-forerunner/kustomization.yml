@@ -11,7 +11,7 @@ configMapGenerator:
       - configmap/vector.yml
 images:
   - name: timberio/vector
-    newTag: 0.41.1-distroless-libc
+    newTag: 0.42.0-distroless-libc@sha256:252e66723a0921c1e6bdfc057bb7d1181078f5c17cdfc19a7a9db98283da30e5
 namespace: valheim-forerunner
 patches:
   - path: patches/add_valheim_env_vars.yml
