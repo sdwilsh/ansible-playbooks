@@ -43,8 +43,12 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
-            - mountPath: /opt/factorio
-              name: factorio-data
+            - mountPath: /opt/factorio/config
+              name: factorio-config
+            - mountPath: /opt/factorio/mods
+              name: factorio-mods
+            - mountPath: /opt/factorio/saves
+              name: factorio-saves
             - mountPath: /opt/fsm-data
               name: factorio-server-manager-data
       priorityClassName: application
@@ -59,7 +63,39 @@ spec:
           recurring-job-group.longhorn.io/default: disabled
           # Opt into the game group.
           recurring-job-group.longhorn.io/game: enabled
-        name: factorio-data
+        name: factorio-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: longhorn-encrypted
+    - metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
+        name: factorio-mods
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-unencrypted
+    - metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
+        name: factorio-saves
       spec:
         accessModes:
           - ReadWriteOnce
