@@ -38,4 +38,4 @@ spec:
         resources:
           requests:
             storage: 60Gi
-  version: v2.54.1
+  version: v2.55.0
