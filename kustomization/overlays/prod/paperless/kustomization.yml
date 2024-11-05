@@ -20,7 +20,7 @@ images:
   - name: gotenberg/gotenberg
     newTag: 8.12.0@sha256:b10708db3ccabbee040d0b6d9ec68b6034a066c1d4e27b13fb7a6af4ade012e4
   - name: quay.io/opstree/redis
-    newTag: v7.2.3
+    newTag: v7.2.6@sha256:c837a6a22f2a07b3cf9fcf81a4ce81936fca5d3ed248c571a80de20da5252100
 namespace: paperless
 patches:
   - path: patches/increase_paperless_data_size.yml
