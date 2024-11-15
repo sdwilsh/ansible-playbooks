@@ -10,7 +10,7 @@ configMapGenerator:
       disableNameSuffixHash: true
 helmCharts:
   - name: gitea
-    version: 10.5.0
+    version: 10.6.0
     repo: https://dl.gitea.com/charts/
     releaseName: gitea
     valuesFile: values.yml
