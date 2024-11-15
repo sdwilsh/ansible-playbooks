@@ -9,11 +9,11 @@ images:
   - name: gitea/gitea
     newTag: 1.22.3-rootless@sha256:6b068c75b3454016b0304d0bb158b027cae6393fc668ce6a3727d4f4016261ed
   - name: penpotapp/backend
-    newTag: 2.2.1@sha256:47853d9bb9ddd392958f596d2e809a4f9d4267942b2e25319725414cd7ab8a97
+    newTag: 2.3.2@sha256:876676bcc904901d696e3a46e13f7899082d90b69a59e42253b1537615d70321
   - name: penpotapp/exporter
-    newTag: 2.2.1@sha256:5c835ffd87ab39e11f3567e4bfbc556199cb41e5735904765d902c203bb134ab
+    newTag: 2.3.2@sha256:7e37425618fd421f3cad9c81048eda8bf0686a13c26c81f52a107b8348407760
   - name: penpotapp/frontend
-    newTag: 2.2.1@sha256:8974882a0542ef67ca66ca26a56ca16620079f26a226a5307e02b825e9eb75bd
+    newTag: 2.3.2@sha256:dbf7c3fb1a28044afea35305d099c9b28f3e31e56b3f44ea0530816696af4728
   - name: timberio/vector
     newTag: 0.42.0-distroless-libc@sha256:252e66723a0921c1e6bdfc057bb7d1181078f5c17cdfc19a7a9db98283da30e5
 namespace: lg
