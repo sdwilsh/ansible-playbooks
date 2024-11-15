@@ -80,7 +80,7 @@
     # renovate: datasource=github-releases depName=starship/starship
     starship_version: v1.21.1
     # renovate: datasource=github-releases depName=kubevirt/kubevirt
-    virtctl_version: v1.3.1
+    virtctl_version: v1.4.0
     # renovate: datasource=github-releases depName=wez/wezterm
     wezterm_version: 20240203-110809-5046fc22
 
