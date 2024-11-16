@@ -65,6 +65,7 @@ access_control:
         - ^/hacsfiles/.*$
         - ^/service_worker.js$
         - ^/static/.*$
+        - ^/sw-modern.js$
     - domain: immich.tswn.us
       networks:
         - home
