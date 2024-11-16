@@ -62,7 +62,7 @@ access_control:
         - ^/api.*$
         - ^/auth/token.*$
         - ^/frontend_latest/.*$
-        - ^/hacsfiles/iconset.js$
+        - ^/hacsfiles/.*$
         - ^/service_worker.js$
         - ^/static/.*$
     - domain: immich.tswn.us
