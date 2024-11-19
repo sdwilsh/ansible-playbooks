@@ -9,7 +9,7 @@ configMapGenerator:
       - configmap/shutdown-mongo.js
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:768e5c6f5cb6db0794eec98dc7a967f40631746c32232b78a3105fb946f3ab83
+    newTag: 1.37.0@sha256:5b0f33c83a97f5f7d12698df6732098b0cdb860d377f6307b68efe2c6821296f
   - name: lscr.io/linuxserver/unifi-network-application
     newTag: 8.6.9@sha256:9019e3eb5a02e1813a1700e114deccc98466a7e52a72030702fcc3e83fd9aafa
   - name: mongo
