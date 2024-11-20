@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd,tvheadend-bypass-basic-auth-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: tvheadend-ingress
+spec:
+  rules:
+    - host: tvheadend.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: tvheadend-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tvheadend-svc
+spec:
+  ports:
+    - name: htsp
+      port: 9982
+      protocol: TCP
+    - name: web
+      port: 9981
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: tvheadend

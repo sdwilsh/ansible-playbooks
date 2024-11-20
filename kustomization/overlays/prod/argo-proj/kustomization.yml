@@ -30,6 +30,7 @@ resources:
   - application/redis.yml
   - application/traefik.yml
   - application/transmission.yml
+  - application/tvheadend.yml
   - application/unifi.yml
   - application/valheim-forerunner.yml
   - application/valheim-relic.yml

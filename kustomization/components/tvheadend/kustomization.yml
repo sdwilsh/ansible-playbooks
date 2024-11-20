@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: lscr.io/linuxserver/tvheadend
+    newTag: latest@sha256:4bb75a93552af6855433b364e7212ef18485ccd2d0f50fbdac0fbf1a7562a630
+resources:
+  - service.yml
+  - statefulset.yml

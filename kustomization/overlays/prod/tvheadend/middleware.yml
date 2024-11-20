@@ -1,0 +1,11 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: bypass-basic-auth-middleware
+spec:
+  headers:
+    customRequestHeaders:
+      # Wildly insecure, but we have authelia to secure access.
+      # If someone is in the network, it's already too late.
+      Authorization: "Basic dHJhZWZpazp0cmFlZmlr"

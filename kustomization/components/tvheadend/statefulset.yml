@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tvheadend-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tvheadend
+  serviceName: tvheadend-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tvheadend
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "65534"
+            - name: PUID
+              value: "65534"
+            - name: TZ
+              value: America/Los_Angeles
+          image: lscr.io/linuxserver/tvheadend
+          name: tvheadend
+          ports:
+            - containerPort: 9982
+              name: htsp
+            - containerPort: 9981
+              name: web
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 8Gi
+              squat.ai/quicksync: 1
+            requests:
+              cpu: 500m
+              squat.ai/quicksync: 1
+          securityContext:
+            allowPrivilegeEscalation: true
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: tvheadend-config
+      hostNetwork: true
+      priorityClassName: application
+      securityContext:
+        fsGroup: 65534
+  volumeClaimTemplates:
+    - metadata:
+        name: tvheadend-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-encrypted

@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/tvheadend
+namespace: tvheadend
+patches:
+  - path: patches/add_tvheadend_volumes.yml
+    target:
+      kind: StatefulSet
+      name: tvheadend-statefulset
+resources:
+  - namespace.yml
+  - middleware.yml
+  - ingress.yml
+  - persistentvolume.yml
+  - persistentvolumeclaim.yml
