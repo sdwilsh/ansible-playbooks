@@ -37,6 +37,10 @@ patches:
     target:
       kind: StatefulSet
       name: navidrome-statefulset
+  - path: patches/set_navidrome_disable_star_rating.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
   - path: patches/set_navidrome_service_ip.yml
     target:
       kind: Service
