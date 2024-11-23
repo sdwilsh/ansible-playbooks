@@ -72,7 +72,7 @@
     deb_architecture:
       x86_64: amd64
     # renovate: datasource=github-releases depName=argoproj/argo-cd
-    argocd_version: v2.13.0
+    argocd_version: v2.13.1
     # renovate: datasource=github-releases depName=kubernetes/kubernetes
     kubectl_version: v1.31.3
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
