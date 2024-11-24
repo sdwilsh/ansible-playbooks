@@ -60,9 +60,7 @@ access_control:
       resources:
         - ^/.external_auth=.$
         - ^/api.*$
-        - ^/auth/authorize.*$
-        - ^/auth/providers$
-        - ^/auth/token.*$
+        - ^/auth/.*$
         - ^/frontend_latest/.*$
         - ^/hacsfiles/.*$
         - ^/service_worker.js$
