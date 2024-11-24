@@ -61,6 +61,7 @@ access_control:
         - ^/.external_auth=.$
         - ^/api.*$
         - ^/auth/authorize.*$
+        - ^/auth/providers$
         - ^/auth/token.*$
         - ^/frontend_latest/.*$
         - ^/hacsfiles/.*$
