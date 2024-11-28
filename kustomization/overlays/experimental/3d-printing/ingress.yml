@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: spoolman-ingress
+spec:
+  rules:
+    - host: spoolman.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: spoolman-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix

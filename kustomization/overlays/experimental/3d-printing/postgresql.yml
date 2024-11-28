@@ -1,0 +1,45 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: spoolman-16-pg
+spec:
+  additionalVolumes:
+    - mountPath: /etc/vector
+      name: vector-config
+      targetContainers:
+        - vector
+      volumeSource:
+        projected:
+          defaultMode: 420
+          sources:
+            - configMap:
+                name: postgresql-vector-metrics-sidecar-config
+    - mountPath: /vector-data-dir
+      name: vector-data
+      targetContainers:
+        - vector
+      volumeSource:
+        emptyDir: {}
+  teamId: spoolman
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database
+  numberOfInstances: 3
+  podPriorityClassName: application-infra
+  postgresql:
+    version: "16"
+  preparedDatabases:
+    spoolman:
+      defaultUsers: true
+  sidecars:
+    - image: timberio/vector:0.42.0-distroless-libc
+      name: vector
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        runAsNonRoot: false
+        seccompProfile:
+          type: RuntimeDefault

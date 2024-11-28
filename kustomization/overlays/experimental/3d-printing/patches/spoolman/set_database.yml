@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: SPOOLMAN_DB_HOST
+              value: spoolman-16-pg
+            - name: SPOOLMAN_DB_NAME
+              value: spoolman
+            - name: SPOOLMAN_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+                  key: password
+            - name: SPOOLMAN_DB_TYPE
+              value: postgres
+            - name: SPOOLMAN_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+                  key: username
+          name: spoolman

@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/spoolman
+configMapGenerator:
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yaml
+    options:
+      disableNameSuffixHash: true
+images:
+  - name: ghcr.io/donkie/spoolman
+    newTag: 0.20.0@sha256:b0eb57d927d45b80c2ce8b4c9c9477f964322dc2790272c7c7cecbf9be974504
+namespace: 3d-printing
+patches:
+  - path: patches/spoolman/set_database.yml
+    target:
+      kind: StatefulSet
+      name: spoolman-statefulset
+resources:
+  - namespace.yml
+  - ingress.yml
+  - postgresql.yml
