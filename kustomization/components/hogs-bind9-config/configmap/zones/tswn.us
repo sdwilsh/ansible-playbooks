@@ -1,4 +1,4 @@
-; Hash: 887a76037a68ee3172370a34530041ae 1728615990
+; Hash: 0ae5b08386fceae60a543760947d4226 1732837438
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1728615990
+  1732837438
   1D
   1H
   1W
@@ -131,6 +131,7 @@ opensprinkler.hogs         IN  CNAME  traefik.hogs
 paperless.hogs             IN  CNAME  traefik.hogs
 prometheus.hogs            IN  CNAME  traefik.hogs
 smtp.hogs                  IN  CNAME  traefik.hogs
+spoolman.hogs              IN  CNAME  traefik.hogs
 tdarr.hogs                 IN  CNAME  traefik.hogs
 transmission.hogs          IN  CNAME  traefik.hogs
 tvheadend.hogs             IN  CNAME  traefik.hogs

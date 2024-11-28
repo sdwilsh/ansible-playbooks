@@ -233,6 +233,7 @@ bind_zones:
           - paperless.hogs
           - prometheus.hogs
           - smtp.hogs
+          - spoolman.hogs
           - tdarr.hogs
           - transmission.hogs
           - tvheadend.hogs
