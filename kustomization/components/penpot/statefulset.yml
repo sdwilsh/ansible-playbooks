@@ -14,6 +14,7 @@ spec:
       labels:
         app.kubernetes.io/name: penpot
     spec:
+      automountServiceAccountToken: false
       containers:
         - env:
             - name: PENPOT_ASSET_STORAGE_BACKEND

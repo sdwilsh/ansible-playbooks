@@ -14,6 +14,7 @@ spec:
       labels:
         app.kubernetes.io/name: tvheadend
     spec:
+      automountServiceAccountToken: false
       containers:
         - env:
             - name: PGID

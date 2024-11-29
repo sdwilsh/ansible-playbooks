@@ -14,6 +14,7 @@ spec:
       labels:
         app.kubernetes.io/name: valheim
     spec:
+      automountServiceAccountToken: false
       containers:
         - env:
             - name: AUTO_BACKUP

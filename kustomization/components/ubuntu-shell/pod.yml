@@ -4,6 +4,7 @@ kind: Pod
 metadata:
   name: ubuntu-shell 
 spec:
+  automountServiceAccountToken: false
   containers:
   - image: ubuntu
     name: ubuntu

@@ -13,6 +13,7 @@ spec:
       labels:
         app.kubernetes.io/name: ara
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: ara
           env:
