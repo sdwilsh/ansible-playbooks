@@ -69,7 +69,11 @@ spec:
               subPath: homeassistant.code-workspace
             - mountPath: /homeassistant-config
               name: homeassistant-config
-        - image: ghcr.io/home-assistant/home-assistant
+        - env:
+            # Short-term workaround as highlighted in https://github.com/home-assistant/core/issues/127966
+            - name: PYTHONPATH
+              value: /usr/local/lib/python3.12:/config/deps
+          image: ghcr.io/home-assistant/home-assistant
           livenessProbe:
             httpGet:
               port: hass-web
