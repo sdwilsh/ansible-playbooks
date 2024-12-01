@@ -12,7 +12,7 @@ configMapGenerator:
       disableNameSuffixHash: true
 images:
   - name: ghcr.io/donkie/spoolman
-    newTag: 0.20.0@sha256:b0eb57d927d45b80c2ce8b4c9c9477f964322dc2790272c7c7cecbf9be974504
+    newTag: 0.21.0@sha256:91e4b75dacfd17c64fdf23336e824149fb0d636df6c422312de1e211d02ce412
 namespace: 3d-printing
 patches:
   - path: patches/spoolman/set_database.yml
