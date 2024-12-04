@@ -33,7 +33,7 @@ spec:
     spoolman:
       defaultUsers: true
   sidecars:
-    - image: timberio/vector:0.42.0-distroless-libc
+    - image: timberio/vector:0.43.0-distroless-libc
       name: vector
       securityContext:
         allowPrivilegeEscalation: false
