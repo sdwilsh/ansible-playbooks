@@ -12,7 +12,7 @@ configMapGenerator:
 images:
   - name: traefik
     # renovate: datasource=github-releases depName=traefik/traefik
-    newTag: v3.2.1@sha256:1a3e33f976d10f45efd613aa64814867068bf51c782599a70ef370447686291b
+    newTag: v3.2.2@sha256:990bbdb0a9174b0d441317a63188e41c63795380db42b36ed920543e27ce04c9
   - name: timberio/vector
     newTag: 0.43.0-distroless-libc@sha256:ef7a313870459631cbf45371182f81544e26194feec146e0002db5167e673aee
 patches:
