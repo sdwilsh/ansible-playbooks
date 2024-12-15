@@ -72,7 +72,7 @@ spec:
         - env:
             # Short-term workaround as highlighted in https://github.com/home-assistant/core/issues/127966
             - name: PYTHONPATH
-              value: /usr/local/lib/python3.12:/config/deps
+              value: /usr/local/lib/python3.13:/config/deps
           image: ghcr.io/home-assistant/home-assistant
           livenessProbe:
             httpGet:
