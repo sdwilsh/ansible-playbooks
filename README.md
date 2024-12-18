@@ -14,10 +14,6 @@ set system login user ansible authentication public-keys sdwilsh-dev type ssh-ed
 commit
 ```
 
-If you are using the OVA Template for ESXI, you can just specify the user data with the contents of
-[this file](https://github.com/sdwilsh/ansible-playbooks/blob/main/cloud-init-vyos-esxi).  This was generated
-with [this repository](https://github.com/zdc/vyos-cloud-init-userdata/) and the above commands.
-
 #### Set IP Address
 
 Run this on the remote machine (chaning the interface and IP address as appropriate):
