@@ -1,0 +1,28 @@
+{
+    "name": "ansible-playbooks",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "earthly.earthfile-syntax-highlighting"
+            ],
+            "settings": {
+                "yaml.customTags": [
+                    "!vault scalar"
+                ]
+            }
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/earthly/devcontainer-features/earthly:1": {
+            "bootstrap": true,
+            // renovate: datasource=docker depName=earthly/earthly
+            "version": "v0.8.15"
+        }
+    },
+    "postCreateCommand": ".devcontainer/post-create-command.sh",
+    "remoteUser": "vscode"
+}
