@@ -20,11 +20,11 @@
         "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
             // renovate: datasource=github-releases depName=kubernetes/kubernetes
             "version": "1.31.4"
-		},
+        },
         "ghcr.io/devcontainers-extra/features/argo-cd:1": {
             // renovate: datasource=github-releases depName=argoproj/argo-cd
             "version": "2.13.2"
-		},
+        },
         "ghcr.io/earthly/devcontainer-features/earthly:1": {
             "bootstrap": true,
             // renovate: datasource=docker depName=earthly/earthly
@@ -33,7 +33,7 @@
         "ghcr.io/rio/features/kustomize:1": {
             // renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
             "version": "v5.4.3"
-		}
+        }
     },
     "postCreateCommand": ".devcontainer/post-create-command.sh",
     "remoteUser": "vscode"
