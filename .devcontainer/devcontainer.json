@@ -1,6 +1,7 @@
 {
     "name": "ansible-playbooks",
     "build": {
+        "context": "..",
         "dockerfile": "Dockerfile"
     },
     "customizations": {
