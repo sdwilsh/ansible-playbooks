@@ -2,4 +2,6 @@
 
 set -eu
 
-ansible-playbook plays/kairos/get_kubeconfig.yml
+if [ -z "${CI}" ]; then
+    ansible-playbook plays/kairos/get_kubeconfig.yml
+fi

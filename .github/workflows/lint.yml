@@ -12,6 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run Lint checks
-        run: |
-          ./earthly.sh +lint
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pre-build image and run lint in dev container
+        uses: devcontainers/ci@v0.3.1900000349
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
+          env: |
+            CI=1
+          imageName: ghcr.io/${{ github.repository }}-devcontainer
+          push: filter
+          refFilterForPush: refs/heads/main
+          runCmd: earthly +lint
