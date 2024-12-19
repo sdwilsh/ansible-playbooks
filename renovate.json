@@ -214,6 +214,14 @@
       ]
     },
     {
+      "groupName": "redis",
+      "matchPackageNames": [
+        "quay.io/opstree/redis",
+        "quay.io/opstree/redis-sentinel",
+        "redis-operator"
+      ]
+    },
+    {
       "groupName": "tdarr",
       "matchPackageNames": [
         "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
