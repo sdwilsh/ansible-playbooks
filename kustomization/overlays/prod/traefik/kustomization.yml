@@ -16,9 +16,9 @@ configMapGenerator:
       disableNameSuffixHash: true
 images:
   - name: quay.io/opstree/redis-sentinel
-    newTag: v7.2.3
+    newTag: v7.2.3@sha256:d2618433f801ede645db01b1ba7ae1e9c3b0fe402f3697a07057a2824a8df935
   - name: quay.io/opstree/redis
-    newTag: v7.2.3
+    newTag: v7.2.3@sha256:f06a24e505d5750bd4b094e842f3fa59925f7f88ef08f71c6d2c474497c26925
 namespace: traefik
 patches:
   - path: patches/add_authelia_identity_providers_secrets.yml
