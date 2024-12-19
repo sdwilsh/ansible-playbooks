@@ -1,6 +1,7 @@
 {
     "name": "ansible-playbooks",
     "build": {
+        "cacheFrom": "ghcr.io/sdwilsh/ansible-playbooks-devcontainer:latest",
         "context": "..",
         "dockerfile": "Dockerfile"
     },
