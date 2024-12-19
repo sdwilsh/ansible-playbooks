@@ -31,6 +31,13 @@ tracked-files:
 # Workflows
 #
 
+hadolint:
+    # renovate: datasource=docker depName=hadolint/hadolint versioning=docker
+    ARG HADOLINT_VERSION=2.12.0-alpine
+    FROM hadolint/hadolint:$HADOLINT_VERSION
+    COPY +tracked-files/all .
+    RUN find . -name "Dockerfile*" -print | xargs -r -n1 hadolint
+
 kustomize-build:
     # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
     ARG KUSTOMIZE_VERSION=v5.4.3
@@ -56,6 +63,7 @@ shellcheck-lint:
     RUN find . -name "*.sh" -print | xargs -r -n1 shellcheck -x
 
 lint:
+    BUILD +hadolint
     BUILD +kustomize-build
     BUILD +renovate-validate
     BUILD +shellcheck-lint
