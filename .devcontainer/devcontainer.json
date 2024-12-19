@@ -21,7 +21,7 @@
         "ghcr.io/devcontainers/features/docker-in-docker:2": {},
         "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
             // renovate: datasource=github-releases depName=kubernetes/kubernetes
-            "version": "1.31.4"
+            "version": "1.32.0"
         },
         "ghcr.io/devcontainers-extra/features/argo-cd:1": {
             // renovate: datasource=github-releases depName=argoproj/argo-cd
