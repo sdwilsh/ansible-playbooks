@@ -4,6 +4,9 @@ hostname: {{ hostvars[host].inventory_hostname }}
 
 users:
   - name: kairos
+    lock_passwd: true
+    groups:
+      - admin
     ssh_authorized_keys:
 {% for item in common__keys %}
       - {{ item.type }} {{ item.key }}
