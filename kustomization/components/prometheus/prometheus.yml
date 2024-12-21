@@ -12,7 +12,7 @@ spec:
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
   priorityClassName: application
-  retention: 12w
+  retention: 4w
   ruleSelector: {}
   securityContext:
     fsGroup: 65536
