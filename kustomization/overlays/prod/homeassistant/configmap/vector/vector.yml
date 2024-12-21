@@ -19,7 +19,6 @@ sources:
       token: ${BEARER_TOKEN:?unset_bearer_token}
     endpoints:
       - http://homeassistant-svc:8081/api/prometheus
-    instance_tag: vector_instance
     scrape_interval_secs: 60
     scrape_timeout_secs: 15
     type: prometheus_scrape

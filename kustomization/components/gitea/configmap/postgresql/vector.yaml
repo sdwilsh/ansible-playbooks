@@ -18,7 +18,6 @@ sources:
   patroni_metrics:
     endpoints:
       - http://localhost:8008/metrics
-    instance_tag: vector_instance
     scrape_interval_secs: 60
     scrape_timeout_secs: 15
     type: prometheus_scrape
