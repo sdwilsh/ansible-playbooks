@@ -3,6 +3,10 @@ exclude_paths:
   - .github/
   - external_collections/
   - external_roles/
+  - kustomization/components/gitea/charts/
+  - kustomization/components/immich/charts/
+  - kustomization/components/redis-operator/charts/
+  - kustomization/overlays/prod/vector/charts/
 skip_list:
   - name[template]
 use_default_rules: true
