@@ -31,13 +31,6 @@ tracked-files:
 # Workflows
 #
 
-hadolint:
-    # renovate: datasource=docker depName=hadolint/hadolint versioning=docker
-    ARG HADOLINT_VERSION=2.12.0-alpine
-    FROM hadolint/hadolint:$HADOLINT_VERSION
-    COPY +tracked-files/all .
-    RUN find . -name "Dockerfile*" -print | xargs -r -n1 hadolint
-
 shellcheck-lint:
     # renovate: datasource=docker depName=koalaman/shellcheck-alpine versioning=docker
     ARG SHELLCHECK_VERSION=v0.10.0
@@ -47,5 +40,4 @@ shellcheck-lint:
     RUN find . -name "*.sh" -print | xargs -r -n1 shellcheck -x
 
 lint:
-    BUILD +hadolint
     BUILD +shellcheck-lint
