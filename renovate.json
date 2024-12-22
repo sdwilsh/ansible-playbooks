@@ -55,7 +55,6 @@
       "customType": "regex",
       "fileMatch": [
         "^group_vars/vyos\\.yml$",
-        "^roles/devsetup/tasks/main\\.yml$"
       ],
       "matchStrings": [
         "#\\s+renovate:\\s+datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)\\s+[a-z]+_version:\\s+(?<currentValue>.*?)\\n"
