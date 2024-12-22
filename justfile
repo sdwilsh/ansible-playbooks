@@ -1,8 +1,10 @@
 # Lists all targets
+[private]
 default:
-    just --list
+    @just --list
 
-# Run hadolint on all `Dockerfile`s
+# Run `hadolint` on all `Dockerfile`s
+[group('lint')]
 hadolint:
     #!/usr/bin/env bash
     set -eou pipefail
@@ -12,7 +14,8 @@ hadolint:
         echo "{{BOLD + GREEN}}OK{{NORMAL}}"
     done
 
-# Build production overlay with kustomize
+# Build production overlay with `kustomize`
+[group('lint')]
 kustomize-build:
     #!/usr/bin/env bash
     set -eou pipefail
@@ -22,11 +25,13 @@ kustomize-build:
         echo "{{BOLD + GREEN}}OK{{NORMAL}}"
     done
 
-# Validate renovate.json file
+# Validate `renovate.json` file
+[group('lint')]
 renovate-validate:
     renovate-config-validator
 
-# Run shellcheck on all shell files
+# Run `shellcheck` on all shell files
+[group('lint')]
 shellcheck:
     #!/usr/bin/env bash
     set -eou pipefail
