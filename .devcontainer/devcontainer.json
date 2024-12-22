@@ -29,6 +29,10 @@
             // renovate: datasource=github-releases depName=argoproj/argo-cd
             "version": "2.13.2"
         },
+        "ghcr.io/devcontainers-extra/features/renovate-cli:2": {
+            // renovate: datasource=github-releases depName=renovate/renovate
+            "version": "39.82.0"
+        },
         "ghcr.io/dhoeric/features/hadolint:1": {
             // renovate: datasource=github-releases depName=hadolint/hadolint
             "version": "2.12.0"
