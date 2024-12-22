@@ -52,23 +52,3 @@ ansible-playbook \
 ```
 
 Note: The user `provision` will be removed automatically when the `common` role is run not as that user.
-
-# Create a new VM with kubevirt
-
-1) Set the context to the namespace you wish to upload the ISO to with:
-
-```
-kubectl config set-context --current --namespace=$(NAMESPACE)
-```
-
-2) Upload with:
-
-```
-virtctl image-upload pvc ubuntu-22.04-live-server-amd64 \
-    --access-mode=ReadWriteMany \
-    --image-path ubuntu-22.04.4-live-server-amd64.iso \
-    --size=3Gi \
-    --storage-class=image-upload-storageclass \
-    --uploadproxy-url=https://cdi-image-upload.hogs.tswn.us \
-    --wait-secs=240
-```
