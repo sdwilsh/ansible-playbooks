@@ -41,8 +41,6 @@ jobs:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           env: |
             CI=1
-          imageName: ghcr.io/${{ github.repository }}-devcontainer
-          push: never
           runCmd: |
             just justcheck
 
