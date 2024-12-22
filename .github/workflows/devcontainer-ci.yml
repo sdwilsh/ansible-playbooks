@@ -1,5 +1,5 @@
 ---
-name: Lint
+name: Devcontainer-based CI
 on:
  push:
    branches:
@@ -8,10 +8,10 @@ on:
  pull_request:
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3 
@@ -29,6 +29,19 @@ jobs:
           imageName: ghcr.io/${{ github.repository }}-devcontainer
           push: filter
           refFilterForPush: refs/heads/main
+
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run lint
+        uses: devcontainers/ci@v0.3.1900000349
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
+          env: |
+            CI=1
+          imageName: ghcr.io/${{ github.repository }}-devcontainer
           runCmd: |
             just justcheck
 
