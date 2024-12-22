@@ -50,4 +50,3 @@ galaxy_info:
 dependencies:
   - "common"
   - "github-client"
-  

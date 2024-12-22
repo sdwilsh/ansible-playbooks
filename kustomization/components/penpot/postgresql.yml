@@ -29,7 +29,7 @@ spec:
   postgresql:
     version: "16"
   preparedDatabases:
-    penpot: 
+    penpot:
       defaultUsers: true
   sidecars:
     - image: timberio/vector:0.43.1-distroless-libc

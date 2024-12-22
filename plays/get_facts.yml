@@ -2,5 +2,5 @@
 - name: Get ansible facts
   hosts: all
   tasks:
-  - ansible.builtin.debug:
-      msg: "{{ ansible_facts }}"
+    - ansible.builtin.debug:
+        msg: "{{ ansible_facts }}"

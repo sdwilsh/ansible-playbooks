@@ -4,7 +4,7 @@ kind: Redis
 metadata:
   name: penpot-redis
 spec:
-  kubernetesConfig: 
+  kubernetesConfig:
     image: quay.io/opstree/redis
     imagePullPolicy: IfNotPresent
     resources:

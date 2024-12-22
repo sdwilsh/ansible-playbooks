@@ -19,8 +19,8 @@ spec:
     fsGroup: 1000 # redis
     runAsUser: 1000 # redis
   priorityClassName: system-cluster-critical
-  redisSentinelConfig: 
-    redisReplicationName : authelia-redis-replication
+  redisSentinelConfig:
+    redisReplicationName: authelia-redis-replication
   kubernetesConfig:
     image: quay.io/opstree/redis-sentinel
     imagePullPolicy: IfNotPresent

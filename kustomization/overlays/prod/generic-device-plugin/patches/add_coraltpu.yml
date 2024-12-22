@@ -1,7 +1,7 @@
 ---
 - op: add
   path: /spec/template/spec/containers/0/args/-
-  value:  --device
+  value: --device
 - op: add
   path: /spec/template/spec/containers/0/args/-
   # Note that the vendor and product start out as 1a64:089a until the first inference when they

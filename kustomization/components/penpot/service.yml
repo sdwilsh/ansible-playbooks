@@ -10,4 +10,4 @@ spec:
       protocol: TCP
       targetPort: web
   selector:
-    app.kubernetes.io/name: penpot 
+    app.kubernetes.io/name: penpot

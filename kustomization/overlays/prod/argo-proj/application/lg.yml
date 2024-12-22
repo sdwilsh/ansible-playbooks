@@ -8,7 +8,7 @@ spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: lg 
+    namespace: lg
   source:
     path: kustomization/overlays/prod/lg
     repoURL: https://github.com/sdwilsh/ansible-playbooks

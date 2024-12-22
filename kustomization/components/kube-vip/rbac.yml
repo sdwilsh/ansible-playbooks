@@ -43,5 +43,5 @@ roleRef:
   kind: ClusterRole
   name: system:kube-vip-role
 subjects:
-- kind: ServiceAccount
-  name: kube-vip
+  - kind: ServiceAccount
+    name: kube-vip

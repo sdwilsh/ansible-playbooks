@@ -235,28 +235,28 @@ vyos_interfaces__wireguard:
 vyos_ospf_interfaces__config:
   - name: wg0
     address_family:
-    - afi: ipv4
-      authentication:
-        md5_key:
-          key_id: 1
-          key: "{{ vyos__ospf_authentication_key }}"
-      cost: 10 # 1G
-      dead_interval: 5
-      hello_interval: 2
-      network: point-to-point
-      priority: "{{ hostvars['hogs01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
+      - afi: ipv4
+        authentication:
+          md5_key:
+            key_id: 1
+            key: "{{ vyos__ospf_authentication_key }}"
+        cost: 10 # 1G
+        dead_interval: 5
+        hello_interval: 2
+        network: point-to-point
+        priority: "{{ hostvars['hogs01.routers.hogs.tswn.us'].vyos__vrrp_priority }}"
   - name: wg1
     address_family:
-    - afi: ipv4
-      authentication:
-        md5_key:
-          key_id: 1
-          key: "{{ vyos__ospf_authentication_key }}"
-      cost: 10 # 1G
-      dead_interval: 5
-      hello_interval: 2
-      network: point-to-point
-      priority: "{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__vrrp_priority }}"
+      - afi: ipv4
+        authentication:
+          md5_key:
+            key_id: 1
+            key: "{{ vyos__ospf_authentication_key }}"
+        cost: 10 # 1G
+        dead_interval: 5
+        hello_interval: 2
+        network: point-to-point
+        priority: "{{ hostvars['maccabeus01.hogs.tswn.us'].vyos__vrrp_priority }}"
 
 vyos_ospfv2__neighbors:
   - neighbor_id: "10.10.1.1"
@@ -268,11 +268,11 @@ vyos_ospfv2_parameters__router_id: "149.248.37.12"
 
 vyos_static_routes__config:
   - address_families:
-    - afi: ipv4
-      routes:
-        - dest: 0.0.0.0/0
-          next_hops:
-            - forward_router_address: 149.248.36.1
+      - afi: ipv4
+        routes:
+          - dest: 0.0.0.0/0
+            next_hops:
+              - forward_router_address: 149.248.36.1
 
 # This uses a local DNS forwarding server, so use that.
 vyos_system__name_servers:

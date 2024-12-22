@@ -79,7 +79,7 @@ spec:
               name: mosquitto-data
       priorityClassName: critical-application
       securityContext:
-        fsGroup: 1883 #mosquitto
+        fsGroup: 1883 # mosquitto
         runAsGroup: 1883 # mosquitto
         runAsUser: 1883 # mosquitto
       volumes:

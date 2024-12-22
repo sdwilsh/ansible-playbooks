@@ -73,7 +73,7 @@ spec:
         - emptyDir:
           name: tdarr-configs
         - emptyDir:
-          name: tdarr-logs 
+          name: tdarr-logs
         - name: tdarr-cache
           persistentVolumeClaim:
             claimName: tdarr-cache-pvc

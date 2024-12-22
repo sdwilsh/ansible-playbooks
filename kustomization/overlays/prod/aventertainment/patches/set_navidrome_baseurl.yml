@@ -11,4 +11,3 @@ spec:
             - name: ND_BASEURL
               value: https://navidrome.tswn.us
           name: navidrome
-

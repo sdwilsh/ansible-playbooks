@@ -58,7 +58,7 @@
               domains:
                 - main: tswn.us
                   sans:
-                  - "*.tswn.us"
+                    - "*.tswn.us"
     - name: Create Minecraft PersistantVolume (NFS)
       kubernetes.core.k8s:
         api_version: v1

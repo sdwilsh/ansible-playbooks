@@ -5,8 +5,8 @@ metadata:
   name: ara-svc
 spec:
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8000
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
   selector:
     app.kubernetes.io/name: ara

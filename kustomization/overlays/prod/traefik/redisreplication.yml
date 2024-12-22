@@ -16,7 +16,7 @@ spec:
                   - authelia-redis-replication
           topologyKey: kubernetes.io/hostname
   clusterSize: 2
-  kubernetesConfig: 
+  kubernetesConfig:
     image: quay.io/opstree/redis
     imagePullPolicy: IfNotPresent
     redisSecret:

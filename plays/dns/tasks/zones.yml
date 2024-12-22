@@ -24,7 +24,7 @@
 
 - name: Create dict of forward hashes
   set_fact:
-    forward_hashes: "{{ forward_hashes|default([]) + [ {'hash': item.stdout|default(), 'name': item.item.name} ] }}"
+    forward_hashes: "{{ forward_hashes|default([]) + [{'hash': item.stdout|default(), 'name': item.item.name}] }}"
   with_items:
     - "{{ forward_hashes_temp.results }}"
   run_once: true

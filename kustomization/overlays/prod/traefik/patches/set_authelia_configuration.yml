@@ -7,7 +7,7 @@
     name: prod-configuration
 - op: add
   path: /spec/template/spec/containers/0/volumeMounts/-
-  value: 
+  value:
     mountPath: /config/prod
     name: prod-configuration
     readOnly: true

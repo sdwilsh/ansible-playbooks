@@ -15,7 +15,7 @@ bind_listen_ipv4:
 bind_zones:
   - name: "tswn.us"
     create_reverse_zones: true
-    primaries: 
+    primaries:
       - "10.10.0.3"
     name_servers:
       - "ns1.tswn.us."

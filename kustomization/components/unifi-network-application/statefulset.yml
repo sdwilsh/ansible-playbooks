@@ -68,7 +68,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: una-secret
-                  key: MONGO_PASS 
+                  key: MONGO_PASS
             - name: MONGO_PORT
               value: "27017"
             - name: MONGO_USER
@@ -123,7 +123,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: una-secret
-                  key: MONGO_PASS 
+                  key: MONGO_PASS
           command:
             - sh
             - -c

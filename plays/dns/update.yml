@@ -21,7 +21,7 @@
         ansible_all_ipv6_addresses: []
         ansible_hostname: ns1.tswn.us
         component_dir: "{{ root_dir }}/kustomization/components/hogs-bind9-config"
-        roles_paths: "{{ output.stdout | from_yaml + [root_dir + '/roles' ] }}"
+        roles_paths: "{{ output.stdout | from_yaml + [root_dir + '/roles'] }}"
         root_relative_dir: plays/dns
     - name: Load bertvv.bind default variables
       ansible.builtin.include_vars:

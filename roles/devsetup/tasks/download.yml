@@ -12,7 +12,7 @@
     group: sdwilsh
     owner: sdwilsh
     url: "{{ item.sha256 }}"
-  register: fetch_sha256 
+  register: fetch_sha256
   when: "'sha256' in item"
 - name: "Consume {{ item.executable }} {{ item.version }} sha256"
   ansible.builtin.slurp:

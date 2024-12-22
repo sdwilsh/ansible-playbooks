@@ -16,35 +16,35 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: Exists
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: Exists
       containers:
-      - args:
-        - manager
-        env:
-        - name: cp_enable
-          value: "true"
-        - name: cp_namespace
-          value: kube-vip
-        - name: lb_port
-          value: "6443"
-        - name: prometheus_server
-          value: ":2113"
-        - name: vip_arp
-          value: "true"
-        - name: vip_leaderelection
-          value: "true"
-        - name: vip_leaseduration
-          value: "5"
-        - name: vip_nodename
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-        - name: vip_renewdeadline
-          value: "3"
-        - name: vip_retryperiod
-          value: "1"
+        - args:
+            - manager
+          env:
+            - name: cp_enable
+              value: "true"
+            - name: cp_namespace
+              value: kube-vip
+            - name: lb_port
+              value: "6443"
+            - name: prometheus_server
+              value: ":2113"
+            - name: vip_arp
+              value: "true"
+            - name: vip_leaderelection
+              value: "true"
+            - name: vip_leaseduration
+              value: "5"
+            - name: vip_nodename
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: vip_renewdeadline
+              value: "3"
+            - name: vip_retryperiod
+              value: "1"
         image: ghcr.io/kube-vip/kube-vip
         name: kube-vip
         ports:
@@ -53,17 +53,17 @@ spec:
         securityContext:
           capabilities:
             add:
-            - NET_ADMIN
-            - NET_RAW
-            - SYS_TIME
+              - NET_ADMIN
+              - NET_RAW
+              - SYS_TIME
       hostNetwork: true
       priorityClassName: system-cluster-critical
       serviceAccountName: kube-vip
       tolerations:
-      - effect: NoSchedule
-        operator: Exists
-      - effect: NoExecute
-        operator: Exists
+        - effect: NoSchedule
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
 
 ---
 apiVersion: apps/v1
@@ -80,49 +80,49 @@ spec:
         app.kubernetes.io/name: kube-vip-svc-ds
     spec:
       containers:
-      - args:
-        - manager
-        env:
-        - name: cp_enable
-          value: "false"
-        - name: cp_namespace
-          value: kube-vip
-        - name: prometheus_server
-          value: ":2114"
-        - name: svc_election
-          value: "true"
-        - name: svc_enable
-          value: "true"
-        - name: vip_arp
-          value: "true"
-        - name: vip_leaderelection
-          value: "true"
-        - name: vip_leaseduration
-          value: "5"
-        - name: vip_nodename
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-        - name: vip_renewdeadline
-          value: "3"
-        - name: vip_retryperiod
-          value: "1"
-        image: ghcr.io/kube-vip/kube-vip
-        name: kube-vip
-        ports:
-          - containerPort: 2114
-            name: metrics
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-            - NET_RAW
-            - SYS_TIME
-      hostNetwork: true
-      priorityClassName: system-cluster-critical
-      serviceAccountName: kube-vip
-      tolerations:
-      - effect: NoSchedule
-        operator: Exists
-      - effect: NoExecute
-        operator: Exists
+        - args:
+            - manager
+          env:
+            - name: cp_enable
+              value: "false"
+            - name: cp_namespace
+              value: kube-vip
+            - name: prometheus_server
+              value: ":2114"
+            - name: svc_election
+              value: "true"
+            - name: svc_enable
+              value: "true"
+            - name: vip_arp
+              value: "true"
+            - name: vip_leaderelection
+              value: "true"
+            - name: vip_leaseduration
+              value: "5"
+            - name: vip_nodename
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: vip_renewdeadline
+              value: "3"
+            - name: vip_retryperiod
+              value: "1"
+          image: ghcr.io/kube-vip/kube-vip
+          name: kube-vip
+          ports:
+            - containerPort: 2114
+              name: metrics
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_TIME
+        hostNetwork: true
+        priorityClassName: system-cluster-critical
+        serviceAccountName: kube-vip
+        tolerations:
+          - effect: NoSchedule
+            operator: Exists
+          - effect: NoExecute
+            operator: Exists
