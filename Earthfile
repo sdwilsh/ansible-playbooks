@@ -38,14 +38,6 @@ hadolint:
     COPY +tracked-files/all .
     RUN find . -name "Dockerfile*" -print | xargs -r -n1 hadolint
 
-kustomize-build:
-    # renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
-    ARG KUSTOMIZE_VERSION=v5.4.3
-    FROM registry.k8s.io/kustomize/kustomize:$KUSTOMIZE_VERSION
-    COPY +helm/binary /usr/local/bin/helm
-    COPY kustomization kustomization
-    RUN find kustomization/overlays/prod/ -mindepth 1 -maxdepth 1 -type d -print | xargs -r -n1 kustomize build --enable-helm > /dev/null
-
 shellcheck-lint:
     # renovate: datasource=docker depName=koalaman/shellcheck-alpine versioning=docker
     ARG SHELLCHECK_VERSION=v0.10.0
@@ -56,5 +48,4 @@ shellcheck-lint:
 
 lint:
     BUILD +hadolint
-    BUILD +kustomize-build
     BUILD +shellcheck-lint

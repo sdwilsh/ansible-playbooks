@@ -31,4 +31,5 @@ jobs:
           refFilterForPush: refs/heads/main
           runCmd: |
             earthly +lint
+            just kustomize-build
             just renovate-validate
