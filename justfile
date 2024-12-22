@@ -25,3 +25,13 @@ kustomize-build:
 # Validate renovate.json file
 renovate-validate:
     renovate-config-validator
+
+# Run shellcheck on all shell files
+shellcheck:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    find . -type f -name "*.sh" -not -path "./external_*" -not -path "*/charts/*" | while read -r file; do
+        echo -n "Running \`shellcheck -x\` on ${file}..."
+        shellcheck -x ${file}
+        echo "{{BOLD + GREEN}}OK{{NORMAL}}"
+    done

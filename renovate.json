@@ -14,24 +14,12 @@
     {
       "customType": "regex",
       "fileMatch": [
-        "(^|/|\\.)(Docker|Earth)file$"
+        "(^|/|\\.)Dockerfile$"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)(\\s+versioning=(?<versioning>.*?))?\\s+ARG\\s+.+_VERSION=(?<currentValue>.*?)\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
-    },
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "^earthly\\.sh$"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "earthly/earthly",
-      "matchStrings": [
-        "earthly\\/earthly:(?<currentValue>.*?)\\s"
-      ],
-      "versioningTemplate": "semver-coerced"
     },
     {
       "customType": "regex",
@@ -141,7 +129,6 @@
         "argoproj/argo-cd",
         "cert-manager/cert-manager",
         "deluan/navidrome",
-        "earthly/earthly",
         "eclipse-mosquitto",
         "esphome/esphome",
         "ghcr.io/paperless-ngx/paperless-ngx",

@@ -8,7 +8,6 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "earthly.earthfile-syntax-highlighting",
                 "nefrob.vscode-just-syntax"
             ],
             "settings": {
@@ -19,7 +18,6 @@
         }
     },
     "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
         "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
             // renovate: datasource=github-releases depName=helm/helm
             "helm": "3.16.4",
@@ -37,11 +35,6 @@
         "ghcr.io/dhoeric/features/hadolint:1": {
             // renovate: datasource=github-releases depName=hadolint/hadolint
             "version": "2.12.0"
-        },
-        "ghcr.io/earthly/devcontainer-features/earthly:1": {
-            "bootstrap": true,
-            // renovate: datasource=docker depName=earthly/earthly
-            "version": "v0.8.15"
         },
         "ghcr.io/guiyomh/features/just:0": {
             // renovate: datasource=github-releases depName=casey/just
