@@ -42,6 +42,10 @@
             // renovate: datasource=docker depName=earthly/earthly
             "version": "v0.8.15"
         },
+        "ghcr.io/marcozac/devcontainer-features/shellcheck:1": {
+            // renovate: datasource=github-releases depName=koalaman/shellcheck
+            "version": "v0.10.0"
+        },
         "ghcr.io/rio/features/kustomize:1": {
             // renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
             "version": "v5.4.3"
