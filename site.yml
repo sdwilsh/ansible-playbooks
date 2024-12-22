@@ -1,5 +1,6 @@
 ---
-- hosts: "all:!kairos:!pikvm:!vyos"
+- name: Most hosts
+  hosts: "all:!kairos:!pikvm:!vyos"
   become: true
   roles:
     - role: common-users
@@ -15,7 +16,9 @@
   tasks:
     - name: "Flush handlers from core roles"
       ansible.builtin.meta: "flush_handlers"
-- import_playbook: "plays/groups/dns.yml"
-- import_playbook: plays/groups/pikvm.yml
-- import_playbook: "plays/hosts/harvest.hogs.tswn.us.yml"
-- import_playbook: "plays/hosts/monitor.house.gem.hogs.tswn.us.yml"
+- name: DNS hosts
+  import_playbook: plays/groups/dns.yml
+- name: PiKVM hosts
+  import_playbook: plays/groups/pikvm.yml
+- name: Energy monitor hosts
+  import_playbook: plays/hosts/monitor.house.gem.hogs.tswn.us.yml
