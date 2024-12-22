@@ -8,7 +8,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "earthly.earthfile-syntax-highlighting"
+                "earthly.earthfile-syntax-highlighting",
+                "nefrob.vscode-just-syntax"
             ],
             "settings": {
                 "yaml.customTags": [
@@ -41,6 +42,10 @@
             "bootstrap": true,
             // renovate: datasource=docker depName=earthly/earthly
             "version": "v0.8.15"
+        },
+        "ghcr.io/guiyomh/features/just:0": {
+            // renovate: datasource=github-releases depName=casey/just
+            "version": "1.38.0"
         },
         "ghcr.io/marcozac/devcontainer-features/shellcheck:1": {
             // renovate: datasource=github-releases depName=koalaman/shellcheck
