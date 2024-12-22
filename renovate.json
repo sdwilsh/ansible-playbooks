@@ -8,7 +8,7 @@
         "^.devcontainer/devcontainer.json$"
       ],
       "matchStrings": [
-        "\\srenovate:\\s+datasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s*\"version\":\\s+\"(?<currentValue>.*?)\""
+        "\\srenovate:\\s+datasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s*\"[a-z]+\":\\s+\"(?<currentValue>.*?)\""
       ]
     },
     {
