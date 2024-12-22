@@ -29,4 +29,6 @@ jobs:
           imageName: ghcr.io/${{ github.repository }}-devcontainer
           push: filter
           refFilterForPush: refs/heads/main
-          runCmd: earthly +lint
+          runCmd: |
+            earthly +lint
+            just renovate-validate
