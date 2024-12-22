@@ -2,7 +2,8 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    kube-vip.io/loadbalancerIPs: 10.11.1.67
   name: this-is-ignored-but-is-required
 spec:
-  loadBalancerIP: 10.11.1.69
   type: LoadBalancer

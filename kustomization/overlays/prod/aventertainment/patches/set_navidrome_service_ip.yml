@@ -2,8 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    kube-vip.io/loadbalancerIPs: 10.11.1.33
   name: this-is-ignored-but-is-required
 spec:
   externalTrafficPolicy: Local
-  loadBalancerIP: 10.11.1.33
   type: LoadBalancer

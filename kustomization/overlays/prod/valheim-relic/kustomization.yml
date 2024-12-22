@@ -18,7 +18,7 @@ patches:
     target:
       kind: StatefulSet
       name: valheim-statefulset
-  - path: patches/set_loadBalancerIP.yml
+  - path: patches/set_load_balancer.yml
     target:
       kind: Service
       name: valheim-svc

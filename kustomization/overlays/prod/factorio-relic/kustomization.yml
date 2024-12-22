@@ -6,7 +6,7 @@ components:
   - ../../../components/factorio
 namespace: factorio-relic
 patches:
-  - path: patches/set_loadBalancerIP.yml
+  - path: patches/set_load_balancer.yml
     target:
       kind: Service
       name: factorio-svc
