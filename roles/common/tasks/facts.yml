@@ -16,5 +16,5 @@
   register: added_custom_fact
 
 - name: Re-run setup to use custom facts
-  setup: ~
+  ansible.builtin.setup: ~
   when: added_custom_fact.changed

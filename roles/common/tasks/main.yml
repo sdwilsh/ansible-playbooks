@@ -7,7 +7,7 @@
   tags:
     - "always"
 
-- import_tasks: "facts.yml"
+- ansible.builtin.import_tasks: "facts.yml"
 
 # Networking
 - name: "Set /etc/hosts"
@@ -18,5 +18,5 @@
   when: common__ip_addresses | length > 0
 
 # Platform-specific stuff
-- import_tasks: "ubuntu.yml"
+- ansible.builtin.import_tasks: "ubuntu.yml"
   when: ansible_distribution == "Ubuntu"

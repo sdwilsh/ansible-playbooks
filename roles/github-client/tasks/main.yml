@@ -1,15 +1,15 @@
 ---
 # tasks file for github-client
 - name: Install git
-  package:
+  ansible.builtin.package:
     name: git
     state: latest
 - name: Create srcs group
-  group:
+  ansible.builtin.group:
     name: srcs
     state: present
 - name: Create /src folder
-  file:
+  ansible.builtin.file:
     path: /src
     state: directory
     group: srcs

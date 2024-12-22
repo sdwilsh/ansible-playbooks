@@ -1,6 +1,6 @@
 ---
 - name: Create base unix groups
-  group:
+  ansible.builtin.group:
     name: "{{ item.name }}"
     gid: "{{ item.gid }}"
     state: present
@@ -28,7 +28,7 @@
     label: "{{ item.description }}"
   become: true
 - name: Setup sudoers
-  template:
+  ansible.builtin.template:
     src: sudoers.j2
     dest: /etc/sudoers.d/ansible
     validate: 'visudo -cf %s'
@@ -37,27 +37,27 @@
 
 # Cleanup From Provisioning
 - name: Remove provision user
-  user:
+  ansible.builtin.user:
     name: provision
     remove: true
     state: absent
   become: true
   when: ansible_user != "provision"
 - name: Remove provision group
-  group:
+  ansible.builtin.group:
     name: provision
     state: absent
   become: true
   when: ansible_user != "provision"
 - name: Remove ubuntu user
-  user:
+  ansible.builtin.user:
     name: ubuntu
     remove: true
     state: absent
   become: true
   when: ansible_user != "ubuntu"
 - name: Remove ubuntu group
-  group:
+  ansible.builtin.group:
     name: ubuntu
     state: absent
   become: true

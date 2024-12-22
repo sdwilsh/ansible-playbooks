@@ -1,5 +1,5 @@
 ---
 # tasks file for common-rpi
-- import_tasks: "config.yml"
-- import_tasks: "cm4io-fan.yml"
+- ansible.builtin.import_tasks: "config.yml"
+- ansible.builtin.import_tasks: "cm4io-fan.yml"
   when: common_rpi__cm4io_fan | length
