@@ -30,6 +30,8 @@ jobs:
           push: filter
           refFilterForPush: refs/heads/main
           runCmd: |
+            just justcheck
+
             just hadolint
             just kustomize-build
             just renovate-validate
