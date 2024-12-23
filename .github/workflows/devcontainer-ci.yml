@@ -30,7 +30,7 @@ jobs:
           push: filter
           refFilterForPush: refs/heads/main
 
-  lint:
+  quick-lint:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -41,10 +41,23 @@ jobs:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           env: |
             CI=1
+          push: never
           runCmd: |
-            just justcheck
-
             just hadolint
-            just kustomize-build
+            just justcheck
             just renovate-validate
             just shellcheck
+
+  kustomize-build:
+    needs: just-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run lint
+        uses: devcontainers/ci@v0.3.1900000349
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
+          env: |
+            CI=1
+          push: never
+          runCmd: just kustomize-build
