@@ -45,17 +45,17 @@ spec:
               value: "3"
             - name: vip_retryperiod
               value: "1"
-        image: ghcr.io/kube-vip/kube-vip
-        name: kube-vip
-        ports:
-          - containerPort: 2113
-            name: metrics
-        securityContext:
-          capabilities:
-            add:
-              - NET_ADMIN
-              - NET_RAW
-              - SYS_TIME
+          image: ghcr.io/kube-vip/kube-vip
+          name: kube-vip
+          ports:
+            - containerPort: 2113
+              name: metrics
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_TIME
       hostNetwork: true
       priorityClassName: system-cluster-critical
       serviceAccountName: kube-vip
@@ -118,11 +118,11 @@ spec:
                 - NET_ADMIN
                 - NET_RAW
                 - SYS_TIME
-        hostNetwork: true
-        priorityClassName: system-cluster-critical
-        serviceAccountName: kube-vip
-        tolerations:
-          - effect: NoSchedule
-            operator: Exists
-          - effect: NoExecute
-            operator: Exists
+      hostNetwork: true
+      priorityClassName: system-cluster-critical
+      serviceAccountName: kube-vip
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
