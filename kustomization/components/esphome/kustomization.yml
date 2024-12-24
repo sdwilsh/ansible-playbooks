@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: esphome/esphome
-    newTag: 2024.12.1@sha256:921f12e15cf6bc837068faa8a4d3b94aeca2ab6bb66a7589ccc642cb98d33fb3
+    newTag: 2024.12.2@sha256:b2c6322700acb67ecf14e6781d5ee953ee6a0e888c0037ee8ac9d49ba48294a9
 resources:
   - service.yml
   - statefulset.yml
