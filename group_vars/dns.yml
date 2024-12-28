@@ -217,6 +217,7 @@ bind_zones:
           - cdi-image-upload.hogs
           - esphome.hogs
           - frigate.hogs
+          - graylog.hogs
           - homeassistant-config.hogs
           - homeassistant.hogs
           - imap.hogs
