@@ -29,7 +29,7 @@
             "version": "2.13.2"
         },
         "ghcr.io/devcontainers-extra/features/renovate-cli:2": {
-            // renovate: datasource=github-releases depName=renovate/renovate
+            // renovate: datasource=github-releases depName=renovatebot/renovate
             "version": "39.82.0"
         },
         "ghcr.io/dhoeric/features/hadolint:1": {
