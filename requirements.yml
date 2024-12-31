@@ -19,7 +19,7 @@ collections:
   - name: community.docker
     version: 4.3.0
   - name: community.general
-    version: 10.1.0
+    version: 10.2.0
   - name: devsec.hardening
     version: 10.2.0
   - name: kubernetes.core
