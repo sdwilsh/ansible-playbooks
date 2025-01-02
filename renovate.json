@@ -194,6 +194,17 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "branch",
+      "groupName": "renovate",
+      "matchPackageNames": [
+        "/^renovatebot\\/renovate$"
+      ],
+      "schedule": [
+        "after 4pm on friday"
+      ]
+    },
+    {
       "groupName": "tdarr",
       "matchPackageNames": [
         "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
