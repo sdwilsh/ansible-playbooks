@@ -1,0 +1,117 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atuin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: atuin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: atuin
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - atuin
+              topologyKey: kubernetes.io/hostname
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - args:
+            - server
+            - start
+          env:
+            - name: TZ
+              value: America/Los_Angeles
+          image: ghcr.io/atuinsh/atuin
+          livenessProbe:
+            httpGet:
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          name: atuin
+          ports:
+            - name: web
+              containerPort: 8888
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          resources:
+            limits:
+              cpu: 250m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000 # atuin
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /config
+              name: tmp-config
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - /scripts/generate-server-toml.sh
+          env:
+            - name: ATUIN_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ATUIN_PORT
+              value: "8888"
+          image: busybox
+          name: generate-config
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 30m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000 # atuin
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /scripts
+              name: scripts
+            - mountPath: /config
+              name: tmp-config
+      priorityClassName: application
+      securityContext:
+        fsGroup: 1000 # atuin
+      volumes:
+        - name: scripts
+          configMap:
+            defaultMode: 0777
+            name: atuin-scripts-configmap
+        - name: tmp-config
+          emptyDir:
+            medium: Memory

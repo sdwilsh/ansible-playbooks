@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: atuin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: atuin
+    spec:
+      automountServiceAccountToken: false
+      initContainers:
+        - env:
+            - name: ATUIN_DB_HOST
+              value: atuin-16-pg
+            - name: ATUIN_DB_PASSWORD_SECRET_FILE
+              value: /postgresql-secrets/password
+            - name: ATUIN_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+                  key: username
+          name: generate-config
+          volumeMounts:
+            - mountPath: /postgresql-secrets
+              name: postgresql-secrets
+              readOnly: true
+      volumes:
+        - name: postgresql-secrets
+          secret:
+            secretName: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do

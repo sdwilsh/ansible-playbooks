@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/atuin
+configMapGenerator:
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yaml
+    options:
+      disableNameSuffixHash: true
+images:
+  - name: busybox
+    newTag: 1.37.0@sha256:2919d0172f7524b2d8df9e50066a682669e6d170ac0f6a49676d54358fe970b5
+  - name: ghcr.io/atuinsh/atuin
+    newTag: v18.4.0@sha256:8c6fa0aea944bf2a39665c9c69df1c2c0f9c05207bda5b942d450142285e3ee1
+namespace: atuin
+patches:
+  - path: patches/set_config_env.yml
+    target:
+      kind: Deployment
+      name: atuin-deployment
+resources:
+  - namespace.yml
+  - ingress.yml
+  - postgresql.yml
