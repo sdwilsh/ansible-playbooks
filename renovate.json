@@ -198,7 +198,7 @@
       "automergeType": "branch",
       "groupName": "renovate",
       "matchPackageNames": [
-        "/^renovatebot\\/renovate$"
+        "renovatebot/renovate"
       ],
       "schedule": [
         "after 4pm on friday"
