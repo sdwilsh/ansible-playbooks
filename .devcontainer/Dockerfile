@@ -4,6 +4,9 @@ FROM mcr.microsoft.com/devcontainers/python:1-${PYTHON_VERSION}
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
+    dnsutils \
+    iproute2 \
+    iputils-ping \
     libssh-dev \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
