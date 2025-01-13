@@ -22,8 +22,6 @@ script: !include scripts.yaml
 . /scripts/generate_generic_hygrostat_config.sh
 # shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_http_config.sh
 . /scripts/generate_http_config.sh
-# shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_plant_config.sh
-. /scripts/generate_plant_config.sh
 # shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_prometheus_config.sh
 . /scripts/generate_prometheus_config.sh
 # shellcheck source=kustomization/components/homeassistant/configmap/scripts/generate_recorder_config.sh
