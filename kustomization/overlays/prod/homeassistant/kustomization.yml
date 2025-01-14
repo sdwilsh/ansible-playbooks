@@ -26,7 +26,7 @@ configMapGenerator:
       disableNameSuffixHash: true
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:2919d0172f7524b2d8df9e50066a682669e6d170ac0f6a49676d54358fe970b5
+    newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
   - name: timberio/vector
     newTag: 0.43.1-distroless-libc@sha256:131485defae3fc07fa20cf9dda85bb3056e8d0d475a8aa387c6d6417eca0223b
 namespace: homeassistant
