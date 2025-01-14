@@ -12,7 +12,7 @@ configMapGenerator:
       disableNameSuffixHash: true
 images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
-    newTag: 2.14.0@sha256:71e443d2b26ff26056efe22651f25187add3776755e58933cd519327d71273a0
+    newTag: 2.14.1@sha256:c0e72b264d33f1c2d70ea1cbc44f6ca1127883bfb267dd0fce775264bbc5c520
   - name: ghcr.io/paperless-ngx/tika
     newTag: 2.9.1-minimal
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
