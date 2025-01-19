@@ -263,7 +263,7 @@
       "description": "Run vyos updates once a week",
       "groupName": "vyos",
       "matchPackageNames": [
-        "vyos"
+        "vyos/vyos-nightly-build"
       ],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-rolling-(?<patch>\\d+)$",
       "schedule": [
