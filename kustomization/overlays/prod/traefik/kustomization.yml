@@ -16,7 +16,7 @@ configMapGenerator:
       disableNameSuffixHash: true
 images:
   - name: quay.io/opstree/redis-sentinel
-    newTag: v7.2.6@sha256:8efb668830758d1c69919ce496d4fc8a4357c3e30b95bd1800e8a0a76201fa4b
+    newTag: v7.2.6@sha256:209dfd954d34f67ba104b88c90dec4f798bb8f05b78936e12f2f75428688cec8
   - name: quay.io/opstree/redis
     newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
 namespace: traefik
