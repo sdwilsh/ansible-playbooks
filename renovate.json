@@ -247,10 +247,16 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "branch",
       "description": "Group for all vector updates",
       "groupName": "vector",
       "matchPackageNames": [
+        "vector",
         "**vector"
+      ],
+      "schedule": [
+        "after 4pm on monday"
       ]
     },
     {
