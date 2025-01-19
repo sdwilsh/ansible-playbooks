@@ -186,11 +186,21 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "branch",
       "groupName": "redis",
       "matchPackageNames": [
         "quay.io/opstree/redis",
         "quay.io/opstree/redis-sentinel",
         "redis-operator"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
+      ],
+      "schedule": [
+        "after 4pm on friday"
       ]
     },
     {
