@@ -46,7 +46,7 @@
         },
         "ghcr.io/rio/features/kustomize:1": {
             // renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
-            "version": "v5.4.3"
+            "version": "v5.6.0"
         }
     },
     "postCreateCommand": ".devcontainer/post-create-command.sh",
