@@ -18,7 +18,7 @@ images:
   - name: quay.io/opstree/redis-sentinel
     newTag: v7.2.6@sha256:8efb668830758d1c69919ce496d4fc8a4357c3e30b95bd1800e8a0a76201fa4b
   - name: quay.io/opstree/redis
-    newTag: v7.2.6@sha256:4ea2adfa2140ccd635171b8c86fb0b60a6b0cc1e3db19d6b448051b6e4bc2177
+    newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
 namespace: traefik
 patches:
   - path: patches/add_authelia_identity_providers_secrets.yml
