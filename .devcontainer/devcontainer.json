@@ -22,7 +22,7 @@
             // renovate: datasource=github-releases depName=helm/helm
             "helm": "3.16.4",
             // renovate: datasource=github-releases depName=kubernetes/kubernetes
-            "version": "1.32.0"
+            "version": "1.32.1"
         },
         "ghcr.io/devcontainers-extra/features/argo-cd:1": {
             // renovate: datasource=github-releases depName=argoproj/argo-cd
