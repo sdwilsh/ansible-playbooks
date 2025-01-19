@@ -157,11 +157,35 @@
       ]
     },
     {
-      "description": "Group for all traefik updates",
+      "automerge": true,
+      "automergeType": "branch",
+      "description": "Group for all traefik automergeable updates",
+      "groupName": "traefik-automerge",
+      "matchPackageNames": [
+        "traefik/traefik",
+        "traefik"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
+      ],
+      "schedule": [
+        "after 4pm on friday"
+      ]
+    },
+    {
+      "description": "Group for all major traefik updates",
       "groupName": "traefik",
       "matchPackageNames": [
         "traefik/traefik",
         "traefik"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "schedule": [
+        "after 4pm on friday"
       ]
     },
     {
