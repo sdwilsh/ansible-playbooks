@@ -8,8 +8,8 @@ env:
   TZ: America/Los_Angeles
 
 image:
-  # renovate: datasource=github-releases depName=immich-app
-  tag: v1.106.4
+  # renovate: datasource=github-releases depName=immich-app/immich
+  tag: v1.124.2
 
 immich:
   metrics:
