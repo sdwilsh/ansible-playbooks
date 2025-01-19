@@ -8,6 +8,7 @@ RUN apt-get update \
     iproute2 \
     iputils-ping \
     libssh-dev \
+    vim \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
