@@ -138,11 +138,13 @@
         "mbround18/valheim",
         "prometheus/prometheus",
         "shenxn/protonmail-bridge",
-        "traefik/traefik",
         "ubuntu/bind9",
         "zwavejs/zwave-js-ui"
       ],
-      "minimumReleaseAge": "3 days"
+      "minimumReleaseAge": "3 days",
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "description": "Automatic Digest Updates",
