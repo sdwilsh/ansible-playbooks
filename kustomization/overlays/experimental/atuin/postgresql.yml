@@ -33,7 +33,7 @@ spec:
     atuin:
       defaultUsers: true
   sidecars:
-    - image: timberio/vector:0.43.1-distroless-libc
+    - image: timberio/vector:0.44.0-distroless-libc
       name: vector
       securityContext:
         allowPrivilegeEscalation: false
