@@ -96,7 +96,7 @@ spec:
             initialDelaySeconds: 30
           name: penpot-frontend
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: web
           readinessProbe:
             httpGet:
