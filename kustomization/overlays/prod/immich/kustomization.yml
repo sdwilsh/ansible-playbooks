@@ -4,12 +4,24 @@ kind: Kustomization
 
 components:
   - ../../../components/immich
+configMapGenerator:
+  - name: postgresql-vector-metrics-sidecar-config
+    files:
+      - configmap/postgresql/vector.yaml
+    options:
+      disableNameSuffixHash: true
 images:
   - name: ghcr.io/immich-app/immich-server
     newTag: v1.124.2@sha256:c14dccad0611635668abf98f17ce87c3badcc17bb979c53ef96dc49e934ebbc8
   - name: ghcr.io/immich-app/immich-machine-learning
     newTag: v1.124.2@sha256:a134652b47278edfdac3187d61558e78679be39c810536193a41e9e0d894c5f4
 namespace: immich
+patches:
+  - path: patches/add_postgres.yml
+    target:
+      kind: Deployment
+      name: immich-server
 resources:
   - namespace.yml
   - ingress.yml
+  - postgresql.yml

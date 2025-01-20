@@ -1,10 +1,8 @@
 ---
 env:
-  DB_PASSWORD:
-    valueFrom:
-      secretKeyRef:
-        key: user_password
-        name: immich-postgresql-secrets
+  # These should be set in the overlay with a patch.
+  DB_HOSTNAME: null
+  DB_PASSWORD: null
   TZ: America/Los_Angeles
 
 image:
@@ -17,16 +15,6 @@ immich:
   persistence:
     library:
       existingClaim: immich-data-pvc
-
-postgresql:
-  enabled: true
-  global:
-    postgresql:
-      auth:
-        existingSecret: immich-postgresql-secrets
-        secretKeys:
-          adminPasswordKey: admin_password
-          userPasswordKey: user_password
 
 priorityClassName: application
 
