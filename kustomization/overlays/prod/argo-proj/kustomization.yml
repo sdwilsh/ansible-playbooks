@@ -10,6 +10,7 @@ resources:
   - application/ara.yml
   - application/argo-cd.yml
   - application/argo-proj.yml
+  - application/atuin.yml
   - application/aventertainment.yml
   - application/cert-manager.yml
   - application/dns.yml
