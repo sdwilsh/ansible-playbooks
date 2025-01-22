@@ -228,6 +228,7 @@ bind_zones:
           - lg-penpot
           - longhorn.hogs
           - manyfold.hogs
+          - minio-postgres.hogs
           - mqtt.hogs
           - nas.hogs
           - navidrome

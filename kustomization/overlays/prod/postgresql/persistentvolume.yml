@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-backup-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Ti
+  nfs:
+    path: /mnt/rust0/nfs/postgres-backup
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain
