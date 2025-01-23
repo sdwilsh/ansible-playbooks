@@ -11,11 +11,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: minio
+      app.kubernetes.io/name: minio
   template:
     metadata:
       labels:
-        app: minio
+        app.kubernetes.io/name: minio
     spec:
       automountServiceAccountToken: false
       containers:
