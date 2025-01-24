@@ -18,4 +18,3 @@ patches:
 resources:
   # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.13.3/manifests/install.yaml
-  - ingress.yml
