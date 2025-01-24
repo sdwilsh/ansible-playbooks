@@ -21,6 +21,7 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
+  enableLogicalBackup: true
   # We need spilo with pgvecto.rs.
   # https://github.com/zalando/spilo/issues/1041
   dockerImage: registry.wuhoo.xyz/jerry/spilo-pgvecto.rs:spilo-3.3-p2-pgvectors-0.3.0
