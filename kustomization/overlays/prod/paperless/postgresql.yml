@@ -21,10 +21,7 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
-  teamId: paperless
-  volume:
-    size: 30Gi
-    storageClass: longhorn-encrypted-replicated-database
+  enableLogicalBackup: true
   numberOfInstances: 3
   podPriorityClassName: critical-application-infra
   postgresql:
@@ -45,3 +42,7 @@ spec:
         runAsNonRoot: false
         seccompProfile:
           type: RuntimeDefault
+  teamId: paperless
+  volume:
+    size: 30Gi
+    storageClass: longhorn-encrypted-replicated-database
