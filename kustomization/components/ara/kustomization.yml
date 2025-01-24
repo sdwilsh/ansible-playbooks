@@ -11,6 +11,5 @@ configMapGenerator:
 resources:
   - cronjob.yml
   - deployment.yml
-  - ingress.yml
   - postgresql.yml
   - service.yml
