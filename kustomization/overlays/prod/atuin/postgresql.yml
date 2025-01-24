@@ -21,10 +21,7 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
-  teamId: atuin
-  volume:
-    size: 10Gi
-    storageClass: longhorn-encrypted-replicated-database
+  enableLogicalBackup: true
   numberOfInstances: 3
   podPriorityClassName: application-infra
   postgresql:
@@ -43,3 +40,7 @@ spec:
         runAsNonRoot: false
         seccompProfile:
           type: RuntimeDefault
+  teamId: atuin
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database
