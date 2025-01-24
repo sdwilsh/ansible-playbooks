@@ -20,10 +20,7 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
-  teamId: penpot
-  volume:
-    size: 10Gi
-    storageClass: longhorn-encrypted-replicated-database
+  enableLogicalBackup: true
   numberOfInstances: 2
   podPriorityClassName: application-infra
   postgresql:
@@ -42,3 +39,7 @@ spec:
         runAsNonRoot: false
         seccompProfile:
           type: RuntimeDefault
+  teamId: penpot
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database

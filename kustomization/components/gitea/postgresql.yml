@@ -20,10 +20,7 @@ spec:
         - vector
       volumeSource:
         emptyDir: {}
-  teamId: gitea
-  volume:
-    size: 10Gi
-    storageClass: longhorn-encrypted-replicated-database
+  enableLogicalBackup: true
   numberOfInstances: 3
   podPriorityClassName: critical-application-infra
   postgresql:
@@ -42,3 +39,7 @@ spec:
         runAsNonRoot: false
         seccompProfile:
           type: RuntimeDefault
+  teamId: gitea
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database
