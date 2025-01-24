@@ -1,0 +1,14 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: OperatorConfiguration
+metadata:
+  name: this-is-ignored-but-is-required
+configuration:
+  logical_backup:
+    logical_backup_cronjob_environment_secret: postgres-logical-backup-environment-secret
+    logical_backup_provider: s3
+    logical_backup_s3_bucket: set-in-secret-not-here
+    logical_backup_s3_endpoint: http://minio-svc.postgresql.svc.cluster.local:9000
+    logical_backup_s3_retention_time: 3 days
+    logical_backup_s3_sse: ""
+    logical_backup_schedule: 15 11 * * * # UTC
