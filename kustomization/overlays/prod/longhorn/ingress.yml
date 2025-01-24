@@ -4,12 +4,14 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: longhorn-frontend-ingress
   namespace: longhorn-system
 spec:
   rules:
-    - http:
+    - host: longhorn.hogs.tswn.us
+      http:
         paths:
           - backend:
               service:

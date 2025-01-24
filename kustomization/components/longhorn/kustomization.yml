@@ -12,7 +12,6 @@ patches:
 resources:
     # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/longhorn/longhorn/v1.7.2/deploy/longhorn.yaml
-  - ingress.yml
   - storageclass.yml
   - recurringjob.yml
   - setting.yml
