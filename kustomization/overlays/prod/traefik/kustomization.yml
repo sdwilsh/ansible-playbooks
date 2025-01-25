@@ -21,23 +21,31 @@ images:
     newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
 namespace: traefik
 patches:
-  - path: patches/add_authelia_identity_providers_secrets.yml
+  - path: patches/authelia/add_identity_providers_secrets.yml
     target:
       kind: Deployment
       name: authelia-deployment
-  - path: patches/add_authelia_postgres_secrets.yml
+  - path: patches/authelia/add_postgres_secrets.yml
     target:
       kind: Deployment
       name: authelia-deployment
-  - path: patches/add_authelia_redis_secrets.yml
+  - path: patches/authelia/add_redis_secrets.yml
     target:
       kind: Deployment
       name: authelia-deployment
-  - path: patches/add_authelia_smtp_secrets.yml
+  - path: patches/authelia/add_smtp_secrets.yml
     target:
       kind: Deployment
       name: authelia-deployment
-  - path: patches/add_authelia_user_secrets.yml
+  - path: patches/authelia/add_user_secrets.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
+  - path: patches/authelia/set_configuration.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
+  - path: patches/authelia/set_replicas.yml
     target:
       kind: Deployment
       name: authelia-deployment
@@ -45,14 +53,6 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
-  - path: patches/set_authelia_configuration.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
-  - path: patches/set_authelia_replicas.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
   - path: patches/set_ingress_published_service.yml
     target:
       kind: Deployment
