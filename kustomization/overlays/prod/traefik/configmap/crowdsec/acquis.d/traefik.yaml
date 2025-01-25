@@ -1,0 +1,7 @@
+---
+filenames:
+  - /var/log/traefik/access.log
+labels:
+  type: traefik
+poll_without_inotify: false
+source: file

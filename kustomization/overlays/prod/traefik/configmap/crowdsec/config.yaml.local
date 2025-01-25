@@ -1,0 +1,26 @@
+---
+api:
+  server:
+    listen_uri: ${POD_IP}:8081
+    online_client:
+      credentials_path: /secrets/online_api_credentials.yaml
+
+crowdsec_service:
+  enable: true
+  acquisition_dir: /etc/crowdsec/acquis.d
+  acquisition_path: ""
+
+db_config:
+  db_name: crowdsec
+  host: crowdsec-16-pg
+  password: ${DB_PASSWORD}
+  port: 5432
+  sslmode: require
+  type: postgresql
+  user: ${DB_USERNAME}
+
+prometheus:
+  enabled: true
+  level: aggregated
+  listen_addr: ${POD_IP}
+  listen_port: 6060

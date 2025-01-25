@@ -1,0 +1,150 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: traefik
+        - command:
+            - sh
+            - -c
+            - /scripts/entrypoint.sh
+          env:
+            - name: COLLECTIONS
+              value: crowdsecurity/traefik
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: crowdsec-owner-user.crowdsec-16-pg.credentials.postgresql.acid.zalan.do
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: crowdsec-owner-user.crowdsec-16-pg.credentials.postgresql.acid.zalan.do
+            - name: LOCAL_API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: local_password
+                  name: crowdsec-credentials-secret
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: TZ
+              value: America/Los_Angeles
+          image: ghcr.io/crowdsecurity/crowdsec
+          name: crowdsec
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: cs-metrics
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          ports:
+            - name: cs-api
+              containerPort: 8081
+            - name: cs-metrics
+              containerPort: 6060
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: cs-metrics
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - SETUID
+                - SETGID
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /metrics
+              port: cs-metrics
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /var/log/traefik
+              name: shared-logs
+              readOnly: true
+            - name: crowdsec-acquisitions-config
+              mountPath: /staging/etc/crowdsec/acquis.d/
+              readOnly: true
+            - name: crowdsec-config
+              mountPath: /etc/crowdsec/config.yaml.local
+              readOnly: true
+              subPath: config.yaml.local
+            - name: crowdsec-credentials-config
+              mountPath: /secrets/online_api_credentials.yaml
+              readOnly: true
+              subPath: online_api_credentials.yaml
+            - name: crowdsec-scripts
+              mountPath: /scripts
+              readOnly: true
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: crowdsec-16-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: crowdsec-owner-user.crowdsec-16-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: crowdsec-owner-user.crowdsec-16-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-crowdsec-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      volumes:
+        - configMap:
+            name: crowdsec-acquisitions-configmap
+          name: crowdsec-acquisitions-config
+        - configMap:
+            name: crowdsec-configmap
+          name: crowdsec-config
+        - name: crowdsec-credentials-config
+          secret:
+            secretName: crowdsec-credentials-secret
+        - configMap:
+            defaultMode: 0777
+            name: crowdsec-scripts-configmap
+          name: crowdsec-scripts
