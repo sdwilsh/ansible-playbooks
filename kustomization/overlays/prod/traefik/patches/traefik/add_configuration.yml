@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          name: traefik
+          ports:
+            # Proxy Ports
+            - name: imapsecure
+              containerPort: 993
+            - name: metrics
+              containerPort: 9090
+            - name: mqtts
+              containerPort: 8883
+            - name: smtpsecure
+              containerPort: 465
+            - name: web
+              containerPort: 80
+            - name: websecure
+              containerPort: 443
+            - name: websecure-ext
+              containerPort: 8443
+          volumeMounts:
+            - name: crowdsec-credentials-config
+              mountPath: /etc/treafik/crowdsec-api-key
+              readOnly: true
+              subPath: traefik-bouncer_api_key
+            - name: traefik-config
+              mountPath: /etc/traefik/traefik.yml
+              readOnly: true
+              subPath: static.yml
+            - mountPath: /shared-logs
+              name: shared-logs
+            - name: traefik-config
+              mountPath: /config/traefik.yml
+              readOnly: true
+              subPath: dynamic.yml
+            - name: wildcard-hogs-tswn-us
+              mountPath: /certs/wildcard-hogs-tswn-us
+              readOnly: true
+            - name: wildcard-tswn-us
+              mountPath: /certs/wildcard-tswn-us
+              readOnly: true
+      volumes:
+        - name: crowdsec-credentials-config
+          secret:
+            secretName: crowdsec-credentials-secret
+        - emptyDir: {}
+          name: shared-logs
+        - configMap:
+            name: traefik-config
+          name: traefik-config
+        - name: wildcard-hogs-tswn-us
+          secret:
+            secretName: wildcard-hogs-tswn-us-secret
+        - name: wildcard-tswn-us
+          secret:
+            secretName: wildcard-tswn-us-secret
+

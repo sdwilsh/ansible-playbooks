@@ -7,17 +7,7 @@ spec:
   template:
     spec:
       containers:
-        - env:
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-          name: traefik
-          volumeMounts:
-            - name: crowdsec-credentials-config
-              mountPath: /etc/treafik/crowdsec-api-key
-              readOnly: true
-              subPath: traefik-bouncer_api_key
+        - name: traefik
         - command:
             - sh
             - -c
@@ -158,3 +148,5 @@ spec:
             defaultMode: 0777
             name: crowdsec-scripts-configmap
           name: crowdsec-scripts
+        - emptyDir: {}
+          name: shared-logs

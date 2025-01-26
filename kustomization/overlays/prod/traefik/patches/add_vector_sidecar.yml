@@ -28,6 +28,8 @@ spec:
             - mountPath: /vector-data-dir
               name: vector-data
       volumes:
+        - emptyDir: {}
+          name: shared-logs
         - name: vector-config
           projected:
             defaultMode: 420
