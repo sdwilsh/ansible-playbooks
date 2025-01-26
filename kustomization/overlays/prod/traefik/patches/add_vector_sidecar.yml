@@ -1,5 +1,4 @@
 ---
-# Locally, it's best if this is kept as a hardlink to other patches with the same name!
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,11 +10,19 @@ spec:
         - args:
             - --config-dir
             - /etc/vector/
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
           image: timberio/vector
           name: vector
           securityContext:
             runAsNonRoot: false
           volumeMounts:
+            - mountPath: /shared-logs
+              name: shared-logs
+              readOnly: true
             - mountPath: /etc/vector/
               name: vector-config
             - mountPath: /vector-data-dir

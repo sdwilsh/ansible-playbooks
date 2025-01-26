@@ -27,29 +27,6 @@ spec:
       containers:
         - name: traefik
           image: traefik
-          args:
-            - --accesslog
-            - --accesslog.filepath=/shared-logs/access.log
-            - --accesslog.format=json
-            - --api.dashboard=true
-            - --api.insecure=true
-            - --entrypoints.imapsecure.address=:993
-            - --entrypoints.metrics.address=:9090
-            - --entrypoints.mqtts.address=:8883
-            - --entrypoints.smtpsecure.address=:465
-            - --entrypoints.web.address=:80
-            - --entrypoints.web.http.redirections.entrypoint.scheme=https
-            - --entrypoints.web.http.redirections.entrypoint.to=websecure
-            - --entrypoints.websecure.address=:443
-            - --entrypoints.websecure-ext.address=:8443
-            - --entrypoints.websecure-ext.forwardedHeaders.trustedIPs=103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,104.16.0.0/13,104.24.0.0/14,108.162.192.0/18,131.0.72.0/22,141.101.64.0/18,162.158.0.0/15,172.64.0.0/13,173.245.48.0/20,188.114.96.0/20,190.93.240.0/20,197.234.240.0/22,198.41.128.0/17
-            - --global.checknewversion=false
-            - --metrics.prometheus=true
-            - --metrics.prometheus.entryPoint=metrics
-            - --providers.file.filename=/config/traefik.yml
-            - --providers.kubernetescrd
-            - --providers.kubernetescrd.allowCrossNamespace=true
-            - --providers.kubernetesingress=true
           ports:
             # Local Service
             - name: dashboard
@@ -70,21 +47,21 @@ spec:
             - name: websecure-ext
               containerPort: 8443
           volumeMounts:
+            - name: traefik-config
+              mountPath: /etc/traefik/traefik.yml
+              readOnly: true
+              subPath: static.yml
             - mountPath: /shared-logs
               name: shared-logs
             - name: traefik-config
-              mountPath: /config
+              mountPath: /config/traefik.yml
               readOnly: true
+              subPath: dynamic.yml
             - name: wildcard-hogs-tswn-us
               mountPath: /certs/wildcard-hogs-tswn-us
               readOnly: true
             - name: wildcard-tswn-us
               mountPath: /certs/wildcard-tswn-us
-              readOnly: true
-        - name: vector
-          volumeMounts:
-            - mountPath: /shared-logs
-              name: shared-logs
               readOnly: true
       priorityClassName: system-cluster-critical
       volumes:

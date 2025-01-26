@@ -1,0 +1,17 @@
+---
+http:
+  middlewares:
+    crowdsec:
+      plugin:
+        crowdsec-bouncer:
+          crowdsecLapiHost: {{expandenv "$POD_IP:8081"}}
+          crowdsecLapiKeyFile: /etc/treafik/crowdsec-api-key
+          crowdsecLapiScheme: http
+          crowdsecMode: live
+          enabled: true
+tls:
+  certificates:
+    - certFile: /certs/wildcard-tswn-us/tls.crt
+      keyFile: /certs/wildcard-tswn-us/tls.key
+    - certFile: /certs/wildcard-hogs-tswn-us/tls.crt
+      keyFile: /certs/wildcard-hogs-tswn-us/tls.key

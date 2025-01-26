@@ -25,9 +25,9 @@
       changed_when: false
     - name: Update traefik entrypoint
       ansible.builtin.lineinfile:
-        line: "            - --entrypoints.websecure-ext.forwardedHeaders.trustedIPs={{ ips_v4 | join(',') }}"
-        path: "{{ root_dir }}/kustomization/components/traefik/deployment.yml"
-        regexp: "- --entrypoints\\.websecure-ext\\.forwardedHeaders\\.trustedIPs="
+        line: "      trustedIPs: [{{ ips_v4 | join(',') }}]"
+        path: "{{ root_dir }}/kustomization/overlays/prod/traefik/configmap/traefik/static.yml"
+        regexp: "trustedIPs:"
     - name: Update tartarus01 Firewall Network Group
       ansible.builtin.replace:
         after: "(?m)^    - name: CLOUDFLARE_IPS\n      members:$"

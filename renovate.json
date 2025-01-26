@@ -101,6 +101,16 @@
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
+      "fileMatch": [
+        "^kustomization/overlays/prod/traefik/configmap/traefik/static\\.yml$"
+      ],
+      "matchStrings": [
+        "moduleName:\\s+github\\.com/(?<depName>.*/.*)\\n\\s+version:\\s+(?<currentValue>.*)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
       "depNameTemplate": "prometheus/prometheus",
       "fileMatch": [
         "^kustomization/components/.+/prometheus\\.yml$",

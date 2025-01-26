@@ -23,6 +23,13 @@ configMapGenerator:
       - configmap/postgresql/vector.yaml
     options:
       disableNameSuffixHash: true
+  - name: vector-config
+    files:
+      - configmap/vector.yml
+  - name: traefik-config
+    files:
+      - configmap/traefik/dynamic.yml
+      - configmap/traefik/static.yml
 images:
   - name: ghcr.io/crowdsecurity/crowdsec
     newTag: v1.6.4@sha256:091229068a9dab7f8c1ae41086669620da2980c6ccc26f9e358a75aaa7cb4a27 
@@ -32,8 +39,17 @@ images:
     newTag: v7.2.6@sha256:209dfd954d34f67ba104b88c90dec4f798bb8f05b78936e12f2f75428688cec8
   - name: quay.io/opstree/redis
     newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
+  - name: timberio/vector
+    newTag: 0.44.0-distroless-libc@sha256:ae164a9812e1e3d012bf5cb80c84116eb292ba78824ae568b7828f89dd90dc7f
+  - name: traefik
+    # renovate: datasource=github-releases depName=traefik/traefik
+    newTag: v3.3.2@sha256:e8b170343bb1ab703a956049291ef0d951867bef39839c9b0d70eebda6b2ed29
 namespace: traefik
 patches:
+  - path: patches/add_vector_sidecar.yml
+    target:
+      kind: Deployment
+      name: traefik-deployment
   - path: patches/authelia/add_identity_providers_secrets.yml
     target:
       kind: Deployment
@@ -66,14 +82,6 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
-  - path: patches/traefik/allow_external_name_services.yml
-    target:
-      kind: Deployment
-      name: traefik-deployment
-  - path: patches/traefik/set_ingress_published_service.yml
-    target:
-      kind: Deployment
-      name: traefik-deployment
   - path: patches/traefik/set_service_ip.yml
     target:
       kind: Service
@@ -82,11 +90,6 @@ patches:
     target:
       kind: ClusterRoleBinding
       name: traefik-ingress-controller
-  # Uncomment to debug production issues!
-  # - path: patches/traefik/set_debug_log_level.yml
-  #   target:
-  #     kind: Deployment
-  #     name: traefik-deployment
 resources:
   - namespace.yml
   - ingress.yml
