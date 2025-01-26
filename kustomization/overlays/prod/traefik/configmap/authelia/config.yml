@@ -146,6 +146,7 @@ identity_providers:
 # https://www.authelia.com/configuration/miscellaneous/logging/
 log:
   file_path: /var/log/traefik/authelia.log
+  format: json
   keep_stdout: true
   level: info
 
