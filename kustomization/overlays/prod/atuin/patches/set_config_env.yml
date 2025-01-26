@@ -17,6 +17,8 @@ spec:
                 secretKeyRef:
                   name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
                   key: username
+            - name: ATUIN_OPEN_REGISTRATION
+              value: "false"
           name: generate-config
           volumeMounts:
             - mountPath: /postgresql-secrets
