@@ -27,6 +27,14 @@ spec:
       containers:
         - name: traefik
           image: traefik
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: dashboard
+              scheme: HTTP
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
           ports:
             # Local Service
             - name: dashboard

@@ -54,6 +54,9 @@ log:
 metrics:
   prometheus:
     entryPoint: metrics
+# Used for healthchecks.
+ping:
+  entryPoint: traefik
 providers:
   file:
     filename: /config/traefik.yml
