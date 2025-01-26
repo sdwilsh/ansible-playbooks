@@ -42,8 +42,17 @@ spec:
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
           image: ghcr.io/authelia/authelia
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: web
+              scheme: HTTP
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
           ports:
             - containerPort: 9091
+              name: web
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
