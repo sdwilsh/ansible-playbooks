@@ -18,7 +18,13 @@ spec:
           image: timberio/vector
           name: vector
           securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
             runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /var/log/traefik
               name: shared-logs
