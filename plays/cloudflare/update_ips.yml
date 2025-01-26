@@ -28,6 +28,11 @@
         line: "      trustedIPs: [{{ ips_v4 | join(',') }}]"
         path: "{{ root_dir }}/kustomization/overlays/prod/traefik/configmap/traefik/static.yml"
         regexp: "trustedIPs:"
+    - name: Update traefik crowdsec-bouncer
+      ansible.builtin.lineinfile:
+        line: "          forwardedHeadersTrustedIPs: [{{ ips_v4 | join(',') }}]"
+        path: "{{ root_dir }}/kustomization/overlays/prod/traefik/configmap/traefik/dynamic.yml"
+        regexp: "forwardedHeadersTrustedIPs:"
     - name: Update tartarus01 Firewall Network Group
       ansible.builtin.replace:
         after: "(?m)^    - name: CLOUDFLARE_IPS\n      members:$"
