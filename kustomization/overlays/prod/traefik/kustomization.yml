@@ -92,6 +92,7 @@ patches:
       name: traefik-ingress-controller
 resources:
   - namespace.yml
+  - certificate.yml
   - ingress.yml
   - postgresql/authelia.yml
   - postgresql/crowdsec.yml
