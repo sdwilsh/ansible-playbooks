@@ -1,0 +1,42 @@
+---
+name: Cloudflare IP Update
+on:
+  schedule:
+    - cron: 0 23 * * 5
+
+jobs:
+  update-cloudflare-ips:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Fetch IPs and update with ansible
+        uses: devcontainers/ci@a56d055efecd725e8cfe370543b6071b79989cc8 # v0.3.1900000349
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
+          env: |
+            ANSIBLE_CONFIG=ansible-ci.cfg
+            CI=1
+          imageName: ghcr.io/${{ github.repository }}-devcontainer
+          push: never
+          runCmd: ansible-playbook plays/cloudflare/update_ips.yml
+
+      - id: create-pull-request
+        name: Create Pull Request
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        with:
+          base: main
+          branch: create-pull-request/cloudflare-ip-update
+          commit-message: "[cloudflare] automated IP address update"
+          delete-branch: true
+          sign-commits: true
+          title: "[cloudflare] automated IP address update"
+          token: ${{ secrets.CREATE_PULL_REQUEST_TOKEN }}
+
+      - name: Enable Pull Request Automerge
+        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d # v3.0.0
+        with:
+          token: ${{ secrets.CREATE_PULL_REQUEST_TOKEN }}
+          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          merge-method: squash
