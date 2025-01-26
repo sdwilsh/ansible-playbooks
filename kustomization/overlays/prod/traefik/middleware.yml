@@ -5,7 +5,7 @@ metadata:
   name: forwardauth-authelia-middleware
 spec:
   forwardAuth:
-    address: http://authelia-svc.traefik.svc.cluster.local:9091/api/authz/forward-auth
+    address: http://localhost:9091/api/authz/forward-auth
     authResponseHeaders:
       - Remote-Email
       - Remote-Groups

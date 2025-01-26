@@ -5,8 +5,8 @@ metadata:
   name: authelia-svc
 spec:
   ports:
-    - name: http
+    - name: web
       port: 9091
       protocol: TCP
   selector:
-    app.kubernetes.io/name: authelia
+    app.kubernetes.io/name: traefik

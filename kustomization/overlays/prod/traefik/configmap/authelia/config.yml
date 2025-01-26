@@ -142,6 +142,11 @@ identity_providers:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
 
+# ---
+# https://www.authelia.com/configuration/miscellaneous/logging/
+log:
+  level: info
+
 # https://www.authelia.com/configuration/notifications/introduction/
 notifier:
   smtp:
@@ -186,6 +191,11 @@ storage:
     database: authelia
     tls:
       skip_verify: true
+
+# https://www.authelia.com/configuration/telemetry/introduction/
+telemetry:
+  metrics:
+    enabled: false
 
 # https://www.authelia.com/configuration/miscellaneous/introduction/#theme
 theme: dark

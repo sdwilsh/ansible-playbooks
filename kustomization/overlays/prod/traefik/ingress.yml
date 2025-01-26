@@ -15,7 +15,7 @@ spec:
               service:
                 name: authelia-svc
                 port:
-                  name: http
+                  name: web
             path: /
             pathType: Prefix
 ---

@@ -3,12 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../components/authelia
   - ../../../components/traefik
 configMapGenerator:
   - name: authelia-configmap
     files:
-      - configmap/authelia-config.yml
+      - configmap/authelia/config.yml
   - name: crowdsec-configmap
     files:
       - configmap/crowdsec/config.yaml.local
@@ -50,34 +49,10 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
-  - path: patches/authelia/add_identity_providers_secrets.yml
+  - path: patches/authelia/add_container.yml
     target:
       kind: Deployment
-      name: authelia-deployment
-  - path: patches/authelia/add_postgres_secrets.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
-  - path: patches/authelia/add_redis_secrets.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
-  - path: patches/authelia/add_smtp_secrets.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
-  - path: patches/authelia/add_user_secrets.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
-  - path: patches/authelia/set_configuration.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
-  - path: patches/authelia/set_replicas.yml
-    target:
-      kind: Deployment
-      name: authelia-deployment
+      name: traefik-deployment
   - path: patches/crowdsec/add_container.yml
     target:
       kind: Deployment
@@ -94,8 +69,10 @@ resources:
   - namespace.yml
   - certificate.yml
   - ingress.yml
+  - middleware.yml
   - postgresql/authelia.yml
   - postgresql/crowdsec.yml
   - redisreplication.yml
   - redissentinel.yml
-  - service.yml
+  - service/authelia.yml
+  - service/traefik.yml

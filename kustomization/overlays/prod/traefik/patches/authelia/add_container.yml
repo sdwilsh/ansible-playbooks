@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: authelia
+          args:
+            - --config
+            - /config/config.yml
+          env:
+            - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
+              value: /secrets/identity_providers_oidc_hmac_secret
+            - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
+              value: /secrets/jwt_secret
+            - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
+              value: /secrets/notifier_smtp_password
+            - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: authelia-config-secret
+                  key: notifier_smtp_username
+            - name: AUTHELIA_SESSION_REDIS_HIGH_AVAILABILITY_SENTINEL_PASSWORD_FILE
+              value: /secrets/session_redis_high_availability_sentinel_password
+            - name: AUTHELIA_SESSION_REDIS_PASSWORD_FILE
+              value: /secrets/session_redis_password
+            - name: AUTHELIA_SESSION_SECRET_FILE
+              value: /secrets/session_secret
+            - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
+              value: /secrets/storage_encryption_key
+            - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
+              value: /postgresql-secrets/password
+            - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: X_AUTHELIA_CONFIG_FILTERS
+              value: template
+          image: ghcr.io/authelia/authelia
+          ports:
+            - containerPort: 9091
+          volumeMounts:
+            - mountPath: /config/
+              name: authelia-configuration
+              readOnly: true
+            - mountPath: /secrets
+              name: authelia-secrets
+              readOnly: true
+            - mountPath: /postgresql-secrets
+              name: authelia-postgresql-secrets
+              readOnly: true
+            - mountPath: /secrets/authelia/users
+              name: authelia-users
+              readOnly: true
+        - name: traefik
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: authelia-storage-16-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-authelia-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      volumes:
+        - configMap:
+            name: authelia-configmap
+          name: authelia-configuration
+        - name: authelia-postgresql-secrets
+          secret:
+            secretName: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+        - name: authelia-secrets
+          secret:
+            secretName: authelia-config-secret
+        - name: authelia-users
+          secret:
+            items:
+              - key: authelia-users.yml
+                path: authelia-users.yml
+            secretName: authelia-config-secret

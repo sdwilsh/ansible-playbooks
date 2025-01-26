@@ -1,4 +1,0 @@
-# ---
-# https://www.authelia.com/configuration/miscellaneous/logging/
-log:
-  level: info
