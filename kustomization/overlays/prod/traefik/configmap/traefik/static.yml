@@ -6,7 +6,7 @@ accessLog:
       defaultMode: drop
       names:
         User-Agent: keep
-  filepath: /shared-logs/access.log
+  filepath: /var/log/traefik/access.log
   filters:
     statusCodes:
       - 200-299

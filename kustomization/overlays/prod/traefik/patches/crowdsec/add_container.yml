@@ -14,7 +14,7 @@ spec:
             - /scripts/entrypoint.sh
           env:
             - name: COLLECTIONS
-              value: crowdsecurity/traefik
+              value: crowdsecurity/traefik LePresidente/authelia
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:

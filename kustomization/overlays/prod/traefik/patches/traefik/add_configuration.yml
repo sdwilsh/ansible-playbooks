@@ -38,7 +38,7 @@ spec:
               mountPath: /etc/traefik/traefik.yml
               readOnly: true
               subPath: static.yml
-            - mountPath: /shared-logs
+            - mountPath: /var/log/traefik
               name: shared-logs
             - name: traefik-config
               mountPath: /config/traefik.yml

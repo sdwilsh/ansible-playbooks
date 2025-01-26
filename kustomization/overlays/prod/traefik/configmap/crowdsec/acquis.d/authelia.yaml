@@ -1,0 +1,5 @@
+---
+filenames:
+ - /var/log/traefik/authelia.log
+labels:
+  type: authelia

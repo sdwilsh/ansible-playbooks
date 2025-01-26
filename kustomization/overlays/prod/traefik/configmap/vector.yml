@@ -25,7 +25,7 @@ sinks:
 sources:
   access_log:
     include:
-      - /shared-logs/access.log
+      - /var/log/traefik/access.log
     type: file
   crowdsec_metrics:
     endpoints:

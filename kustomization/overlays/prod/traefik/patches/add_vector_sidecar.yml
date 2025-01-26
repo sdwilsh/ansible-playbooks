@@ -20,7 +20,7 @@ spec:
           securityContext:
             runAsNonRoot: false
           volumeMounts:
-            - mountPath: /shared-logs
+            - mountPath: /var/log/traefik
               name: shared-logs
               readOnly: true
             - mountPath: /etc/vector/
