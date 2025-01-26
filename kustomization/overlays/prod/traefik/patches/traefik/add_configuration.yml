@@ -29,16 +29,6 @@ spec:
               containerPort: 8443
             - name: websecure-ext
               containerPort: 9443
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            runAsUser: 65534
-            seccompProfile:
-              type: RuntimeDefault
           volumeMounts:
             - name: crowdsec-credentials-config
               mountPath: /etc/treafik/crowdsec-api-key
