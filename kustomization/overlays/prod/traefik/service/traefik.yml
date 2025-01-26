@@ -9,23 +9,29 @@ spec:
   externalTrafficPolicy: Local
   ports:
     - name: imapsecure
-      protocol: TCP
       port: 993
+      protocol: TCP
+      targetPort: imapsecure
     - name: mqtts
-      protocol: TCP
       port: 8883
+      protocol: TCP
+      targetPort: mqtts
     - name: smtpsecure
-      protocol: TCP
       port: 465
+      protocol: TCP
+      targetPort: smtpsecure
     - name: web
-      protocol: TCP
       port: 80
+      protocol: TCP
+      targetPort: web
     - name: websecure
-      protocol: TCP
       port: 443
-    - name: websecure-ext
       protocol: TCP
+      targetPort: websecure
+    - name: websecure-ext
       port: 8443
+      protocol: TCP
+      targetPort: websecure-ext
   selector:
     app.kubernetes.io/name: traefik
   type: LoadBalancer

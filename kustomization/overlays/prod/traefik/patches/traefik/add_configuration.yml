@@ -16,34 +16,46 @@ spec:
           ports:
             # Proxy Ports
             - name: imapsecure
-              containerPort: 993
+              containerPort: 8993
             - name: metrics
               containerPort: 9090
             - name: mqtts
               containerPort: 8883
             - name: smtpsecure
-              containerPort: 465
+              containerPort: 8465
             - name: web
-              containerPort: 80
+              containerPort: 9080
             - name: websecure
-              containerPort: 443
-            - name: websecure-ext
               containerPort: 8443
+            - name: websecure-ext
+              containerPort: 9443
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: crowdsec-credentials-config
               mountPath: /etc/treafik/crowdsec-api-key
               readOnly: true
               subPath: traefik-bouncer_api_key
+            - mountPath: /var/log/traefik
+              name: shared-logs
             - name: traefik-config
               mountPath: /etc/traefik/traefik.yml
               readOnly: true
               subPath: static.yml
-            - mountPath: /var/log/traefik
-              name: shared-logs
             - name: traefik-config
               mountPath: /config/traefik.yml
               readOnly: true
               subPath: dynamic.yml
+            - mountPath: /plugins-storage
+              name: traefik-plugins-storage
             - name: wildcard-hogs-tswn-us
               mountPath: /certs/wildcard-hogs-tswn-us
               readOnly: true
@@ -59,6 +71,8 @@ spec:
         - configMap:
             name: traefik-config
           name: traefik-config
+        - emptyDir: {}
+          name: traefik-plugins-storage
         - name: wildcard-hogs-tswn-us
           secret:
             secretName: wildcard-hogs-tswn-us-secret
