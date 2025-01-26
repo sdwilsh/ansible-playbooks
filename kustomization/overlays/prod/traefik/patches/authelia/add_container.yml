@@ -43,6 +43,16 @@ spec:
           image: ghcr.io/authelia/authelia
           ports:
             - containerPort: 9091
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false # Authelia writes to the file system!
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /config/
               name: authelia-configuration
