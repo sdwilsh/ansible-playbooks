@@ -20,7 +20,7 @@
     "features": {
         "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
             // renovate: datasource=github-releases depName=helm/helm
-            "helm": "3.16.4",
+            "helm": "3.17.0",
             // renovate: datasource=github-releases depName=kubernetes/kubernetes
             "version": "1.32.1"
         },
