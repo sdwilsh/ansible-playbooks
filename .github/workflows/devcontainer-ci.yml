@@ -40,9 +40,11 @@ jobs:
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           env: |
+            ANSIBLE_CONFIG=ansible-ci.cfg
             CI=1
           push: never
           runCmd: |
+            just ansible-lint
             just hadolint
             just justcheck
             just renovate-validate

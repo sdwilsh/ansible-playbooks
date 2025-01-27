@@ -3,6 +3,11 @@
 default:
     @just --list
 
+# Run ansible-lint with the configured profile
+[group('lint')]
+ansible-lint:
+    @ansible-lint
+
 # Check `just` syntax
 [group('just')]
 justcheck:
