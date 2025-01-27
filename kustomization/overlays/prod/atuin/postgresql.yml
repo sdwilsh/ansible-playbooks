@@ -22,7 +22,7 @@ spec:
       volumeSource:
         emptyDir: {}
   enableLogicalBackup: true
-  numberOfInstances: 3
+  numberOfInstances: 2
   podPriorityClassName: application-infra
   postgresql:
     version: "16"
