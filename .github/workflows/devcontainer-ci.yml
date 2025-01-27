@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pre-build image and run lint in dev container
-        uses: devcontainers/ci@v0.3.1900000349
+        uses: devcontainers/ci@a56d055efecd725e8cfe370543b6071b79989cc8 # v0.3.1900000349
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           env: |
