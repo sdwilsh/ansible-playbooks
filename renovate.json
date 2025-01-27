@@ -153,7 +153,28 @@
       ],
       "minimumReleaseAge": "3 days",
       "schedule": [
-        "after 4pm on friday"
+        "after 4pm on friday",
+        "every weekend"
+      ]
+    },
+    {
+      "description": "Automatic Patch Updates",
+      "automerge": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/home-assistant/home-assistant",
+        "ghcr.io/immich-app/immich-machine-learning",
+        "ghcr.io/immich-app/immich-server",
+        "immich",
+        "zwavejs/zwave-js-ui"
+      ],
+      "minimumReleaseAge": "1 days",
+      "schedule": [
+        "after 4pm every weekday",
+        "every weekend"
       ]
     },
     {
@@ -166,6 +187,24 @@
       ],
       "matchUpdateTypes": [
         "digest"
+      ]
+    },
+    {
+      "automerge": true,
+      "automergeType": "branch",
+      "description": "Group for all just automergeable updates",
+      "groupName": "just-automerge",
+      "matchPackageNames": [
+        "casey/just"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "major",
+        "minor",
+        "patch"
+      ],
+      "schedule": [
+        "after 4pm on friday"
       ]
     },
     {
