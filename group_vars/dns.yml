@@ -209,13 +209,12 @@ bind_zones:
       - name: traefik.hogs
         ip: 10.11.1.64
         aliases:
-          - atuin.hogs
+          - atuin
           - factorio-relic-admin
           - alertmanager.hogs
           - ara.hogs
           - argo-cd.hogs
           - auth
-          - cdi-image-upload.hogs
           - esphome.hogs
           - frigate.hogs
           - graylog.hogs

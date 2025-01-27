@@ -49,9 +49,7 @@ access_control:
         - man
         - 10.117.0.24 # monitor.house.gem.hogs.tswn.us
       policy: bypass
-    - domain: cdi-image-upload.hogs.tswn.us
-      networks:
-        - dev
+    - domain: atuin.tswn.us
       policy: bypass
     - domain: homeassistant.hogs.tswn.us
       networks:
