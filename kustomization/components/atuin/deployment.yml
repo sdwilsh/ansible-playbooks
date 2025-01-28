@@ -30,6 +30,8 @@ spec:
             - server
             - start
           env:
+            - name: RUST_LOG
+              value: debug
             - name: TZ
               value: America/Los_Angeles
           image: ghcr.io/atuinsh/atuin
