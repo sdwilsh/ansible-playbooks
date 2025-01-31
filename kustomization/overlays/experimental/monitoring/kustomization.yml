@@ -4,6 +4,13 @@ kind: Kustomization
 
 components:
   - ../../../components/minio
+helmCharts:
+  - name: loki
+    namespace: monitoring
+    version: 6.25.0
+    repo: https://grafana.github.io/helm-charts
+    releaseName: loki
+    valuesFile: values.yml
 images:
   - name: quay.io/minio/minio
     newTag: latest@sha256:ed9be66eb5f2636c18289c34c3b725ddf57815f2777c77b5938543b78a44f144
@@ -19,3 +26,4 @@ patches:
       name: minio-statefulset
 resources:
   - namespace.yml
+  - ingress.yml

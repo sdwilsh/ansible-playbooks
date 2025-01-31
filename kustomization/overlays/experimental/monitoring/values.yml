@@ -1,0 +1,145 @@
+---
+global:
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+loki:
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: s3
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  ingester:
+    chunk_encoding: snappy
+  querier:
+    max_concurrent: 4
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+    s3:
+      accessKeyId: $MINIO_ACCESS_KEY
+      disable_dualstack: true
+      endpoint: http://minio-svc:9000
+      insecure: true
+      secretAccessKey: $MINIO_SECRET_ACCESS_KEY
+
+memcached:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+
+memcachedExporter:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+
+# General settings for Distributed deployment mode.
+deploymentMode: Distributed
+ingester:
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+  priorityClassName: application-infra
+  replicas: 3
+querier:
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+  maxUnavailable: 2
+  priorityClassName: application-infra
+  replicas: 3 # Improve query performance via parallelism
+queryFrontend:
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+  maxUnavailable: 1
+  priorityClassName: application-infra
+  replicas: 2
+queryScheduler:
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+  priorityClassName: application-infra
+  replicas: 2
+distributor:
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+  maxUnavailable: 2
+  priorityClassName: application-infra
+  replicas: 3 
+compactor:
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom:
+    - secretRef:
+        name: loki-env-secret
+  priorityClassName: application-infra
+  replicas: 1
+indexGateway:
+  maxUnavailable: 1
+  priorityClassName: application-infra
+  replicas: 2
+
+# Zero-out replics for non-Distributed pieces per documentation.
+bloomPlanner:
+  replicas: 0
+bloomBuilder:
+  replicas: 0
+bloomGateway:
+  replicas: 0
+backend:
+   replicas: 0
+read:
+   replicas: 0
+write:
+   replicas: 0
+singleBinary:
+   replicas: 0
+
+# No need to have a special gateway; we can just use ingress
+gateway:
+  enabled: false
+
+ingress:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  enabled: true
+  hosts:
+    - loki.hogs.tswn.us
+
+# These are used by helm to make sure it's working, but that's not needed with kustomize.
+lokiCanary:
+  enabled: false
+test:
+  enabled: false
+

@@ -225,6 +225,7 @@ bind_zones:
           - jellyfin
           - lg-git
           - lg-penpot
+          - loki.hogs
           - longhorn.hogs
           - manyfold.hogs
           - minio-monitoring.hogs
