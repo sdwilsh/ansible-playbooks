@@ -1,0 +1,53 @@
+---
+alloy:
+  configMap:
+    create: false
+    name: alloy-config
+    key: config.alloy
+  extraEnv:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+  listenAddr: $(POD_IP)
+  mounts:
+    extra:
+      - mountPath: /tmp/alloy
+        name: tmp
+  priorityClassName: application-infra
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsGroup: 473 # alloy
+    runAsNonRoot: true
+    runAsUser: 473 # alloy
+    seccompProfile:
+      type: RuntimeDefault
+  storagePath: /tmp/alloy
+
+configReloader:
+  enabed: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    seccompProfile:
+      type: RuntimeDefault
+
+controller:
+  priorityClassName: application-infra
+  type: deployment
+  volumes:
+    extra:
+      - emptyDir: {}
+        name: tmp
+
+crds:
+  create: true

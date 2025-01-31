@@ -4,7 +4,19 @@ kind: Kustomization
 
 components:
   - ../../../components/minio
+configMapGenerator:
+  - name: alloy-config
+    files:
+      - configmap/config.alloy
+    options:
+      disableNameSuffixHash: true
 helmCharts:
+  - name: alloy
+    namespace: alloy
+    version: 0.11.0
+    repo: https://grafana.github.io/helm-charts
+    releaseName: alloy
+    valuesFile: alloy-values.yml
   - name: loki
     namespace: monitoring
     version: 6.25.0
