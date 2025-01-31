@@ -4,6 +4,9 @@ kind: Kustomization
 
 components:
   - ../../../components/minio
+images:
+  - name: quay.io/minio/minio
+    newTag: latest@sha256:ed9be66eb5f2636c18289c34c3b725ddf57815f2777c77b5938543b78a44f144
 namespace: monitoring
 patches:
   - path: patches/minio/configure_storage.yml
