@@ -13,6 +13,8 @@ spec:
           recurring-job-group.longhorn.io/no-backup: enabled
         name: data
       spec:
+        accessModes:
+          - ReadWriteOnce
         resources:
           requests:
             storage: 100Gi
