@@ -79,7 +79,7 @@ spec:
         - name: scripts
           configMap:
             defaultMode: 0777
-            name: scripts-configmap
+            name: minio-scripts-configmap
   volumeClaimTemplates:
     - metadata:
         name: data

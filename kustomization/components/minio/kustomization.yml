@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 configMapGenerator:
-  - name: scripts-configmap
+  - name: minio-scripts-configmap
     files:
       - configmap/start_minio.sh
 resources:
