@@ -15,6 +15,12 @@ loki:
           period: 24h
   ingester:
     chunk_encoding: snappy
+  pattern_ingester:
+      enabled: true
+  limits_config:
+    allow_structured_metadata: true
+    volume_enabled: true
+    retention_period: 672h # 28 days retention
   querier:
     max_concurrent: 4
   containerSecurityContext:
@@ -36,6 +42,7 @@ loki:
       endpoint: http://minio-svc:9000
       insecure: true
       secretAccessKey: $MINIO_SECRET_ACCESS_KEY
+    type: s3
 
 memcached:
   containerSecurityContext:
