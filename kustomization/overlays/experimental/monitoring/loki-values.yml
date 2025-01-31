@@ -4,6 +4,7 @@ global:
     - secretRef:
         name: loki-env-secret
 loki:
+  auth_enabled: false
   schemaConfig:
     configs:
       - from: "2024-04-01"
@@ -37,11 +38,11 @@ loki:
       ruler: ruler
       admin: admin
     s3:
-      accessKeyId: $MINIO_ACCESS_KEY
+      s3: s3://${MINIO_ACCESS_KEY}:${MINIO_SECRET_ACCESS_KEY}@minio-svc:9000/chunks
+      s3ForcePathStyle: true
       disable_dualstack: true
-      endpoint: http://minio-svc:9000
+      endpoint: minio-svc:9000
       insecure: true
-      secretAccessKey: $MINIO_SECRET_ACCESS_KEY
     type: s3
 
 memcached:
@@ -67,6 +68,8 @@ memcachedExporter:
 # General settings for Distributed deployment mode.
 deploymentMode: Distributed
 ingester:
+  extraArgs:
+    - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -74,6 +77,8 @@ ingester:
   priorityClassName: application-infra
   replicas: 3
 querier:
+  extraArgs:
+    - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -82,6 +87,8 @@ querier:
   priorityClassName: application-infra
   replicas: 3 # Improve query performance via parallelism
 queryFrontend:
+  extraArgs:
+    - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -90,6 +97,8 @@ queryFrontend:
   priorityClassName: application-infra
   replicas: 2
 queryScheduler:
+  extraArgs:
+    - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -97,6 +106,8 @@ queryScheduler:
   priorityClassName: application-infra
   replicas: 2
 distributor:
+  extraArgs:
+    - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -105,6 +116,8 @@ distributor:
   priorityClassName: application-infra
   replicas: 3 
 compactor:
+  extraArgs:
+    - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -112,6 +125,8 @@ compactor:
   priorityClassName: application-infra
   replicas: 1
 indexGateway:
+  extraArgs:
+    - -config.expand-env=true
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
