@@ -7,5 +7,7 @@ configMapGenerator:
     files:
       - configmap/start_minio.sh
 resources:
-  - statefulset.yml
+  - podmonitor.yml
   - service.yml
+  - servicemonitor.yml
+  - statefulset.yml

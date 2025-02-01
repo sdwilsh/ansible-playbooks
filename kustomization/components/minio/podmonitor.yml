@@ -1,0 +1,14 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: minio
+  name: minio-podmonitor
+spec:
+  podMetricsEndpoints:
+    - path: /minio/v2/metrics/node
+      port: api
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: minio

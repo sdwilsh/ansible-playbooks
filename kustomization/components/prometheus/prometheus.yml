@@ -22,9 +22,7 @@ spec:
     seccompProfile:
       type: RuntimeDefault
   serviceAccountName: prometheus-service-account
-  serviceMonitorSelector:
-    matchLabels:
-      app.kubernetes.io/name: vector
+  serviceMonitorSelector: {}
   storage:
     volumeClaimTemplate:
       metadata:

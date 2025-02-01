@@ -1,0 +1,15 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: minio
+  name: minio-servicemonitor
+spec:
+  endpoints:
+    - enableHttp2: false
+      path: /minio/v2/metrics/cluster
+      port: api
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: minio
