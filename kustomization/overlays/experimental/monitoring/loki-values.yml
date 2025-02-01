@@ -5,6 +5,24 @@ global:
         name: loki-env-secret
 loki:
   auth_enabled: false
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+  ingester:
+    chunk_encoding: snappy
+  limits_config:
+    allow_structured_metadata: true
+    volume_enabled: true
+    retention_period: 672h # 28 days retention
+  pattern_ingester:
+      enabled: true
+  querier:
+    max_concurrent: 4
   schemaConfig:
     configs:
       - from: "2024-04-01"
@@ -14,24 +32,6 @@ loki:
         index:
           prefix: loki_index_
           period: 24h
-  ingester:
-    chunk_encoding: snappy
-  pattern_ingester:
-      enabled: true
-  limits_config:
-    allow_structured_metadata: true
-    volume_enabled: true
-    retention_period: 672h # 28 days retention
-  querier:
-    max_concurrent: 4
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    seccompProfile:
-      type: RuntimeDefault
   storage:
     bucketNames:
       chunks: chunks
