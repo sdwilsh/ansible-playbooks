@@ -4,12 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/immich
-configMapGenerator:
-  - name: postgresql-vector-metrics-sidecar-config
-    files:
-      - configmap/postgresql/vector.yaml
-    options:
-      disableNameSuffixHash: true
 images:
   - name: ghcr.io/immich-app/immich-server
     newTag: v1.125.7@sha256:217cddb1e0fa3f4878e1573fe1fd4b9dc24f737015cc5c917910787a5ec0f85e

@@ -9,8 +9,6 @@ configMapGenerator:
     files:
       - configmap/kubernetes.alloy
       - configmap/loki.alloy
-    options:
-      disableNameSuffixHash: true
 helmCharts:
   - name: alloy
     namespace: alloy

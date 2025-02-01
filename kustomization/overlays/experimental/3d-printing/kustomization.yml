@@ -4,12 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/spoolman
-configMapGenerator:
-  - name: postgresql-vector-metrics-sidecar-config
-    files:
-      - configmap/postgresql/vector.yaml
-    options:
-      disableNameSuffixHash: true
 images:
   - name: ghcr.io/donkie/spoolman
     newTag: 0.21.0@sha256:91e4b75dacfd17c64fdf23336e824149fb0d636df6c422312de1e211d02ce412

@@ -19,16 +19,9 @@ configMapGenerator:
   - name: vector-metrics-scraper-config
     files:
       - configmap/vector/vector.yml
-  - name: postgresql-vector-metrics-sidecar-config
-    files:
-      - configmap/postgresql/vector.yaml
-    options:
-      disableNameSuffixHash: true
 images:
   - name: busybox
     newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
-  - name: timberio/vector
-    newTag: 0.44.0-distroless-libc@sha256:ae164a9812e1e3d012bf5cb80c84116eb292ba78824ae568b7828f89dd90dc7f
 namespace: homeassistant
 patches:
   - path: patches/frigate/add_frigate_env_vars.yml

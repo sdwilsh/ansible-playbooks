@@ -4,12 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/atuin
-configMapGenerator:
-  - name: postgresql-vector-metrics-sidecar-config
-    files:
-      - configmap/postgresql/vector.yaml
-    options:
-      disableNameSuffixHash: true
 images:
   - name: busybox
     newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1

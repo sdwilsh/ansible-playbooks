@@ -1,0 +1,14 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: spilo-podmonitor
+spec:
+  namespaceSelector:
+    any: true
+  podMetricsEndpoints:
+    - path: /metrics
+      portNumber: 8008
+  selector:
+    matchLabels:
+      application: spilo

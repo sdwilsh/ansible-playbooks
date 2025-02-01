@@ -18,11 +18,6 @@ configMapGenerator:
   - name: crowdsec-scripts-configmap
     files:
       - configmap/crowdsec/scripts/entrypoint.sh
-  - name: postgresql-vector-metrics-sidecar-config
-    files:
-      - configmap/postgresql/vector.yaml
-    options:
-      disableNameSuffixHash: true
   - name: vector-config
     files:
       - configmap/vector.yml

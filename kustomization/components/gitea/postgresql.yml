@@ -3,23 +3,6 @@ kind: postgresql
 metadata:
   name: gitea-database-16-pg
 spec:
-  additionalVolumes:
-    - mountPath: /etc/vector
-      name: vector-config
-      targetContainers:
-        - vector
-      volumeSource:
-        projected:
-          defaultMode: 420
-          sources:
-            - configMap:
-                name: postgresql-vector-metrics-sidecar-config
-    - mountPath: /vector-data-dir
-      name: vector-data
-      targetContainers:
-        - vector
-      volumeSource:
-        emptyDir: {}
   enableLogicalBackup: true
   numberOfInstances: 3
   podPriorityClassName: critical-application-infra
@@ -28,17 +11,6 @@ spec:
   preparedDatabases:
     gitea:
       defaultUsers: true
-  sidecars:
-    - image: timberio/vector:0.44.0-distroless-libc
-      name: vector
-      securityContext:
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-        runAsNonRoot: false
-        seccompProfile:
-          type: RuntimeDefault
   teamId: gitea
   volume:
     size: 10Gi
