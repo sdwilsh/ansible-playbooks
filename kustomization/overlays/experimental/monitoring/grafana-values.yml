@@ -1,0 +1,50 @@
+---
+admin:
+  existingSecret: grafana-secret
+
+envValueFrom:
+  GF_DATABASE_PASSWORD:
+    secretKeyRef:
+      key: password
+      name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+  GF_DATABASE_USERNAME:
+    secretKeyRef:
+      key: username
+      name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+
+ingress:
+  enabled: false
+
+grafana.ini:
+  analytics:
+    check_for_updates: true
+  database:
+    host: grafana-17-pg
+    name: grafana
+    password: $__env{GF_DATABASE_PASSWORD}
+    ssl_mode: require
+    type: postgres
+    user: $__env{GF_DATABASE_USERNAME}
+  grafana_net:
+    url: https://grafana.net
+  log:
+    mode: console
+  paths:
+    data: /var/lib/grafana/
+    logs: /var/log/grafana
+    plugins: /var/lib/grafana/plugins
+    provisioning: /etc/grafana/provisioning
+  security:
+    cookie_secure: true
+    strict_transport_security: true
+  server:
+    domain: grafana.hogs.tswn.us
+
+persistence:
+  enabled: false # Uses postgres
+
+serviceMonitor:
+  enabled: true
+
+testFramework:
+  enabled: false

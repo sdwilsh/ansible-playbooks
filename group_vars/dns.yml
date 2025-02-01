@@ -217,7 +217,7 @@ bind_zones:
           - auth
           - esphome.hogs
           - frigate.hogs
-          - graylog.hogs
+          - grafana.hogs
           - homeassistant-config.hogs
           - homeassistant.hogs
           - imap.hogs

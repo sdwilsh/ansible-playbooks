@@ -8,6 +8,16 @@ metadata:
   name: monitoring-ingress
 spec:
   rules:
+    - host: grafana.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: grafana
+                port:
+                  name: service
+            path: /
+            pathType: Prefix
     - host: minio-monitoring.hogs.tswn.us
       http:
         paths:

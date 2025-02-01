@@ -1,0 +1,20 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: grafana-17-pg
+spec:
+  enableLogicalBackup: true
+  numberOfInstances: 2
+  podPriorityClassName: application-infra
+  postgresql:
+    version: "17"
+  preparedDatabases:
+    grafana:
+      defaultUsers: true
+      schemas:
+        public: {}
+  teamId: grafana
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database

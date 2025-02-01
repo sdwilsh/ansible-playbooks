@@ -15,6 +15,11 @@ helmCharts:
     repo: https://grafana.github.io/helm-charts
     releaseName: alloy
     valuesFile: alloy-values.yml
+  - name: grafana
+    version: 8.8.6
+    repo: https://grafana.github.io/helm-charts
+    releaseName: grafana
+    valuesFile: grafana-values.yml
   - name: loki
     namespace: monitoring
     version: 6.25.0
@@ -37,3 +42,4 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
+  - postgresql.yml
