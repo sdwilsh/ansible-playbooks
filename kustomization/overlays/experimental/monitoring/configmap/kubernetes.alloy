@@ -1,9 +1,3 @@
-loki.write "default" {
-  endpoint {
-    url = "http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push"
-  }
-}
-
 // discovery.kubernetes allows you to find scrape targets from Kubernetes resources.
 // It watches cluster state and ensures targets are continually synced with what is currently running in your cluster.
 discovery.kubernetes "pod" {

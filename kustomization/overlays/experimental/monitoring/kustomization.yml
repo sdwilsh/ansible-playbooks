@@ -7,7 +7,8 @@ components:
 configMapGenerator:
   - name: alloy-config
     files:
-      - configmap/config.alloy
+      - configmap/kubernetes.alloy
+      - configmap/loki.alloy
     options:
       disableNameSuffixHash: true
 helmCharts:
