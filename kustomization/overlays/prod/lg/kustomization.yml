@@ -9,11 +9,11 @@ images:
   - name: gitea/gitea
     newTag: 1.23.1-rootless@sha256:ce2ea016e72ea2748d34c79c63563c8084b6275461cae00b34e343be2abd2a04
   - name: penpotapp/backend
-    newTag: 2.4.1@sha256:eae423072a8286bf406bc92829ba483fd9b4b06a7795d641f5bf8e2b8c1f31f4
+    newTag: 2.4.3@sha256:f716f3e66738fb868cc718d0c629a1737bca79792ba37813fed20fd001142210
   - name: penpotapp/exporter
-    newTag: 2.4.1@sha256:0c27d33233a022ab34066a9bed15e62cb50c17d12bd7551a1baf70347bac698c
+    newTag: 2.4.3@sha256:60adce36eb42c46df7f2f8bb94d68b9c633f09ffcf7242c84da73eb056a959ef
   - name: penpotapp/frontend
-    newTag: 2.4.1@sha256:1b76e54bb00cdcf13d8bc77b6e26af0716fc7747dbb5045dbe45cf15caa1a067
+    newTag: 2.4.3@sha256:1b7249ed23694f2b82d28b07e71fc788175f3e4e2606f19da07b78a220264fc3
 namespace: lg
 patches:
   - path: patches/set_gitea_admin.yml
