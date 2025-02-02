@@ -10,10 +10,18 @@ images:
     newTag: latest@sha256:ed9be66eb5f2636c18289c34c3b725ddf57815f2777c77b5938543b78a44f144
 namespace: postgresql
 patches:
+  - path: patches/minio/set_pods_instance_label.yml
+    target:
+      kind: StatefulSet
+      name: minio-statefulset
   - path: patches/minio/set_root_credentials.yml
     target:
       kind: StatefulSet
       name: minio-statefulset
+  - path: patches/minio/set_service_instance_label.yml
+    target:
+      kind: Service
+      name: minio-svc
   - path: patches/minio/use_nfs_storage.yml
     target:
       kind: StatefulSet

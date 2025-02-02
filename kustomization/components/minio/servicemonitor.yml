@@ -10,6 +10,7 @@ spec:
     - enableHttp2: false
       path: /minio/v2/metrics/cluster
       port: api
+  jobLabel: app.kubernetes.io/instance
   selector:
     matchLabels:
       app.kubernetes.io/name: minio

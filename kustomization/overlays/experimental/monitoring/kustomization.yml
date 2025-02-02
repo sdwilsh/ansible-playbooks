@@ -44,10 +44,18 @@ patches:
     target:
       kind: StatefulSet
       name: minio-statefulset
+  - path: patches/minio/set_pods_instance_label.yml
+    target:
+      kind: StatefulSet
+      name: minio-statefulset
   - path: patches/minio/set_root_credentials.yml
     target:
       kind: StatefulSet
       name: minio-statefulset
+  - path: patches/minio/set_service_instance_label.yml
+    target:
+      kind: Service
+      name: minio-svc
   - path: patches/prometheus/set_externalUrl.yml
     target:
       kind: Prometheus
