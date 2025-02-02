@@ -18,3 +18,7 @@ patches:
 resources:
   # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.13.3/manifests/install.yaml
+  - servicemonitor/argocd-applicationset-controller.yml
+  - servicemonitor/argocd-repo-server.yml
+  - servicemonitor/argocd-server.yml
+  - servicemonitor/argocd.yml
