@@ -1,5 +1,14 @@
 ---
 global:
+  extraEnv: &tracing-exraEnv
+    - name: JAEGER_AGENT_TAGS
+      value: cluster="kairos_prod",namespace="monitoring"
+    - name: JAEGER_ENDPOINT
+      value: http://meta-monitoring-alloy.meta-monitoring.svc.cluster.local:14268/api/traces
+    - name: JAEGER_SAMPLER_PARAM
+      value: "1.0"
+    - name: JAEGER_SAMPLER_TYPE
+      value: ratelimiting
   extraEnvFrom:
     - secretRef:
         name: loki-env-secret
@@ -44,6 +53,8 @@ loki:
       endpoint: minio-svc:9000
       insecure: true
     type: s3
+  tracing:
+    enabled: true
 
 memcached:
   containerSecurityContext:
@@ -70,6 +81,7 @@ deploymentMode: Distributed
 ingester:
   extraArgs:
     - -config.expand-env=true
+  extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -79,6 +91,7 @@ ingester:
 querier:
   extraArgs:
     - -config.expand-env=true
+  extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -89,6 +102,7 @@ querier:
 queryFrontend:
   extraArgs:
     - -config.expand-env=true
+  extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -99,6 +113,7 @@ queryFrontend:
 queryScheduler:
   extraArgs:
     - -config.expand-env=true
+  extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -108,6 +123,7 @@ queryScheduler:
 distributor:
   extraArgs:
     - -config.expand-env=true
+  extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom:
     - secretRef:
@@ -127,9 +143,13 @@ compactor:
 indexGateway:
   extraArgs:
     - -config.expand-env=true
+  extraEnv: *tracing-exraEnv
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
+ruler:
+  extraEnv: *tracing-exraEnv
+  priorityClassName: application-infra
 
 # Zero-out replics for non-Distributed pieces per documentation.
 bloomPlanner:
