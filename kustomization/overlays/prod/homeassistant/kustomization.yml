@@ -7,7 +7,6 @@ components:
   - ../../../components/frigate
   - ../../../components/homeassistant
   - ../../../components/mosquitto
-  - ../../../components/vector-metrics-scraper
   - ../../../components/zwavejs
 configMapGenerator:
   - files:
@@ -16,9 +15,6 @@ configMapGenerator:
   - files:
       - configmap/mosquitto-config/homeassistant.conf
     name: mosquitto-config-configmap
-  - name: vector-metrics-scraper-config
-    files:
-      - configmap/vector/vector.yml
 images:
   - name: busybox
     newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
@@ -36,10 +32,6 @@ patches:
     target:
       kind: StatefulSet
       name: mosquitto-statefulset
-  - path: patches/vector/add_secrets.yml
-    target:
-      kind: Deployment
-      name: vector-metrics-scraper-deployment
 resources:
   - namespace.yml
   - ingress.yml

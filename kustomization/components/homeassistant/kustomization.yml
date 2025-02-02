@@ -11,7 +11,6 @@ configMapGenerator:
       - configmap/scripts/generate_config.sh
       - configmap/scripts/generate_generic_hygrostat_config.sh
       - configmap/scripts/generate_http_config.sh
-      - configmap/scripts/generate_prometheus_config.sh
       - configmap/scripts/generate_recorder_config.sh
       - configmap/scripts/manage_hacs.sh
 images:
