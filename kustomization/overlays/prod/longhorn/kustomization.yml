@@ -4,19 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/longhorn
-configMapGenerator:
-  - name: vector-metrics-scraper-config
-    namespace: longhorn-system
-    files:
-      - configmap/vector.yml
-images:
-  - name: timberio/vector
-    newTag: 0.44.0-distroless-libc@sha256:ae164a9812e1e3d012bf5cb80c84116eb292ba78824ae568b7828f89dd90dc7f
 patches:
-  - path: patches/add_metrics_scraper.yml
-    target:
-      kind: DaemonSet
-      name: longhorn-manager
   - path: patches/change_ingress_host.yml
     target:
       kind: Ingress
