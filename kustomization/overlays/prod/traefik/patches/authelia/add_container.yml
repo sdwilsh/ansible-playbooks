@@ -51,8 +51,10 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
           ports:
+            - containerPort: 9959
+              name: auth-metrics
             - containerPort: 9091
-              name: web
+              name: auth-web
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

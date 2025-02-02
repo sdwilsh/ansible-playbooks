@@ -196,7 +196,8 @@ storage:
 # https://www.authelia.com/configuration/telemetry/introduction/
 telemetry:
   metrics:
-    enabled: false
+    address: tcp://:9959/metrics
+    enabled: true
 
 # https://www.authelia.com/configuration/miscellaneous/introduction/#theme
 theme: dark

@@ -1,0 +1,19 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: traefik-podmonitor
+spec:
+  podMetricsEndpoints:
+    # authelia
+    - path: /metrics
+      port: auth-metrics
+    # crowdsec
+    - path: /metrics
+      port: cs-metrics
+    # traefik
+    - path: /metrics
+      port: metrics
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: traefik

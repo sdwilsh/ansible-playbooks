@@ -66,6 +66,7 @@ resources:
   - certificate.yml
   - ingress.yml
   - middleware.yml
+  - podmonitor.yml
   - postgresql/authelia.yml
   - postgresql/crowdsec.yml
   - redisreplication.yml
