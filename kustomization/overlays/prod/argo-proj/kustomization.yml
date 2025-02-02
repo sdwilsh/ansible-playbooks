@@ -25,7 +25,7 @@ resources:
   - application/manyfold.yml
   - application/paperless.yml
   - application/postgresql.yml
-  - application/prometheus.yml
+  - application/prometheus-operator.yml
   - application/proton-mail.yml
   - application/redis.yml
   - application/traefik.yml

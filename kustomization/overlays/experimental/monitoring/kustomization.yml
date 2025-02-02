@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/minio
+  - ../../../components/prometheus
 configMapGenerator:
   - name: alloy-config
     files:
@@ -31,6 +32,14 @@ images:
     newTag: latest@sha256:ed9be66eb5f2636c18289c34c3b725ddf57815f2777c77b5938543b78a44f144
 namespace: monitoring
 patches:
+  - path: patches/alertmanager/set_configuration.yml
+    target:
+      kind: Alertmanager
+      name: alertmanager
+  - path: patches/alertmanager/set_externalUrl.yml
+    target:
+      kind: Alertmanager
+      name: alertmanager
   - path: patches/minio/configure_storage.yml
     target:
       kind: StatefulSet
@@ -39,7 +48,12 @@ patches:
     target:
       kind: StatefulSet
       name: minio-statefulset
+  - path: patches/prometheus/set_externalUrl.yml
+    target:
+      kind: Prometheus
+      name: prometheus
 resources:
   - namespace.yml
+  - alertmanagerconfig.yml
   - ingress.yml
   - postgresql.yml

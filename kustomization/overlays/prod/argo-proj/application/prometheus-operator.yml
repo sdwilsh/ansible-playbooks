@@ -7,12 +7,12 @@ metadata:
 spec:
   project: default
   source:
-    path: kustomization/overlays/prod/prometheus
+    path: kustomization/overlays/prod/prometheus-operator
     repoURL: https://github.com/sdwilsh/ansible-playbooks
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
-    namespace: prometheus
+    namespace: prometheus-operator
   syncPolicy:
     automated: {}
     syncOptions:

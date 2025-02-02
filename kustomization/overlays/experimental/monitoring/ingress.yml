@@ -4,10 +4,21 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: monitoring-ingress
 spec:
   rules:
+    - host: alertmanager.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: alertmanager-operated
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: grafana.hogs.tswn.us
       http:
         paths:
@@ -24,6 +35,16 @@ spec:
           - backend:
               service:
                 name: minio-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
+    - host: prometheus.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: prometheus-operated
                 port:
                   name: web
             path: /
