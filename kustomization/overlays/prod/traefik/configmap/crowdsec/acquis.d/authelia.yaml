@@ -1,5 +1,7 @@
 ---
-filenames:
- - /var/log/traefik/authelia.log
+source: loki
+url: http://loki-query-frontend.monitoring.svc.cluster.local:3100/
+query: |
+  {namespace="traefik", container="authelia"}
 labels:
   type: authelia

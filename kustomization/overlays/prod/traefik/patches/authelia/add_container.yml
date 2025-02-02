@@ -78,8 +78,6 @@ spec:
             - mountPath: /secrets/authelia/users
               name: authelia-users
               readOnly: true
-            - mountPath: /var/log/traefik
-              name: shared-logs
         - name: traefik
       initContainers:
         - command:
@@ -129,5 +127,3 @@ spec:
               - key: authelia-users.yml
                 path: authelia-users.yml
             secretName: authelia-config-secret
-        - emptyDir: {}
-          name: shared-logs
