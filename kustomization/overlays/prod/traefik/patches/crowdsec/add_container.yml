@@ -85,9 +85,6 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
           volumeMounts:
-            - mountPath: /var/log/traefik
-              name: shared-logs
-              readOnly: true
             - name: crowdsec-acquisitions-config
               mountPath: /staging/etc/crowdsec/acquis.d/
               readOnly: true
@@ -148,5 +145,3 @@ spec:
             defaultMode: 0777
             name: crowdsec-scripts-configmap
           name: crowdsec-scripts
-        - emptyDir: {}
-          name: shared-logs

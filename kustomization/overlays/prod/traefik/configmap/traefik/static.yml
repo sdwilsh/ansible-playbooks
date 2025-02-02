@@ -6,7 +6,7 @@ accessLog:
       defaultMode: drop
       names:
         User-Agent: keep
-  filepath: /var/log/traefik/access.log
+  filePath: "" # log to stdout
   filters:
     statusCodes:
       - 200-299
@@ -49,6 +49,7 @@ global:
   checkNewVersion: false
 log:
   filePath: "" # log to stdout
+  format: json
   # Uncomment to debug production issues!
   # level: DEBUG
 metrics:

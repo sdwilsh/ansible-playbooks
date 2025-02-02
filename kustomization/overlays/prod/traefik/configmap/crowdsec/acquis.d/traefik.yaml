@@ -1,7 +1,7 @@
 ---
-filenames:
-  - /var/log/traefik/access.log
+source: loki
+url: http://loki-query-frontend.monitoring.svc.cluster.local:3100/
+query: |
+  {namespace="traefik", container="traefik"} |= `ClientAddr`
 labels:
   type: traefik
-poll_without_inotify: false
-source: file

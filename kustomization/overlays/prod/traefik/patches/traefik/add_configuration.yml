@@ -34,8 +34,6 @@ spec:
               mountPath: /etc/treafik/crowdsec-api-key
               readOnly: true
               subPath: traefik-bouncer_api_key
-            - mountPath: /var/log/traefik
-              name: shared-logs
             - name: traefik-config
               mountPath: /etc/traefik/traefik.yml
               readOnly: true
@@ -56,8 +54,6 @@ spec:
         - name: crowdsec-credentials-config
           secret:
             secretName: crowdsec-credentials-secret
-        - emptyDir: {}
-          name: shared-logs
         - configMap:
             name: traefik-config
           name: traefik-config
