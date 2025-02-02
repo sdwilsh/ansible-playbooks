@@ -139,7 +139,11 @@ indexGateway:
   replicas: 2
 ruler:
   extraEnv: *tracing-exraEnv
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom: *s3-extraEnvFrom
+  maxUnavailable: 1
   priorityClassName: application-infra
+  replicas: 2
 
 # Zero-out replics for non-Distributed pieces per documentation.
 bloomPlanner:
