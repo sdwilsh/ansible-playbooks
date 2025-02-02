@@ -18,9 +18,6 @@ configMapGenerator:
   - name: crowdsec-scripts-configmap
     files:
       - configmap/crowdsec/scripts/entrypoint.sh
-  - name: vector-config
-    files:
-      - configmap/vector.yml
   - name: traefik-config
     files:
       - configmap/traefik/dynamic.yml
@@ -34,17 +31,11 @@ images:
     newTag: v7.2.6@sha256:209dfd954d34f67ba104b88c90dec4f798bb8f05b78936e12f2f75428688cec8
   - name: quay.io/opstree/redis
     newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
-  - name: timberio/vector
-    newTag: 0.44.0-distroless-libc@sha256:ae164a9812e1e3d012bf5cb80c84116eb292ba78824ae568b7828f89dd90dc7f
   - name: traefik
     # renovate: datasource=github-releases depName=traefik/traefik
     newTag: v3.3.3@sha256:f1fdee7fda041872cff24e36a08f45ca53f006ded88f743a8e30e3d87ca52b48
 namespace: traefik
 patches:
-  - path: patches/add_vector_sidecar.yml
-    target:
-      kind: Deployment
-      name: traefik-deployment
   - path: patches/authelia/add_container.yml
     target:
       kind: Deployment
