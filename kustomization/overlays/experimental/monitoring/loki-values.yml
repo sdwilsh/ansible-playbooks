@@ -9,7 +9,7 @@ global:
       value: "1.0"
     - name: JAEGER_SAMPLER_TYPE
       value: ratelimiting
-  extraEnvFrom:
+  extraEnvFrom: &s3-extraEnvFrom
     - secretRef:
         name: loki-env-secret
 loki:
@@ -83,9 +83,7 @@ ingester:
     - -config.expand-env=true
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom:
-    - secretRef:
-        name: loki-env-secret
+  extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 3
 querier:
@@ -93,9 +91,7 @@ querier:
     - -config.expand-env=true
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom:
-    - secretRef:
-        name: loki-env-secret
+  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 2
   priorityClassName: application-infra
   replicas: 3 # Improve query performance via parallelism
@@ -104,9 +100,7 @@ queryFrontend:
     - -config.expand-env=true
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom:
-    - secretRef:
-        name: loki-env-secret
+  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
@@ -115,9 +109,7 @@ queryScheduler:
     - -config.expand-env=true
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom:
-    - secretRef:
-        name: loki-env-secret
+  extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 2
 distributor:
@@ -125,9 +117,7 @@ distributor:
     - -config.expand-env=true
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom:
-    - secretRef:
-        name: loki-env-secret
+  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 2
   priorityClassName: application-infra
   replicas: 3 
@@ -135,15 +125,15 @@ compactor:
   extraArgs:
     - -config.expand-env=true
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom:
-    - secretRef:
-        name: loki-env-secret
+  extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 1
 indexGateway:
   extraArgs:
     - -config.expand-env=true
   extraEnv: *tracing-exraEnv
+  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
+  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
