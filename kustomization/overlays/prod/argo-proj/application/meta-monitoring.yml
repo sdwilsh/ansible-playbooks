@@ -1,0 +1,17 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: meta-monitoring
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: meta-monitoring
+  source:
+    path: kustomization/overlays/prod/meta-monitoring
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}
