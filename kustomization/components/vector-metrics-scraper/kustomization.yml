@@ -1,9 +1,0 @@
----
-apiVersion: kustomize.config.k8s.io/v1alpha1
-kind: Component
-
-images:
-  - name: timberio/vector
-    newTag: 0.44.0-distroless-libc@sha256:ae164a9812e1e3d012bf5cb80c84116eb292ba78824ae568b7828f89dd90dc7f
-resources:
-  - deployment.yml

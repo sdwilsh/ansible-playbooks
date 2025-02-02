@@ -34,4 +34,3 @@ resources:
   - application/unifi.yml
   - application/valheim-forerunner.yml
   - application/valheim-relic.yml
-  - application/vector.yml
