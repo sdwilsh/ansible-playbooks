@@ -17,23 +17,13 @@ sinks:
   aggregator:
     address: aggregator.vector.svc.cluster.local:6000
     inputs:
-      - crowdsec_metrics
       - internal_metrics
       - parsed_access_log
-      - traefik_metrics
     type: vector
 sources:
   access_log:
     include:
       - /var/log/traefik/access.log
     type: file
-  crowdsec_metrics:
-    endpoints:
-      - "http://${POD_IP}:6060/metrics"
-    type: prometheus_scrape
-  traefik_metrics:
-    endpoints:
-      - http://localhost:9090/metrics
-    type: prometheus_scrape
   internal_metrics:
     type: internal_metrics
