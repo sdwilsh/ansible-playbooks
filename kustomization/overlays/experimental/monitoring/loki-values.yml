@@ -1,5 +1,7 @@
 ---
 global:
+  extraArgs: &extraArgs
+    - -config.expand-env=true
   extraEnv: &tracing-exraEnv
     - name: JAEGER_AGENT_TAGS
       value: cluster="kairos_prod",namespace="monitoring"
@@ -79,16 +81,14 @@ memcachedExporter:
 # General settings for Distributed deployment mode.
 deploymentMode: Distributed
 ingester:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 3
 querier:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
@@ -96,8 +96,7 @@ querier:
   priorityClassName: application-infra
   replicas: 3 # Improve query performance via parallelism
 queryFrontend:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
@@ -105,16 +104,14 @@ queryFrontend:
   priorityClassName: application-infra
   replicas: 2
 queryScheduler:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 2
 distributor:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
@@ -122,15 +119,13 @@ distributor:
   priorityClassName: application-infra
   replicas: 3 
 compactor:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 1
 indexGateway:
-  extraArgs:
-    - -config.expand-env=true
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
@@ -138,6 +133,7 @@ indexGateway:
   priorityClassName: application-infra
   replicas: 2
 ruler:
+  extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
   extraEnvFrom: *s3-extraEnvFrom
