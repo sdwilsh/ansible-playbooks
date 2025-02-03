@@ -42,7 +42,20 @@ configReloader:
       type: RuntimeDefault
 
 controller:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - alloy
+          topologyKey: kubernetes.io/hostname
+  podDisruptionBudget:
+    minAvailable: 1
   priorityClassName: application-infra
+  replicas: 3
   type: deployment
   volumes:
     extra:
