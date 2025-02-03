@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=github-releases depName=vyos/vyos-nightly-build
-vyos_version: 1.5-rolling-202501260007
+vyos_version: 1.5-rolling-202502030007
 
 ansbile_network_cli_ssh_type: libssh
 ansible_connection: network_cli
