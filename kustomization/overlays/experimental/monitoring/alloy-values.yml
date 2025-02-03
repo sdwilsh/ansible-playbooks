@@ -36,8 +36,9 @@ configReloader:
       drop:
         - ALL
     readOnlyRootFilesystem: true
+    runAsGroup: 473 # alloy
     runAsNonRoot: true
-    runAsUser: 65534
+    runAsUser: 473 # alloy
     seccompProfile:
       type: RuntimeDefault
 
