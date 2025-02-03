@@ -1,0 +1,70 @@
+---
+alloy:
+  configMap:
+    create: false
+    name: alloy-config
+    key: /
+  extraEnv:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+  listenAddr: $(POD_IP)
+  mounts:
+    extra:
+      - mountPath: /host/var/log/journal
+        name: journal
+        readOnly: true
+      - mountPath: /tmp/alloy
+        name: tmp
+  priorityClassName: application-infra
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seccompProfile:
+      type: RuntimeDefault
+  storagePath: /tmp/alloy
+
+configReloader:
+  enabed: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seccompProfile:
+      type: RuntimeDefault
+
+controller:
+  type: daemonset
+  volumes:
+    extra:
+      - hostPath:
+          path: /var/log/journal
+          type: Directory
+        name: journal
+      - emptyDir: {}
+        name: tmp
+
+crds:
+  create: false
+
+nameOverride: node-
+
+rbac:
+  create: false
+
+service:
+  enabled: false
+
+serviceAccount:
+  create: false
+
+serviceMonitor:
+  enabled: false
