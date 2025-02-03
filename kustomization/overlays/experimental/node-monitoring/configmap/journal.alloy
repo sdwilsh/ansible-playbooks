@@ -13,10 +13,102 @@ loki.relabel "journal" {
     source_labels = ["__journal__transport"]
     target_label  = "transport"
   }
+  rule {
+    source_labels = ["__journal_priority"]
+    target_label  = "syslog_priority"
+  }
+}
+
+loki.process "loglevel" {
+  forward_to = [loki.write.default.receiver]
+
+  // Unmatched case
+  stage.static_labels {
+    values = {
+      level = "unknown",
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "0"}`
+    stage.static_labels {
+      values = {
+        level = "error",
+      }
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "1"}`
+    stage.static_labels {
+      values = {
+        level = "error",
+      }
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "2"}`
+    stage.static_labels {
+      values = {
+        level = "error",
+      }
+    }
+  }
+
+  
+  stage.match {
+    selector = `{syslog_priority = "3"}`
+    stage.static_labels {
+      values = {
+        level = "error",
+      }
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "4"}`
+    stage.static_labels {
+      values = {
+        level = "warning",
+      }
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "5"}`
+    stage.static_labels {
+      values = {
+        level = "info",
+      }
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "6"}`
+    stage.static_labels {
+      values = {
+        level = "info",
+      }
+    }
+  }
+
+  stage.match {
+    selector = `{syslog_priority = "7"}`
+    stage.static_labels {
+      values = {
+        level = "debug",
+      }
+    }
+  }
+
+  stage.label_drop {
+    values = ["syslog_priority"]
+  }
 }
 
 loki.source.journal "kairos_prod"  {
-  forward_to = [loki.write.default.receiver]
+  forward_to = [loki.process.loglevel.receiver]
   path = "/host/var/log/journal"
   relabel_rules = loki.relabel.journal.rules
 }
