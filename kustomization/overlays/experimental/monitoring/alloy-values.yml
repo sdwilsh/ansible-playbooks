@@ -1,5 +1,7 @@
 ---
 alloy:
+  clustering:
+    enabled: true
   configMap:
     create: false
     name: alloy-config
