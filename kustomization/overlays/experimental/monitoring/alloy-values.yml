@@ -64,3 +64,6 @@ controller:
 
 crds:
   create: false
+
+serviceMonitor:
+  enabled: true
