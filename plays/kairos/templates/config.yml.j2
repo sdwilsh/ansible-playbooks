@@ -27,7 +27,7 @@ k3s:
 {% endif %}
     - --cluster-cidr=172.16.0.0/16
     - --service-cidr=172.17.0.0/16
-    - --disable=traefik,servicelb
+    - --disable=metrics-server,traefik,servicelb
     - --disable-helm-controller
 {% for tls_san in hostvars[host].k3s_controlplane_san %}
     - --tls-san={{ tls_san }}
