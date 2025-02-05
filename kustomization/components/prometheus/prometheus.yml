@@ -22,6 +22,7 @@ spec:
     seccompProfile:
       type: RuntimeDefault
   serviceAccountName: prometheus-service-account
+  serviceMonitorNamespaceSelector: {}
   serviceMonitorSelector: {}
   storage:
     volumeClaimTemplate:
