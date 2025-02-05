@@ -1,0 +1,6 @@
+---
+namespaceOverride: node-monitoring
+
+prometheus:
+  monitor:
+    enabled: true

@@ -13,6 +13,14 @@ helmCharts:
     repo: https://grafana.github.io/helm-charts
     releaseName: alloy
     valuesFile: alloy-values.yml
+  - name: prometheus-node-exporter
+    version: 4.43.1
+    repo: https://prometheus-community.github.io/helm-charts
+    releaseName: node-exporter
+    valuesFile: node-exporter-values.yml
+images:
+  - name: quay.io/prometheus/node-exporter
+    newTag: v1.8.2@sha256:4032c6d5bfd752342c3e631c2f1de93ba6b86c41db6b167b9a35372c139e7706
 namespace: node-monitoring
 resources:
   - namespace.yml
