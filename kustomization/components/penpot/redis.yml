@@ -17,6 +17,15 @@ spec:
   podSecurityContext:
     fsGroup: 1000 # redis
     runAsUser: 1000 # redis
+  priorityClassName: application-infra
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
   storage:
     volumeClaimTemplate:
       spec:
