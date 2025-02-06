@@ -29,7 +29,7 @@ helmCharts:
     valuesFile: loki-values.yml
 images:
   - name: quay.io/minio/minio
-    newTag: latest@sha256:ed9be66eb5f2636c18289c34c3b725ddf57815f2777c77b5938543b78a44f144
+    newTag: latest@sha256:a62e44a7db506b8ed114a44e67b4996c4f1ecca981d9c6e40aa2581334999313
 namespace: monitoring
 patches:
   - path: patches/alertmanager/set_configuration.yml
