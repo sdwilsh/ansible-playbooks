@@ -183,10 +183,16 @@
       "automergeType": "branch",
       "matchPackageNames": [
         "ghcr.io/blakeblackshear/frigate",
-        "ghcr.io/servercontainers/samba"
+        "ghcr.io/servercontainers/samba",
+        "lscr.io/linuxserver/code-server",
+        "postgres",
+        "quay.io/minio/minio"
       ],
       "matchUpdateTypes": [
         "digest"
+      ],
+      "schedule": [
+        "after 4pm every weekday"
       ]
     },
     {
