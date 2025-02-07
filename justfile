@@ -6,7 +6,7 @@ default:
 # Run ansible-lint with the configured profile
 [group('lint')]
 ansible-lint:
-    @ansible-lint
+    @ansible-lint --offline
 
 # Check `just` syntax
 [group('just')]
