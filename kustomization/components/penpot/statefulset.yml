@@ -36,7 +36,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: PENPOT_REDIS_URI
-              value: redis://penpot-redis/0
+              value: redis://penpot-redis/
             - name: PENPOT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -62,7 +62,10 @@ spec:
               name: backend-tmp
             - mountPath: /opt/data/assets
               name: penpot-assets
-        - image: penpotapp/exporter
+        - env:
+            - name: PENPOT_REDIS_URI
+              value: redis://penpot-redis/
+          image: penpotapp/exporter
           name: penpot-exporter
           resources:
             limits:
