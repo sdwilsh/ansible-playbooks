@@ -3,7 +3,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../components/unifi-network-application
+  - https://github.com/marinatedconcrete/config/kustomization/components/unifi-network-application
+images:
+  - name: busybox
+    newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
+  - name: lscr.io/linuxserver/unifi-network-application
+    newTag: 9.0.114@sha256:8990fe661fc5b4677d38eaf1321012f2a4322d965540051db8104d6a8329952b
+  - name: mongo
+    newTag: 7.0.16@sha256:e557aa97915d4d0ca4fb9ecf90e55dc4006faa973c7718c1529df325c64342ad
 namespace: unifi
 patches:
   - path: patches/add_una_svc_annotations.yml

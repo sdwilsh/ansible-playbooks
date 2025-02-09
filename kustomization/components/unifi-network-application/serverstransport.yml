@@ -1,7 +1,0 @@
----
-apiVersion: traefik.io/v1alpha1
-kind: ServersTransport
-metadata:
-  name: unifi-network-application-serverstransport
-spec:
-  insecureSkipVerify: true
