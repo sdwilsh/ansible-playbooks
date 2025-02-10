@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  # renovate: datasource=github-releases
+  # renovate: datasource=github-releases versioning=loose
   - https://github.com/marinatedconcrete/config/kustomization/components/unifi-network-application?ref=kustomize-unifi-network-application@v1.0.0
 namespace: unifi
 patches:
