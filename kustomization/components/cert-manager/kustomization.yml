@@ -8,5 +8,5 @@ patches:
       kind: Deployment
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/cert-manager/cert-manager/releases/download/v1.16.3/cert-manager.yaml
+  - https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
   - podmonitor.yml
