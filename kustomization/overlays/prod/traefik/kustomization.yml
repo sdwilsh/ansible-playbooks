@@ -24,7 +24,7 @@ configMapGenerator:
       - configmap/traefik/static.yml
 images:
   - name: ghcr.io/crowdsecurity/crowdsec
-    newTag: v1.6.4@sha256:091229068a9dab7f8c1ae41086669620da2980c6ccc26f9e358a75aaa7cb4a27 
+    newTag: v1.6.5@sha256:fdb487e130095709c1b1c5ba2bd2b461e6715676076e5f774230dcf47d366f76 
   - name: postgres
     newTag: 16@sha256:557fea37a744d5f4c8faab304b0a90858b53ab119735a88c131fd19dab802f36
   - name: quay.io/opstree/redis-sentinel
