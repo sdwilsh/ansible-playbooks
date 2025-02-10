@@ -163,9 +163,11 @@
         "gotenberg/gotenberg",
         "helm/helm",
         "jellyfin/jellyfin",
+        "loki",
         "lscr.io/linuxserver/transmission",
         "mbround18/valheim",
         "prometheus/prometheus",
+        "quay.io/minio/minio",
         "shenxn/protonmail-bridge",
         "ubuntu/bind9",
         "zwavejs/zwave-js-ui"
