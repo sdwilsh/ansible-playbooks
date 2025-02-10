@@ -98,8 +98,7 @@
       "matchStrings": [
         "- https://github\\.com/marinatedconcrete/config/releases/download/(?<currentValue>.*?)/",
         "- https://github\\.com/marinatedconcrete/config/?\\?ref=(?<currentValue>.+?)$"
-      ],
-      "versioning": "regex:^(?<compatibility>.*)@v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
+      ]
     },
     {
       "customType": "regex",
@@ -140,6 +139,11 @@
     "config:best-practices"
   ],
   "packageRules": [
+    {
+      "description": "marinatedconcrete/config versioning",
+      "matchPackageNames": ["marinatedconcrete/config"],
+      "versioning": "regex:^(?<compatibility>.*)@v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
+    },
     {
       "description": "Automatic Minor and Patch Updates",
       "automerge": true,
