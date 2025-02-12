@@ -123,7 +123,7 @@
     }
   ],
   "extends": [
-    "github>marinatedconcrete/config//renovate/default"
+    "github>marinatedconcrete/config//renovate/default#renovate-config@v1.0.0"
   ],
   "packageRules": [
     {
