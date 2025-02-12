@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: ghcr.io/blakeblackshear/frigate:stable
-    newTag: 0.14.1
+    newTag: 0.15.0@sha256:dc77295ccc5a7258510ab6b1d9d5b7a339027305e2d29224338534febc4d1e89
 resources:
   - statefulset.yml
   - service.yml
