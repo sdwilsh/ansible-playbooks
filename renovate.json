@@ -89,19 +89,6 @@
     },
     {
       "customType": "regex",
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "marinatedconcrete/config",
-      "fileMatch": [
-        "^kustomization/.+/.+/kustomization\\.yml$",
-        "^kustomization/.+/.+/.+/kustomization\\.yml$"
-      ],
-      "matchStrings": [
-        "- https://github\\.com/marinatedconcrete/config/releases/download/(?<currentValue>.*?)/",
-        "- https://github\\.com/marinatedconcrete/config/?\\?ref=(?<currentValue>.+?)$"
-      ]
-    },
-    {
-      "customType": "regex",
       "datasourceTemplate": "docker",
       "fileMatch": [
         "^kustomization/components/.+/postgresql\\.yml$",
@@ -139,11 +126,6 @@
     "github>marinatedconcrete/config//renovate"
   ],
   "packageRules": [
-    {
-      "description": "marinatedconcrete/config versioning",
-      "matchPackageNames": ["marinatedconcrete/config"],
-      "versioning": "regex:^(?<compatibility>.*)@v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?$"
-    },
     {
       "description": "Automatic Minor and Patch Updates",
       "automerge": true,
