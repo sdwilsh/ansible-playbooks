@@ -14,7 +14,7 @@ spec:
         paths:
           - backend:
               service:
-                name: factorio-svc
+                name: factorio-admin-svc
                 port:
                   name: web
             path: /

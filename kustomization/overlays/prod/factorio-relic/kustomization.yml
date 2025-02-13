@@ -9,7 +9,7 @@ patches:
   - path: patches/set_load_balancer.yml
     target:
       kind: Service
-      name: factorio-svc
+      name: factorio-game-svc
 resources:
   - namespace.yml
   - ingress.yml
