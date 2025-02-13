@@ -90,8 +90,8 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    recovery_image_label: 24.04-standard-amd64-generic-v3.1.2-k3sv1.30.4-k3s1
-    target_image_label: 24.04-standard-amd64-generic-v3.2.4-k3sv1.30.7-k3s1
+    recovery_image_label: 24.04-standard-amd64-generic-v3.2.4-k3sv1.30.7-k3s1
+    target_image_label: 24.04-standard-amd64-generic-v3.3.1-k3sv1.31.4-k3s1
 
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
