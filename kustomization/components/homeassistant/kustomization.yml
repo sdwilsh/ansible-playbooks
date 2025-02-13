@@ -15,7 +15,7 @@ configMapGenerator:
       - configmap/scripts/manage_hacs.sh
 images:
   - name: ghcr.io/home-assistant/home-assistant
-    newTag: 2025.2.2@sha256:a9fab1c5cb63a7c721d38b2ba40cdcac3acb9cd70be3fe3838336f71e73d9443
+    newTag: 2025.2.3@sha256:9fb37db8a70364e81b3efa0dd59630a94606aab825e04068256753f65d10174e
   - name: lscr.io/linuxserver/code-server
     newTag: 4.96.4@sha256:b0b34e9afb1342b06690bd8c1f22cf2c7c4e562f8a7b2e50c3917eee06a5eed4
 resources:
