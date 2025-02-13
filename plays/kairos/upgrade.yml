@@ -44,7 +44,7 @@
       when: not k3s_controlplane
     - name: Read in current version
       ansible.builtin.slurp:
-        src: /etc/os-release
+        src: /etc/kairos-release
       register: osreleasefile
     - name: Decode release metadata
       ansible.builtin.set_fact:
