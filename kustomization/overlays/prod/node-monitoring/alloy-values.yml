@@ -42,6 +42,33 @@ configReloader:
       type: RuntimeDefault
 
 controller:
+  initContainers:
+    - command:
+        - sh
+        - -c
+        - /scripts/install_journald_conf.sh
+      image: busybox
+      name: install-journald-conf
+      resources:
+        limits:
+          cpu: 100m
+          memory: 200Mi
+        requests:
+          cpu: 30m
+          memory: 100Mi
+      securityContext:
+        allowPrivilegeEscalation: true
+        privileged: true
+        runAsUser: 0
+        runAsNonRoot: false
+        readOnlyRootFilesystem: false
+        seccompProfile:
+          type: RuntimeDefault
+      volumeMounts:
+        - mountPath: /scripts
+          name: scripts
+        - mountPath: /host/usr/local/lib/systemd/journald.conf.d
+          name: journald-conf
   type: daemonset
   volumes:
     extra:
@@ -49,6 +76,14 @@ controller:
           path: /var/log/journal
           type: Directory
         name: journal
+      - hostPath:
+          path: /usr/local/lib/systemd/journald.conf.d
+          type: DirectoryOrCreate
+        name: journald-conf
+      - configMap:
+          defaultMode: 0777
+          name: alloy-scripts-configmap
+        name: scripts
       - emptyDir: {}
         name: tmp
 

@@ -7,6 +7,9 @@ configMapGenerator:
     files:
       - configmap/journal.alloy
       - configmap/loki.alloy
+  - name: alloy-scripts-configmap
+    files:
+      - configmap/install_journald_conf.sh
 helmCharts:
   - name: alloy
     version: 0.11.0
