@@ -1,5 +1,5 @@
 ansible-dev-tools ==25.2.1
 ansible-pylibssh ==1.2.2
 ara ==1.7.2
-kubernetes ==32.0.0
+kubernetes ==32.0.1
 netaddr ==1.3.0
