@@ -55,3 +55,35 @@ spec:
             limits:
               cpu: 4000m
               memory: 8Gi
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: paperless-16-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: paperless-owner-user.paperless-16-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: paperless-owner-user.paperless-16-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-paperless-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
