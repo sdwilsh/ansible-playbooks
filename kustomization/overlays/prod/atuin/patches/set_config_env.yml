@@ -24,6 +24,37 @@ spec:
             - mountPath: /postgresql-secrets
               name: postgresql-secrets
               readOnly: true
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: atuin-16-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-atuin-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
       volumes:
         - name: postgresql-secrets
           secret:
