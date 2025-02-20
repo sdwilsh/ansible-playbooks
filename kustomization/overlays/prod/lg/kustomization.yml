@@ -14,6 +14,8 @@ images:
     newTag: 2.4.3@sha256:60adce36eb42c46df7f2f8bb94d68b9c633f09ffcf7242c84da73eb056a959ef
   - name: penpotapp/frontend
     newTag: 2.4.3@sha256:1b7249ed23694f2b82d28b07e71fc788175f3e4e2606f19da07b78a220264fc3
+  - name: postgres
+    newTag: 16@sha256:a35ec42526e3c522eb13b4d82eddaee875d0ac6ca9eb5cc5607e412854478c71
 namespace: lg
 patches:
   - path: patches/set_gitea_admin.yml

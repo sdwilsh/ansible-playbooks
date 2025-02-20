@@ -120,6 +120,38 @@ spec:
           volumeMounts:
             - mountPath: /opt/data/assets
               name: penpot-assets
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: penpot-database-16-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: penpot-owner-user.penpot-database-16-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: penpot-owner-user.penpot-database-16-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-penpot-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
       priorityClassName: application
       volumes:
         - name: backend-tmp
