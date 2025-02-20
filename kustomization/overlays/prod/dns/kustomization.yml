@@ -17,7 +17,7 @@ images:
   - name: ubuntu
     newTag: "24.04@sha256:72297848456d5d37d1262630108ab308d3e9ec7ed1c3286a32fe09856619a782"
   - name: ubuntu/bind9
-    newTag: 9.18-22.04_beta
+    newTag: 9.18-24.04_beta@sha256:38fc0495351783f1ab2fa63865aa00a2a609dc50dadf59e8ed6235e48cdaba6f
 namespace: dns
 resources:
   - namespace.yml
