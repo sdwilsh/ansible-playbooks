@@ -25,3 +25,35 @@ spec:
                   name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
                   key: username
           name: spoolman
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: spoolman-16-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-spoolman-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
