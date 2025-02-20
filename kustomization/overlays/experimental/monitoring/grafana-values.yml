@@ -12,6 +12,39 @@ envValueFrom:
       key: username
       name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
 
+extraInitContainers:
+  - command:
+      - sh
+      - -c
+      - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+    env:
+      - name: PGHOST
+        value: grafana-17-pg
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+      - name: PGSSLMODE
+        value: require
+      - name: PGUSER
+        valueFrom:
+          secretKeyRef:
+            key: username
+            name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+    image: postgres
+    name: wait-for-grafana-pg-is-ready
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65534
+      seccompProfile:
+        type: RuntimeDefault
+
 ingress:
   enabled: false
 

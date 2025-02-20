@@ -28,6 +28,8 @@ helmCharts:
     releaseName: loki
     valuesFile: loki-values.yml
 images:
+  - name: postgres
+    newTag: 17@sha256:0321e2252ebfeecb8bc1a899755084d29bce872953e1a5a3e25ec0860b739098
   - name: quay.io/minio/minio
     newTag: latest@sha256:1df91be8d6a6146001cd6be2569a12785a8ece583b511f56ebed08f1e65d3611
 namespace: monitoring
