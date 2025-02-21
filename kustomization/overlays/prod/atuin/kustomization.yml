@@ -6,7 +6,7 @@ components:
   - ../../../components/atuin
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
+    newTag: 1.37.0@sha256:498a000f370d8c37927118ed80afe8adc38d1edcbfc071627d17b25c88efcab0
   - name: ghcr.io/atuinsh/atuin
     newTag: v18.4.0@sha256:8c6fa0aea944bf2a39665c9c69df1c2c0f9c05207bda5b942d450142285e3ee1
   - name: postgres

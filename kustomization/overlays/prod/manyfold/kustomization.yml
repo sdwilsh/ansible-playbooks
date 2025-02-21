@@ -6,7 +6,7 @@ components:
   - ../../../components/manyfold
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
+    newTag: 1.37.0@sha256:498a000f370d8c37927118ed80afe8adc38d1edcbfc071627d17b25c88efcab0
   - name: ghcr.io/manyfold3d/manyfold-solo
     newTag: 0.101.0@sha256:0d496f43696f21c1412dfe52848a92b72ddd22bdc2f00a9209b8d8db9c0d8967
 namespace: manyfold

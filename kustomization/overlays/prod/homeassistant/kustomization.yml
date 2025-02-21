@@ -17,7 +17,7 @@ configMapGenerator:
     name: mosquitto-config-configmap
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
+    newTag: 1.37.0@sha256:498a000f370d8c37927118ed80afe8adc38d1edcbfc071627d17b25c88efcab0
   - name: postgres
     newTag: 16@sha256:a35ec42526e3c522eb13b4d82eddaee875d0ac6ca9eb5cc5607e412854478c71
 namespace: homeassistant
