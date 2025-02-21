@@ -1,0 +1,6 @@
+---
+# This exists because the helm chart tries to examine capabilities of the server, but we render it with kustomize so
+# we have no capabilities.
+- op: replace
+  path: /apiVersion
+  value: apiregistration.k8s.io/v1

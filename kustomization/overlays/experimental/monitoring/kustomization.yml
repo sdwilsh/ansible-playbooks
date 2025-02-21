@@ -27,11 +27,18 @@ helmCharts:
     repo: https://grafana.github.io/helm-charts
     releaseName: loki
     valuesFile: loki-values.yml
+  - name: prometheus-adapter
+    version: 4.11.0
+    repo: https://prometheus-community.github.io/helm-charts
+    releaseName: prometheus-adapter
+    valuesFile: prometheus-adapter-values.yml
 images:
   - name: postgres
     newTag: 17@sha256:0321e2252ebfeecb8bc1a899755084d29bce872953e1a5a3e25ec0860b739098
   - name: quay.io/minio/minio
     newTag: latest@sha256:1df91be8d6a6146001cd6be2569a12785a8ece583b511f56ebed08f1e65d3611
+  - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
+    newTag: v0.12.0@sha256:932eae60e2bcf9c4660d6442da066ef1a79b4ea7cc232c61c7303069216ca006
 namespace: monitoring
 patches:
   - path: patches/alertmanager/set_configuration.yml
@@ -62,6 +69,9 @@ patches:
     target:
       kind: Prometheus
       name: prometheus
+  - path: patches/prometheus-adapter/set_correct_apiVersion.yml
+    target:
+      kind: APIService
 resources:
   - namespace.yml
   - alertmanagerconfig.yml
