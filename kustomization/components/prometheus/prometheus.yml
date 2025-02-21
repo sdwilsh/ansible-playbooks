@@ -6,8 +6,7 @@ metadata:
 spec:
   alerting:
     alertmanagers:
-      - namespace: prometheus
-        name: alertmanager-operated
+      - name: alertmanager-operated
         port: web
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
