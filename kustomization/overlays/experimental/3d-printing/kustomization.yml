@@ -8,7 +8,7 @@ images:
   - name: ghcr.io/donkie/spoolman
     newTag: 0.21.0@sha256:91e4b75dacfd17c64fdf23336e824149fb0d636df6c422312de1e211d02ce412
   - name: postgres
-    newTag: 16@sha256:a35ec42526e3c522eb13b4d82eddaee875d0ac6ca9eb5cc5607e412854478c71
+    newTag: 16@sha256:361c84f2bbe0f91135990841eb4eb4d2fe491f6e950686d9c746415dd1ffc65e
 namespace: 3d-printing
 patches:
   - path: patches/spoolman/set_database.yml
