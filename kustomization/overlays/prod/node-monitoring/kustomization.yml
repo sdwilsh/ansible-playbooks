@@ -12,7 +12,7 @@ configMapGenerator:
       - configmap/install_journald_conf.sh
 helmCharts:
   - name: alloy
-    version: 0.11.0
+    version: 0.12.0
     repo: https://grafana.github.io/helm-charts
     releaseName: alloy
     valuesFile: alloy-values.yml
