@@ -29,5 +29,6 @@ ip rule add table main suppress_prefixlength 0
 #
 
 # Route all k8s traffic though `eth0`.
+ip route add 172.16.0.1 dev eth0 || true
 ip route add 172.16.0.0/16 via 172.16.0.1 dev eth0 || true
 ip route add 172.17.0.0/16 via 172.16.0.1 dev eth0 || true
