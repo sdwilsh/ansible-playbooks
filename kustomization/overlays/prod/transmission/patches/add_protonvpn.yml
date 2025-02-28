@@ -13,33 +13,8 @@ spec:
           name: transmission
           volumeMounts:
             - mountPath: /etc/resolv.conf
-              name: dnsmasq
+              name: protonvpn
               subPath: resolv.conf
-        - name: dnsmasq
-          image: dockurr/dnsmasq
-          livenessProbe:
-            tcpSocket:
-              port: 53
-          readinessProbe:
-            tcpSocket:
-              port: 53
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              add:
-                - NET_ADMIN
-                - NET_RAW
-              drop:
-                - ALL
-            runAsGroup: 0
-            runAsNonRoot: false
-            runAsUser: 0
-            seccompProfile:
-              type: RuntimeDefault
-          volumeMounts:
-            - mountPath: /etc/dnsmasq.conf
-              name: dnsmasq
-              subPath: dnsmasq.conf
       initContainers:
         - command:
             - /bin/sh
@@ -65,9 +40,9 @@ spec:
             - mountPath: /scripts
               name: wireguard-scripts
       volumes:
-        - name: dnsmasq
+        - name: protonvpn 
           configMap:
-            name: dnsmasq-configmap
+            name: protonvpn-configmap
         - name: wireguard-scripts
           configMap:
             defaultMode: 0777

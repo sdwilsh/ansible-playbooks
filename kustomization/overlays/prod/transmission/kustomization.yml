@@ -5,10 +5,9 @@ kind: Kustomization
 components:
   - ../../../components/transmission
 configMapGenerator:
-  - name: dnsmasq-configmap
+  - name: protonvpn-configmap
     files:
-      - configmap/dnsmasq/dnsmasq.conf
-      - configmap/dnsmasq/resolv.conf
+      - configmap/protonvpn/resolv.conf
   - name: wireguard-scripts-configmap
     files:
       - configmap/scripts/setup_wireguard.sh
