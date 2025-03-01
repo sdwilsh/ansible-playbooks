@@ -1,0 +1,7 @@
+---
+appsec_config: crowdsecurity/virtual-patching
+labels:
+  type: appsec
+listen_addr: ${POD_IP}:7422
+path: /
+source: appsec

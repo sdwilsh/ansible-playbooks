@@ -13,6 +13,7 @@ configMapGenerator:
       - configmap/crowdsec/config.yaml.local
   - name: crowdsec-acquisitions-configmap
     files:
+      - configmap/crowdsec/acquis.d/appsec.yaml
       - configmap/crowdsec/acquis.d/authelia.yaml
       - configmap/crowdsec/acquis.d/immich.yaml
       - configmap/crowdsec/acquis.d/traefik.yaml
