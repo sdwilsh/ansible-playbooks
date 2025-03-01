@@ -16,6 +16,9 @@ configMapGenerator:
       - configmap/crowdsec/acquis.d/authelia.yaml
       - configmap/crowdsec/acquis.d/immich.yaml
       - configmap/crowdsec/acquis.d/traefik.yaml
+  - name: crowdsec-pages-configmap
+    files:
+      - configmap/crowdsec/pages/ban.html
   - name: crowdsec-scripts-configmap
     files:
       - configmap/crowdsec/scripts/entrypoint.sh

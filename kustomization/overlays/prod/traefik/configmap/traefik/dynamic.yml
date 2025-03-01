@@ -4,6 +4,7 @@ http:
     crowdsec:
       plugin:
         crowdsec-bouncer:
+          banHTMLFilePath: /pages/ban.html
           crowdsecAppsecEnabled: true
           crowdsecAppsecHost: localhost:7422
           crowdsecLapiHost: {{expandenv "$POD_IP:8081"}}

@@ -8,6 +8,10 @@ spec:
     spec:
       containers:
         - name: traefik
+          volumeMounts:
+            - name: crowdsec-pages
+              mountPath: /pages
+              readOnly: true
         - command:
             - sh
             - -c
@@ -141,6 +145,9 @@ spec:
         - name: crowdsec-credentials-config
           secret:
             secretName: crowdsec-credentials-secret
+        - configMap:
+            name: crowdsec-pages-configmap
+          name: crowdsec-pages
         - configMap:
             defaultMode: 0777
             name: crowdsec-scripts-configmap
