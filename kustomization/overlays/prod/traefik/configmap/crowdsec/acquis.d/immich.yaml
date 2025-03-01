@@ -1,0 +1,7 @@
+---
+labels:
+  type: immich
+query: |
+  {namespace="immich", container="immich-server"}
+source: loki
+url: http://loki-query-frontend.monitoring.svc.cluster.local:3100/
