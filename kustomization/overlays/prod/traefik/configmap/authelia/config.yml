@@ -56,8 +56,6 @@ access_control:
         - home
       policy: bypass
     - domain: immich.tswn.us
-      networks:
-        - home
       policy: bypass
       resources:
         - ^/.well-known/immich$
