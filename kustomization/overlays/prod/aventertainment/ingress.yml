@@ -19,16 +19,6 @@ spec:
                   name: web
             path: /
             pathType: Prefix
-    - host: navidrome.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: navidrome-svc
-                port:
-                  name: web
-            path: /
-            pathType: Prefix
     - host: tdarr.hogs.tswn.us
       http:
         paths:
@@ -37,5 +27,25 @@ spec:
                 name: tdarr-svc
                 port:
                   name: ui
+            path: /
+            pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: aventertainment-external-ingress
+spec:
+  rules:
+    - host: navidrome.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: navidrome-svc
+                port:
+                  name: web
             path: /
             pathType: Prefix

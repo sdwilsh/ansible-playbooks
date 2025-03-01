@@ -64,10 +64,6 @@ access_control:
       networks:
         - home
       policy: bypass
-    - domain: navidrome.tswn.us
-      networks:
-        - home
-      policy: bypass
     - domain: opensprinkler.hogs.tswn.us
       networks:
         - home
