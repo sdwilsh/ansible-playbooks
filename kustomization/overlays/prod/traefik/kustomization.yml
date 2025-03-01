@@ -27,7 +27,7 @@ images:
   - name: ghcr.io/crowdsecurity/crowdsec
     newTag: v1.6.5@sha256:fdb487e130095709c1b1c5ba2bd2b461e6715676076e5f774230dcf47d366f76 
   - name: postgres
-    newTag: 16@sha256:12c827ab26d9929e1fcf3439ed8f5af8616726d8a605d4dbb010abb797af1821
+    newTag: 16@sha256:e38a7fe2234174d0eb69b5467d346e1bb193c09f98adc229fc9df30fe364dd4a
   - name: quay.io/opstree/redis-sentinel
     newTag: v7.2.7@sha256:dc73ba35a3d54fdc613d759a729a44e6d6a87c5d97c2fa696888df98bf7a0fc4
   - name: quay.io/opstree/redis
