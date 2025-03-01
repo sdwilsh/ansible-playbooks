@@ -1,0 +1,7 @@
+---
+labels:
+  type: navidrome
+query: |
+  {namespace="aventertainment", container="navidrome"}
+source: loki
+url: http://loki-query-frontend.monitoring.svc.cluster.local:3100/

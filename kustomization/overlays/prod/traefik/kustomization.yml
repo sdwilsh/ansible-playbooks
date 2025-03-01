@@ -16,6 +16,7 @@ configMapGenerator:
       - configmap/crowdsec/acquis.d/appsec.yaml
       - configmap/crowdsec/acquis.d/authelia.yaml
       - configmap/crowdsec/acquis.d/immich.yaml
+      - configmap/crowdsec/acquis.d/navidrome.yaml
       - configmap/crowdsec/acquis.d/traefik.yaml
   - name: crowdsec-pages-configmap
     files:
