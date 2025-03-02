@@ -233,6 +233,7 @@ bind_zones:
           - mqtt.hogs
           - nas.hogs
           - navidrome
+          - nextcloud
           - opensprinkler.hogs
           - paperless.hogs
           - prometheus.hogs
