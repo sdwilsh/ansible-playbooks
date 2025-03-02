@@ -1,0 +1,93 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Disable automated sync for homeassistant
+      ansible.builtin.command:
+        argv:
+          - argocd
+          - app
+          - set
+          - homeassistant
+          - --sync-policy=manual
+    - name: Scale down homeassistant statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/homeassistant/statefulset.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down esphome statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/esphome/statefulset.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down frigate statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/frigate/statefulset.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down mosquitto statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/mosquitto/statefulset.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down zwavejs statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/zwavejs/statefulset.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down homeassistant postgresql
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: acid.zalan.do/v1
+          kind: postgresql
+          metadata:
+            name: "{{ (lookup('file', 'postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            numberOfInstances: 0
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

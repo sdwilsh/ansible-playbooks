@@ -1,0 +1,107 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Scale up gitea postgresql
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: acid.zalan.do/v1
+          kind: postgresql
+          metadata:
+            name: "{{ (lookup('file', '../../../components/gitea/postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            numberOfInstances: "{{ (lookup('file', '../../../components/gitea/postgresql.yml') | from_yaml).spec.numberOfInstances | int }}"
+        wait: true
+    - name: Wait for gitea postgresql statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/gitea/postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+        wait: true
+    - name: Scale up gitea redis statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', 'redis.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+    - name: Scale up gitea deployment
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: gitea
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+    - name: Scale up penpot postgresql
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: acid.zalan.do/v1
+          kind: postgresql
+          metadata:
+            name: "{{ (lookup('file', '../../../components/penpot/postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            numberOfInstances: "{{ (lookup('file', '../../../components/penpot/postgresql.yml') | from_yaml).spec.numberOfInstances | int }}"
+        wait: true
+    - name: Wait for penpot postgresql statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/penpot/postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+        wait: true
+    - name: Scale up penpot redis statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', '../../../components/penpot/redis.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+    - name: Scale up penpot statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: penpot-statefulset
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

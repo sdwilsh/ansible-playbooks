@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Scale up redis-operator deployment
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: redis-operator
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

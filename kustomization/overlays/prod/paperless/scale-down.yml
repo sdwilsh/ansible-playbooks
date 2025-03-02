@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Disable automated sync for paperless
+      ansible.builtin.command:
+        argv:
+          - argocd
+          - app
+          - set
+          - paperless
+          - --sync-policy=manual
+    - name: Scale down paperless statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: paperless
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down paperless samba deployment
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: samba
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down paperless postgresql
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: acid.zalan.do/v1
+          kind: postgresql
+          metadata:
+            name: "{{ (lookup('file', 'postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            numberOfInstances: 0
+        wait: true
+    - name: Scale down paperless redis statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', 'redis.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

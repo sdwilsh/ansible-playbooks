@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Disable automated sync for manyfold
+      ansible.builtin.command:
+        argv:
+          - argocd
+          - app
+          - set
+          - manyfold
+          - --sync-policy=manual
+    - name: Scale down manyfold statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: manyfold-statefulset
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Disable automated sync for prometheus-operator
+      ansible.builtin.command:
+        argv:
+          - argocd
+          - app
+          - set
+          - prometheus-operator
+          - --sync-policy=manual
+    - name: Scale down prometheus-operator deployment
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: prometheus-operator
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

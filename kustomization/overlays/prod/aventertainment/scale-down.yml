@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Disable automated sync for aventertainment
+      ansible.builtin.command:
+        argv:
+          - argocd
+          - app
+          - set
+          - aventertainment
+          - --sync-policy=manual
+    - name: Scale down jellyfin statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: jellyfin-statefulset
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down navidrome statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: navidrome-statefulset
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down tdarr-node deployment
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: tdarr-node-deployment
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down tdarr-server statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: tdarr-server-statefulset
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

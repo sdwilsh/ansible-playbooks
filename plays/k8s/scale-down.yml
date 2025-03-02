@@ -1,0 +1,22 @@
+---
+# Scale down operators that might fight our ability to scale applications down.
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/prometheus-operator/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/redis/scale-down.yml
+# Scale down any application that uses longhorn storage.
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/ara/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/atuin/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/aventertainment/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/lg/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tvheadend/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/unifi/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-forerunner/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-relic/scale-down.yml
+# Finally, we can scale down traefik
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/traefik/scale-down.yml
