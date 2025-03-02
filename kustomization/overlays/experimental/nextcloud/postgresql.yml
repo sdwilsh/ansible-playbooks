@@ -1,0 +1,20 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: nextcloud-16-pg
+spec:
+  enableLogicalBackup: true
+  numberOfInstances: 2
+  podPriorityClassName: application-infra
+  postgresql:
+    version: "16"
+  preparedDatabases:
+    nextcloud:
+      defaultUsers: true
+      schemas:
+        public: {}
+  teamId: nextcloud
+  volume:
+    size: 20Gi
+    storageClass: longhorn-encrypted-replicated-database

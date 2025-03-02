@@ -1,0 +1,161 @@
+---
+cronjob:
+  enabled: true
+
+externalDatabase:
+  enabled: true
+  existingSecret:
+    enabled: true
+    usernameKey: username
+    passwordKey: password
+    secretName: nextcloud-owner-user.nextcloud-16-pg.credentials.postgresql.acid.zalan.do
+  host: nextcloud-16-pg
+  type: postgresql
+
+image:
+  flavor: fpm-alpine
+
+internalDatabase:
+  enabled: false
+
+nextcloud:
+  configs:
+    custom.config.php: |
+      <?php
+        $CONFIG = array(
+          'check_data_directory_permissions' => false,
+          'default_phone_region' => 'US',
+          'default_timezone' => 'America/Los_Angeles',
+          'maintenance_window_start' => 8,
+          'overwritehost' => 'nextcloud.tswn.us',
+          'overwriteprotocol' => 'https',
+          'overwrite.cli.url' => 'https://nextcloud.tswn.us',
+        );
+  containerPort: 8080
+  defaultConfigs:
+    .htaccess: false
+    apache-pretty-urls.config.php: false
+    s3.config.php: false
+    swift.config.php: false
+    imaginary.config.php: false
+  existingSecret:
+    enabled: true
+    passwordKey: nextcloud-admin-password
+    secretName: nextcloud-secret
+    smtpHostKey: ""
+    smtpPasswordKey: ""
+    smtpUsernameKey: ""
+    usernameKey: nextcloud-admin-username
+  extraEnv:
+    - name: APACHE_DISABLE_REWRITE_IP
+      value: "1"
+    - name: REDIS_HOST
+      value: nextcloud-redis
+    - name: REDIS_HOST_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: redis-password
+          name: nextcloud-secret
+    - name: TRUSTED_PROXIES
+      value: 127.0.0.1 172.16.0.0/16
+  extraInitContainers:
+    # See https://github.com/nextcloud/helm/issues/187#issuecomment-2674561977
+    - name: create-redis-session-ini
+      image: busybox
+      command:
+        - sh
+        - -c
+        - touch /mnt/redis-session.ini
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        runAsNonRoot: true
+        runAsUser: 65534
+      volumeMounts:
+        - name: redis-session-fix
+          mountPath: /mnt
+    - command:
+        - sh
+        - -c
+        - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+      env:
+        - name: PGDATABASE
+          value: nextcloud
+        - name: PGHOST
+          value: nextcloud-16-pg
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: nextcloud-owner-user.nextcloud-16-pg.credentials.postgresql.acid.zalan.do
+        - name: PGSSLMODE
+          value: require
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: nextcloud-owner-user.nextcloud-16-pg.credentials.postgresql.acid.zalan.do
+      image: postgres
+      name: wait-for-nextcloud-pg-is-ready
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+  extraVolumes:
+    - name: redis-session-fix
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: redis-session-fix
+      mountPath: /usr/local/etc/php/conf.d/redis-session.ini
+      subPath: redis-session.ini
+  host: nextcloud.tswn.us
+  podSecurityContext:
+    fsGroup: 82 # www-data
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsUser: 82 # www-data
+    runAsGroup: 82 # www-data
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  trustedDomains:
+    - nextcloud.tswn.us
+
+nginx:
+  containerPort: 8080
+  enabled: true
+  image:
+    repository: nginxinc/nginx-unprivileged
+    tag: alpine
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsUser: 101 # nginx
+    runAsGroup: 101 # nginx
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+persistence:
+  enabled: true
+  nextcloudData:
+    enabled: true
+    size: 100Gi
+    storageClass: longhorn-encrypted
+  storageClass: longhorn-encrypted
+
+startupProbe:
+  enabled: true

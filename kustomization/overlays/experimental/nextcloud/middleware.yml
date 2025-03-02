@@ -1,0 +1,21 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: caldav-and-carddav-middleware
+spec:
+  # https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/reverse_proxy_configuration.html#service-discovery
+  redirectRegex:
+    permanent: false
+    regex: https://(.*)/.well-known/(?:card|cal)dav
+    replacement: https://${1}/remote.php/dav
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: webfinger-middleware
+spec:
+  redirectRegex:
+    permanent: false
+    regex: ^https://nextcloud.tswn.us/(?:index\.php/)?(\.well-known[^#]*)$
+    replacement: https://nextcloud.tswn.us/index.php/${1}

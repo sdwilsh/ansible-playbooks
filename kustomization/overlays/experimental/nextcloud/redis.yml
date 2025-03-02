@@ -1,0 +1,40 @@
+---
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: Redis
+metadata:
+  name: nextcloud-redis
+spec:
+  kubernetesConfig:
+    image: quay.io/opstree/redis
+    imagePullPolicy: IfNotPresent
+    redisSecret:
+      key: redis-password
+      name: nextcloud-secret
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 101m
+        memory: 128Mi
+  podSecurityContext:
+    fsGroup: 1000 # redis
+    runAsUser: 1000 # redis
+  priorityClassName: application-infra
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: longhorn-encrypted
