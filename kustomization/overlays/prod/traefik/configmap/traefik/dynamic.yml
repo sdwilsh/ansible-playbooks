@@ -18,6 +18,14 @@ http:
       redirectScheme:
         scheme: https
         permanent: true
+  routers:
+    http-catch-all:
+      entryPoints:
+        - web
+      middlewares:
+        - to-https@file
+      rule: PathPrefix(`/`)
+      service: noop@internal
 tls:
   certificates:
     - certFile: /certs/wildcard-tswn-us/tls.crt

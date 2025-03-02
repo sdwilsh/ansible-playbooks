@@ -26,9 +26,6 @@ entryPoints:
     address: :8465
   web:
     address: :9080
-    http:
-      middlewares:
-        - to-https@file
   websecure:
     address: :8443
   websecure-ext:
