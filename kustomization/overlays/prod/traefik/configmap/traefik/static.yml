@@ -27,10 +27,8 @@ entryPoints:
   web:
     address: :9080
     http:
-      redirections:
-        entryPoint:
-          scheme: https
-          to: websecure
+      middlewares:
+        - to-https@file
   websecure:
     address: :8443
   websecure-ext:
