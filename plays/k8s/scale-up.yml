@@ -1,0 +1,20 @@
+---
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/redis/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/traefik/scale-up.yml
+
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/prometheus-operator/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/ara/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/atuin/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/aventertainment/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/lg/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tvheadend/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/unifi/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-forerunner/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-relic/scale-up.yml
