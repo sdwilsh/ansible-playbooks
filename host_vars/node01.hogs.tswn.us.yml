@@ -14,3 +14,6 @@ common__ip_addresses:
   - 10.11.0.101/23
 
 k3s_cluster_init: true
+
+kairos__disks_to_format:
+  - /dev/sda

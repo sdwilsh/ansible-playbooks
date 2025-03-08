@@ -11,3 +11,6 @@ common__interfaces:
 
 common__ip_addresses:
   - 10.11.0.104/23
+
+kairos__disks_to_format:
+  - /dev/sda
