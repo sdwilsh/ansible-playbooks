@@ -8,7 +8,7 @@
         state: present
         resource_definition:
           apiVersion: apps/v1
-          kind: Atuin
+          kind: Deployment
           metadata:
             name: prometheus-operator
             namespace: "{{ k8s_namespace }}"
