@@ -1,0 +1,20 @@
+---
+- ansible.builtin.import_playbook: scale-down.yml
+# Shutdown workers
+- hosts: kairos_worker:!kairos_controlplane
+  gather_facts: false
+  order: sorted
+  tasks:
+    - name: Shutdown
+      community.general.shutdown:
+        delay: 0
+      become: true
+# Shutdown Control Plane
+- hosts: kairos_controlplane
+  gather_facts: false
+  order: sorted
+  tasks:
+    - name: Shutdown
+      community.general.shutdown:
+        delay: 0
+      become: true
