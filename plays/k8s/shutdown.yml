@@ -16,5 +16,5 @@
   tasks:
     - name: Shutdown
       community.general.shutdown:
-        delay: 0
+        delay: 60
       become: true
