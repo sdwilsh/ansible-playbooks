@@ -39,19 +39,6 @@
           spec:
             replicas: 1
         wait: true
-    - name: Scale up paperless samba deployment
-      kubernetes.core.k8s:
-        context: "{{ cluster }}"
-        state: present
-        resource_definition:
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: samba
-            namespace: "{{ k8s_namespace }}"
-          spec:
-            replicas: 1
-        wait: true
     - name: Scale up paperless statefulset
       kubernetes.core.k8s:
         context: "{{ cluster }}"
@@ -61,6 +48,19 @@
           kind: StatefulSet
           metadata:
             name: paperless
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+    - name: Scale up paperless samba deployment
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: samba
             namespace: "{{ k8s_namespace }}"
           spec:
             replicas: 1
