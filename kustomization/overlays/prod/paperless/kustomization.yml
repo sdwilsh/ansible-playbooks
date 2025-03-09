@@ -10,7 +10,7 @@ images:
   - name: ghcr.io/servercontainers/samba:smbd-only-latest
     digest: sha256:58b59656f36b025da79ee7a71ee4aeffe8a472b23aaf86bf0e27394460180d82
   - name: gotenberg/gotenberg
-    newTag: 8.17.2@sha256:369f67f5c5057a30043e91582a431cbe193f898d66d704f4c8aaab385cad25a9
+    newTag: 8.17.3@sha256:779d4cf9bb36cb645e26e03fdb1b929b5d0fd01bfa58c336da5e224dd154626e
   - name: postgres
     newTag: 16@sha256:e38a7fe2234174d0eb69b5467d346e1bb193c09f98adc229fc9df30fe364dd4a
   - name: quay.io/opstree/redis
