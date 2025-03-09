@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Disable automated sync for 3d-printing
+      ansible.builtin.command:
+        argv:
+          - argocd
+          - app
+          - set
+          - 3d-printing
+          - --sync-policy=manual
+    - name: Scale down spoolman statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: spoolman-statefulset
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 0
+        wait: true
+    - name: Scale down spoolman postgresql
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: acid.zalan.do/v1
+          kind: postgresql
+          metadata:
+            name: "{{ (lookup('file', 'postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            numberOfInstances: 0
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"
