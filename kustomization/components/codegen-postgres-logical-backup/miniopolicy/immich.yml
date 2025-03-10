@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-immich-miniopolicy
+spec:
+  name: namespace-immich
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-immich
+        - arn:aws:s3:::namespace-immich/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+

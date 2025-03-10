@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-3d-printing-miniopolicy
+spec:
+  name: namespace-3d-printing
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-3d-printing
+        - arn:aws:s3:::namespace-3d-printing/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+

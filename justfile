@@ -8,6 +8,12 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+
+# Generates/updates resources for postgres-operator managed resources
+[group('codegen')]
+generate-postgres-logical-backup-resources:
+    ansible-playbook plays/codegen/postgres-logical-backup.yml
+
 # Check `just` syntax
 [group('just')]
 justcheck:

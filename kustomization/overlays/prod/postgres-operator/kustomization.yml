@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/codegen-postgres-logical-backup
+  - ../../../components/postgres-operator
+namespace: postgres-operator
+patches:
+  - path: patches/postgres-operator/add_logical_backup.yml
+    target:
+      kind: OperatorConfiguration
+      name: postgresql-operator-default-configuration
+resources:
+  - namespace.yml
+  - ingress.yml
+  - podmonitor.yml
+  - tenant.yml

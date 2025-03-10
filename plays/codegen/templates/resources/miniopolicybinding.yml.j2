@@ -1,0 +1,13 @@
+# @codegen-command: ansible-playbook {{ play_name }} 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicyBinding
+metadata:
+  name: {{ policyName }}-miniopolicybinding
+spec:
+  policy: {{ policyName }}
+  tenantRef:
+    name: {{ tenantName }}
+  user:
+    builtin: {{ accessKey }}

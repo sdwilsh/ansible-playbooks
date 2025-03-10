@@ -2,13 +2,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgresql
+  name: postgres-operator
   namespace: argocd
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: postgresql
+    namespace: postgres-operator
   source:
     path: kustomization/overlays/prod/postgresql
     repoURL: https://github.com/sdwilsh/ansible-playbooks

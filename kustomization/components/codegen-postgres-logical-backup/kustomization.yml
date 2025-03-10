@@ -1,0 +1,39 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - miniobucket/3d-printing.yml
+  - miniobucket/atuin.yml
+  - miniobucket/homeassistant.yml
+  - miniobucket/immich.yml
+  - miniobucket/lg.yml
+  - miniobucket/monitoring.yml
+  - miniobucket/paperless.yml
+  - miniobucket/traefik.yml
+  - miniopolicy/3d-printing.yml
+  - miniopolicy/atuin.yml
+  - miniopolicy/homeassistant.yml
+  - miniopolicy/immich.yml
+  - miniopolicy/lg.yml
+  - miniopolicy/monitoring.yml
+  - miniopolicy/paperless.yml
+  - miniopolicy/traefik.yml
+  - miniopolicybinding/3d-printing.yml
+  - miniopolicybinding/atuin.yml
+  - miniopolicybinding/homeassistant.yml
+  - miniopolicybinding/immich.yml
+  - miniopolicybinding/lg.yml
+  - miniopolicybinding/monitoring.yml
+  - miniopolicybinding/paperless.yml
+  - miniopolicybinding/traefik.yml
+  - miniouser/3d-printing.yml
+  - miniouser/atuin.yml
+  - miniouser/homeassistant.yml
+  - miniouser/immich.yml
+  - miniouser/lg.yml
+  - miniouser/monitoring.yml
+  - miniouser/paperless.yml
+  - miniouser/traefik.yml

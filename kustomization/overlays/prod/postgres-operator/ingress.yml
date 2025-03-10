@@ -4,8 +4,9 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: postgres-ingress
+  name: postgres-operator-ingress
 spec:
   rules:
     - host: minio-postgres.hogs.tswn.us
@@ -13,8 +14,8 @@ spec:
         paths:
           - backend:
               service:
-                name: minio-svc
+                name: postgres-backup-tenant-console
                 port:
-                  name: web
+                  name: http-console
             path: /
             pathType: Prefix

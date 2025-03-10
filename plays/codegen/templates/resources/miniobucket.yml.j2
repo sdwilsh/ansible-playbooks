@@ -1,0 +1,12 @@
+# @codegen-command: ansible-playbook {{ play_name }} 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioBucket
+metadata:
+  name: {{ bucketName }}-miniobucket
+spec:
+  deletionPolicy: IfEmpty
+  name: {{ bucketName }}
+  tenantRef:
+    name: {{ tenantName }}

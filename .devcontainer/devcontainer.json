@@ -10,6 +10,9 @@
             "extensions": [
                 "nefrob.vscode-just-syntax"
             ],
+            "files.readonlyInclude": {
+                "kustomization/components/codegen-*/**": true
+            },
             "settings": {
                 "yaml.customTags": [
                     "!vault scalar"

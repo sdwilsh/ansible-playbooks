@@ -1,0 +1,13 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicyBinding
+metadata:
+  name: namespace-3d-printing-miniopolicybinding
+spec:
+  policy: namespace-3d-printing
+  tenantRef:
+    name: postgres-backup-tenant
+  user:
+    builtin: namespace-3d-printing

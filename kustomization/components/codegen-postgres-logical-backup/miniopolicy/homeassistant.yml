@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-homeassistant-miniopolicy
+spec:
+  name: namespace-homeassistant
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-homeassistant
+        - arn:aws:s3:::namespace-homeassistant/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+

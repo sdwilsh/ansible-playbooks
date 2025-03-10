@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-paperless-miniopolicy
+spec:
+  name: namespace-paperless
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-paperless
+        - arn:aws:s3:::namespace-paperless/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+

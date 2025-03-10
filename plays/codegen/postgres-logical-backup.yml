@@ -1,0 +1,130 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    # Setup
+    - ansible.builtin.set_fact:
+        root_dir: "{{ playbook_dir }}/../.."
+    - ansible.builtin.set_fact:
+        component_dir: "{{ root_dir }}/kustomization/components/codegen-postgres-logical-backup"
+        root_relative_dir: plays/codegen
+    - name: Set expected namespaces needing backup
+      ansible.builtin.set_fact:
+        # We use a bucket per namespace for any postgresql resources in that namespace.
+        namespaces:
+          - 3d-printing
+          - atuin
+          - homeassistant
+          - immich
+          - lg
+          - monitoring
+          - paperless
+          - traefik
+    - name: Delete existing codegen
+      ansible.builtin.file:
+        path: "{{ component_dir }}"
+        state: absent
+    
+    # Generate Resources
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        path: "{{ component_dir }}/{{ item }}"
+        state: directory
+      loop:
+        - miniobucket
+        - miniopolicy
+        - miniopolicybinding
+        - miniouser
+    - name: Generate Buckets
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/miniobucket/{{ item }}.yml"
+        src: resources/miniobucket.yml.j2
+      loop: "{{ namespaces }}"
+      vars:
+        bucketName: "namespace-{{ item }}"
+        tenantName: postgres-backup-tenant
+    - name: Generate Policies
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/miniopolicy/{{ item }}.yml"
+        src: resources/miniopolicy.yml.j2
+      loop: "{{ namespaces }}"
+      vars:
+        bucketName: "namespace-{{ item }}"
+        policyName: "namespace-{{ item }}"
+        tenantName: postgres-backup-tenant
+    - name: Generate Policy Bindings
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/miniopolicybinding/{{ item }}.yml"
+        src: resources/miniopolicybinding.yml.j2
+      loop: "{{ namespaces }}"
+      vars:
+        accessKey: "namespace-{{ item }}"
+        policyName: "namespace-{{ item }}"
+        tenantName: postgres-backup-tenant
+    - name: Generate Users
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/miniouser/{{ item }}.yml"
+        src: resources/miniouser.yml.j2
+      loop: "{{ namespaces }}"
+      vars:
+        accessKey: "namespace-{{ item }}"
+        secretKey: "namespace-{{ item }}"
+        secretName: postgres-backup-secret-keys
+        tenantName: postgres-backup-tenant
+    - name: Compute Resources
+      ansible.builtin.set_fact:
+        buckets: "{{ namespaces | map('regex_replace', '^(.*)$', 'miniobucket/\\1.yml') }}"
+        policies: "{{ namespaces | map('regex_replace', '^(.*)$', 'miniopolicy/\\1.yml') }}"
+        policy_bindings: "{{ namespaces | map('regex_replace', '^(.*)$', 'miniopolicybinding/\\1.yml') }}"
+        users: "{{ namespaces | map('regex_replace', '^(.*)$', 'miniouser/\\1.yml') }}"
+    - name: Generate Kustomization
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/kustomization.yml"
+        src: resources/kustomization.yml.j2
+      vars:
+        resources: "{{ (buckets + policies + policy_bindings + users) | sort }}"
+
+    # Ensure appropriate secrets exists!
+    - name: Check each client namespace has the correct secret defined
+      ansible.builtin.assert:
+        that:
+          - >
+            hostvars[groups['kairos_prod'] | first].secrets |
+              selectattr('namespace', 'equalto', item) |
+              selectattr('name', 'equalto', 'postgres-logical-backup-environment-secret') |
+              length == 1
+          - >
+            (hostvars[groups['kairos_prod'] | first].secrets |
+              selectattr('namespace', 'equalto', item) |
+              selectattr('name', 'equalto', 'postgres-logical-backup-environment-secret') |
+              first).stringData.AWS_ACCESS_KEY_ID == 'namespace-'+item 
+          - >
+            'AWS_SECRET_ACCESS_KEY' in
+              (hostvars[groups['kairos_prod'] | first].secrets |
+                selectattr('namespace', 'equalto', item) |
+                selectattr('name', 'equalto', 'postgres-logical-backup-environment-secret') |
+                first).stringData
+          - >
+            (hostvars[groups['kairos_prod'] | first].secrets |
+              selectattr('namespace', 'equalto', item) |
+              selectattr('name', 'equalto', 'postgres-logical-backup-environment-secret') |
+              first).stringData.LOGICAL_BACKUP_S3_BUCKET == 'namespace-'+item 
+      loop: "{{ namespaces }}"
+    - name: Check that each client namespace has a secret access key defined for tenant
+      ansible.builtin.assert:
+        that:
+          - >
+            hostvars[groups['kairos_prod'] | first].secrets |
+              selectattr('namespace', 'equalto', 'postgres-operator') |
+              selectattr('name', 'equalto', 'postgres-backup-secret-keys') |
+              length == 1
+          - >
+            'namespace-'+item in
+              (hostvars[groups['kairos_prod'] | first].secrets |
+                selectattr('namespace', 'equalto', 'postgres-operator') |
+                selectattr('name', 'equalto', 'postgres-backup-secret-keys') |
+                first).stringData
+      loop: "{{ namespaces }}"
+
+  vars:
+    play_name: plays/codegen/postgres-logical-backup.yml

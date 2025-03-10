@@ -1,0 +1,13 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicyBinding
+metadata:
+  name: namespace-monitoring-miniopolicybinding
+spec:
+  policy: namespace-monitoring
+  tenantRef:
+    name: postgres-backup-tenant
+  user:
+    builtin: namespace-monitoring

@@ -1,4 +1,7 @@
 {
+    "files.readonlyInclude": {
+        "kustomization/components/codegen-*/**": true
+    },
     "python.formatting.provider": "black",
     "yaml.customTags": [
         "!vault scalar"

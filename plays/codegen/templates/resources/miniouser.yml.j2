@@ -1,0 +1,14 @@
+# @codegen-command: ansible-playbook {{ play_name }} 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioUser
+metadata:
+  name: {{ accessKey }}-miniouser
+spec:
+  accessKey: {{ accessKey }}
+  secretKeyRef:
+    name: {{ secretName }}
+    key: {{ secretKey }}
+  tenantRef:
+    name: {{ tenantName }}

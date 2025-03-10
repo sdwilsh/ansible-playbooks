@@ -27,7 +27,7 @@ resources:
   - application/meta-monitoring.yml
   - application/node-monitoring.yml
   - application/paperless.yml
-  - application/postgresql.yml
+  - application/postgres-operator.yml
   - application/prometheus-operator.yml
   - application/proton-mail.yml
   - application/redis.yml

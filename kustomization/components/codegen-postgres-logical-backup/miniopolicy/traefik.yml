@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-traefik-miniopolicy
+spec:
+  name: namespace-traefik
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-traefik
+        - arn:aws:s3:::namespace-traefik/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+
