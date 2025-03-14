@@ -18,7 +18,7 @@ spec:
             - /scripts/entrypoint.sh
           env:
             - name: COLLECTIONS
-              value: crowdsecurity/appsec-virtual-patching crowdsecurity/traefik gauth-fr/immich LePresidente/authelia
+              value: crowdsecurity/appsec-virtual-patching crowdsecurity/traefik gauth-fr/immich LePresidente/authelia sdwilsh/navidrome
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
