@@ -6,7 +6,7 @@ components:
   - ../../../components/spoolman
 images:
   - name: ghcr.io/donkie/spoolman
-    newTag: 0.22.0@sha256:32fdbc2a29813f9f47defd1cc5fc7b350c98738b369948946648364aaa0b234a
+    newTag: 0.22.1@sha256:238ea5bfb2eeda4436c39f54e73df5fef4ee904fb7c291617588b856786fe0ef
   - name: postgres
     newTag: 16@sha256:e95b0cb95f719e0ce156c2bc5545c89fbd98a1a692845a5331ddc79ea61f1b1e
 namespace: 3d-printing
