@@ -180,6 +180,7 @@
       "automerge": true,
       "automergeType": "branch",
       "matchPackageNames": [
+        "busybox",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/servercontainers/samba",
         "lscr.io/linuxserver/code-server",
@@ -189,6 +190,7 @@
       "matchUpdateTypes": [
         "digest"
       ],
+      "minimumReleaseAge": "3 days",
       "schedule": [
         "after 4pm every weekday"
       ]
