@@ -236,6 +236,7 @@ bind_zones:
           - nextcloud
           - opensprinkler.hogs
           - paperless.hogs
+          - pdf-tools.hogs
           - prometheus.hogs
           - smtp.hogs
           - spoolman.hogs
