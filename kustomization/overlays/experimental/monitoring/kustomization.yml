@@ -12,7 +12,7 @@ configMapGenerator:
       - configmap/loki.alloy
 helmCharts:
   - name: alloy
-    version: 0.12.1
+    version: 0.12.5
     repo: https://grafana.github.io/helm-charts
     releaseName: alloy
     valuesFile: alloy-values.yml
