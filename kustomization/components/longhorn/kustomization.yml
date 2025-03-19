@@ -14,5 +14,4 @@ resources:
   - https://raw.githubusercontent.com/longhorn/longhorn/v1.8.1/deploy/longhorn.yaml
   - podmonitor.yml
   - recurringjob.yml
-  - setting.yml
   - storageclass.yml
