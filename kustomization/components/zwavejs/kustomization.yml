@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: zwavejs/zwave-js-ui
-    newTag: 9.33.0@sha256:e2febaed461f0779a394c9b43b6275638fad3d126bf2d058bdc683983cb46c56
+    newTag: 10.0.1@sha256:4a05a2e64cf566d36f217878ca803b26da2bd38f9af8f82aa5c8621bfe65dbc5
 resources:
   - statefulset.yml
   - service.yml
