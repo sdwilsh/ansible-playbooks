@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: stirling-pdf-chart
+    version: v1.8.2
+    repo: https://docs.stirlingpdf.com/Stirling-PDF-chart/
+    releaseName: stirling-pdf
+    valuesFile: values.yml
+images:
+  - name: docker.stirlingpdf.com/stirlingtools/stirling-pdf
+    newTag: 0.44.2-fat@sha256:a86a845a345a4276493a16110e271472fbfe2992cc17aa0d92623ca77bd76b26 
+namespace: stirling-pdf
+resources:
+  - namespace.yml

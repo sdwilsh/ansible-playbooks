@@ -1,0 +1,18 @@
+---
+
+envs:
+  - name: APP_LOCALE
+    value: en_US
+  - name: SYSTEM_ENABLEANALYTICS
+    value: "true"
+
+ingress:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  enabled: true
+  hosts:
+    - name: pdf-tools.hogs.tswn.us
+      path: /
+
+priorityClassName: application
