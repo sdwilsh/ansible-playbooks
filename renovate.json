@@ -128,10 +128,12 @@
         "patch"
       ],
       "matchPackageNames": [
+        "alloy",
         "alpine",
         "argoproj/argo-cd",
         "cert-manager/cert-manager",
         "deluan/navidrome",
+        "docker.io/grafana/alloy",
         "eclipse-mosquitto",
         "esphome/esphome",
         "ghcr.io/paperless-ngx/paperless-ngx",
