@@ -10,7 +10,7 @@ helmCharts:
     valuesFile: values.yml
 images:
   - name: docker.stirlingpdf.com/stirlingtools/stirling-pdf
-    newTag: 0.44.2-fat@sha256:a86a845a345a4276493a16110e271472fbfe2992cc17aa0d92623ca77bd76b26 
+    newTag: 0.44.3-fat@sha256:d6c06ec0bb81730389651c4891f6ab8883ad1f45ba20ac3f24353ec3c87b4192 
 namespace: stirling-pdf
 resources:
   - namespace.yml
