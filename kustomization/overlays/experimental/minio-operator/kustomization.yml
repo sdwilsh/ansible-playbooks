@@ -5,4 +5,4 @@ kind: Kustomization
 namespace: minio-operator
 resources:
   # renovate: datasource=github-releases
-  - https://github.com/minio/operator/?ref=v7.0.0
+  - https://github.com/minio/operator/?ref=v7.0.1
