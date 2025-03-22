@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: lscr.io/linuxserver/tvheadend
-    newTag: latest@sha256:0917106f3fc394796a2e01fbd93bd84af88d88b875d2ec5066444c6203ca9834
+    newTag: latest@sha256:2f9863aceb9bc592da8487765af35f2027744e0056359ee08b8281d90416fab3
 resources:
   - service.yml
   - statefulset.yml
