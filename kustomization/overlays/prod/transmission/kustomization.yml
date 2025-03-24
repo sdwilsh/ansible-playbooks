@@ -15,7 +15,7 @@ images:
   - name: alpine
     newTag: 3.21.3@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
   - name: dockurr/dnsmasq
-    newTag: "2.90"
+    newTag: "2.91@sha256:7873ce2dae1b0aa51d2c13dd4bd3aad47890c233088b3c7f6eb099a01e6e4307"
   - name: lscr.io/linuxserver/transmission
     newTag: 4.0.5-r0-ls223
 namespace: transmission
