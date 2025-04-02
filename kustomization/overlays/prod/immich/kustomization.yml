@@ -6,9 +6,9 @@ components:
   - ../../../components/immich
 images:
   - name: ghcr.io/immich-app/immich-server
-    newTag: v1.131.1@sha256:d17ccd6b94fbef1057147d57813a0c508e308b6fe0330709e2c7b87c12d662ae
+    newTag: v1.131.3@sha256:7e5b6729b12b5e5cc5d98bcc6f7c27f723fabae4ee77696855808ebd5200bbf8
   - name: ghcr.io/immich-app/immich-machine-learning
-    newTag: v1.131.1@sha256:838757ea055071269e12bb8a4fb43109fb7dbe2340fffd96cb07ecf26b939e25
+    newTag: v1.131.2@sha256:29836cf73146057ac388546021fff3e00c923e22a28587cceb5108a5e537987d
 namespace: immich
 patches:
   - path: patches/add_postgres.yml
