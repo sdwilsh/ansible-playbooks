@@ -36,7 +36,7 @@ images:
   - name: postgres
     newTag: 17@sha256:7f29c02ba9eeff4de9a9f414d803faa0e6fe5e8d15ebe217e3e418c82e652b35
   - name: quay.io/minio/minio
-    newTag: latest@sha256:46b3009bf7041eefbd90bd0d2b38c6ddc24d20a35d609551a1802c558c1c958f
+    newTag: latest@sha256:a640662d97632f7b94e9dee8cbb7da5c20db24879725cb4fac36f1e220cd528a
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
     newTag: v0.12.0@sha256:932eae60e2bcf9c4660d6442da066ef1a79b4ea7cc232c61c7303069216ca006
 namespace: monitoring
