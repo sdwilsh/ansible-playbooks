@@ -12,7 +12,7 @@ images:
   - name: gotenberg/gotenberg
     newTag: 8.19.1@sha256:a55777dad95294ba2c1bfd1760c9eea4e573755589cf192d0ec6107ae08fc7e3
   - name: postgres
-    newTag: 16@sha256:e95b0cb95f719e0ce156c2bc5545c89fbd98a1a692845a5331ddc79ea61f1b1e
+    newTag: 16@sha256:cef2d22004db69e3d601442ca4cac142adda0987ad7ca4f28c4e998bef690951
   - name: quay.io/opstree/redis
     newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
 namespace: paperless
