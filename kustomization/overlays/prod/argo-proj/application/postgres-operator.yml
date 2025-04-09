@@ -10,7 +10,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: postgres-operator
   source:
-    path: kustomization/overlays/prod/postgresql
+    path: kustomization/overlays/prod/postgres-operator
     repoURL: https://github.com/sdwilsh/ansible-playbooks
     targetRevision: HEAD
   syncPolicy:
