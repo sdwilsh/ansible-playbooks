@@ -11,6 +11,11 @@ ansible-lint:
 
 # Generates/updates resources for postgres-operator managed resources
 [group('codegen')]
+generate-dns-hogs:
+    ansible-playbook plays/dns-update.yml
+
+# Generates/updates resources for postgres-operator managed resources
+[group('codegen')]
 generate-postgres-logical-backup-resources:
     ansible-playbook plays/codegen/postgres-logical-backup.yml
 

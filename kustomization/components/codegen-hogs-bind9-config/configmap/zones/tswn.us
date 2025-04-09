@@ -1,4 +1,4 @@
-; Hash: c4b9317edb87e30c99a09948a52dbb07 1742357498
+; Hash: c4b9317edb87e30c99a09948a52dbb07 1744241475
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1742357498
+  1744241475
   1D
   1H
   1W

@@ -1,9 +1,5 @@
-#
-# Ansible managed
-#
-#
-# plays/dns/templates/kustomization.yml.j2
-#
+# @codegen-command: ansible-playbook plays/dns/update.yml 
+# @generated
 ---
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component

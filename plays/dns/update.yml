@@ -2,10 +2,17 @@
 - hosts: localhost
   gather_facts: false
   tasks:
+    # Setup
     - ansible.builtin.set_fact:
         ansible_default_ipv4:
           address: 10.10.0.3 # Fake being ns1 for now
         root_dir: "{{ playbook_dir }}/../.."
+    - ansible.builtin.set_fact:
+        component_dir: "{{ root_dir }}/kustomization/components/codegen-hogs-bind9-config"
+    - name: Delete existing codegen
+      ansible.builtin.file:
+        path: "{{ component_dir }}"
+        state: absent
 
     # The next several tasks setup our variable environment the same as it would if it was running
     # the actual role.
@@ -20,7 +27,6 @@
           - "{{ ansible_default_ipv4.address }}"
         ansible_all_ipv6_addresses: []
         ansible_hostname: ns1.tswn.us
-        component_dir: "{{ root_dir }}/kustomization/components/hogs-bind9-config"
         roles_paths: "{{ output.stdout | from_yaml + [root_dir + '/roles'] }}"
         root_relative_dir: plays/dns
     - name: Load bertvv.bind default variables
@@ -43,6 +49,13 @@
       register: timestamp
 
     # Now we are all setup to run some of the tasks to generate things!
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        path: "{{ component_dir }}/{{ item }}"
+        state: directory
+      loop:
+        - configmap/zones
+        - configmap
     - name: Generate zone files
       ansible.builtin.include_tasks: tasks/zones.yml
       vars:
@@ -57,3 +70,5 @@
       ansible.builtin.template:
         dest: "{{ component_dir }}/kustomization.yml"
         src: templates/kustomization.yml.j2
+  vars:
+    play_name: plays/dns/update.yml

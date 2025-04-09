@@ -1,5 +1,5 @@
-{{ ansible_managed | comment }}
-{{ (root_relative_dir + "/" + template_path) | comment }}
+# @codegen-command: ansible-playbook {{ play_name }} 
+# @generated
 ---
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
