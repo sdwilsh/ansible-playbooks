@@ -24,7 +24,6 @@ resources:
   - application/lg.yml
   - application/longhorn.yml
   - application/manyfold.yml
-  - application/meta-monitoring.yml
   - application/node-monitoring.yml
   - application/paperless.yml
   - application/postgres-operator.yml
