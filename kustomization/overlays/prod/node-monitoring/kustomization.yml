@@ -25,7 +25,7 @@ images:
   - name: docker.io/grafana/alloy
     newTag: v1.7.5@sha256:b92703c13c32c20d629ffd89f40287ed385c12a335a7c9f31c720a5f912f9d6f
   - name: ghcr.io/jimmidyson/configmap-reload
-    newTag: v0.14.0@sha256:a35b35f5bd5c5dc59d6885a60ac325235d873defbc819cd1e16f52f897752c85 
+    newTag: v0.15.0@sha256:b578b7599d65c0279f6e1aad201bba737b9b15e6a4f308281d9e26f765e6657f 
   - name: quay.io/prometheus/node-exporter
     newTag: v1.9.1@sha256:d00a542e409ee618a4edc67da14dd48c5da66726bbd5537ab2af9c1dfc442c8a
 namespace: node-monitoring
