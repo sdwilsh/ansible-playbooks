@@ -7,7 +7,7 @@ components:
   - ../../../components/postgresql-operator
 images:
   - name: quay.io/minio/minio
-    newTag: latest@sha256:a640662d97632f7b94e9dee8cbb7da5c20db24879725cb4fac36f1e220cd528a
+    newTag: latest@sha256:8834ae47a2de3509b83e0e70da9369c24bbbc22de42f2a2eddc530eee88acd1b
 namespace: postgresql
 patches:
   - path: patches/minio/set_pods_instance_label.yml
