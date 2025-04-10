@@ -86,8 +86,7 @@
         "^kustomization/overlays/.+/.+/tenant(?:/.+?)?\\.yml$"
       ],
       "matchStrings": [
-        "image:\\s+(?<depName>.+?):(?<currentValue>.+?)$",
-        "image:\\s+(?<depName>.+?):(?<currentValue>.+?)@sha256:(?<currentDigest>[0-9a-f]+)$"
+        "image:\\s+(?<depName>.+?):(?<currentValue>.+?)$"
       ],
       "versioningTemplate": "docker"
     },
