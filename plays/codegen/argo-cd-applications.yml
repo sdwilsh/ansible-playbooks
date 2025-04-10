@@ -1,0 +1,55 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    # Setup
+    - ansible.builtin.set_fact:
+        root_dir: "{{ playbook_dir }}/../.."
+    - ansible.builtin.set_fact:
+        component_dir: "{{ root_dir }}/kustomization/components/codegen-argo-cd-applications-{{ overlay }}"
+        root_relative_dir: plays/codegen
+    - name: Determine namespaces for overlay
+      ansible.builtin.find:
+        excludes:
+          - argo-proj
+        file_type: directory
+        paths:
+          - "{{ root_dir }}/kustomization/overlays/{{ overlay }}/"
+        recurse: false
+      register: overlays
+    - ansible.builtin.set_fact:
+        namespaces: "{{ overlays.files | map(attribute='path') | map('basename') | sort }}"
+    - name: Delete existing codegen
+      ansible.builtin.file:
+        path: "{{ component_dir }}"
+        state: absent
+    
+    # Generate Resources
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        path: "{{ component_dir }}/{{ item }}"
+        state: directory
+      loop:
+        - application
+    - name: Generate Applications
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/application/{{ item }}.yml"
+        src: resources/application.yml.j2
+      loop: "{{ namespaces }}"
+      vars:
+        application: "{{ item }}"
+    - name: Compute Resources
+      ansible.builtin.set_fact:
+        applications: "{{ namespaces | map('regex_replace', '^(.*)$', 'application/\\1.yml') }}"
+    - name: Generate Kustomization
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/kustomization.yml"
+        src: resources/kustomization.yml.j2
+      vars:
+        resources: "{{ applications | sort }}"
+  vars:
+    play_name: plays/codegen/argo-cd-applications.yml
+  vars_prompt:
+    - name: overlay
+      private: false
+      prompt: What overlay is this for?

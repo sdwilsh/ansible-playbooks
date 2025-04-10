@@ -8,8 +8,12 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Generates/updates resources for Argo CD applications
+[group('codegen')]
+generate-argo-cd-applications:
+    ansible-playbook plays/argo-cd-applications.yml --extra-vars overlay=prod
 
-# Generates/updates resources for postgres-operator managed resources
+# Generates/updates resources for DNS entries
 [group('codegen')]
 generate-dns-hogs:
     ansible-playbook plays/dns-update.yml

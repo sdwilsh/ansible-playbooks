@@ -1,0 +1,18 @@
+# @codegen-command: ansible-playbook plays/codegen/argo-cd-applications.yml 
+# @generated
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: atuin
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: atuin
+  source:
+    path: kustomization/overlays/prod/atuin
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}

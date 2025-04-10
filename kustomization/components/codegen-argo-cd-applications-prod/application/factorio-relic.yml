@@ -1,0 +1,18 @@
+# @codegen-command: ansible-playbook plays/codegen/argo-cd-applications.yml 
+# @generated
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: factorio-relic
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: factorio-relic
+  source:
+    path: kustomization/overlays/prod/factorio-relic
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}

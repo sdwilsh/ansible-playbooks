@@ -1,0 +1,35 @@
+# @codegen-command: ansible-playbook plays/codegen/argo-cd-applications.yml 
+# @generated
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - application/3d-printing.yml
+  - application/ara.yml
+  - application/argo-cd.yml
+  - application/atuin.yml
+  - application/aventertainment.yml
+  - application/cert-manager.yml
+  - application/dns.yml
+  - application/external-services.yml
+  - application/factorio-relic.yml
+  - application/generic-device-plugin.yml
+  - application/homeassistant.yml
+  - application/immich.yml
+  - application/kube-vip.yml
+  - application/lg.yml
+  - application/longhorn.yml
+  - application/manyfold.yml
+  - application/node-monitoring.yml
+  - application/paperless.yml
+  - application/postgres-operator.yml
+  - application/prometheus-operator.yml
+  - application/proton-mail.yml
+  - application/redis.yml
+  - application/traefik.yml
+  - application/transmission.yml
+  - application/tvheadend.yml
+  - application/unifi.yml
+  - application/valheim-forerunner.yml
+  - application/valheim-relic.yml

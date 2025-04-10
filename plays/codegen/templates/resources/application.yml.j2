@@ -1,0 +1,18 @@
+# @codegen-command: ansible-playbook {{ play_name }} 
+# @generated
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ application }}
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ application }}
+  source:
+    path: kustomization/overlays/prod/{{ application }}
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}
