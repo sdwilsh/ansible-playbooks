@@ -5,7 +5,7 @@ metadata:
   name: minio-resource-scrapeconfig
 spec:
   jobName: postgres-backup-tenant
-  metricsPath: /minio/v2/metrics/resources
+  metricsPath: /minio/v2/metrics/resource
   scheme: HTTP
   scrapeInterval: 60s
   staticConfigs:
