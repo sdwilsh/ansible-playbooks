@@ -19,7 +19,7 @@ resources:
   - application/immich.yml
   - application/kube-vip.yml
   - application/lg.yml
-  - application/longhorn.yml
+  - application/longhorn-system.yml
   - application/manyfold.yml
   - application/node-monitoring.yml
   - application/paperless.yml

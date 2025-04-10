@@ -4,14 +4,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn
+  name: longhorn-system
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: longhorn
+    namespace: longhorn-system
   source:
-    path: kustomization/overlays/prod/longhorn
+    path: kustomization/overlays/prod/longhorn-system
     repoURL: https://github.com/sdwilsh/ansible-playbooks
     targetRevision: HEAD
   syncPolicy:
