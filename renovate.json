@@ -82,11 +82,13 @@
       "customType": "regex",
       "datasourceTemplate": "docker",
       "fileMatch": [
-        "^kustomization/components/.+/postgresql\\.yml$",
-        "^kustomization/overlays/.+/.+/postgresql\\.yml$"
+        "^kustomization/components/.+/postgresql(?:/.+?)?\\.yml$",
+        "^kustomization/components/.+/tenant(?:/.+?)?\\.yml$",
+        "^kustomization/overlays/.+/.+/postgresql(?:/.+?)?\\.yml$",
+        "^kustomization/overlays/.+/.+/tenant(?:/.+?)?\\.yml$"
       ],
       "matchStrings": [
-        "image:\\s+(?<depName>.*?):(?<currentValue>.*?)\\n"
+        "image:\\s+(?<depName>.+?):(?<currentValue>.+?)(?:@sha256:(?<currentDigest>[0-9a-f]+))?$"
       ],
       "versioningTemplate": "docker"
     },
