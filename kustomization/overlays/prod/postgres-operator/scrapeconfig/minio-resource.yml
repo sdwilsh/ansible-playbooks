@@ -1,0 +1,13 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1 
+kind: ScrapeConfig
+metadata:
+  name: minio-resource-scrapeconfig
+spec:
+  jobName: postgres-backup-tenant
+  metricsPath: /minio/v2/metrics/resources
+  scheme: http
+  scrapeInterval: 60s
+  staticConfigs:
+    - minio.postgres-operator.svc.cluster.local
+

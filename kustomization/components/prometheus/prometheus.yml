@@ -22,6 +22,8 @@ spec:
     seccompProfile:
       type: RuntimeDefault
   serviceAccountName: prometheus-service-account
+  scrapeConfigNamespaceSelector: {}
+  scrapeConfigSelector: {}
   serviceMonitorNamespaceSelector: {}
   serviceMonitorSelector: {}
   storage:

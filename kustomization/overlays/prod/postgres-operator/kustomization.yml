@@ -14,5 +14,9 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
-  - podmonitor.yml
+  - podmonitor/minio.yml
+  - podmonitor/spilo.yml
+  - scrapeconfig/minio-bucket.yml
+  - scrapeconfig/minio-cluster.yml
+  - scrapeconfig/minio-resource.yml
   - tenant.yml

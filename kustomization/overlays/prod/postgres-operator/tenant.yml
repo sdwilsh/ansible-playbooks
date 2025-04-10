@@ -3,8 +3,6 @@ apiVersion: minio.min.io/v2
 kind: Tenant
 metadata:
   name: postgres-backup-tenant
-  labels:
-    app.kubernetes.io/name: minio
 spec:
   configuration:
     name: minio-storage-configuration-secret
@@ -38,6 +36,5 @@ spec:
           storageClassName: longhorn-encrypted
       volumesPerServer: 1
   priorityClassName: application-infra
-  prometheusOperator: true
   requestAutoCert: false
   
