@@ -4,14 +4,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-cd
+  name: argocd
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo-cd
+    namespace: argocd
   source:
-    path: kustomization/overlays/prod/argo-cd
+    path: kustomization/overlays/prod/argocd
     repoURL: https://github.com/sdwilsh/ansible-playbooks
     targetRevision: HEAD
   syncPolicy:

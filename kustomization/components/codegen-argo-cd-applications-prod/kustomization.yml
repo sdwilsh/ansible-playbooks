@@ -7,7 +7,7 @@ kind: Component
 resources:
   - application/3d-printing.yml
   - application/ara.yml
-  - application/argo-cd.yml
+  - application/argocd.yml
   - application/atuin.yml
   - application/aventertainment.yml
   - application/cert-manager.yml

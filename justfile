@@ -11,12 +11,12 @@ ansible-lint:
 # Generates/updates resources for Argo CD applications
 [group('codegen')]
 generate-argo-cd-applications:
-    ansible-playbook plays/argo-cd-applications.yml --extra-vars overlay=prod
+    ansible-playbook plays/codegen/argo-cd-applications.yml --extra-vars overlay=prod
 
 # Generates/updates resources for DNS entries
 [group('codegen')]
 generate-dns-hogs:
-    ansible-playbook plays/dns-update.yml
+    ansible-playbook plays/dns/update.yml
 
 # Generates/updates resources for postgres-operator managed resources
 [group('codegen')]
