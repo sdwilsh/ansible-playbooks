@@ -6,8 +6,9 @@ metadata:
 spec:
   jobName: postgres-backup-tenant
   metricsPath: /minio/v2/metrics/bucket
-  scheme: http
+  scheme: HTTP
   scrapeInterval: 60s
   staticConfigs:
-    - minio.postgres-operator.svc.cluster.local
+    - targets:
+        - minio.postgres-operator.svc.cluster.local
 
