@@ -28,6 +28,7 @@ resources:
   - application/prometheus-operator.yml
   - application/proton-mail.yml
   - application/redis.yml
+  - application/stirling-pdf.yml
   - application/traefik.yml
   - application/transmission.yml
   - application/tvheadend.yml
