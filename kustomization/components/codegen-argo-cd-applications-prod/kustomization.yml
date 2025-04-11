@@ -21,6 +21,7 @@ resources:
   - application/lg.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
+  - application/minio-operator.yml
   - application/node-monitoring.yml
   - application/paperless.yml
   - application/postgres-operator.yml
