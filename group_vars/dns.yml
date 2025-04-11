@@ -228,6 +228,7 @@ bind_zones:
           - loki.hogs
           - longhorn.hogs
           - manyfold.hogs
+          - matrix
           - minio-monitoring.hogs
           - minio-postgres.hogs
           - mqtt.hogs
