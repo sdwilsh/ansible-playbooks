@@ -44,30 +44,12 @@ kairos_prod
 [vms]
 docker.hogs.tswn.us ansible_host=10.10.0.8
 
-[vyos_guest]
-guest01.routers.hogs.tswn.us ansible_host=10.10.0.82
-guest02.routers.hogs.tswn.us ansible_host=10.10.0.83
-
 [vyos_home]
 maccabeus01.hogs.tswn.us ansible_host=10.10.0.48
-
-[vyos_hogs]
-hogs01.routers.hogs.tswn.us ansible_host=10.10.0.79
 
 [vyos_remote]
 tartarus01.tswn.us ansible_host=149.248.37.12
 
-[vyos_wan]
-centurylink.routers.hogs.tswn.us ansible_host=10.10.0.70
-
-[vyos_work]
-work01.routers.hogs.tswn.us ansible_host=10.10.0.85
-work02.routers.hogs.tswn.us ansible_host=10.10.0.86
-
 [vyos:children]
-vyos_guest
 vyos_home
-vyos_hogs
 vyos_remote
-vyos_wan
-vyos_work

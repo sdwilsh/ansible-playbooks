@@ -1,4 +1,0 @@
----
-vyos__host_id_ipv4: "82"
-vyos__peer_host_id_ipv4: "83"
-vyos__vrrp_priority: 100

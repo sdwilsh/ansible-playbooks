@@ -1,8 +1,0 @@
----
-- description: Allow ICMP
-  action: accept
-  protocol: icmp
-- description: Allow all traffic
-  action: accept
-  state:
-    new: true
