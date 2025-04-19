@@ -103,8 +103,8 @@
   ],
   "extends": [
     "config:best-practices",
-    "github>marinatedconcrete/config//renovate/devcontainer#renovate-config-2.0.1",
-    "github>marinatedconcrete/config//renovate/marinatedconcrete#renovate-config-2.0.1"
+    "github>marinatedconcrete/config//renovate/devcontainer#renovate-config-2.1.0",
+    "github>marinatedconcrete/config//renovate/marinatedconcrete#renovate-config-2.1.0"
   ],
   "packageRules": [
     {
