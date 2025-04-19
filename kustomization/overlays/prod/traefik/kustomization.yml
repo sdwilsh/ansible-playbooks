@@ -39,7 +39,7 @@ images:
     newTag: v7.2.7@sha256:aa3cec3f6c136bb8875bf2a183801eab5c94d560e45c40006d8c5c870e7122ba
   - name: traefik
     # renovate: datasource=github-releases depName=traefik/traefik
-    newTag: v3.3.5@sha256:104204dadedf5d1284f8ef8f97f705649ac81aa6f7a6c9abf13e2c59245b8abc
+    newTag: v3.3.6@sha256:83f3c843133530e4aa45e6ddc415488583a8a01c88adc5022d415c6e97ceeaae
 namespace: traefik
 patches:
   - path: patches/authelia/add_container.yml
