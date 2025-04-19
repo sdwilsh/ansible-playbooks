@@ -1,6 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "configMigration": true,
   "customManagers": [
     {
       "customType": "regex",
@@ -102,9 +101,9 @@
     }
   ],
   "extends": [
-    "config:best-practices",
     "github>marinatedconcrete/config//renovate/devcontainer#renovate-config-2.1.0",
-    "github>marinatedconcrete/config//renovate/marinatedconcrete#renovate-config-2.1.0"
+    "github>marinatedconcrete/config//renovate/marinatedconcrete#renovate-config-2.1.0",
+    "github>marinatedconcrete/config//renovate/recommended#renovate-config-2.1.0"
   ],
   "packageRules": [
     {
@@ -312,6 +311,5 @@
       ]
     }
   ],
-  "separateMinorPatch": true,
-  "timezone": "America/Los_Angeles"
+  "separateMinorPatch": true
 }
