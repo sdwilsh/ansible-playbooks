@@ -16,3 +16,5 @@ spec:
     targetRevision: HEAD
   syncPolicy:
     automated: {}
+    syncOptions:
+      - ServerSideApply=true
