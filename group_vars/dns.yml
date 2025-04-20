@@ -256,6 +256,8 @@ bind_zones:
         ip: 10.11.1.69
       - name: lg-git-ssh
         ip: 10.11.1.70
+      - name: nut.hogs
+        ip: 10.11.1.71
 
       # NONET Network
       - name: "front-porch.camera.hogs"
