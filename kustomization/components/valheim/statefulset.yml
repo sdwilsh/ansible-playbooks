@@ -89,7 +89,9 @@ spec:
       securityContext:
         fsGroup: 65536
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         labels:
           # Use this PVC to configure attached PVs.
           recurring-job.longhorn.io/source: enabled
@@ -105,7 +107,9 @@ spec:
           requests:
             storage: 20Gi
         storageClassName: longhorn-unencrypted
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         labels:
           # Use this PVC to configure attached PVs.
           recurring-job.longhorn.io/source: enabled
@@ -121,7 +125,9 @@ spec:
           requests:
             storage: 10Gi
         storageClassName: longhorn-unencrypted
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         labels:
           # Use this PVC to configure attached PVs.
           recurring-job.longhorn.io/source: enabled

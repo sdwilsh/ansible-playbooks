@@ -159,7 +159,9 @@ spec:
         - name: exporter-tmp
           emptyDir: {}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: penpot-assets
       spec:
         accessModes:

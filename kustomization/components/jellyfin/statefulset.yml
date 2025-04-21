@@ -45,7 +45,9 @@ spec:
               name: jellyfin-cache
       priorityClassName: application
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         labels:
           # Use this PVC to configure attached PVs.
           recurring-job.longhorn.io/source: enabled
@@ -59,7 +61,9 @@ spec:
           requests:
             storage: 20Gi
         storageClassName: jellyfin-cache-storageclass
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: jellyfin-config
       spec:
         accessModes:

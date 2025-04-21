@@ -78,7 +78,9 @@ spec:
           persistentVolumeClaim:
             claimName: tdarr-cache-pvc
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: tdarr-server
       spec:
         accessModes:

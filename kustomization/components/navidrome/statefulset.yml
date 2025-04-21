@@ -58,7 +58,9 @@ spec:
             sizeLimit: 2Gi
           name: navidrome-cache
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: navidrome-data
       spec:
         accessModes:

@@ -75,7 +75,9 @@ spec:
             defaultMode: 420
             secretName: zwavejs-secret
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: zwavejs-store
       spec:
         accessModes:

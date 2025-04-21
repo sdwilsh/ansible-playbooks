@@ -97,7 +97,9 @@ spec:
           secret:
             secretName: mosquitto-password-conf-secret
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: mosquitto-data
       spec:
         accessModes:

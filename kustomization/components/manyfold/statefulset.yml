@@ -95,7 +95,9 @@ spec:
         - name: manyfold-tmp
           emptyDir: {}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: manyfold-config
       spec:
         accessModes:
@@ -104,7 +106,9 @@ spec:
           requests:
             storage: 1Gi
         storageClassName: longhorn-encrypted
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: manyfold-libraries
       spec:
         accessModes:

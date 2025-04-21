@@ -51,7 +51,9 @@ spec:
       securityContext:
         fsGroup: 65534
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: tvheadend-config
       spec:
         accessModes:

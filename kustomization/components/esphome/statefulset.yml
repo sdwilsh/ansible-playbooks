@@ -59,7 +59,9 @@ spec:
         - emptyDir: {}
           name: esphome-cache
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: esphome-config
       spec:
         accessModes:

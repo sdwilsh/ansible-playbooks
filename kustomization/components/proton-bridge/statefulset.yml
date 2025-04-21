@@ -33,7 +33,9 @@ spec:
             - mountPath: /root
               name: data
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         labels:
           # Use this PVC to configure attached PVs.
           recurring-job.longhorn.io/source: enabled

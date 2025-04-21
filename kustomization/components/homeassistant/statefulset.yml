@@ -158,7 +158,9 @@ spec:
             defaultMode: 0777
             name: scripts-configmap
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: homeassistant-config
       spec:
         accessModes:

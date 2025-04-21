@@ -40,7 +40,9 @@ spec:
               name: transmission-config
       priorityClassName: application
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: transmission-config
       spec:
         accessModes:

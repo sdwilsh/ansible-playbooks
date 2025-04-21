@@ -108,7 +108,9 @@ spec:
             sizeLimit: 1Gi
           name: frigate-tmp
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: frigate-db
       spec:
         accessModes:
@@ -117,7 +119,9 @@ spec:
           requests:
             storage: 2Gi
         storageClassName: longhorn-encrypted
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: frigate-media
       spec:
         accessModes:
