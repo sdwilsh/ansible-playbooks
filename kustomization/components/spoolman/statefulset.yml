@@ -59,7 +59,9 @@ spec:
       securityContext:
         fsGroup: 65534
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: spoolman-data
       spec:
         accessModes:
