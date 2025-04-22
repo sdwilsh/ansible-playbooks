@@ -9,11 +9,11 @@ images:
   - name: gitea/gitea
     newTag: 1.23.6-rootless@sha256:9a18e8e9fb35f21fbe31b6a3a6754ceb0898a67ba874aa3c4cb25a47814c4185
   - name: penpotapp/backend
-    newTag: 2.5.4@sha256:9d14571f9e2a5fb1ed00439d76e829aac87bc385c6d2e63b197e75fb2b902edb
+    newTag: 2.6.1@sha256:a074efc1d0de69ceb1d4533248d78bdb960d1dd96d380e1f259ec2b941bff5dc
   - name: penpotapp/exporter
-    newTag: 2.5.4@sha256:6e7029fd14bae3d4205407b5b8252445cbd0c563de815aedb8822933ecda0493
+    newTag: 2.6.1@sha256:48c473819c2c51b65885e52e1c47fa4d26aeabab6c2919fbcb7a51aeadccac38
   - name: penpotapp/frontend
-    newTag: 2.5.4@sha256:2cc369ccfee9aed84acc4bdf4d00d9e34c329ec202074dd3c027896f1d251421
+    newTag: 2.6.1@sha256:5a1afc4972bf81be3473945f47bbce50513dc4cd47b5f2282d52b13132359b73
   - name: postgres
     newTag: 16@sha256:cef2d22004db69e3d601442ca4cac142adda0987ad7ca4f28c4e998bef690951
 namespace: lg
