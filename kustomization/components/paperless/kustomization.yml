@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 components:
-  - https://github.com/marinatedconcrete/config/kustomization/components/paperless?ref=kustomize-paperless@v1.0.1
+  - https://github.com/marinatedconcrete/config/kustomization/components/paperless?ref=kustomize-paperless@v1.0.2
   - https://github.com/marinatedconcrete/config/kustomization/components/samba-upload
 patches:
   - path: patches/add_tika.yml
