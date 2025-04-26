@@ -133,6 +133,7 @@
         "prometheus/prometheus",
         "quay.io/minio/minio",
         "shenxn/protonmail-bridge",
+        "stirling-pdf-chart",
         "ubuntu/bind9",
         "zwavejs/zwave-js-ui"
       ],
