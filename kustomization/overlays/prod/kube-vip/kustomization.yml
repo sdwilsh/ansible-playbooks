@@ -10,3 +10,5 @@ patches:
     target:
       kind: DaemonSet
       name: kube-vip-ds
+resources:
+  - namespace.yml
