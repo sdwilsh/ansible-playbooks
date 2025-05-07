@@ -17,7 +17,7 @@ patches:
   - path: patches/set_tracking_by_annotation.yml
 resources:
   # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.14.11/manifests/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.0/manifests/install.yaml
   - servicemonitor/argocd-applicationset-controller.yml
   - servicemonitor/argocd-repo-server.yml
   - servicemonitor/argocd-server.yml
