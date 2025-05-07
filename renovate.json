@@ -3,8 +3,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "(^|/|\\.)Dockerfile$"
+      "managerFilePatterns": [
+        "/(^|/|\\.)Dockerfile$/"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)(\\s+versioning=(?<versioning>.*?))?\\s+ARG\\s+.+_VERSION=(?<currentValue>.*?)\\s"
@@ -13,8 +13,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^kustomization\\/.*\\.sh$"
+      "managerFilePatterns": [
+        "/^kustomization\\/.*\\.sh$/"
       ],
       "matchStrings": [
         "\\srenovate:\\s+datasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s*[a-zA-Z_]+=\"(?<currentValue>.*?)\""
@@ -22,8 +22,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^roles/.+/tasks/.+\\.yml$"
+      "managerFilePatterns": [
+        "/^roles/.+/tasks/.+\\.yml$/"
       ],
       "datasourceTemplate": "docker",
       "matchStrings": [
@@ -33,8 +33,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^plays/kairos/upgrade\\.yml$"
+      "managerFilePatterns": [
+        "/^plays/kairos/upgrade\\.yml$/"
       ],
       "datasourceTemplate": "docker",
       "matchStrings": [
@@ -43,8 +43,8 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^group_vars/vyos\\.yml$"
+      "managerFilePatterns": [
+        "/^group_vars/vyos\\.yml$/"
       ],
       "matchStrings": [
         "#\\s+renovate:\\s+datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)\\s+[a-z]+_version:\\s+(?<currentValue>.*?)\\n"
@@ -53,8 +53,8 @@
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
-      "fileMatch": [
-        "^kustomization/.+/.+/.*values\\.yml$"
+      "managerFilePatterns": [
+        "/^kustomization/.+/.+/.*values\\.yml$/"
       ],
       "matchStrings": [
         "image:\\n\\s+repository:\\s+(?<depName>.*?)\\n\\s+tag:\\s+(?<currentValue>.*?)\\n",
@@ -64,9 +64,9 @@
     },
     {
       "customType": "regex",
-      "fileMatch": [
-        "^kustomization/.+/.+/kustomization\\.yml$",
-        "^kustomization/.+/.+/.+/kustomization\\.yml$"
+      "managerFilePatterns": [
+        "/^kustomization/.+/.+/kustomization\\.yml$/",
+        "/^kustomization/.+/.+/.+/kustomization\\.yml$/"
       ],
       "matchStrings": [
         "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+newTag: (?<currentValue>.*?)\\n",
@@ -80,8 +80,8 @@
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
-      "fileMatch": [
-        "^kustomization/overlays/prod/traefik/configmap/traefik/static\\.yml$"
+      "managerFilePatterns": [
+        "/^kustomization/overlays/prod/traefik/configmap/traefik/static\\.yml$/"
       ],
       "matchStrings": [
         "moduleName:\\s+github\\.com/(?<depName>.*/.*)\\n\\s+version:\\s+(?<currentValue>.*)"
@@ -91,9 +91,9 @@
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "prometheus/prometheus",
-      "fileMatch": [
-        "^kustomization/components/.+/prometheus\\.yml$",
-        "^kustomization/overlays/.+/.+/prometheus\\.yml$"
+      "managerFilePatterns": [
+        "/^kustomization/components/.+/prometheus\\.yml$/",
+        "/^kustomization/overlays/.+/.+/prometheus\\.yml$/"
       ],
       "matchStrings": [
         "version:\\s+(?<currentValue>v.*?)\\n"
