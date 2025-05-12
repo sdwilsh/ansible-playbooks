@@ -43,6 +43,9 @@
           PublishPort=443:443/tcp
           # Wireguard
           PublishPort={{ ansible_default_ipv4.address }}:51821:51821/udp
+
+          [Install]
+          WantedBy=multi-user.target default.target
         dest: /etc/containers/systemd/hogs.pod
         mode: u=rw,g=r,o=r
         owner: root
@@ -73,9 +76,6 @@
           [Container]
           Pod=hogs.pod
           Volume=/etc/alloy/loki.alloy:/etc/alloy/loki.alloy:ro
-
-          [Install]
-          WantedBy=multi-user.target default.target
         dest: /etc/containers/systemd/alloy.container.d/override.conf
         mode: u=rw,g=r,o=r
         owner: root
