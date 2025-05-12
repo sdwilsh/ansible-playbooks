@@ -1,0 +1,189 @@
+---
+- name: Play to setup choros.tswn.us
+  become: true
+  hosts: choros.tswn.us
+  handlers:
+    # Note: these run in the order they are defined in (regardless of invocation order)!
+    - name: systemctl daemon-reload
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+    - name: systemd-modules-load.service
+      ansible.builtin.systemd_service:
+        name: systemd-modules-load.service
+        state: restarted
+    - name: systemd-sysctl.service
+      ansible.builtin.systemd_service:
+        name: systemd-sysctl.service
+        state: restarted
+    - name: hogs-pod.service
+      ansible.builtin.systemd_service:
+        name: alloy.service
+        state: restarted
+      listen:
+        - alloy.service
+        - wireguard.service
+        - hogs-pod.service
+  roles:
+    - role: common-users
+    - role: devsec.hardening.ssh_hardening
+      vars:
+        ssh_kerberos_supprt: false
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+    - name: Setup HOGS pod for containers
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Description=A pod that contains a set of containers that need to talk to HOGS.
+
+          [Pod]
+          # Traefik Proxy
+          PublishPort=443:443/tcp
+          # Wireguard
+          PublishPort={{ ansible_default_ipv4.address }}:51821:51821/udp
+        dest: /etc/containers/systemd/hogs.pod
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hogs-pod.service
+      tags:
+        - hogs-pod
+        - wireguard
+
+    # Node Monitoring
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      loop:
+        - /etc/containers/systemd/alloy.container.d
+      tags:
+        - alloy
+        - hogs-pod
+    - name: Modify Alloy container to run as part of HOGS pod
+      ansible.builtin.copy:
+        content: |
+          [Container]
+          Pod=hogs.pod
+          Volume=/etc/alloy/loki.alloy:/etc/alloy/loki.alloy:ro
+
+          [Install]
+          WantedBy=multi-user.target default.target
+        dest: /etc/containers/systemd/alloy.container.d/override.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - alloy.service
+        - systemctl daemon-reload
+      tags:
+        - alloy
+        - hogs-pod
+    - name: Configure Loki target
+      ansible.builtin.copy:
+        content: |
+          loki.write "default" {
+            endpoint {
+              url = "http://10.11.1.72:3100/loki/api/v1/push"
+            }
+          }
+        dest: /etc/alloy/loki.alloy
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - alloy.service
+      tags:
+        - alloy
+        - hogs-pod
+
+    # Wireguard Forwarding
+    - name: Setup sysctl's for router functionality
+      ansible.builtin.copy:
+        content: |
+          net.ipv4.conf.all.forwarding = 1
+          net.ipv4.ip_unprivileged_port_start = 0
+        dest: /etc/sysctl.d/90-router.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemd-sysctl.service
+      tags:
+        - sysctl
+    - name: Setup loading of additional kernel modules needed by Wireguard
+      ansible.builtin.copy:
+        content: |
+          wireguard
+          # iptables/nftables modules for basic DNAT/SNAT and masquerading
+          nft_chain_nat
+          nft_compat
+          xt_nat
+          # nftables modules for wg-quick default route
+          nft_ct
+          nft_fib_ine
+        dest: /etc/modules-load.d/wireguard.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemd-modules-load.service
+      tags:
+        - modules-load
+    - name: Setup Wireguard Config
+      ansible.builtin.copy:
+        content: |
+          [Interface]
+          PrivateKey = {{ wireguard__privkey }}
+          Address = 172.31.0.1/32
+          ListenPort = 51821
+
+          # port forwarding
+          PreUp = iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 10.11.1.64
+          PreUp = iptables -t nat -A POSTROUTING -p tcp --dport 443 -j MASQUERADE
+
+          [Peer]
+          PublicKey = EUDwE7E1dmbiJZXBSH0txxs/3B+eACWdfDocMvi5Fno=
+          AllowedIPs = 10.11.0.0/23
+        dest: /etc/wireguard/hogs0.conf
+        mode: u=rw,g=r
+        owner: root
+        group: root
+      no_log: true # Contains the wireguard private key!
+      notify:
+        - wireguard.service
+      tags:
+        - hogs-pod
+        - wireguard
+    - name: Setup Wireguard container
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          ConditionPathExists=/etc/wireguard/hogs0.conf
+          Description=A container that hosts a wireguard VPN server and routes traffic through it.
+
+          [Container]
+          AddCapability=NET_ADMIN
+          AddCapability=NET_RAW
+          DropCapability=ALL
+          NoNewPrivileges=true
+          Image=docker.io/procustodibus/wireguard
+          Pod=hogs.pod
+          Volume=/etc/wireguard/hogs0.conf:/etc/wireguard/wg0.conf:Z
+        dest: /etc/containers/systemd/wireguard.container
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - wireguard.service
+      tags:
+        - hogs-pod
+        - wireguard

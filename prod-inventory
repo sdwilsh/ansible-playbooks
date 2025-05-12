@@ -41,6 +41,9 @@ kairos_worker
 [kairos:children]
 kairos_prod
 
+[sos]
+choros.tswn.us ansible_host=23.94.59.52
+
 [vms]
 docker.hogs.tswn.us ansible_host=10.10.0.8
 
