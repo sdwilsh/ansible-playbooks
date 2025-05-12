@@ -1,4 +1,4 @@
-; Hash: 378b6fe2fd9de4d475f4f2d163817407 1745634014
+; Hash: 9b40896e54d77a52475e28f15fc78509 1747024149
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -8,7 +8,7 @@ $ORIGIN tswn.us.
 $TTL 1W
 
 @ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1745634014
+  1747024149
   1D
   1H
   1W
@@ -150,6 +150,7 @@ valheim-relic              IN  A      10.11.1.68
 factorio-relic             IN  A      10.11.1.69
 lg-git-ssh                 IN  A      10.11.1.70
 nut-ups02.hogs             IN  A      10.11.1.71
+loki.hogs                  IN  A      10.11.1.72
 front-porch.camera.hogs       IN  A      10.67.0.12
 front-north-west.camera.hogs       IN  A      10.67.0.13
 front-north-east.camera.hogs       IN  A      10.67.0.14

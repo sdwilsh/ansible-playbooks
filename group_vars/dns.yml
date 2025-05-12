@@ -258,6 +258,8 @@ bind_zones:
         ip: 10.11.1.70
       - name: nut-ups02.hogs
         ip: 10.11.1.71
+      - name: loki.hogs
+        ip: 10.11.1.72
 
       # NONET Network
       - name: "front-porch.camera.hogs"

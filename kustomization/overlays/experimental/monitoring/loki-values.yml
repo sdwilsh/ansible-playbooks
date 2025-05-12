@@ -118,6 +118,8 @@ distributor:
   maxUnavailable: 2
   priorityClassName: application-infra
   replicas: 3 
+  serviceAnnotations:
+    kube-vip.io/loadbalancerIPs: 10.11.1.72
 compactor:
   extraArgs: *extraArgs
   # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!

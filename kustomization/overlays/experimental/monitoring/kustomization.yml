@@ -49,6 +49,10 @@ patches:
     target:
       kind: Alertmanager
       name: alertmanager
+  - path: patches/loki/set_service_type_load_balancer.yml
+    target:
+      kind: Service
+      name: loki-distributor
   - path: patches/minio/configure_storage.yml
     target:
       kind: StatefulSet
