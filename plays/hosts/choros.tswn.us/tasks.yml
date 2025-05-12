@@ -17,12 +17,12 @@
         state: restarted
     - name: hogs-pod.service
       ansible.builtin.systemd_service:
-        name: alloy.service
+        name: hogs-pod.service
         state: restarted
       listen:
         - alloy.service
-        - wireguard.service
         - hogs-pod.service
+        - wireguard.service
   roles:
     - role: common-users
     - role: devsec.hardening.ssh_hardening
