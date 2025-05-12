@@ -40,7 +40,7 @@
 
           [Pod]
           # Traefik Proxy
-          PublishPort=443:443/tcp
+          PublishPort={{ ansible_default_ipv4.address }}:443:443/tcp
           # Wireguard
           PublishPort={{ ansible_default_ipv4.address }}:51821:51821/udp
 
