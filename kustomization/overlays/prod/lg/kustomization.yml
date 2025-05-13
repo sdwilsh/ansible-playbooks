@@ -7,7 +7,7 @@ components:
   - ../../../components/penpot
 images:
   - name: gitea/gitea
-    newTag: 1.23.7-rootless@sha256:e71bf5c6b9851238d8df9047a2056b40a1a1e87a0bff62bb82935d59d3d37b23
+    newTag: 1.23.8-rootless@sha256:331875f35bdcc3c1110fc8410a4e809e3103ebb091ef424fec2df53ac1b658fc
   - name: penpotapp/backend
     newTag: 2.6.2@sha256:e82c0a7ce65920e4b21fb20d644ec15dd245182a09982c2be23806ef65f1f00c
   - name: penpotapp/exporter
