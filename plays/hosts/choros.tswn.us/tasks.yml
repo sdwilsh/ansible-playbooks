@@ -22,6 +22,7 @@
       listen:
         - alloy.service
         - hogs-pod.service
+        - hogs-services-network.service
         - wireguard.service
   roles:
     - role: common-users
@@ -32,6 +33,28 @@
     - name: Set hostname
       ansible.builtin.hostname:
         name: "{{ inventory_hostname }}"
+    
+    # HOGS Pod & Network Setup
+    - name: Setup HOGS services container network
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Description=A network with a known set of addresses to talk to HOGS services.
+
+          [Network]
+          Gateway=10.11.2.1
+          IPRange=10.11.2.128/25
+          IPv6=false
+          Subnet=10.11.2.0/24
+        dest: /etc/containers/systemd/hogs-services.network
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hogs-services-network.service
+      tags:
+        - hogs-pod
     - name: Setup HOGS pod for containers
       ansible.builtin.copy:
         content: |
@@ -39,6 +62,7 @@
           Description=A pod that contains a set of containers that need to talk to HOGS.
 
           [Pod]
+          Network=hogs-services.network
           # Traefik Proxy
           PublishPort={{ ansible_default_ipv4.address }}:443:443/tcp
           # Wireguard
@@ -55,7 +79,6 @@
         - hogs-pod.service
       tags:
         - hogs-pod
-        - wireguard
 
     # Node Monitoring
     - name: Ensure directories exist
@@ -142,7 +165,7 @@
         content: |
           [Interface]
           PrivateKey = {{ wireguard__privkey }}
-          Address = 172.31.0.1/32
+          Address = 10.11.2.2/32
           ListenPort = 51821
 
           # port forwarding
