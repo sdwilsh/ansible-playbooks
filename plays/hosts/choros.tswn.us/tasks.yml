@@ -164,9 +164,10 @@
       ansible.builtin.copy:
         content: |
           [Interface]
-          PrivateKey = {{ wireguard__privkey }}
           Address = 10.11.2.2/32
           ListenPort = 51821
+          MTU = 1280
+          PrivateKey = {{ wireguard__privkey }}
 
           # port forwarding
           PreUp = iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 10.11.1.64
