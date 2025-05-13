@@ -174,8 +174,9 @@
           PreUp = iptables -t nat -A POSTROUTING -p tcp --dport 443 -j MASQUERADE
 
           [Peer]
+          PersistentKeepalive = 25
           PublicKey = EUDwE7E1dmbiJZXBSH0txxs/3B+eACWdfDocMvi5Fno=
-          AllowedIPs = 10.11.0.0/23
+          AllowedIPs = 10.11.2.1/32, 10.11.0.0/23
         dest: /etc/wireguard/hogs0.conf
         mode: u=rw,g=r
         owner: root
@@ -197,6 +198,11 @@
           AddCapability=NET_ADMIN
           AddCapability=NET_RAW
           DropCapability=ALL
+          HealthCmd=CMD-SHELL ping -c 1 10.11.2.1 || exit 1
+          HealthInterval=30s
+          HealthLogDestination=events_logger
+          HealthRetries=3
+          HealthStartPeriod=10s
           NoNewPrivileges=true
           Image=docker.io/procustodibus/wireguard
           Pod=hogs.pod
