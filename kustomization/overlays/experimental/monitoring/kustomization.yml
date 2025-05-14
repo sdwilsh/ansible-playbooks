@@ -34,7 +34,7 @@ helmCharts:
     valuesFile: prometheus-adapter-values.yml
 images:
   - name: postgres
-    newTag: 17@sha256:304ab813518754228f9f792f79d6da36359b82d8ecf418096c636725f8c930ad
+    newTag: 17@sha256:864831322bf2520e7d03d899b01b542de6de9ece6fe29c89f19dc5e1d5568ccf
   - name: quay.io/minio/minio
     newTag: latest@sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
