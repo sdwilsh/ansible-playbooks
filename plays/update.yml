@@ -1,6 +1,6 @@
 ---
 - name: Setup ansible_distribution-based Groups
-  hosts: all:!kairos:!vyos:!pikvm
+  hosts: all:!bootc:!kairos:!vyos:!pikvm
   gather_facts: true
   gather_subset:
     - "!all"
@@ -14,6 +14,25 @@
       changed_when: false
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
+
+- name: Perform Updates for bootc-Based Hosts
+  hosts: bootc
+  gather_facts: false
+  order: sorted
+  tasks:
+    - name: Update to latest image
+      community.general.bootc_manage:
+        state: latest
+      become: true
+      register: bootc_status
+    - name: Schedule Reboot
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        group: ToReboot
+      changed_when: false
+      delegate_to: localhost
+      loop: "{{ ansible_play_batch }}"
+      when: hostvars[item].bootc_status.changed
 
 - name: Perform Updates for PiKVM Hosts
   hosts: pikvm

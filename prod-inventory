@@ -1,3 +1,6 @@
+[bootc:children]
+sos
+
 [dev]
 sdwilsh-dev.hogs.tswn.us ansible_host=10.10.0.20
 lighterthansome.hogs.tswn.us ansible_host=10.117.0.9
