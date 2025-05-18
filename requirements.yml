@@ -1,12 +1,7 @@
 ---
 roles:
   - name: mrlesmithjr.netplan
-    # version: v0.4.1
-    # For now, use git because no release that works with 23.10+
-    # https://github.com/mrlesmithjr/ansible-netplan/pull/49
-    scm: git
-    src: https://github.com/mrlesmithjr/ansible-netplan.git
-    version: master
+    version: v0.4.2
   - name: nickjj.docker
     version: v2.5.0
 collections:
