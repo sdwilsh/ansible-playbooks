@@ -1,4 +1,4 @@
-; Hash: 0488a50fafe239784c7a30bb89535533 1747545557
+; Hash: cc54f5172eb849f441e4ffbc61cd5af5 1747586953
 ; Zone file for tswn.us
 ;
 ; Ansible managed
@@ -7,22 +7,19 @@
 $ORIGIN tswn.us.
 $TTL 1W
 
-@ IN SOA ns1.tswn.us. hostmaster.tswn.us. (
-  1747545557
+@ IN SOA ns1.tswn.us.tswn.us. hostmaster.tswn.us. (
+  1747586953
   1D
   1H
   1W
   1D )
 
-                           IN  NS     ns1.tswn.us.
-                           IN  NS     ns2.tswn.us.
+                           IN  NS     ns1.tswn.us.tswn.us.
 
 
 
 pool.ntp.hogs              IN  A      10.117.0.50
 tartarus01                 IN  A      149.248.37.12
-guest.routers.hogs         IN  A      10.2.0.81
-work.routers.hogs          IN  A      10.2.0.84
 maccabeus.hogs             IN  A      10.117.0.1
 home                       IN  CNAME  maccabeus.hogs
 lighterthansome.hogs       IN  A      10.117.0.9
@@ -57,11 +54,7 @@ sonos-move.hogs            IN  A      10.117.0.66
 sonos-mainbed.hogs         IN  A      10.117.0.67
 sonos-office.hogs          IN  A      10.117.0.68
 sonos-dining.hogs          IN  A      10.117.0.69
-ns1                        IN  A      10.10.0.3
-ns2                        IN  A      10.10.0.4
-vcenter.hogs               IN  A      10.10.0.5
 harvest.hogs               IN  A      10.10.0.6
-ipmi.firstlightweaveslivingsong.hogs       IN  A      10.10.0.10
 ipmi.dadab.hogs            IN  A      10.10.0.11
 ipmi-chanttogreen.hogs       IN  A      10.10.0.13
 chanttogreen.hogs          IN  A      10.10.0.14
@@ -82,18 +75,6 @@ backyard-switch.hogs       IN  A      10.10.0.46
 kvm01.hogs                 IN  A      10.10.0.50
 kvm02.hogs                 IN  A      10.10.0.51
 kvm03.hogs                 IN  A      10.10.0.52
-esxi-intel01.hogs          IN  A      10.10.0.53
-esxi-intel02.hogs          IN  A      10.10.0.54
-esxi-intel03.hogs          IN  A      10.10.0.55
-esxi-intel04.hogs          IN  A      10.10.0.56
-centurylink.routers.hogs       IN  A      10.10.0.70
-hogs.routers.hogs          IN  A      10.10.0.78
-hogs01.routers.hogs        IN  A      10.10.0.79
-hogs02.routers.hogs        IN  A      10.10.0.80
-guest01.routers.hogs       IN  A      10.10.0.82
-guest02.routers.hogs       IN  A      10.10.0.83
-work01.routers.hogs        IN  A      10.10.0.85
-work02.routers.hogs        IN  A      10.10.0.86
 backyard-ap.hogs           IN  A      10.10.0.90
 den-ap.hogs                IN  A      10.10.0.91
 living-ap.hogs             IN  A      10.10.0.92
@@ -145,14 +126,13 @@ tvheadend.hogs             IN  CNAME  traefik.hogs
 unifi                      IN  CNAME  traefik.hogs
 zwave.hogs                 IN  CNAME  traefik.hogs
 unifi-inform               IN  A      10.11.1.65
-local-dns.hogs             IN  A      10.11.1.66
+dns.hogs                   IN  A      10.11.1.66
 valheim-forerunner         IN  A      10.11.1.67
 valheim-relic              IN  A      10.11.1.68
 factorio-relic             IN  A      10.11.1.69
 lg-git-ssh                 IN  A      10.11.1.70
 nut-ups02.hogs             IN  A      10.11.1.71
 loki-distributor.hogs       IN  A      10.11.1.72
-full-dns.hogs              IN  A      10.11.1.73
 front-porch.camera.hogs       IN  A      10.67.0.12
 front-north-west.camera.hogs       IN  A      10.67.0.13
 front-north-east.camera.hogs       IN  A      10.67.0.14

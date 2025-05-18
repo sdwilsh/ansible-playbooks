@@ -11,7 +11,6 @@ configMapGenerator:
   - name: hogs-bind9-gen-zones-configmap
     files:
       - configmap/zones/tswn.us
-      - configmap/zones/0.2.10.in-addr.arpa
       - configmap/zones/0.10.10.in-addr.arpa
       - configmap/zones/0.11.10.in-addr.arpa
       - configmap/zones/0.67.10.in-addr.arpa
