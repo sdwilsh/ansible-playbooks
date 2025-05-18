@@ -32,7 +32,7 @@ spec:
           env:
             - name: TZ
               value: America/Los_Angeles
-          image: spx01/blocky
+          image: docker.io/spx01/blocky
           livenessProbe:
             exec:
               command:

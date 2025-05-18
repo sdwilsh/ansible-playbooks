@@ -4,24 +4,18 @@ kind: Kustomization
 
 components:
   - ../../../components/blocky
-  - ../../../components/codegen-hogs-bind9-config
 configMapGenerator:
   - name: blocky-configmap
     files:
       - configmap/blocky/config.yml
-  - name: scripts-configmap
-    files:
-      - configmap/scripts/setup_var_cache_bind.sh
 generatorOptions:
   annotations:
     argocd.argoproj.io/sync-options: Prune=true
   labels:
     app.kubernetes.io/name: bind9
 images:
-  - name: ubuntu
-    newTag: "22.04"
-  - name: ubuntu/bind9
-    newTag: 9.18-22.04_beta
+  - name: docker.io/spx01/blocky
+    newTag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
 namespace: dns
 patches:
   - path: patches/blocky/mount_configuration.yml
@@ -34,6 +28,5 @@ patches:
       name: blocky-svc
 resources:
   - namespace.yml
-  - deployment.yml
   - service.yml
   - servicemonitor.yml
