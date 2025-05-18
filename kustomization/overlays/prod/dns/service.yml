@@ -16,3 +16,18 @@ spec:
   selector:
     app.kubernetes.io/name: bind9
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: blocky
+  name: blocky-metrics-svc
+spec:
+  ports:
+    - name: web
+      port: 9000
+      protocol: TCP
+      targetPort: web
+  selector:
+    app.kubernetes.io/name: blocky

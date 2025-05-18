@@ -1,0 +1,47 @@
+---
+bootstrapDns:
+  # Cloudflare DNS
+  - tcp-tls:1.1.1.1
+  - https://1.1.1.1/dns-query
+  # Quad 9 DNS
+  - tcp-tls:9.9.9.9
+  - https://9.9.9.9/dns-query
+
+conditional:
+  fallbackUpstream: false
+  mapping:
+    tswn.us: 10.11.1.66
+    0.10.10.in-addr.arpa: 10.11.1.66
+    0.11.10.in-addr.arpa: 10.11.1.66
+    0.67.10.in-addr.arpa: 10.11.1.66
+    0.117.10.in-addr.arpa: 10.11.1.66
+
+connectIPVersion: v4
+
+filtering:
+  queryTypes:
+    - AAAA
+
+fqdnOnly:
+  enable: true
+
+log:
+  format: json
+
+ports:
+  http: 9000
+
+prometheus:
+  enable: true
+
+upstreams:
+  groups:
+    default:
+      # Cloudflare Security DNS
+      - tcp-tls:security.cloudflare-dns.com
+      - https://security.cloudflare-dns.com/dns-query
+      # Quad 9 DNS
+      - tcp-tls:dns.quad9.net
+      - https://dns.quad9.net/dns-query
+  init:
+    strategy: failOnError

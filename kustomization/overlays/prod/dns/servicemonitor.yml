@@ -1,0 +1,14 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: blocky
+  name: blocky-servicemonitor
+spec:
+  endpoints:
+    - path: /metrics
+      port: web
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blocky

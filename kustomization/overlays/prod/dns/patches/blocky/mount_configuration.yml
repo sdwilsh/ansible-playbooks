@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: blocky
+          ports:
+            - name: web
+              containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config/
+              name: prod-config
+      volumes:
+        - name: prod-config 
+          configMap:
+            name: blocky-configmap
