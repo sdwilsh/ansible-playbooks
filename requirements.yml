@@ -1,7 +1,5 @@
 ---
 roles:
-  - name: bertvv.bind
-    version: v5.1.0
   - name: mrlesmithjr.netplan
     # version: v0.4.1
     # For now, use git because no release that works with 23.10+

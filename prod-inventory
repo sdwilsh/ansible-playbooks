@@ -5,10 +5,6 @@ sos
 sdwilsh-dev.hogs.tswn.us ansible_host=10.10.0.20
 lighterthansome.hogs.tswn.us ansible_host=10.117.0.9
 
-[dns]
-ns1.tswn.us ansible_host=10.10.0.3
-ns2.tswn.us ansible_host=10.10.0.4
-
 [hogsflixplus]
 hogsflixplus01.tswn.us ansible_host=172.31.42.2
 hogsflixplus02.tswn.us ansible_host=172.31.42.3

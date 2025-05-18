@@ -16,8 +16,6 @@
   tasks:
     - name: "Flush handlers from core roles"
       ansible.builtin.meta: "flush_handlers"
-- name: DNS hosts
-  import_playbook: plays/groups/dns.yml
 - name: PiKVM hosts
   import_playbook: plays/groups/pikvm.yml
 - name: Energy monitor hosts

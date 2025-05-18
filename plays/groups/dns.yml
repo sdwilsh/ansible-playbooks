@@ -1,6 +1,0 @@
----
-- name: Play for dns hosts
-  become: true
-  hosts: dns
-  roles:
-    - role: bertvv.bind
