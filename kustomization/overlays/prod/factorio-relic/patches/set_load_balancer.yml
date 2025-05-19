@@ -6,4 +6,5 @@ metadata:
     kube-vip.io/loadbalancerIPs: 10.11.1.69
   name: this-is-ignored-but-is-required
 spec:
+  externalTrafficPolicy: Local
   type: LoadBalancer
