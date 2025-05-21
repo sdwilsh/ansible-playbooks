@@ -192,7 +192,9 @@ stages:
             Address={{ network.address }}
 {% endif %}
 {% if 'gateway' in network %}
-            DNS={{ network.gateway }}
+{% for dns_server in network.dns %}
+            DNS={{ dns_server }}
+{% endfor %}
             Gateway={{ network.gateway }}
 {% endif %}
 {% endfor %}

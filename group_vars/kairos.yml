@@ -20,5 +20,9 @@ kairos_managed_networks:
     vlan_id: 2
   - name: services
     address: "{{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | first }}"
+    dns:
+      - 10.11.1.66
+      - 1.1.1.1
+      - 9.9.9.9
     gateway: 10.11.0.1
     vlan_id: 11
