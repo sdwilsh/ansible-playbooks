@@ -160,15 +160,13 @@ fqdnOnly:
 
 log:
   format: json
+  privacy: true
 
 ports:
   http: 9000
 
 prometheus:
   enable: true
-
-queryLog:
-  type: none
 
 upstreams:
   groups:
