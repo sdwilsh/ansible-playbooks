@@ -90,6 +90,7 @@ customDNS:
     fan-office.hogs.tswn.us: 10.117.0.43
     house.gem.hogs.tswn.us: 10.117.0.46
     maccabeus01.hogs.tswn.us: 10.117.0.48
+    pool.hogs.tswn.us: 10.117.0.50
     0.ntp.hogs.tswn.us: 10.117.0.50
     sonos-den.hogs.tswn.us: 10.117.0.60
     sonos-den-sub.hogs.tswn.us: 10.117.0.61
@@ -113,7 +114,7 @@ customDNS:
     alertmanager.hogs IN CNAME traefik.hogs
     ara.hogs IN CNAME traefik.hogs
     argo-cd.hogs IN CNAME traefik.hogs
-    atuin.hogs IN CNAME traefik.hogs
+    atuin IN CNAME traefik.hogs
     auth IN CNAME traefik.hogs
     esphome.hogs IN CNAME traefik.hogs
     factorio-relic-admin IN CNAME traefik.hogs
