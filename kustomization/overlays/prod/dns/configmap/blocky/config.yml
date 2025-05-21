@@ -173,9 +173,15 @@ queryLog:
 upstreams:
   groups:
     default:
+      # # CleanBrowsing
+      - tcp-tls:security-filter-dns.cleanbrowsing.org
+      - https://doh.cleanbrowsing.org/doh/security-filter/
       # Cloudflare Security DNS
       - tcp-tls:security.cloudflare-dns.com
       - https://security.cloudflare-dns.com/dns-query
+      # # HE DNS
+      - tcp-tls:ordns.he.net
+      - https://ordns.he.net/dns-query
       # Quad 9 DNS
       - tcp-tls:dns.quad9.net
       - https://dns.quad9.net/dns-query
