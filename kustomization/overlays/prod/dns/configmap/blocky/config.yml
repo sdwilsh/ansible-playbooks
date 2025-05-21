@@ -1,4 +1,21 @@
 ---
+blocking:
+  clientGroupsBlock:
+    default:
+      - light
+      - piracy
+      - threat-intelligence-feeds
+  denylists:
+    light:
+      # https://github.com/hagezi/dns-blocklists#light
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/light.txt
+    piracy:
+      # https://github.com/hagezi/dns-blocklists#piracy
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/anti.piracy.txt
+    threat-intelligence-feeds:
+      # https://github.com/hagezi/dns-blocklists#tif
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif.txt
+
 bootstrapDns:
   # Cloudflare DNS
   - tcp-tls:1.1.1.1
