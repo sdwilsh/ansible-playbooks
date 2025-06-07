@@ -39,10 +39,6 @@
             // renovate: datasource=github-releases depName=casey/just
             "version": "1.40.0"
         },
-        "ghcr.io/marcozac/devcontainer-features/shellcheck:1": {
-            // renovate: datasource=github-releases depName=koalaman/shellcheck
-            "version": "v0.10.0"
-        },
         "ghcr.io/rio/features/kustomize:1": {
             // renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
             "version": "v5.6.0"
