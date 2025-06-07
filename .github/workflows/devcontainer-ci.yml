@@ -24,6 +24,7 @@ jobs:
         uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 # v0.3.1900000417
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
+          cacheTo: ghcr.io/${{ github.repository }}-devcontainer
           env: |
             CI=1
           imageName: ghcr.io/${{ github.repository }}-devcontainer
@@ -39,7 +40,6 @@ jobs:
         uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 # v0.3.1900000417
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
-          cacheTo: ghcr.io/${{ github.repository }}-devcontainer
           env: |
             ANSIBLE_CONFIG=ansible-ci.cfg
             CI=1
