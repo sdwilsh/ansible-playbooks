@@ -35,10 +35,6 @@
             // renovate: datasource=github-releases depName=renovatebot/renovate
             "version": "40.2.0"
         },
-        "ghcr.io/dhoeric/features/hadolint:1": {
-            // renovate: datasource=github-releases depName=hadolint/hadolint
-            "version": "2.12.0"
-        },
         "ghcr.io/guiyomh/features/just:0": {
             // renovate: datasource=github-releases depName=casey/just
             "version": "1.40.0"
