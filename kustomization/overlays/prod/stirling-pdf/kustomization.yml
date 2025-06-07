@@ -4,7 +4,7 @@ kind: Kustomization
 
 helmCharts:
   - name: stirling-pdf-chart
-    version: 1.9.1
+    version: 1.10.0
     repo: https://docs.stirlingpdf.com/Stirling-PDF-chart/
     releaseName: stirling-pdf
     valuesFile: values.yml
