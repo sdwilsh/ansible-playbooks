@@ -4,7 +4,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/(^|/|\\.)Dockerfile$/"
+        "/(^|/|\\.)(Container|Docker)file$/"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)(\\s+versioning=(?<versioning>.*?))?\\s+ARG\\s+.+_VERSION=(?<currentValue>.*?)\\s"

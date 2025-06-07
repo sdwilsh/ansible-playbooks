@@ -3,7 +3,7 @@
     "build": {
         "cacheFrom": "ghcr.io/sdwilsh/ansible-playbooks-devcontainer:latest",
         "context": "..",
-        "dockerfile": "Dockerfile"
+        "dockerfile": "Containerfile"
     },
     "customizations": {
         "vscode": {
