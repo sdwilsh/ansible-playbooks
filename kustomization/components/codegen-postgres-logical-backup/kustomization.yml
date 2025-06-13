@@ -9,7 +9,6 @@ resources:
   - miniobucket/atuin.yml
   - miniobucket/homeassistant.yml
   - miniobucket/immich.yml
-  - miniobucket/lg.yml
   - miniobucket/monitoring.yml
   - miniobucket/paperless.yml
   - miniobucket/traefik.yml
@@ -17,7 +16,6 @@ resources:
   - miniopolicy/atuin.yml
   - miniopolicy/homeassistant.yml
   - miniopolicy/immich.yml
-  - miniopolicy/lg.yml
   - miniopolicy/monitoring.yml
   - miniopolicy/paperless.yml
   - miniopolicy/traefik.yml
@@ -25,7 +23,6 @@ resources:
   - miniopolicybinding/atuin.yml
   - miniopolicybinding/homeassistant.yml
   - miniopolicybinding/immich.yml
-  - miniopolicybinding/lg.yml
   - miniopolicybinding/monitoring.yml
   - miniopolicybinding/paperless.yml
   - miniopolicybinding/traefik.yml
@@ -33,7 +30,6 @@ resources:
   - miniouser/atuin.yml
   - miniouser/homeassistant.yml
   - miniouser/immich.yml
-  - miniouser/lg.yml
   - miniouser/monitoring.yml
   - miniouser/paperless.yml
   - miniouser/traefik.yml

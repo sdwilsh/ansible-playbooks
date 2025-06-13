@@ -73,7 +73,6 @@ customDNS:
     valheim-forerunner.tswn.us: 10.11.1.67
     valheim-relic.tswn.us: 10.11.1.68
     factorio-relic.tswn.us: 10.11.1.69
-    lg-git-ssh.tswn.us: 10.11.1.70
     nut-ups02.hogs.tswn.us: 10.11.1.71
     loki-distributor.hogs.tswn.us: 10.11.1.72
 
@@ -142,8 +141,6 @@ customDNS:
     imap.hogs IN CNAME traefik.hogs
     immich IN CNAME traefik.hogs
     jellyfin IN CNAME traefik.hogs
-    lg-git IN CNAME traefik.hogs
-    lg-penpot IN CNAME traefik.hogs
     loki.hogs IN CNAME traefik.hogs
     longhorn.hogs IN CNAME traefik.hogs
     manyfold.hogs IN CNAME traefik.hogs

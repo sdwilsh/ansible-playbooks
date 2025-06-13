@@ -10,7 +10,6 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/lg/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-down.yml

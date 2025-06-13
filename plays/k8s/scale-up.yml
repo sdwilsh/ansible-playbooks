@@ -11,7 +11,6 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-up.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/lg/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-up.yml

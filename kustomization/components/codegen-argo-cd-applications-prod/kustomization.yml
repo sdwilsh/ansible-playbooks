@@ -18,7 +18,6 @@ resources:
   - application/homeassistant.yml
   - application/immich.yml
   - application/kube-vip.yml
-  - application/lg.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
   - application/minio-operator.yml

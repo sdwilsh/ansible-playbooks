@@ -76,18 +76,6 @@ access_control:
       networks:
         - home
       policy: one_factor
-    - domain: lg-git.tswn.us
-      policy: two_factor
-      subject:
-        - group:lg-git
-    - domain: lg-git.tswn.us
-      policy: deny
-    - domain: lg-penpot.tswn.us
-      policy: two_factor
-      subject:
-        - group:lg-penpot
-    - domain: lg-penpot.tswn.us
-      policy: deny
     - domain: "*.tswn.us"
       policy: two_factor
 
@@ -108,32 +96,6 @@ identity_providers:
           - openid
           - profile
         userinfo_signed_response_alg: none
-      - authorization_policy: two_factor
-        client_id: eAsie4x9acvgRmD.KnZHnHm0puL0J39Bsv8NBOSEyZcIQ-NYwH-YB1N.eiZJuCGl.10RCf~5
-        client_name: LG Gitea
-        client_secret: $pbkdf2-sha512$310000$0jkP5WESMf3CEhy/YWHW2A$BgqIFihKFIzWxsaoP.XSIYtIgsVHPy49EiYni3qQqczDYTJqd1arcfStrAjE/vQ9mSgZFaEeS.g2iJmp2KSAeg
-        public: false
-        redirect_uris:
-          - https://lg-git.tswn.us/user/oauth2/authelia/callback
-        scopes:
-          - openid
-          - email
-          - profile
-        userinfo_signed_response_alg: none
-        token_endpoint_auth_method: client_secret_basic
-      - authorization_policy: two_factor
-        client_id: jluhY5vutnbXx-caYcIxVM1-KdeVkPdelVuViZdI~iiiA5DshyX_h0KQY2DVON7W1ZneUI7D
-        client_name: LG Penpot
-        client_secret: $pbkdf2-sha512$310000$sf.jhb1T5QMDNIuC0.mMDA$vhEGNaqGh29USkzkRPShkIjo3U./9IoQuoRt/eiE0j.VdIa/zb4GzbZui.l6ypaT9LfwsGsM/peEQr5.Hfh6aw
-        public: false
-        redirect_uris:
-          - https://lg-penpot.tswn.us/api/auth/oauth/oidc/callback
-        scopes:
-          - openid
-          - email
-          - profile
-        userinfo_signed_response_alg: none
-        token_endpoint_auth_method: client_secret_post
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
