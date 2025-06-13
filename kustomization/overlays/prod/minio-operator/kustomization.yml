@@ -8,7 +8,7 @@ helmCharts:
     repo: https://benfiola.github.io/minio-operator-ext/charts
     releaseName: minio-operator-ext-crds
   - name: operator
-    version: 3.0.1
+    version: 3.1.0
     repo: https://benfiola.github.io/minio-operator-ext/charts
     releaseName: minio-operator-ext-operator
 namespace: minio-operator
