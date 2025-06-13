@@ -11,7 +11,7 @@ configMapGenerator:
 namespace: ara
 images:
   - name: postgres
-    newTag: 16@sha256:4d7a802fa570946af4f28b81d0012938412f5bb8625d5b64f2c9d2ae80964c5f
+    newTag: 16@sha256:2e7c735993bf456ee1977c40dd82e66875e25f7ee9dfe1e5118fb24887104d85
 patches:
   - path: patches/add_address_in_job_env.yml
     target:
