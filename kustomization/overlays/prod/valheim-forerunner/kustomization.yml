@@ -18,5 +18,9 @@ patches:
     target:
       kind: StatefulSet
       name: valheim-statefulset
+  - path: patches/turn_off.yml
+    target:
+      kind: StatefulSet
+      name: valheim-statefulset
 resources:
   - namespace.yml
