@@ -71,9 +71,14 @@ objects:
     - person
 record:
   enabled: true
-  events:
+  alerts:
+    retain: {}
+    pre_capture: 10
+  detections:
+    retain: {}
     pre_capture: 10
 snapshots:
   enabled: true
 ui:
   time_format: 24hour
+version: 0.15-1
