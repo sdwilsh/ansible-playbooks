@@ -14,7 +14,7 @@ images:
   - name: postgres
     newTag: 16@sha256:2e7c735993bf456ee1977c40dd82e66875e25f7ee9dfe1e5118fb24887104d85
   - name: quay.io/opstree/redis
-    newTag: v7.2.9@sha256:db345621d3421798ce2757bb1d4a46dbe788e671888593bb5760c000c613b28c
+    newTag: v7.4.4@sha256:129f4ad838ab80ef63557e05193fcfb41a0370e5c03a7525a017dc5fb6f1e742
 namespace: paperless
 patches:
   - path: patches/increase_paperless_data_size.yml
