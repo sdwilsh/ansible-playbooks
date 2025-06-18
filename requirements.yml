@@ -3,7 +3,7 @@ roles:
   - name: mrlesmithjr.netplan
     version: v0.4.2
   - name: nickjj.docker
-    version: v2.5.0
+    version: v2.5.1
 collections:
   - name: ansible.posix
     version: 2.0.0
