@@ -6,6 +6,12 @@ metadata:
 spec:
   template:
     spec:
+      containers:
+        - name: traefik
+          volumeMounts:
+            - name: crowdsec-pages
+              mountPath: /pages
+              readOnly: true
       volumes:
         - configMap:
             name: crowdsec-pages-configmap
