@@ -37,7 +37,7 @@
         },
         "ghcr.io/guiyomh/features/just:0": {
             // renovate: datasource=github-releases depName=casey/just
-            "version": "1.40.0"
+            "version": "1.41.0"
         },
         "ghcr.io/rio/features/kustomize:1": {
             // renovate: datasource=docker depName=registry.k8s.io/kustomize/kustomize
