@@ -16,7 +16,7 @@ db_config:
   password: ${DB_PASSWORD}
   port: 5432
   sslmode: require
-  type: postgresql
+  type: pgx
   user: ${DB_USERNAME}
 
 prometheus:
