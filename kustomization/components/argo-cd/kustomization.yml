@@ -14,7 +14,6 @@ patches:
   - path: patches/set_priorityClassName.yml
     target:
       kind: StatefulSet
-  - path: patches/set_tracking_by_annotation.yml
 resources:
   # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.6/manifests/install.yaml
