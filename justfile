@@ -8,6 +8,11 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# List decisions from crowdsec.  Useful when debugging access problems.
+[group('crowdsec')]
+crowdsec-list-decisions:
+  kubectl exec -n crowdsec -it deployments/crowdsec-deployment -c crowdsec -- /usr/bin/env cscli decisions list
+
 # Generates/updates resources for Argo CD applications
 [group('codegen')]
 generate-argo-cd-applications:
