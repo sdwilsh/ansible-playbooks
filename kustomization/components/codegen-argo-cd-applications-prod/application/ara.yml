@@ -6,10 +6,15 @@ kind: Application
 metadata:
   name: ara
 spec:
-  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: ara
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+  project: default
   source:
     path: kustomization/overlays/prod/ara
     repoURL: https://github.com/sdwilsh/ansible-playbooks

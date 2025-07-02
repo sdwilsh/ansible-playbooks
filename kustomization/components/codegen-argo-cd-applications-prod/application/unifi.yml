@@ -6,10 +6,15 @@ kind: Application
 metadata:
   name: unifi
 spec:
-  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: unifi
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+  project: default
   source:
     path: kustomization/overlays/prod/unifi
     repoURL: https://github.com/sdwilsh/ansible-playbooks

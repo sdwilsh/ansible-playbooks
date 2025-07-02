@@ -6,10 +6,15 @@ kind: Application
 metadata:
   name: 3d-printing
 spec:
-  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: 3d-printing
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+  project: default
   source:
     path: kustomization/overlays/prod/3d-printing
     repoURL: https://github.com/sdwilsh/ansible-playbooks

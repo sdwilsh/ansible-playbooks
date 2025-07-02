@@ -6,10 +6,15 @@ kind: Application
 metadata:
   name: paperless
 spec:
-  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: paperless
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+  project: default
   source:
     path: kustomization/overlays/prod/paperless
     repoURL: https://github.com/sdwilsh/ansible-playbooks

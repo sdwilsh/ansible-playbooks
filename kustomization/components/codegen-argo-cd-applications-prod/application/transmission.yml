@@ -6,10 +6,15 @@ kind: Application
 metadata:
   name: transmission
 spec:
-  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: transmission
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+  project: default
   source:
     path: kustomization/overlays/prod/transmission
     repoURL: https://github.com/sdwilsh/ansible-playbooks

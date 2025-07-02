@@ -6,10 +6,15 @@ kind: Application
 metadata:
   name: generic-device-plugin
 spec:
-  project: default
   destination:
     server: https://kubernetes.default.svc
     namespace: generic-device-plugin
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
+  project: default
   source:
     path: kustomization/overlays/prod/generic-device-plugin
     repoURL: https://github.com/sdwilsh/ansible-playbooks
