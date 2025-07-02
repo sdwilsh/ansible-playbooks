@@ -1,0 +1,12 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioBucket
+metadata:
+  name: namespace-crowdsec-miniobucket
+spec:
+  deletionPolicy: IfEmpty
+  name: namespace-crowdsec
+  tenantRef:
+    name: postgres-backup-tenant

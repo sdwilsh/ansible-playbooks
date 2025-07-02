@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-crowdsec-miniopolicy
+spec:
+  name: namespace-crowdsec
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-crowdsec
+        - arn:aws:s3:::namespace-crowdsec/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+

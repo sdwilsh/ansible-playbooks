@@ -603,10 +603,10 @@ secrets:
           32613765653063393230356230653564346636346165376633656137343961613730633831356361
           3838313230353766666463303965326437663134353262653666
       LOGICAL_BACKUP_S3_BUCKET: namespace-atuin
-  - name: crowdsec-logical-backup-environment-secret
+  - name: postgres-logical-backup-environment-secret
     namespace: crowdsec
     stringData:
-      AWS_ACESS_KEY_ID: namespace-crowdsec
+      AWS_ACCESS_KEY_ID: namespace-crowdsec
       AWS_SECRET_ACCESS_KEY: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           63646639316166363264396430653430373031373266333334646536313764613866306561393662
