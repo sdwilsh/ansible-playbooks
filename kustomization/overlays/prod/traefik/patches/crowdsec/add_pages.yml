@@ -1,0 +1,12 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      volumes:
+        - configMap:
+            name: crowdsec-pages-configmap
+          name: crowdsec-pages

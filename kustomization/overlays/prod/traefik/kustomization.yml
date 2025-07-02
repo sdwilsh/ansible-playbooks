@@ -8,29 +8,14 @@ configMapGenerator:
   - name: authelia-configmap
     files:
       - configmap/authelia/config.yml
-  - name: crowdsec-configmap
-    files:
-      - configmap/crowdsec/config.yaml.local
-  - name: crowdsec-acquisitions-configmap
-    files:
-      - configmap/crowdsec/acquis.d/appsec.yaml
-      - configmap/crowdsec/acquis.d/authelia.yaml
-      - configmap/crowdsec/acquis.d/immich.yaml
-      - configmap/crowdsec/acquis.d/navidrome.yaml
-      - configmap/crowdsec/acquis.d/traefik.yaml
   - name: crowdsec-pages-configmap
     files:
       - configmap/crowdsec/pages/ban.html
-  - name: crowdsec-scripts-configmap
-    files:
-      - configmap/crowdsec/scripts/entrypoint.sh
   - name: traefik-config
     files:
       - configmap/traefik/dynamic.yml
       - configmap/traefik/static.yml
 images:
-  - name: ghcr.io/crowdsecurity/crowdsec
-    newTag: v1.6.9@sha256:84f0b521aa0f0d9e2ce45c74c86aeb11c86769bd9cd852bd1d989b451e3fb0fd 
   - name: postgres
     newTag: 16@sha256:2e7c735993bf456ee1977c40dd82e66875e25f7ee9dfe1e5118fb24887104d85
   - name: quay.io/opstree/redis-sentinel
@@ -45,7 +30,7 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
-  - path: patches/crowdsec/add_container.yml
+  - path: patches/crowdsec/add_pages.yml
     target:
       kind: Deployment
       name: traefik-deployment
@@ -64,7 +49,6 @@ resources:
   - middleware.yml
   - podmonitor.yml
   - postgresql/authelia.yml
-  - postgresql/crowdsec.yml
   - redisreplication.yml
   - redissentinel.yml
   - service/authelia.yml

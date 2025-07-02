@@ -1,0 +1,29 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: crowdsec-configmap
+    files:
+      - configmap/config.yaml.local
+  - name: crowdsec-acquisitions-configmap
+    files:
+      - configmap/acquis.d/appsec.yaml
+      - configmap/acquis.d/authelia.yaml
+      - configmap/acquis.d/immich.yaml
+      - configmap/acquis.d/navidrome.yaml
+      - configmap/acquis.d/traefik.yaml
+  - name: crowdsec-scripts-configmap
+    files:
+      - configmap/scripts/entrypoint.sh
+images:
+  - name: ghcr.io/crowdsecurity/crowdsec
+    newTag: v1.6.9@sha256:84f0b521aa0f0d9e2ce45c74c86aeb11c86769bd9cd852bd1d989b451e3fb0fd 
+  - name: postgres
+    newTag: 17@sha256:6cf6142afacfa89fb28b894d6391c7dcbf6523c33178bdc33e782b3b533a9342
+namespace: crowdsec
+resources:
+  - namespace.yml
+  - deployment.yml
+  - postgresql.yml
+  - service.yml

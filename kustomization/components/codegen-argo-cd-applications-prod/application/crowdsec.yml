@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/argo-cd-applications.yml 
+# @generated
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crowdsec
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: crowdsec
+  source:
+    path: kustomization/overlays/prod/crowdsec
+    repoURL: https://github.com/sdwilsh/ansible-playbooks
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - ServerSideApply=true

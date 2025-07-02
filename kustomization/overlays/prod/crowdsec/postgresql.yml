@@ -2,13 +2,13 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: crowdsec-16-pg
+  name: crowdsec-17-pg
 spec:
   enableLogicalBackup: true
   numberOfInstances: 2
   podPriorityClassName: critical-application-infra
   postgresql:
-    version: "16"
+    version: "17"
   preparedDatabases:
     crowdsec:
       defaultUsers: true

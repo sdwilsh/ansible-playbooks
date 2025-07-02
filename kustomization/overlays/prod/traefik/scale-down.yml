@@ -63,19 +63,6 @@
           spec:
             numberOfInstances: 0
         wait: true
-    - name: Scale down crowdsec postgresql
-      kubernetes.core.k8s:
-        context: "{{ cluster }}"
-        state: present
-        resource_definition:
-          apiVersion: acid.zalan.do/v1
-          kind: postgresql
-          metadata:
-            name: "{{ (lookup('file', 'postgresql/crowdsec.yml') | from_yaml).metadata.name }}"
-            namespace: "{{ k8s_namespace }}"
-          spec:
-            numberOfInstances: 0
-        wait: true
   vars:
     cluster: default
     k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

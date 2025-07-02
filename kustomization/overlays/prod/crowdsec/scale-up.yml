@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Scale up crowdsec postgresql
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: acid.zalan.do/v1
+          kind: postgresql
+          metadata:
+            name: "{{ (lookup('file', 'postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            numberOfInstances: "{{ (lookup('file', 'postgresql.yml') | from_yaml).spec.numberOfInstances | int}}"
+        wait: true
+    - name: Wait for crowdsec postgresql statefulset
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            name: "{{ (lookup('file', 'postgresql.yml') | from_yaml).metadata.name }}"
+            namespace: "{{ k8s_namespace }}"
+        wait: true
+    - name: Scale up crowdsec deployment 
+      kubernetes.core.k8s:
+        context: "{{ cluster }}"
+        state: present
+        resource_definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: crowdsec-deployment
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 1
+        wait: true
+  vars:
+    cluster: default
+    k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"

@@ -11,6 +11,7 @@ resources:
   - application/atuin.yml
   - application/aventertainment.yml
   - application/cert-manager.yml
+  - application/crowdsec.yml
   - application/dns.yml
   - application/external-services.yml
   - application/factorio-relic.yml
