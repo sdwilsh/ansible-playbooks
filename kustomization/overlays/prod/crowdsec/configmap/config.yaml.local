@@ -1,5 +1,7 @@
 ---
 api:
+  client:
+    unregister_on_exit: true
   server:
     listen_uri: ${POD_IP}:3000
     online_client:
