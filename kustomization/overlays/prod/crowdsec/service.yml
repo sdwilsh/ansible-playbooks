@@ -7,7 +7,7 @@ spec:
   ports:
     - protocol: TCP
       name: api
-      port: 8081
+      port: 3000
       targetPort: api
     - protocol: TCP
       name: appsec
