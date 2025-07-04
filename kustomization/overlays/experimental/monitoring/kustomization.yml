@@ -3,7 +3,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../components/minio
   - ../../../components/prometheus
 configMapGenerator:
   - name: alloy-config
@@ -53,22 +52,6 @@ patches:
     target:
       kind: Service
       name: loki-distributor
-  - path: patches/minio/configure_storage.yml
-    target:
-      kind: StatefulSet
-      name: minio-statefulset
-  - path: patches/minio/set_pods_instance_label.yml
-    target:
-      kind: StatefulSet
-      name: minio-statefulset
-  - path: patches/minio/set_root_credentials.yml
-    target:
-      kind: StatefulSet
-      name: minio-statefulset
-  - path: patches/minio/set_service_instance_label.yml
-    target:
-      kind: Service
-      name: minio-svc
   - path: patches/prometheus/set_externalUrl.yml
     target:
       kind: Prometheus
@@ -80,4 +63,12 @@ resources:
   - namespace.yml
   - alertmanagerconfig.yml
   - ingress.yml
+  - miniobucket/admin.yml
+  - miniobucket/chunks.yml
+  - miniobucket/loki.yml
+  - miniobucket/ruler.yml
+  - miniopolicy/loki-helm.yml
+  - miniopolicybinding/monitoring-loki-user-loki-helm.yml
+  - miniouser/monitoring-loki.yml
   - postgresql.yml
+  - tenant.yml

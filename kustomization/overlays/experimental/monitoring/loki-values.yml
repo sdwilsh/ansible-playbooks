@@ -49,10 +49,9 @@ loki:
       ruler: ruler
       admin: admin
     s3:
-      s3: s3://${MINIO_ACCESS_KEY}:${MINIO_SECRET_ACCESS_KEY}@minio-svc:9000/chunks
+      s3: s3://monitoring-loki:${MINIO_SECRET_ACCESS_KEY}@minio.monitoring.svc.cluster.local/chunks
       s3ForcePathStyle: true
       disable_dualstack: true
-      endpoint: minio-svc:9000
       insecure: true
     type: s3
   tracing:

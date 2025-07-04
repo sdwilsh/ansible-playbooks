@@ -34,9 +34,9 @@ spec:
         paths:
           - backend:
               service:
-                name: minio-svc
+                name: loki-tenant-console
                 port:
-                  name: web
+                  name: http-console
             path: /
             pathType: Prefix
     - host: prometheus.hogs.tswn.us

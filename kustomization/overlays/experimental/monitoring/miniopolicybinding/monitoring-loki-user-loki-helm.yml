@@ -1,0 +1,13 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicyBinding
+metadata:
+  name: monitoring-loki-user-loki-helm-miniopolicybinding
+spec:
+  policy: loki-helm
+  tenantRef:
+    name: loki-tenant
+  user:
+    builtin: monitoring-loki

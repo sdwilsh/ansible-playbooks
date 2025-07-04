@@ -1,0 +1,44 @@
+---
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: loki-tenant
+spec:
+  configuration:
+    name: minio-storage-configuration-secret
+  pools:
+    - containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      name: pool
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      servers: 1
+      volumeClaimTemplate:
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          labels:
+            # Use this PVC to configure attached PVs.
+            recurring-job.longhorn.io/source: enabled
+            # Opt into the no-backup group since it can easily be recreated.
+            recurring-job-group.longhorn.io/no-backup: enabled
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 250Gi
+          storageClassName: longhorn-encrypted
+      volumesPerServer: 1
+  priorityClassName: application-infra
+  requestAutoCert: false
+  

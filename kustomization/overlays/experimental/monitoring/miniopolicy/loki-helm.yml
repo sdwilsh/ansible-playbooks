@@ -1,0 +1,27 @@
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: loki-helm-miniopolicy
+spec:
+  name: loki-helm
+  statement:
+    - action:
+        - s3:DeleteObject
+        - s3:GetObject
+        - s3:ListBucket
+        - s3:PutObject
+      effect: Allow
+      resource:
+        - arn:aws:s3:::admin
+        - arn:aws:s3:::admin/*
+        - arn:aws:s3:::chunks
+        - arn:aws:s3:::chunks/*
+        - arn:aws:s3:::loki
+        - arn:aws:s3:::loki/*
+        - arn:aws:s3:::ruler
+        - arn:aws:s3:::ruler/*
+  tenantRef:
+    name: loki-tenant
+  version: "2012-10-17"
+

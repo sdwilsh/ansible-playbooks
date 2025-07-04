@@ -1,0 +1,10 @@
+---
+apiVersion: bfiola.dev/v1
+kind: MinioBucket
+metadata:
+  name: ruler-miniobucket
+spec:
+  deletionPolicy: IfEmpty
+  name: ruler
+  tenantRef:
+    name: loki-tenant
