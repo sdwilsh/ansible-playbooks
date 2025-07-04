@@ -37,6 +37,7 @@ spec:
           image: ghcr.io/atuinsh/atuin
           livenessProbe:
             httpGet:
+              path: /healthz
               port: web
             initialDelaySeconds: 5
             periodSeconds: 15
