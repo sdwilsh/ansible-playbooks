@@ -10,3 +10,7 @@ patches:
     target:
       kind: StatefulSet
       name: paperless
+  - path: patches/pin_pvc_paperless-media.yml
+    target:
+      kind: PersistentVolumeClaim
+      name: paperless-media
