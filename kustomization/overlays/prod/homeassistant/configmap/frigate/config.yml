@@ -17,7 +17,7 @@ cameras:
           roles:
             - record
         - path:
-            rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
+            rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.12:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
     motion:
@@ -37,7 +37,7 @@ cameras:
           roles:
             - record
         - path:
-            rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=2
+            rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.14:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
     motion:
@@ -57,9 +57,9 @@ go2rtc:
     password: '{FRIGATE_RTSP_PASSWORD}'
   streams:
     front-north-east:
-      rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-north-east.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+      rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.14:554/cam/realmonitor?channel=1&subtype=0
     front-porch:
-      rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@front-porch.camera.hogs.tswn.us:554/cam/realmonitor?channel=1&subtype=0
+      rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.12:554/cam/realmonitor?channel=1&subtype=0
 mqtt:
   host: mosquitto-svc.homeassistant.svc.cluster.local
   user: frigate
