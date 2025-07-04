@@ -22,6 +22,8 @@
       ansible.builtin.template:
         dest: "{{ workdir.path }}/config.yml"
         src: templates/config.yml.j2
+      vars:
+        controlplane_hosts: "{{ groups['kairos_controlplane'] }}"
     - name: Host configuration on port 9000
       ansible.builtin.command:
         chdir: "{{ workdir.path }}"

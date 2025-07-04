@@ -90,6 +90,14 @@ stages:
         NTP: {{ common__ntp_pool }}
         FallbackNTP: ""
     - files:
+        # Safety first!  Hard-code control plane nodes in /etc/hosts...
+        - path: /etc/hosts
+          permissions: 0644
+          content: |
+            127.0.0.1 localhost {{ inventory_hostname }}
+{% for host in controlplane_hosts %}
+            {{ hostvars[host].ansible_host }} {{ host }}
+{% endfor %}
 {% if "common__interfaces" in hostvars[host] and "bonds" in hostvars[host].common__interfaces %}
         # This host has multiple NICs with a bond for failover.
 {% for bond in hostvars[host].common__interfaces.bonds %}

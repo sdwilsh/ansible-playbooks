@@ -11,6 +11,7 @@
       become: true
       register: config
       vars:
+        controlplane_hosts: "{{ groups['kairos_controlplane'] }}"
         host: "{{ inventory_hostname }}"
     # If the config changes, including files that should no longer exist, we want to make sure the new config is what applies.
     - name: Remove old network files
