@@ -696,7 +696,7 @@ secrets:
     namespace: monitoring
     stringData:
       # Path in lookup is relative to play that runs this.
-      config.env: "{{ lookup('file', '../../kustomization/overlays/experimental/monitoring/ansible-vault/minio/config.env') }}"
+      config.env: "{{ lookup('file', '../../kustomization/overlays/prod/monitoring/ansible-vault/minio/config.env') }}"
   - name: minio-storage-configuration-secret
     namespace: postgres-operator
     stringData:
