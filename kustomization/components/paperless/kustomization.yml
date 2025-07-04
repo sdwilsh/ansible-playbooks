@@ -5,8 +5,16 @@ kind: Component
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/paperless?ref=kustomize-paperless@v1.0.2
   - https://github.com/marinatedconcrete/config/kustomization/components/samba-upload
+configMapGenerator:
+  - name: paperless-backup-scripts-configmap
+    files:
+      - configmap/scripts/backup.sh
 patches:
   - path: patches/add_tika.yml
+    target:
+      kind: StatefulSet
+      name: paperless
+  - path: patches/mount_memory_tmp.yml
     target:
       kind: StatefulSet
       name: paperless
@@ -14,3 +22,10 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: paperless-media
+resources:
+  - clusterrole.yaml
+  - clusterrolebinding.yaml
+  - cronjob.yml
+  - persistentvolume.yml
+  - pvc.yml
+  - serviceaccount.yml

@@ -1,0 +1,51 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: paperless-backup
+spec:
+  schedule: "@weekly"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - env:
+                - name: BACKUP_DESTINATION
+                  value: /backup/
+              name: kubectl
+              image: alpine/k8s:1.33.1
+              args:
+                - /scripts/backup.sh
+              command:
+                - bash
+                - -c
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              volumeMounts:
+                - mountPath: /backup
+                  name: paperless-backup-destination
+                - mountPath: /scripts
+                  name: paperless-backup-scripts
+          priorityClassName: critical-application-infra
+          restartPolicy: OnFailure
+          securityContext:
+            fsGroup: 65534
+            runAsGroup: 65534
+            runAsUser: 65534
+          serviceAccountName: paperless-backup-serviceaccount
+          volumes:
+            - name: paperless-backup-scripts
+              configMap:
+                defaultMode: 0777
+                name: paperless-backup-scripts-configmap
+            - name: paperless-backup-destination
+              persistentVolumeClaim:
+                claimName: paperless-backup-pvc

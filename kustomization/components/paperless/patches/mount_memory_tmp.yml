@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: paperless
+          volumeMounts:
+            - mountPath: /tmp
+              name: paperless-tmp
+      volumes:
+        - name: paperless-tmp
+          emptyDir:
+            medium: Memory

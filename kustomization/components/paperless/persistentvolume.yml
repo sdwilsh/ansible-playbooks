@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: paperless-backup-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 20Gi
+  nfs:
+    path: /mnt/rust0/nfs/paperless-backup
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain
