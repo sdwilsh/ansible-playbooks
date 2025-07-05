@@ -25,6 +25,7 @@ loki:
     seccompProfile:
       type: RuntimeDefault
   ingester:
+    autoforget_unhealthy: true
     chunk_encoding: snappy
   limits_config:
     allow_structured_metadata: true
