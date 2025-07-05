@@ -69,6 +69,7 @@ customDNS:
     paperless-samba.hogs.tswn.us: 10.11.1.32
     traefik.hogs.tswn.us: 10.11.1.64
     unifi-inform.tswn.us: 10.11.1.65
+    unifi.shawnwilsher.net: 10.11.1.65 # Controllers point devices to this still...
     dns.hogs.tswn.us: 10.11.1.66
     valheim-forerunner.tswn.us: 10.11.1.67
     valheim-relic.tswn.us: 10.11.1.68
