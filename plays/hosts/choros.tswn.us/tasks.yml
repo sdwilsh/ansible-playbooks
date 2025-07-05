@@ -34,6 +34,12 @@
       ansible.builtin.hostname:
         name: "{{ inventory_hostname }}"
     
+    # Disable bootc auto-updates, as it breaks the update script.
+    - name: Disable bootc auto-update via rpm-ostreed-automatic.timer
+      ansible.builtin.systemd_service:
+        name: rpm-ostreed-automatic.timer
+        enabled: false
+    
     # HOGS Pod & Network Setup
     - name: Setup HOGS services container network
       ansible.builtin.copy:
