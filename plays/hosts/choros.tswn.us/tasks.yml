@@ -7,6 +7,10 @@
     - name: systemctl daemon-reload
       ansible.builtin.systemd_service:
         daemon_reload: true
+    - name: systemd-journald.service
+      ansible.builtin.systemd_service:
+        name: systemd-journald.service
+        state: restarted
     - name: systemd-modules-load.service
       ansible.builtin.systemd_service:
         name: systemd-modules-load.service
@@ -96,6 +100,7 @@
         group: root
       loop:
         - /etc/containers/systemd/alloy.container.d
+        - /etc/systemd/journald.conf.d
       tags:
         - alloy
         - hogs-pod
@@ -132,6 +137,23 @@
       tags:
         - alloy
         - hogs-pod
+    - name: Install journald.conf for Alloy
+      ansible.builtin.copy:
+        content: |
+          [Journal]
+          # Alloy pod will read from journalctl.
+          ForwardToSyslog=no
+
+          # Alloy should be ingesting this, but keep a bit extra just in case!
+          MaxRetentionSec=7day
+        dest: /etc/systemd/journald.conf.d/alloy.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemd-journald.service
+      tags:
+        - alloy
 
     # Wireguard Forwarding
     - name: Setup sysctl's for router functionality
