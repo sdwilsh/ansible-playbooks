@@ -218,9 +218,9 @@
           MTU = 1280
           PrivateKey = {{ wireguard__privkey }}
 
-          # port forwarding
-          PreUp = iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 10.11.1.64
-          PreUp = iptables -t nat -A POSTROUTING -p tcp --dport 443 -j MASQUERADE
+          # Traefik Port Forwarding
+          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 443 --jump DNAT --to-destination 10.11.1.64:8443
+          PreUp = iptables --table nat --append POSTROUTING --protocol tcp --destination 10.11.1.64 --dport 8443 --jump MASQUERADE
 
           # Unifi Inform Forwarding
           PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 8080 --jump DNAT --to-destination 10.11.1.65:8080
