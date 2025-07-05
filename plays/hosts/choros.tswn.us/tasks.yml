@@ -93,6 +93,9 @@
           Network=hogs-services.network
           # Traefik Proxy
           PublishPort={{ ansible_default_ipv4.address }}:443:443/tcp
+          # Unifi INFORM
+          PublishPort={{ ansible_default_ipv4.address }}:8080:8080/tcp
+          PublishPort={{ ansible_default_ipv4.address }}:3478:3478/udp
           # Wireguard
           PublishPort={{ ansible_default_ipv4.address }}:51821:51821/udp
 
@@ -218,6 +221,12 @@
           # port forwarding
           PreUp = iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 10.11.1.64
           PreUp = iptables -t nat -A POSTROUTING -p tcp --dport 443 -j MASQUERADE
+
+          # Unifi Inform Forwarding
+          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 8080 --jump DNAT --to-destination 10.11.1.65:8080
+          PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 3478 --jump DNAT --to-destination 10.11.1.65:3478
+          PreUp = iptables --table nat --append POSTROUTING --protocol tcp --destination 10.11.1.65 --dport 8080 --jump MASQUERADE
+          PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.65 --dport 3478 --jump MASQUERADE
 
           [Peer]
           PersistentKeepalive = 25
