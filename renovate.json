@@ -43,15 +43,6 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/^group_vars/vyos\\.yml$/"
-      ],
-      "matchStrings": [
-        "#\\s+renovate:\\s+datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)\\s+[a-z]+_version:\\s+(?<currentValue>.*?)\\n"
-      ]
-    },
-    {
-      "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
         "/^kustomization/.+/.+/.*values\\.yml$/"
@@ -291,17 +282,6 @@
       "groupName": "tdarr",
       "matchPackageNames": [
         "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
-      ]
-    },
-    {
-      "description": "Run vyos updates once a week",
-      "groupName": "vyos",
-      "matchPackageNames": [
-        "vyos/vyos-nightly-build"
-      ],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-rolling-(?<patch>\\d+)$",
-      "schedule": [
-        "after 4pm on friday"
       ]
     }
   ],

@@ -1,4 +1,0 @@
----
-- description: "Allow ICMP"
-  action: "accept"
-  protocol: "icmp"

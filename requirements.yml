@@ -15,5 +15,3 @@ collections:
     version: 10.3.1
   - name: kubernetes.core
     version: 6.1.0
-  - name: vyos.vyos
-    version: 5.0.0

@@ -33,10 +33,3 @@
         line: "          forwardedHeadersTrustedIPs: [{{ ips_v4 | join(',') }}]"
         path: "{{ root_dir }}/kustomization/overlays/prod/traefik/configmap/traefik/dynamic.yml"
         regexp: "forwardedHeadersTrustedIPs:"
-    - name: Update tartarus01 Firewall Network Group
-      ansible.builtin.replace:
-        after: "(?m)^    - name: CLOUDFLARE_IPS\n      members:$"
-        before: "^  port_group:$"
-        path: "{{ root_dir }}/host_vars/tartarus01.tswn.us.yml"
-        regexp: (?:(\s+)(?:- address:.*$))+
-        replace: "{% for ip_v4 in ips_v4 %}\\1- address: {{ ip_v4 }}\n{%- endfor %}"

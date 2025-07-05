@@ -29,7 +29,6 @@ customDNS:
   mapping:
     # External IPs
     choros.tswn.us: 23.94.59.52
-    tartarus01.tswn.us: 149.248.37.12
 
     # MAN VLAN
     harvest.hogs.tswn.us: 10.10.0.6
@@ -84,7 +83,6 @@ customDNS:
     front-north-east.camera.hogs.tswn.us: 10.67.0.14
 
     # HOME VLAN
-    maccabeus.hogs.tswn.us: 10.117.0.1
     lighterthansome.hogs.tswn.us: 10.117.0.9
     firstlightweaveslivingsong.hogs.tswn.us: 10.117.0.10
     palamok.hogs.tswn.us: 10.117.0.12
@@ -108,7 +106,6 @@ customDNS:
     fan-mainbed.hogs.tswn.us: 10.117.0.42
     fan-office.hogs.tswn.us: 10.117.0.43
     house.gem.hogs.tswn.us: 10.117.0.46
-    maccabeus01.hogs.tswn.us: 10.117.0.48
     pool.hogs.tswn.us: 10.117.0.50
     0.ntp.hogs.tswn.us: 10.117.0.50
     sonos-den.hogs.tswn.us: 10.117.0.60

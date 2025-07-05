@@ -1,6 +1,6 @@
 ---
 - name: Most hosts
-  hosts: "all:!kairos:!pikvm:!vyos"
+  hosts: "all:!kairos:!pikvm"
   become: true
   roles:
     - role: common-users

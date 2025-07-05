@@ -1,9 +1,0 @@
----
-# tasks file for vyos-dhcp-server
-- name: Setup DHCP
-  vyos.vyos.vyos_config:
-    lines: "{{ lookup('template', 'templates/dhcp-server_config.yml.j2') | from_yaml }}"
-    save: true
-  tags:
-    - services
-    - dhcp-server

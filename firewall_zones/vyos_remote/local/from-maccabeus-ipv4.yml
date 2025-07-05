@@ -1,7 +1,0 @@
----
-- description: "Allow ICMP"
-  action: "accept"
-  protocol: "icmp"
-- description: "Allow OSPF"
-  action: "accept"
-  protocol: "89"

@@ -1,4 +1,0 @@
----
-# defaults file for vyos-dhcp-server
-
-vyos_dhcp_server__networks: []

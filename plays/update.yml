@@ -1,6 +1,6 @@
 ---
 - name: Setup ansible_distribution-based Groups
-  hosts: all:!bootc:!kairos:!vyos:!pikvm
+  hosts: all:!bootc:!kairos:!pikvm
   gather_facts: true
   gather_subset:
     - "!all"
