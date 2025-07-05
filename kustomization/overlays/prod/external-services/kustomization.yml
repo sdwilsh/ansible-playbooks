@@ -5,5 +5,8 @@ kind: Kustomization
 namespace: external-svc
 resources:
   - namespace.yml
+  - endpointslice/nas.yml
+  - endpointslice/opensprinkler.yml
   - ingress.yml
-  - service.yml
+  - service/nas.yml
+  - service/opensprinkler.yml

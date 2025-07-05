@@ -1,0 +1,17 @@
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: nas-endpointslice
+  labels:
+    kubernetes.io/service-name: nas-svc
+addressType: IPv4
+ports:
+  - name: web
+    protocol: TCP
+    port: 80
+endpoints:
+  - addresses:
+      - 10.10.0.14 # chanttogreen.hogs.tswn.us
+    conditions:
+      ready: true

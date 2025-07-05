@@ -16,7 +16,7 @@ spec:
               service:
                 name: nas-svc
                 port:
-                  name: http
+                  name: web
             path: /
             pathType: Prefix
     - host: opensprinkler.hogs.tswn.us
@@ -26,6 +26,6 @@ spec:
               service:
                 name: opensprinkler-svc
                 port:
-                  name: http
+                  name: web
             path: /
             pathType: Prefix
