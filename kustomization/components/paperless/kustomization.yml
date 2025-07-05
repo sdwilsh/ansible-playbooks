@@ -3,12 +3,16 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 components:
-  - https://github.com/marinatedconcrete/config/kustomization/components/paperless?ref=kustomize-paperless@v1.0.3
-  - https://github.com/marinatedconcrete/config/kustomization/components/samba-upload
+  - https://github.com/marinatedconcrete/config/kustomization/components/paperless?ref=kustomize-paperless@v1.1.0
 configMapGenerator:
   - name: paperless-backup-scripts-configmap
     files:
       - configmap/scripts/backup.sh
+images:
+  - name: ghcr.io/paperless-ngx/tika
+    newTag: 2.9.1-minimal
+  - name: gotenberg/gotenberg
+    newTag: 8.21.1@sha256:91486863744f7420ca985ee6cef7c216910e40faffd378f3da7c0fad724d01ba
 patches:
   - path: patches/add_tika.yml
     target:

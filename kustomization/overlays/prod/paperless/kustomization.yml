@@ -5,12 +5,6 @@ kind: Kustomization
 components:
   - ../../../components/paperless
 images:
-  - name: ghcr.io/paperless-ngx/tika
-    newTag: 2.9.1-minimal
-  - name: ghcr.io/servercontainers/samba:smbd-only-latest
-    digest: sha256:58b59656f36b025da79ee7a71ee4aeffe8a472b23aaf86bf0e27394460180d82
-  - name: gotenberg/gotenberg
-    newTag: 8.21.1@sha256:91486863744f7420ca985ee6cef7c216910e40faffd378f3da7c0fad724d01ba
   - name: postgres
     newTag: 16@sha256:918e8e72b35b5370901965ce3da5a355c3537cb5e10c38e82c2b6f174b758334
   - name: quay.io/opstree/redis
