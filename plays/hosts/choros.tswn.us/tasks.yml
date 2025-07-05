@@ -7,6 +7,10 @@
     - name: systemctl daemon-reload
       ansible.builtin.systemd_service:
         daemon_reload: true
+    - name: firewalld.service
+      ansible.builtin.systemd_service:
+        name: firewalld.service
+        state: restarted
     - name: systemd-journald.service
       ansible.builtin.systemd_service:
         name: systemd-journald.service
@@ -43,6 +47,20 @@
       ansible.builtin.systemd_service:
         name: rpm-ostreed-automatic.timer
         enabled: false
+
+    # Firewalld Setup
+    - name: Setup firewalld.conf
+      ansible.builtin.copy:
+        content: |
+          LogDenied=unicast
+        dest: /etc/firewalld/firewalld.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - firewalld.service
+      tags:
+        - firewall
     
     # HOGS Pod & Network Setup
     - name: Setup HOGS services container network
