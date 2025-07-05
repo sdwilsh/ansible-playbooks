@@ -45,7 +45,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: web
+              port: auth-web
               scheme: HTTP
             periodSeconds: 15
             successThreshold: 1
