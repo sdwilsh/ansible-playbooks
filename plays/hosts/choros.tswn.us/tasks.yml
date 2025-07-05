@@ -29,6 +29,7 @@
         state: restarted
       listen:
         - alloy.service
+        - hfp-wireguard.service
         - hogs-pod.service
         - hogs-services-network.service
         - wireguard.service
@@ -91,6 +92,8 @@
 
           [Pod]
           Network=hogs-services.network
+          # HFP
+          PublishPort={{ ansible_default_ipv4.address }}:51823:51823/udp
           # Traefik Proxy
           PublishPort={{ ansible_default_ipv4.address }}:443:443/tcp
           # Unifi INFORM
@@ -231,7 +234,7 @@
           [Peer]
           PersistentKeepalive = 25
           PublicKey = EUDwE7E1dmbiJZXBSH0txxs/3B+eACWdfDocMvi5Fno=
-          AllowedIPs = 10.11.2.1/32, 10.11.0.0/23
+          AllowedIPs = {{ allowed_ips | join(', ') }}
         dest: /etc/wireguard/hogs0.conf
         mode: u=rw,g=r
         owner: root
@@ -242,6 +245,20 @@
       tags:
         - hogs-pod
         - wireguard
+      vars:
+        allowed_ips:
+          - 10.11.2.1/32 # Gateway
+          - 10.11.1.1/32 # Jellyfin
+          - 10.11.1.64/32 # Traefik
+          - 10.11.1.65/32 # Unifi Controller
+        wireguard__privkey: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          65363935346361653034666130656437303839336239663564346538333164353732643934373833
+          3335373164356164383932666237343563653733643238300a313231616633313130343732373834
+          30626165306338323162613264643562623163633334333339366339336662333635393838366564
+          3534623832613566300a386266623766386135393636353435353966383463303430653739376562
+          37363132376437626438383166376338383339356239636563386638616339333466393962386235
+          3361663561313533386664633930326432333730343561306634
     - name: Setup Wireguard container
       ansible.builtin.copy:
         content: |
@@ -272,3 +289,67 @@
       tags:
         - hogs-pod
         - wireguard
+      
+    # HFP
+    - name: Setup HFP Wireguard Config
+      ansible.builtin.copy:
+        content: |
+          [Interface]
+          Address = 172.31.42.1/24
+          ListenPort = 51823
+          PrivateKey = {{ wireguard__privkey }}
+
+          {% for hostname in groups['hogsflixplus'] %}
+          [Peer]
+          PublicKey = {{ hostvars[hostname].wireguard__pubkey }}
+          AllowedIPs = {{ hostvars[hostname].wireguard__address | ansible.utils.ipaddr('address') }}/32
+          {% endfor %}
+        dest: /etc/wireguard/hfp0.conf
+        mode: u=rw,g=r
+        owner: root
+        group: root
+      no_log: true # Contains the wireguard private key!
+      notify:
+        - hfp-wireguard.service
+      tags:
+        - hogs-pod
+        - hfp-wireguard
+      vars:
+        wireguard__privkey: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62306262626166313039376234306564333664303061666639333162636566306263386133656130
+          3162346632323933343062623136363365363035633131310a613339373135393965333831353430
+          62346161346364383335346632363666396263633732346166393866363832303664376136353537
+          3762373566633835340a393062626636303061633039336534306365663438613132343165343465
+          66333430336439653565653834313739323430613835353330303638643430333630616339633666
+          6565343133316431633366346238653862663836656232383463
+    - name: Setup HFP Wireguard container
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          ConditionPathExists=/etc/wireguard/hfp0.conf
+          Description=A container that hosts a wireguard VPN server and routes traffic through it for peers.
+
+          [Container]
+          AddCapability=NET_ADMIN
+          AddCapability=NET_RAW
+          DropCapability=ALL
+          HealthCmd=CMD-SHELL ping -c 1 10.11.1.1 || exit 1
+          HealthInterval=60s
+          HealthLogDestination=events_logger
+          HealthRetries=3
+          HealthStartPeriod=10s
+          NoNewPrivileges=true
+          Image=docker.io/procustodibus/wireguard
+          Pod=hogs.pod
+          Volume=/etc/wireguard/hfp0.conf:/etc/wireguard/wg1.conf:Z
+        dest: /etc/containers/systemd/hfp-wireguard.container
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hfp-wireguard.service
+      tags:
+        - hogs-pod
+        - hfp-wireguard
