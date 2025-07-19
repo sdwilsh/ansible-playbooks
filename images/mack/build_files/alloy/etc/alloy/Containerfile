@@ -1,0 +1,9 @@
+FROM docker.io/grafana/alloy:v1.9.1@sha256:b5fc87ff9a8941d6ed3ae5f099d9cb8598b3cd42fef9a8af128ed782258b4017
+
+# This exists only due to the lack of curl in the Alloy container:
+# https://github.com/grafana/alloy/issues/477
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*

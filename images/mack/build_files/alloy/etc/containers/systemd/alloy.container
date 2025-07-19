@@ -1,0 +1,17 @@
+[Unit]
+Description=A container to run Alloy to collect system logs and forward them to a central server.
+
+[Container]
+DropCapability=ALL
+Exec=run /etc/alloy/ --storage.path=/tmp/alloy --server.http.listen-addr=localhost:8080 --server.http.ui-path-prefix=/ --stability.level=generally-available
+HealthCmd=CMD-SHELL curl http://localhost:8080/-/ready || exit 1
+HealthInterval=10s
+HealthStartPeriod=10s
+Image=alloy.build
+NoNewPrivileges=true
+ReadOnly=true
+SecurityLabelDisable=true
+Tmpfs=/tmp/alloy
+# This needs to override the default configuration file that is part of the image.
+Volume=/usr/etc/alloy/journal.alloy:/etc/alloy/config.alloy:ro
+Volume=/var/log/journal:/host/var/log/journal:ro

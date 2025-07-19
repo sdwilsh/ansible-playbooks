@@ -1,0 +1,16 @@
+# Allow build scripts to be referenced without being copied into the final image.
+FROM scratch AS ctx
+COPY build_files /
+
+# This is the base image.
+FROM quay.io/fedora/fedora-bootc:42@sha256:ebe9cd10da14dd2eef1763669021755b2df5d9e4dbf78285576cd7664a73ad15
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build.sh && \
+    ostree container commit
+
+# Verify final image and contents are correct.
+RUN bootc container lint

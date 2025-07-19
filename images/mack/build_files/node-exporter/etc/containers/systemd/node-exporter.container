@@ -1,0 +1,18 @@
+[Unit]
+Description=A container to run the Prometheus Node Exporter to collect system metrics.
+
+[Container]
+DropCapability=ALL
+Exec=--path.procfs=/host/proc
+Exec=--path.sysfs=/host/sys
+Exec=--path.rootfs=/host/root
+Exec=--path.udev.data=/host/root/run/udev/data
+HealthCmd=CMD-SHELL wget --no-verbose --tries=1 --spider http://localhost:9100/ || exit 1
+HealthInterval=10s
+Image=quay.io/prometheus/node-exporter:v1.9.1@sha256:d00a542e409ee618a4edc67da14dd48c5da66726bbd5537ab2af9c1dfc442c8a
+NoNewPrivileges=true
+ReadOnly=true
+SecurityLabelDisable=true
+Volume=/proc:/host/proc:ro
+Volume=/sys:/host/sys:ro
+Volume=/root:/host/root:ro
