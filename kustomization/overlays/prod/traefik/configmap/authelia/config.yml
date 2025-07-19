@@ -96,6 +96,26 @@ identity_providers:
           - openid
           - profile
         userinfo_signed_response_alg: none
+      # https://www.authelia.com/integration/openid-connect/opkssh/
+      - access_token_signed_response_alg: none
+        authorization_policy: two_factor
+        client_id: U.~.pIkNP_pYOYhauWcH1klEtbEagrtpse~eFgeGncUsugCXkZtiiZVqOSiEs7acspBclRuU
+        client_name: opkssh 
+        grant_types:
+          - authorization_code
+          - refresh_token
+        public: true
+        redirect_uris:
+          - http://localhost:3000/login-callback
+          - http://localhost:10001/login-callback
+          - http://localhost:11110/login-callback
+        reponse_types:
+          - code
+        scopes:
+          - offline_access
+          - openid
+        token_endpoint_auth_method: none
+        userinfo_signed_response_alg: none
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
