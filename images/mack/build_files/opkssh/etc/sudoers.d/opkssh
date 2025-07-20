@@ -1,0 +1,2 @@
+# This is needed to allow for opkssh to check the user's home directory for policies.
+opksshuser ALL=(ALL) NOPASSWD: /usr/local/bin/opkssh readhome *
