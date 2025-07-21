@@ -110,7 +110,7 @@ identity_providers:
           - http://localhost:3000/login-callback
           - http://localhost:10001/login-callback
           - http://localhost:11110/login-callback
-        reponse_types:
+        response_types:
           - code
         require_pkce: true
         scopes:
