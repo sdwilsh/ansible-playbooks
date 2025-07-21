@@ -104,6 +104,7 @@ identity_providers:
         grant_types:
           - authorization_code
           - refresh_token
+        pkce_challenge_method: S256
         public: true
         redirect_uris:
           - http://localhost:3000/login-callback
@@ -111,6 +112,7 @@ identity_providers:
           - http://localhost:11110/login-callback
         reponse_types:
           - code
+        require_pkce: true
         scopes:
           - offline_access
           - openid
