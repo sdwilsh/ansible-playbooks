@@ -14,10 +14,10 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^kustomization\\/.*\\.sh$/"
+        "/(^|/|\\.).*\\.sh$/"
       ],
       "matchStrings": [
-        "\\srenovate:\\s+datasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s*[a-zA-Z_]+=\"(?<currentValue>.*?)\""
+        "\\srenovate:\\s+datasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s*[a-zA-Z_]+=\"?(?<currentValue>.*?)\"?"
       ]
     },
     {
