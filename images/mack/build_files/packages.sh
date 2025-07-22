@@ -26,7 +26,7 @@ case "${TARGETPLATFORM}" in
 esac
 
 # renovate: datasource=github-releases depName=twpayne/chezmoi
-CHEZMOI_VERSION=2.63.0
+CHEZMOI_VERSION=2.63.1
 # renovate: datasource=github-releases depName=openpubkey/opkssh
 OPKSSH_VERSION=0.8.0
 
