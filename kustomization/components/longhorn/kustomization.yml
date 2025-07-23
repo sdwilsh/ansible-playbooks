@@ -11,7 +11,7 @@ patches:
       kind: DaemonSet
 resources:
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/longhorn/longhorn/v1.8.2/deploy/longhorn.yaml
+  - https://raw.githubusercontent.com/longhorn/longhorn/v1.9.1/deploy/longhorn.yaml
   - podmonitor.yml
   - recurringjob.yml
   - storageclass.yml
