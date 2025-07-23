@@ -8,6 +8,44 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Builds the images/mack container.
+[group('images')]
+build-mack:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    podman build \
+        images/mack \
+        -t mack
+
+# Builds the images/mack container as a virtual machine.
+[group('images')]
+build-mack-vm:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    mkdir -p output-mack
+
+    # This must be built rootful...
+    sudo podman build \
+        images/mack \
+        -t mack
+
+    # ...so it can be done rootful here.
+    sudo podman run \
+        --rm \
+        -it \
+        --privileged \
+        --pull=newer \
+        --security-opt label=type:unconfined_t \
+        -v ./config.toml:/config.toml:ro \
+        -v ./output-mack:/output \
+        -v /var/lib/containers/storage:/var/lib/containers/storage \
+        quay.io/centos-bootc/bootc-image-builder:latest \
+        --rootfs ext4 \
+        --type qcow2 \
+        localhost/mack:latest
+
 # List decisions from crowdsec.  Useful when debugging access problems.
 [group('crowdsec')]
 crowdsec-list-decisions:
@@ -70,6 +108,21 @@ kustomize-build:
 [group('lint')]
 renovate-validate:
     renovate-config-validator
+
+# Runs the images/mack container in a virtual machine.
+[group('images')]
+run-mack: build-mack-vm
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    qemu-system-x86_64 \
+        -M accel=kvm \
+        -cpu host \
+        -smp 2 \
+        -m 4096 \
+        -bios /usr/share/OVMF/OVMF_CODE.fd \
+        -serial stdio \
+        -snapshot output-mack/qcow2/disk.qcow2
 
 # Run `shellcheck` on all shell files
 [group('lint')]

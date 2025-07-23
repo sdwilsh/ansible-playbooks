@@ -1,6 +1,10 @@
 .ansible_vault_password
 .venv
 
+# Used to configure bootc images with a pre-defined user.
+config.toml
+output-mack
+
 # Roles and Collections that are managed by ansible-galaxy.
 external_collections/
 external_roles/
