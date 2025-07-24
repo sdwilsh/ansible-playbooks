@@ -34,6 +34,7 @@ dnf install --setopt=install_weak_deps=False -y \
     atuin \
     fish \
     starship \
+    vim \
     "https://github.com/twpayne/chezmoi/releases/download/v${CHEZMOI_VERSION}/chezmoi-${CHEZMOI_VERSION}-$(arch).rpm" \
     https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_${TARGETARCHITECTURE}.rpm
 
