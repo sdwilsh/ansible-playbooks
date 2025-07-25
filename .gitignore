@@ -3,6 +3,7 @@
 
 # Used to configure bootc images with a pre-defined user.
 config.toml
+output-loki
 output-mack
 
 # Roles and Collections that are managed by ansible-galaxy.

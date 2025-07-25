@@ -8,6 +8,51 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Builds the images/loki container for the Raspberry Pi.
+[group('images')]
+build-loki-image:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    mkdir -p output-loki
+
+    # This must be built rootful...
+    sudo podman build \
+        images/mack \
+        --platform=linux/arm64 \
+        -t mack
+    sudo podman build \
+        images/loki \
+        --build-arg PARENT=localhost/mack:latest \
+        --platform=linux/arm64 \
+        -t loki
+
+    # ...so it can be done rootful here.
+    sudo podman run \
+        --rm \
+        -it \
+        --privileged \
+        --pull=newer \
+        --security-opt label=type:unconfined_t \
+        -v ./config.toml:/config.toml:ro \
+        -v ./output-loki:/output \
+        -v /var/lib/containers/storage:/var/lib/containers/storage \
+        quay.io/centos-bootc/bootc-image-builder:latest \
+        --rootfs ext4 \
+        --target-arch=aarch64 \
+        --type raw \
+        localhost/loki:latest
+    
+    sudo rm -rf output-loki/image/disk.raw.xz
+    sudo xz -z -k -v output-loki/image/disk.raw
+
+    echo "Complete! Now you can run this to install it:"
+    echo "sudo arm-image-installer \
+    --image=$(pwd)/output-loki/image/disk.raw.xz \
+    --target=rpi4 \
+    --resizefs \
+    --media=/dev/sdXXX"
+
 # Builds the images/mack container.
 [group('images')]
 build-mack:

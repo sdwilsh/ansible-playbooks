@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# This script shims into the build process of the image to install the firmware
+# into /boot/efi.  This is otherwise impossible today.  This is being improved:
+# https://github.com/fedora-iot/iot-distro/issues/82
+if [[ $# -ge 2 ]]; then
+    if [[ "$1" == "backend" && "$2" == "install" ]]; then
+        # BASH_ARGV[0] is the path to the target root directory.
+        TARGET_ROOT="${BASH_ARGV[0]}"
+        echo "Copying Raspberry Pi firmware files to ${TARGET_ROOT}/boot/efi/..." >&2
+        cp -av /usr/lib/bootc-raspi-firmwares/. "${TARGET_ROOT}"/boot/efi/
+        echo "Copying Raspberry Pi firmware files finished" >&2
+    fi
+fi
+
+# After the firmware is installed, call into the actual bootupctl.
+exec /usr/bin/bootupctl-orig/bootupctl "$@"
