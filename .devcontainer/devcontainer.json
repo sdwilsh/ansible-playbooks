@@ -44,6 +44,23 @@
             "version": "v5.7.1"
         }
     },
+    "portsAttributes": {
+        "3000": {
+            "label": "OpenPubkey SSH",
+            "onAutoForward": "silent",
+            "requireLocalPort": true
+        },
+        "10001": {
+            "label": "OpenPubkey SSH",
+            "onAutoForward": "silent",
+            "requireLocalPort": true
+        },
+        "11110": {
+            "label": "OpenPubkey SSH",
+            "onAutoForward": "silent",
+            "requireLocalPort": true
+        }
+    },
     "postCreateCommand": ".devcontainer/post-create-command.sh",
     "remoteUser": "vscode"
 }

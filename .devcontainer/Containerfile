@@ -9,8 +9,18 @@ FROM mcr.microsoft.com/devcontainers/python:1-${PYTHON_VERSION}
 COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
-RUN apt-get update \
+# Setup and Configure OpenPubkey SSH
+# renovate: datasource=github-releases depName=openpubkey/opkssh
+ARG OPKSSH_VERSION=0.8.0
+RUN --mount=type=cache,dst=/deb \
+  curl -o /deb/opkssh.deb \
+    -L \
+    https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_amd64.deb
+
+RUN --mount=type=cache,dst=/deb \
+  apt-get update \
   && apt-get install -y --no-install-recommends \
+    /deb/opkssh.deb \
     dnsutils \
     iproute2 \
     iputils-ping \
