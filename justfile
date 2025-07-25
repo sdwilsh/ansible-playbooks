@@ -87,7 +87,7 @@ justfix:
 hadolint:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "Dockerfile*" -not -path "./external_*" | while read -r file; do
+    find . -type f -name "Containerfile*" -not -path "./external_*" | while read -r file; do
         echo -n "Running \`hadolint\` on ${file}..."
         hadolint ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
