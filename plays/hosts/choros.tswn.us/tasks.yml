@@ -296,7 +296,7 @@
       ansible.builtin.copy:
         content: |
           [Interface]
-          Address = 172.31.42.1/24
+          Address = 10.11.2.30/32
           ListenPort = 51823
           PrivateKey = {{ wireguard__privkey }}
 

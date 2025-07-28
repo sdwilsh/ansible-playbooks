@@ -1,5 +1,5 @@
 ---
-wireguard__address: 172.31.42.5/24
+wireguard__address: 10.11.2.34/32
 wireguard__privkey: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           38353265393037633832326631323339643433383663393331353965376432326366316561663833
