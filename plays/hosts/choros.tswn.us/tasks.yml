@@ -298,6 +298,7 @@
           [Interface]
           Address = 10.11.2.30/32
           ListenPort = 51823
+          MTU = 1280
           PrivateKey = {{ wireguard__privkey }}
 
           {% for hostname in groups['hogsflixplus'] %}

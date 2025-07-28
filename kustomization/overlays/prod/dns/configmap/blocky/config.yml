@@ -119,11 +119,11 @@ customDNS:
     sonos-dining.hogs.tswn.us: 10.117.0.69
 
     # HFP
-    hogsflixplus01.tswn.us: 172.31.42.2
-    hogsflixplus02.tswn.us: 172.31.42.3
-    hogsflixplus03.tswn.us: 172.31.42.4
-    hogsflixplus04.tswn.us: 172.31.42.5
-    hogsflixplus05.tswn.us: 172.31.42.6
+    hogsflixplus01.tswn.us: 10.11.2.31
+    hogsflixplus02.tswn.us: 10.11.2.32
+    hogsflixplus03.tswn.us: 10.11.2.33
+    hogsflixplus04.tswn.us: 10.11.2.34
+    hogsflixplus05.tswn.us: 10.11.2.35
   zone: |
     $ORIGIN tswn.us.
     $TTL 3600

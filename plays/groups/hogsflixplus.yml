@@ -1,143 +1,197 @@
 ---
 - name: Play for hogsflixplus hosts
+  become: true
   hosts: hogsflixplus
+  handlers:
+    # Note: these run in the order they are defined in (regardless of invocation order)!
+    - name: systemctl daemon-reload
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+    - name: systemd-modules-load.service
+      ansible.builtin.systemd_service:
+        name: systemd-modules-load.service
+        state: restarted
+    - name: systemd-sysctl.service
+      ansible.builtin.systemd_service:
+        name: systemd-sysctl.service
+        state: restarted
+    - name: hfp-pod.service
+      ansible.builtin.systemd_service:
+        name: hfp-pod.service
+        state: restarted
+      listen:
+        - hfp-pod.service
+        - hfp-proxy.service
+        - hfp-wireguard.service
   roles:
     - role: common-users
-    - become: true
-      netplan_configuration:
-        network:
-          ethernets:
-            eth0:
-              dhcp4: true
-          tunnels:
-            wg_hogsflixplus:
-              addresses:
-                - "{{ wireguard__address }}"
-              key: "{{ wireguard__privkey }}"
-              mode: wireguard
-              peers:
-                - allowed-ips:
-                    - 10.10.0.20/32 # sdwilsh-dev.hogs.tswn.us
-                    - 10.11.1.1/32 # jellyfin
-                    - 172.31.42.1/32 # tartarus01 wireguard tunnel address
-                  endpoint: 149.248.37.12:51823
-                  keepalive: 25
-                  keys:
-                    public: "{{ hostvars['tartarus01.tswn.us'].wireguard__pubkey }}"
-              routes:
-                - to: 10.10.0.20/32 # sdwilsh-dev.hogs.tswn.us
-                  via: 172.31.42.1
-                - to: 10.11.1.1/32 # jellyfin
-                  via: 172.31.42.1
-          version: 2
-      role: mrlesmithjr.netplan
     - role: devsec.hardening.ssh_hardening
       vars:
-        ssh_kerberos_supprt: false
+        ssh_kerberos_support: false
         ssh_listen_to:
-          - "{{ wireguard__address | ansible.utils.ipaddr('address') }}"
-    - role: devsec.hardening.os_hardening
-      become: true
+          - 0.0.0.0
   tasks:
     - name: Set Hostname
       ansible.builtin.hostname:
         name: "{{ inventory_hostname }}"
-      become: true
-    - name: Disable cloud-init
-      ansible.builtin.copy:
-        content: ""
-        dest: /etc/cloud/cloud-init.disabled
-      become: true
-    - name: Install Packages
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-      become: true
-      loop:
-        - wireguard
-        - cargo
-    - name: Setup jellyfin Group
-      ansible.builtin.group:
-        gid: 65533
-        name: jellyfin
-        state: present
-      become: true
-    - name: Setup jellyfin User
-      ansible.builtin.user:
-        create_home: false
-        group: jellyfin
-        name: jellyfin
-        password: "*"
-        state: present
-        uid: 65533
-      become: true
-    - name: Ensure Configuration Directory Exists
+    - name: Ensure directories exist
       ansible.builtin.file:
-        group: jellyfin
-        owner: root
-        path: /usr/local/etc/jellyfin-remote-proxy
+        path: "{{ item }}"
         state: directory
-      become: true
-    - name: Configure jellyfin-remote-proxy
-      ansible.builtin.copy:
-        content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
-        dest: /usr/local/etc/jellyfin-remote-proxy/config.yml
-        mode: u=r,g=r
-        owner: jellyfin
-        group: jellyfin
-      vars:
-        config:
-          local:
-            interface: eth0
-            port: 80
-          remote:
-            address: 10.11.1.1
-      become: true
-    - name: Install jellyfin-remote-proxy
-      community.general.cargo:
-        name: jellyfin-remote-proxy
-        path: /usr/local
-        state: present
-        version: 0.1.1
-      become: true
-    - name: Set proper permissions on jellyfin-remote-proxy
-      ansible.builtin.file:
-        group: root
-        mode: u=rwx,g=rx,o=rx
-        owner: root
-        path: /usr/local/bin/jellyfin-remote-proxy
-      become: true
-    - name: Setup systemd
-      ansible.builtin.copy:
-        content: |
-          [Unit]
-          Description=hogsflix+
-
-          [Service]
-          AmbientCapabilities=CAP_NET_BIND_SERVICE
-          CapabilityBoundingSet=CAP_NET_BIND_SERVICE
-          Environment="RUST_LOG=INFO"
-          ExecStart=/usr/local/bin/jellyfin-remote-proxy /usr/local/etc/jellyfin-remote-proxy/config.yml
-          Group=jellyfin
-          NoNewPrivileges=true
-          StandardError=syslog
-          StandardOutput=syslog
-          SyslogFacility=daemon
-          SyslogIdentifier=jellyfin
-          SyslogLevel=info
-          User=jellyfin
-
-          [Install]
-          WantedBy=multi-user.target
-        dest: /etc/systemd/system/jellyfin.service
         mode: u=rw,g=r,o=r
         owner: root
         group: root
-      become: true
-    - name: Enable and Start Service
-      ansible.builtin.systemd:
-        daemon_reload: true
-        enabled: true
-        name: jellyfin
-        state: started
-      become: true
+      loop:
+        - /etc/containers/systemd/alloy.container.d
+        - /etc/jellyfin-remote-proxy
+        - /etc/wireguard
+      tags:
+        - alloy
+        - hfp-pod
+    - name: Setup hfp pod for containers
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Description=A pod that contains a set of containers that need to talk to hfp.
+
+          [Pod]
+          Network=host
+
+          [Install]
+          WantedBy=multi-user.target default.target
+        dest: /etc/containers/systemd/hfp.pod
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hfp-pod.service
+      tags:
+        - hfp-pod
+    - name: Setup loading of additional kernel modules needed by Wireguard
+      ansible.builtin.copy:
+        content: |
+          wireguard
+          # iptables/nftables modules for basic DNAT/SNAT and masquerading
+          nft_chain_nat
+          nft_compat
+          xt_nat
+          # nftables modules for wg-quick default route
+          nft_ct
+          nft_fib_ine
+        dest: /etc/modules-load.d/wireguard.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemd-modules-load.service
+      tags:
+        - modules-load
+    - name: Setup HFP Wireguard Config
+      ansible.builtin.copy:
+        content: |
+          [Interface]
+          Address = {{ wireguard__address }}
+          MTU = 1280
+          PrivateKey = {{ wireguard__privkey }}
+
+          [Peer]
+          AllowedIPs = {{ allowed_ips | join(', ') }}
+          Endpoint = hogsflixplus.tswn.us:51823
+          PublicKey = {{ wireguard__pubkey }}
+        dest: /etc/wireguard/hfp0.conf
+        mode: u=rw,g=r
+        owner: root
+        group: root
+      no_log: true # Contains the wireguard private key!
+      notify:
+        - hfp-wireguard.service
+      tags:
+        - hfp-pod
+        - hfp-wireguard
+      vars:
+        allowed_ips:
+          - 10.11.2.1/32 # Gateway
+          - 10.11.1.1/32 # Jellyfin
+          - 10.11.1.72/32 # loki-distributor
+          - 10.117.0.9/32 # lighterthansome
+        wireguard__pubkey: Dwdz7rWR4y8uMW3s4MWZwe1+rR0Bqiigms7Aku51ghU=
+    - name: Setup HFP Wireguard container
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          ConditionPathExists=/etc/wireguard/hfp0.conf
+          Description=A container that hosts a wireguard VPN server and routes traffic through it for peers.
+
+          [Container]
+          AddCapability=NET_ADMIN
+          AddCapability=NET_RAW
+          DropCapability=ALL
+          HealthCmd=CMD-SHELL ping -c 1 10.11.2.1 || exit 1
+          HealthInterval=60s
+          HealthLogDestination=events_logger
+          HealthRetries=3
+          HealthStartPeriod=10s
+          NoNewPrivileges=true
+          Image=docker.io/procustodibus/wireguard
+          Pod=hfp.pod
+          Volume=/etc/wireguard/hfp0.conf:/etc/wireguard/wg1.conf:Z
+        dest: /etc/containers/systemd/hfp-wireguard.container
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hfp-wireguard.service
+      tags:
+        - hfp-pod
+        - hfp-wireguard
+    - name: Configure jellyfin-remote-proxy
+      ansible.builtin.copy:
+        content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
+        dest: /etc/jellyfin-remote-proxy/config.yml
+        mode: u=r,g=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hfp-proxy.service
+      tags:
+        - hfp-podd
+        - hfp-proxy
+      vars:
+        config:
+          local:
+            interface: end0
+            port: 80
+          remote:
+            address: 10.11.1.1
+    - name: Setup HFP proxy container
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          ConditionPathExists=/etc/jellyfin-remote-proxy/config.yml
+          Description=A container that proxies jellyfin to the local network.
+
+          [Container]
+          AddCapability=NET_BIND_SERVICE
+          Environment="RUST_LOG=INFO"
+          Exec=/usr/local/etc/jellyfin-remote-proxy/config.yml
+          DropCapability=ALL
+          NoNewPrivileges=true
+          Image=ghcr.io/sdwilsh/jellyfin-remote-proxy:{{ jellyfin_remote_proxy_version }}
+          Pod=hfp.pod
+          Volume=/etc/jellyfin-remote-proxy/config.yml:/usr/local/etc/jellyfin-remote-proxy/config.yml:Z
+        dest: /etc/containers/systemd/hfp-proxy.container
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - hfp-proxy.service
+      tags:
+        - hfp-pod
+        - hfp-proxy
+      vars:
+        # renovate: datasource=github-releases depName=sdwilsh/jellyfin-remote-proxy
+        jellyfin_remote_proxy_version: v0.1.5
