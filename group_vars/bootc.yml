@@ -1,0 +1,5 @@
+---
+# devsec.hardening's ssh_hardening
+ssh_pkgs: []
+ssh_selinux_packages: []
+sshd_path: /usr/bin/sshd

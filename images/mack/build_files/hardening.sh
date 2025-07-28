@@ -2,13 +2,19 @@
 
 set -ouex pipefail
 
+# See ssh_selinux_packages from
+# https://github.com/dev-sec/ansible-collection-hardening/blob/master/roles/ssh_hardening/vars/Fedora.yml
+SSH_HARENDING_PACKAGES=(
+    checkpolicy
+    python3-policycoreutils
+)
 TEMPORARY_PACKAGES=(
     ansible
-    python3-policycoreutils
 )
 dnf install --setopt=install_weak_deps=False -y \
     python3-dnf \
-    ${TEMPORARY_PACKAGES}
+    "${SSH_HARENDING_PACKAGES[@]}" \
+    "${TEMPORARY_PACKAGES[@]}"
 
 mkdir -p /var/cache/ansible/external_collections
 pushd /ctx/ansible
@@ -18,4 +24,4 @@ popd
 
 # Cleanup
 rm -rf ~/.ansible
-dnf remove -y ${TEMPORARY_PACKAGES}
+dnf remove -y "${TEMPORARY_PACKAGES[@]}"
