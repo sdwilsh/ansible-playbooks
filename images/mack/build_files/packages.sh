@@ -38,16 +38,6 @@ dnf install --setopt=install_weak_deps=False -y \
     "https://github.com/twpayne/chezmoi/releases/download/v${CHEZMOI_VERSION}/chezmoi-${CHEZMOI_VERSION}-$(arch).rpm" \
     https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_${TARGETARCHITECTURE}.rpm
 
-# For dev-sec hardening of SSH
-dnf install --setopt=install_weak_deps=False -y \
-    audit \
-    audit-rules \
-    checkpolicy \
-    initscripts-service \
-    openssh \
-    python3-dnf \
-    python3-policycoreutils
-
 /ctx/packages/configure-alloy.sh
 /ctx/packages/configure-node-exporter.sh
 /ctx/packages/configure-opkssh.sh

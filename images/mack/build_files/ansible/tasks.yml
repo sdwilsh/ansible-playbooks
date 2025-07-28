@@ -1,0 +1,14 @@
+---
+- name: Harden
+  hosts: localhost
+  roles:
+    - role: devsec.hardening.ssh_hardening
+      become: true
+      vars:
+        # This doesn't work as part of the image build phase becuase it tries
+        # to do things like adjust the host keys.
+        ssh_server_hardening: false
+    # TODO: run devsec.hardening.os_hardening
+    # https://github.com/dev-sec/ansible-collection-hardening/issues/780
+  vars:
+    ansible_connection: local
