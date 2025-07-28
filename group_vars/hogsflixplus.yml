@@ -1,4 +1,6 @@
 ---
+ansible_package_use: ansible.builtin.dnf
+
 common__unix_groups:
   - name: ansible
     gid: 2000

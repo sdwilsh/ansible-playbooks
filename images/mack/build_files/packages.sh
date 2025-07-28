@@ -40,7 +40,10 @@ dnf install --setopt=install_weak_deps=False -y \
 
 # For dev-sec hardening of SSH
 dnf install --setopt=install_weak_deps=False -y \
+    audit \
+    audit-rules \
     checkpolicy \
+    initscripts-service \
     openssh \
     python3-dnf \
     python3-policycoreutils
