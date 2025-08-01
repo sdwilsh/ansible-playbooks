@@ -17,6 +17,7 @@ curl -o /usr/share/opkssh/install-linux.sh https://raw.githubusercontent.com/ope
 
 # Determine what architecture we are building for because some packages do not
 # label with the output from arch.
+echo "Picking the correct target architecture from platform '${TARGETPLATFORM}'..."
 TARGETARCHITECTURE=""
 case "${TARGETPLATFORM}" in
     linux/amd64)
