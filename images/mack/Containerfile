@@ -3,7 +3,7 @@ FROM scratch AS ctx
 COPY build_files /
 
 # This is the base image.
-FROM quay.io/fedora/fedora-bootc:42@sha256:ebe9cd10da14dd2eef1763669021755b2df5d9e4dbf78285576cd7664a73ad15
+FROM quay.io/fedora/fedora-bootc:42@sha256:8a9f80273d499de2ddc4dff445a3ab4a296ef0d0f21399e7a36ef42f62c63b23
 
 ARG TARGETPLATFORM
 
