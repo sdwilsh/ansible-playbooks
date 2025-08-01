@@ -23,7 +23,6 @@ env:
   IMAGE_LOGO_URL: https://avatars.githubusercontent.com/u/656602?s=200&v=4
   IMAGE_NAME: mack
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
-  DEFAULT_TAG: "latest"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
@@ -32,18 +31,30 @@ concurrency:
 jobs:
   build_push:
     name: Build and push image
-    runs-on: ubuntu-24.04
 
     permissions:
       contents: read
       packages: write
       id-token: write
 
+    runs-on: ${{ matrix.runner }}
+
+    strategy:
+      matrix:
+        runner:
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+
     steps:
-      - name: Install qemu dependency
+      - name: Setup Platform-Specific Tag
         run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-user-static
+          if [[ "${{ matrix.runner }}" == *"arm" ]]; then
+            echo "DEFAULT_TAG=latest-arm64" >> ${GITHUB_ENV}
+            echo "PLATFORM=linux/arm64" >> ${GITHUB_ENV}
+          else
+            echo "DEFAULT_TAG=latest-amd64" >> ${GITHUB_ENV}
+            echo "PLATFORM=linux/amd64" >> ${GITHUB_ENV}
+          fi
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -100,7 +111,7 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           oci: false
-          platforms: linux/amd64, linux/arm64
+          platforms: ${{ env.PLATFORM }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
