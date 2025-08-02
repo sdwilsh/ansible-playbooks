@@ -19,9 +19,9 @@ images:
   - name: postgres
     newTag: 16@sha256:fec2740c517838d4f582e48a8a9a1cb51082af3dcae59e9b12a66ec262302b97
   - name: quay.io/opstree/redis-sentinel
-    newTag: v8.0.2@sha256:61f5ce2993ce952897015a37a95a3f47704f7b0c30cee35ff527a3a067125b5d
+    newTag: v8.0.3@sha256:a1737b88d6a5a46f50b669b81b202774ee8d82b1d71d96e7c5773973a38d5622
   - name: quay.io/opstree/redis
-    newTag: v8.0.2@sha256:96119015d334884828c7b922a5b45fb3eb13303f0eaec5a1a49891fc64c3a0f0
+    newTag: v8.0.3@sha256:ef4ed070d7d2b1b5f9b4ba28048a372ace0535a9f9d3c073fc1eb3bae7df1d6e
   - name: traefik
     newTag: v3.4.4@sha256:9b0e9d788816d722703eae57ebf8b4d52ad98e02b76f0362d5a040ef46902ef7
 namespace: traefik
