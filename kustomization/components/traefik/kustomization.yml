@@ -4,9 +4,9 @@ kind: Component
 
 resources:
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v3.4.4/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v3.4.5/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
     # renovate: datasource=github-releases
-  - https://raw.githubusercontent.com/traefik/traefik/v3.4.4/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
+  - https://raw.githubusercontent.com/traefik/traefik/v3.4.5/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
   - deployment.yml
   - ingressclass.yml
   - service.yml
