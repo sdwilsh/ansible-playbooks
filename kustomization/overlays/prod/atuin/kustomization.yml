@@ -8,7 +8,7 @@ images:
   - name: busybox
     newTag: 1.37.0@sha256:f9a104fddb33220ec80fc45a4e606c74aadf1ef7a3832eb0b05be9e90cd61f5f
   - name: ghcr.io/atuinsh/atuin
-    newTag: v18.7.1@sha256:f096ee29583b53f8d9442b1bc2631b3a07e0e5887bac99a672406359147fec0f
+    newTag: v18.8.0@sha256:8a8a8ef4eb5865656072bace5cc49390b56caa81360f9f0869054777155b6ef1
   - name: postgres
     newTag: 16@sha256:fec2740c517838d4f582e48a8a9a1cb51082af3dcae59e9b12a66ec262302b97
 namespace: atuin
