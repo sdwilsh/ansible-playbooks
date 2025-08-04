@@ -2,7 +2,7 @@
 ARG PYTHON_VERSION=3.13
 
 FROM ghcr.io/hadolint/hadolint:v2.12.0@sha256:30a8fd2e785ab6176eed53f74769e04f125afb2f74a6c52aef7d463583b6d45e AS hadolint
-FROM koalaman/shellcheck:stable@sha256:047a571f02e690c5da4e6b10e9afc37503931534c005ca6192db8ca144d1b01a AS shellcheck
+FROM koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
 FROM mcr.microsoft.com/devcontainers/python:1-${PYTHON_VERSION}
 
