@@ -24,9 +24,9 @@ spec:
             - name: ND_CACHEFOLDER
               value: /cache
             - name: ND_IMAGECACHESIZE
-              value: 256Mi
+              value: 512Mi
             - name: ND_TRANSCODINGCACHESIZE
-              value: 1792Mi
+              value: 4096Mi
           image: deluan/navidrome
           name: navidrome
           ports:
