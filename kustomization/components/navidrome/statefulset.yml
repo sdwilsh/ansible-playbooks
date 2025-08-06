@@ -51,8 +51,7 @@ spec:
       priorityClassName: application
       volumes:
         - emptyDir:
-            medium: Memory
-            sizeLimit: 2Gi
+            sizeLimit: 20Gi
           name: navidrome-cache
   volumeClaimTemplates:
     - apiVersion: v1
