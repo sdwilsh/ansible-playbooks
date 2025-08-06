@@ -34,9 +34,6 @@ spec:
               name: navidrome-web
               protocol: TCP
           resources:
-            limits:
-              cpu: 2000m
-              memory: 6Gi
             requests:
               cpu: 250m
           securityContext:
