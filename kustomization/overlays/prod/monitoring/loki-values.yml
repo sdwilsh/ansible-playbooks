@@ -83,38 +83,28 @@ deploymentMode: Distributed
 ingester:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 3
 querier:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 2
   priorityClassName: application-infra
   replicas: 3 # Improve query performance via parallelism
 queryFrontend:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
 queryScheduler:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 2
 distributor:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 2
   priorityClassName: application-infra
   replicas: 3 
@@ -122,23 +112,17 @@ distributor:
     kube-vip.io/loadbalancerIPs: 10.11.1.72
 compactor:
   extraArgs: *extraArgs
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   priorityClassName: application-infra
   replicas: 1
 indexGateway:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
 ruler:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
-  # This should not be needed once https://github.com/grafana/loki/pull/12652 lands!
-  extraEnvFrom: *s3-extraEnvFrom
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
