@@ -1,5 +1,5 @@
 # ---
-apiVersion: longhorn.io/v1beta1
+apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: backup-hourly
@@ -14,7 +14,7 @@ spec:
   retain: 24 # Full Day
   task: backup
 ---
-apiVersion: longhorn.io/v1beta1
+apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: filesystem-trim-monthly
@@ -29,7 +29,7 @@ spec:
     - no-backup
   task: filesystem-trim
 ---
-apiVersion: longhorn.io/v1beta1
+apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: snapshot-cleanup
@@ -41,7 +41,7 @@ spec:
     - no-backup
   task: snapshot-cleanup
 ---
-apiVersion: longhorn.io/v1beta1
+apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: snapshot-daily
@@ -55,7 +55,7 @@ spec:
   retain: 7 # One Week
   task: snapshot
 ---
-apiVersion: longhorn.io/v1beta1
+apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: snapshot-hourly
@@ -70,7 +70,7 @@ spec:
   retain: 24 # 1 Day
   task: snapshot
 ---
-apiVersion: longhorn.io/v1beta1
+apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: snapshot-weekly
