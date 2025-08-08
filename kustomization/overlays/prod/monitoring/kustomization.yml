@@ -27,7 +27,7 @@ helmCharts:
     releaseName: loki
     valuesFile: loki-values.yml
   - name: prometheus-adapter
-    version: 4.14.1
+    version: 5.0.0
     repo: https://prometheus-community.github.io/helm-charts
     releaseName: prometheus-adapter
     valuesFile: prometheus-adapter-values.yml
