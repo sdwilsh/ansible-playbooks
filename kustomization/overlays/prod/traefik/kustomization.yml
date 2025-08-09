@@ -23,7 +23,7 @@ images:
   - name: quay.io/opstree/redis
     newTag: v8.0.3@sha256:ef4ed070d7d2b1b5f9b4ba28048a372ace0535a9f9d3c073fc1eb3bae7df1d6e
   - name: traefik
-    newTag: v3.4.5@sha256:06ddf61ee653caf4f4211a604e657f084f4727f762c16f826c97aafbefcb279e
+    newTag: v3.5.0@sha256:4e7175cfe19be83c6b928cae49dde2f2788fb307189a4dc9550b67acf30c11a5
 namespace: traefik
 patches:
   - path: patches/authelia/add_container.yml
