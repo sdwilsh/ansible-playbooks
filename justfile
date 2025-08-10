@@ -19,7 +19,10 @@ build-loki-image:
     # This must be built rootful...
     sudo podman build \
         images/mack \
+        --cap-add=all \
+        --device /dev/fuse \
         --platform=linux/arm64 \
+        --security-opt=label=type:container_runtime_t \
         -t mack
     sudo podman build \
         images/loki \
@@ -61,6 +64,9 @@ build-mack:
 
     podman build \
         images/mack \
+        --cap-add=all \
+        --device /dev/fuse \
+        --security-opt=label=type:container_runtime_t \
         -t mack
 
 # Builds the images/mack container as a virtual machine.
@@ -74,6 +80,9 @@ build-mack-vm:
     # This must be built rootful...
     sudo podman build \
         images/mack \
+        --cap-add=all \
+        --device /dev/fuse \
+        --security-opt=label=type:container_runtime_t \
         -t mack
 
     # ...so it can be done rootful here.
