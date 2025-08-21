@@ -98,6 +98,7 @@ identity_providers:
           - email
           - openid
           - profile
+        token_endpoint_auth_method: client_secret_post
         userinfo_signed_response_alg: none
       # https://www.authelia.com/integration/openid-connect/opkssh/
       - access_token_signed_response_alg: none

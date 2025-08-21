@@ -2,26 +2,27 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: immich-14-pg
+  name: immich-17-pg
 spec:
   enableLogicalBackup: true
-  # We need spilo with pgvecto.rs.
-  # https://github.com/zalando/spilo/issues/1041
-  dockerImage: registry.wuhoo.xyz/jerry/spilo-pgvecto.rs:spilo-3.3-p2-pgvectors-0.3.0
-  # A bug was reported in v0.3.0 of pgvecto.rs, which does not allow a replicated setup:
-  # https://github.com/immich-app/immich-charts/issues/149#issuecomment-2559012759
+  # We need spilo with VectorChord.
+  # https://github.com/immich-app/immich/discussions/20634#discussion-8681480
+  dockerImage: ghcr.io/alexanderbabel/spilo:4.0-p3
   numberOfInstances: 1
   podPriorityClassName: application-infra
   postgresql:
-    version: "14"
+    parameters:
+      # Order matters for pg_state_statements and pg_stat_kcache!
+      shared_preload_libraries: pg_cron,pg_stat_statements,pg_stat_kcache,vchord
+    version: "17"
   resources:
-    limits:
-      cpu: 1000m
-      memory: 4Gi
+    requests:
+      cpu: 50m
+      memory: 512Mi
   teamId: immich
   users:
     immich:
       - SUPERUSER
   volume:
     size: 20Gi
-    storageClass: longhorn-encrypted
+    storageClass: longhorn-encrypted-replicated-database

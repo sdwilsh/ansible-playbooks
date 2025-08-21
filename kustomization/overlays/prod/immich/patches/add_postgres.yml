@@ -11,14 +11,17 @@ spec:
             - name: DB_DATABASE_NAME
               value: immich
             - name: DB_HOSTNAME
-              value: immich-14-pg
+              value: immich-17-pg
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: immich.immich-14-pg.credentials.postgresql.acid.zalan.do
+                  name: immich.immich-17-pg.credentials.postgresql.acid.zalan.do
                   key: password
             - name: DB_USERNAME
-              value: immich
+              valueFrom:
+                secretKeyRef:
+                  name: immich.immich-17-pg.credentials.postgresql.acid.zalan.do
+                  key: username
             - name: DB_URL
               value: postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOSTNAME)/$(DB_DATABASE_NAME)?sslmode=require&sslmode=no-verify
           name: immich-server

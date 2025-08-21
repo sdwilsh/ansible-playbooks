@@ -5,10 +5,6 @@ env:
   DB_PASSWORD: null
   TZ: America/Los_Angeles
 
-image:
-  # renovate: datasource=github-releases depName=immich-app/immich
-  tag: v1.124.2
-
 immich:
   metrics:
     enabled: true
