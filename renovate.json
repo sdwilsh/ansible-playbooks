@@ -202,6 +202,17 @@
       ]
     },
     {
+      "enabled": false,
+      "groupName": "no-pin",
+      "matchUpdateTypes": [
+        "pin"
+      ],
+      "matchPackageNames": [
+        "mcr.microsoft.com/devcontainers/python",
+        "quay.io/fedora/fedora-bootc"
+      ]
+    },
+    {
       "automerge": true,
       "automergeType": "branch",
       "description": "Group for all traefik automergeable updates",
@@ -247,23 +258,6 @@
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
       "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
-    },
-    {
-      "automerge": true,
-      "automergeType": "branch",
-      "groupName": "penpot",
-      "matchPackageNames": [
-        "penpotapp/**"
-      ],
-      "matchUpdateTypes": [
-        "digest",
-        "minor",
-        "patch"
-      ],
-      "minimumReleaseAge": "7 days",
-      "schedule": [
-        "after 4pm every weekday"
-      ]
     },
     {
       "automerge": true,
