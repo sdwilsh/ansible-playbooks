@@ -18,15 +18,8 @@ build-loki-image:
 
     # This must be built rootful...
     sudo podman build \
-        images/mack \
-        --cap-add=all \
-        --device /dev/fuse \
-        --platform=linux/arm64 \
-        --security-opt=label=type:container_runtime_t \
-        -t mack
-    sudo podman build \
         images/loki \
-        --build-arg PARENT=localhost/mack:latest \
+        --build-arg PARENT=ghcr.io/sdwilsh/mack:latest-arm64 \
         --platform=linux/arm64 \
         -t loki
 
