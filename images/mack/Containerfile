@@ -2,15 +2,8 @@
 FROM scratch AS ctx
 COPY build_files /
 
-FROM quay.io/fedora/fedora-bootc:42 as builder
-RUN /usr/libexec/bootc-base-imagectl \
-    build-rootfs \
-    --manifest=standard \
-    /target-rootfs
-
-# Create a new, empty image from scratch (literally and figuratively).
-FROM scratch
-COPY --from=builder /target-rootfs/ /
+# This is the base image.
+FROM quay.io/fedora/fedora-bootc:42@sha256:8b6f28ea84e1dbcdf17115f85464582f3ba4939c754c763497f5cfea6a79f39e
 
 ARG TARGETPLATFORM
 
@@ -18,13 +11,8 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build.sh
+    /ctx/build.sh && \
+    ostree container commit
 
 # Verify final image and contents are correct.
 RUN bootc container lint
-
-LABEL containers.bootc 1
-LABEL ostree.bootable 1
-ENV container=oci
-STOPSIGNAL SIGRTMIN+3
-CMD ["/sbin/init"]

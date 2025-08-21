@@ -104,14 +104,10 @@ jobs:
           containerfiles: |
             ./images/mack/Containerfile
           context: images/mack
-          extra-args: |
-            --cap-add=all
-            --device=/dev/fuse
-            --security-opt=label=type:container_runtime_t
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
-          oci: true
+          oci: false
           platforms: ${{ env.PLATFORM }}
 
       - name: Login to GitHub Container Registry
