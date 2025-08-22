@@ -7,6 +7,14 @@
     - name: systemctl daemon-reload
       ansible.builtin.systemd_service:
         daemon_reload: true
+    - name: alloy.service
+      ansible.builtin.systemd_service:
+        name: alloy.service
+        state: restarted
+    - name: systemd-journald.service
+      ansible.builtin.systemd_service:
+        name: systemd-journald.service
+        state: restarted
     - name: systemd-modules-load.service
       ansible.builtin.systemd_service:
         name: systemd-modules-load.service
@@ -44,10 +52,13 @@
       loop:
         - /etc/containers/systemd/alloy.container.d
         - /etc/jellyfin-remote-proxy
+        - /etc/systemd/journald.conf.d
         - /etc/wireguard
       tags:
         - alloy
         - hfp-pod
+        - hfp-proxy
+        - hfp-wireguard
     - name: Setup hfp pod for containers
       ansible.builtin.copy:
         content: |
@@ -157,7 +168,7 @@
         - systemctl daemon-reload
         - hfp-proxy.service
       tags:
-        - hfp-podd
+        - hfp-pod
         - hfp-proxy
       vars:
         config:
@@ -195,3 +206,52 @@
       vars:
         # renovate: datasource=github-releases depName=sdwilsh/jellyfin-remote-proxy
         jellyfin_remote_proxy_version: v0.1.5
+
+    # Node Monitoring
+    - name: Modify Alloy container to setup config
+      ansible.builtin.copy:
+        content: |
+          [Container]
+          Volume=/etc/alloy/loki.alloy:/etc/alloy/loki.alloy:ro
+        dest: /etc/containers/systemd/alloy.container.d/override.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - alloy.service
+        - systemctl daemon-reload
+      tags:
+        - alloy
+    - name: Configure Loki target
+      ansible.builtin.copy:
+        content: |
+          loki.write "default" {
+            endpoint {
+              url = "http://10.11.1.72:3100/loki/api/v1/push"
+            }
+          }
+        dest: /etc/alloy/loki.alloy
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - alloy.service
+      tags:
+        - alloy
+    - name: Install journald.conf for Alloy
+      ansible.builtin.copy:
+        content: |
+          [Journal]
+          # Alloy pod will read from journalctl.
+          ForwardToSyslog=no
+
+          # Alloy should be ingesting this, but keep a bit extra just in case!
+          MaxRetentionSec=7day
+        dest: /etc/systemd/journald.conf.d/alloy.conf
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemd-journald.service
+      tags:
+        - alloy
