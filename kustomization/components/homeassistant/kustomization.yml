@@ -16,7 +16,7 @@ images:
   - name: ghcr.io/home-assistant/home-assistant
     newTag: 2025.8.3@sha256:2eb83307a08de3287822b648fce4cbf1364423b55f2af623c149c6b21c2cef00
   - name: lscr.io/linuxserver/code-server
-    newTag: 4.102.3@sha256:87cb49f330b48da7796af9de889bc38943ac79db099fbce6323775518fd26b4a
+    newTag: 4.103.1@sha256:fd2d23e11a539e8fdf04ca535fd8ea675281f73ba2b45eaddb45a31f39af0f61
 resources:
   - service.yml
   - statefulset.yml
