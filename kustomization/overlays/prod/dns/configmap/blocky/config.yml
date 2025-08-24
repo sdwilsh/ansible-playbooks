@@ -67,7 +67,7 @@ customDNS:
     worker02.hogs.tswn.us: 10.11.0.105
     worker03.hogs.tswn.us: 10.11.0.106
     paperless-samba.hogs.tswn.us: 10.11.1.32
-    postgress.homeassistant.hogs.tswn.us: 10.11.1.33
+    postgres.homeassistant.hogs.tswn.us: 10.11.1.33
     traefik.hogs.tswn.us: 10.11.1.64
     unifi-inform.tswn.us: 10.11.1.65
     unifi.shawnwilsher.net: 10.11.1.65 # Controllers point devices to this still...
