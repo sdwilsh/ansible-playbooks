@@ -19,7 +19,7 @@ images:
   - name: busybox
     newTag: 1.37.0@sha256:ab33eacc8251e3807b85bb6dba570e4698c3998eca6f0fc2ccb60575a563ea74
   - name: postgres
-    newTag: 17@sha256:29e0bb09c8e7e7fc265ea9f4367de9622e55bae6b0b97e7cce740c2d63c2ebc0
+    newTag: 16@sha256:66a5efb5677ffac1037774a0e141fd3a4c035c9c0c0e624c9cc980dfa10f45e5
 namespace: homeassistant
 patches:
   - path: patches/frigate/add_frigate_env_vars.yml
