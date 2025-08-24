@@ -11,6 +11,10 @@ patches:
     target:
       kind: OperatorConfiguration
       name: postgresql-operator-default-configuration
+  - path: patches/postgres-operator/use_local_load_balancer_external_traffic_policy.yml
+    target:
+      kind: OperatorConfiguration
+      name: postgresql-operator-default-configuration
 resources:
   - namespace.yml
   - ingress.yml

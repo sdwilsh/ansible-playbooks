@@ -2,17 +2,25 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: homeassistant-recorder-16-pg
+  name: homeassistant-recorder-17-pg
 spec:
+  allowedSourceRanges:
+    - 10.117.0.33/32
   enableLogicalBackup: true
+  enableMasterLoadBalancer: true
+  masterServiceAnnotations:
+    kube-vip.io/loadbalancerIPs: 10.11.1.33
   numberOfInstances: 3
   podPriorityClassName: critical-application-infra
   postgresql:
-    version: "16"
+    version: "17"
   preparedDatabases:
     homeassistant:
       defaultUsers: true
+  spiloFSGroup: 103 # postgres GID
   teamId: homeassistant
+  tls:
+    secretName: postgres-homeassistant-hogs-tswn-us-secret
   volume:
     size: 50Gi
     storageClass: longhorn-encrypted-replicated-database

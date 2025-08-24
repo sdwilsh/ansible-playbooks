@@ -1,0 +1,8 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: OperatorConfiguration
+metadata:
+  name: this-is-ignored-but-is-required
+configuration:
+  load_balancer:
+    external_traffic_policy: Local
