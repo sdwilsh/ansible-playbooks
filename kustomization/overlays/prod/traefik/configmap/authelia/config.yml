@@ -24,6 +24,9 @@ access_control:
       networks:
         - 10.117.0.0/23
         - 10.117.2.1/24
+    - name: homeassistant-appliance
+      networks:
+        - 10.117.0.33
     - name: kubernetes
       networks:
         - 10.11.0.0/23
@@ -55,6 +58,9 @@ access_control:
       policy: bypass
     - domain: atuin.tswn.us
       policy: bypass
+    - domain: frigate.hogs.tswn.us
+      networks:
+        - homeassistant-appliance
     - domain: homeassistant.hogs.tswn.us
       networks:
         - home
@@ -71,7 +77,11 @@ access_control:
     - domain: opensprinkler.hogs.tswn.us
       networks:
         - home
+        - homeassistant-appliance
       policy: bypass
+    - domain: spoolman.hogs.tswn.us
+      networks:
+        - homeassistant-appliance
     - domain: "*.tswn.us"
       networks:
         - home
