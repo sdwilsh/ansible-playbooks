@@ -61,6 +61,7 @@ access_control:
     - domain: frigate.hogs.tswn.us
       networks:
         - homeassistant-appliance
+      policy: bypass
     - domain: homeassistant.hogs.tswn.us
       networks:
         - home
@@ -82,6 +83,7 @@ access_control:
     - domain: spoolman.hogs.tswn.us
       networks:
         - homeassistant-appliance
+      policy: bypass
     - domain: "*.tswn.us"
       networks:
         - home
