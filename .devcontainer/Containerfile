@@ -11,7 +11,7 @@ COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
 # Setup and Configure OpenPubkey SSH
 # renovate: datasource=github-releases depName=openpubkey/opkssh
-ARG OPKSSH_VERSION=0.8.0
+ARG OPKSSH_VERSION=0.9.0
 RUN --mount=type=cache,dst=/deb \
   curl -o /deb/opkssh.deb \
     -L \
