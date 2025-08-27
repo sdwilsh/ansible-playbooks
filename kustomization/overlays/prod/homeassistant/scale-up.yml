@@ -41,19 +41,6 @@
           spec:
             replicas: 1
         wait: true
-    - name: Scale up zwavejs statefulset
-      kubernetes.core.k8s:
-        context: "{{ cluster }}"
-        state: present
-        resource_definition:
-          apiVersion: apps/v1
-          kind: StatefulSet
-          metadata:
-            name: "{{ (lookup('file', '../../../components/zwavejs/statefulset.yml') | from_yaml).metadata.name }}"
-            namespace: "{{ k8s_namespace }}"
-          spec:
-            replicas: 1
-        wait: true
     - name: Scale up homeassistant statefulset
       kubernetes.core.k8s:
         context: "{{ cluster }}"

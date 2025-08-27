@@ -39,13 +39,3 @@ spec:
                   name: code-web
             path: /
             pathType: Prefix
-    - host: zwave.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: zwavejs-svc
-                port:
-                  name: web
-            path: /
-            pathType: Prefix

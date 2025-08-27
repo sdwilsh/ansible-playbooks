@@ -163,7 +163,6 @@ customDNS:
     transmission.hogs IN CNAME traefik.hogs
     tvheadend.hogs IN CNAME traefik.hogs
     unifi IN CNAME traefik.hogs
-    zwave.hogs IN CNAME traefik.hogs
 
 connectIPVersion: v4
 

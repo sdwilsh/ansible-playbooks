@@ -6,7 +6,6 @@ components:
   - ../../../components/frigate
   - ../../../components/homeassistant
   - ../../../components/mosquitto
-  - ../../../components/zwavejs
 configMapGenerator:
   - files:
       - configmap/frigate/config.yml

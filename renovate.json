@@ -134,7 +134,6 @@
         "shenxn/protonmail-bridge",
         "stirling-pdf-chart",
         "ubuntu/bind9",
-        "zwavejs/zwave-js-ui"
       ],
       "minimumReleaseAge": "3 days",
       "schedule": [
@@ -154,7 +153,6 @@
         "ghcr.io/immich-app/immich-machine-learning",
         "ghcr.io/immich-app/immich-server",
         "immich",
-        "zwavejs/zwave-js-ui"
       ],
       "minimumReleaseAge": "1 days",
       "schedule": [

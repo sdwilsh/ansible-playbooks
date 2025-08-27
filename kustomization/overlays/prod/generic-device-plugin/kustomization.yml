@@ -22,9 +22,5 @@ patches:
       kind: DaemonSet
       name: generic-device-plugin
     path: patches/add_render.yml
-  - target:
-      kind: DaemonSet
-      name: generic-device-plugin
-    path: patches/add_zstick7.yml
 resources:
   - namespace.yml
