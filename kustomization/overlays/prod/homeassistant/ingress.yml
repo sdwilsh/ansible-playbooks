@@ -9,16 +9,6 @@ metadata:
   name: homeassistant-ingress
 spec:
   rules:
-    - host: esphome.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: esphome-svc
-                port:
-                  name: web
-            path: /
-            pathType: Prefix
     - host: frigate.hogs.tswn.us
       http:
         paths:

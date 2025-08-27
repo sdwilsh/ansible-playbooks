@@ -122,7 +122,6 @@
         "deluan/navidrome",
         "docker.io/grafana/alloy",
         "eclipse-mosquitto",
-        "esphome/esphome",
         "ghcr.io/paperless-ngx/paperless-ngx",
         "gotenberg/gotenberg",
         "helm/helm",

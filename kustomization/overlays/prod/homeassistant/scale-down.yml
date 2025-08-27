@@ -23,19 +23,6 @@
           spec:
             replicas: 0
         wait: true
-    - name: Scale down esphome statefulset
-      kubernetes.core.k8s:
-        context: "{{ cluster }}"
-        state: present
-        resource_definition:
-          apiVersion: apps/v1
-          kind: StatefulSet
-          metadata:
-            name: "{{ (lookup('file', '../../../components/esphome/statefulset.yml') | from_yaml).metadata.name }}"
-            namespace: "{{ k8s_namespace }}"
-          spec:
-            replicas: 0
-        wait: true
     - name: Scale down frigate statefulset
       kubernetes.core.k8s:
         context: "{{ cluster }}"
