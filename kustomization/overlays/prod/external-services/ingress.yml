@@ -9,6 +9,16 @@ metadata:
   name: external-services-ingress
 spec:
   rules:
+    - host: homeassistant.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: homeassistant-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: nas.hogs.tswn.us
       http:
         paths:

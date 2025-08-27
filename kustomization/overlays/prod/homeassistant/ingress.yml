@@ -19,23 +19,3 @@ spec:
                   name: web
             path: /
             pathType: Prefix
-    - host: homeassistant.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: homeassistant-svc
-                port:
-                  name: hass-web
-            path: /
-            pathType: Prefix
-    - host: homeassistant-config.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: homeassistant-svc
-                port:
-                  name: code-web
-            path: /
-            pathType: Prefix

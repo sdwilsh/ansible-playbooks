@@ -1,0 +1,18 @@
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: homeassistant-endpointslice
+  labels:
+    kubernetes.io/service-name: homeassistant-svc
+addressType: IPv4
+ports:
+  - name: web
+    protocol: TCP
+    port: 8123
+endpoints:
+  - addresses:
+      - 10.117.0.33 # homeassistant-appliance.hogs.tswn.us
+    conditions:
+      ready: true
+
