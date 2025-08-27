@@ -4,7 +4,7 @@ Description=Checks if policies need to be updated for selinux to run opkssh.
 Wants=network.target
 
 [Service]
-ExecStart=/usr/share/opkssh/check_selinux.sh
+ExecStart=/usr/share/opkssh/configure_selinux.sh
 KillMode=process
 Type=simple
 
