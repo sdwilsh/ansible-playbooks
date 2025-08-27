@@ -1,7 +1,5 @@
 ---
 roles:
-  - name: mrlesmithjr.netplan
-    version: v0.4.2
   - name: nickjj.docker
     version: v2.5.1
 collections:
