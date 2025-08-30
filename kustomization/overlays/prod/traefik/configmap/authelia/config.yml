@@ -43,7 +43,6 @@ access_control:
         - 10.117.0.68 # sonos-office.hogs
         - 10.117.0.69 # sonos-dining.hogs
   rules:
-      policy: bypass
     - domain: argo-cd.hogs.tswn.us
       networks:
         - home
