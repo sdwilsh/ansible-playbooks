@@ -283,6 +283,12 @@
       "matchPackageNames": [
         "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
       ]
+    },
+    {
+      "groupName": "marinatedconcrete Unifi Network Application Kustomize Component",
+      "groupSlug": "marinatedconcrete-kustomize-unifi-network-application",
+      "matchCurrentValue": "kustomize-unifi-network-application@**",
+      "matchPackageNames": ["marinatedconcrete/config"]
     }
   ],
   "separateMinorPatch": true
