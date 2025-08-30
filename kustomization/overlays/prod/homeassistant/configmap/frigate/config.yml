@@ -7,6 +7,7 @@ birdseye:
 cameras:
   Front_Porch:
     detect:
+      enabled: true
       fps: 5
       height: 720
       width: 1280
@@ -27,6 +28,7 @@ cameras:
         - 0.367,0.405,0,0.374,0,0,0.46,0.003,0.503,0.063,0.507,0.225,0.365,0.223
   Front_North_East:
     detect:
+      enabled: true
       fps: 5
       height: 720
       width: 1280
