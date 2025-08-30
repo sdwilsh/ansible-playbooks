@@ -18,4 +18,9 @@ spec:
                 secretKeyRef:
                   name: frigate-secret
                   key: rtsp_password
+            - name: PLUS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frigate-secret
+                  key: api_key
           name: frigate
