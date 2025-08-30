@@ -84,7 +84,8 @@ ingester:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
   priorityClassName: application-infra
-  replicas: 6
+  replicas: 9 # 3 per zone
+  maxUnavailable: 1
 querier:
   extraArgs: *extraArgs
   extraEnv: *tracing-exraEnv
