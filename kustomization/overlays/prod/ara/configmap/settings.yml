@@ -1,6 +1,0 @@
----
-default:
-  ALLOWED_HOSTS:
-    - ara.hogs.tswn.us
-  CORS_ORIGIN_WHITELIST:
-    - https://ara.hogs.tswn.us

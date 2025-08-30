@@ -5,7 +5,6 @@
 
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/prometheus-operator/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/3d-printing/scale-up.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/ara/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/atuin/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/aventertainment/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-up.yml

@@ -59,20 +59,6 @@
     group: "root"
     mode: "u=rw,g=r,o=r"
     src: "logrotate-ansible.j2"
-- name: Set environment in cron file for ARA API Client
-  ansible.builtin.cron:
-    name: "ARA_API_CLIENT"
-    env: true
-    job: "http"
-    user: "ansible"
-    state: present
-- name: Set environment in cron file for ARA API Client
-  ansible.builtin.cron:
-    name: "ARA_API_SERVER"
-    env: true
-    job: "https://ara.hogs.tswn.us"
-    user: "ansible"
-    state: present
 - name: "Create ansible-cron script"
   ansible.builtin.copy:
     content: |
@@ -97,10 +83,6 @@
       pip install -r requirements.txt
 
       export ANSIBLE_LOG_PATH=/var/log/ansible.log
-      export ANSIBLE_CALLBACK_PLUGINS=$({{ ansible_python.executable }} -m ara.setup.callback_plugins)
-      export ARA_API_CLIENT=http
-      export ARA_API_SERVER=https://ara.hogs.tswn.us
-      export ARA_CALLBACK_THREADS=4
 
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing collections"
       ansible-galaxy collection install --force -U -p external_collections/ -r requirements.yml

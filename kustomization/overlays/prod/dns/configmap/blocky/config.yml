@@ -127,7 +127,6 @@ customDNS:
     $TTL 3600
 
     alertmanager.hogs IN CNAME traefik.hogs
-    ara.hogs IN CNAME traefik.hogs
     argo-cd.hogs IN CNAME traefik.hogs
     atuin IN CNAME traefik.hogs
     auth IN CNAME traefik.hogs

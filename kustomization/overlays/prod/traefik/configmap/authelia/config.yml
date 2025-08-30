@@ -43,13 +43,6 @@ access_control:
         - 10.117.0.68 # sonos-office.hogs
         - 10.117.0.69 # sonos-dining.hogs
   rules:
-    - domain: ara.hogs.tswn.us
-      networks:
-        - cluster
-        - dev
-        - kubernetes
-        - man
-        - 10.117.0.24 # monitor.house.gem.hogs.tswn.us
       policy: bypass
     - domain: argo-cd.hogs.tswn.us
       networks:
