@@ -1,0 +1,14 @@
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      volumes:
+        # https://docs.frigate.video/frigate/installation#calculating-required-shm-size
+        - emptyDir:
+            sizeLimit: 256Mi
+          name: frigate-shm

@@ -21,6 +21,10 @@ patches:
     target:
       kind: StatefulSet
       name: frigate-statefulset
+  - path: patches/frigate/set_frigate_shm_size.yml
+    target:
+      kind: StatefulSet
+      name: frigate-statefulset
   - path: patches/mosquitto/add_custom_config.yml
     target:
       kind: StatefulSet
