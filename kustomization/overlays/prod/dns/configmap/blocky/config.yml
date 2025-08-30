@@ -75,6 +75,8 @@ customDNS:
     factorio-relic.tswn.us: 10.11.1.69
     nut-ups02.hogs.tswn.us: 10.11.1.71
     loki-distributor.hogs.tswn.us: 10.11.1.72
+    0.ntp.hogs.tswn.us: 10.11.1.73
+    pool.hogs.tswn.us: 10.11.1.73
 
     # NO-WAN VLAN
     front-porch.camera.hogs.tswn.us: 10.67.0.12
@@ -105,8 +107,6 @@ customDNS:
     fan-mainbed.hogs.tswn.us: 10.117.0.42
     fan-office.hogs.tswn.us: 10.117.0.43
     house.gem.hogs.tswn.us: 10.117.0.46
-    pool.hogs.tswn.us: 10.117.0.50
-    0.ntp.hogs.tswn.us: 10.117.0.50
     sonos-den.hogs.tswn.us: 10.117.0.60
     sonos-den-sub.hogs.tswn.us: 10.117.0.61
     sonos-living.hogs.tswn.us: 10.117.0.62
