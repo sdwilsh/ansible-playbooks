@@ -83,4 +83,3 @@ snapshots:
   enabled: true
 ui:
   time_format: 24hour
-version: 0.15-1
