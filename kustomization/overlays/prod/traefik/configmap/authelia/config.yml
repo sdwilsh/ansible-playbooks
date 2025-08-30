@@ -118,9 +118,9 @@ identity_providers:
         pkce_challenge_method: S256
         public: true
         redirect_uris:
-          - http://localhost:3000/login-callback
-          - http://localhost:10001/login-callback
-          - http://localhost:11110/login-callback
+          - http://127.0.0.1:3000/login-callback
+          - http://127.0.0.1:10001/login-callback
+          - http://127.0.0.1:11110/login-callback
         response_types:
           - code
         require_pkce: true
