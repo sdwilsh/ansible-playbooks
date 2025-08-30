@@ -36,7 +36,6 @@ customDNS:
     ipmi-chanttogreen.hogs.tswn.us: 10.10.0.13
     chanttogreen.hogs.tswn.us: 10.10.0.14
     rack-switch01.tswn.us.hogs.tswn.us: 10.10.0.15
-    sdwilsh-dev.hogs.tswn.us: 10.10.0.20
     ups01.hogs.tswn.us: 10.10.0.30
     ups02.hogs.tswn.us: 10.10.0.31
     power-failover.hogs.tswn.us: 10.10.0.32

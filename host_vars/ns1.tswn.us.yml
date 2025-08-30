@@ -1,7 +1,0 @@
----
-common__gateway_v4_address: "10.10.0.1"
-common__ip_addresses:
-  - "10.10.0.3/24"
-common__nameservers:
-  addresses:
-    - "10.10.0.1"

@@ -3,7 +3,6 @@ hogsflixplus
 sos
 
 [dev]
-sdwilsh-dev.hogs.tswn.us ansible_host=10.10.0.20
 lighterthansome.hogs.tswn.us ansible_host=10.117.0.9
 
 [hogsflixplus]
@@ -43,6 +42,3 @@ kairos_prod
 
 [sos]
 choros.tswn.us ansible_host=23.94.59.52
-
-[vms]
-docker.hogs.tswn.us ansible_host=10.10.0.8
