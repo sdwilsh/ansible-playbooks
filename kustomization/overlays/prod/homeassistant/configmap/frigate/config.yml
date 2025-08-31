@@ -53,6 +53,8 @@ detectors:
   coral:
     type: edgetpu
     device: usb
+face_recognition:
+  enabled: true
 go2rtc:
   rtsp:
     username: frigate
