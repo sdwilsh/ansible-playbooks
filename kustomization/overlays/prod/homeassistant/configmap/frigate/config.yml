@@ -62,15 +62,32 @@ go2rtc:
       rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.14:554/cam/realmonitor?channel=1&subtype=0
     front-porch:
       rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.12:554/cam/realmonitor?channel=1&subtype=0
+model:
+  width: 320
+  height: 320
+  path: plus://e074d6405b3257c98d255cd2efc9d21f
 mqtt:
   host: mosquitto-svc.homeassistant.svc.cluster.local
   user: frigate
   password: '{FRIGATE_MQTT_PASSWORD}'
 objects:
   track:
+    - amazon
+    - bird
     - cat
+    - dhl
     - dog
+    - face
+    - fedex
+    - package
     - person
+    - possum
+    - rabbit
+    - raccoon
+    - rodent
+    - squirrel
+    - ups
+    - usps
 record:
   enabled: true
   alerts:
