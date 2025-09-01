@@ -9,6 +9,6 @@ spec:
   capacity:
     storage: 20Gi
   nfs:
-    path: /mnt/rust0/nfs/paperless-backup
+    path: /mnt/rust0/paperless-backup
     server: services-nfs.hogs.tswn.us
   persistentVolumeReclaimPolicy: Retain
