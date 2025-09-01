@@ -18,10 +18,7 @@ spec:
                   name: immich.immich-17-pg.credentials.postgresql.acid.zalan.do
                   key: password
             - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: immich.immich-17-pg.credentials.postgresql.acid.zalan.do
-                  key: username
+              value: immich
             - name: DB_URL
               value: postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOSTNAME)/$(DB_DATABASE_NAME)?sslmode=require&sslmode=no-verify
           name: immich-server
