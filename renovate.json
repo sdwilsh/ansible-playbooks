@@ -92,9 +92,9 @@
     }
   ],
   "extends": [
-    "github>marinatedconcrete/config//renovate/devcontainer#renovate-config-2.1.1",
-    "github>marinatedconcrete/config//renovate/marinatedconcrete#renovate-config-2.1.1",
-    "github>marinatedconcrete/config//renovate/recommended#renovate-config-2.1.1"
+    "github>marinatedconcrete/config//renovate/devcontainer#renovate-config-2.2.0",
+    "github>marinatedconcrete/config//renovate/marinatedconcrete#renovate-config-2.2.0",
+    "github>marinatedconcrete/config//renovate/recommended#renovate-config-2.2.0"
   ],
   "packageRules": [
     {
