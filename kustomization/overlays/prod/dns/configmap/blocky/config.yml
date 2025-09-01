@@ -77,6 +77,7 @@ customDNS:
     loki-distributor.hogs.tswn.us: 10.11.1.72
     0.ntp.hogs.tswn.us: 10.11.1.73
     pool.hogs.tswn.us: 10.11.1.73
+    7d2d-relic.tswn.us: 10.11.1.74
 
     # NO-WAN VLAN
     front-porch.camera.hogs.tswn.us: 10.67.0.12
@@ -126,7 +127,7 @@ customDNS:
     $ORIGIN tswn.us.
     $TTL 3600
 
-    7d2d-relic IN CNAME traefik.hogs
+    7d2d-relic-admin IN CNAME traefik.hogs
     alertmanager.hogs IN CNAME traefik.hogs
     argo-cd.hogs IN CNAME traefik.hogs
     atuin IN CNAME traefik.hogs

@@ -8,6 +8,11 @@ images:
   - name: vinanrra/7dtd-server
     newTag: v0.9.2@sha256:2ba7b9d4b1a7f66b5b7e00755f62169583930e64c49cf400b69c4f1f2d126a9c
 namespace: 7d2d-relic
+patches:
+  - path: patches/set_load_balancer.yml
+    target:
+      kind: Service
+      name: seven-days-to-die-svc
 resources:
   - namespace.yml
   - ingress.yml

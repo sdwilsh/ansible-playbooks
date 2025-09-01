@@ -8,7 +8,7 @@ metadata:
   name: seven-days-to-die-ingress
 spec:
   rules:
-    - host: 7d2d-relic.tswn.us
+    - host: 7d2d-relic-admin.tswn.us
       http:
         paths:
           - backend:
