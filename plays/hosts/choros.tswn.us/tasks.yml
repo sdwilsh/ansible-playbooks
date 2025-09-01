@@ -92,6 +92,11 @@
 
           [Pod]
           Network=hogs-services.network
+          # 7 Days to Die (Relic)
+          PublishPort={{ ansible_default_ipv4.address }}:26900:26900/tcp
+          PublishPort={{ ansible_default_ipv4.address }}:26900:26900/udp
+          PublishPort={{ ansible_default_ipv4.address }}:26901:26901/udp
+          PublishPort={{ ansible_default_ipv4.address }}:26902:26902/udp
           # Factorio
           PublishPort={{ ansible_default_ipv4.address }}:34197:34197/udp
           # HFP
@@ -223,6 +228,16 @@
           MTU = 1280
           PrivateKey = {{ wireguard__privkey }}
 
+          # 7 Days to Die (Relic) Forwarding
+          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 26900 --jump DNAT --to-destination 10.11.1.74:26900
+          PreUp = iptables --table nat --append POSTROUTING --protocol tcp --destination 10.11.1.74 --dport 26900 --jump MASQUERADE
+          PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 26900 --jump DNAT --to-destination 10.11.1.74:26900
+          PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.74 --dport 26900 --jump MASQUERADE
+          PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 26901 --jump DNAT --to-destination 10.11.1.74:26901
+          PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.74 --dport 26901 --jump MASQUERADE
+          PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 26902 --jump DNAT --to-destination 10.11.1.74:26902
+          PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.74 --dport 26902 --jump MASQUERADE
+
           # Factorio Forwarding
           PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 34197 --jump DNAT --to-destination 10.11.1.69:34197
           PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.69 --dport 34197 --jump MASQUERADE
@@ -258,6 +273,7 @@
           - 10.11.1.64/32 # Traefik
           - 10.11.1.65/32 # Unifi Controller
           - 10.11.1.72/32 # loki-distributor
+          - 10.11.1.74/32 # 7 Days to Die (Relic)
         wireguard__privkey: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           65363935346361653034666130656437303839336239663564346538333164353732643934373833
