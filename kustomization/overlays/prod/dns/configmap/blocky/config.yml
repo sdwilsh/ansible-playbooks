@@ -126,6 +126,7 @@ customDNS:
     $ORIGIN tswn.us.
     $TTL 3600
 
+    7d2d-relic IN CNAME traefik.hogs
     alertmanager.hogs IN CNAME traefik.hogs
     argo-cd.hogs IN CNAME traefik.hogs
     atuin IN CNAME traefik.hogs

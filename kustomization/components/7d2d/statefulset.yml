@@ -1,0 +1,153 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: seven-days-to-die-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: seven-days-to-die
+  serviceName: seven-days-to-die-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: seven-days-to-die
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: BACKUP
+              value: "YES"
+            - name: PGID
+              value: "65536"
+            - name: PUID
+              value: "65536"
+            - name: START_MODE
+              value: "3"
+            - name: TimeZone
+              value: America/Los_Angeles
+          image: vinanrra/7dtd-server
+          livenessProbe:
+            exec:
+              command:
+                - pidof
+                - 7DaysToDieServer.x86_64
+            periodSeconds: 60
+            timeoutSeconds: 3
+          name: seven-days-to-die
+          ports:
+            - containerPort: 26900
+              name: game-tcp
+              protocol: TCP
+            - containerPort: 26900
+              name: game-udp-0
+              protocol: UDP
+            - containerPort: 26901
+              name: game-udp-1
+              protocol: UDP
+            - containerPort: 26902
+              name: game-udp-2
+              protocol: UDP
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          securityContext:
+            allowPrivilegeEscalation: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /home/sdtdserver/lgsm/backup/
+              name: seven-days-to-die-backups
+            - mountPath: /home/sdtdserver/lgsm/config-lgsm/sdtdserver/
+              name: seven-days-to-die-lgsm-config
+            - mountPath: /home/sdtdserver/log/
+              name: seven-days-to-die-logs
+            - mountPath: /home/sdtdserver/.local/share/7DaysToDie/
+              name: seven-days-to-die-saves
+            - mountPath: /home/sdtdserver/serverfiles/
+              name: seven-days-to-die-server
+      priorityClassName: application
+      securityContext:
+        fsGroup: 65536
+      volumes:
+        - name: seven-days-to-die-logs
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
+        name: seven-days-to-die-backups
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+        storageClassName: longhorn-unencrypted
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
+        name: seven-days-to-die-lgsm-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-unencrypted
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the game group.
+          recurring-job-group.longhorn.io/game: enabled
+        name: seven-days-to-die-saves
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+        storageClassName: longhorn-unencrypted
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          # Opt out of the default group.
+          recurring-job-group.longhorn.io/default: disabled
+          # Opt into the no-backup group since it can easily be recreated.
+          recurring-job-group.longhorn.io/no-backup: enabled
+        name: seven-days-to-die-server
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+        storageClassName: longhorn-unencrypted

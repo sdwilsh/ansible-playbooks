@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seven-days-to-die-svc
+spec:
+  selector:
+    app.kubernetes.io/name: seven-days-to-die
+  ports:
+    - name: game-tcp
+      port: 26900
+      protocol: TCP
+      targetPort: game-tcp
+    - name: game-udp-0
+      port: 26900
+      protocol: UDP
+      targetPort: game-udp-0
+    - name: game-udp-1
+      port: 26901
+      protocol: UDP
+      targetPort: game-udp-1
+    - name: game-udp-2
+      port: 26902
+      protocol: UDP
+      targetPort: game-udp-2
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: web
