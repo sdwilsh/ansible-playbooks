@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: seven-days-to-die-ingress
 spec:
