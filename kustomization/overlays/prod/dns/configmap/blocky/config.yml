@@ -76,7 +76,7 @@ customDNS:
     nut-ups02.hogs.tswn.us: 10.11.1.71
     loki-distributor.hogs.tswn.us: 10.11.1.72
     0.ntp.hogs.tswn.us: 10.11.1.73
-    pool.hogs.tswn.us: 10.11.1.73
+    pool.ntp.hogs.tswn.us: 10.11.1.73
     7d2d-relic.tswn.us: 10.11.1.74
 
     # NO-WAN VLAN
