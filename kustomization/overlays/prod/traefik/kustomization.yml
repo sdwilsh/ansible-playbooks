@@ -17,7 +17,7 @@ configMapGenerator:
       - configmap/traefik/static.yml
 images:
   - name: postgres
-    newTag: 16@sha256:66a5efb5677ffac1037774a0e141fd3a4c035c9c0c0e624c9cc980dfa10f45e5
+    newTag: 16@sha256:3105ef2d654e4b216af23d8d71c85db7c490479e4ba4c10979883f806f247fdd
   - name: quay.io/opstree/redis-sentinel
     newTag: v8.0.3@sha256:a1737b88d6a5a46f50b669b81b202774ee8d82b1d71d96e7c5773973a38d5622
   - name: quay.io/opstree/redis
