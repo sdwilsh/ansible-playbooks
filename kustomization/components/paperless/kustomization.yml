@@ -12,7 +12,7 @@ images:
   - name: ghcr.io/paperless-ngx/tika
     newTag: 2.9.1-minimal
   - name: gotenberg/gotenberg
-    newTag: 8.22.0@sha256:91035c5041e7f986ae89d0e9f1783233dbae4254b19a33f954288466de5d150f
+    newTag: 8.23.0@sha256:3e9d970c395dfd7f0f98fd8da5adc01dab6bf95881d8d232f77a9feafe6d4977
 patches:
   - path: patches/add_tika.yml
     target:
