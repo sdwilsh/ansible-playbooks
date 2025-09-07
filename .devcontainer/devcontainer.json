@@ -29,7 +29,7 @@
         },
         "ghcr.io/devcontainers-extra/features/argo-cd:1": {
             // renovate: datasource=github-releases depName=argoproj/argo-cd
-            "version": "3.1.1"
+            "version": "3.1.3"
         },
         "ghcr.io/devcontainers-extra/features/renovate-cli:2": {
             // renovate: datasource=github-releases depName=renovatebot/renovate
