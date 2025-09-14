@@ -37,6 +37,15 @@ image:
 internalDatabase:
   enabled: false
 
+lifecycle:
+  postStartCommand:
+    - /bin/sh
+    - -c
+    - |-
+      echo "Configuring NextCloud Apps"
+      php occ app:enable user_oidc
+      php occ config:app:set --value=0 user_oidc allow_multiple_user_backends
+      php occ user_oidc:provider auth.tswn.us --clientid="${OIDC_CLIENT_ID}" --clientsecret="${OIDC_CLIENT_SECRET}" --discoveryuri="${OIDC_DISCOVERY_URI}"
 nextcloud:
   configs:
     custom.config.php: |
@@ -51,6 +60,15 @@ nextcloud:
           'overwrite.cli.url' => 'https://nextcloud.tswn.us',
           'tempdirectory' => '/var/www/tmp',
         );
+    oidc.config.php: |
+      <?php
+      $CONFIG = array(
+        'user_oidc' => [
+          'auto_provision' => true,
+          'soft_auto_provision' => true,
+          'single_logout' => false,
+        ],
+      );
   containerPort: 8080
   defaultConfigs:
     .htaccess: false
@@ -69,6 +87,15 @@ nextcloud:
   extraEnv:
     - name: APACHE_DISABLE_REWRITE_IP
       value: "1"
+    - name: OIDC_DISCOVERY_URI
+      value: https://auth.tswn.us/.well-known/openid-configuration
+    - name: OIDC_CLIENT_ID
+      value: fr7~9UoZ_cXqdcUpB_MgysiYMuVZqJW3PLxgdlHnWUq2q05KaV3I.RGXyVP0WMomxDruQO1o
+    - name: OIDC_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: oidc-client-secret
+          name: nextcloud-secret
     - name: TRUSTED_PROXIES
       value: 127.0.0.1 172.16.0.0/16
   extraInitContainers:
