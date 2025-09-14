@@ -1,0 +1,20 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioPolicy
+metadata:
+  name: namespace-nextcloud-miniopolicy
+spec:
+  name: namespace-nextcloud
+  statement:
+    - action:
+        - s3:*
+      effect: Allow
+      resource:
+        - arn:aws:s3:::namespace-nextcloud
+        - arn:aws:s3:::namespace-nextcloud/*
+  tenantRef:
+    name: postgres-backup-tenant
+  version: "2012-10-17"
+

@@ -18,6 +18,7 @@
           - homeassistant
           - immich
           - monitoring
+          - nextcloud
           - paperless
           - traefik
     - name: Delete existing codegen
