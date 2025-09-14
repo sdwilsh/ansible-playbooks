@@ -14,7 +14,7 @@ chmod -R o= /etc/opk
 # Grab the te file for selinux so it can be installed/updated at boot.
 curl --fail \
     -o \
-    /usr/share/opkssh/opkssh.te https://raw.githubusercontent.com/openpubkey/opkssh/refs/tags/v${OPKSSH_VERSION}/te-files/opkssh.te
+    /usr/share/opkssh/opkssh.te https://raw.githubusercontent.com/openpubkey/opkssh/refs/tags/v${OPKSSH_VERSION}/opkssh.te
 
 # Determine what architecture we are building for because some packages do not
 # label with the output from arch.
