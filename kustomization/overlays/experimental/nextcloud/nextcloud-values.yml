@@ -20,8 +20,8 @@ externalDatabase:
     enabled: true
     usernameKey: username
     passwordKey: password
-    secretName: nextcloud-owner-user.nextcloud-16-pg.credentials.postgresql.acid.zalan.do
-  host: nextcloud-16-pg
+    secretName: nextcloud-owner-user.nextcloud-17-pg.credentials.postgresql.acid.zalan.do
+  host: nextcloud-17-pg
   type: postgresql
 
 image:
@@ -96,19 +96,19 @@ nextcloud:
         - name: PGDATABASE
           value: nextcloud
         - name: PGHOST
-          value: nextcloud-16-pg
+          value: nextcloud-17-pg
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: nextcloud-owner-user.nextcloud-16-pg.credentials.postgresql.acid.zalan.do
+              name: nextcloud-owner-user.nextcloud-17-pg.credentials.postgresql.acid.zalan.do
         - name: PGSSLMODE
           value: require
         - name: PGUSER
           valueFrom:
             secretKeyRef:
               key: username
-              name: nextcloud-owner-user.nextcloud-16-pg.credentials.postgresql.acid.zalan.do
+              name: nextcloud-owner-user.nextcloud-17-pg.credentials.postgresql.acid.zalan.do
       image: postgres
       name: wait-for-nextcloud-pg-is-ready
       securityContext:

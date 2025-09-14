@@ -2,13 +2,13 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: nextcloud-16-pg
+  name: nextcloud-17-pg
 spec:
   enableLogicalBackup: true
   numberOfInstances: 2
   podPriorityClassName: application-infra
   postgresql:
-    version: "16"
+    version: "17"
   preparedDatabases:
     nextcloud:
       defaultUsers: true

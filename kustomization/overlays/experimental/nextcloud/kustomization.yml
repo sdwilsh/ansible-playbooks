@@ -10,7 +10,7 @@ helmCharts:
     valuesFile: nextcloud-values.yml
 images:
   - name: postgres
-    newTag: 16@sha256:b477759d38be47671d54a054d832791f8ddb9f0eaf6faf51ed17516087793a66
+    newTag: 17@sha256:feff5b24fedd610975a1f5e743c51a4b360437f4dc3a11acf740dcd708f413f6
 namespace: nextcloud
 resources:
   - namespace.yml
