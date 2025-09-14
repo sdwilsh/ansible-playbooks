@@ -49,6 +49,7 @@ nextcloud:
           'overwritehost' => 'nextcloud.tswn.us',
           'overwriteprotocol' => 'https',
           'overwrite.cli.url' => 'https://nextcloud.tswn.us',
+          'tempdirectory' => '/var/www/tmp',
         );
   containerPort: 8080
   defaultConfigs:
