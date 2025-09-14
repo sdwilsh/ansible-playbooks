@@ -1,6 +1,18 @@
 ---
 cronjob:
+  cronjob:
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      runAsUser: 82 # www-data
+      runAsGroup: 101 # nginx
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
   enabled: true
+  type: cronjob
+
 
 externalDatabase:
   enabled: true
