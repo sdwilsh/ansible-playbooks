@@ -13,7 +13,6 @@ cronjob:
   enabled: true
   type: cronjob
 
-
 externalDatabase:
   enabled: true
   existingSecret:
@@ -23,6 +22,14 @@ externalDatabase:
     secretName: nextcloud-owner-user.nextcloud-17-pg.credentials.postgresql.acid.zalan.do
   host: nextcloud-17-pg
   type: postgresql
+
+externalRedis:
+  enabled: true
+  existingSecret:
+    enabled: true
+    passwordKey: redis-password
+    secretName: nextcloud-secret
+  host: nextcloud-redis
 
 image:
   flavor: fpm-alpine
@@ -61,13 +68,6 @@ nextcloud:
   extraEnv:
     - name: APACHE_DISABLE_REWRITE_IP
       value: "1"
-    - name: REDIS_HOST
-      value: nextcloud-redis
-    - name: REDIS_HOST_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          key: redis-password
-          name: nextcloud-secret
     - name: TRUSTED_PROXIES
       value: 127.0.0.1 172.16.0.0/16
   extraInitContainers:
