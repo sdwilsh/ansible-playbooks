@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # renovate: datasource=github-releases depName=openpubkey/opkssh
-OPKSSH_VERSION=0.9.0
+OPKSSH_VERSION=0.10.0
 
 rsync -rvK /ctx/opkssh/ /
 systemd-sysusers /usr/lib/sysusers.d/opkssh.conf
