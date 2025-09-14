@@ -14,6 +14,7 @@ CHEZMOI_VERSION=2.65.1
 
 dnf install --setopt=install_weak_deps=False -y \
     atuin \
+    firewalld \
     fish \
     starship \
     vim \
