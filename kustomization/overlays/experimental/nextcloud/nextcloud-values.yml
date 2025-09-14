@@ -194,8 +194,7 @@ persistence:
   enabled: true
   nextcloudData:
     enabled: true
-    size: 100Gi
-    storageClass: longhorn-encrypted
+    existingClaim: nextcloud-data-pvc
   storageClass: longhorn-encrypted
 
 startupProbe:

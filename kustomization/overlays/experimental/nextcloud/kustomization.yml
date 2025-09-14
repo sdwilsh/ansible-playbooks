@@ -16,5 +16,7 @@ resources:
   - namespace.yml
   - ingress.yml
   - middleware.yml
+  - persistentvolume.yml
+  - persistentvolumeclaim.yml
   - postgresql.yml
   - redis.yml

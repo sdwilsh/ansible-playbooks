@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nextcloud-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 6Ti
+  nfs:
+    path: /mnt/rust0/nextcloud
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain
