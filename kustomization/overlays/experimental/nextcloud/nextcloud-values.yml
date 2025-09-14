@@ -38,6 +38,7 @@ internalDatabase:
   enabled: false
 
 lifecycle:
+  # Note: on a clean install, this must be commented out!
   postStartCommand:
     - /bin/sh
     - -c
