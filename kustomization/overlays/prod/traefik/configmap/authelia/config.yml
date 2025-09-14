@@ -100,6 +100,28 @@ identity_providers:
           - profile
         token_endpoint_auth_method: client_secret_post
         userinfo_signed_response_alg: none
+      # https://www.authelia.com/integration/openid-connect/clients/nextcloud/#openid-connect-user-backend-app
+      - access_token_signed_response_alg: none
+        authorization_policy: two_factor
+        client_id: fr7~9UoZ_cXqdcUpB_MgysiYMuVZqJW3PLxgdlHnWUq2q05KaV3I.RGXyVP0WMomxDruQO1o
+        client_name: NextCloud
+        client_secret: $pbkdf2-sha512$310000$sG/bEwoICRr33qf9g.bgMQ$VQAD07hXEzLCE29apKwhV/.yCbO5BTJ5gwDtGoNKh52e4Z7C23eRGuP9q1rmmOZovUUOLpQwjI7Bkq/.kY6l5w
+        grant_types:
+          - authorization_code
+        pkce_challenge_method: S256
+        public: false
+        redirect_uris:
+          - https://nextcloud.tswn.us/apps/user_oidc/code
+        require_pkce: true
+        response_types:
+          - code
+        scopes:
+          - email
+          - groups
+          - openid
+          - profile
+        token_endpoint_auth_method: client_secret_post
+        userinfo_signed_response_alg: none
       # https://www.authelia.com/integration/openid-connect/opkssh/
       - access_token_signed_response_alg: none
         authorization_policy: two_factor
