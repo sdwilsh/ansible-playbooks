@@ -16,9 +16,9 @@ spec:
       shared_preload_libraries: pg_cron,pg_stat_statements,pg_stat_kcache,vchord
     version: "17"
   resources:
-    requests:
-      cpu: 50m
-      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 4Gi
   teamId: immich
   users:
     immich:
