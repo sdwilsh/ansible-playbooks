@@ -5,6 +5,10 @@ authentication_backend:
     # Not compatible with readonly files
     disable: true
   file:
+    extra_attributes:
+      nextcloud_quota:
+        multi_valued: false
+        value_type: string
     path: /secrets/authelia/users/authelia-users.yml
     watch: true
 
