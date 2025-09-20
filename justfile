@@ -8,6 +8,17 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Syncs the traefik application.
+[group('argocd')]
+argocd-traefik:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    current_context=$(kubectl config view -o jsonpath='{.contexts[?(@.name == "default")].context.namespace}')
+    kubectl config set-context --current --namespace argocd
+    argocd --core app sync traefik --prune
+    kubectl config set-context --current --namespace ${current_context}
+
 # Builds the images/loki container for the Raspberry Pi.
 [group('images')]
 build-loki-image:
