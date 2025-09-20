@@ -46,7 +46,11 @@ lifecycle:
       echo "Configuring NextCloud Apps"
       php occ app:enable user_oidc
       php occ config:app:set --value=0 user_oidc allow_multiple_user_backends
-      php occ user_oidc:provider auth.tswn.us --clientid="${OIDC_CLIENT_ID}" --clientsecret="${OIDC_CLIENT_SECRET}" --discoveryuri="${OIDC_DISCOVERY_URI}"
+      php occ user_oidc:provider auth.tswn.us \
+        --clientid="${OIDC_CLIENT_ID}" \
+        --clientsecret="${OIDC_CLIENT_SECRET}" \
+        --discoveryuri="${OIDC_DISCOVERY_URI}" \
+        --scope="email openid profile"
 nextcloud:
   configs:
     custom.config.php: |
@@ -66,6 +70,7 @@ nextcloud:
       $CONFIG = array(
         'user_oidc' => [
           'auto_provision' => true,
+          'default_token_endpoint_auth_method' => 'client_secret_post',
           'soft_auto_provision' => true,
           'single_logout' => false,
         ],

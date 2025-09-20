@@ -88,11 +88,6 @@ access_control:
 
 identity_providers:
   oidc:
-    claims_policies:
-      nextcloud:
-        custom_claims:
-          quota:
-            attribute: nextcloud_quota
     clients:
       - authorization_policy: two_factor
         client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG
@@ -112,7 +107,6 @@ identity_providers:
       # https://www.authelia.com/integration/openid-connect/clients/nextcloud/#openid-connect-user-backend-app
       - access_token_signed_response_alg: none
         authorization_policy: two_factor
-        claims_policy: nextcloud
         client_id: fr7~9UoZ_cXqdcUpB_MgysiYMuVZqJW3PLxgdlHnWUq2q05KaV3I.RGXyVP0WMomxDruQO1o
         client_name: NextCloud
         client_secret: $pbkdf2-sha512$310000$sG/bEwoICRr33qf9g.bgMQ$VQAD07hXEzLCE29apKwhV/.yCbO5BTJ5gwDtGoNKh52e4Z7C23eRGuP9q1rmmOZovUUOLpQwjI7Bkq/.kY6l5w
@@ -127,8 +121,6 @@ identity_providers:
           - code
         scopes:
           - email
-          - groups
-          - nextcloud
           - openid
           - profile
         token_endpoint_auth_method: client_secret_post
@@ -158,10 +150,6 @@ identity_providers:
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
-    scopes:
-      nextcloud:
-        claims:
-          - quota
 
 # ---
 # https://www.authelia.com/configuration/miscellaneous/logging/
