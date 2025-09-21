@@ -16,5 +16,5 @@ spec:
         public: {}
   teamId: nextcloud
   volume:
-    size: 20Gi
+    size: 50Gi
     storageClass: longhorn-encrypted-replicated-database
