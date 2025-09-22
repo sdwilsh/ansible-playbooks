@@ -132,6 +132,7 @@ customDNS:
     argo-cd.hogs IN CNAME traefik.hogs
     atuin IN CNAME traefik.hogs
     auth IN CNAME traefik.hogs
+    cloud IN CNAME traefik.hogs
     factorio-relic-admin IN CNAME traefik.hogs
     frigate.hogs IN CNAME traefik.hogs
     grafana.hogs IN CNAME traefik.hogs
