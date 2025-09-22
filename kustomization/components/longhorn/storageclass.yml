@@ -31,7 +31,7 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: longhorn-system
   csi.storage.k8s.io/provisioner-secret-name: longhorn
   csi.storage.k8s.io/provisioner-secret-namespace: longhorn-system
-  dataLocality: strict-local
+  dataLocality: best-effort
   diskSelector: nvme
   encrypted: "true"
   fromBackup: ""
