@@ -89,6 +89,7 @@ access_control:
 identity_providers:
   oidc:
     clients:
+      # https://www.authelia.com/integration/openid-connect/clients/immich/
       - authorization_policy: two_factor
         client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG
         client_name: Immitch
@@ -125,6 +126,57 @@ identity_providers:
           - openid
           - profile
         token_endpoint_auth_method: client_secret_post
+        userinfo_signed_response_alg: none
+      # OpenCloud, but it needs two clients!
+      - audience: []
+        authorization_policy: two_factor
+        client_id: opencloud-web
+        client_name: OpenCloud
+        consent_mode: auto
+        grant_types:
+          - authorization_code
+          - refresh_token
+        pre_configured_consent_duration: 1w
+        public: true
+        redirect_uris:
+          - https://cloud.tswn.us/
+          - https://cloud.tswn.us/oidc-callback.html
+          - https://cloud.tswn.us/oidc-silent-redirect.html
+        response_modes:
+          - form_post
+          - fragment
+          - query
+        response_types:
+          - code
+        scopes:
+          - email
+          - groups
+          - offline_access
+          - openid
+          - profile
+        userinfo_signed_response_alg: none
+      - audience: []
+        authorization_policy: one_factor
+        client_id: OpenCloudDesktop
+        client_name: OpenCloud Desktop Client
+        consent_mode: auto
+        grant_types:
+          - authorization_code
+          - refresh_token
+        pre_configured_consent_duration: 1w
+        public: true
+        redirect_uris:
+          - http://127.0.0.1
+        response_types:
+          - code
+        response_modes:
+          - form_post
+        scopes:
+          - email
+          - groups
+          - offline_access
+          - openid
+          - profile
         userinfo_signed_response_alg: none
       # https://www.authelia.com/integration/openid-connect/opkssh/
       - access_token_signed_response_alg: none
