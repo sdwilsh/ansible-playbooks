@@ -1,7 +1,7 @@
 # renovate: datasource=docker depName=python
 ARG PYTHON_VERSION=3.13
 
-FROM ghcr.io/hadolint/hadolint:v2.13.1@sha256:1fd499f411a9ff121fda3207af1c8d32e2a92648c19fb1847553c5b79ca4c281 AS hadolint
+FROM ghcr.io/hadolint/hadolint:v2.14.0@sha256:27086352fd5e1907ea2b934eb1023f217c5ae087992eb59fde121dce9c9ff21e AS hadolint
 FROM koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
 FROM mcr.microsoft.com/devcontainers/python:1-${PYTHON_VERSION}
