@@ -22,6 +22,27 @@ reclaimPolicy: Retain
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
+  name: longhorn-encrypted-fast
+allowVolumeExpansion: true
+parameters:
+  csi.storage.k8s.io/node-publish-secret-name: longhorn
+  csi.storage.k8s.io/node-publish-secret-namespace: longhorn-system
+  csi.storage.k8s.io/node-stage-secret-name: longhorn
+  csi.storage.k8s.io/node-stage-secret-namespace: longhorn-system
+  csi.storage.k8s.io/provisioner-secret-name: longhorn
+  csi.storage.k8s.io/provisioner-secret-namespace: longhorn-system
+  dataLocality: strict-local
+  diskSelector: nvme
+  encrypted: "true"
+  fromBackup: ""
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "2880" # 48 hours in minutes
+provisioner: driver.longhorn.io
+reclaimPolicy: Retain
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
   name: longhorn-encrypted-replicated-database
 allowVolumeExpansion: true
 parameters:
