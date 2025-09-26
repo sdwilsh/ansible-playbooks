@@ -67,7 +67,7 @@ go2rtc:
 model:
   width: 320
   height: 320
-  path: plus://e074d6405b3257c98d255cd2efc9d21f
+  path: plus://62a896664d52b459d486e453361d4710
 mqtt:
   host: mosquitto-svc.homeassistant.svc.cluster.local
   user: frigate
