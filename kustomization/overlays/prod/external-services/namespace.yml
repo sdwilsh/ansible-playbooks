@@ -5,4 +5,4 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: restricted
     pod-security.kubernetes.io/enforce-version: latest
-  name: external-services
+  name: this-is-ignored-but-is-required
