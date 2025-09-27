@@ -243,6 +243,11 @@ identity_providers:
           - openid
         token_endpoint_auth_method: none
         userinfo_signed_response_alg: none
+    cors:
+      allowed_origins:
+        - https://cloud.tswn.us
+      endpoints:
+        - token
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
