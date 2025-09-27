@@ -173,7 +173,7 @@ identity_providers:
       # OpenCloud, but it needs two clients!
       - audience: []
         authorization_policy: two_factor
-        client_id: opencloud-web
+        client_id: OpenCloudWeb
         client_name: OpenCloud
         consent_mode: auto
         grant_types:
