@@ -219,7 +219,7 @@ notifier:
       skip_verify: true
 
 ntp:
-  address: pool.ntp.hogs.tswn.us:123
+  address: udp://pool.ntp.hogs.tswn.us:123
   version: 4
 
 # https://www.authelia.com/configuration/miscellaneous/server/
