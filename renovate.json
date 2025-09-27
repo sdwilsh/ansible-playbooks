@@ -208,6 +208,7 @@
       "description": "Group for all traefik automergeable updates",
       "groupName": "traefik-automerge",
       "matchPackageNames": [
+        "11notes/traefik",
         "traefik/traefik",
         "traefik"
       ],
