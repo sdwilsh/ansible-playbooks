@@ -8,7 +8,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "nefrob.vscode-just-syntax"
+                "nefrob.vscode-just-syntax",
+                "redhat.vscode-yaml"
             ],
             "files.readonlyInclude": {
                 "kustomization/components/codegen-*/**": true

@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://www.authelia.com/schemas/v4.39/json-schema/configuration.json
 # https://www.authelia.com/configuration/first-factor/introduction/
 authentication_backend:
   password_reset:
