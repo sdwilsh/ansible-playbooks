@@ -48,8 +48,9 @@ patches:
 resources:
   - namespace.yml
   - certificate.yml
-  - ingress.yml
-  - middleware.yml
+  - ingress/authelia.yml
+  - ingress/traefik-dashboard.yml
+  - middleware/forwardauth-authelia.yml
   - podmonitor.yml
   - postgresql/authelia.yml
   - redisreplication.yml
