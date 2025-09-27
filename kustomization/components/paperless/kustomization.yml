@@ -10,7 +10,7 @@ configMapGenerator:
       - configmap/scripts/backup.sh
 images:
   - name: ghcr.io/paperless-ngx/tika
-    newTag: 2.9.1-minimal
+    newTag: 2.9.1-minimal@sha256:20db3df89eaeb1b271dd840888fe909b88b12f4b86ef641ec07a1d45d4c5168f
   - name: gotenberg/gotenberg
     newTag: 8.23.1@sha256:6ae55a47fee9f95541aadb9af5a87548ebcc0603e8f6bf6af01ca82e594a78cc
 patches:
