@@ -219,6 +219,7 @@
       "description": "Group for all traefik automergeable updates",
       "groupName": "traefik-automerge",
       "matchPackageNames": [
+        "ghcr.io/authelia/authelia",
         "11notes/traefik",
         "traefik/traefik",
         "traefik"
@@ -236,6 +237,8 @@
       "description": "Group for all major traefik updates",
       "groupName": "traefik",
       "matchPackageNames": [
+        "ghcr.io/authelia/authelia",
+        "11notes/traefik",
         "traefik/traefik",
         "traefik"
       ],
