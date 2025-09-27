@@ -98,7 +98,7 @@
         "kustomization/overlays/prod/traefik/configmap/authelia/config.yml"
       ],
       "matchStrings": [
-        "\\$schema=https://www\\.authelia\\.com/schemas/v(?<major>\\d+)\\.(?<minor>\\d+)/json-schema/configuration\\.json$"
+        "\\$schema=https://www\\.authelia\\.com/schemas/(?<currentValue>v\\d+\\.\\d+)/json-schema/configuration\\.json$"
       ]
     }
   ],
