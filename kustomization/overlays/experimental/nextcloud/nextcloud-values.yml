@@ -184,7 +184,7 @@ nginx:
   enabled: true
   image:
     repository: nginxinc/nginx-unprivileged
-    tag: alpine
+    tag: stable-alpine@sha256:88cabc3dd9a7d97e89a7f3374f91fb569f3a88465cb271d236f4736b0fa56121
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
