@@ -92,7 +92,7 @@ identity_providers:
       # https://www.authelia.com/integration/openid-connect/clients/immich/
       - authorization_policy: two_factor
         client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG
-        client_name: Immitch
+        client_name: Immich
         client_secret: $pbkdf2-sha512$310000$omxinbTJUu.5YlmzWZTyhw$n5isxHk/CeWL9EhtQppgnyUUBlGO64icMFj26ZGj4ekwnbg.tunfss9t4kRHOhWyOd.3EQnfJKFngXM8A/pqeQ
         public: false
         redirect_uris:
