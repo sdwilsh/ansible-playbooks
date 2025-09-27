@@ -1,0 +1,10 @@
+---
+auto_provision_accounts: true
+csp_config_file_location: /managed-config/csp.yaml
+oidc:
+  access_token_verify_method: none
+  rewrite_well_known: true
+role_assignment:
+  # Note that this should be `oidc`, but is not due to this issue:
+  # https://github.com/opencloud-eu/desktop/issues/217
+  driver: default

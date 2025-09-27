@@ -1,0 +1,105 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env: &opencloud-env
+            - name: IDM_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: adminPassword
+                  name: opencloud-secret
+            - name: OC_CONFIG_DIR
+              value: /etc/opencloud
+            # Services to not startup:
+            # - idp is not needed because we use authelia
+            - name: OC_EXCLUDE_RUN_SERVICES
+              value: idp
+            - name: OC_INSECURE
+              value: "false"
+            - name: OC_URL
+              value: https://cloud.tswn.us
+            - name: START_ADDITIONAL_SERVICES
+              value: notifications
+            # Authelia OIDC Config
+            # See https://docs.opencloud.eu/docs/admin/configuration/authentication-and-user-management/external-idp#opencloud-configuration
+            # Note that this should be `false`, but is not due to this issue:
+            # https://github.com/opencloud-eu/desktop/issues/217
+            - name: GRAPH_ASSIGN_DEFAULT_USER_ROLE
+              value: "true"
+            - name: GRAPH_USERNAME_MATCH
+              value: none
+            - name: WEB_OIDC_CLIENT_ID
+              value: OpenCloudWeb
+            - name: WEB_OIDC_SCOPE
+              value: openid profile email groups
+            - name: OC_OIDC_ISSUER
+              value: https://auth.tswn.us
+            - name: PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM
+              value: groups
+            # Storage Configuration
+            - name: OC_DATA_DIR
+              value: /var/lib/opencloud
+            - name: STORAGE_USERS_DRIVER
+              value: posix
+            - name: STORAGE_USERS_ID_CACHE_STORE
+              value: nats-js-kv
+          name: opencloud
+          volumeMounts: &opencloud-volumeMounts
+            - mountPath: /etc/opencloud
+              name: opencloud-config
+            - mountPath: /var/lib/opencloud
+              name: opencloud-data
+            - mountPath: /managed-config
+              name: opencloud-managed-config
+      initContainers:
+        - args:
+            - -t
+            - /etc/opencloud
+            - /copied-config/app-registry.yaml
+            - /copied-config/apps.yaml
+            - /copied-config/banned-passwords-list.txt
+            - /copied-config/proxy.yaml
+          command:
+            - cp
+          image: busybox
+          name: install-config
+          resources:
+            requests:
+              cpu: 30m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000 # opencloud-user
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/opencloud
+              name: opencloud-config
+            - mountPath: /copied-config
+              name: opencloud-copied-config
+        - env: *opencloud-env
+          name: opencloud-init
+          volumeMounts: *opencloud-volumeMounts
+      volumes:
+        - name: opencloud-data
+          persistentVolumeClaim:
+            claimName: opencloud-data-pvc
+        - name: opencloud-config
+          persistentVolumeClaim:
+            claimName: opencloud-config-pvc
+        - configMap:
+            name: opencloud-copied-configmap
+          name: opencloud-copied-config
+        - configMap:
+            name: opencloud-managed-configmap
+          name: opencloud-managed-config

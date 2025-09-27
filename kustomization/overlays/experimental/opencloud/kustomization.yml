@@ -1,0 +1,37 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/opencloud
+configMapGenerator:
+  # These can be set with an environment variable and can therefore just be
+  # mounted and pointed to.
+  - files:
+      - configmap/opencloud/csp.yaml
+    name: opencloud-managed-configmap
+  # These must be copied into the /config directory in an init container.
+  - files:
+      - configmap/opencloud/app-registry.yaml
+      - configmap/opencloud/apps.yaml
+      - configmap/opencloud/banned-passwords-list.txt
+      - configmap/opencloud/proxy.yaml
+    name: opencloud-copied-configmap
+images:
+  - name: busybox
+    newTag: 1.37.0@sha256:d82f458899c9696cb26a7c02d5568f81c8c8223f8661bb2a7988b269c8b9051e
+  - name: opencloudeu/opencloud-rolling
+    newTag: 3.5.0@sha256:15963603ee31edf92317dea6ccd420afd9c40caf95d5ebc9901e42eb339789ef
+namespace: opencloud
+patches:
+  - path: patches/opencloud/add_config.yml
+    target:
+      kind: StatefulSet
+      name: opencloud-statefulset
+resources:
+  - namespace.yml
+  - ingress.yml
+  - persistentvolume/opencloud-config.yml
+  - persistentvolume/opencloud-data.yml
+  - persistentvolumeclaim/opencloud-config.yml
+  - persistentvolumeclaim/opencloud-data.yml

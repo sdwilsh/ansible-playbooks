@@ -1,0 +1,46 @@
+---
+# See https://github.com/opencloud-eu/opencloud/blob/main/devtools/deployments/opencloud_full/config/opencloud/csp.yaml
+# for the default config for this file.
+directives:
+  child-src:
+    - '''self'''
+  connect-src:
+    - '''self'''
+    - 'blob:'
+    - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+    # For OIDC
+    - https://auth.tswn.us/
+  default-src:
+    - '''none'''
+  font-src:
+    - '''self'''
+  frame-ancestors:
+    - '''self'''
+  frame-src:
+    - '''self'''
+    - 'blob:'
+    - 'https://embed.diagrams.net/'
+    # In contrary to bash and docker the default is given after the | character
+    - 'https://${COLLABORA_DOMAIN|collabora.opencloud.test}/'
+    # This is needed for the external-sites web extension when embedding sites
+    - 'https://docs.opencloud.eu'
+    # For OIDC
+    - https://auth.tswn.us/
+  img-src:
+    - '''self'''
+    - 'data:'
+    - 'blob:'
+    - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+  manifest-src:
+    - '''self'''
+  media-src:
+    - '''self'''
+  object-src:
+    - '''self'''
+    - 'blob:'
+  script-src:
+    - '''self'''
+    - '''unsafe-inline'''
+  style-src:
+    - '''self'''
+    - '''unsafe-inline'''

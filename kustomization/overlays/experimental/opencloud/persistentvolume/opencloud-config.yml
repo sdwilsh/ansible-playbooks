@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: opencloud-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /mnt/rust0/opencloud/config
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain

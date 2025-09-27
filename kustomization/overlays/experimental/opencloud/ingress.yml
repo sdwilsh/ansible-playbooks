@@ -3,17 +3,18 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # traefik.ingress.kubernetes.io/router.middlewares: traefik-forwardauth-authelia-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
-  name: authelia-ingress
+  name: opencloud-ingress
 spec:
   rules:
-    - host: auth.tswn.us
+    - host: cloud.tswn.us
       http:
         paths:
           - backend:
               service:
-                name: authelia-svc
+                name: opencloud-svc
                 port:
                   name: web
             path: /

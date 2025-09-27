@@ -1,0 +1,10 @@
+---
+app_registry:
+  mimetypes:
+    - mime_type: application/pdf
+      extension: pdf
+      name: PDF
+      description: PDF document
+      icon: ''
+      default_app: ''
+      allow_creation: false
