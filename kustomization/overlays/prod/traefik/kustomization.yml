@@ -16,6 +16,8 @@ configMapGenerator:
       - configmap/traefik/dynamic.yml
       - configmap/traefik/static.yml
 images:
+  - name: ghcr.io/authelia/authelia
+    newTag: 4.39.10@sha256:ed52a81c71dfb3b84327a1397081423773804281519b4f6c337cb12a4c58bef9 
   - name: postgres
     newTag: 16@sha256:fd4208c8aadb92850e7e86a584fe8b1f2a6af8949feeb1ac8e12e72324573676
   - name: quay.io/opstree/redis-sentinel
