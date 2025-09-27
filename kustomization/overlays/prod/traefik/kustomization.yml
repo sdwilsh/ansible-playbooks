@@ -24,7 +24,7 @@ images:
     newTag: v8.2.1@sha256:8027cf7ec625d625a4f60e2526f0073d2b58bf6a6172992015f7699ecbd8504a
   - name: traefik
     newName: 11notes/traefik
-    newTag: 3.5.2@sha256:4b136fc7f306d2ac6c08028c0de230f9373edba5ea5209147d8bd07036148836
+    newTag: 3.5.3@sha256:255fccae8caae8f8d945c9a6ca7b1d4826f1e909137eaedaa2995d81ad0edc37
 namespace: traefik
 patches:
   - path: patches/authelia/add_container.yml
