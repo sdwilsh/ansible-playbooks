@@ -15,9 +15,9 @@ images:
   - name: alpine
     newTag: 3.22.1@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
   - name: dockurr/dnsmasq
-    newTag: "2.91@sha256:7873ce2dae1b0aa51d2c13dd4bd3aad47890c233088b3c7f6eb099a01e6e4307"
+    newTag: 2.91@sha256:7873ce2dae1b0aa51d2c13dd4bd3aad47890c233088b3c7f6eb099a01e6e4307
   - name: lscr.io/linuxserver/transmission
-    newTag: 4.0.5-r0-ls223
+    newTag: 4.0.5-r0-ls223@sha256:96ddcd5c724664c63d8e626d99305ad154498b4fe75f8fcb29e744321762951c
 namespace: transmission
 patches:
   - path: patches/add_downloads_mount.yml
