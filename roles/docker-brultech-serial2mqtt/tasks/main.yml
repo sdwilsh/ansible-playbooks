@@ -125,7 +125,7 @@
           environment:
             - "PGID={{ brultech_gid }}"
             - "PUID={{ brultech_uid }}"
-          image: "ghcr.io/sdwilsh/brultech-serial2mqtt:main"
+          image: ghcr.io/sdwilsh/brultech-serial2mqtt:main@sha256:a4dfa51bdd37a4adea0d1fb916688d24d7932db1149113697d8861101448ac61
           volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "/etc/timezone:/etc/timezone:ro"
