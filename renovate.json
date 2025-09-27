@@ -95,7 +95,7 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "authelia/authelia",
       "managerFilePatterns": [
-        "kustomization/overlays/prod/traefik/configmap/authelia/config.yml"
+        "/^kustomization/overlays/prod/traefik/configmap/authelia/config\\.yml$/"
       ],
       "matchStrings": [
         "\\$schema=https://www\\.authelia\\.com/schemas/(?<currentValue>v\\d+\\.\\d+)/json-schema/configuration\\.json$"
