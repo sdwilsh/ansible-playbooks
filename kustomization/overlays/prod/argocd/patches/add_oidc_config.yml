@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: this-is-ignored-but-is-required
+data:
+  oidc.config: |
+    cliClientID: argocd-cli
+    clientID: argocd
+    clientSecret: $oidc.auth-tswn-us.clientSecret
+    enablePKCEAuthentication: true
+    enableUserInfoGroups: true
+    issuer: https://auth.tswn.us
+    name: auth.tswn.us
+    requestedScopes:
+      - email
+      - groups
+      - openid
+    userInfoPath: /api/oidc/userinfo
+  url: https://argo-cd.hogs.tswn.us

@@ -89,6 +89,48 @@ access_control:
 identity_providers:
   oidc:
     clients:
+      # https://www.authelia.com/integration/openid-connect/clients/argocd/
+      - access_token_signed_response_alg: none
+        authorization_policy: two_factor
+        client_id: argocd
+        client_name: Argo CD
+        client_secret: $pbkdf2-sha512$310000$V1TXhcVzq2u8HjL4TVDrEQ$H6I9r.US8I841kfBPzEc0qkSR9iIljsMWxRdkLf0WfpQQrzz925qp47pFCGag3BCmf9OPSWFBd4U9lUa87VRXA
+        grant_types:
+          - authorization_code
+        pkce_challenge_method: S256
+        public: false
+        redirect_uris:
+          - https://argo-cd.hogs.tswn.us/auth/callback
+        require_pkce: true
+        response_types:
+          - code
+        scopes:
+          - email
+          - groups
+          - openid
+        token_endpoint_auth_method: client_secret_post
+        userinfo_signed_response_alg: none
+      - access_token_signed_response_alg: none
+        authorization_policy: two_factor
+        client_id: argocd-cli
+        client_name: Argo CD (CLI)
+        grant_types:
+          - authorization_code
+          - refresh_token
+        pkce_challenge_method: S256
+        public: true
+        require_pkce: true
+        redirect_uris:
+          - http://localhost:8085/auth/callback
+        response_types:
+          - code
+        scopes:
+          - email
+          - groups
+          - offline_access
+          - openid
+        token_endpoint_auth_method: none
+        userinfo_signed_response_alg: none
       # https://www.authelia.com/integration/openid-connect/clients/immich/
       - authorization_policy: two_factor
         client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG

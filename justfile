@@ -8,6 +8,14 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Login to argocd cli.
+[group('argocd')]
+argocd-login:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    argocd login argo-cd.hogs.tswn.us --sso --grpc-web --sso-launch-browser=false
+
 # Syncs the traefik application.
 [group('argocd')]
 argocd-traefik:

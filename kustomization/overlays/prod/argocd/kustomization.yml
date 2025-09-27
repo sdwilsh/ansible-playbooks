@@ -5,6 +5,15 @@ kind: Kustomization
 components:
   - ../../../components/argo-cd
 namespace: argocd
+patches:
+  - target:
+      kind: ConfigMap
+      name: argocd-cm
+    path: patches/add_oidc_config.yml
+  - target:
+      kind: ConfigMap
+      name: argocd-rbac-cm
+    path: patches/add_oidc_policy.yml
 resources:
   - namespace.yml
   - ingress.yml
