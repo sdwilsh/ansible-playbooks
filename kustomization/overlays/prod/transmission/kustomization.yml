@@ -17,7 +17,7 @@ images:
   - name: dockurr/dnsmasq
     newTag: 2.91@sha256:7873ce2dae1b0aa51d2c13dd4bd3aad47890c233088b3c7f6eb099a01e6e4307
   - name: lscr.io/linuxserver/transmission
-    newTag: 4.0.5-r0-ls223@sha256:96ddcd5c724664c63d8e626d99305ad154498b4fe75f8fcb29e744321762951c
+    newTag: 4.0.5-r0-ls223@sha256:bd450da4a328cdf1f89845785150e79b531983b27ab6a1d4c2e3e7dcbf952bfc
 namespace: transmission
 patches:
   - path: patches/add_downloads_mount.yml
