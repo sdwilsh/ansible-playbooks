@@ -32,6 +32,15 @@ entryPoints:
     http:
       middlewares:
         - strict-transport-security@file
+    transport:
+      # Added for OpenCloud, although probably useful for Immich as well.
+      # @see https://github.com/opencloud-eu/opencloud-compose/blob/main/config/traefik/docker-entrypoint-override.sh
+      # However, their values are very large, and since Traefik doesn't allow
+      # this set per service (https://github.com/traefik/traefik/issues/10962),
+      # we must do it globally.
+      respondingTimeouts:
+        readTimeout: 5m
+        writeTimeout: 5m
   websecure-ext:
     address: :9443
     forwardedHeaders:
