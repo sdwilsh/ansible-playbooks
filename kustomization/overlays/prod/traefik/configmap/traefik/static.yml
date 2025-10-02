@@ -49,6 +49,11 @@ entryPoints:
       middlewares:
         - strict-transport-security@file
         - crowdsec@file
+    transport:
+      # See comment for websecure about why this exists!
+      respondingTimeouts:
+        readTimeout: 5m
+        writeTimeout: 5m
 experimental:
   plugins:
     crowdsec-bouncer:
