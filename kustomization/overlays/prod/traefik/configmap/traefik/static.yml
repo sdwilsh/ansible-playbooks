@@ -6,6 +6,7 @@ accessLog:
       defaultMode: drop
       names:
         User-Agent: keep
+        X-Request-Id: keep
   filePath: "" # log to stdout
   filters:
     statusCodes:
