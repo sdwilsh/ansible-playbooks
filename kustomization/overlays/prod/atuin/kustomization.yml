@@ -10,7 +10,7 @@ images:
   - name: ghcr.io/atuinsh/atuin
     newTag: v18.8.0@sha256:8a8a8ef4eb5865656072bace5cc49390b56caa81360f9f0869054777155b6ef1
   - name: postgres
-    newTag: 16@sha256:8892f23a412f88fd85ce2788486edfb3cb6b8750e488e1f77568f3185145cba5
+    newTag: 16@sha256:fb9aa6d07b0fe53e94e8470977f316d1cdb39b8cdb33c45279ff0bbe32067c25
 namespace: atuin
 patches:
   - path: patches/set_config_env.yml
