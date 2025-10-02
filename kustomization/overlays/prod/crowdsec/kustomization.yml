@@ -20,7 +20,7 @@ images:
   - name: ghcr.io/crowdsecurity/crowdsec
     newTag: v1.7.0@sha256:26841bec239f53c74f5ac35ca89166b0566c511a449c4852d3187c8a62faf4ed 
   - name: postgres
-    newTag: 17@sha256:14d1abe0b1c660ec3c7521786d1249157699ebc62b07ea84ab6aad5239f5251f
+    newTag: 17@sha256:e6a4209d1a4893f2df3bdcde58f8926c3c929c4d51df90990ed1b36d83c1382a
 namespace: crowdsec
 resources:
   - namespace.yml
