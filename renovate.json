@@ -237,7 +237,7 @@
       "description": "Group for all Longhorn updates",
       "groupName": "longhorn",
       "matchPackageNames": [
-        "lonhorn/cli",
+        "longhorn/cli",
         "longhorn/longhorn"
       ]
     },
