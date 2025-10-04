@@ -23,8 +23,6 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
 
-            # - name: OC_INSECURE
-            #   value: "false"
             - name: PROXY_HTTP_ADDR
               value: $(POD_IP):9200
             - name: PROXY_TLS
