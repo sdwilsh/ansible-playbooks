@@ -79,7 +79,6 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 1000 # opencloud-user
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:

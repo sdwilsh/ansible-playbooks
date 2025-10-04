@@ -59,7 +59,6 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 1000 # opencloud-user
             seccompProfile:
               type: RuntimeDefault
           startupProbe:
@@ -90,3 +89,7 @@ spec:
             - mountPath: /copied-config
               name: opencloud-copied-config
       priorityClassName: application
+      securityContext:
+        fsGroup: 1000 # opencloud-user
+        runAsGroup: 1000 # opencloud-user
+        runAsUser: 1000 # opencloud-user
