@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - role: marinatedconcrete.config.longhorn_allow_encrypted_trim

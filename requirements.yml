@@ -13,5 +13,8 @@ collections:
     version: 11.3.0
   - name: devsec.hardening
     version: 10.3.1
+  - name: https://github.com/marinatedconcrete/config.git#ansible
+    type: git
+    version: ansible-collection@v1.1.0
   - name: kubernetes.core
     version: 6.1.0
