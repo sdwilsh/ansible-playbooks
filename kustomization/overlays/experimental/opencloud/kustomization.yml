@@ -31,7 +31,3 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
-  - persistentvolume/opencloud-config.yml
-  - persistentvolume/opencloud-data.yml
-  - persistentvolumeclaim/opencloud-config.yml
-  - persistentvolumeclaim/opencloud-data.yml

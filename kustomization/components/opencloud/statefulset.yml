@@ -84,12 +84,33 @@ spec:
               memory: 100Mi
           securityContext: *opencloud-securityContext
           volumeMounts:
-            - mountPath: /config
+            - mountPath: /etc/opencloud
               name: opencloud-config
-            - mountPath: /copied-config
-              name: opencloud-copied-config
       priorityClassName: application
       securityContext:
         fsGroup: 1000 # opencloud-user
         runAsGroup: 1000 # opencloud-user
         runAsUser: 1000 # opencloud-user
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: opencloud-config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: longhorn-encrypted
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: opencloud-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 500Gi
+        storageClassName: longhorn-encrypted

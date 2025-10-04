@@ -90,12 +90,6 @@ spec:
           name: opencloud-init
           volumeMounts: *opencloud-volumeMounts
       volumes:
-        - name: opencloud-data
-          persistentVolumeClaim:
-            claimName: opencloud-data-pvc
-        - name: opencloud-config
-          persistentVolumeClaim:
-            claimName: opencloud-config-pvc
         - configMap:
             name: opencloud-copied-configmap
           name: opencloud-copied-config
