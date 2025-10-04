@@ -234,6 +234,14 @@
       ]
     },
     {
+      "description": "Group for all Longhorn updates",
+      "groupName": "longhorn",
+      "matchPackageNames": [
+        "lonhorn/cli",
+        "longhorn/longhorn"
+      ]
+    },
+    {
       "description": "Group for all major traefik updates",
       "groupName": "traefik",
       "matchPackageNames": [

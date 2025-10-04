@@ -11,6 +11,14 @@ COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=kustomize /app/kustomize /usr/local/bin/kustomize
 COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
+# Download and Install longhorncli
+# renovate: datasource=github-releases depName=longhorn/cli
+ARG LONGHORN_CLI_VERSION=v1.9.2
+RUN curl -o /usr/local/bin/longhorncli \
+    -L \
+    https://github.com/longhorn/cli/releases/download/${LONGHORN_CLI_VERSION}/longhornctl-linux-amd64 \
+  && chmod +x /usr/local/bin/longhorncli
+
 # Setup and Configure OpenPubkey SSH
 # renovate: datasource=github-releases depName=openpubkey/opkssh
 ARG OPKSSH_VERSION=0.10.0
