@@ -38,7 +38,7 @@
         },
         "ghcr.io/guiyomh/features/just:0": {
             // renovate: datasource=github-releases depName=casey/just
-            "version": "1.42.4"
+            "version": "1.43.0"
         }
     },
     "portsAttributes": {
