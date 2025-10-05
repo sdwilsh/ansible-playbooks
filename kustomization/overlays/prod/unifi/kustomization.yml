@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - https://github.com/marinatedconcrete/config/kustomization/components/unifi-network-application?ref=kustomize-unifi-network-application@v1.1.17
+  - https://github.com/marinatedconcrete/config/kustomization/components/unifi-network-application?ref=kustomize-unifi-network-application@v1.1.18
 namespace: unifi
 patches:
   - path: patches/add_una_svc_annotations.yml
