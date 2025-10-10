@@ -10,7 +10,7 @@ dnf install --setopt=install_weak_deps=False -y \
 dnf -y copr enable atim/starship
 
 # renovate: datasource=github-releases depName=twpayne/chezmoi
-CHEZMOI_VERSION=2.65.2
+CHEZMOI_VERSION=2.66.0
 
 dnf install --setopt=install_weak_deps=False -y \
     atuin \
