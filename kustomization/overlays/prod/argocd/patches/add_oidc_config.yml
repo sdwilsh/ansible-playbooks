@@ -7,7 +7,7 @@ data:
   oidc.config: |
     cliClientID: argocd-cli
     clientID: argocd
-    clientSecret: $oidc.auth-tswn-us.clientSecret
+    clientSecret: $argocd-oidc-secret:oidc.auth-tswn-us.clientSecret
     enablePKCEAuthentication: true
     enableUserInfoGroups: true
     issuer: https://auth.tswn.us
