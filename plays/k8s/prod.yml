@@ -23,6 +23,14 @@
           apiVersion: v1
           kind: Secret
           metadata:
+            labels: >-
+              {{ secret.labels
+                  | default({})
+                  | combine(
+                    {
+                      "app.kubernetes.io/name": secret.name
+                    })
+              }}
             name: "{{ secret.name }}"
             namespace: "{{ secret.namespace }}"
           stringData: "{{ secret.stringData }}"
