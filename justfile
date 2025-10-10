@@ -8,6 +8,17 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Syncs the argocd application.
+[group('argocd')]
+argocd-argocd:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    current_context=$(kubectl config view -o jsonpath='{.contexts[?(@.name == "default")].context.namespace}')
+    kubectl config set-context --current --namespace argocd
+    argocd --core app sync argocd --prune
+    kubectl config set-context --current --namespace ${current_context}
+
 # Login to argocd cli.
 [group('argocd')]
 argocd-login:
