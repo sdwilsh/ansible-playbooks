@@ -14,7 +14,6 @@ resources:
   - miniobucket/monitoring.yml
   - miniobucket/nextcloud.yml
   - miniobucket/paperless.yml
-  - miniobucket/traefik.yml
   - miniopolicy/3d-printing.yml
   - miniopolicy/atuin.yml
   - miniopolicy/auth.yml
@@ -24,7 +23,6 @@ resources:
   - miniopolicy/monitoring.yml
   - miniopolicy/nextcloud.yml
   - miniopolicy/paperless.yml
-  - miniopolicy/traefik.yml
   - miniopolicybinding/3d-printing.yml
   - miniopolicybinding/atuin.yml
   - miniopolicybinding/auth.yml
@@ -34,7 +32,6 @@ resources:
   - miniopolicybinding/monitoring.yml
   - miniopolicybinding/nextcloud.yml
   - miniopolicybinding/paperless.yml
-  - miniopolicybinding/traefik.yml
   - miniouser/3d-printing.yml
   - miniouser/atuin.yml
   - miniouser/auth.yml
@@ -44,4 +41,3 @@ resources:
   - miniouser/monitoring.yml
   - miniouser/nextcloud.yml
   - miniouser/paperless.yml
-  - miniouser/traefik.yml

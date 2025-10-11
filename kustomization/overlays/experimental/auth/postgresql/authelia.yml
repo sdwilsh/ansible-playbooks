@@ -2,13 +2,13 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: authelia-storage-16-pg
+  name: authelia-17-pg
 spec:
   enableLogicalBackup: true
-  numberOfInstances: 2
+  numberOfInstances: 3
   podPriorityClassName: critical-application-infra
   postgresql:
-    version: "16"
+    version: "17"
   preparedDatabases:
     authelia:
       defaultUsers: true

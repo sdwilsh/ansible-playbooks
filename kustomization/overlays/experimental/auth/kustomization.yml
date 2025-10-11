@@ -3,12 +3,27 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/authelia
   - ../../../components/lldap
+configMapGenerator:
+  - name: authelia-configmap
+    files:
+      - configmap/authelia/config.yml
 images:
   - name: postgres
     newTag: 17@sha256:e6a4209d1a4893f2df3bdcde58f8926c3c929c4d51df90990ed1b36d83c1382a
+  - name: quay.io/opstree/redis-sentinel
+    newTag: v8.2.2@sha256:232e7b81e034c37b5f2b247452c1dd2c1e5f6b66bae814377bec41b0340f23c4
+  - name: quay.io/opstree/redis
+    newTag: v8.2.2@sha256:8fb0c3cc1443b545efbf08b846480aa14fe4d78fd6745d526b58dca935891539
 namespace: auth
 patches:
+  # authelia
+  - path: patches/authelia/add_config.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
+  # lldap
   - path: patches/lldap/add_config.yml
     target:
       kind: Deployment
@@ -32,5 +47,10 @@ patches:
 resources:
   - namespace.yml
   - certificate/lldap.yml
+  - ingress/authelia.yml
   - ingress/lldap.yml
+  - middleware/forwardauth.yml
+  - postgresql/authelia.yml
   - postgresql/lldap.yml
+  - redisreplication.yml
+  - redissentinel.yml

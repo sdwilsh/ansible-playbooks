@@ -21,7 +21,6 @@
           - monitoring
           - nextcloud
           - paperless
-          - traefik
     - name: Delete existing codegen
       ansible.builtin.file:
         path: "{{ component_dir }}"

@@ -2,10 +2,10 @@
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: forwardauth-authelia-middleware
+  name: forwardauth-middleware
 spec:
   forwardAuth:
-    address: http://localhost:9091/api/authz/forward-auth
+    address: http://authelia-svc.auth.svc.cluster.local:9091/api/authz/forward-auth
     authResponseHeaders:
       - Remote-Email
       - Remote-Groups

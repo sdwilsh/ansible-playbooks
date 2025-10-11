@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authelia-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: authelia
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: authelia
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - authelia
+              topologyKey: kubernetes.io/hostname
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - name: authelia
+          args:
+            - --config
+            - /config/config.yml
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+            - name: AUTHELIA_SERVER_ADDRESS
+              value: tcp://$(POD_IP):9091/
+            - name: AUTHELIA_SERVER_DISABLE_HEALTHCHECK
+              value: "true" # We do this ourselves.
+            - name: AUTHELIA_TELEMETRY_METRICS_ENABLED
+              value: "true"
+            - name: AUTHELIA_TELEMETRY_METRICS_ADDRESS
+              value: tcp://$(POD_IP):9959
+          image: ghcr.io/authelia/authelia
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: web
+              scheme: HTTP
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: web
+              scheme: HTTP
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: web
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          ports:
+            - containerPort: 9959
+              name: metrics
+            - containerPort: 9091
+              name: web
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+      priorityClassName: critical-application-infra
+      securityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsUser: 65534
+

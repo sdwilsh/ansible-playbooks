@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: ghcr.io/authelia/authelia
+    newTag: 4.39.12@sha256:3d374f212b4e0d4b980e5e3fffced788c04912103b824649ae53b42110afeefb 
+resources:
+  - deployment.yml
+  - service.yml
+  - podmonitor.yml

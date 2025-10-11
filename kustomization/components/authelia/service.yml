@@ -8,6 +8,6 @@ spec:
     - name: web
       port: 9091
       protocol: TCP
-      targetPort: auth-web
+      targetPort: web
   selector:
-    app.kubernetes.io/name: traefik
+    app.kubernetes.io/name: authelia

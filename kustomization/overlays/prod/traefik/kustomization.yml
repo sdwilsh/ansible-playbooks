@@ -5,9 +5,6 @@ kind: Kustomization
 components:
   - ../../../components/traefik
 configMapGenerator:
-  - name: authelia-configmap
-    files:
-      - configmap/authelia/config.yml
   - name: crowdsec-pages-configmap
     files:
       - configmap/crowdsec/pages/ban.html
@@ -16,23 +13,11 @@ configMapGenerator:
       - configmap/traefik/dynamic.yml
       - configmap/traefik/static.yml
 images:
-  - name: ghcr.io/authelia/authelia
-    newTag: 4.39.12@sha256:3d374f212b4e0d4b980e5e3fffced788c04912103b824649ae53b42110afeefb 
-  - name: postgres
-    newTag: 16@sha256:fb9aa6d07b0fe53e94e8470977f316d1cdb39b8cdb33c45279ff0bbe32067c25
-  - name: quay.io/opstree/redis-sentinel
-    newTag: v8.2.2@sha256:232e7b81e034c37b5f2b247452c1dd2c1e5f6b66bae814377bec41b0340f23c4
-  - name: quay.io/opstree/redis
-    newTag: v8.2.2@sha256:8fb0c3cc1443b545efbf08b846480aa14fe4d78fd6745d526b58dca935891539
   - name: traefik
     newName: 11notes/traefik
     newTag: 3.5.3@sha256:255fccae8caae8f8d945c9a6ca7b1d4826f1e909137eaedaa2995d81ad0edc37
 namespace: traefik
 patches:
-  - path: patches/authelia/add_container.yml
-    target:
-      kind: Deployment
-      name: traefik-deployment
   - path: patches/crowdsec/add_pages.yml
     target:
       kind: Deployment
@@ -48,12 +33,6 @@ patches:
 resources:
   - namespace.yml
   - certificate.yml
-  - ingress/authelia.yml
   - ingress/traefik-dashboard.yml
-  - middleware/forwardauth-authelia.yml
   - podmonitor.yml
-  - postgresql/authelia.yml
-  - redisreplication.yml
-  - redissentinel.yml
-  - service/authelia.yml
   - service/traefik.yml

@@ -4,12 +4,12 @@ kind: Deployment
 metadata:
   name: this-is-ignored-but-is-required
 spec:
+  replicas: 2
   template:
     spec:
       enableServiceLinks: false
       containers:
-        - name: authelia
-          args:
+        - args:
             - --config
             - /config/config.yml
           env:
@@ -37,34 +37,14 @@ spec:
             - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+                  name: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
                   key: username
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
-          image: ghcr.io/authelia/authelia
-          livenessProbe:
-            httpGet:
-              path: /api/health
-              port: auth-web
-              scheme: HTTP
-            periodSeconds: 15
-            successThreshold: 1
-            timeoutSeconds: 5
+          name: authelia
           ports:
             - containerPort: 9959
               name: auth-metrics
-            - containerPort: 9091
-              name: auth-web
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            readOnlyRootFilesystem: false # Authelia writes to the file system!
-            runAsNonRoot: true
-            runAsUser: 65534
-            seccompProfile:
-              type: RuntimeDefault
           volumeMounts:
             - mountPath: /config/
               name: authelia-configuration
@@ -78,7 +58,6 @@ spec:
             - mountPath: /secrets/authelia/users
               name: authelia-users
               readOnly: true
-        - name: traefik
       initContainers:
         - command:
             - sh
@@ -86,19 +65,19 @@ spec:
             - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
           env:
             - name: PGHOST
-              value: authelia-storage-16-pg
+              value: authelia-17-pg
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+                  name: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+                  name: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
           image: postgres
           name: wait-for-authelia-pg-is-ready
           securityContext:
@@ -108,7 +87,6 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 65534
             seccompProfile:
               type: RuntimeDefault
       volumes:
@@ -117,7 +95,7 @@ spec:
           name: authelia-configuration
         - name: authelia-postgresql-secrets
           secret:
-            secretName: authelia-owner-user.authelia-storage-16-pg.credentials.postgresql.acid.zalan.do
+            secretName: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
         - name: authelia-secrets
           secret:
             secretName: authelia-config-secret
