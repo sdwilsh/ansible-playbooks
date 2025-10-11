@@ -1,0 +1,14 @@
+# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
+# @generated
+---
+apiVersion: bfiola.dev/v1
+kind: MinioUser
+metadata:
+  name: namespace-auth-miniouser
+spec:
+  accessKey: namespace-auth
+  secretKeyRef:
+    name: postgres-backup-secret-keys
+    key: namespace-auth
+  tenantRef:
+    name: postgres-backup-tenant

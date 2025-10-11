@@ -7,6 +7,7 @@ kind: Component
 resources:
   - miniobucket/3d-printing.yml
   - miniobucket/atuin.yml
+  - miniobucket/auth.yml
   - miniobucket/crowdsec.yml
   - miniobucket/homeassistant.yml
   - miniobucket/immich.yml
@@ -16,6 +17,7 @@ resources:
   - miniobucket/traefik.yml
   - miniopolicy/3d-printing.yml
   - miniopolicy/atuin.yml
+  - miniopolicy/auth.yml
   - miniopolicy/crowdsec.yml
   - miniopolicy/homeassistant.yml
   - miniopolicy/immich.yml
@@ -25,6 +27,7 @@ resources:
   - miniopolicy/traefik.yml
   - miniopolicybinding/3d-printing.yml
   - miniopolicybinding/atuin.yml
+  - miniopolicybinding/auth.yml
   - miniopolicybinding/crowdsec.yml
   - miniopolicybinding/homeassistant.yml
   - miniopolicybinding/immich.yml
@@ -34,6 +37,7 @@ resources:
   - miniopolicybinding/traefik.yml
   - miniouser/3d-printing.yml
   - miniouser/atuin.yml
+  - miniouser/auth.yml
   - miniouser/crowdsec.yml
   - miniouser/homeassistant.yml
   - miniouser/immich.yml

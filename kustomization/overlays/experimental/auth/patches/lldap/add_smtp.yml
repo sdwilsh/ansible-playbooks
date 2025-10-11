@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET
+              value: "true"
+            - name: LLDAP_SMTP_OPTIONS__SERVER
+              value: proton-bridge-svc.proton-mail.svc.cluster.local
+            - name: LLDAP_SMTP_OPTIONS__PORT
+              value: "25"
+            - name: LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION
+              value: NONE
+            - name: LLDAP_SMTP_OPTIONS__FROM
+              value: no-reply@tswn.us
+          envFrom:
+            - secretRef:
+                name: lldap-smtp-secret
+          name: lldap

@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: ghcr.io/lldap/lldap
+    newTag: 2025-10-10-alpine-rootless@sha256:6608c1ce391c4eeefc639e8f720fe04ffdb33d283f314b89f0401fd7513e9931
+resources:
+  - deployment.yml
+  - service.yml

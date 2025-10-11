@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
+                  key: password
+            - name: LLDAP_DATABASE_URL
+              value: postgres://$(DB_USERNAME):$(DB_PASSWORD)@lldap-17-pg/lldap
+          name: lldap
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+          env:
+            - name: PGHOST
+              value: lldap-17-pg
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
+          image: postgres
+          name: wait-for-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault

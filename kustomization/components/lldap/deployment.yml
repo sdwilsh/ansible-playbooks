@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lldap-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lldap
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lldap
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - lldap
+              topologyKey: kubernetes.io/hostname
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+            # Health checks do not work when specifying a specific IP address.
+            # https://github.com/lldap/lldap/issues/700
+            # - name: LLDAP_HTTP_HOST
+            #   value: $(POD_IP)
+            - name: LLDAP_HTTP_PORT
+              value: "17170"
+            # Health checks do not work when specifying a specific IP address.
+            # https://github.com/lldap/lldap/issues/700
+            # - name: LLDAP_LDAP_HOST
+            #   value: $(POD_IP)
+            - name: LLDAP_LDAP_PORT
+              value: "3890"
+            - name: TZ
+              value: America/Los_Angeles
+          image: ghcr.io/lldap/lldap
+          livenessProbe:
+            exec:
+              command:
+                - /app/lldap
+                - healthcheck
+          name: lldap
+          ports:
+            - name: web
+              containerPort: 17170
+              protocol: TCP
+            - name: ldap
+              containerPort: 3890
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - /app/lldap
+                - healthcheck
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          startupProbe:
+            exec:
+              command:
+                - /app/lldap
+                - healthcheck
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /data
+              name: lldap-data
+      priorityClassName: critical-application-infra
+      securityContext:
+        fsGroup: 10001 # app
+        runAsGroup: 10001 # app
+        runAsUser: 10001 # app
+      volumes:
+        - name: lldap-data
+          emptyDir:
+            medium: Memory

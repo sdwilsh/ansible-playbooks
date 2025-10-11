@@ -1,0 +1,18 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: lldap-17-pg
+spec:
+  enableLogicalBackup: true
+  numberOfInstances: 3
+  podPriorityClassName: critical-application-infra
+  postgresql:
+    version: "17"
+  preparedDatabases:
+    lldap:
+      defaultUsers: true
+  teamId: lldap
+  volume:
+    size: 10Gi
+    storageClass: longhorn-encrypted-replicated-database

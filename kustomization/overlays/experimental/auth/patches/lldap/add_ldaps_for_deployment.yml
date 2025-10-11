@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: LLDAP_LDAPS_OPTIONS__CERT_FILE
+              value: /secrets/lldap/tls/tls.crt
+            - name: LLDAP_LDAPS_OPTIONS__ENABLED
+              value: "true"
+            - name: LLDAP_LDAPS_OPTIONS__KEY_FILE
+              value: /secrets/lldap/tls/tls.key
+            - name: LLDAP_LDAPS_OPTIONS__PORT
+              value: "6360"
+          name: lldap
+          ports:
+            - name: ldaps
+              containerPort: 6360
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /secrets/lldap/tls
+              name: ldaps-secret
+              readOnly: true
+      volumes:
+        - name: ldaps-secret
+          secret:
+            secretName: ldap-tswn-us-secret

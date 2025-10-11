@@ -1,0 +1,36 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/lldap
+images:
+  - name: postgres
+    newTag: 17@sha256:e6a4209d1a4893f2df3bdcde58f8926c3c929c4d51df90990ed1b36d83c1382a
+namespace: auth
+patches:
+  - path: patches/lldap/add_config.yml
+    target:
+      kind: Deployment
+      name: lldap-deployment
+  - path: patches/lldap/add_ldaps_for_deployment.yml
+    target:
+      kind: Deployment
+      name: lldap-deployment
+  - path: patches/lldap/add_ldaps_for_service.yml
+    target:
+      kind: Service
+      name: lldap-svc
+  - path: patches/lldap/add_postgres.yml
+    target:
+      kind: Deployment
+      name: lldap-deployment
+  - path: patches/lldap/add_smtp.yml
+    target:
+      kind: Deployment
+      name: lldap-deployment
+resources:
+  - namespace.yml
+  - certificate/lldap.yml
+  - ingress/lldap.yml
+  - postgresql/lldap.yml
