@@ -17,6 +17,8 @@ spec:
               value: /secrets/identity_providers_oidc_hmac_secret
             - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
               value: /secrets/jwt_secret
+            - name: AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE
+              value: /secrets/authentication_backend_ldap_password
             - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
               value: /secrets/notifier_smtp_password
             - name: AUTHELIA_NOTIFIER_SMTP_USERNAME

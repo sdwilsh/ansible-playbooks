@@ -2,16 +2,13 @@
 # yaml-language-server: $schema=https://www.authelia.com/schemas/v4.39/json-schema/configuration.json
 # https://www.authelia.com/configuration/first-factor/introduction/
 authentication_backend:
+  ldap:
+    address: ldap://lldap-svc:389
+    base_dn: DC=tswn,DC=us
+    implementation: lldap
+    user: UID=authelia,OU=people,DC=tswn,DC=us
   password_reset:
-    # Not compatible with readonly files
-    disable: true
-  file:
-    extra_attributes:
-      nextcloud_quota:
-        multi_valued: false
-        value_type: string
-    path: /secrets/authelia/users/authelia-users.yml
-    watch: true
+    disable: false
 
 # https://www.authelia.com/configuration/security/access-control/
 access_control:
