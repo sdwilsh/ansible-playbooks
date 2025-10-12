@@ -23,7 +23,7 @@ helmCharts:
     valuesFile: node-exporter-values.yml
 images:
   - name: docker.io/grafana/alloy
-    newTag: v1.11.0@sha256:e849f170152aff2015427908463a08c48416abade66302cd880379609058042b
+    newTag: v1.11.1@sha256:422454f72cdbd7586358ae6bf7c55818281d48ca16eeba4ad4d665e60e5e046e
   - name: ghcr.io/jimmidyson/configmap-reload
     newTag: v0.15.0@sha256:b578b7599d65c0279f6e1aad201bba737b9b15e6a4f308281d9e26f765e6657f 
   - name: quay.io/prometheus/node-exporter
