@@ -13,6 +13,8 @@ spec:
               value: dc=tswn,dc=us
             - name: LLDAP_HTTP_URL
               value: https://idm.tswn.us
+            - name: LLDAP_IGNORED_USER_ATTRIBUTES
+              value: "[opencloudexternalidentity,opencloudlastsignintimestamp,openclouduserenabled]"
             - name: LLDAP_JWT_SECRET_FILE
               value: /secrets/lldap/config/LLDAP_JWT_SECRET
             - name: LLDAP_KEY_FILE
