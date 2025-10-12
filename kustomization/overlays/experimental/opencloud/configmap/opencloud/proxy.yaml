@@ -1,5 +1,5 @@
 ---
-auto_provision_accounts: true
+auto_provision_accounts: false
 csp_config_file_location: /managed-config/csp.yaml
 oidc:
   access_token_verify_method: none
