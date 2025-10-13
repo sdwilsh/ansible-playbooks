@@ -77,6 +77,33 @@ access_control:
       networks:
         - homeassistant-appliance
       policy: bypass
+    - domain: cloud.tswn.us
+      policy: bypass
+      resources:
+        # See https://docs.opencloud.eu/docs/dev/server/Services/frontend/Frontend-info
+        # for some idea how these were determined.  Other things have more specific
+        # links before them as well.
+        - ^/\.well-known/.+$
+        - ^/app/.+$
+        - ^/archiver/.+$
+        - ^/data(?:/.+)?$
+        - ^/data/.+$
+        - ^/ocs/.+$
+        - ^/status\.php$
+        # Shares
+        - ^/s/[a-zA-Z]+$
+        # LibreGraph: https://docs.opencloud.eu/docs/dev/server/Apis/http/graph/
+        - ^/graph/.+$
+        # WebDAV: https://docs.opencloud.eu/docs/dev/server/Apis/http/webdav/
+        - ^/(?:dav/spaces|remote\.php/dav/spaces|remote\.php/dav|remote\.php/webdav|dav|webdav)/.+$
+        # Assets & JavaScript
+        - ^/assets/.+$
+        - ^/config\.json$
+        - ^/favicon.ico$
+        - ^/icons/.+$
+        - ^/js/.+$
+        - ^/manifest\.json$
+        - ^/themes/.+$
     - domain: "*.tswn.us"
       networks:
         - home
