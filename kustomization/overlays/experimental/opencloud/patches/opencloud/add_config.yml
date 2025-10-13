@@ -56,7 +56,7 @@ spec:
             - name: OC_LDAP_GROUP_BASE_DN
               value: ou=groups,dc=tswn,dc=us
             - name: OC_LDAP_GROUP_FILTER
-              value: (&(objectclass=groupOfUniqueNames)(uid=opencloud-*))
+              value: (opencloud-visibility=1)
             - name: OC_LDAP_GROUP_OBJECTCLASS
               value: groupOfUniqueNames
             - name: OC_LDAP_GROUP_SCHEMA_ID
