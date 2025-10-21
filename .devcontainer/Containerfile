@@ -13,7 +13,7 @@ COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
 # Download and Install longhorncli
 # renovate: datasource=github-releases depName=longhorn/cli
-ARG LONGHORN_CLI_VERSION=v1.9.2
+ARG LONGHORN_CLI_VERSION=v1.10.0
 RUN curl -o /usr/local/bin/longhorncli \
     -L \
     https://github.com/longhorn/cli/releases/download/${LONGHORN_CLI_VERSION}/longhornctl-linux-amd64 \
