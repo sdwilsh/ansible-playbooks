@@ -1,0 +1,7 @@
+---
+apiVersion: acid.zalan.do/v1
+kind: OperatorConfiguration
+metadata:
+  name: this-is-ignored-but-is-required
+configuration:
+  kubernetes_use_configmaps: true
