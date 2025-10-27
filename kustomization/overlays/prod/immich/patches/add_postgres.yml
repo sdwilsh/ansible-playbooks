@@ -21,4 +21,4 @@ spec:
               value: immich
             - name: DB_URL
               value: postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOSTNAME)/$(DB_DATABASE_NAME)?sslmode=require&sslmode=no-verify
-          name: immich-server
+          name: main

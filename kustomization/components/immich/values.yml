@@ -14,5 +14,5 @@ immich:
 
 priorityClassName: application
 
-redis:
+valkey:
   enabled: true
