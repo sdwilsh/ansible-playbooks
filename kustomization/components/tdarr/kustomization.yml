@@ -4,9 +4,9 @@ kind: Component
 
 images:
   - name: ghcr.io/haveagitgat/tdarr
-    newTag: 2.51.01@sha256:d3d284e61157f89bfd21f4cae76a3005f6a3900e287338848138b1baf3df3339
+    newTag: 2.51.03@sha256:5796f2fbb318f22609972f8dd07602b1fc562606c518c13c809eda4c2f9fca26
   - name: ghcr.io/haveagitgat/tdarr_node
-    newTag: 2.51.01@sha256:a49c706cc910c6e135d3600d70470a3d8e42b61abc619c71040f12b4b29c593a
+    newTag: 2.51.03@sha256:9639102b7970aa45e544c27525eda60ba13b5d09f23ab7a5b55821cdd3af76b4
 resources:
   - deployment.yml
   - service.yml
