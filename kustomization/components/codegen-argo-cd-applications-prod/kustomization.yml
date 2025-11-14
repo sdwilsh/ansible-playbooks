@@ -8,6 +8,7 @@ resources:
   - application/3d-printing.yml
   - application/argocd.yml
   - application/atuin.yml
+  - application/auth.yml
   - application/aventertainment.yml
   - application/cert-manager.yml
   - application/crowdsec.yml
