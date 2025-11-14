@@ -230,6 +230,7 @@ identity_providers:
         grant_types:
           - authorization_code
           - refresh_token
+        lifespan: opencloud
         pre_configured_consent_duration: 1w
         public: true
         redirect_uris:
@@ -275,6 +276,11 @@ identity_providers:
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/identity_providers_oidc_jwks_rsa4096_key" | mindent 10 "|" | msquote }}
+    lifespans:
+      custom:
+        opencloud:
+          access_token: 3d
+          refresh_token: 6d
 
 # ---
 # https://www.authelia.com/configuration/miscellaneous/logging/
