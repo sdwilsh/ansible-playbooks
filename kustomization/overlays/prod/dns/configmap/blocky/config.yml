@@ -90,6 +90,7 @@ customDNS:
     palamok.hogs.tswn.us: 10.117.0.12
     nvidia-shield.hogs.tswn.us: 10.117.0.13
     printer.hogs.tswn.us: 10.117.0.14
+    labelwriter.hogs.tswn.us: 10.117.0.15
     energy.hogs.tswn.us: 10.117.0.16
     lutron.hogs.tswn.us: 10.117.0.18
     cortana.hogs.tswn.us: 10.117.0.19
