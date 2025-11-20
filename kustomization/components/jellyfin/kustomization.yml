@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: jellyfin/jellyfin
-    newTag: 10.11.2@sha256:d43a8878689311f841a1967f899f54db56877bf6b426fd7ff870ac1a6fd1dce4
+    newTag: 10.11.3@sha256:1edf3f17997acbe139718f252a7d2ded2706762390d787a34204668498dbc5f6
 resources:
   - service.yml
   - statefulset.yml
