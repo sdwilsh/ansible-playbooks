@@ -5,6 +5,6 @@ kind: Component
 images:
   - name: ghcr.io/squat/generic-device-plugin
     # Alas, this is currently not versioned: https://github.com/squat/generic-device-plugin/issues/24
-    newTag: latest@sha256:e812d2d79e5642bf89e87203d422d351d3fcbbd29ef440481eb7638651d3eb6e
+    newTag: latest@sha256:ef5deb09dcf7e577c8603857ae56ef479d91be6ab6f40dd2427166d510b0745f
 resources:
   - daemonset.yml
