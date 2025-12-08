@@ -23,14 +23,18 @@
       ansible.builtin.systemd_service:
         name: systemd-sysctl.service
         state: restarted
-    - name: hfp-pod.service
+    - name: reload hfp network
+      ansible.builtin.nmcli:
+        conn_name: hfp
+        conn_reload: true
+        state: up
+    - name: hfp-proxy.service
       ansible.builtin.systemd_service:
-        name: hfp-pod.service
+        name: hfp-proxy.service
         state: restarted
-      listen:
-        - hfp-pod.service
-        - hfp-proxy.service
-        - hfp-wireguard.service
+    - name: reboot
+      ansible.builtin.reboot:
+        test_command: "{{ reboot_test_command }}"
   roles:
     - role: common-users
     - role: devsec.hardening.ssh_hardening
@@ -42,6 +46,15 @@
     - name: Set Hostname
       ansible.builtin.hostname:
         name: "{{ inventory_hostname }}"
+    - name: Update to latest mack image
+      community.general.bootc_manage:
+        image: ghcr.io/sdwilsh/mack:latest
+        state: switch
+      become: true
+      notify:
+        - reboot
+      tags:
+        - bootc
     - name: Ensure directories exist
       ansible.builtin.file:
         path: "{{ item }}"
@@ -53,32 +66,9 @@
         - /etc/containers/systemd/alloy.container.d
         - /etc/jellyfin-remote-proxy
         - /etc/systemd/journald.conf.d
-        - /etc/wireguard
       tags:
         - alloy
-        - hfp-pod
         - hfp-proxy
-        - hfp-wireguard
-    - name: Setup hfp pod for containers
-      ansible.builtin.copy:
-        content: |
-          [Unit]
-          Description=A pod that contains a set of containers that need to talk to hfp.
-
-          [Pod]
-          Network=host
-
-          [Install]
-          WantedBy=multi-user.target default.target
-        dest: /etc/containers/systemd/hfp.pod
-        mode: u=rw,g=r,o=r
-        owner: root
-        group: root
-      notify:
-        - systemctl daemon-reload
-        - hfp-pod.service
-      tags:
-        - hfp-pod
     - name: Setup loading of additional kernel modules needed by Wireguard
       ansible.builtin.copy:
         content: |
@@ -97,28 +87,38 @@
       notify:
         - systemd-modules-load.service
       tags:
+        - hfp-wireguard
         - modules-load
-    - name: Setup HFP Wireguard Config
-      ansible.builtin.copy:
-        content: |
-          [Interface]
-          Address = {{ wireguard__address }}
-          MTU = 1280
-          PrivateKey = {{ wireguard__privkey }}
-
-          [Peer]
-          AllowedIPs = {{ allowed_ips | join(', ') }}
-          Endpoint = hogsflixplus.tswn.us:51823
-          PublicKey = {{ wireguard__pubkey }}
-        dest: /etc/wireguard/hfp0.conf
-        mode: u=rw,g=r
-        owner: root
-        group: root
+    - name: Setup HFP Wireguard Connection
+      community.general.nmcli:
+        autoconnect: true
+        conn_name: hfp
+        ifname: hfp0
+        ip4: "{{ wireguard__address }}"
+        type: wireguard
+        state: present
+        wireguard:
+          fwmark: 0x00acab00
+          ip4-auto-default-route: true
+          mtu: 1280
+          peer-routes: true
+          private-key: "{{ wireguard__privkey }}"
+      tags:
+        - hfp-wireguard
+    - name: Add Wireguard Peer
+      ansible.builtin.blockinfile:
+        append_newline: true
+        block: |
+          [wireguard-peer.{{ wireguard__pubkey }}]
+          allowed-ips={{ allowed_ips | join(';') }};
+          endpoint=hogsflixplus.tswn.us:51823
+        insertafter: EOF
+        path: /etc/NetworkManager/system-connections/hfp.nmconnection
+        state: present
       no_log: true # Contains the wireguard private key!
       notify:
-        - hfp-wireguard.service
+        - reload hfp network
       tags:
-        - hfp-pod
         - hfp-wireguard
       vars:
         allowed_ips:
@@ -127,36 +127,6 @@
           - 10.11.1.72/32 # loki-distributor
           - 10.117.0.9/32 # lighterthansome
         wireguard__pubkey: Dwdz7rWR4y8uMW3s4MWZwe1+rR0Bqiigms7Aku51ghU=
-    - name: Setup HFP Wireguard container
-      ansible.builtin.copy:
-        content: |
-          [Unit]
-          ConditionPathExists=/etc/wireguard/hfp0.conf
-          Description=A container that hosts a wireguard VPN server and routes traffic through it for peers.
-
-          [Container]
-          AddCapability=NET_ADMIN
-          AddCapability=NET_RAW
-          DropCapability=ALL
-          HealthCmd=CMD-SHELL ping -c 1 10.11.2.1 || exit 1
-          HealthInterval=60s
-          HealthLogDestination=events_logger
-          HealthRetries=3
-          HealthStartPeriod=10s
-          NoNewPrivileges=true
-          Image=docker.io/procustodibus/wireguard
-          Pod=hfp.pod
-          Volume=/etc/wireguard/hfp0.conf:/etc/wireguard/wg1.conf:Z
-        dest: /etc/containers/systemd/hfp-wireguard.container
-        mode: u=rw,g=r,o=r
-        owner: root
-        group: root
-      notify:
-        - systemctl daemon-reload
-        - hfp-wireguard.service
-      tags:
-        - hfp-pod
-        - hfp-wireguard
     - name: Configure jellyfin-remote-proxy
       ansible.builtin.copy:
         content: "{{ config | to_nice_yaml(indent=2, explicit_start=True) }}"
@@ -168,30 +138,37 @@
         - systemctl daemon-reload
         - hfp-proxy.service
       tags:
-        - hfp-pod
         - hfp-proxy
       vars:
         config:
           local:
-            interface: end0
-            port: 80
+            port: 8080
           remote:
             address: 10.11.1.1
+            port: 8096
     - name: Setup HFP proxy container
       ansible.builtin.copy:
         content: |
           [Unit]
+          After=network-online.target
           ConditionPathExists=/etc/jellyfin-remote-proxy/config.yml
           Description=A container that proxies jellyfin to the local network.
 
+          [Install]
+          WantedBy=multi-user.target default.target
+
           [Container]
-          AddCapability=NET_BIND_SERVICE
+          DropCapability=ALL
           Environment="RUST_LOG=INFO"
           Exec=/usr/local/etc/jellyfin-remote-proxy/config.yml
-          DropCapability=ALL
-          NoNewPrivileges=true
+          HealthCmd=CMD-SHELL curl http://localhost:8080/health || exit 1
+          HealthInterval=60s
+          HealthOnFailure=restart
+          HealthStartPeriod=15s
           Image=ghcr.io/sdwilsh/jellyfin-remote-proxy:{{ jellyfin_remote_proxy_version }}
-          Pod=hfp.pod
+          NoNewPrivileges=true
+          PublishPort=80:8080/tcp
+          PublishPort=7359:7359/udp
           Volume=/etc/jellyfin-remote-proxy/config.yml:/usr/local/etc/jellyfin-remote-proxy/config.yml:Z
         dest: /etc/containers/systemd/hfp-proxy.container
         mode: u=rw,g=r,o=r
@@ -201,16 +178,18 @@
         - systemctl daemon-reload
         - hfp-proxy.service
       tags:
-        - hfp-pod
         - hfp-proxy
       vars:
         # renovate: datasource=github-releases depName=sdwilsh/jellyfin-remote-proxy
-        jellyfin_remote_proxy_version: v0.1.5
+        jellyfin_remote_proxy_version: v0.1.9
 
     # Node Monitoring
     - name: Modify Alloy container to setup config
       ansible.builtin.copy:
         content: |
+          [Install]
+          WantedBy=multi-user.target default.target
+
           [Container]
           Volume=/etc/alloy/loki.alloy:/etc/alloy/loki.alloy:ro
         dest: /etc/containers/systemd/alloy.container.d/override.conf
