@@ -70,6 +70,16 @@
     },
     {
       "customType": "regex",
+      "managerFilePatterns": [
+        "/^plays/.+\\.yml$/"
+      ],
+      "matchStrings": [
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)(?:\\sversioning=(?<versioning>.*?))?\\n\\s+[a-zA-Z_]+_version: (?<currentValue>.*?)\\n"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
+    },
+    {
+      "customType": "regex",
       "datasourceTemplate": "github-releases",
       "managerFilePatterns": [
         "/^kustomization/overlays/prod/traefik/configmap/traefik/static\\.yml$/"
