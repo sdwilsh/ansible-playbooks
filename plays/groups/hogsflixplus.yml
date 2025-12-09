@@ -205,7 +205,7 @@
         - hfp-proxy
       vars:
         # renovate: datasource=github-releases depName=sdwilsh/jellyfin-remote-proxy
-        jellyfin_remote_proxy_version: v0.1.5
+        jellyfin_remote_proxy_version: v0.1.9
 
     # Node Monitoring
     - name: Modify Alloy container to setup config
