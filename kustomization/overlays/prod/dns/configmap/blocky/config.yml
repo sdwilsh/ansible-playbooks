@@ -125,6 +125,7 @@ customDNS:
     hogsflixplus03.tswn.us: 10.11.2.33
     hogsflixplus04.tswn.us: 10.11.2.34
     hogsflixplus05.tswn.us: 10.11.2.35
+    hogsflixplus06.tswn.us: 10.11.2.36
   zone: |
     $ORIGIN tswn.us.
     $TTL 3600
