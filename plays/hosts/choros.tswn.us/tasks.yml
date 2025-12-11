@@ -93,21 +93,21 @@
           [Pod]
           Network=hogs-services.network
           # 7 Days to Die (Relic)
-          PublishPort={{ ansible_default_ipv4.address }}:26900:26900/tcp
-          PublishPort={{ ansible_default_ipv4.address }}:26900:26900/udp
-          PublishPort={{ ansible_default_ipv4.address }}:26901:26901/udp
-          PublishPort={{ ansible_default_ipv4.address }}:26902:26902/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:26900:26900/tcp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:26900:26900/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:26901:26901/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:26902:26902/udp
           # Factorio
-          PublishPort={{ ansible_default_ipv4.address }}:34197:34197/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:34197:34197/udp
           # HFP
-          PublishPort={{ ansible_default_ipv4.address }}:51823:51823/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:51823:51823/udp
           # Traefik Proxy
-          PublishPort={{ ansible_default_ipv4.address }}:443:443/tcp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:443:443/tcp
           # Unifi INFORM
-          PublishPort={{ ansible_default_ipv4.address }}:8080:8080/tcp
-          PublishPort={{ ansible_default_ipv4.address }}:3478:3478/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:8080:8080/tcp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:3478:3478/udp
           # Wireguard
-          PublishPort={{ ansible_default_ipv4.address }}:51821:51821/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:51821:51821/udp
 
           [Install]
           WantedBy=multi-user.target default.target
