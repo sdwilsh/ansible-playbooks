@@ -12,6 +12,7 @@ hogsflixplus03.tswn.us ansible_host=10.11.2.33
 hogsflixplus04.tswn.us ansible_host=10.11.2.34
 hogsflixplus05.tswn.us ansible_host=10.11.2.35
 hogsflixplus06.tswn.us ansible_host=10.11.2.36
+hogsflixplus07.tswn.us ansible_host=10.11.2.37
 
 [pikvm]
 kvm01.hogs.tswn.us ansible_host=10.10.0.50
