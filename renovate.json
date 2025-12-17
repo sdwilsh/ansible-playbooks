@@ -127,6 +127,7 @@
         "patch"
       ],
       "matchPackageNames": [
+        "actions/checkout",
         "alloy",
         "alpine",
         "argoproj/argo-cd",
@@ -136,6 +137,7 @@
         "eclipse-mosquitto",
         "ghcr.io/paperless-ngx/paperless-ngx",
         "gotenberg/gotenberg",
+        "grafana",
         "helm/helm",
         "jellyfin/jellyfin",
         "loki",
@@ -145,7 +147,8 @@
         "quay.io/minio/minio",
         "shenxn/protonmail-bridge",
         "stirling-pdf-chart",
-        "ubuntu/bind9",
+        "twpayne/chezmoi",
+        "ubuntu/bind9"
       ],
       "minimumReleaseAge": "3 days",
       "schedule": [
