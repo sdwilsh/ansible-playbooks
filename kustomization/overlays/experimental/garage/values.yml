@@ -1,0 +1,16 @@
+---
+deployment:
+  kind: DaemonSet
+garage:
+  rpc:
+    secret:
+      create: false
+      name: garage-secret
+monitoring:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+persistence:
+  data:
+    hostPath: /usr/loca/disk0/garage    
