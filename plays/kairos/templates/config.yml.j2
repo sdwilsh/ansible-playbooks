@@ -75,6 +75,7 @@ stages:
       commands:
         - rm -rf /usr/local/disk{{ loop.index0 }}/*
         - mount -o rw {{ partition_path }} /usr/local/disk{{ loop.index0 }}
+        - mkdir -p /usr/local/disk{{ loop.index0 }}/longhorn
 {% endfor %}
 {% endif %}
   initramfs:
