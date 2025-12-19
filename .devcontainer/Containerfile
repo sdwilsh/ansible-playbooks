@@ -16,7 +16,7 @@ COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 ARG GARAGE_CLI_VERSION=v2.1.0
 RUN curl -o /usr/local/bin/garage \
     -L \
-    https://garagehq.deuxfleurs.fr/_releases/${GARAGE_CLI_VERSION}/x86_64-unknown-linux-musl/garage
+    https://garagehq.deuxfleurs.fr/_releases/${GARAGE_CLI_VERSION}/x86_64-unknown-linux-musl/garage \
   && chmod +x /usr/local/bin/garage
 
 # Download and Install longhorncli
