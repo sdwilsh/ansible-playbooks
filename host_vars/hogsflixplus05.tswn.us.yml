@@ -1,4 +1,15 @@
 ---
+common__host_unix_groups:
+  - name: robarnold
+    gid: 3000
+    sudo: true
+common__host_unix_users:
+  - name: robarnold
+    opk:
+      - identifier: 15009de0-1a39-484d-b1c0-72e3be047f41
+        issuer: https://auth.tswn.us
+    uid: 3000
+
 wireguard__address: 10.11.2.35/32
 wireguard__privkey: !vault |
           $ANSIBLE_VAULT;1.1;AES256
