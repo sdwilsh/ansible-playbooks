@@ -12,7 +12,7 @@ on:
     paths:
       - .github/workflows/build-mack.yml
       - images/mack/Containerfile
-      - images/mack/build_files
+      - images/mack/build_files/**
   workflow_dispatch:
 
 env:
