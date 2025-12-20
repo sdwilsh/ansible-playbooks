@@ -4,7 +4,7 @@ local.file_match "opkssh_log" {
             "__path__" = "/var/log/opkssh.log",
             "hostname" = constants.hostname,
             "service" = "sshd",
-        }
+        },
     ]
     sync_period = "60s"
 }
