@@ -13,5 +13,6 @@ ReadOnly=true
 SecurityLabelDisable=true
 Tmpfs=/tmp/alloy
 # This needs to override the default configuration file that is part of the image.
-Volume=/usr/etc/alloy/journal.alloy:/etc/alloy/config.alloy:ro
+Volume=/usr/etc/alloy/config.alloy:/etc/alloy/config.alloy:ro
+Volume=/usr/etc/alloy/journal.alloy:/etc/alloy/journal.alloy:ro
 Volume=/var/log/journal:/host/var/log/journal:ro
