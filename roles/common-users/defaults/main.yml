@@ -1,4 +1,8 @@
 ---
+# The prefix for home folders on this system.
+# common__home_prefix: /home/
+common__home_prefix: /home/
+
 # Groups to create.  For example:
 # common__unix_groups:
 #   - name: "ansible"

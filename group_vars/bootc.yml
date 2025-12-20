@@ -1,4 +1,6 @@
 ---
+common__home_prefix: /var/home/
+
 # devsec.hardening's ssh_hardening
 ssh_pkgs: []
 ssh_selinux_packages: []

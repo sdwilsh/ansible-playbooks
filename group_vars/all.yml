@@ -22,11 +22,17 @@ common__unix_groups:
   - name: "ansible"
     gid: 2000
     sudo: true
+  - name: sdwilsh
+    gid: 2001
+    sudo: true
   - name: "srcs"
     gid: 2050
 common__unix_users:
   - name: "ansible"
     uid: 2000
+  - name: sdwilsh
+    shell: /usr/bin/fish
+    uid: 2001
   - name: "localroot"
     uid: 5000
     group: root

@@ -10,10 +10,10 @@
   ansible.builtin.user:
     expires: -1
     group: "{{ item.group | default(item.name) }}"
-    home: "/home/{{ item.name }}"
+    home: "{{ common__home_prefix }}{{ item.name }}"
     name: "{{ item.name }}"
     password: "{{ item.password | default('') }}"
-    shell: /bin/bash
+    shell: "{{ item.shell | default('/bin/bash') }}"
     state: present
     uid: "{{ item.uid }}"
   become: true
