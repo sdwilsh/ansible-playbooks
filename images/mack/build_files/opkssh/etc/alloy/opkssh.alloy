@@ -1,0 +1,14 @@
+local.file_match "opkssh_log" {
+    path_targets = [
+        {
+            "__path__" = "/var/log/opkssh.log",
+            "hostname" = constants.hostname,
+        }
+    ]
+}
+
+loki.source.file "opkssh_log_scrape" {
+    forward_to = [loki.write.default.receiver]
+    tail_from_end = true
+    targets = local.file_match.opkssh_log.targets
+}

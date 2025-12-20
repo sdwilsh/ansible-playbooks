@@ -6,6 +6,7 @@ set -ouex pipefail
 OPKSSH_VERSION=0.10.0
 
 rsync -rvK /ctx/opkssh/ /
+chown 473:473 /etc/alloy/opkssh.alloy
 systemd-sysusers /usr/lib/sysusers.d/opkssh.conf
 systemctl enable opkssh-configure-selinux.service
 chown -R root:opksshuser /etc/opk
