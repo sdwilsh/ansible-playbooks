@@ -4,4 +4,7 @@ common__home_prefix: /var/home/
 # devsec.hardening's ssh_hardening
 ssh_pkgs: []
 ssh_selinux_packages: []
+sshd_custom_options:
+  - AuthorizedKeysCommand /usr/bin/opkssh verify %u %k %t
+  - AuthorizedKeysCommandUser opksshuser
 sshd_path: /usr/bin/sshd
