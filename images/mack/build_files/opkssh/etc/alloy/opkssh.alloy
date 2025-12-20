@@ -2,7 +2,7 @@ local.file_match "opkssh_log" {
     path_targets = [
         {
             "__path__" = "/var/log/opkssh.log",
-            "hostname" = constants.hostname,
+            "hostname" = constants.hostname
         }
     ]
 }
