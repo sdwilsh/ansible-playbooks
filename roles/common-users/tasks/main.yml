@@ -22,6 +22,39 @@
   loop: "{{ common__unix_users + common__host_unix_users }}"
   loop_control:
     label: "{{ item.name }}"
+- name: Remove ~/.opk
+  ansible.builtin.file:
+    path: "{{ common__home_prefix }}{{ user.name }}/.opk"
+    state: absent
+  become: true
+  loop: "{{ (common__unix_users + common__host_unix_users) | selectattr('opk', 'undefined') }}"
+  loop_control:
+    label: "{{ user.name }}"
+    loop_var: user
+- name: Ensure ~/.opk exists
+  ansible.builtin.file:
+    group: "{{ user.group | default(user.name) }}"
+    owner: "{{ user.name }}"
+    path: "{{ common__home_prefix }}{{ user.name }}/.opk"
+    state: directory
+  become: true
+  loop: "{{ (common__unix_users + common__host_unix_users) | selectattr('opk', 'defined') }}"
+  loop_control:
+    label: "{{ user.name }}"
+    loop_var: user
+# It would be nice to verify this: https://github.com/openpubkey/opkssh/issues/429
+- name: Deploy ~/.opk/auth_id
+  ansible.builtin.template:
+    dest: "{{ common__home_prefix }}{{ user.name }}/.opk/auth_id"
+    group: "{{ user.group | default(user.name) }}"
+    mode: u=rw,g=,o=
+    owner: "{{ user.name }}"
+    src: opk_auth_id.j2
+  become: true
+  loop: "{{ (common__unix_users + common__host_unix_users) | selectattr('opk', 'defined') }}"
+  loop_control:
+    label: "{{ user.name }}"
+    loop_var: user
 - name: Deploy public keys to ansible user
   ansible.posix.authorized_key:
     user: ansible

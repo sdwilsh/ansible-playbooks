@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+{% for entry in user.opk %}
+{{ user.name }} {{ entry.identifier }} {{ entry.issuer }}
+{% endfor %}

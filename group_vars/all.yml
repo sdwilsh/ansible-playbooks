@@ -29,8 +29,14 @@ common__unix_groups:
     gid: 2050
 common__unix_users:
   - name: "ansible"
+    opk:
+      - identifier: 844f1d64-a714-4d10-bab2-a5d6c9da41b2
+        issuer: https://auth.tswn.us
     uid: 2000
   - name: sdwilsh
+    opk:
+      - identifier: 844f1d64-a714-4d10-bab2-a5d6c9da41b2
+        issuer: https://auth.tswn.us
     shell: /usr/bin/fish
     uid: 2001
   - name: "localroot"
