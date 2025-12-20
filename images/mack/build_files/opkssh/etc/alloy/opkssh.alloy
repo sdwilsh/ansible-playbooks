@@ -5,6 +5,7 @@ local.file_match "opkssh_log" {
             "hostname" = constants.hostname
         }
     ]
+    sync_period = "60s"
 }
 
 loki.source.file "opkssh_log_scrape" {
