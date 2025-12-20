@@ -1,12 +1,12 @@
 ---
-- name: Create base unix groups
+- name: Create unix groups
   ansible.builtin.group:
     name: "{{ item.name }}"
     gid: "{{ item.gid }}"
     state: present
   become: true
-  loop: "{{ common__unix_groups }}"
-- name: Create base users
+  loop: "{{ common__unix_groups + common__host_unix_groups }}"
+- name: Create users
   ansible.builtin.user:
     expires: -1
     group: "{{ item.group | default(item.name) }}"
@@ -17,7 +17,7 @@
     state: present
     uid: "{{ item.uid }}"
   become: true
-  loop: "{{ common__unix_users }}"
+  loop: "{{ common__unix_users + common__host_unix_users }}"
 - name: Deploy public keys to ansible user
   ansible.posix.authorized_key:
     user: ansible
@@ -34,6 +34,9 @@
     validate: 'visudo -cf %s'
     mode: 0440
   become: true
+  vars:
+    unix_groups: "{{ common__unix_groups + common__host_unix_groups }}"
+    unix_users:  "{{ common__unix_users + common__host_unix_users }}"
 
 # Cleanup From Provisioning
 - name: Remove provision user

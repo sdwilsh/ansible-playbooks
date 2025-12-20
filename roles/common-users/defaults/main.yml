@@ -15,3 +15,16 @@ common__unix_groups: []
 #   - name: "ansible"
 #     gid: 2000
 common__unix_users: []
+
+# Host-specific groups to create.  For example:
+# common__unix_groups:
+#   - name: someuser
+#     gid: 9000
+#     sudo: true
+common__host_unix_groups: []
+
+# Host-specific users to create.  For example:
+# common__unix_groups:
+#   - name: someuser
+#     gid: 9000
+common__host_unix_users: []
