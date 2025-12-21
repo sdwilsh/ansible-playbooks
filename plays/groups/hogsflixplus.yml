@@ -191,6 +191,7 @@
           WantedBy=multi-user.target default.target
 
           [Container]
+          Environment=HOST_HOSTNAME={{ inventory_hostname }}
           Volume=/etc/alloy/loki.alloy:/etc/alloy/loki.alloy:ro
         dest: /etc/containers/systemd/alloy.container.d/override.conf
         mode: u=rw,g=r,o=r

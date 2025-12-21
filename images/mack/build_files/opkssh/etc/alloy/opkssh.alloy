@@ -2,8 +2,9 @@ local.file_match "opkssh_log" {
     path_targets = [
         {
             "__path__" = "/var/log/opkssh.log",
-            "hostname" = constants.hostname,
-            "service" = "sshd",
+            "hostname" = sys.env("HOST_HOSTNAME"),
+            "service" = "loki.source.file.opkssh",
+            "unit" = "sshd.service",
         },
     ]
     sync_period = "60s"
