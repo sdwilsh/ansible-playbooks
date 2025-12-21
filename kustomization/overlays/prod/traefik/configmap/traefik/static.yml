@@ -39,8 +39,9 @@ entryPoints:
       # this set per service (https://github.com/traefik/traefik/issues/10962),
       # we must do it globally.
       respondingTimeouts:
-        readTimeout: 5m
-        writeTimeout: 5m
+        idleTimeout: 3m
+        readTimeout: 1h
+        writeTimeout: 1h
   websecure-ext:
     address: :9443
     forwardedHeaders:
