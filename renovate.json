@@ -222,8 +222,6 @@
         "pinDigest"
       ],
       "matchPackageNames": [
-        "mcr.microsoft.com/devcontainers/python",
-        "python",
         "quay.io/fedora/fedora-bootc"
       ]
     },
