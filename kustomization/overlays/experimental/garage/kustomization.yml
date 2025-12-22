@@ -4,7 +4,7 @@ kind: Kustomization
 
 helmCharts:
   - name: garage
-    version: 1.1.2
+    version: 1.2.0
     repo: https://charts.derwitt.dev
     releaseName: garage
     valuesFile: values.yml
