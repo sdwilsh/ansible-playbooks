@@ -6,7 +6,7 @@ MODULE_TEMP=/tmp/opkssh.mod
 PACKAGE_TEMP=/tmp/opkssh.pp
 
 # Ensure Logging is Setup
-rm /var/log/opkssh.log
+rm -rf /var/log/opkssh.log
 touch /var/log/opkssh.log
 chown root:opksshuser /var/log/opkssh.log
 chmod 660 /var/log/opkssh.log
