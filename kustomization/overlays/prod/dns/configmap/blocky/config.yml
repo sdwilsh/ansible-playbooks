@@ -84,7 +84,7 @@ customDNS:
     front-north-west.camera.hogs.tswn.us: 10.67.0.13
     front-north-east.camera.hogs.tswn.us: 10.67.0.14
     north-gate.camera.hogs.tswn.us: 10.67.0.15
-    north-back-porch.camera.hogs.tswn.us: 10.67.0.16
+    back-porch-north.camera.hogs.tswn.us: 10.67.0.16
 
     # HOME VLAN
     lighterthansome.hogs.tswn.us: 10.117.0.9
