@@ -68,7 +68,7 @@ build-loki-image:
         --target-arch=aarch64 \
         --type raw \
         localhost/loki:latest
-    
+
     sudo rm -rf output-loki/image/disk.raw.xz
     sudo xz -z -k -v output-loki/image/disk.raw
 
@@ -120,7 +120,7 @@ build-mack-vm:
 # List decisions from crowdsec.  Useful when debugging access problems.
 [group('crowdsec')]
 crowdsec-list-decisions:
-  kubectl exec -n crowdsec -it deployments/crowdsec-deployment -c crowdsec -- /usr/bin/env cscli decisions list
+    kubectl exec -n crowdsec -it deployments/crowdsec-deployment -c crowdsec -- /usr/bin/env cscli decisions list
 
 # Generates/updates resources for Argo CD applications
 [group('codegen')]
