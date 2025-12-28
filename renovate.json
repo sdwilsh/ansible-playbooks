@@ -55,6 +55,17 @@
     },
     {
       "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/^kustomization/.+/cnpg/.+\\.yml$/"
+      ],
+      "matchStrings": [
+        "^\\s+imageName:\\s+(?<registryUrl>.+?)/(?<depName>.+):(?<currentValue>.+?)@(?<currentDigest>.+)$'"
+      ],
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "managerFilePatterns": [
         "/^kustomization/.+/.+/kustomization\\.yml$/",
         "/^kustomization/.+/.+/.+/kustomization\\.yml$/"
