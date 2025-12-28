@@ -46,14 +46,17 @@ loki:
           period: 24h
   storage:
     bucketNames:
-      chunks: chunks
-      ruler: ruler
-      admin: admin
+      admin: monitoring-admin
+      chunks: monitoring-chunks
+      ruler: monitoring-ruler
     s3:
-      s3: s3://monitoring-loki:${MINIO_SECRET_ACCESS_KEY}@minio.monitoring.svc.cluster.local/chunks
-      s3ForcePathStyle: true
+      accessKeyId: GKd80820999ad3096edba1edf0
       disable_dualstack: true
+      endpoint: garage.garage.svc.cluster.local:3900
       insecure: true
+      region: garage
+      s3ForcePathStyle: true
+      secretAccessKey: ${GARAGE_SECRET_ACCESS_KEY}
     type: s3
   tracing:
     enabled: true
