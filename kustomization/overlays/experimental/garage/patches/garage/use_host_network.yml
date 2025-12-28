@@ -1,0 +1,10 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet

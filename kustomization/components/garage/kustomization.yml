@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+images:
+  - name: dxflrs/garage
+    newTag: v2.1.0@sha256:4c9b34c113e61358466e83fd6e7d66e6d18657ede14b776eb78a93ee8da7cf6a
+resources:
+  - daemonset.yml
+  - rbac.yml
+  - service/garage-metrics.yml
+  - service/garage.yml
+  - servicemonitor.yml
+

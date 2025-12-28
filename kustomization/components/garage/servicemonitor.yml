@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: garage
+    app.kubernetes.io/name: garage
+  name: garage
+  namespace: garage
+spec:
+  endpoints:
+    - honorLabels: true
+      interval: 15s
+      path: /metrics
+      port: metrics
+      scheme: http
+      scrapeTimeout: 10s
+  jobLabel: garage
+  namespaceSelector:
+    matchNames:
+      - garage
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: garage
+      app.kubernetes.io/name: garage

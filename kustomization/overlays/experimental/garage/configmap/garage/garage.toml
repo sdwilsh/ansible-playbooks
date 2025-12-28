@@ -1,0 +1,34 @@
+metadata_dir = "/mnt/meta"
+data_dir = "/mnt/data"
+
+db_engine = "lmdb"
+
+block_size = "16M"
+
+replication_factor = 3
+consistency_mode = "consistent"
+
+compression_level = 3
+
+rpc_bind_addr = "[::]:3901"
+rpc_public_addr_subnet = "10.11.0.0/24"
+
+bootstrap_peers = []
+
+[kubernetes_discovery]
+namespace = "garage"
+service_name = "garage"
+skip_crd = false
+
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+root_domain = ".s3.garage.tld"
+
+[s3_web]
+bind_addr = "[::]:3902"
+root_domain = ".web.garage.tld"
+index = "index.html"
+
+[admin]
+api_bind_addr = "[::]:3903"

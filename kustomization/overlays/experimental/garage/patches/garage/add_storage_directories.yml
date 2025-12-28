@@ -1,0 +1,18 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      volumes:
+        - hostPath:
+            path: /usr/local/garage-meta
+            type: DirectoryOrCreate
+          name: meta
+        - hostPath:
+            path: /usr/local/disk0/garage
+            type: DirectoryOrCreate
+          name: data
+
