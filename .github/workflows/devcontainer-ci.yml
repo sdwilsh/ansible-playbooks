@@ -50,6 +50,7 @@ jobs:
             CI=1
           push: never
           runCmd: |
+            set -euxo pipefail
             just ansible-lint
             just hadolint
             just justcheck
@@ -68,4 +69,6 @@ jobs:
           env: |
             CI=1
           push: never
-          runCmd: just kustomize-build
+          runCmd: |
+            set -euxo pipefail
+            just kustomize-build
