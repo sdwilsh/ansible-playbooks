@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cleanup-pod
+spec:
+  containers:
+    - name: postgres
+      image: postgres:17@sha256:dca7512acaa113409df7e40d977d801e53c0c8088e45d4311a45b4065ccfdcd3
+      command:
+        - sleep
+        - 1d
+      env:
+        - name: PGHOST
+          value: grafana-pg-cluster-rw
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: grafana-pg-cluster-app
+        - name: PGSSLMODE
+          value: require
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: grafana-pg-cluster-app
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
