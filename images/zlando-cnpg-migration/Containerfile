@@ -1,0 +1,31 @@
+FROM ghcr.io/cloudnative-pg/postgresql:17@sha256:0577d652f8ae83defb6c31d9948388d7f7fffdd5a8f2a9b50f3ba71d3fb80d24
+
+USER root
+
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+  set -xe \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    build-essential \
+    clang-11 \
+    git \
+    llvm-11 \
+    postgresql-server-dev-17 \
+  && git clone -b REL4_2_0 https://github.com/pgaudit/set_user.git /tmp/set_user \
+  && make -C /tmp/set_user USE_PGXS=1 \
+  && make -C /tmp/set_user USE_PGXS=1 install \
+  && apt-get purge -y \
+    build-essential \
+    clang-11 \
+    git \
+    llvm-11 \
+    postgresql-server-dev-17 \
+  && apt-get autopurge -y \
+  && apt-get install -y --no-install-recommends \
+    postgresql-17-pg-stat-kcache \
+  && rm -fr /tmp/* \
+  && rm -rf /var/lib/apt/lists/*
+
+USER 26
