@@ -1,0 +1,23 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: grafana-pg-cluster
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:0577d652f8ae83defb6c31d9948388d7f7fffdd5a8f2a9b50f3ba71d3fb80d24
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+        - ro
+  postgresql:
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: cnpg-encrypted-storage

@@ -5,7 +5,7 @@ metadata:
   name: grafana-17-pg
 spec:
   enableLogicalBackup: true
-  numberOfInstances: 2
+  numberOfInstances: 0
   podPriorityClassName: application-infra
   postgresql:
     version: "17"

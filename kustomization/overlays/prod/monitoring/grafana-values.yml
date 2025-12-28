@@ -3,35 +3,47 @@ admin:
   existingSecret: grafana-secret
 
 envValueFrom:
+  GF_DATABASE_NAME:
+    secretKeyRef:
+      key: dbname
+      name: grafana-pg-cluster-app
   GF_DATABASE_PASSWORD:
     secretKeyRef:
       key: password
-      name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+      name: grafana-pg-cluster-app
   GF_DATABASE_USERNAME:
     secretKeyRef:
       key: username
-      name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+      name: grafana-pg-cluster-app
 
 extraInitContainers:
   - command:
       - sh
       - -c
-      - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+      - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
     env:
-      - name: PGHOST
-        value: grafana-17-pg
-      - name: PGPASSWORD
+      - name: PGDATABASE
         valueFrom:
           secretKeyRef:
-            key: password
-            name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
-      - name: PGSSLMODE
-        value: require
+            key: dbname
+            name: grafana-pg-cluster-app
+      - name: PGHOST
+        valueFrom:
+          secretKeyRef:
+            key: host
+            name: grafana-pg-cluster-app
       - name: PGUSER
         valueFrom:
           secretKeyRef:
             key: username
-            name: grafana-owner-user.grafana-17-pg.credentials.postgresql.acid.zalan.do
+            name: grafana-pg-cluster-app
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: grafana-pg-cluster-app
+      - name: PGSSLMODE
+        value: require
     image: postgres
     name: wait-for-grafana-pg-is-ready
     securityContext:
@@ -52,8 +64,8 @@ grafana.ini:
   analytics:
     check_for_updates: true
   database:
-    host: grafana-17-pg
-    name: grafana
+    host: grafana-pg-cluster-rw
+    name: $__env{GF_DATABASE_NAME}
     password: $__env{GF_DATABASE_PASSWORD}
     ssl_mode: require
     type: postgres
