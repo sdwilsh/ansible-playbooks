@@ -11,7 +11,7 @@ resources:
   - application/auth.yml
   - application/aventertainment.yml
   - application/cert-manager.yml
-  - application/cnpg.yml
+  - application/cnpg-system.yml
   - application/crowdsec.yml
   - application/dns.yml
   - application/external-services.yml
