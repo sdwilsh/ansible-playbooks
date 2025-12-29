@@ -65,4 +65,3 @@ resources:
   - cnpg/cluster.yml
   - cnpg/database.yml
   - ingress.yml
-  - postgresql.yml
