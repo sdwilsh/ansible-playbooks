@@ -4,6 +4,8 @@ kind: Cluster
 metadata:
   name: grafana-pg-cluster
 spec:
+  backup:
+    target: primary
   imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:b473a9c10debd74827c2966632012c84e335ccacff1d87da4ad4facf96a62e21
   instances: 3
   managed:
@@ -11,6 +13,11 @@ spec:
       disabledDefaultServices:
         - r
         - ro
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: garage-objectstore
   postgresql:
     synchronous:
       failoverQuorum: true
@@ -18,6 +25,7 @@ spec:
       number: 1
   primaryUpdateMethod: switchover
   primaryUpdateStrategy: unsupervised
+  priorityClassName: critical-application-infra
   storage:
     size: 10Gi
     storageClass: cnpg-encrypted-storage

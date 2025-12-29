@@ -64,4 +64,6 @@ resources:
   - alertmanagerconfig.yml
   - cnpg/cluster.yml
   - cnpg/database.yml
+  - cnpg/objectstore.yml
+  - cnpg/scheduledbackup.yml
   - ingress.yml

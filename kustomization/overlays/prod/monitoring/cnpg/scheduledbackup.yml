@@ -1,0 +1,11 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: nightly-scheduledbackup
+spec:
+  backupOwnerReference: cluster
+  cluster:
+    name: grafana-pg-cluster
+  method: barmanObjectStore
+  schedule: "0 15 23 * * *"  # At 23:15 every day.
