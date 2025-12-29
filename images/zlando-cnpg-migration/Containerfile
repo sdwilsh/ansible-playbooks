@@ -1,4 +1,4 @@
-FROM ghcr.io/cloudnative-pg/postgresql:17@sha256:0577d652f8ae83defb6c31d9948388d7f7fffdd5a8f2a9b50f3ba71d3fb80d24
+FROM ghcr.io/cloudnative-pg/postgresql:17@sha256:b473a9c10debd74827c2966632012c84e335ccacff1d87da4ad4facf96a62e21
 
 USER root
 
