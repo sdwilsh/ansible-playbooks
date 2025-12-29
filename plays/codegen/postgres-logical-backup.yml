@@ -18,8 +18,6 @@
           - crowdsec
           - homeassistant
           - immich
-          - monitoring
-          - nextcloud
           - paperless
     - name: Delete existing codegen
       ansible.builtin.file:

@@ -11,8 +11,6 @@ resources:
   - miniobucket/crowdsec.yml
   - miniobucket/homeassistant.yml
   - miniobucket/immich.yml
-  - miniobucket/monitoring.yml
-  - miniobucket/nextcloud.yml
   - miniobucket/paperless.yml
   - miniopolicy/3d-printing.yml
   - miniopolicy/atuin.yml
@@ -20,8 +18,6 @@ resources:
   - miniopolicy/crowdsec.yml
   - miniopolicy/homeassistant.yml
   - miniopolicy/immich.yml
-  - miniopolicy/monitoring.yml
-  - miniopolicy/nextcloud.yml
   - miniopolicy/paperless.yml
   - miniopolicybinding/3d-printing.yml
   - miniopolicybinding/atuin.yml
@@ -29,8 +25,6 @@ resources:
   - miniopolicybinding/crowdsec.yml
   - miniopolicybinding/homeassistant.yml
   - miniopolicybinding/immich.yml
-  - miniopolicybinding/monitoring.yml
-  - miniopolicybinding/nextcloud.yml
   - miniopolicybinding/paperless.yml
   - miniouser/3d-printing.yml
   - miniouser/atuin.yml
@@ -38,6 +32,4 @@ resources:
   - miniouser/crowdsec.yml
   - miniouser/homeassistant.yml
   - miniouser/immich.yml
-  - miniouser/monitoring.yml
-  - miniouser/nextcloud.yml
   - miniouser/paperless.yml
