@@ -60,7 +60,7 @@
         "/^kustomization/.+/cnpg/.+\\.yml$/"
       ],
       "matchStrings": [
-        "\\s+imageName:\\s+(?<registryUrl>.+?)/(?<depName>.+):(?<currentValue>.+?)@(?<currentDigest>.+)"
+        "\\s+imageName:\\s+(?<depName>.+):(?<currentValue>.+?)@(?<currentDigest>sha256:[a-f0-9]{64})"
       ],
       "versioningTemplate": "docker"
     },
