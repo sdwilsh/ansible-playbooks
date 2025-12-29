@@ -194,6 +194,7 @@
       "matchPackageNames": [
         "busybox",
         "ghcr.io/blakeblackshear/frigate",
+        "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/servercontainers/samba",
         "lscr.io/linuxserver/code-server",
         "postgres",
