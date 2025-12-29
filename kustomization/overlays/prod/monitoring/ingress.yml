@@ -29,16 +29,6 @@ spec:
                   name: service
             path: /
             pathType: Prefix
-    - host: minio-monitoring.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: loki-tenant-console
-                port:
-                  name: http-console
-            path: /
-            pathType: Prefix
     - host: prometheus.hogs.tswn.us
       http:
         paths:
