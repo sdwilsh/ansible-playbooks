@@ -12,8 +12,6 @@
       ansible.builtin.set_fact:
         # We use a bucket per namespace for any postgresql resources in that namespace.
         namespaces:
-          - 3d-printing
-          - atuin
           - auth
           - crowdsec
           - homeassistant

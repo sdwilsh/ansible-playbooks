@@ -9,13 +9,16 @@ spec:
       initContainers:
         - env:
             - name: ATUIN_DB_HOST
-              value: atuin-17-pg
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: atuin-pg-cluster-app
             - name: ATUIN_DB_PASSWORD_SECRET_FILE
               value: /postgresql-secrets/password
             - name: ATUIN_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
+                  name: atuin-pg-cluster-app
                   key: username
             - name: ATUIN_OPEN_REGISTRATION
               value: "false"
@@ -27,22 +30,30 @@ spec:
         - command:
             - sh
             - -c
-            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
           env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: atuin-pg-cluster-app
             - name: PGHOST
-              value: atuin-17-pg
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: atuin-pg-cluster-app
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
+                  name: atuin-pg-cluster-app
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
+                  name: atuin-pg-cluster-app
           image: postgres
           name: wait-for-atuin-pg-is-ready
           securityContext:
@@ -58,4 +69,4 @@ spec:
       volumes:
         - name: postgresql-secrets
           secret:
-            secretName: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
+            secretName: atuin-pg-cluster-app
