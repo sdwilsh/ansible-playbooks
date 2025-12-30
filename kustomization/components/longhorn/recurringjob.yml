@@ -27,6 +27,7 @@ spec:
     - game
     - important
     - no-backup
+    - postgres-replica-storage
   task: filesystem-trim
 ---
 apiVersion: longhorn.io/v1beta2
@@ -39,6 +40,7 @@ spec:
   cron: "5 */1 * * *"
   groups:
     - no-backup
+    - postgres-replica-storage
   task: snapshot-cleanup
 ---
 apiVersion: longhorn.io/v1beta2
