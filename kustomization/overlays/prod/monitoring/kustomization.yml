@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/cnpg-backup
   - ../../../components/prometheus
 configMapGenerator:
   - name: alloy-config
@@ -48,6 +49,10 @@ patches:
     target:
       kind: Alertmanager
       name: alertmanager
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
   - path: patches/loki/set_service_type_load_balancer.yml
     target:
       kind: Service
@@ -64,6 +69,5 @@ resources:
   - alertmanagerconfig.yml
   - cnpg/cluster.yml
   - cnpg/database.yml
-  - cnpg/objectstore.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
