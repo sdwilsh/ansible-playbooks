@@ -11,7 +11,7 @@ images:
   - name: ghcr.io/atuinsh/atuin
     newTag: v18.10.0@sha256:4a29feda6f352581ece849807445fe1f50f2074b4643b7bfe62b27e23705b068
   - name: postgres
-    newTag: 16@sha256:d4c3314b2dd74ff23cd6cd07e4d7e737cb6ef791c22a7cbd744cfbfb4815df72
+    newTag: 17@sha256:dca7512acaa113409df7e40d977d801e53c0c8088e45d4311a45b4065ccfdcd3
 namespace: atuin
 patches:
   - path: patches/atuin/set_config_env.yml
@@ -27,4 +27,3 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
-  - postgresql.yml
