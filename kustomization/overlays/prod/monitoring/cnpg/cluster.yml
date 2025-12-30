@@ -14,8 +14,9 @@ spec:
         - r
         - ro
   plugins:
-    - name: barman-cloud.cloudnative-pg.io
+    - enabled: true
       isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
       parameters:
         barmanObjectName: garage-objectstore
   postgresql:
