@@ -64,6 +64,10 @@ access_control:
       resources:
         - ^/.well-known/immich$
         - ^/api/.*$
+    - domain: immich.tswn.us
+      policy: bypass
+      resources:
+        - ^/share/.*$
     - domain: jellyfin.tswn.us
       networks:
         - home
