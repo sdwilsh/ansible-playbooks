@@ -1,4 +1,4 @@
-FROM ghcr.io/cloudnative-pg/postgresql:17@sha256:b473a9c10debd74827c2966632012c84e335ccacff1d87da4ad4facf96a62e21
+FROM ghcr.io/tensorchord/cloudnative-vectorchord:17@sha256:9e1f7d83922277d69b11fa366b681b2620d56dc2f18247289e58b595d0628184
 
 USER root
 
@@ -9,18 +9,18 @@ RUN --mount=type=cache,dst=/var/cache \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
     build-essential \
-    clang-11 \
+    clang \
     git \
-    llvm-11 \
+    llvm \
     postgresql-server-dev-17 \
   && git clone -b REL4_2_0 https://github.com/pgaudit/set_user.git /tmp/set_user \
   && make -C /tmp/set_user USE_PGXS=1 \
   && make -C /tmp/set_user USE_PGXS=1 install \
   && apt-get purge -y \
     build-essential \
-    clang-11 \
+    clang \
     git \
-    llvm-11 \
+    llvm \
     postgresql-server-dev-17 \
   && apt-get autopurge -y \
   && apt-get install -y --no-install-recommends \
