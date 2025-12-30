@@ -49,19 +49,24 @@
           spec:
             numberOfInstances: 0
         wait: true
-    - name: Scale down paperless redis statefulset
+    - name: Scale down paperless postgresql
       kubernetes.core.k8s:
         context: "{{ cluster }}"
         state: present
         resource_definition:
-          apiVersion: apps/v1
-          kind: StatefulSet
+          apiVersion: postgresql.cnpg.io/v1
+          kind: Cluster
           metadata:
-            name: "{{ (lookup('file', 'redis.yml') | from_yaml).metadata.name }}"
+            annotations:
+              cnpg.io/hibernation: "on"
+            name: "{{ (lookup('file', 'cnpg/cluster.yml') | from_yaml).metadata.name }}"
             namespace: "{{ k8s_namespace }}"
-          spec:
-            replicas: 0
         wait: true
+        wait_condition:
+          type: cnpg.io/hibernation
+          reason: Hibernated
+          status: "True"
+        wait_timeout: 300 # 5m
   vars:
     cluster: default
     k8s_namespace: "{{ (lookup('file', 'kustomization.yml') | from_yaml).namespace }}"
