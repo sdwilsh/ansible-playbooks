@@ -67,6 +67,8 @@ access_control:
     - domain: immich.tswn.us
       policy: bypass
       resources:
+        - ^/_app/env.js$
+        - ^/_app/immutable/.*$
         - ^/share/.*$
     - domain: jellyfin.tswn.us
       networks:
