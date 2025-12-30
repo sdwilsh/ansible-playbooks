@@ -60,7 +60,5 @@ resources:
   - ingress/authelia.yml
   - ingress/lldap.yml
   - middleware/forwardauth.yml
-  - postgresql/authelia.yml
-  - postgresql/lldap.yml
   - redisreplication.yml
   - redissentinel.yml
