@@ -157,15 +157,20 @@ identity_providers:
         token_endpoint_auth_method: none
         userinfo_signed_response_alg: none
       # https://www.authelia.com/integration/openid-connect/clients/immich/
-      - authorization_policy: two_factor
+      - access_token_signed_response_alg: none
+        authorization_policy: two_factor
         client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG
         client_name: Immich
         client_secret: $pbkdf2-sha512$310000$omxinbTJUu.5YlmzWZTyhw$n5isxHk/CeWL9EhtQppgnyUUBlGO64icMFj26ZGj4ekwnbg.tunfss9t4kRHOhWyOd.3EQnfJKFngXM8A/pqeQ
+        grant_types:
+          - authorization_code
         public: false
         redirect_uris:
           - app.immich:///oauth-callback
           - https://immich.tswn.us/auth/login
-          - https://immich.tswn.us/auth/user-settings
+          - https://immich.tswn.us/user-settings
+        response_types:
+          - code
         scopes:
           - email
           - openid
