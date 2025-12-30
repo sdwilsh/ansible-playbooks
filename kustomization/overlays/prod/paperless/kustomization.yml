@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/cnpg-backup
   - ../../../components/paperless
 images:
   - name: postgres
@@ -11,6 +12,12 @@ images:
     newTag: v8.4.0@sha256:539924b2c1446dcdea2f043af2c50bed7516623254e4984a6d926df42eb359b2
 namespace: paperless
 patches:
+  # cnpg
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
+  # paperless
   - path: patches/increase_paperless_data_size.yml
     target:
       kind: PersistentVolumeClaim
@@ -27,7 +34,9 @@ patches:
     target:
       kind: PersistentVolumeClaim
 resources:
-  - ingress.yml
   - namespace.yml
+  - cnpg/cluster.yml
+  - cnpg/scheduledbackup.yml
+  - ingress.yml
   - postgresql.yml
   - redis.yml

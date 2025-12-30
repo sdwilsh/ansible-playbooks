@@ -6,18 +6,10 @@ kind: Component
 
 resources:
   - miniobucket/crowdsec.yml
-  - miniobucket/homeassistant.yml
   - miniobucket/immich.yml
-  - miniobucket/paperless.yml
   - miniopolicy/crowdsec.yml
-  - miniopolicy/homeassistant.yml
   - miniopolicy/immich.yml
-  - miniopolicy/paperless.yml
   - miniopolicybinding/crowdsec.yml
-  - miniopolicybinding/homeassistant.yml
   - miniopolicybinding/immich.yml
-  - miniopolicybinding/paperless.yml
   - miniouser/crowdsec.yml
-  - miniouser/homeassistant.yml
   - miniouser/immich.yml
-  - miniouser/paperless.yml

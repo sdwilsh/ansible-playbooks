@@ -5,7 +5,7 @@ metadata:
   name: paperless-17-pg
 spec:
   enableLogicalBackup: true
-  numberOfInstances: 3
+  numberOfInstances: 0
   podPriorityClassName: critical-application-infra
   postgresql:
     version: "17"

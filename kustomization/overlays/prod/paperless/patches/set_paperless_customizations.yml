@@ -12,19 +12,30 @@ spec:
             - name: PAPERLESS_DBENGINE
               value: postgresql
             - name: PAPERLESS_DBHOST
-              value: paperless-17-pg
-            - name: PAPERLESS_DBPORT
-              value: "5432"
-            - name: PAPERLESS_DBUSER
               valueFrom:
                 secretKeyRef:
-                  key: username
-                  name: paperless-owner-user.paperless-17-pg.credentials.postgresql.acid.zalan.do
+                  key: host
+                  name: paperless-pg-cluster-app
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: paperless-pg-cluster-app
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: paperless-owner-user.paperless-17-pg.credentials.postgresql.acid.zalan.do
+                  name: paperless-pg-cluster-app
+            - name: PAPERLESS_DBPORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: paperless-pg-cluster-app
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: paperless-pg-cluster-app
 
             # Features
             - name: PAPERLESS_CONSUMER_ENABLE_BARCODES
@@ -59,22 +70,30 @@ spec:
         - command:
             - sh
             - -c
-            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
           env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: paperless-pg-cluster-app
             - name: PGHOST
-              value: paperless-17-pg
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: paperless-pg-cluster-app
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: paperless-owner-user.paperless-17-pg.credentials.postgresql.acid.zalan.do
+                  name: paperless-pg-cluster-app
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: paperless-owner-user.paperless-17-pg.credentials.postgresql.acid.zalan.do
+                  name: paperless-pg-cluster-app
           image: postgres
           name: wait-for-paperless-pg-is-ready
           securityContext:
