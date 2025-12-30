@@ -2,6 +2,8 @@
 [Service]
 ExecStart=
 ExecStart=/usr/bin/k3s server \
+    --etcd-s3 \
+    --etcd-s3-config-secret=etcd-s3-secret \
     --flannel-iface=services \
     --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }} \
     --node-name={{ inventory_hostname_short }} \

@@ -34,7 +34,7 @@
             name: "{{ secret.name }}"
             namespace: "{{ secret.namespace }}"
           stringData: "{{ secret.stringData }}"
-          type: Opaque
+          type: "{{ secret.type | default('Opaque') }}"
         state: present
       loop: "{{ secrets }}"
       loop_control:
