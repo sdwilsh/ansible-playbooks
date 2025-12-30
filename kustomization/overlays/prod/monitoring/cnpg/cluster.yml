@@ -6,6 +6,9 @@ metadata:
 spec:
   backup:
     target: primary
+  env:
+    - name: TZ
+      value: America/Los_Angeles
   imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:b473a9c10debd74827c2966632012c84e335ccacff1d87da4ad4facf96a62e21
   instances: 3
   managed:
