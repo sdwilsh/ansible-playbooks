@@ -52,7 +52,7 @@
         contents: "{{ osreleasefile['content'] | b64decode }}"
     - name: Extract metadata
       ansible.builtin.set_fact:
-        os_image_version: '{{ contents | regex_findall(''^KAIROS_VERSION="(.*)"$'', multiline=True) | last }}'
+        os_image_version: '{{ contents | regex_findall(''^KAIROS_VERSION="(.*)"$'', multiline=True) | last | trim(''v'') }}'
     - name: Print os image
       ansible.builtin.debug:
         var: os_image_version
