@@ -1,7 +1,0 @@
-# @codegen-command: ansible-playbook plays/codegen/postgres-logical-backup.yml 
-# @generated
----
-apiVersion: kustomize.config.k8s.io/v1alpha1
-kind: Component
-
-resources: []

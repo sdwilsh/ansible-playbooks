@@ -156,7 +156,6 @@
         "lscr.io/linuxserver/transmission",
         "mbround18/valheim",
         "prometheus/prometheus",
-        "quay.io/minio/minio",
         "shenxn/protonmail-bridge",
         "stirling-pdf-chart",
         "twpayne/chezmoi",
@@ -197,8 +196,7 @@
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/servercontainers/samba",
         "lscr.io/linuxserver/code-server",
-        "postgres",
-        "quay.io/minio/minio"
+        "postgres"
       ],
       "matchUpdateTypes": [
         "digest"

@@ -4,7 +4,7 @@ kind: postgresql
 metadata:
   name: immich-17-pg
 spec:
-  enableLogicalBackup: true
+  enableLogicalBackup: false
   # We need spilo with VectorChord.
   # https://github.com/immich-app/immich/discussions/20634#discussion-8681480
   dockerImage: ghcr.io/alexanderbabel/spilo:4.0-p3

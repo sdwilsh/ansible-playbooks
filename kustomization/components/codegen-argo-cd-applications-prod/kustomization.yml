@@ -23,7 +23,6 @@ resources:
   - application/kube-vip.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
-  - application/minio-operator.yml
   - application/monitoring.yml
   - application/node-monitoring.yml
   - application/opencloud.yml
