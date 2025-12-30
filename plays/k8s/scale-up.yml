@@ -11,6 +11,7 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/monitoring/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tvheadend/scale-up.yml
