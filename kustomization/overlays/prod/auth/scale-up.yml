@@ -20,18 +20,6 @@
           reason: ClusterIsReady
           status: "True"
         wait_timeout: 300 # 5m
-    - name: Scale up authelia postgresql
-      kubernetes.core.k8s:
-        context: "{{ cluster }}"
-        state: present
-        resource_definition:
-          apiVersion: acid.zalan.do/v1
-          kind: postgresql
-          metadata:
-            name: "{{ (lookup('file', 'postgresql/authelia.yml') | from_yaml).metadata.name }}"
-            namespace: "{{ k8s_namespace }}"
-          spec:
-            numberOfInstances: "{{ (lookup('file', 'postgresql/authelia.yml') | from_yaml).spec.numberOfInstances | int }}"
     - name: Scale up lldap deployment 
       kubernetes.core.k8s:
         context: "{{ cluster }}"
@@ -45,17 +33,24 @@
           spec:
             replicas: 1
         wait: true
-    - name: Wait for authelia postgresql statefulset
+    - name: Scale up authelia postgresql
       kubernetes.core.k8s:
         context: "{{ cluster }}"
         state: present
         resource_definition:
-          apiVersion: apps/v1
-          kind: StatefulSet
+          apiVersion: postgresql.cnpg.io/v1
+          kind: Cluster
           metadata:
-            name: "{{ (lookup('file', 'postgresql/authelia.yml') | from_yaml).metadata.name }}"
+            annotations:
+              cnpg.io/hibernation: "off"
+            name: "{{ (lookup('file', 'cnpg/cluster/authelia.yml') | from_yaml).metadata.name }}"
             namespace: "{{ k8s_namespace }}"
         wait: true
+        wait_condition:
+          type: Ready
+          reason: ClusterIsReady
+          status: "True"
+        wait_timeout: 300 # 5m
     - name: Scale up authelia redis replication statefulset
       kubernetes.core.k8s:
         context: "{{ cluster }}"

@@ -34,13 +34,18 @@ spec:
               value: /secrets/session_secret
             - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
               value: /secrets/storage_encryption_key
+            - name: AUTHELIA_STORAGE_POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: authelia-pg-cluster-app
             - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
               value: /postgresql-secrets/password
             - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
                   key: username
+                  name: authelia-pg-cluster-app
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
           name: authelia
@@ -64,22 +69,30 @@ spec:
         - command:
             - sh
             - -c
-            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
           env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: authelia-pg-cluster-app
             - name: PGHOST
-              value: authelia-17-pg
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: authelia-pg-cluster-app
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
+                  name: authelia-pg-cluster-app
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
+                  name: authelia-pg-cluster-app
           image: postgres
           name: wait-for-authelia-pg-is-ready
           securityContext:
@@ -97,7 +110,7 @@ spec:
           name: authelia-configuration
         - name: authelia-postgresql-secrets
           secret:
-            secretName: authelia-owner-user.authelia-17-pg.credentials.postgresql.acid.zalan.do
+            secretName: authelia-pg-cluster-app
         - name: authelia-secrets
           secret:
             secretName: authelia-config-secret

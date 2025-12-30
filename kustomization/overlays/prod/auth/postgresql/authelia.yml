@@ -4,8 +4,8 @@ kind: postgresql
 metadata:
   name: authelia-17-pg
 spec:
-  enableLogicalBackup: true
-  numberOfInstances: 3
+  enableLogicalBackup: false
+  numberOfInstances: 0
   podPriorityClassName: critical-application-infra
   postgresql:
     version: "17"

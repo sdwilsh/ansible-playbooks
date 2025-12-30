@@ -5,22 +5,18 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 resources:
-  - miniobucket/auth.yml
   - miniobucket/crowdsec.yml
   - miniobucket/homeassistant.yml
   - miniobucket/immich.yml
   - miniobucket/paperless.yml
-  - miniopolicy/auth.yml
   - miniopolicy/crowdsec.yml
   - miniopolicy/homeassistant.yml
   - miniopolicy/immich.yml
   - miniopolicy/paperless.yml
-  - miniopolicybinding/auth.yml
   - miniopolicybinding/crowdsec.yml
   - miniopolicybinding/homeassistant.yml
   - miniopolicybinding/immich.yml
   - miniopolicybinding/paperless.yml
-  - miniouser/auth.yml
   - miniouser/crowdsec.yml
   - miniouser/homeassistant.yml
   - miniouser/immich.yml
