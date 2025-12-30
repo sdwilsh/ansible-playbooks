@@ -1,0 +1,39 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: spoolman-pg-cluster
+spec:
+  backup:
+    target: primary
+  bootstrap:
+    initdb:
+      database: spoolman
+      dataChecksums: true
+      owner: spoolman
+      postInitApplicationSQL:
+        - ALTER USER spoolman SET search_path TO "$user", data, public
+  imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:b473a9c10debd74827c2966632012c84e335ccacff1d87da4ad4facf96a62e21
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+        - ro
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: garage-objectstore
+  postgresql:
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: application-infra
+  storage:
+    size: 10Gi
+    storageClass: cnpg-encrypted-storage

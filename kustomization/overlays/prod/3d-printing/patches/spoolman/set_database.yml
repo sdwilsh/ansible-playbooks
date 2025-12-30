@@ -9,42 +9,56 @@ spec:
       containers:
         - env:
             - name: SPOOLMAN_DB_HOST
-              value: spoolman-16-pg
+              valueFrom:
+                secretKeyRef:
+                  name: spoolman-pg-cluster-app
+                  key: host
             - name: SPOOLMAN_DB_NAME
-              value: spoolman
+              valueFrom:
+                secretKeyRef:
+                  name: spoolman-pg-cluster-app
+                  key: dbname
             - name: SPOOLMAN_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+                  name: spoolman-pg-cluster-app
                   key: password
             - name: SPOOLMAN_DB_TYPE
               value: postgres
             - name: SPOOLMAN_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+                  name: spoolman-pg-cluster-app
                   key: username
           name: spoolman
       initContainers:
         - command:
             - sh
             - -c
-            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
           env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: spoolman-pg-cluster-app
             - name: PGHOST
-              value: spoolman-16-pg
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: spoolman-pg-cluster-app
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+                  name: spoolman-pg-cluster-app
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: spoolman-owner-user.spoolman-16-pg.credentials.postgresql.acid.zalan.do
+                  name: spoolman-pg-cluster-app
           image: postgres
           name: wait-for-spoolman-pg-is-ready
           securityContext:
