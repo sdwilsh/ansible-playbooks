@@ -8,17 +8,50 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_DATABASE_NAME
-              value: immich
-            - name: DB_HOSTNAME
-              value: immich-17-pg
-            - name: DB_PASSWORD
+            - name: DB_URL
+              value: null
               valueFrom:
                 secretKeyRef:
-                  name: immich.immich-17-pg.credentials.postgresql.acid.zalan.do
-                  key: password
-            - name: DB_USERNAME
-              value: immich
-            - name: DB_URL
-              value: postgresql://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOSTNAME)/$(DB_DATABASE_NAME)?sslmode=require&sslmode=no-verify
+                  key: uri
+                  name: immich-pg-cluster-app
           name: main
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
+          env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: immich-pg-cluster-app
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: immich-pg-cluster-app
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: immich-pg-cluster-app
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: immich-pg-cluster-app
+          image: postgres
+          name: wait-for-immich-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault

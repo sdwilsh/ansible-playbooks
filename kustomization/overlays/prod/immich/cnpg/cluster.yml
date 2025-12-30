@@ -1,0 +1,47 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-pg-cluster
+spec:
+  backup:
+    target: primary
+  bootstrap:
+    initdb:
+      database: immich
+      dataChecksums: true
+      owner: immich
+  env:
+    - name: TZ
+      value: America/Los_Angeles
+  # We must use 18.0 because there are no 0.5.3 imaches of VectorChord for newer ones.  Once Immich supports
+  # VectorChord 1.0, this maybe gets easier: https://github.com/immich-app/immich/pull/23845
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3@sha256:267f6cbb32af6e109e138a143c7e9dd5d44d68433ec2303f0c30e745c788d1a9
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+        - ro
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: garage-objectstore
+  postgresql:
+    shared_preload_libraries:
+      - vchord.so
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: critical-application-infra
+  storage:
+    size: 5Gi
+    storageClass: cnpg-data-encrypted-storage
+  walStorage:
+    size: 4Gi
+    storageClass: cnpg-wal-encrypted-storage

@@ -41,14 +41,19 @@
         context: "{{ cluster }}"
         state: present
         resource_definition:
-          apiVersion: acid.zalan.do/v1
-          kind: postgresql
+          apiVersion: postgresql.cnpg.io/v1
+          kind: Cluster
           metadata:
-            name: "{{ (lookup('file', 'postgresql.yml') | from_yaml).metadata.name }}"
+            annotations:
+              cnpg.io/hibernation: "on"
+            name: "{{ (lookup('file', 'cnpg/cluster.yml') | from_yaml).metadata.name }}"
             namespace: "{{ k8s_namespace }}"
-          spec:
-            numberOfInstances: 0
         wait: true
+        wait_condition:
+          type: cnpg.io/hibernation
+          reason: Hibernated
+          status: "True"
+        wait_timeout: 300 # 5m
     - name: Scale down immich redis statefulset
       kubernetes.core.k8s:
         context: "{{ cluster }}"

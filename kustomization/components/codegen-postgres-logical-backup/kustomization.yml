@@ -4,8 +4,4 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
-resources:
-  - miniobucket/immich.yml
-  - miniopolicy/immich.yml
-  - miniopolicybinding/immich.yml
-  - miniouser/immich.yml
+resources: []

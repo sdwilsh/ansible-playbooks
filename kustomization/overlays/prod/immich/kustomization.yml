@@ -3,19 +3,30 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/cnpg-backup
   - ../../../components/immich
 images:
   - name: ghcr.io/immich-app/immich-server
     newTag: v2.4.1@sha256:e6a6298e67ae077808fdb7d8d5565955f60b0708191576143fc02d30ab1389d1
   - name: ghcr.io/immich-app/immich-machine-learning
     newTag: v2.4.1@sha256:b3deefd1826f113824e9d7bc30d905e7f823535887d03f869330946b6db3b44a
+  - name: postgres
+    newTag: 18@sha256:bfe50b2b0ddd9b55eadedd066fe24c7c6fe06626185b73358c480ea37868024d
 namespace: immich
 patches:
+  # cnpg
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
+  # immich
   - path: patches/add_postgres.yml
     target:
       kind: Deployment
       name: immich-server
 resources:
   - namespace.yml
+  - cnpg/cluster.yml
+  - cnpg/scheduledbackup.yml
   - ingress.yml
   - postgresql.yml
