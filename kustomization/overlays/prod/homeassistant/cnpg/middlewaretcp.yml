@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: MiddlewareTCP
+metadata:
+  name: homeassistant-pg-ip-allowlist-middlewaretcp
+spec:
+  ipWhiteList:
+    sourceRange:
+      - 10.117.0.33/32

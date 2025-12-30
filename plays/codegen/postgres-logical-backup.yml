@@ -13,7 +13,6 @@
         # We use a bucket per namespace for any postgresql resources in that namespace.
         namespaces:
           - crowdsec
-          - homeassistant
           - immich
           - paperless
     - name: Delete existing codegen

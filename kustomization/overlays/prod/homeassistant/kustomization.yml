@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/cnpg-backup
   - ../../../components/frigate
   - ../../../components/mosquitto
 configMapGenerator:
@@ -17,6 +18,12 @@ images:
     newTag: 1.37.0@sha256:d80cd694d3e9467884fcb94b8ca1e20437d8a501096cdf367a5a1918a34fc2fd
 namespace: homeassistant
 patches:
+  # cnpg
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
+  # frigate
   - path: patches/frigate/add_frigate_env_vars.yml
     target:
       kind: StatefulSet
@@ -25,13 +32,19 @@ patches:
     target:
       kind: StatefulSet
       name: frigate-statefulset
+  # mosquitto
   - path: patches/mosquitto/add_custom_config.yml
     target:
       kind: StatefulSet
       name: mosquitto-statefulset
 resources:
   - namespace.yml
-  - certificate.yml
+  - cnpg/certificate.yml
+  - cnpg/cluster.yml
+  - cnpg/middlewaretcp.yml
+  - cnpg/ingressroutetcp.yml
+  - cnpg/scheduledbackup.yml
+  - cnpg/tlsoption.yml
   - ingress.yml
   - ingressroutetcp.yml
   - postgresql.yml
