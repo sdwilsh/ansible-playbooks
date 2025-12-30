@@ -34,5 +34,4 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - deployment.yml
-  - postgresql.yml
   - service.yml
