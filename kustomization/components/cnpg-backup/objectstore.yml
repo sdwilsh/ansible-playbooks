@@ -16,4 +16,12 @@ spec:
         key: ACCESS_SECRET_KEY
     wal:
       compression: gzip
+  instanceSidecarConfiguration:
+    env:
+      - name: AWS_REQUEST_CHECKSUM_CALCULATION
+        value: when_required
+      - name: AWS_RESPONSE_CHECKSUM_VALIDATION
+        value: when_required
+    logLevel: info
+    retentionPolicyIntervalSeconds: 1800
   retentionPolicy: 30d
