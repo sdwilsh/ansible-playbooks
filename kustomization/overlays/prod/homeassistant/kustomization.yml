@@ -47,4 +47,3 @@ resources:
   - cnpg/tlsoption.yml
   - ingress.yml
   - ingressroutetcp.yml
-  - postgresql.yml
