@@ -16,6 +16,10 @@ spec:
       port: 8883
       protocol: TCP
       targetPort: mqtts
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: postgres
     - name: smtpsecure
       port: 465
       protocol: TCP

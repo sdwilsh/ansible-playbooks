@@ -21,6 +21,8 @@ spec:
               containerPort: 9090
             - name: mqtts
               containerPort: 8883
+            - name: postgres
+              containerPort: 5432
             - name: smtpsecure
               containerPort: 8465
             - name: web
