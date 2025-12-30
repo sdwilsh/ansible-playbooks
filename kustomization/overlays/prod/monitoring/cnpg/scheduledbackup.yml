@@ -7,5 +7,7 @@ spec:
   backupOwnerReference: cluster
   cluster:
     name: grafana-pg-cluster
-  method: barmanObjectStore
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
   schedule: "0 15 23 * * *"  # At 23:15 every day.
