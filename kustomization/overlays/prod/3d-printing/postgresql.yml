@@ -4,7 +4,7 @@ kind: postgresql
 metadata:
   name: spoolman-17-pg
 spec:
-  enableLogicalBackup: true
+  enableLogicalBackup: false
   numberOfInstances: 0
   podPriorityClassName: application-infra
   postgresql:
