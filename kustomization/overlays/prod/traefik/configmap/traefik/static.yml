@@ -23,6 +23,8 @@ entryPoints:
     address: :9090
   mqtts:
     address: :8883
+  postgres:
+    address: :5432
   smtpsecure:
     address: :8465
   web:
