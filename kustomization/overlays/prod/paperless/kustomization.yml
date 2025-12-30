@@ -6,7 +6,7 @@ components:
   - ../../../components/paperless
 images:
   - name: postgres
-    newTag: 16@sha256:d4c3314b2dd74ff23cd6cd07e4d7e737cb6ef791c22a7cbd744cfbfb4815df72
+    newTag: 17@sha256:dca7512acaa113409df7e40d977d801e53c0c8088e45d4311a45b4065ccfdcd3
   - name: quay.io/opstree/redis
     newTag: v8.4.0@sha256:539924b2c1446dcdea2f043af2c50bed7516623254e4984a6d926df42eb359b2
 namespace: paperless
