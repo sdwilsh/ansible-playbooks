@@ -8,39 +8,40 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
-                  key: password
             - name: LLDAP_DATABASE_URL
-              value: postgres://$(DB_USERNAME):$(DB_PASSWORD)@lldap-17-pg/lldap
+              valueFrom:
+                secretKeyRef:
+                  key: uri
+                  name: lldap-pg-cluster-app
           name: lldap
       initContainers:
         - command:
             - sh
             - -c
-            - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
           env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: lldap-pg-cluster-app
             - name: PGHOST
-              value: lldap-17-pg
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: lldap-pg-cluster-app
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
+                  name: lldap-pg-cluster-app
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: lldap-owner-user.lldap-17-pg.credentials.postgresql.acid.zalan.do
+                  name: lldap-pg-cluster-app
           image: postgres
           name: wait-for-pg-is-ready
           securityContext:

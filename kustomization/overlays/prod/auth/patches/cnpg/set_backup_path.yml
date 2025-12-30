@@ -1,0 +1,8 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  configuration:
+    destinationPath: s3://prod-cnpg-backup/auth/

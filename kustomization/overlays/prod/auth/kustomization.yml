@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/authelia
+  - ../../../components/cnpg-backup
   - ../../../components/lldap
 configMapGenerator:
   - name: authelia-configmap
@@ -23,6 +24,11 @@ patches:
     target:
       kind: Deployment
       name: authelia-deployment
+  # cnpg
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
   # lldap
   - path: patches/lldap/add_config.yml
     target:
@@ -47,6 +53,8 @@ patches:
 resources:
   - namespace.yml
   - certificate/lldap.yml
+  - cnpg/cluster/lldap.yml
+  - cnpg/scheduledbackup/lldap.yml
   - ingress/authelia.yml
   - ingress/lldap.yml
   - middleware/forwardauth.yml
