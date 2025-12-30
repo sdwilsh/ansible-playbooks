@@ -18,6 +18,10 @@ spec:
       compression: gzip
   instanceSidecarConfiguration:
     env:
+      - name: AWS_DEFAULT_REGION
+        value: hogs
+      - name: AWS_REGION
+        value: hogs
       - name: AWS_REQUEST_CHECKSUM_CALCULATION
         value: when_required
       - name: AWS_RESPONSE_CHECKSUM_VALIDATION

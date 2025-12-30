@@ -21,7 +21,7 @@ service_name = "garage"
 skip_crd = false
 
 [s3_api]
-s3_region = "garage"
+s3_region = "hogs"
 api_bind_addr = "[::]:3900"
 root_domain = ".s3.garage.tld"
 

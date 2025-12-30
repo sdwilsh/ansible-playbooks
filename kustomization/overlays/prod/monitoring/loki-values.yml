@@ -54,7 +54,7 @@ loki:
       disable_dualstack: true
       endpoint: garage.garage.svc.cluster.local:3900
       insecure: true
-      region: garage
+      region: hogs
       s3ForcePathStyle: true
       secretAccessKey: ${GARAGE_SECRET_ACCESS_KEY}
     type: s3
