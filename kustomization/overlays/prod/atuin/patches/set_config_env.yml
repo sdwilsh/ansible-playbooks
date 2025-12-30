@@ -9,13 +9,13 @@ spec:
       initContainers:
         - env:
             - name: ATUIN_DB_HOST
-              value: atuin-16-pg
+              value: atuin-17-pg
             - name: ATUIN_DB_PASSWORD_SECRET_FILE
               value: /postgresql-secrets/password
             - name: ATUIN_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+                  name: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
                   key: username
             - name: ATUIN_OPEN_REGISTRATION
               value: "false"
@@ -30,19 +30,19 @@ spec:
             - until pg_isready; do echo "waiting for database ${PGHOST}..."; sleep 10; done;
           env:
             - name: PGHOST
-              value: atuin-16-pg
+              value: atuin-17-pg
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+                  name: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
             - name: PGSSLMODE
               value: require
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+                  name: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
           image: postgres
           name: wait-for-atuin-pg-is-ready
           securityContext:
@@ -58,4 +58,4 @@ spec:
       volumes:
         - name: postgresql-secrets
           secret:
-            secretName: atuin-owner-user.atuin-16-pg.credentials.postgresql.acid.zalan.do
+            secretName: atuin-owner-user.atuin-17-pg.credentials.postgresql.acid.zalan.do
