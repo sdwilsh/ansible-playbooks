@@ -1,4 +1,4 @@
-FROM ghcr.io/tensorchord/cloudnative-vectorchord:17@sha256:9e1f7d83922277d69b11fa366b681b2620d56dc2f18247289e58b595d0628184
+FROM ghcr.io/tensorchord/cloudnative-vectorchord:17-0.5.3@sha256:ef3bf2e3abe76c3939b994afbde46cb9f24d2fbdf7ff2026a03aefa84d9a2a23
 
 USER root
 
