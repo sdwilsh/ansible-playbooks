@@ -5,6 +5,8 @@ metadata:
   name: garage-objectstore
 spec:
   configuration:
+    data:
+      compression: gzip
     destinationPath: s3://prod-cnpg-backup/$(namespace)/
     endpointURL: http://garage.garage.svc.cluster.local:3900
     s3Credentials:
@@ -26,6 +28,8 @@ spec:
         value: when_required
       - name: AWS_RESPONSE_CHECKSUM_VALIDATION
         value: when_required
+      - name: TZ
+        value: America/Los_Angeles
     logLevel: info
     retentionPolicyIntervalSeconds: 1800
   retentionPolicy: 30d
