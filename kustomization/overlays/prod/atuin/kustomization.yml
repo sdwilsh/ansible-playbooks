@@ -13,7 +13,7 @@ images:
     newTag: 16@sha256:d4c3314b2dd74ff23cd6cd07e4d7e737cb6ef791c22a7cbd744cfbfb4815df72
 namespace: atuin
 patches:
-  - path: patches/set_config_env.yml
+  - path: patches/atuin/set_config_env.yml
     target:
       kind: Deployment
       name: atuin-deployment
