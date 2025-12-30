@@ -81,6 +81,19 @@
     - name: Note if the host needs to be rebooted
       ansible.builtin.set_fact:
         reboot_required: "{{ os_image_version != target_image_version or config.changed or k3s_service.changed or k3s_agent_service.changed }}"
+    - name: Save etcd snapshot before upgrade
+      ansible.builtin.command:
+        argv:
+          - k3s
+          - etcd-snapshot
+          - save
+          - --etcd-s3
+          - --etcd-s3-config-secret=etcd-s3-secret
+      become: true
+      run_once: true
+      when:
+        - inventory_hostname in groups['kairos_controlplane']
+        - os_image_version != target_image_version
     - name: Schedule Drain and Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
