@@ -12,7 +12,6 @@
       ansible.builtin.set_fact:
         # We use a bucket per namespace for any postgresql resources in that namespace.
         namespaces:
-          - crowdsec
           - immich
     - name: Delete existing codegen
       ansible.builtin.file:

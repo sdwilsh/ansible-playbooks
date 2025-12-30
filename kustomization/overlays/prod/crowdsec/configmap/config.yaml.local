@@ -13,8 +13,8 @@ crowdsec_service:
   acquisition_path: ""
 
 db_config:
-  db_name: crowdsec
-  host: crowdsec-17-pg
+  db_name: ${DB_NAME}
+  host: ${DB_HOST}
   password: ${DB_PASSWORD}
   port: 5432
   sslmode: require

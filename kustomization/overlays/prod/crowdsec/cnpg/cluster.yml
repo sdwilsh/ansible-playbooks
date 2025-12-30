@@ -1,0 +1,45 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: crowdsec-pg-cluster
+spec:
+  backup:
+    target: primary
+  bootstrap:
+    initdb:
+      database: crowdsec
+      dataChecksums: true
+      owner: crowdsec
+      postInitApplicationSQL:
+        - ALTER USER crowdsec SET search_path TO "$user", data, public
+  env:
+    - name: TZ
+      value: America/Los_Angeles
+  imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:b473a9c10debd74827c2966632012c84e335ccacff1d87da4ad4facf96a62e21
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+        - ro
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: garage-objectstore
+  postgresql:
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: critical-application-infra
+  storage:
+    size: 5Gi
+    storageClass: cnpg-data-encrypted-storage
+  walStorage:
+    size: 4Gi
+    storageClass: cnpg-wal-encrypted-storage
