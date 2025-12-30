@@ -1,0 +1,28 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cnpg-data-encrypted-storage
+allowVolumeExpansion: true
+parameters:
+  csi.storage.k8s.io/node-publish-secret-name: longhorn
+  csi.storage.k8s.io/node-publish-secret-namespace: longhorn-system
+  csi.storage.k8s.io/node-stage-secret-name: longhorn
+  csi.storage.k8s.io/node-stage-secret-namespace: longhorn-system
+  csi.storage.k8s.io/provisioner-secret-name: longhorn
+  csi.storage.k8s.io/provisioner-secret-namespace: longhorn-system
+  dataLocality: strict-local
+  diskSelector: ssd
+  encrypted: "true"
+  fromBackup: ""
+  numberOfReplicas: "1"
+  recurringJobSelector: '[
+      {
+        "name":"postgres-replica-storage",
+        "isGroup":true
+      }
+    ]'
+  staleReplicaTimeout: "1440" # 1d
+provisioner: driver.longhorn.io
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
