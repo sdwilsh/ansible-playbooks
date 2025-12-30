@@ -16,6 +16,7 @@ resources:
   - application/dns.yml
   - application/external-services.yml
   - application/factorio-relic.yml
+  - application/garage.yml
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
   - application/immich.yml
