@@ -53,8 +53,9 @@ entryPoints:
     transport:
       # See comment for websecure about why this exists!
       respondingTimeouts:
-        readTimeout: 5m
-        writeTimeout: 5m
+        idleTimeout: 3m
+        readTimeout: 1h
+        writeTimeout: 1h
 experimental:
   plugins:
     crowdsec-bouncer:
