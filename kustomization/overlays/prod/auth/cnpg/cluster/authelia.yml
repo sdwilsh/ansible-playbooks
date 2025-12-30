@@ -37,4 +37,7 @@ spec:
   priorityClassName: critical-application-infra
   storage:
     size: 10Gi
-    storageClass: cnpg-encrypted-storage
+    storageClass: cnpg-data-encrypted-storage
+  walStorage:
+    size: 4Gi
+    storageClass: cnpg-wal-encrypted-storage
