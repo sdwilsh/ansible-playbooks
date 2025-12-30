@@ -5,7 +5,7 @@ metadata:
   name: garage-objectstore
 spec:
   configuration:
-    destinationPath: s3://monitoring-cnpg-backup/
+    destinationPath: s3://prod-cnpg-backup/
     endpointURL: http://garage.garage.svc.cluster.local:3900
     s3Credentials:
       accessKeyId:
