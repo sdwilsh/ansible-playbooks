@@ -15,7 +15,7 @@ configMapGenerator:
 images:
   - name: traefik
     newName: 11notes/traefik
-    newTag: 3.6.5@sha256:75b84eeacc39c319c503ff9ef1e38f3f2ec95066cad618b1f9ebdb9394c61791
+    newTag: 3.6.6@sha256:8d6aeb3ac9dfb8925ab3fbe70590277fd3f5b3f09790a0504f48b663ae0b3edd
 namespace: traefik
 patches:
   - path: patches/crowdsec/add_pages.yml
