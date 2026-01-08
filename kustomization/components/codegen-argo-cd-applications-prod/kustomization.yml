@@ -27,7 +27,6 @@ resources:
   - application/node-monitoring.yml
   - application/opencloud.yml
   - application/paperless.yml
-  - application/postgres-operator.yml
   - application/prometheus-operator.yml
   - application/proton-mail.yml
   - application/redis.yml

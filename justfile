@@ -127,11 +127,6 @@ crowdsec-list-decisions:
 generate-argo-cd-applications:
     ansible-playbook plays/codegen/argo-cd-applications.yml --extra-vars overlay=prod
 
-# Generates/updates resources for postgres-operator managed resources
-[group('codegen')]
-generate-postgres-logical-backup-resources:
-    ansible-playbook plays/codegen/postgres-logical-backup.yml
-
 # Check `just` syntax
 [group('just')]
 justcheck:
