@@ -9,6 +9,16 @@ metadata:
   name: external-services-ingress
 spec:
   rules:
+    - host: garage-admin.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: garage-admin-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: homeassistant.hogs.tswn.us
       http:
         paths:
