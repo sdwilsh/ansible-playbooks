@@ -44,5 +44,5 @@ spec:
     size: 30Gi
     storageClass: cnpg-data-encrypted-storage
   walStorage:
-    size: 4Gi
+    size: 8Gi
     storageClass: cnpg-wal-encrypted-storage
