@@ -79,10 +79,23 @@ access_control:
         - home
         - homeassistant-appliance
       policy: bypass
-    - domain: spoolman.hogs.tswn.us
+    # Spoolman has some complications!  We want:
+    # a) Home Assistant to have full access
+    # b) on the home network, just simple auth for any user
+    # c) on any other network, the user needs two-factor auth and be in the right group
+    - domain: spoolman.tswn.us
       networks:
         - homeassistant-appliance
       policy: bypass
+    - domain: spoolman.tswn.us
+      networks:
+        - home
+      policy: one_factor
+    - domain: spoolman.tswn.us
+      policy: two_factor
+      subject: group:SpoolmanUsers
+    - domain: spoolman.tswn.us
+      policy: deny
     - domain: cloud.tswn.us
       policy: bypass
       resources:
