@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: paperless-pg-cluster
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: paperless-pg-cluster
+  podMetricsEndpoints:
+    - port: metrics
+      scheme: https
+      tlsConfig:
+        ca:
+          secret:
+            name: paperless-pg-cluster-ca
+            key: ca.crt
+        serverName: paperless-pg-cluster-rw

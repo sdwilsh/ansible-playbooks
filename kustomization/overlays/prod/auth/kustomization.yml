@@ -55,6 +55,8 @@ resources:
   - certificate/lldap.yml
   - cnpg/cluster/authelia.yml
   - cnpg/cluster/lldap.yml
+  - cnpg/podmonitor/authelia.yml
+  - cnpg/podmonitor/lldap.yml
   - cnpg/scheduledbackup/authelia.yml
   - cnpg/scheduledbackup/lldap.yml
   - ingress/authelia.yml

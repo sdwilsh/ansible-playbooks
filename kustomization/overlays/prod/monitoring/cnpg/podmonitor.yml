@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: grafana-pg-cluster
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: grafana-pg-cluster
+  podMetricsEndpoints:
+    - port: metrics
+      scheme: https
+      tlsConfig:
+        ca:
+          secret:
+            name: grafana-pg-cluster-ca
+            key: ca.crt
+        serverName: grafana-pg-cluster-rw

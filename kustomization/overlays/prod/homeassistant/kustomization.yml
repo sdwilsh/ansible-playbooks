@@ -41,8 +41,9 @@ resources:
   - namespace.yml
   - cnpg/certificate.yml
   - cnpg/cluster.yml
-  - cnpg/middlewaretcp.yml
   - cnpg/ingressroutetcp.yml
+  - cnpg/middlewaretcp.yml
+  - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - cnpg/tlsoption.yml
   - ingress.yml

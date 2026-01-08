@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: spoolman-pg-cluster
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: spoolman-pg-cluster
+  podMetricsEndpoints:
+    - port: metrics
+      scheme: https
+      tlsConfig:
+        ca:
+          secret:
+            name: spoolman-pg-cluster-ca
+            key: ca.crt
+        serverName: spoolman-pg-cluster-rw

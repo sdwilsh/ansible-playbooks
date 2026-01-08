@@ -16,6 +16,9 @@ spec:
       disabledDefaultServices:
         - r
         - ro
+  monitoring:
+    tls:
+      enabled: true
   plugins:
     - enabled: true
       isWALArchiver: true

@@ -25,5 +25,6 @@ patches:
 resources:
   - namespace.yml
   - cnpg/cluster.yml
+  - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml

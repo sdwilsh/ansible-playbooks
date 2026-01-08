@@ -32,6 +32,7 @@ patches:
 resources:
   - namespace.yml
   - cnpg/cluster.yml
+  - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - deployment.yml
   - service.yml
