@@ -19,6 +19,7 @@ resources:
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.28.0.yaml
   - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.9.0/manifest.yaml
   - configmap.yml
+  - podmonitor.yml
   - storageclass/data.yml
   - storageclass/legacy.yml
   - storageclass/wal.yml
