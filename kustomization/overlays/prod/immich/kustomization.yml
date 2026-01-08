@@ -29,4 +29,3 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
-  - postgresql.yml
