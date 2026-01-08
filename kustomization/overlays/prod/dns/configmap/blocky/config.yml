@@ -153,7 +153,6 @@ customDNS:
     mqtt.hogs IN CNAME traefik.hogs
     nas.hogs IN CNAME traefik.hogs
     navidrome IN CNAME traefik.hogs
-    nextcloud IN CNAME traefik.hogs
     opensprinkler.hogs IN CNAME traefik.hogs
     paperless.hogs IN CNAME traefik.hogs
     pdf-tools.hogs IN CNAME traefik.hogs
