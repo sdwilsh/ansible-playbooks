@@ -24,6 +24,22 @@ RUN curl -o /usr/local/bin/longhorncli \
     https://github.com/longhorn/cli/releases/download/${LONGHORN_CLI_VERSION}/longhornctl-linux-amd64 \
   && chmod +x /usr/local/bin/longhorncli
 
+# Download and Setup CloudnativePG kubectl Plugin
+# renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
+ARG CNPG_VERSION=1.28.0
+RUN --mount=type=cache,dst=/deb \
+  curl -o /deb/kubectl-cnpg.deb \
+    -L \
+    https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v${CNPG_VERSION}/kubectl-cnpg_${CNPG_VERSION}_linux_x86_64.deb
+# https://cloudnative-pg.io/docs/1.28/kubectl-plugin/#configuring-auto-completion
+RUN <<EOF cat > /usr/local/bin/kubectl_complete-cnpg
+#!/usr/bin/env sh
+
+# Call the __complete command passing it all arguments
+kubectl cnpg __complete "\$@"
+EOF
+RUN chmod +x /usr/local/bin/kubectl_complete-cnpg
+
 # Setup and Configure OpenPubkey SSH
 # renovate: datasource=github-releases depName=openpubkey/opkssh
 ARG OPKSSH_VERSION=0.10.0
@@ -35,6 +51,7 @@ RUN --mount=type=cache,dst=/deb \
 RUN --mount=type=cache,dst=/deb \
   apt-get update \
   && apt-get install -y --no-install-recommends \
+    /deb/kubectl-cnpg.deb \
     /deb/opkssh.deb \
     dnsutils \
     iproute2 \
