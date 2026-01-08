@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: paperless-pg-cluster
+  name: paperless-pg-cluster-podmonitor
 spec:
   selector:
     matchLabels:

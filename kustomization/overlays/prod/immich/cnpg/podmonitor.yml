@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: immich-pg-cluster
+  name: immich-pg-cluster-podmonitor
 spec:
   selector:
     matchLabels:

@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: cnpg-controller-manager
+  name: cnpg-controller-manager-podmonitor
 spec:
   selector:
     matchLabels:

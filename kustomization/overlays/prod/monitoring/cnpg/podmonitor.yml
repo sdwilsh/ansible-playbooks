@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: grafana-pg-cluster
+  name: grafana-pg-cluster-podmonitor
 spec:
   selector:
     matchLabels:

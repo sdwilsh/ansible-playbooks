@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: crowdsec-pg-cluster
+  name: crowdsec-pg-cluster-podmonitor
 spec:
   selector:
     matchLabels:

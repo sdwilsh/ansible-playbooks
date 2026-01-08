@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: atuin-pg-cluster
+  name: atuin-pg-cluster-podmonitor
 spec:
   selector:
     matchLabels:
