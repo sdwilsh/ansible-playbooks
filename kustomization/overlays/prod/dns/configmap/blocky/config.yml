@@ -159,6 +159,7 @@ customDNS:
     postgres.homeassistant.hogs IN CNAME traefik.hogs
     prometheus.hogs IN CNAME traefik.hogs
     smtp.hogs IN CNAME traefik.hogs
+    spoolman IN CNAME traefik.hogs
     spoolman.hogs IN CNAME traefik.hogs
     tdarr.hogs IN CNAME traefik.hogs
     transmission.hogs IN CNAME traefik.hogs

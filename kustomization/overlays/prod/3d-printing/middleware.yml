@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: spoolman-redirect-middleware
+spec:
+  redirectRegex:
+    regex: ^https://spoolman.hogs.tswn.us/(.*)
+    replacement: https://spoolman.tswn.us/${1}

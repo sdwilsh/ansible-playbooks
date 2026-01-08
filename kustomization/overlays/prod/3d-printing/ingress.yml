@@ -4,11 +4,22 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.middlewares: auth-forwardauth-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: 3d-printing-spoolman-redirect-middleware@kubernetescrd,auth-forwardauth-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: spoolman-ingress
 spec:
   rules:
+    - host: spoolman.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: spoolman-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
+    # Not really used, but traefik needs to know about the domain.
     - host: spoolman.hogs.tswn.us
       http:
         paths:

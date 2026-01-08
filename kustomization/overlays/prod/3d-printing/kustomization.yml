@@ -25,3 +25,4 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
+  - middleware.yml
