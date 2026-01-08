@@ -12,7 +12,7 @@ ports:
     port: 30186
 endpoints:
   - addresses:
-      - 10.10.0.14 # chanttogreen.hogs.tswn.us
+      - 10.11.0.14 # chanttogreen.hogs.tswn.us
     conditions:
       ready: true
 
