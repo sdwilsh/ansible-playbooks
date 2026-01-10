@@ -17,7 +17,7 @@ helmCharts:
     releaseName: alloy
     valuesFile: alloy-values.yml
   - name: grafana
-    version: 10.4.3
+    version: 10.5.3
     repo: https://grafana.github.io/helm-charts
     releaseName: grafana
     valuesFile: grafana-values.yml
