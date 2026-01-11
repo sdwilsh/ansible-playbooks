@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: mbround18/valheim
-    newTag: 3.4.1@sha256:4e4c209455150200baa0f2237271bd0d196f9b32ae11130f6129ec1ca5f2fa5d
+    newTag: 3.5.0@sha256:68cf418f39b0174e421ca0f063be38a11f1a4aadb48f3b15e9cc7c7be39111a6
 resources:
   - statefulset.yml
   - service.yml
