@@ -51,6 +51,7 @@ host = \"${ATUIN_HOST}\"
 port = ${ATUIN_PORT}
 open_registration = ${ATUIN_OPEN_REGISTRATION}
 db_uri = \"postgres://${ATUIN_DB_USERNAME}:${db_password}@${ATUIN_DB_HOST}/${ATUIN_DB_NAME}\"
+sync_v1_enabled = false
 " > $config_dest
 
 echo "Successfully setup configuration at ${config_dest}"
