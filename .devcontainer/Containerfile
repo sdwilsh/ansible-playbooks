@@ -8,6 +8,8 @@ COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=kustomize /app/kustomize /usr/local/bin/kustomize
 COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Download and Install garage CLI
 # renovate: datasource=git-tags registryUrl=https://git.deuxfleurs.fr/Deuxfleurs/garage
 ARG GARAGE_CLI_VERSION=v2.1.0
