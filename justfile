@@ -200,3 +200,10 @@ shellcheck:
         shellcheck -x ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
+
+[group('longhorn')]
+longhorn-allow-trim:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    ansible localhost --module-name include_role --args name=marinatedconcrete.config.longhorn_allow_encrypted_trim
