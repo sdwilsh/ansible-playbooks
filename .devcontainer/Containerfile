@@ -49,7 +49,7 @@ RUN chmod +x /usr/local/bin/kubectl_complete-cnpg
 
 # Setup and Configure OpenPubkey SSH
 # renovate: datasource=github-releases depName=openpubkey/opkssh
-ARG OPKSSH_VERSION=0.11.0
+ARG OPKSSH_VERSION=0.12.0
 RUN --mount=type=cache,dst=/deb \
   curl -o /deb/opkssh.deb \
     -L \
