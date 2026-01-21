@@ -17,7 +17,7 @@ spec:
     - name: TZ
       value: America/Los_Angeles
   imageName: ghcr.io/cloudnative-pg/postgresql:18@sha256:b53c340d52ae3c5e980147b2dee775e5a569ad2d4a4447a629bfc9bf048c7768
-  instances: 3
+  instances: 1
   managed:
     services:
       disabledDefaultServices:
@@ -32,11 +32,6 @@ spec:
       name: barman-cloud.cloudnative-pg.io
       parameters:
         barmanObjectName: garage-objectstore
-  postgresql:
-    synchronous:
-      failoverQuorum: true
-      method: any
-      number: 1
   primaryUpdateMethod: switchover
   primaryUpdateStrategy: unsupervised
   priorityClassName: critical-application-infra
