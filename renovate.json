@@ -207,6 +207,7 @@
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/servercontainers/samba",
+        "ghcr.io/tensorchord/cloudnative-vectorchord",
         "lscr.io/linuxserver/code-server",
         "postgres"
       ],
@@ -306,6 +307,100 @@
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
       "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
+    },
+    {
+      "groupName": "postgres-3d-printing",
+      "matchFileNames": [
+        "kustomization/overlays/prod/3d-printing/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2,
+      "minimumReleaseAge": "2 days"
+    },
+    {
+      "groupName": "postgres-atuin",
+      "matchFileNames": [
+        "kustomization/overlays/prod/atuin/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2,
+      "minimumReleaseAge": "1 day"
+    },
+    {
+      "groupName": "postgres-auth",
+      "matchFileNames": [
+        "kustomization/overlays/prod/auth/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2,
+      "minimumReleaseAge": "1 day"
+    },
+    {
+      "groupName": "postgres-crowdsec",
+      "matchFileNames": [
+        "kustomization/overlays/prod/crowdsec/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "groupName": "postgres-homeassistant",
+      "matchFileNames": [
+        "kustomization/overlays/prod/homeassistant/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2,
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "groupName": "postgres-immich",
+      "matchFileNames": [
+        "kustomization/overlays/prod/immich/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/tensorchord/cloudnative-vectorchord",
+        "postgres"
+      ],
+      "minimumGroupSize": 2,
+      "minimumReleaseAge": "5 days"
+    },
+    {
+      "groupName": "postgres-monitoring",
+      "matchFileNames": [
+        "kustomization/overlays/prod/monitoring/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "groupName": "postgres-paperless",
+      "matchFileNames": [
+        "kustomization/overlays/prod/paperless/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
+        "postgres"
+      ],
+      "minimumGroupSize": 2,
+      "minimumReleaseAge": "1 week"
     },
     {
       "automerge": true,
