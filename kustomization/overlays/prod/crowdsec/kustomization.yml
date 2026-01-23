@@ -20,7 +20,7 @@ configMapGenerator:
       - configmap/scripts/entrypoint.sh
 images:
   - name: ghcr.io/crowdsecurity/crowdsec
-    newTag: v1.7.4@sha256:4312a5109057f2a6b1237431abe638cd1026ecb3a9c2707c6ccc1ed09e4cb994 
+    newTag: v1.7.6@sha256:63b595fef92de1778573b375897a45dd226637ee9a3d3db9f57ac7355c369493 
   - name: postgres
     newTag: 18@sha256:5773fe724c49c42a7a9ca70202e11e1dff21fb7235b335a73f39297d200b73a2
 namespace: crowdsec
