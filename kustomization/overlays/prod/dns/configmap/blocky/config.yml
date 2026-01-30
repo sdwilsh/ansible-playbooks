@@ -159,6 +159,7 @@ customDNS:
     pdf-tools.hogs IN CNAME traefik.hogs
     postgres.homeassistant.hogs IN CNAME traefik.hogs
     prometheus.hogs IN CNAME traefik.hogs
+    recipes.tswn IN CNAME traefik.hogs
     smtp.hogs IN CNAME traefik.hogs
     spoolman IN CNAME traefik.hogs
     spoolman.hogs IN CNAME traefik.hogs
