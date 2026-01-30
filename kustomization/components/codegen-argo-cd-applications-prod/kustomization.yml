@@ -31,6 +31,7 @@ resources:
   - application/proton-mail.yml
   - application/redis.yml
   - application/stirling-pdf.yml
+  - application/tandoor.yml
   - application/traefik.yml
   - application/transmission.yml
   - application/tvheadend.yml

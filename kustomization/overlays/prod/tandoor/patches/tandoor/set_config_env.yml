@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: ALLOWED_HOSTS
+              value: recipes.tswn.us
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: tandoor-pg-cluster-app
+                  key: uri
+            - name: REMOTE_USER_AUTH
+              value: "1"
+            - name: SECRET_KEY_FILE
+              value: /secrets/django_secret_key
+          name: tandoor
+          volumeMounts:
+            - mountPath: /secrets
+              name: tandoor-secrets
+              readOnly: true
+      volumes:
+        - name: tandoor-secrets
+          secret:
+            secretName: tandoor-secret

@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: atuin-nightly-scheduledbackup
+spec:
+  backupOwnerReference: cluster
+  cluster:
+    name: atuin-pg-cluster
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  schedule: "0 15 7 * * *"  # At 23:15 PST every day (but in UTC, so 7:15 UTC)

@@ -403,6 +403,16 @@
       "minimumReleaseAge": "1 week"
     },
     {
+      "groupName": "postgres-tandoor",
+      "matchFileNames": [
+        "kustomization/overlays/prod/tandoor/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql"
+      ],
+      "minimumReleaseAge": "3 days"
+    },
+    {
       "automerge": true,
       "automergeType": "branch",
       "groupName": "redis",

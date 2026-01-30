@@ -13,6 +13,7 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/monitoring/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tandoor/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tvheadend/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/unifi/scale-down.yml
