@@ -2,7 +2,7 @@ FROM ghcr.io/hadolint/hadolint:v2.14.0@sha256:27086352fd5e1907ea2b934eb1023f217c
 FROM registry.k8s.io/kustomize/kustomize:v5.8.0@sha256:98424842862ed35fa666dbaac02159623567e1e9e184d91382fa665e89023258 AS kustomize
 FROM koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
-FROM mcr.microsoft.com/devcontainers/python:3-3@sha256:77238990f09e14b9baecb21c620bb919a6293fdb7a539d19f53996860b47a00a
+FROM mcr.microsoft.com/devcontainers/python:3-3@sha256:9d063a63ebbded28ff97a11f246bb43aa198f3cb7db3589c92bd1bf2e017a0cf
 
 COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=kustomize /app/kustomize /usr/local/bin/kustomize
@@ -55,8 +55,12 @@ RUN --mount=type=cache,dst=/deb \
     -L \
     https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_amd64.deb
 
+# NOTE: The yarn GPG key expired and was rolled to a new key.
+# @see https://github.com/yarnpkg/yarn/issues/9216
+# @see https://github.com/yarnpkg/yarn/issues/9218
 RUN --mount=type=cache,dst=/deb \
-  apt-get update \
+  rm /etc/apt/sources.list.d/yarn.list \
+  && apt-get update \
   && apt-get install -y --no-install-recommends \
     /deb/opkssh.deb \
     dnsutils \
