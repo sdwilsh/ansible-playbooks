@@ -86,6 +86,11 @@ stages:
       sysctl:
         fs.inotify.max_user_instances: "8192"
         fs.inotify.max_user_watches: "524288"
+    - name: Disable multipath
+      systemctl:
+        disable:
+          - multipathd
+          - multipathd.socket
     - name: Setup NTP
       systemctl:
         enable:
