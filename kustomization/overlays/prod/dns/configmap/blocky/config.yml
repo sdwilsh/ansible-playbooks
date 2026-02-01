@@ -99,8 +99,10 @@ customDNS:
     roku-den.hogs.tswn.us: 10.117.0.21
     luxor.hogs.tswn.us: 10.117.0.22
     monitor.house.gem.hogs.tswn.us: 10.117.0.24
-    fdm01.hogs.tswn.us: 10.117.0.26
     fdm02.hogs.tswn.us: 10.117.0.27
+    fdm03.hogs.tswn.us: 10.117.0.28
+    fdm04.hogs.tswn.us: 10.117.0.29
+    camera.fdm04.hogs.tswn.us: 10.117.0.30
     homeassistant-appliance.hogs.tswn.us: 10.117.0.33
     hue.hogs.tswn.us: 10.117.0.34
     living-dash.hogs.tswn.us: 10.117.0.35
