@@ -19,7 +19,7 @@ configMapGenerator:
     name: opencloud-copied-configmap
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+    newTag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
   - name: opencloudeu/opencloud-rolling
     newTag: 5.0.1@sha256:9c6b9ffea9f1e3f08beb526b99e3158002d21b2f7ad7d8d36c123fc7e1b58bfe
 namespace: opencloud
