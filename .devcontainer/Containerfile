@@ -2,7 +2,7 @@ FROM ghcr.io/hadolint/hadolint:v2.14.0@sha256:27086352fd5e1907ea2b934eb1023f217c
 FROM registry.k8s.io/kustomize/kustomize:v5.8.0@sha256:98424842862ed35fa666dbaac02159623567e1e9e184d91382fa665e89023258 AS kustomize
 FROM koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
-FROM mcr.microsoft.com/devcontainers/python:3-3@sha256:9d063a63ebbded28ff97a11f246bb43aa198f3cb7db3589c92bd1bf2e017a0cf
+FROM mcr.microsoft.com/devcontainers/python:3-3@sha256:99bf0ccea2570de791b53370bf17d0aa103a4faf396b5fb968462f65267bc6a5
 
 COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=kustomize /app/kustomize /usr/local/bin/kustomize
