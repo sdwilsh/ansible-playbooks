@@ -55,12 +55,8 @@ RUN --mount=type=cache,dst=/deb \
     -L \
     https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_amd64.deb
 
-# NOTE: The yarn GPG key expired and was rolled to a new key.
-# @see https://github.com/yarnpkg/yarn/issues/9216
-# @see https://github.com/yarnpkg/yarn/issues/9218
 RUN --mount=type=cache,dst=/deb \
-  rm /etc/apt/sources.list.d/yarn.list \
-  && apt-get update \
+  apt-get update \
   && apt-get install -y --no-install-recommends \
     /deb/opkssh.deb \
     dnsutils \
