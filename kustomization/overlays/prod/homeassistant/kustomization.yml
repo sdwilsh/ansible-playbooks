@@ -15,7 +15,7 @@ configMapGenerator:
     name: mosquitto-config-configmap
 images:
   - name: busybox
-    newTag: 1.37.0@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+    newTag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
 namespace: homeassistant
 patches:
   # cnpg
