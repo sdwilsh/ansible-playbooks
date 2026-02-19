@@ -6,4 +6,4 @@ metadata:
 spec:
   configuration:
     destinationPath: s3://prod-cnpg-backup/homeassistant/
-  retentionPolicy: 7d
+  retentionPolicy: 3d
