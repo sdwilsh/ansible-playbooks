@@ -1,5 +1,5 @@
 FROM ghcr.io/hadolint/hadolint:v2.14.0@sha256:27086352fd5e1907ea2b934eb1023f217c5ae087992eb59fde121dce9c9ff21e AS hadolint
-FROM registry.k8s.io/kustomize/kustomize:v5.8.0@sha256:98424842862ed35fa666dbaac02159623567e1e9e184d91382fa665e89023258 AS kustomize
+FROM registry.k8s.io/kustomize/kustomize:v5.8.1@sha256:899fcd3bc898160e62bcaf82932b0cb29ba38d16272353db2e7acbba82129429 AS kustomize
 FROM koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
 FROM mcr.microsoft.com/devcontainers/python:3-3@sha256:99bf0ccea2570de791b53370bf17d0aa103a4faf396b5fb968462f65267bc6a5
