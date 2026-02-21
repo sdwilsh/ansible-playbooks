@@ -21,7 +21,7 @@ images:
   - name: busybox
     newTag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
   - name: opencloudeu/opencloud-rolling
-    newTag: 5.0.2@sha256:05db0550a9b6e9590ea52830b5b0003a0f15a2326b38b4aee52629c1a005f2d5
+    newTag: 5.1.0@sha256:6229e937e32e5e114ddac81af7e851fb9346a818c58a36b784529d5503530f93
 namespace: opencloud
 patches:
   - path: patches/opencloud/add_config.yml
