@@ -16,7 +16,7 @@ spec:
   env:
     - name: TZ
       value: America/Los_Angeles
-  imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:dab846a58e8ca3c8872584ab2225ee93fb9e659a87c52e163fefae9275b46f51
+  imageName: ghcr.io/cloudnative-pg/postgresql:17@sha256:ca2259722b27fb744160876673fb7f193b7b2f6cd85a27dbbc88e445fb138353
   instances: 3
   managed:
     services:
