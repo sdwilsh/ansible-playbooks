@@ -9,7 +9,7 @@ Exec=--path.rootfs=/host/root
 Exec=--path.udev.data=/host/root/run/udev/data
 HealthCmd=CMD-SHELL wget --no-verbose --tries=1 --spider http://localhost:9100/ || exit 1
 HealthInterval=10s
-Image=quay.io/prometheus/node-exporter:v1.9.1@sha256:d00a542e409ee618a4edc67da14dd48c5da66726bbd5537ab2af9c1dfc442c8a
+Image=quay.io/prometheus/node-exporter:v1.10.2@sha256:337ff1d356b68d39cef853e8c6345de11ce7556bb34cda8bd205bcf2ed30b565
 NoNewPrivileges=true
 ReadOnly=true
 SecurityLabelDisable=true
