@@ -27,7 +27,6 @@ spec:
       enableServiceLinks: false
       containers:
         - args:
-            - server
             - start
           env:
             - name: RUST_LOG
