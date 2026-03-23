@@ -22,6 +22,10 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: paperless-data
+  - path: patches/increase_paperless_media_size.yml
+    target:
+      kind: PersistentVolumeClaim
+      name: paperless-media
   - path: patches/set_paperless_customizations.yml
     target:
       kind: StatefulSet
