@@ -21,7 +21,7 @@ metadata:
   namespace: longhorn-system
 spec:
   concurrency: 3
-  cron: "45 4 19 * *"
+  cron: "45 4 5,19 * *"
   groups:
     - default
     - game
