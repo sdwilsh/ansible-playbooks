@@ -85,7 +85,8 @@ cameras:
             - detect
 classification:
   bird:
-    enabled: truedatabase:
+    enabled: true
+database:
   path: /config/frigate.db
 detectors:
   coral:
