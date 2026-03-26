@@ -83,7 +83,9 @@ cameras:
             rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.15:554/cam/realmonitor?channel=1&subtype=2
           roles:
             - detect
-database:
+classification:
+  bird:
+    enabled: truedatabase:
   path: /config/frigate.db
 detectors:
   coral:
@@ -104,6 +106,8 @@ go2rtc:
       rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.12:554/cam/realmonitor?channel=1&subtype=0
     north-gate:
       rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@10.67.0.15:554/cam/realmonitor?channel=1&subtype=0
+lpr:
+  enabled: false
 model:
   width: 320
   height: 320
@@ -149,6 +153,9 @@ record:
   detections:
     retain: {}
     pre_capture: 10
+semantic_search:
+  enabled: true
+  model_size: small
 snapshots:
   enabled: true
 ui:
