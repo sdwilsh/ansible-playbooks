@@ -112,7 +112,7 @@ lpr:
 model:
   width: 320
   height: 320
-  path: plus://c0fd749c7278e32b2c0309b2e9469a41
+  path: plus://69a1ad335b8475a668246fe4be6a1f5b
 mqtt:
   host: mosquitto-svc.homeassistant.svc.cluster.local
   user: frigate
