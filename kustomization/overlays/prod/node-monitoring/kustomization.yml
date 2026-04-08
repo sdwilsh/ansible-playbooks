@@ -27,7 +27,7 @@ images:
   - name: ghcr.io/jimmidyson/configmap-reload
     newTag: v0.15.0@sha256:b578b7599d65c0279f6e1aad201bba737b9b15e6a4f308281d9e26f765e6657f 
   - name: quay.io/prometheus/node-exporter
-    newTag: v1.10.2@sha256:337ff1d356b68d39cef853e8c6345de11ce7556bb34cda8bd205bcf2ed30b565
+    newTag: v1.11.1@sha256:0f422f62c15f154af8d8572b23d623aebfb10cec73a5c654d18f911f3f9df241
 namespace: node-monitoring
 resources:
   - namespace.yml
