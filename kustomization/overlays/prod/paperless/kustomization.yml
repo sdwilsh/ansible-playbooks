@@ -9,7 +9,7 @@ images:
   - name: postgres
     newTag: 17@sha256:b994732fcf33f73776c65d3a5bf1f80c00120ba5007e8ab90307b1a743c1fc16
   - name: quay.io/opstree/redis
-    newTag: v8.4.2@sha256:eba9bac8aab170698b7276ba1608ad40268ef597c73925576a533940e49287db
+    newTag: v8.6.2@sha256:5f79911253cb74636e8e97555b08095902d46a835c6423adb123295b00ba70d7
 namespace: paperless
 patches:
   # cnpg

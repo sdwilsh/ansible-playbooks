@@ -14,9 +14,9 @@ images:
   - name: postgres
     newTag: 17@sha256:b994732fcf33f73776c65d3a5bf1f80c00120ba5007e8ab90307b1a743c1fc16
   - name: quay.io/opstree/redis-sentinel
-    newTag: v8.4.2@sha256:093fe87268d612b6a61704334f6f6a22e8110955dae4f84814f0b3dee79680a6
+    newTag: v8.6.2@sha256:c7e3262f5d791abf49f7b207af75bc0966a324b31f13f22e3a29bdc27d734a5b
   - name: quay.io/opstree/redis
-    newTag: v8.4.2@sha256:eba9bac8aab170698b7276ba1608ad40268ef597c73925576a533940e49287db
+    newTag: v8.6.2@sha256:5f79911253cb74636e8e97555b08095902d46a835c6423adb123295b00ba70d7
 namespace: auth
 patches:
   # authelia
