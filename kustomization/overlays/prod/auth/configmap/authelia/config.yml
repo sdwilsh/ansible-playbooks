@@ -74,6 +74,10 @@ access_control:
       networks:
         - home
       policy: bypass
+    - domain: musicassistant.hogs.tswn.us
+      networks:
+        - homeassistant-appliance
+      policy: bypass
     - domain: opensprinkler.hogs.tswn.us
       networks:
         - home

@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: auth-forwardauth-middleware@kubernetescrd,external-svc-musicassistant-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: musicassistant-ingress
+spec:
+  rules:
+    - host: musicassistant.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: musicassistant-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix

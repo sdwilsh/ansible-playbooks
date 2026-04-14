@@ -7,10 +7,14 @@ resources:
   - namespace.yml
   - endpointslice/garage-admin.yml
   - endpointslice/homeassistant.yml
+  - endpointslice/musicassistant.yml
   - endpointslice/nas.yml
   - endpointslice/opensprinkler.yml
-  - ingress.yml
+  - ingress/external-services.yml
+  - ingress/musicassistant.yml
+  - middleware/musicassistant.yml
   - service/garage-admin.yml
   - service/homeassistant.yml
+  - service/musicassistant.yml
   - service/nas.yml
   - service/opensprinkler.yml
