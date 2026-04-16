@@ -7,7 +7,7 @@ components:
   - ../../../components/cnpg-backup
 images:
   - name: vabene1111/recipes
-    newTag: 2.6.5@sha256:82cd223fdd99db4518b7412dcfe3999e6acdf91eeea4703558269f83a93478c8
+    newTag: 2.6.8@sha256:985773f99d4c48a2c3a92e83f70de6ed58c194394db7c39ab0d2224c7e699c73
 namespace: tandoor
 patches:
   - path: patches/tandoor/set_config_env.yml
