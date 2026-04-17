@@ -26,7 +26,7 @@ jobs:
           driver: docker-container
 
       - name: Pre-build image and run lint in dev container
-        uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 # v0.3.1900000417
+        uses: devcontainers/ci@19ddf8c5778961129f90613da69436820ba5e0d9 # v0.3.1900000448
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           cacheTo: ghcr.io/${{ github.repository }}-devcontainer
@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Run quick-lint
-        uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 # v0.3.1900000417
+        uses: devcontainers/ci@19ddf8c5778961129f90613da69436820ba5e0d9 # v0.3.1900000448
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           env: |
@@ -63,7 +63,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Run kustomize-build
-        uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 # v0.3.1900000417
+        uses: devcontainers/ci@19ddf8c5778961129f90613da69436820ba5e0d9 # v0.3.1900000448
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
           env: |
