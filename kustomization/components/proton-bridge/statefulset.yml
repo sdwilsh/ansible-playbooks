@@ -17,6 +17,16 @@ spec:
       automountServiceAccountToken: false
       containers:
         - image: ghcr.io/dancwilliams/protonmail-bridge-docker
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - pgrep -f proton-bridge || exit 1
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
           name: proton-bridge
           ports:
             - containerPort: 25
