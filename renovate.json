@@ -160,6 +160,7 @@
         "docker.io/grafana/alloy",
         "eclipse-mosquitto",
         "ghcr.io/paperless-ngx/paperless-ngx",
+        "ghcr.io/squat/generic-device-plugin",
         "gotenberg/gotenberg",
         "grafana",
         "helm/helm",

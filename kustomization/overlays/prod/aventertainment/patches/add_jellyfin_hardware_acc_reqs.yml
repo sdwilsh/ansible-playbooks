@@ -13,11 +13,11 @@ spec:
           name: jellyfin
           resources:
             limits:
-              squat.ai/kfd: 1
-              squat.ai/render: 1
+              devic.es/kfd: 1
+              devic.es/render: 1
             requests:
-              squat.ai/kfd: 1
-              squat.ai/render: 1
+              devic.es/kfd: 1
+              devic.es/render: 1
       nodeName: worker03
       securityContext:
         supplementalGroups:

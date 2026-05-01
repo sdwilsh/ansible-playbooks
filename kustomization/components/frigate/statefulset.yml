@@ -47,13 +47,13 @@ spec:
             limits:
               cpu: 3000m
               memory: 8Gi
-              squat.ai/coraltpu: 1
-              squat.ai/quicksync: 1
+              devic.es/coraltpu: 1
+              devic.es/quicksync: 1
             requests:
               cpu: 500m
               memory: 1Gi
-              squat.ai/coraltpu: 1
-              squat.ai/quicksync: 1
+              devic.es/coraltpu: 1
+              devic.es/quicksync: 1
           securityContext:
             allowPrivilegeEscalation: false
             seccompProfile:

@@ -34,10 +34,10 @@ spec:
             limits:
               cpu: 2000m
               memory: 8Gi
-              squat.ai/quicksync: 1
+              devic.es/quicksync: 1
             requests:
               cpu: 500m
-              squat.ai/quicksync: 1
+              devic.es/quicksync: 1
           securityContext:
             allowPrivilegeEscalation: true
             runAsNonRoot: false
