@@ -103,7 +103,7 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    recovery_image_version: 0.4.0
+    recovery_image_version: 1.0.0
     # renovate: datasource=docker depName=ghcr.io/marinatedconcrete/kairos-ubuntu
     target_image_version: 1.0.3
 - name: Serially drain and reboot hosts that need to be rebooted
