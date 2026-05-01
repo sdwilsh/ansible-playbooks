@@ -3,8 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 images:
-  - name: shenxn/protonmail-bridge
-    newTag: 3.19.0-1@sha256:3717b4441130675dc9131196de9f9c5287d2ea21b138d83b0486429e1737638a
+  - name: ghcr.io/dancwilliams/protonmail-bridge-docker
+    newTag: 3.24.2@sha256:0249317f91ba9e1980487894413485cfdcda18724d4bfc62c20a90725d562cc1
 resources:
   - service.yml
   - statefulset.yml

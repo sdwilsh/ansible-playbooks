@@ -16,7 +16,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: shenxn/protonmail-bridge
+        - image: ghcr.io/dancwilliams/protonmail-bridge-docker
           name: proton-bridge
           ports:
             - containerPort: 25
