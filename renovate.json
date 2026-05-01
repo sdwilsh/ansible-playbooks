@@ -176,6 +176,8 @@
       ],
       "minimumReleaseAge": "3 days",
       "schedule": [
+        "after 4pm on tuesday",
+        "after 4pm on thursday",
         "after 4pm on friday",
         "every weekend"
       ]
@@ -191,7 +193,7 @@
         "ghcr.io/home-assistant/home-assistant",
         "ghcr.io/immich-app/immich-machine-learning",
         "ghcr.io/immich-app/immich-server",
-        "immich",
+        "immich"
       ],
       "minimumReleaseAge": "1 days",
       "schedule": [
@@ -256,8 +258,9 @@
       "description": "Group for all traefik automergeable updates",
       "groupName": "traefik-automerge",
       "matchPackageNames": [
-        "ghcr.io/authelia/authelia",
         "11notes/traefik",
+        "ghcr.io/authelia/authelia",
+        "maxlerebourg/crowdsec-bouncer-traefik-plugin",
         "traefik/traefik",
         "traefik"
       ],
@@ -267,6 +270,8 @@
         "patch"
       ],
       "schedule": [
+        "after 4pm on tuesday",
+        "after 4pm on thursday",
         "after 4pm on friday"
       ]
     },
@@ -282,8 +287,9 @@
       "description": "Group for all major traefik updates",
       "groupName": "traefik",
       "matchPackageNames": [
-        "ghcr.io/authelia/authelia",
         "11notes/traefik",
+        "ghcr.io/authelia/authelia",
+        "maxlerebourg/crowdsec-bouncer-traefik-plugin",
         "traefik/traefik",
         "traefik"
       ],
@@ -291,6 +297,8 @@
         "major"
       ],
       "schedule": [
+        "after 4pm on tuesday",
+        "after 4pm on thursday",
         "after 4pm on friday"
       ]
     },
