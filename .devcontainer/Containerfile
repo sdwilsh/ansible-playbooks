@@ -28,7 +28,7 @@ RUN curl -o /usr/local/bin/longhorncli \
 
 # Download and Setup CloudnativePG kubectl Plugin
 # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-ARG CNPG_VERSION=1.29.0
+ARG CNPG_VERSION=1.29.1
 RUN --mount=type=tmpfs,dst=/tmp \
   curl \
     -s \
