@@ -75,7 +75,7 @@
           - kairos-agent
           - upgrade
           - --source
-          - "oci:ghcr.io/marinatedconcrete/kairos-ubuntu:{{ target_image_version | trim('v') }}"
+          - "oci:ghcr.io/marinatedconcrete/kairos-fedora:{{ target_image_version | trim('v') }}"
       become: true
       when: os_image_version != target_image_version
     - name: Note if the host needs to be rebooted
@@ -103,9 +103,9 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    recovery_image_version: 1.0.0
-    # renovate: datasource=docker depName=ghcr.io/marinatedconcrete/kairos-ubuntu
-    target_image_version: 1.0.3
+    recovery_image_version: 1.0.3
+    # renovate: datasource=docker depName=ghcr.io/marinatedconcrete/kairos-fedora
+    target_image_version: 0.5.0
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
   gather_facts: false
