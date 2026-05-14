@@ -13,6 +13,7 @@ on:
       - .github/workflows/build-mack.yml
       - images/mack/Containerfile
       - images/mack/build_files/**
+      - justfile
   workflow_dispatch:
 
 env:
@@ -68,6 +69,13 @@ jobs:
           # https://artifacthub.io/docs/topics/repositories/container-images/
           # https://linux.die.net/man/1/date
           echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> $GITHUB_OUTPUT
+      
+      - name: Compute SOURCE_DATE_EPOCH
+        id: epoch
+        run: echo "epoch=$(date -d '${{ github.event.head_commit.timestamp }}' +%s)" >> $GITHUB_OUTPUT
+
+      - name: Install just
+        uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 #v4.0.0
 
       - name: Image Metadata
         uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6
@@ -99,16 +107,28 @@ jobs:
 
       - name: Build Image
         id: build_image
-        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
-        with:
-          containerfiles: |
-            ./images/mack/Containerfile
-          context: images/mack
-          image: ${{ env.IMAGE_NAME }}
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          oci: false
-          platforms: ${{ env.PLATFORM }}
+        env:
+          SOURCE_DATE_EPOCH: ${{ steps.epoch.outputs.epoch }}
+        run: |
+          sudo -E $(command -v just) build-mack \
+            ${PLATFORM} \
+            ${DEFAULT_TAG}
+
+      - name: Rechunk with Chunkah
+        env:
+          SOURCE_DATE_EPOCH: ${{ steps.epoch.outputs.epoch }}
+        run: |
+          sudo -E $(command -v just) rechunk \
+            ${{ env.IMAGE_NAME}} \
+            ${DEFAULT_TAG}
+
+      - name: Tag Image
+        id: tag-images
+        run: |
+          sudo -E $(command -v just) tag-images \
+          "${{ env.IMAGE_NAME }}" \
+          "${DEFAULT_TAG}" \
+          "${{ steps.metadata.outputs.tags }}"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
