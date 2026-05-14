@@ -81,13 +81,36 @@ build-loki-image:
 
 # Builds the images/mack container.
 [group('images')]
-build-mack:
+build-mack platform="linux/amd64" tag="mack":
     #!/usr/bin/env bash
-    set -eou pipefail
+    set -eoux pipefail
 
-    podman build \
-        images/mack \
-        -t mack
+    BUILD_ARGS=()
+    LABELS=()
+    if [[ -z "$(git status -s)" ]]; then
+        GIT_SHA=$(git rev-parse --short HEAD)
+        BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=${GIT_SHA}")
+        LABELS+=("--label" "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/sdwilsh/mack/${GIT_SHA}/README.md")
+        LABELS+=("--label" "org.opencontainers.image.documentation=https://raw.githubusercontent.com/sdwilsh/mack/${GIT_SHA}/README.md")
+        LABELS+=("--label" "org.opencontainers.image.source=https://github.com/sdwilsh/mack/${GIT_SHA}/Containerfile")
+        LABELS+=("--label" "org.opencontainers.image.url=https://github.com/sdwilsh/mack/tree/${GIT_SHA}")
+    fi
+
+    LABELS+=("--label" "io.artifacthub.package.deprecated=false")
+    LABELS+=("--label" "io.artifacthub.package.keywords=bootc")
+    LABELS+=("--label" "io.artifacthub.package.license=Apache-2.0")
+    LABELS+=("--label" "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/656602?s=200&v=4")
+    LABELS+=("--label" "io.artifacthub.package.prerelease=false")
+    LABELS+=("--label" "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)")
+    LABELS+=("--label" "org.opencontainers.image.description='Mack OS—A bootc-powered core operating system.'")
+    LABELS+=("--label" "org.opencontainers.image.title=mack")
+    LABELS+=("--label" "org.opencontainers.image.vendor=sdwilsh")
+    LABELS+=("--label" "org.opencontainers.image.version={{ tag }}.$(date +%Y%M%d)")
+
+    # This actually builds the image!
+    PODMAN_BUILD_ARGS=("${BUILD_ARGS[@]}" "${LABELS[@]}" --platform={{ platform }} --pull=newer --tag "mack:{{ tag }}")
+
+    podman build "${PODMAN_BUILD_ARGS[@]}" images/mack
 
 # Builds the images/mack container as a virtual machine.
 [group('images')]
@@ -170,6 +193,25 @@ kustomize-build:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Split the image for smaller updates.
+[group('images')]
+rechunk target_image tag:
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    export CHUNKAH_CONFIG_STR=$(podman inspect "{{ target_image }}:{{ tag }}")
+    podman run \
+        -e CHUNKAH_CONFIG_STR \
+        --mount=type=image,src="{{ target_image }}:{{ tag }}",target=/chunkah \
+        --rm \
+        quay.io/coreos/chunkah:latest \
+    build \
+        --compressed \
+        --max-layers 128 \
+        --prune /sysroot/ \
+        --prune /ostree \
+        --label ostree.commit- --label ostree.final-diffid- \
+        --tag "{{ target_image }}:{{ tag }}" | podman load
+
 # Validate `renovate.json` file
 [group('lint')]
 renovate-validate:
@@ -200,6 +242,24 @@ shellcheck:
         shellcheck -x ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
+
+# Tag Images
+[group('images')]
+tag-images target_image tag tags:
+    #!/usr/bin/env bash
+    set -eoux pipefail
+
+    # Get Image, and untag
+    IMAGE=$(podman inspect {{ target_image }}:{{ tag }} | jq -r .[].Id)
+    podman untag ${IMAGE}
+
+    # Tag Image
+    for tag in {{ tags }}; do
+        podman tag $IMAGE "{{ target_image }}:{{ tag }}"
+    done
+
+    # Show Images
+    podman images
 
 [group('longhorn')]
 longhorn-allow-trim:
