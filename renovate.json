@@ -248,7 +248,7 @@
         "pinDigest"
       ],
       "matchPackageNames": [
-        "ghcr.io/marinatedconcrete/kairos-ubuntu",
+        "ghcr.io/marinatedconcrete/kairos-fedora",
         "quay.io/fedora/fedora-bootc"
       ]
     },
