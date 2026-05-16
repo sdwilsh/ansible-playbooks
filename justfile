@@ -245,7 +245,7 @@ shellcheck:
 
 # Tag Images
 [group('images')]
-tag-images target_image tag tags:
+tag-images target_image tag tags registry="":
     #!/usr/bin/env bash
     set -eoux pipefail
 
@@ -253,9 +253,15 @@ tag-images target_image tag tags:
     IMAGE=$(podman inspect {{ target_image }}:{{ tag }} | jq -r .[].Id)
     podman untag ${IMAGE}
 
+    if [ -z "{{ registry }}"]; then
+        REGISTRY=""
+    else
+        REGISTRY="{{ registry }}/"
+    fi
+
     # Tag Image
     for tag in {{ tags }}; do
-        podman tag $IMAGE "{{ target_image }}:{{ tag }}"
+        podman tag ${IMAGE} "${REGISTRY}{{ target_image }}:{{ tag }}"
     done
 
     # Show Images

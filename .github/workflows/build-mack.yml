@@ -126,9 +126,10 @@ jobs:
         id: tag-images
         run: |
           sudo -E $(command -v just) tag-images \
-          "${{ env.IMAGE_NAME }}" \
-          "${DEFAULT_TAG}" \
-          "${{ steps.metadata.outputs.tags }}"
+            "${{ env.IMAGE_NAME }}" \
+            "${DEFAULT_TAG}" \
+            "${{ steps.metadata.outputs.tags }}" \
+            "${{ env.IMAGE_REGISTRY }}"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
