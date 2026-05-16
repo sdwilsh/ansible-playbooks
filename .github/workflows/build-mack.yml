@@ -143,8 +143,8 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
         run: |
-          for tag in ${{ steps.output.metadata.tags }}; do
-              podman push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
+          for tag in ${{ steps.metadata.outputs.tags }}; do
+              podman push "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
           done
 
       - name: Install Cosign
