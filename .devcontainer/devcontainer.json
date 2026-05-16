@@ -22,24 +22,6 @@
         }
     },
     "features": {
-        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-            // renovate: datasource=github-releases depName=helm/helm
-            "helm": "3.17.0",
-            // renovate: datasource=github-releases depName=kubernetes/kubernetes
-            "version": "1.36.1"
-        },
-        "ghcr.io/devcontainers-extra/features/argo-cd:1": {
-            // renovate: datasource=github-releases depName=argoproj/argo-cd
-            "version": "3.2.11"
-        },
-        "ghcr.io/devcontainers-extra/features/renovate-cli:2": {
-            // renovate: datasource=github-releases depName=renovatebot/renovate
-            "version": "43.146.0"
-        },
-        "ghcr.io/guiyomh/features/just:0": {
-            // renovate: datasource=github-releases depName=casey/just
-            "version": "1.51.0"
-        }
     },
     "portsAttributes": {
         "3000": {

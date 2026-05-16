@@ -1,24 +1,3 @@
 {
-  "features": {
-    "ghcr.io/devcontainers-extra/features/argo-cd:1": {
-      "version": "1.1.0",
-      "resolved": "ghcr.io/devcontainers-extra/features/argo-cd@sha256:a317da96000c08161ae740ba4c2cd79b1de7ae3ee5c04dd1ed12d38928c5deca",
-      "integrity": "sha256:a317da96000c08161ae740ba4c2cd79b1de7ae3ee5c04dd1ed12d38928c5deca"
-    },
-    "ghcr.io/devcontainers-extra/features/renovate-cli:2": {
-      "version": "2.0.16",
-      "resolved": "ghcr.io/devcontainers-extra/features/renovate-cli@sha256:3653309f6b17363ce9cd63d07b35a3c986b08ad24b2aeecf418d9e5e3aaf3520",
-      "integrity": "sha256:3653309f6b17363ce9cd63d07b35a3c986b08ad24b2aeecf418d9e5e3aaf3520"
-    },
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-      "version": "1.3.1",
-      "resolved": "ghcr.io/devcontainers/features/kubectl-helm-minikube@sha256:bbe8adf6b37fff8c67412ab0a4579f4c2f30bbaba1d9a5cebd9e38bade54025b",
-      "integrity": "sha256:bbe8adf6b37fff8c67412ab0a4579f4c2f30bbaba1d9a5cebd9e38bade54025b"
-    },
-    "ghcr.io/guiyomh/features/just:0": {
-      "version": "0.1.0",
-      "resolved": "ghcr.io/guiyomh/features/just@sha256:8311dff976bd153a54a879021353a7e149963e580022b25af49c45cfc5f13bec",
-      "integrity": "sha256:8311dff976bd153a54a879021353a7e149963e580022b25af49c45cfc5f13bec"
-    }
-  }
+  "features": {}
 }

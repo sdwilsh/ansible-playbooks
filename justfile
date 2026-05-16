@@ -215,7 +215,7 @@ rechunk target_image tag:
 # Validate `renovate.json` file
 [group('lint')]
 renovate-validate:
-    renovate-config-validator
+    ~/.local/share/pnpm/global/5/node_modules/.bin/renovate-config-validator
 
 # Runs the images/mack container in a virtual machine.
 [group('images')]

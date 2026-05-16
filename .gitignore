@@ -1,5 +1,7 @@
 .ansible_vault_password
+.pnpm-store
 .venv
+node_modules
 
 # Used to configure bootc images with a pre-defined user.
 config.toml
