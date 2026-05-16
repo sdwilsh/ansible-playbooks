@@ -105,7 +105,7 @@
   vars:
     recovery_image_version: 1.0.3
     # renovate: datasource=docker depName=ghcr.io/marinatedconcrete/kairos-fedora
-    target_image_version: 0.7.0
+    target_image_version: 0.7.1
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
   gather_facts: false
