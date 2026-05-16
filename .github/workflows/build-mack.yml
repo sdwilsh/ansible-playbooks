@@ -144,7 +144,7 @@ jobs:
         id: push
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-              podman push "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
+              sudo -E podman push "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
           done
 
       - name: Install Cosign
