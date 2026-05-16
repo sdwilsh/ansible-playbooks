@@ -1,14 +1,51 @@
 FROM ghcr.io/hadolint/hadolint:v2.14.0@sha256:27086352fd5e1907ea2b934eb1023f217c5ae087992eb59fde121dce9c9ff21e AS hadolint
 FROM registry.k8s.io/kustomize/kustomize:v5.8.1@sha256:899fcd3bc898160e62bcaf82932b0cb29ba38d16272353db2e7acbba82129429 AS kustomize
-FROM koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
+FROM docker.io/koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
-FROM mcr.microsoft.com/devcontainers/python:3-3@sha256:9e51c13505754efe79dd4a0b1a29523d3854090dabb8add3f3fa642ea3c98fad
+FROM quay.io/fedora/fedora-minimal:44@sha256:cd2b366b9fdd4b181965143ef9b22a57b76ecd30b00c3faf4d0a0c4a52937e65
+
+ARG USERNAME=vscode
+ARG USERID=1000
+ARG GROUPID=1000
 
 COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=kustomize /app/kustomize /usr/local/bin/kustomize
 COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN --mount=type=tmpfs,dst=/tmp \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    dnf install --setopt=install_weak_deps=False -y \
+      bind-utils \
+      coreutils \
+      curl \
+      git \
+      gzip \
+      iproute \
+      iputils \
+      pnpm \
+      python3 \
+      python3-pip \
+      sudo \
+      tar \
+      vim \
+    && dnf clean all \
+    && rm -rf /var/lib/dnf
+
+RUN groupadd --gid ${GROUPID} ${USERNAME} \
+    && useradd --gid ${GROUPID} --uid ${USERID} -p ${USERNAME} -s /bin/bash -m ${USERNAME} \
+    && passwd -d ${USERNAME} \
+    && usermod -a -G wheel ${USERNAME}
+
+# Download and Install ArgoCD CLI
+# renovate: datasource=github-releases depName=argoproj/argo-cd
+ARG ARGOCD_VERSION=v3.2.11
+RUN curl -o /usr/local/bin/argocd \
+      -L \
+      https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64 \
+      && chmod +x /usr/local/bin/argocd
 
 # Download and Install garage CLI
 # renovate: datasource=git-tags registryUrl=https://git.deuxfleurs.fr/Deuxfleurs/garage
@@ -17,6 +54,29 @@ RUN curl -o /usr/local/bin/garage \
     -L \
     https://garagehq.deuxfleurs.fr/_releases/${GARAGE_CLI_VERSION}/x86_64-unknown-linux-musl/garage \
   && chmod +x /usr/local/bin/garage
+
+# Download and Install Helm
+# renovate: datasource=github-releases depName=helm/helm
+ARG HELM_VERSION=v4.2.0
+RUN --mount=type=tmpfs,dst=/tmp \
+  curl \
+    -s \
+    -L \
+    https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz | \
+  tar -xvzf - -C /tmp \
+  && mv /tmp/linux-amd64/helm /usr/local/bin/helm
+
+# Download and Install Just
+# renovate: datasource=github-releases depName=casey/just
+ARG JUST_VERSION=1.51.0
+RUN --mount=type=tmpfs,dst=/tmp \
+  curl \
+    -s \
+    -L \
+    https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz | \
+  tar -xvzf - -C /tmp \
+  && ls -la /tmp \
+  && mv /tmp/just /usr/local/bin/just
 
 # Download and Install longhorncli
 # renovate: datasource=github-releases depName=longhorn/cli
@@ -50,23 +110,29 @@ RUN chmod +x /usr/local/bin/kubectl_complete-cnpg
 # Setup and Configure OpenPubkey SSH
 # renovate: datasource=github-releases depName=openpubkey/opkssh
 ARG OPKSSH_VERSION=0.14.0
-RUN --mount=type=cache,dst=/deb \
-  curl -o /deb/opkssh.deb \
+RUN --mount=type=cache,dst=/dnf \
+  curl -o /dnf/opkssh.rpm \
     -L \
-    https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_amd64.deb
+    https://github.com/openpubkey/opkssh/releases/download/v${OPKSSH_VERSION}/opkssh_${OPKSSH_VERSION}_linux_amd64.rpm
 
-RUN --mount=type=cache,dst=/deb \
-  apt-get update \
-  && apt-get install -y --no-install-recommends \
-    /deb/opkssh.deb \
-    dnsutils \
-    iproute2 \
-    iputils-ping \
-    libssh-dev \
-    vim \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,dst=/dnf \
+    --mount=type=tmpfs,dst=/tmp \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    dnf install --setopt=install_weak_deps=False -y \
+      /dnf/opkssh.rpm \
+      libssh-devel \
+    && dnf clean all \
+    && rm -rf /var/lib/dnf
+
+COPY package.json /home/${USERNAME}/.local/share/pnpm/global/5/package.json
+COPY pnpm-lock.yaml /home/${USERNAME}/.local/share/pnpm/global/5/pnpm-lock.yaml
+RUN pnpm install --global-dir /home/${USERNAME}/.local/share/pnpm/global/ -g \
+  && chown -R ${USERID}:${GROUPID} /home/${USERNAME}/.local
 
 WORKDIR /tmp
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
+
+WORKDIR /home/${USERNAME}
+USER ${USERNAME}

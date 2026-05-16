@@ -2,3 +2,4 @@
 failure-threshold: info
 ignored:
   - DL3008
+  - DL3041

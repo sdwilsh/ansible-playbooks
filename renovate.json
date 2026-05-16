@@ -190,7 +190,6 @@
         "patch"
       ],
       "matchPackageNames": [
-        "ghcr.io/home-assistant/home-assistant",
         "ghcr.io/immich-app/immich-machine-learning",
         "ghcr.io/immich-app/immich-server",
         "immich"
@@ -212,14 +211,15 @@
         "ghcr.io/servercontainers/samba",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
         "lscr.io/linuxserver/code-server",
-        "postgres"
+        "postgres",
+        "quay.io/fedora/fedora-minimal"
       ],
       "matchUpdateTypes": [
         "digest"
       ],
       "minimumReleaseAge": "3 days",
       "schedule": [
-        "after 4pm every weekday"
+        "after 4pm every day"
       ]
     },
     {
