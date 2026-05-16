@@ -261,7 +261,7 @@ tag-images target_image tag tags registry="":
 
     # Tag Image
     for tag in {{ tags }}; do
-        podman tag ${IMAGE} "${REGISTRY}{{ target_image }}:{{ tag }}"
+        podman tag ${IMAGE} "${REGISTRY}{{ target_image }}:${tag}"
     done
 
     # Show Images
