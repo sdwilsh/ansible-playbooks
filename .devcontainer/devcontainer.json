@@ -34,7 +34,7 @@
         },
         "ghcr.io/devcontainers-extra/features/renovate-cli:2": {
             // renovate: datasource=github-releases depName=renovatebot/renovate
-            "version": "43.146.0"
+            "version": "43.181.2"
         },
         "ghcr.io/guiyomh/features/just:0": {
             // renovate: datasource=github-releases depName=casey/just
