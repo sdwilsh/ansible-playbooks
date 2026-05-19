@@ -12,7 +12,7 @@ configMapGenerator:
       - configmap/authelia/config.yml
 images:
   - name: postgres
-    newTag: 17@sha256:5b96f1a16bd9768b060dd2ffe55cb6225c4d9ef4d214a8b21eb08134869a97e4
+    newTag: 17@sha256:538bdb8c6b278f2f09070a4d79f04a83363a795ed23ec0d92d6b70cabc398eae
   - name: quay.io/opstree/redis-sentinel
     newTag: v8.6.2@sha256:c7e3262f5d791abf49f7b207af75bc0966a324b31f13f22e3a29bdc27d734a5b
   - name: quay.io/opstree/redis
