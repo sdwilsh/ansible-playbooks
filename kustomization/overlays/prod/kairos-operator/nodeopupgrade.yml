@@ -8,5 +8,5 @@ spec:
   image: ghcr.io/marinatedconcrete/kairos-fedora:0.7.1
   nodeSelector:
     matchLabels:
-      node-role.kubernetes.io/control-plane: "false"
+      kubernetes.io/os: linux
   stopOnFailure: true
