@@ -20,6 +20,7 @@ resources:
   - application/generic-device-plugin.yml
   - application/homeassistant.yml
   - application/immich.yml
+  - application/kairos-operator.yml
   - application/kube-vip.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
