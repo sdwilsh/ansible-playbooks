@@ -96,6 +96,14 @@ RUN --mount=type=tmpfs,dst=/tmp \
   && ls -la /tmp \
   && mv /tmp/just /usr/local/bin/just
 
+# Download and Install kubectl
+# renovate: datasource=github-releases depName=kubernetes/kubernetes
+ARG KUBECTL_VERSION=v1.36.1
+RUN curl -o /usr/local/bin/kubectl \
+    -L \
+    https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
+  && chmod +x /usr/local/bin/kubectl
+
 # Download and Install longhorncli
 # renovate: datasource=github-releases depName=longhorn/cli
 ARG LONGHORN_CLI_VERSION=v1.11.2
