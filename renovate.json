@@ -201,6 +201,17 @@
       ]
     },
     {
+      "description": "Automatic Digest Updates - Quick",
+      "automerge": true,
+      "automergeType": "branch",
+      "matchPackageNames": [
+        "quay.io/fedora/fedora-minimal"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ]
+    },
+    {
       "description": "Automatic Digest Updates",
       "automerge": true,
       "automergeType": "branch",
@@ -211,8 +222,7 @@
         "ghcr.io/servercontainers/samba",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
         "lscr.io/linuxserver/code-server",
-        "postgres",
-        "quay.io/fedora/fedora-minimal"
+        "postgres"
       ],
       "matchUpdateTypes": [
         "digest"
