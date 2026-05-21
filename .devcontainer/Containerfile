@@ -63,6 +63,7 @@ RUN <<EOF cat > /usr/local/bin/kubectl_complete-cnpg
 # Call the __complete command passing it all arguments
 kubectl cnpg __complete "\$@"
 EOF
+
 RUN chmod +x /usr/local/bin/kubectl_complete-cnpg
 
 # Download and Install garage CLI
