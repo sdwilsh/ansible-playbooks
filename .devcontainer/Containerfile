@@ -31,6 +31,7 @@ RUN --mount=type=tmpfs,dst=/tmp \
       sudo \
       tar \
       vim \
+      watch \
     && dnf clean all \
     && rm -rf /var/lib/dnf
 
