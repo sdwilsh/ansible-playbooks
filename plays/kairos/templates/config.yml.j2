@@ -99,11 +99,13 @@ stages:
         NTP: {{ common__ntp_pool }}
         FallbackNTP: ""
     - files:
-        # Safety first!  Hard-code control plane nodes in /etc/hosts...
+        # Safety first!  Hard-code control plane nodes and other important things in /etc/hosts...
         - path: /etc/hosts
           permissions: 0644
           content: |
             127.0.0.1 localhost {{ inventory_hostname }}
+            10.11.0.14 services-nfs.hogs.tswn.us
+            10.11.1.73 pool.ntp.hogs.tswn.us
 {% for host in controlplane_hosts %}
             {{ hostvars[host].ansible_host }} {{ host }}
 {% endfor %}
