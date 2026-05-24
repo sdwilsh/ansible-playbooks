@@ -9,10 +9,17 @@ spec:
   cluster:
     name: immich-pg-cluster
   extensions:
-    - name: cube
-    - name: earthdistance
-    - name: pg_trgm
-    - name: unaccent
-    - name: uuid-ossp
-    - name: vchord
-    - name: vector
+    - ensure: present
+      name: cube
+    - ensure: present
+      name: earthdistance
+    - ensure: present
+      name: pg_trgm
+    - ensure: present
+      name: unaccent
+    - ensure: present
+      name: uuid-ossp
+    - ensure: present
+      name: vchord
+    - ensure: present
+      name: vector
