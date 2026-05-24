@@ -380,10 +380,8 @@
         "kustomization/overlays/prod/homeassistant/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2,
       "minimumReleaseAge": "3 days"
     },
     {
