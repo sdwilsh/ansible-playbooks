@@ -202,17 +202,6 @@
       ]
     },
     {
-      "description": "Automatic Digest Updates - Quick",
-      "automerge": true,
-      "automergeType": "branch",
-      "matchPackageNames": [
-        "quay.io/fedora/fedora-minimal"
-      ],
-      "matchUpdateTypes": [
-        "digest"
-      ]
-    },
-    {
       "description": "Automatic Digest Updates",
       "automerge": true,
       "automergeType": "branch",
@@ -260,7 +249,8 @@
       ],
       "matchPackageNames": [
         "ghcr.io/marinatedconcrete/kairos-fedora",
-        "quay.io/fedora/fedora-bootc"
+        "quay.io/fedora/fedora-bootc",
+        "quay.io/fedora/fedora-minimal"
       ]
     },
     {
