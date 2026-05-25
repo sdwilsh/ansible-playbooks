@@ -6,3 +6,4 @@ namespace: kairos-operator
 resources:
   - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.1.0-beta6
   - nodeopupgrade/controlplane.yml
+  - nodeopupgrade/workers.yml
