@@ -144,6 +144,7 @@
       ],
       "matchStrings": [
         "\\s+name:\\s+kairos-upgrade-control-plane-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\\n.*image:\\s+(?<depName>.+):",
+        "\\s+name:\\s+kairos-upgrade-workers-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\\n.*image:\\s+(?<depName>.+):",
         "image:\\s+(?<depName>.+):(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"
       ]
     }
@@ -281,6 +282,29 @@
         "minor",
         "patch"
       ],
+      "schedule": [
+        "after 4pm on tuesday",
+        "after 4pm on thursday",
+        "after 4pm on friday"
+      ]
+    },
+    {
+      "groupName": "kairos-control-plane",
+      "matchFileNames": [
+        "kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane.yml"
+      ],
+      "schedule": [
+        "after 4pm on tuesday",
+        "after 4pm on thursday",
+        "after 4pm on friday"
+      ]
+    },
+    {
+      "groupName": "kairos-workers",
+      "matchFileNames": [
+        "kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers.yml"
+      ],
+      "minimumReleaseAge": "1 day",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
