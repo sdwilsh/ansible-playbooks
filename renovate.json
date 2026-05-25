@@ -135,6 +135,17 @@
       "matchStrings": [
         "\\$schema=https://www\\.authelia\\.com/schemas/(?<currentValue>v\\d+\\.\\d+)/json-schema/configuration\\.json$"
       ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane\\.yml$/"
+      ],
+      "matchStrings": [
+        "\\s+name:\\s+kairos-upgrade-control-plane-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\\n.*image:\\s+(?<depName>.+):",
+        "image:\\s+(?<depName>.+):(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"
+      ]
     }
   ],
   "extends": [
