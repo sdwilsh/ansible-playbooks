@@ -391,6 +391,7 @@
         "kustomization/overlays/prod/immich/**"
       ],
       "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
         "postgres"
       ],
