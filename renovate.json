@@ -395,7 +395,7 @@
         "postgres"
       ],
       "minimumGroupSize": 2,
-      "minimumReleaseAge": "5 days"
+      "minimumReleaseAge": "3 days"
     },
     {
       "groupName": "postgres-monitoring",
@@ -418,7 +418,7 @@
         "postgres"
       ],
       "minimumGroupSize": 2,
-      "minimumReleaseAge": "1 week"
+      "minimumReleaseAge": "3 days"
     },
     {
       "groupName": "postgres-tandoor",
