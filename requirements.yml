@@ -10,7 +10,7 @@ collections:
   - name: community.docker
     version: 5.2.0
   - name: community.general
-    version: 13.0.0
+    version: 13.0.1
   - name: devsec.hardening
     version: 10.5.2
   - name: https://github.com/marinatedconcrete/config.git#ansible
