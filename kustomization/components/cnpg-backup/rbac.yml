@@ -5,7 +5,7 @@ metadata:
   name: cnpg-backup-check-role
 rules:
 - apiGroups:
-    - ""
+    - postgresql.cnpg.io
   resources:
     - describe backups.postgresql.cnpg.io
   verbs: 
