@@ -5,7 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
-  generateName: immich-pre-update-backup-
+  name: immich-pre-update-backup
 spec:
   backupOwnerReference: cluster
   cluster:
