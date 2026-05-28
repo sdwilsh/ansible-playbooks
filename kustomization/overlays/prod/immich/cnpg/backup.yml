@@ -1,0 +1,16 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+  generateName: immich-pre-update-backup-
+spec:
+  backupOwnerReference: cluster
+  cluster:
+    name: immich-pg-cluster
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+

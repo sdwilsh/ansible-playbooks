@@ -26,6 +26,7 @@ patches:
       name: immich-server
 resources:
   - namespace.yml
+  - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/database.yml
   - cnpg/podmonitor.yml
