@@ -2,11 +2,9 @@ FROM ghcr.io/hadolint/hadolint:v2.14.0@sha256:27086352fd5e1907ea2b934eb1023f217c
 FROM registry.k8s.io/kustomize/kustomize:v5.8.1@sha256:899fcd3bc898160e62bcaf82932b0cb29ba38d16272353db2e7acbba82129429 AS kustomize
 FROM docker.io/koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 
-FROM quay.io/fedora/fedora-minimal:44
+FROM ghcr.io/marinatedconcrete/devcontainer-base:latest@sha256:0a5a9abb2e1d0cbfaa7a2a8136924adeef430b1077d4fadd9dfc7093ecca637d
 
 ARG USERNAME=vscode
-ARG USERID=1000
-ARG GROUPID=1000
 
 COPY --chmod=777 --from=hadolint /bin/hadolint /usr/local/bin/hadolint
 COPY --chmod=777 --from=kustomize /app/kustomize /usr/local/bin/kustomize
@@ -14,32 +12,17 @@ COPY --chmod=777 --from=shellcheck /bin/shellcheck /usr/local/bin/shellcheck
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+USER root
+
 RUN --mount=type=tmpfs,dst=/tmp \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     dnf install --setopt=install_weak_deps=False -y \
-      bind-utils \
-      coreutils \
-      curl \
-      diffutils \
-      git \
-      gzip \
-      iproute \
-      iputils \
       pnpm \
       python3 \
       python3-pip \
-      sudo \
-      tar \
-      vim \
-      watch \
     && dnf clean all \
     && rm -rf /var/lib/dnf
-
-RUN groupadd --gid ${GROUPID} ${USERNAME} \
-    && useradd --gid ${GROUPID} --uid ${USERID} -p ${USERNAME} -s /bin/bash -m ${USERNAME} \
-    && passwd -d ${USERNAME} \
-    && usermod -a -G wheel ${USERNAME}
 
 # Download and Install ArgoCD CLI
 # renovate: datasource=github-releases depName=argoproj/argo-cd
@@ -87,18 +70,6 @@ RUN --mount=type=tmpfs,dst=/tmp \
   tar -xvzf - -C /tmp \
   && mv /tmp/linux-amd64/helm /usr/local/bin/helm
 
-# Download and Install Just
-# renovate: datasource=github-releases depName=casey/just
-ARG JUST_VERSION=1.51.0
-RUN --mount=type=tmpfs,dst=/tmp \
-  curl \
-    -s \
-    -L \
-    https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz | \
-  tar -xvzf - -C /tmp \
-  && ls -la /tmp \
-  && mv /tmp/just /usr/local/bin/just
-
 # Download and Install kubectl
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=v1.36.1
@@ -136,7 +107,7 @@ RUN --mount=type=cache,dst=/dnf \
 COPY package.json /home/${USERNAME}/.local/share/pnpm/global/5/package.json
 COPY pnpm-lock.yaml /home/${USERNAME}/.local/share/pnpm/global/5/pnpm-lock.yaml
 RUN pnpm install --global-dir /home/${USERNAME}/.local/share/pnpm/global/ -g \
-  && chown -R ${USERID}:${GROUPID} /home/${USERNAME}/.local
+  && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.local
 
 WORKDIR /tmp
 COPY requirements.txt requirements.txt

@@ -221,6 +221,7 @@
         "busybox",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
+        "ghcr.io/marinatedconcrete/devcontainer-base",
         "ghcr.io/servercontainers/samba",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
         "lscr.io/linuxserver/code-server",
@@ -261,8 +262,7 @@
       ],
       "matchPackageNames": [
         "ghcr.io/marinatedconcrete/kairos-fedora",
-        "quay.io/fedora/fedora-bootc",
-        "quay.io/fedora/fedora-minimal"
+        "quay.io/fedora/fedora-bootc"
       ]
     },
     {
