@@ -7,7 +7,7 @@ rules:
 - apiGroups:
     - postgresql.cnpg.io
   resources:
-    - describe backups.postgresql.cnpg.io
+    - backups.postgresql.cnpg.io
   verbs: 
     - get
 ---
