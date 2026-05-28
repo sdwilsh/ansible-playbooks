@@ -4,4 +4,4 @@ kind: Component
 
 resources:
   - objectstore.yml
-
+  - rbac.yml
