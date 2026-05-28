@@ -16,7 +16,7 @@ spec:
   env:
     - name: TZ
       value: America/Los_Angeles
-  imageName: ghcr.io/cloudnative-pg/postgresql:18-system-bookworm@sha256:61bcf7237cb5363ff84ac357bdf66a29d1220f88fc05e64473d7824043e4b150
+  imageName: ghcr.io/cloudnative-pg/postgresql:18-system-bookworm@sha256:1cd5f49ef9d3bffdcd94fd480f23b79203303c5eed12eea54e5b2fbab870ef67
   instances: 3
   managed:
     services:
