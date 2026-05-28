@@ -7,7 +7,6 @@ metadata:
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
   name: immich-pre-update-backup
 spec:
-  backupOwnerReference: cluster
   cluster:
     name: immich-pg-cluster
   method: plugin
