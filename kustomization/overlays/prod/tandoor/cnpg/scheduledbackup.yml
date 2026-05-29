@@ -2,11 +2,11 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
-  name: atuin-nightly-scheduledbackup
+  name: tandoor-nightly-scheduledbackup
 spec:
   backupOwnerReference: cluster
   cluster:
-    name: atuin-pg-cluster
+    name: tandoor-pg-cluster
   method: plugin
   pluginConfiguration:
     name: barman-cloud.cloudnative-pg.io
