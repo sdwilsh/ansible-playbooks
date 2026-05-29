@@ -1,0 +1,47 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/sync-wave: "0"
+  name: paperless-pre-update-backup
+spec:
+  cluster:
+    name: paperless-pg-cluster
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "1"
+  name: paperless-pre-update-backup-complete-check
+spec:
+  containers:
+    - args:
+        - /scripts/wait-for-backup.sh
+      command:
+        - bash
+        - -c
+      env:
+        - name: BACKUP_RESOURCE
+          value: paperless-pre-update-backup
+      image: docker.io/bitnami/kubectl
+      name: check
+      volumeMounts:
+        - mountPath: /scripts
+          name: scripts
+  restartPolicy: Never
+  serviceAccount: cnpg-backup-check
+  volumes:
+    - configMap:
+        defaultMode: 0777
+        name: cnpg-backup-scripts-configmap
+      name: scripts
+
