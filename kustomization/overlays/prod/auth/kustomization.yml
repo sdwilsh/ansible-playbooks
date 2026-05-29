@@ -11,6 +11,8 @@ configMapGenerator:
     files:
       - configmap/authelia/config.yml
 images:
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:e2b97dde9666986c61c56d49aae85a714b89b69392baa531438e74ec34096fb4
   - name: postgres
     newTag: 18@sha256:f7ce845ee6873dd84be93c9828fe0d1fab0f9707dc9ac569694657398b290bce
   - name: quay.io/opstree/redis-sentinel
@@ -53,6 +55,8 @@ patches:
 resources:
   - namespace.yml
   - certificate/lldap.yml
+  - cnpg/backup/authelia.yml
+  - cnpg/backup/lldap.yml
   - cnpg/cluster/authelia.yml
   - cnpg/cluster/lldap.yml
   - cnpg/podmonitor/authelia.yml
