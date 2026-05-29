@@ -8,6 +8,8 @@ components:
 images:
   - name: busybox
     newTag: 1.38.0@sha256:b6762ddf4a50aabb5f4d21aa6f447d05d5633fb09f09c08b33f22356a2f98be0
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:e2b97dde9666986c61c56d49aae85a714b89b69392baa531438e74ec34096fb4
   - name: ghcr.io/atuinsh/atuin
     newTag: 18.16.1@sha256:9d4d79507b51be6d292b218f5cc791d79ca0a72f51ab48f786b091bd6eafb39f
   - name: postgres
@@ -24,6 +26,7 @@ patches:
       name: garage-objectstore
 resources:
   - namespace.yml
+  - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
