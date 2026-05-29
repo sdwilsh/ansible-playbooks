@@ -19,6 +19,8 @@ configMapGenerator:
     files:
       - configmap/scripts/entrypoint.sh
 images:
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:e2b97dde9666986c61c56d49aae85a714b89b69392baa531438e74ec34096fb4
   - name: ghcr.io/crowdsecurity/crowdsec
     newTag: v1.7.8@sha256:2f527c9bb8b367120eb08b82890aa912ce96bfa1ada93dda0721700e4b4e0dde 
   - name: postgres
@@ -31,6 +33,7 @@ patches:
       name: garage-objectstore
 resources:
   - namespace.yml
+  - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
