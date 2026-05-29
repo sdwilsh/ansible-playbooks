@@ -2,6 +2,10 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
+configMapGenerator:
+  - name: cnpg-backup-scripts-configmap
+    files:
+      - configmap/wait-for-backup.sh
 resources:
   - objectstore.yml
   - rbac.yml
