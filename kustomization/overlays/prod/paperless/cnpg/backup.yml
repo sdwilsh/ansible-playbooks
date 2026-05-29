@@ -34,10 +34,23 @@ spec:
           value: paperless-pre-update-backup
       image: docker.io/bitnami/kubectl
       name: check
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: false
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
       volumeMounts:
         - mountPath: /scripts
           name: scripts
+  priorityClassName: application-infra
   restartPolicy: Never
+  securityContext:
+    fsGroup: 65534
   serviceAccount: cnpg-backup-check
   volumes:
     - configMap:
