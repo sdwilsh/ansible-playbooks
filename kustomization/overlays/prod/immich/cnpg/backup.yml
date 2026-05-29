@@ -41,6 +41,7 @@ spec:
   serviceAccount: cnpg-backup-check
   volumes:
     - configMap:
+        defaultMode: 0777
         name: cnpg-backup-scripts-configmap
       name: scripts
 
