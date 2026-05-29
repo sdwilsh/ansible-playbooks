@@ -33,6 +33,8 @@ helmCharts:
     releaseName: prometheus-adapter
     valuesFile: prometheus-adapter-values.yml
 images:
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:e2b97dde9666986c61c56d49aae85a714b89b69392baa531438e74ec34096fb4
   - name: postgres
     newTag: 18@sha256:7aba8c66107ee218ddbaacb30eae46d774bf5e34ab77a917be819b4e227493c4
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
@@ -65,6 +67,7 @@ patches:
 resources:
   - namespace.yml
   - alertmanagerconfig.yml
+  - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
