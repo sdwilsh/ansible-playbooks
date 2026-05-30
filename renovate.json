@@ -219,6 +219,7 @@
       "automergeType": "branch",
       "matchPackageNames": [
         "busybox",
+        "docker.io/bitnami/kubectl",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/marinatedconcrete/devcontainer-base",
