@@ -2,6 +2,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+configMapGenerator:
+  - name: cnpg-scripts-configmap
+    files:
+      - configmap/restart-cnpg-if-needed.sh
+images:
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:e2b97dde9666986c61c56d49aae85a714b89b69392baa531438e74ec34096fb4
 namespace: cnpg-system
 patches:
   - patch: |-
@@ -19,7 +26,9 @@ resources:
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.28.1.yaml
   - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.12.0/manifest.yaml
   - configmap.yml
+  - job.yml
   - podmonitor.yml
+  - rbac.yml
   - storageclass/data.yml
   - storageclass/legacy.yml
   - storageclass/wal.yml

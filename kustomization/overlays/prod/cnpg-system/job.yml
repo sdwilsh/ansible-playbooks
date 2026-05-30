@@ -1,0 +1,42 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+  name: maybe-restart-cnpg-job
+spec:
+  template:
+    spec:
+      containers:
+        - args:
+            - /scripts/restart-cnpg-if-needed.sh
+          command:
+            - bash
+            - -c
+          image: docker.io/bitnami/kubectl
+          name: check
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /scripts
+              name: scripts
+      priorityClassName: critical-application-infra
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 65534
+      serviceAccount: cnpg-plugin-check
+      volumes:
+        - configMap:
+            defaultMode: 0777
+            name: cnpg-scripts-configmap
+          name: scripts

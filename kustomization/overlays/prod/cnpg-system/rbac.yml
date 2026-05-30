@@ -1,0 +1,36 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cnpg-plugin-check-role
+rules:
+- apiGroups:
+    - apps
+    - extensions
+  resources:
+    - deployments
+  resourceNames:
+    - barman-cloud
+    - cnpg-controller-manager
+  verbs: 
+    - get
+    - list
+    - patch
+    - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cnpg-plugin-check-role-binding
+subjects:
+- kind: ServiceAccount
+  name: cnpg-plugin-check
+roleRef:
+  kind: Role
+  name: cnpg-plugin-check-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cnpg-plugin-check
