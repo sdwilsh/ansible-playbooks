@@ -114,13 +114,13 @@ jobs:
             ${PLATFORM} \
             ${DEFAULT_TAG}
 
-      - name: Rechunk with Chunkah
-        env:
-          SOURCE_DATE_EPOCH: ${{ steps.epoch.outputs.epoch }}
-        run: |
-          sudo -E $(command -v just) rechunk \
-            ${{ env.IMAGE_NAME}} \
-            ${DEFAULT_TAG}
+      # - name: Rechunk with Chunkah
+      #   env:
+      #     SOURCE_DATE_EPOCH: ${{ steps.epoch.outputs.epoch }}
+      #   run: |
+      #     sudo -E $(command -v just) rechunk \
+      #       ${{ env.IMAGE_NAME}} \
+      #       ${DEFAULT_TAG}
 
       - name: Tag Image
         id: tag-images
