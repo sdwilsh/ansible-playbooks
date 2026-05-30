@@ -209,7 +209,8 @@ rechunk target_image tag:
         --max-layers 128 \
         --prune /sysroot/ \
         --prune /ostree \
-        --label ostree.commit- --label ostree.final-diffid- \
+        --label ostree.commit- \
+        --label ostree.final-diffid- \
         --tag "{{ target_image }}:{{ tag }}" | podman load
 
 # Validate `renovate.json` file
