@@ -7,7 +7,7 @@ components:
   - ../../../components/immich
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:e2b97dde9666986c61c56d49aae85a714b89b69392baa531438e74ec34096fb4
+    newTag: latest@sha256:9c362260ef11ec664c36f34e0cb263b5cacd5b2f64e4c9b93aa3c3dc95549315
   - name: ghcr.io/immich-app/immich-server
     newTag: v2.7.2@sha256:6a2952539e2a9c8adcf6fb74850bb1ba7e1db2804050acea21baafdc9154c430
   - name: ghcr.io/immich-app/immich-machine-learning
