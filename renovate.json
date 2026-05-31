@@ -140,7 +140,8 @@
       "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
-        "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane\\.yml$/"
+        "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane\\.yml$/",
+        "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers\\.yml$/"
       ],
       "matchStrings": [
         "\\s+name:\\s+kairos-upgrade-control-plane-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\\n.*image:\\s+(?<depName>.+):",
