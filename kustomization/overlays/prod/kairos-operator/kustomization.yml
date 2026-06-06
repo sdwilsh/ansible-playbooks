@@ -7,6 +7,6 @@ images:
     newTag: v0.1.0-beta7@sha256:5989416da3f56a2df640be1d90b0c8dc3e83af35e1283bb6abc5bf14fec98431
 namespace: kairos-operator
 resources:
-  - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.1.0-beta7
+  - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.0.7
   - nodeopupgrade/controlplane.yml
   - nodeopupgrade/workers.yml
