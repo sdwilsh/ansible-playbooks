@@ -314,6 +314,13 @@
       ]
     },
     {
+      "groupName": "kairos-operator",
+      "matchPackageNames": [
+        "kairos-io/kairos-operator",
+        "quay.io/kairos/operator"
+      ]
+    },
+    {
       "description": "Group for all Longhorn updates",
       "groupName": "longhorn",
       "matchPackageNames": [
