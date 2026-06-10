@@ -24,7 +24,7 @@ patches:
       kind: Namespace
 resources:
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.28.1.yaml
-  - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.12.0/manifest.yaml
+  - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.13.0/manifest.yaml
   - configmap.yml
   - job.yml
   - podmonitor.yml
