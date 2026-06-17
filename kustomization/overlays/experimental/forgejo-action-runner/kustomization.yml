@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/forgejo-scaled-runner
+configMapGenerator:
+  - name: runner-config-configmap
+    files:
+      - configmap/config.yml
+images:
+  - name: code.forgejo.org/forgejo/runner
+    newTag: 12.11.1@sha256:a1a2885261a0b8337d4791dd6949651117206741ba66423c24a57c107a64d4a8
+  - name: docker.io/library/docker
+    newTag: 29.5.3-dind-rootless@sha256:0a7f0063b568810c8d91a373d579d74e407c8348dbc163a9e89000acc186f3c4
+namespace: forgejo-action-runner
+patches:
+  - path: patches/configure-scaledjob.yml
+    target:
+      kind: ScaledJob
+      name: forgejo-runner-scaledjob
+resources:
+  - namespace.yml

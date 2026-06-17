@@ -1,0 +1,19 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  labels:
+    app.kubernetes.io/name: forgejo-runner
+  name: this-is-ignored-but-is-required
+spec:
+  maxReplicaCount: 6
+  pollingInterval: 15
+  triggers:
+    - type: forgejo-runner
+      metadata:
+        name: runner
+        address: https://code.tswn.us/
+        global: "true"
+        labels: fedora-latest,node,ubuntu-latest
+      authenticationRef:
+        name: forgejo-runner-triggerauthentication

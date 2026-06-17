@@ -1,0 +1,6 @@
+---
+nameReference:
+  - fieldSpecs:
+      - kind: ScaledJob
+        path: spec/jobTargetRef/template/spec/volumes/configMap/name
+    kind: ConfigMap

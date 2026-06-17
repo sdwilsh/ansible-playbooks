@@ -1,0 +1,95 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  labels:
+    app.kubernetes.io/name: forgejo-runner
+  name: forgejo-runner-scaledjob
+spec:
+  jobTargetRef:
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/name: forgejo-runner
+      spec:
+        automountServiceAccountToken: false
+        containers:
+          - command:
+              - sh
+              - -c
+              - /scripts/runner.sh
+            env:
+              - name: DOCKER_HOST
+                value: tcp://127.0.0.1:2376
+              - name: DOCKER_CERT_PATH
+                value: /certs/client
+              - name: DOCKER_TLS_VERIFY
+                value: "1"
+            image: code.forgejo.org/forgejo/runner
+            name: runner
+            volumeMounts:
+              - mountPath: /certs
+                name: docker-certs
+              - mountPath: /config
+                name: runner-config
+                readOnly: true
+              - mountPath: /data
+                name: runner-data
+              - mountPath: /secrets/runner
+                name: runner-token
+                readOnly: true
+              - mountPath: /scripts
+                name: runner-scripts
+                readOnly: true
+              - mountPath: /state
+                name: runner-state
+          - command:
+              - sh
+              - -c
+              - /scripts/daemon.sh
+            env:
+              - name: DOCKER_TLS_CERTDIR
+                value: /certs
+            image: docker.io/library/docker
+            name: daemon
+            securityContext:
+              privileged: true
+              runAsUser: 0
+            volumeMounts:
+              - mountPath: /certs
+                name: docker-certs
+              - mountPath: /scripts
+                name: runner-scripts
+                readOnly: true
+              - mountPath: /state
+                name: runner-state
+                readOnly: true
+        restartPolicy: Never
+        shareProcessNamespace: true
+        volumes:
+          - name: runner-token
+            secret:
+              secretName: forgejo-runner-token-secret
+          - emptyDir: {}
+            name: docker-certs
+          - name: runner-config
+            configMap:
+              name: runner-config-configmap
+          - emptyDir: {}
+            name: runner-data
+          - name: runner-scripts
+            configMap:
+              defaultMode: 0777
+              name: runner-scripts-configmap
+          - emptyDir: {}
+            name: runner-state
+  minReplicaCount: 0
+  maxReplicaCount: 20
+  pollingInterval: 30
+  triggers:
+    - authenticationRef:
+        name: forgejo-runner-triggerauthentication
+      metadata:
+        name: runner
+        # address, type (global, repo, user), and labels to be patched by user.
+      type: forgejo-runner

@@ -1,0 +1,32 @@
+---
+# For reference: https://code.forgejo.org/forgejo/runner/src/branch/main/internal/pkg/config/config.example.yaml
+cache:
+  # Might be nice, but for a one-shot runner, useless to configure without a remote server.
+  enabled: false
+container:
+  docker_host: "-"
+  enable_ipv6: false
+  force_pull: false
+  force_rebuild: false
+  network: ""
+  options:
+  privileged: true
+  valid_volumes: []
+  workdir_parent:
+log:
+  job_level: info
+  level: info
+runner:
+  envs: {}
+  insecure: false
+  labels:
+    - fedora-latest:docker://ghcr.io/marinatedconcrete/devcontainer-base:latest
+    - node:docker://node:lts
+    - ubuntu-latest:docker://ubuntu:latest
+  timeout: 3h
+server:
+  connections:
+    hogs-prod:
+      url: https://code.tswn.us/
+      uuid: ba0da30a-18a4-41bd-b96c-09fb655bf708
+      token_url: file:/secrets/runner/token
