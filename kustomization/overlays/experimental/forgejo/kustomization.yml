@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/cnpg-backup
+helmCharts:
+  - name: forgejo
+    version: 17.1.1
+    repo: oci://code.forgejo.org/forgejo-helm
+    releaseName: forgejo
+    valuesFile: values.yml
+images:
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:323998cf83a2332f6761706df910870a3fa24dd8d4b999db977aa322de553399
+namespace: forgejo
+resources:
+  - namespace.yml
+# Uncomment before landing for argocd.
+#  - cnpg/backup.yml
+  - cnpg/cluster.yml
+  - cnpg/podmonitor.yml
+  - cnpg/scheduledbackup.yml

@@ -1,0 +1,47 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: forgejo-pg-cluster
+spec:
+  backup:
+    target: primary
+  bootstrap:
+    initdb:
+      database: forgejodb
+      dataChecksums: true
+      localeCType: en_US.UTF-8
+      localeCollate: en_US.UTF-8
+      owner: forgejo
+  env:
+    - name: TZ
+      value: America/Los_Angeles
+  imageName: ghcr.io/cloudnative-pg/postgresql:18@sha256:afbcd2ca3827991317113ba8a90348f321b13a9698c39aaac8c089837a4e07f3
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+  monitoring:
+    tls:
+      enabled: true
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: garage-objectstore
+  postgresql:
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: application-infra
+  storage:
+    size: 10Gi
+    storageClass: cnpg-data-encrypted-storage
+  walStorage:
+    size: 4Gi
+    storageClass: cnpg-wal-encrypted-storage

@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: forgejo-pg-cluster-podmonitor
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: forgejo-pg-cluster
+  podMetricsEndpoints:
+    - port: metrics
+      scheme: https
+      tlsConfig:
+        ca:
+          secret:
+            name: forgejo-pg-cluster-ca
+            key: ca.crt
+        serverName: forgejo-pg-cluster-rw

@@ -97,6 +97,8 @@
           PublishPort={{ ansible_facts['default_ipv4'].address }}:26900:26900/udp
           PublishPort={{ ansible_facts['default_ipv4'].address }}:26901:26901/udp
           PublishPort={{ ansible_facts['default_ipv4'].address }}:26902:26902/udp
+          # code-ssh.tswn.us SSH Forwarding
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:2222:2222/tcp
           # Factorio
           PublishPort={{ ansible_facts['default_ipv4'].address }}:34197:34197/udp
           # HFP
@@ -238,6 +240,10 @@
           PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 26902 --jump DNAT --to-destination 10.11.1.74:26902
           PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.74 --dport 26902 --jump MASQUERADE
 
+          # code-ssh.tswn.us SSH Forwarding
+          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 2222 --jump DNAT --to-destination 10.11.1.70:2222
+          PreUp = iptables --table nat --append POSTROUTING --protocol tcp --destination 10.11.1.70 --dport 2222 --jump MASQUERADE
+
           # Factorio Forwarding
           PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 34197 --jump DNAT --to-destination 10.11.1.69:34197
           PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.69 --dport 34197 --jump MASQUERADE
@@ -272,6 +278,7 @@
           - 10.11.1.1/32 # Jellyfin
           - 10.11.1.64/32 # Traefik
           - 10.11.1.65/32 # Unifi Controller
+          - 10.11.1.70/32 # code.tswn.us SSH Server
           - 10.11.1.72/32 # loki-distributor
           - 10.11.1.74/32 # 7 Days to Die (Relic)
         wireguard__privkey: !vault |

@@ -1,0 +1,109 @@
+---
+# yaml-language-server: $schema=https://code.forgejo.org/forgejo-helm/forgejo-helm/raw/tag/v17.1.1/values.schema.json
+
+# TODO:
+# - teach renovate how to handle updating the version in the schema of this file
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+
+gitea:
+  additionalConfigFromEnvs:
+    - name: FORGEJO__DATABASE__NAME
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-pg-cluster-app
+          key: dbname
+    - name: FORGEJO__DATABASE__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-pg-cluster-app
+          key: password
+    - name: FORGEJO__DATABASE__USER
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-pg-cluster-app
+          key: user
+    - name: FORGEJO__SERVER__HTTP_ADDR
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    - name: FORGEJO__SERVER__SSH_LISTEN_HOST
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+  admin:
+    email: forgejo@local
+    existingSecret: forgejo-admin-secret
+  config:
+    database:
+      DB_TYPE: postgres
+      HOST_PRIMARY: forgejo-pg-cluster-rw:5432
+      HOST_REPLICAS: forgejo-pg-cluster-ro:5432
+      SSL_MODE: require
+    indexer:
+      ISSUE_INDEXER_TYPE: db
+      REPO_INDEXER_ENABLED: true
+    openid:
+      ENABLE_OPENID_SIGNIN: false
+      ENABLE_OPENID_SIGNUP: true
+      WHITELISTED_URIS: auth.tswn.us
+    security:
+      REVERSE_PROXY_TRUSTED_PROXIES: 172.16.0.0/16
+    session:
+      PROVIDER: db
+    server:
+      DOMAIN: code.tswn.us
+      PROTOCOL: http
+      ROOT_URL: https://code.tswn.us
+      SSH_DOMAIN: code-ssh.tswn.us 
+      SSH_PORT: 2222 
+    service:
+      ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+      DISABLE_REGISTRATION: false
+      SHOW_REGISTRATION_BUTTON: false
+
+
+ingress:
+  annotations: 
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext
+    traefik.ingress.kubernetes.io/router.middlewares: auth-forwardauth-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  enabled: true
+  hosts:
+    - host: code.tswn.us
+      paths:
+        - path: /
+          pathType: Prefix
+          port: http
+
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: longhorn-encrypted
+
+podSecurityContext:
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+priorityClassName: critical-application
+
+service:
+  ssh:
+    annotations:
+      kube-vip.io/loadbalancerIPs: 10.11.1.70
+    externalTrafficPolicy: Local
+    port: 2222
+    type: LoadBalancer
+
+test:
+  enabled: false
