@@ -291,7 +291,7 @@ identity_providers:
         pkce_challenge_method: S256
         public: false
         redirect_uris:
-          - https://code.tswn.us/user/oauth2/authelia/callback
+          - https://code.tswn.us/user/oauth2/auth.tswn.us/callback
         require_pkce: true
         response_types:
           - code
