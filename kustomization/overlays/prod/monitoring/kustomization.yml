@@ -29,7 +29,7 @@ helmCharts:
     valuesFile: loki-values.yml
   - name: prometheus-adapter
     version: 5.3.0
-    repo: https://prometheus-community.github.io/helm-charts
+    repo: oci://ghcr.io/prometheus-community/charts
     releaseName: prometheus-adapter
     valuesFile: prometheus-adapter-values.yml
 images:
