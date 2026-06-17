@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/name: blocky
   name: blocky-svc
 spec:
+  externalTrafficPolicy: Local
   ports:
     - name: dns-tcp
       port: 53
@@ -17,3 +18,4 @@ spec:
       targetPort: dns-udp
   selector:
     app.kubernetes.io/name: blocky
+  type: LoadBalancer
