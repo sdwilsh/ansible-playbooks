@@ -72,6 +72,7 @@ customDNS:
     valheim-forerunner.tswn.us: 10.11.1.67
     valheim-relic.tswn.us: 10.11.1.68
     factorio-relic.tswn.us: 10.11.1.69
+    code-ssh.tswn.us: 10.11.1.70
     nut-ups02.hogs.tswn.us: 10.11.1.71
     loki-distributor.hogs.tswn.us: 10.11.1.72
     0.ntp.hogs.tswn.us: 10.11.1.73
@@ -142,6 +143,7 @@ customDNS:
     atuin IN CNAME traefik.hogs
     auth IN CNAME traefik.hogs
     cloud IN CNAME traefik.hogs
+    code IN CNAME traefik.hogs
     factorio-relic-admin IN CNAME traefik.hogs
     frigate.hogs IN CNAME traefik.hogs
     garage-admin.hogs IN CNAME traefik.hogs
