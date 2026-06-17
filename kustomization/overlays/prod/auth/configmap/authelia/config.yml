@@ -127,12 +127,19 @@ access_control:
         - ^/js/.+$
         - ^/manifest\.json$
         - ^/themes/.+$
+    # code.tswn.us
+    - domain: code.tswn.us
+      policy: bypass
+      resources:
+        - ^/\.manifest.json$
+        - ^/api/.+$
     - domain: code.tswn.us
       policy: two_factor
       subject:
         - group:CodeUsers
     - domain: code.tswn.us
       policy: deny
+    # Fallbacks
     - domain: "*.tswn.us"
       networks:
         - home
