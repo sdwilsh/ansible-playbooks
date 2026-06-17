@@ -226,6 +226,7 @@
         content: |
           [Interface]
           Address = 10.11.2.2/32
+          DNS = 10.11.1.66
           ListenPort = 51821
           MTU = 1280
           PrivateKey = {{ wireguard__privkey }}
@@ -278,6 +279,7 @@
           - 10.11.1.1/32 # Jellyfin
           - 10.11.1.64/32 # Traefik
           - 10.11.1.65/32 # Unifi Controller
+          - 10.11.1.66/32 # DNS Server
           - 10.11.1.70/32 # code.tswn.us SSH Server
           - 10.11.1.72/32 # loki-distributor
           - 10.11.1.74/32 # 7 Days to Die (Relic)
