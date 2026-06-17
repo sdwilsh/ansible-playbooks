@@ -21,6 +21,7 @@ resources:
   - application/homeassistant.yml
   - application/immich.yml
   - application/kairos-operator.yml
+  - application/keda.yml
   - application/kube-vip.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
