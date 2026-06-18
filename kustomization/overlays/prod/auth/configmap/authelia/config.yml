@@ -129,20 +129,13 @@ access_control:
         - ^/themes/.+$
     # code.tswn.us
     - domain: code.tswn.us
-      policy: bypass
-      resources:
-        # Used during Actions
-        - ^/[a-zA-Z0-9\-_\.]+/[a-zA-Z0-9\-_\.]+\.git(?:/.+)?$
-        - ^/[a-zA-Z0-9\-_\.]+/ci/.+$
-        # Used by the API endpoints.
-        - ^/\.manifest.json$
-        - ^/api/.+$
-    - domain: code.tswn.us
       policy: two_factor
+      resources:
+        - ^/user/login(?:.*)?$
       subject:
         - group:CodeUsers
     - domain: code.tswn.us
-      policy: deny
+      policy: bypass
     # Fallbacks
     - domain: "*.tswn.us"
       networks:
