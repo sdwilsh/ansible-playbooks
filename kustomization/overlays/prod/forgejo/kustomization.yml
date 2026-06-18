@@ -21,8 +21,7 @@ patches:
       name: garage-objectstore
 resources:
   - namespace.yml
-# Uncomment before landing for argocd.
-#  - cnpg/backup.yml
+  - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
