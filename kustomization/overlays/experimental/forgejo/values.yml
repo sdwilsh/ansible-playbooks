@@ -40,10 +40,26 @@ gitea:
       valueFrom:
         fieldRef:
           fieldPath: status.podIP
+    - name: FORGEJO__storage__MINIO_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: garage-access-secret
+          key: ACCESS_KEY_ID
+    - name: FORGEJO__storage__MINIO_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: garage-access-secret
+          key: ACCESS_SECRET_KEY
   admin:
     email: forgejo@local
     existingSecret: forgejo-admin-secret
   config:
+    actions.artifacts:
+      MINIO_BASE_PATH: actions_artifacts/
+    attachment:
+      MINIO_BASE_PATH: attachments/
+    avatar:
+      MINIO_BASE_PATH: avatars/
     database:
       DB_TYPE: postgres
       HOST_PRIMARY: forgejo-pg-cluster-rw:5432
@@ -52,10 +68,18 @@ gitea:
     indexer:
       ISSUE_INDEXER_TYPE: db
       REPO_INDEXER_ENABLED: true
+    lfs:
+      MINIO_BASE_PATH: lfs/
     openid:
       ENABLE_OPENID_SIGNIN: false
       ENABLE_OPENID_SIGNUP: true
       WHITELISTED_URIS: auth.tswn.us
+    packages:
+      MINIO_BASE_PATH: packages/
+    repo-avatar:
+      MINIO_BASE_PATH: repo-avatars/
+    repo-archive:
+      MINIO_BASE_PATH: archives/
     security:
       REVERSE_PROXY_TRUSTED_PROXIES: 172.16.0.0/16
     session:
@@ -70,7 +94,15 @@ gitea:
       ALLOW_ONLY_EXTERNAL_REGISTRATION: true
       DISABLE_REGISTRATION: false
       SHOW_REGISTRATION_BUTTON: false
-
+    storage:
+      MINIO_BUCKET: forgejo
+      MINIO_BUCKET_LOOKUP: path
+      MINIO_ENDPOINT: garage.garage.svc.cluster.local:3900
+      MINIO_LOCATION: hogs
+      MINIO_USE_SSL: false
+      STORAGE_TYPE: minio
+    storage.actions_log:
+      MINIO_BASE_PATH: actions_logs/
 
 ingress:
   annotations: 
