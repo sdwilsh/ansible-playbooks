@@ -132,7 +132,7 @@ access_control:
       policy: bypass
       resources:
         # Used during Actions
-        - ^/[a-zA-Z0-9\-_\.]+/[a-zA-Z0-9\-_\.]+\.git$
+        - ^/[a-zA-Z0-9\-_\.]+/[a-zA-Z0-9\-_\.]+\.git(?:/.+)?$
         - ^/[a-zA-Z0-9\-_\.]+/ci/.+$
         # Used by the API endpoints.
         - ^/\.manifest.json$
