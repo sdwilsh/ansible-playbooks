@@ -6,6 +6,15 @@ metadata:
     app.kubernetes.io/name: forgejo-runner
   name: this-is-ignored-but-is-required
 spec:
+  jobTargetRef:
+    template:
+      spec:
+        containers:
+          - name: runner
+            securityContext:
+              runAsGroup: 1001
+              runAsNonRoot: true
+              runAsUser: 1001
   maxReplicaCount: 6
   pollingInterval: 15
   triggers:
@@ -14,6 +23,6 @@ spec:
         name: runner
         address: https://code.tswn.us/
         global: "true"
-        labels: fedora-latest,node,ubuntu-latest
+        labels: ci-latest,fedora-latest,node,ubuntu-latest
       authenticationRef:
         name: forgejo-runner-triggerauthentication
