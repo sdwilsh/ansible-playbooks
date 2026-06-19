@@ -4,7 +4,7 @@ cache:
   # Might be nice, but for a one-shot runner, useless to configure without a remote server.
   enabled: false
 container:
-  docker_host: tcp://docker-in-docker:2376
+  docker_host: tcp://127.0.0.1:2376
   enable_ipv6: false
   force_pull: false
   force_rebuild: false
