@@ -66,6 +66,13 @@ spec:
                 readOnly: true
         restartPolicy: Never
         shareProcessNamespace: true
+        topologySpreadConstraints:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: forgejo-runner
+            maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: DoNotSchedule
         volumes:
           - name: runner-token
             secret:
