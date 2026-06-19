@@ -8,7 +8,8 @@ while ! nc -z 127.0.0.1 2376 </dev/null; do
 done
 
 forgejo-runner one-job \
-    --config /config/config.yml
+    --config /config/config.yml \
+    || echo "forgejo-runner failed!  Continuing to cleanup..."
 
 echo "Notifing daemon as completed..."
 touch /state/complete
