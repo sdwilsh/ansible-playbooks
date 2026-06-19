@@ -11,7 +11,8 @@ container:
   network: ""
   options:
   privileged: true
-  valid_volumes: []
+  valid_volumes:
+    - /certs/client
   workdir_parent:
 log:
   job_level: info
