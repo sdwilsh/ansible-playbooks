@@ -15,7 +15,7 @@ spec:
               runAsGroup: 1001
               runAsNonRoot: true
               runAsUser: 1001
-  maxReplicaCount: 6
+  maxReplicaCount: 12
   pollingInterval: 15
   triggers:
     - type: forgejo-runner
