@@ -20,6 +20,7 @@ runner:
   envs: {}
   insecure: false
   labels:
+    - ci-latest:docker://ghcr.io/marinatedconcrete/github-runner-ci:1.1.0
     - fedora-latest:docker://ghcr.io/marinatedconcrete/devcontainer-base:latest
     - node:docker://node:lts
     - ubuntu-latest:docker://ubuntu:latest

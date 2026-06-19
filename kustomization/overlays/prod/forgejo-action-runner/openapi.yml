@@ -1,0 +1,35 @@
+---
+# Teach Kustomize how to strategic-merge ScaledJob pod template containers.
+swagger: "2.0"
+info:
+  title: Forgejo ScaledJob Kustomize schema
+  version: v1
+definitions:
+  keda.v1alpha1.ScaledJob:
+    type: object
+    x-kubernetes-group-version-kind:
+      - group: keda.sh
+        version: v1alpha1
+        kind: ScaledJob
+    properties:
+      spec:
+        type: object
+        properties:
+          jobTargetRef:
+            type: object
+            properties:
+              template:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    properties:
+                      containers:
+                        type: array
+                        x-kubernetes-patch-merge-key: name
+                        x-kubernetes-patch-strategy: merge
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string

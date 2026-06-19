@@ -14,6 +14,8 @@ images:
   - name: docker.io/library/docker
     newTag: 29.5.3-dind-rootless@sha256:0a7f0063b568810c8d91a373d579d74e407c8348dbc163a9e89000acc186f3c4
 namespace: forgejo-action-runner
+openapi:
+  path: openapi.yml
 patches:
   - path: patches/configure-scaledjob.yml
     target:
