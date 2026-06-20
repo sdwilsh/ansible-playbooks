@@ -66,6 +66,10 @@ spec:
                 readOnly: true
         restartPolicy: Never
         shareProcessNamespace: true
+        tolerations:
+          - effect: NoSchedule
+            key: node-role.kubernetes.io/control-plane
+            operator: Exists
         topologySpreadConstraints:
           - labelSelector:
               matchLabels:
