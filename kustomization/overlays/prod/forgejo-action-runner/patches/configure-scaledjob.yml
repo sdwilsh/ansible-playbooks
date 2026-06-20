@@ -23,6 +23,6 @@ spec:
         name: runner
         address: https://code.tswn.us/
         global: "true"
-        labels: ci-latest,fedora-latest,node,ubuntu-latest
+        labels: ci-latest,docker,fedora-latest,node,ubuntu-latest
       authenticationRef:
         name: forgejo-runner-triggerauthentication
