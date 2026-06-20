@@ -26,8 +26,8 @@ spec:
         cpu: 101m
         memory: 128Mi
       limits:
-        cpu: 101m
-        memory: 128Mi
+        cpu: 500m
+        memory: 256Mi
   podSecurityContext:
     fsGroup: 1000 # redis
     runAsUser: 1000 # redis
