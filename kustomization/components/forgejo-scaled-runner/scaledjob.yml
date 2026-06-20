@@ -12,6 +12,15 @@ spec:
         labels:
           app.kubernetes.io/name: forgejo-runner
       spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: NotIn
+                      values:
+                        - "true"
         automountServiceAccountToken: false
         containers:
           - command:
@@ -66,10 +75,6 @@ spec:
                 readOnly: true
         restartPolicy: Never
         shareProcessNamespace: true
-        tolerations:
-          - effect: NoSchedule
-            key: node-role.kubernetes.io/control-plane
-            operator: Exists
         topologySpreadConstraints:
           - labelSelector:
               matchLabels:
