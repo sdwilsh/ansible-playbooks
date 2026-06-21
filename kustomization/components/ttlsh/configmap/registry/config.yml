@@ -1,0 +1,30 @@
+---
+# https://distribution.github.io/distribution/about/configuration/
+version: 0.1
+log:
+  formatter: json
+storage:
+  delete:
+    enabled: true
+http:
+  addr: __POD_IP__:5000
+  debug:
+    addr: __POD_IP__:5001
+  headers:
+    X-Content-Type-Options:
+      - nosniff
+notifications:
+  endpoints:
+    - name: ttl-hooks
+      url: http://ttl-hooks:8000/v1/hook/registry-event
+      headers:
+        Authorization:
+          - "Token __HOOK_TOKEN__"
+      timeout: 200ms
+      threshold: 3
+      backoff: 5s
+      ignore:
+        actions:
+          - delete
+          - mount
+          - pull

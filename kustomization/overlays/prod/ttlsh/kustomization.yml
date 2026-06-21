@@ -1,0 +1,35 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/ttlsh
+images:
+  - name: busybox
+    newTag: 1.38.0@sha256:b6762ddf4a50aabb5f4d21aa6f447d05d5633fb09f09c08b33f22356a2f98be0
+  - name: docker.io/redis
+    newTag: 8.6.4@sha256:c00011808d8c33f83e4eedb0a50f04a4c8e86b08d7727e7d809a75a59298846b
+  - name: ghcr.io/replicatedhq/ttlsh-hooks
+    newTag: latest@sha256:29d8f1033896d80a29c417a2f2b7b94bf54a70cbfdbcfaadcf34bf5e840b1060
+  - name: ghcr.io/replicatedhq/ttlsh-reaper
+    newTag: latest@sha256:8aabe27dc02296e25e0b19b679c231315e7bb87d4ed5efb968fbe6799377ced1
+  # Cannot move to v3, as it breaks hooks entirely: https://github.com/replicatedhq/ttl.sh/pull/179
+  - name: registry
+    newTag: 2@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+  - name: quay.io/curl/curl
+    newTag: 8.20.0@sha256:b3f1fb2a51d923260350d21b8654bbc607164a987e2f7c84a0ac199a67df812a
+namespace: ttlsh
+patches:
+  - path: patches/configure-hooks.yml
+    target:
+      kind: Deployment
+      name: ttl-hooks
+  - path: patches/configure-registry.yml
+    target:
+      kind: Deployment
+      name: ttl-registry
+resources:
+  - namespace.yml
+  - ingress.yml
+  - podmonitor.yml
+  - prometheusrule.yml

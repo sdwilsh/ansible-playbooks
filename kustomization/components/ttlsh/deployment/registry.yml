@@ -1,0 +1,101 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttl-registry
+  labels:
+    app.kubernetes.io/name: ttl-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ttl-registry
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ttl-registry
+    spec:
+      containers:
+        - name: ttl-registry
+          image: registry
+          command:
+            - /entrypoint.sh
+          ports:
+            - containerPort: 5000
+              name: web
+            - containerPort: 5001
+              name: debug
+          volumeMounts:
+            - name: registry-scripts
+              mountPath: /entrypoint.sh
+              subPath: entrypoint.sh
+            - name: registry-scripts
+              mountPath: /garbage-collect.sh
+              subPath: garbage-collect.sh
+            - name: registry-config
+              mountPath: /etc/docker/registry/config.yml
+              subPath: config.yml
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 1
+            successThreshold: 2
+            timeoutSeconds: 1
+            httpGet:
+              path: /
+              port: web
+              scheme: HTTP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - /substitute-config.sh
+          env:
+            - name: HOOK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: hook-token
+                  name: ttlsh-secret
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: busybox
+          name: generate-config
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /etc/docker/registry
+              name: registry-config
+            - mountPath: /config.yml
+              name: registry-original-config
+              subPath: config.yml
+            - mountPath: /substitute-config.sh
+              name: registry-scripts
+              subPath: substitute-config.sh
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: registry-config
+          emptyDir: {}
+        - name: registry-original-config
+          configMap:
+            name: ttl-registry-configmap
+        - name: registry-scripts
+          configMap:
+            name: ttl-registry-scripts-configmap
+            defaultMode: 0755

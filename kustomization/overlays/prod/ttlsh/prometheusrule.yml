@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ttlsh-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: ttlsh
+      interval: 5m
+      rules:
+        - alert: distribution-failing-notifications
+          annotations:
+            description: "{{ $labels.namespace }}/{{ $labels.container }} has a growing queue of failures!"
+          expr: registry_notifications_events_total > 100
+          for: 15m
+          labels:
+            severity: warning
+        - alert: distribution-seriously-failing-notifications
+          annotations:
+            description: "{{ $labels.namespace }}/{{ $labels.container }} has a growing queue of failures!"
+          expr: registry_notifications_events_total > 100
+          for: 24h
+          labels:
+            severity: page

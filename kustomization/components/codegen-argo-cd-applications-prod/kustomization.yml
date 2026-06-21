@@ -38,6 +38,7 @@ resources:
   - application/tandoor.yml
   - application/traefik.yml
   - application/transmission.yml
+  - application/ttlsh.yml
   - application/tvheadend.yml
   - application/unifi.yml
   - application/valheim-forerunner.yml

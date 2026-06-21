@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttl-reaper
+  labels:
+    app.kubernetes.io/name: ttl-reaper
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ttl-reaper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ttl-reaper
+    spec:
+      containers:
+        - name: ttl-reaper
+          image: ghcr.io/replicatedhq/ttlsh-reaper
+          ports:
+            - containerPort: 8000
+          env:
+            - name: REGISTRY_URL
+              value: http://ttl-registry:5000
+            - name: REDISCLOUD_URL
+              value: redis://ttl-redis:6379
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      initContainers:
+        - name: wait-for-registry
+          image: quay.io/curl/curl
+          command:
+            - sh
+            - -c
+            - |
+              until curl -s -o /dev/null -w "%{http_code}" ttl-registry:5000/v2/; do
+                echo "Waiting for Docker Registry to be ready..."
+                sleep 2
+              done
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+        - name: wait-for-redis
+          image: docker.io/redis
+          command:
+            - sh
+            - -c
+            - |
+              until redis-cli -h ttl-redis -p 6379 ping | grep "PONG"; do
+                echo "Waiting for Redis to be ready..."
+                sleep 2
+              done
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault

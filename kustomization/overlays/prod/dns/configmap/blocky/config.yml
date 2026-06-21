@@ -144,6 +144,7 @@ customDNS:
     auth IN CNAME traefik.hogs
     cloud IN CNAME traefik.hogs
     code IN CNAME traefik.hogs
+    ephemeral-container-registry.hogs IN CNAME traefik.hogs
     factorio-relic-admin IN CNAME traefik.hogs
     frigate.hogs IN CNAME traefik.hogs
     garage-admin.hogs IN CNAME traefik.hogs
