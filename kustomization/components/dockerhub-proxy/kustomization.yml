@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: proxy-registry-configmap
+    files:
+      - configmap/config.yml
+  - name: proxy-registry-scripts-configmap
+    files:
+      - configmap/entrypoint.sh
+      - configmap/gc.sh
+      - configmap/substitute-config.sh
+resources:
+  - deployment.yml
+  - service.yml

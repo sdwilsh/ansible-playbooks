@@ -1,0 +1,20 @@
+---
+# https://distribution.github.io/distribution/about/configuration/
+version: 0.1
+log:
+  formatter: json
+storage:
+  delete:
+    enabled: true
+  filesystem:
+    rootDirectory: /var/lib/registry
+http:
+  addr: __POD_IP__:5000
+  debug:
+    addr: __POD_IP__:5001
+  headers:
+    X-Content-Type-Options:
+      - nosniff
+proxy:
+  remoteurl: https://registry-1.docker.io
+  ttl: 168h

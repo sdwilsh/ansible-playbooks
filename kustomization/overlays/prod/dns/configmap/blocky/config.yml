@@ -78,6 +78,7 @@ customDNS:
     0.ntp.hogs.tswn.us: 10.11.1.73
     pool.ntp.hogs.tswn.us: 10.11.1.73
     7d2d-relic.tswn.us: 10.11.1.74
+    dockerhub-proxy.hogs.tswn.us: 10.11.1.75
 
     # NO-WAN VLAN
     front-porch.camera.hogs.tswn.us: 10.67.0.12

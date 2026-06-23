@@ -1,0 +1,101 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-registry
+  labels:
+    app.kubernetes.io/name: proxy-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: proxy-registry
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: proxy-registry
+    spec:
+      containers:
+        - name: proxy-registry
+          image: ghcr.io/distribution/distribution
+          command:
+            - /entrypoint.sh
+          ports:
+            - containerPort: 5000
+              name: web
+            - containerPort: 5001
+              name: debug
+          volumeMounts:
+            - mountPath: /entrypoint.sh
+              name: registry-scripts
+              subPath: entrypoint.sh
+            - mountPath: /garbage-collect.sh
+              name: registry-scripts
+              subPath: garbage-collect.sh
+            - mountPath: /etc/distribution/config.yml
+              name: registry-config
+              subPath: config.yml
+            - mountPath: /var/lib/registry
+              name: registry-data
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 1
+            successThreshold: 2
+            timeoutSeconds: 1
+            httpGet:
+              path: /
+              port: web
+              scheme: HTTP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - /substitute-config.sh
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: busybox
+          name: generate-config
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /etc/distribution
+              name: registry-config
+            - mountPath: /config.yml
+              name: registry-original-config
+              subPath: config.yml
+            - mountPath: /substitute-config.sh
+              name: registry-scripts
+              subPath: substitute-config.sh
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: registry-config
+          emptyDir: {}
+        # This throws away all data on every restart!
+        - name: registry-data
+          emptyDir: {}
+        - name: registry-original-config
+          configMap:
+            name: proxy-registry-configmap
+        - name: registry-scripts
+          configMap:
+            name: proxy-registry-scripts-configmap
+            defaultMode: 0755

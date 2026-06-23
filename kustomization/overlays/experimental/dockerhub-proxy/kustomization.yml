@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/dockerhub-proxy
+images:
+  - name: busybox
+    newTag: 1.38.0@sha256:b6762ddf4a50aabb5f4d21aa6f447d05d5633fb09f09c08b33f22356a2f98be0
+  - name: ghcr.io/distribution/distribution
+    newTag: 3.1.1@sha256:bca24727f4002e51f959c18c42e816e4d1078198081a9837e16b8b7d7e43ebf8
+namespace: dockerhub-proxy
+patches:
+  - path: patches/configure-registry-deployment.yml
+    target:
+      kind: Deployment
+      name: proxy-registry
+  - path: patches/configure-registry-service.yml
+    target:
+      kind: Service
+      name: proxy-registry
+resources:
+  - namespace.yml
+  - certificate.yml

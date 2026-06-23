@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            # - name: REGISTRY_LOG_LEVEL
+            #   value: debug
+            - name: REGISTRY_HTTP_TLS_CERTIFICATE
+              value: /tls/tls.crt
+            - name: REGISTRY_HTTP_TLS_KEY
+              value: /tls/tls.key
+            - name: REGISTRY_PROXY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: dockerhub-proxy-secret
+            - name: REGISTRY_PROXY_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: dockerhub-proxy-secret
+          name: proxy-registry
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+          volumeMounts:
+            - mountPath: /tls
+              name: registry-tls
+              readOnly: true
+      volumes:
+        - name: registry-tls
+          secret:
+            secretName: proxy-tls-secret
