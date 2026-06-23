@@ -14,6 +14,7 @@ resources:
   - application/cnpg-system.yml
   - application/crowdsec.yml
   - application/dns.yml
+  - application/dockerhub-proxy.yml
   - application/external-services.yml
   - application/factorio-relic.yml
   - application/forgejo-action-runner.yml
