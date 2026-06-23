@@ -26,6 +26,28 @@ spec:
           - command:
               - sh
               - -c
+              - /scripts/daemon.sh
+            env:
+              - name: DOCKER_TLS_CERTDIR
+                value: /certs
+            image: docker.io/library/docker
+            name: daemon
+            securityContext:
+              privileged: true
+              runAsUser: 0
+            volumeMounts:
+              - mountPath: /certs
+                name: docker-certs
+              - mountPath: /scripts/daemon.sh
+                name: runner-scripts
+                readOnly: true
+                subPath: daemon.sh
+              - mountPath: /state
+                name: runner-state
+                readOnly: true
+          - command:
+              - sh
+              - -c
               - /scripts/runner.sh
             env:
               - name: DOCKER_HOST
@@ -39,40 +61,21 @@ spec:
             volumeMounts:
               - mountPath: /certs
                 name: docker-certs
-              - mountPath: /config
+              - mountPath: /config/config.yml
                 name: runner-config
                 readOnly: true
+                subPath: config.yml
               - mountPath: /data
                 name: runner-data
               - mountPath: /secrets/runner
                 name: runner-token
                 readOnly: true
-              - mountPath: /scripts
+              - mountPath: /scripts/runner.sh
                 name: runner-scripts
                 readOnly: true
+                subPath: runner.sh
               - mountPath: /state
                 name: runner-state
-          - command:
-              - sh
-              - -c
-              - /scripts/daemon.sh
-            env:
-              - name: DOCKER_TLS_CERTDIR
-                value: /certs
-            image: docker.io/library/docker
-            name: daemon
-            securityContext:
-              privileged: true
-              runAsUser: 0
-            volumeMounts:
-              - mountPath: /certs
-                name: docker-certs
-              - mountPath: /scripts
-                name: runner-scripts
-                readOnly: true
-              - mountPath: /state
-                name: runner-state
-                readOnly: true
         restartPolicy: Never
         shareProcessNamespace: true
         topologySpreadConstraints:

@@ -4,12 +4,12 @@ cache:
   # Might be nice, but for a one-shot runner, useless to configure without a remote server.
   enabled: false
 container:
-  docker_host: "-"
+  docker_host: tcp://127.0.0.1:2376
   enable_ipv6: false
   force_pull: false
   force_rebuild: false
   network: host
-  options: -v /certs/client:/certs/client
+  options: -v /certs/client:/certs/client:ro
   privileged: true
   valid_volumes:
     - /certs/client
