@@ -10,11 +10,31 @@ spec:
     template:
       spec:
         containers:
+          - name: daemon
+            volumeMounts:
+              - mountPath: /etc/docker/daemon.json
+                name: daemon-config
+                readOnly: true
+                subPath: daemon.json
+              - mountPath: /home/rootless/.config/docker/daemon.json
+                name: daemon-config
+                readOnly: true
+                subPath: daemon.json
           - name: runner
             securityContext:
               runAsGroup: 1001
               runAsNonRoot: true
               runAsUser: 1001
+            volumeMounts:
+              - mountPath: /etc/docker/daemon.json
+                name: daemon-config
+                readOnly: true
+                subPath: daemon.json
+        volumes:
+          - name: daemon-config
+            configMap:
+              defaultMode: 0444 # r--r--r--
+              name: daemon-config-configmap
   maxReplicaCount: 6
   pollingInterval: 15
   triggers:
