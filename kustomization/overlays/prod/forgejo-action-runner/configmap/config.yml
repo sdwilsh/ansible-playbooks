@@ -9,10 +9,11 @@ container:
   force_pull: false
   force_rebuild: false
   network: host
-  options: -v /certs/client:/certs/client:ro
+  options: -v /certs/client:/certs/client:ro -v /etc/containers/registries.conf:/etc/containers/registries.conf:ro
   privileged: true
   valid_volumes:
     - /certs/client
+    - /etc/containers/registries.conf
   workdir_parent:
 log:
   job_level: info

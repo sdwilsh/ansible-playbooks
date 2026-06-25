@@ -11,6 +11,7 @@ configMapGenerator:
   - name: daemon-config-configmap
     files:
       - configmap/daemon.json
+      - configmap/registries.conf
 images:
   - name: code.forgejo.org/forgejo/runner
     newTag: 12.11.1@sha256:a1a2885261a0b8337d4791dd6949651117206741ba66423c24a57c107a64d4a8

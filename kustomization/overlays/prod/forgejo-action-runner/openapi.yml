@@ -35,13 +35,19 @@ definitions:
                               type: string
                             volumeMounts:
                               type: array
-                              x-kubernetes-patch-merge-key: name
+                              x-kubernetes-patch-merge-key: mountPath
                               x-kubernetes-patch-strategy: merge
                               items:
                                 type: object
                                 properties:
+                                  mountPath:
+                                    type: string
                                   name:
                                     type: string
+                                required:
+                                  - mountPath
+                          required:
+                            - name
                       volumes:
                         type: array
                         x-kubernetes-patch-merge-key: name
@@ -51,3 +57,5 @@ definitions:
                           properties:
                             name:
                               type: string
+                          required:
+                            - name

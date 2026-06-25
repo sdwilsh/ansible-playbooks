@@ -26,6 +26,10 @@ spec:
               runAsNonRoot: true
               runAsUser: 1001
             volumeMounts:
+              - mountPath: /etc/containers/registries.conf
+                name: daemon-config
+                readOnly: true
+                subPath: registries.conf
               - mountPath: /etc/docker/daemon.json
                 name: daemon-config
                 readOnly: true
