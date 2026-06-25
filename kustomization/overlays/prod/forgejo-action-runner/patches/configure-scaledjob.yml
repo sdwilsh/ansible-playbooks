@@ -10,13 +10,12 @@ spec:
     template:
       spec:
         containers:
-          - name: daemon
+          - env:
+              - name: XDG_CONFIG_HOME
+                value: /etc
+            name: daemon
             volumeMounts:
               - mountPath: /etc/docker/daemon.json
-                name: daemon-config
-                readOnly: true
-                subPath: daemon.json
-              - mountPath: /home/rootless/.config/docker/daemon.json
                 name: daemon-config
                 readOnly: true
                 subPath: daemon.json
