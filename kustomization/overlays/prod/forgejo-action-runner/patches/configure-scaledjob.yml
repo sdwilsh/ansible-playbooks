@@ -25,6 +25,10 @@ spec:
                 subPath: daemon.json
           - name: runner
             securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
               runAsGroup: 1001
               runAsNonRoot: true
               runAsUser: 1001
