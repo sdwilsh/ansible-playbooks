@@ -20,6 +20,7 @@ log:
   level: info
 runner:
   envs:
+    CONTAINERS_REGISTRIES_CONF: /etc/containers/registries.conf
     DOCKER_CERT_PATH: /certs/client
     DOCKER_HOST: tcp://127.0.0.1:2376
     DOCKER_TLS_VERIFY: 1
