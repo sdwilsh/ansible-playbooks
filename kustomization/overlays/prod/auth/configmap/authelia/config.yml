@@ -240,6 +240,27 @@ identity_providers:
         userinfo_signed_response_alg: none
       - audience: []
         authorization_policy: one_factor
+        client_id: OpenCloudAndroid
+        client_name: OpenCloud Android App
+        consent_mode: auto
+        grant_types:
+          - authorization_code
+          - refresh_token
+        pre_configured_consent_duration: 1w
+        public: true
+        redirect_uris:
+          - oc://android.owncloud.com
+        response_types:
+          - code
+        scopes:
+          - email
+          - groups
+          - offline_access
+          - openid
+          - profile
+        userinfo_signed_response_alg: none
+      - audience: []
+        authorization_policy: one_factor
         client_id: OpenCloudDesktop
         client_name: OpenCloud Desktop Client
         consent_mode: auto
@@ -255,27 +276,6 @@ identity_providers:
           - code
         response_modes:
           - form_post
-        scopes:
-          - email
-          - groups
-          - offline_access
-          - openid
-          - profile
-        userinfo_signed_response_alg: none
-      - audience: []
-        authorization_policy: one_factor
-        client_id: e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD
-        client_name: OpenCloud Android App
-        consent_mode: auto
-        grant_types:
-          - authorization_code
-          - refresh_token
-        pre_configured_consent_duration: 1w
-        public: true
-        redirect_uris:
-          - oc://android.owncloud.com
-        response_types:
-          - code
         scopes:
           - email
           - groups
