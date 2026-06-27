@@ -15,6 +15,10 @@ spec:
                 value: /etc
             name: daemon
             volumeMounts:
+              - mountPath: /etc/containers/registries.conf
+                name: daemon-config
+                readOnly: true
+                subPath: registries.conf
               - mountPath: /etc/docker/daemon.json
                 name: daemon-config
                 readOnly: true
@@ -24,15 +28,6 @@ spec:
               runAsGroup: 1001
               runAsNonRoot: true
               runAsUser: 1001
-            volumeMounts:
-              - mountPath: /etc/containers/registries.conf
-                name: daemon-config
-                readOnly: true
-                subPath: registries.conf
-              - mountPath: /etc/docker/daemon.json
-                name: daemon-config
-                readOnly: true
-                subPath: daemon.json
         volumes:
           - name: daemon-config
             configMap:
