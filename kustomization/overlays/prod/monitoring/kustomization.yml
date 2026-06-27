@@ -36,7 +36,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:323998cf83a2332f6761706df910870a3fa24dd8d4b999db977aa322de553399
   - name: postgres
-    newTag: 18@sha256:8ff36f3c66371cba71d20ceedccfc3de9669a68737607888c4ef0af93abe8e39
+    newTag: 18@sha256:4aabea78cf39b90e834caf3af7d602a18565f6fe2508705c8d01aa63245c2e20
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
     newTag: v0.12.0@sha256:932eae60e2bcf9c4660d6442da066ef1a79b4ea7cc232c61c7303069216ca006
 namespace: monitoring
