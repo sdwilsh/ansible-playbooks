@@ -249,7 +249,7 @@ identity_providers:
         pre_configured_consent_duration: 1w
         public: true
         redirect_uris:
-          - oc://android.owncloud.com
+          - oc://android.owncloud.eu
         response_types:
           - code
         scopes:
