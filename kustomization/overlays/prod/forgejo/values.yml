@@ -119,7 +119,7 @@ ingress:
 
 persistence:
   enabled: true
-  size: 40Gi
+  size: 50Gi
   storageClass: longhorn-encrypted
 
 podSecurityContext:
