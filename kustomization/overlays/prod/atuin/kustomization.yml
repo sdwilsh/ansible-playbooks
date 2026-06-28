@@ -7,7 +7,7 @@ components:
   - ../../../components/cnpg-backup
 images:
   - name: busybox
-    newTag: 1.38.0@sha256:b6762ddf4a50aabb5f4d21aa6f447d05d5633fb09f09c08b33f22356a2f98be0
+    newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:323998cf83a2332f6761706df910870a3fa24dd8d4b999db977aa322de553399
   - name: ghcr.io/atuinsh/atuin
