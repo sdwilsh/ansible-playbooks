@@ -6,7 +6,7 @@ components:
   - ../../../components/ttlsh
 images:
   - name: busybox
-    newTag: 1.38.0@sha256:b6762ddf4a50aabb5f4d21aa6f447d05d5633fb09f09c08b33f22356a2f98be0
+    newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
   - name: docker.io/redis
     newTag: 8.6.4@sha256:c00011808d8c33f83e4eedb0a50f04a4c8e86b08d7727e7d809a75a59298846b
   - name: ghcr.io/replicatedhq/ttlsh-hooks
