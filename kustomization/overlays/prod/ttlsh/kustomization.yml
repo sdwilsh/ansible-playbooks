@@ -8,7 +8,7 @@ images:
   - name: busybox
     newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
   - name: docker.io/redis
-    newTag: 8.6.4@sha256:c00011808d8c33f83e4eedb0a50f04a4c8e86b08d7727e7d809a75a59298846b
+    newTag: 8.6.4@sha256:4483474d5e78c444ce180037def4430ec0d02553663ded2a6d7a1c922da00ecf
   - name: ghcr.io/replicatedhq/ttlsh-hooks
     newTag: latest@sha256:29d8f1033896d80a29c417a2f2b7b94bf54a70cbfdbcfaadcf34bf5e840b1060
   - name: ghcr.io/replicatedhq/ttlsh-reaper
