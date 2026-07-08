@@ -4,6 +4,6 @@ kind: Kustomization
 
 namespace: sysbox
 resources:
-  - https://github.com/nestybox/sysbox/sysbox-k8s-manifests/sysbox-install.yaml?ref=v0.7.0
+  - https://raw.githubusercontent.com/nestybox/sysbox/v0.7.0/sysbox-k8s-manifests/sysbox-install.yaml
   - namespace.yml
 
