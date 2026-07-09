@@ -9,11 +9,15 @@ container:
   force_pull: false
   force_rebuild: false
   network: host
-  options: -v /certs/client:/certs/client:ro -v /etc/containers/registries.conf:/etc/containers/registries.conf:ro
+  options: >
+    -v /certs/client:/certs/client:ro
+    -v /etc/containers/registries.conf:/etc/containers/registries.conf:ro
+    -v /etc/containers/storage.conf:/etc/containers/storage.conf:ro
   privileged: true
   valid_volumes:
     - /certs/client
     - /etc/containers/registries.conf
+    - /etc/containers/storage.conf
   workdir_parent:
 log:
   job_level: info
@@ -21,6 +25,7 @@ log:
 runner:
   envs:
     CONTAINERS_REGISTRIES_CONF: /etc/containers/registries.conf
+    CONTAINERS_STORAGE_CONF: /etc/containers/storage.conf
     DOCKER_CERT_PATH: /certs/client
     DOCKER_HOST: tcp://127.0.0.1:2376
     DOCKER_TLS_VERIFY: 1

@@ -19,6 +19,10 @@ spec:
                 name: daemon-config
                 readOnly: true
                 subPath: registries.conf
+              - mountPath: /etc/containers/storage.conf
+                name: daemon-config
+                readOnly: true
+                subPath: storage.conf
               - mountPath: /etc/docker/daemon.json
                 name: daemon-config
                 readOnly: true
