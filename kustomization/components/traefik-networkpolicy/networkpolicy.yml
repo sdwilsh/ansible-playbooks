@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: traefik-networkpolicy
+spec:
+  ingress:
+    # Allow traffic within the namespace.
+    - from:
+        - podSelector: {}
+    # Allow traffic from the Traefik ingress controller.
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - port: web # You may need to replace this!
+  podSelector: {} # You probably do not want to match all pods!
+  policyTypes:
+    - Ingress

@@ -5,6 +5,7 @@ kind: Kustomization
 components:
   - ../../../components/cnpg-backup
   - ../../../components/spoolman
+  - ../../../components/traefik-networkpolicy
 images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
@@ -22,6 +23,27 @@ patches:
     target:
       kind: StatefulSet
       name: spoolman-statefulset
+replacements:
+  - source:
+      fieldPath: spec.template.spec.containers.[name=spoolman].ports.[name=spoolman-web].name
+      kind: StatefulSet
+      name: spoolman-statefulset
+    targets:
+      - fieldPaths:
+          - spec.ingress.1.ports.[port=web].port
+        select:
+          kind: NetworkPolicy
+          name: traefik-networkpolicy
+  - source:
+      fieldPath: spec.selector
+      kind: StatefulSet
+      name: spoolman-statefulset
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
