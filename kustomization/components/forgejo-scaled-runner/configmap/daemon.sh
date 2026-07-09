@@ -4,7 +4,7 @@ set -e
 
 # Setup a real mount for docker when running in kata:
 # https://github.com/kata-containers/kata-containers/blob/main/docs/how-to/how-to-run-docker-with-kata.md
-if [[ $(df -PT /var/lib/docker | awk 'NR==2 {print $2}') == virtiofs ]];
+if [ "$(df -PT /var/lib/docker | awk 'NR==2 {print $2}')" = virtiofs ];
 then
   truncate -s 40G /mnt/scratch/dind-disk.img
   mkfs.ext4 -F /mnt/scratch/dind-disk.img
