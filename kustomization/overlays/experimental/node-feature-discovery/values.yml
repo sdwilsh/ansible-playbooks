@@ -1,0 +1,20 @@
+---
+gc:
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+master:
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+priorityClassName: system-node-critical
+
+prometheus:
+  enable: true
+
+worker:
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
