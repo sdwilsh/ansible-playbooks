@@ -9,11 +9,19 @@ spec:
   jobTargetRef:
     template:
       spec:
+        runtimeClassName: kata-qemu-runtime-rs
         containers:
           - env:
               - name: XDG_CONFIG_HOME
                 value: /etc
             name: daemon
+            resources:
+              limits:
+                cpu: 2000m
+                memory: 4Gi
+              requests:
+                cpu: 250m
+                memory: 1Gi
             volumeMounts:
               - mountPath: /etc/containers/registries.conf
                 name: daemon-config
@@ -27,7 +35,16 @@ spec:
                 name: daemon-config
                 readOnly: true
                 subPath: daemon.json
+              - mountPath: /mnt/scratch
+                name: scratch
           - name: runner
+            resources:
+              limits:
+                cpu: 500m
+                memory: 1Gi
+              requests:
+                cpu: 100m
+                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -41,6 +58,8 @@ spec:
             configMap:
               defaultMode: 0444 # r--r--r--
               name: daemon-config-configmap
+          - name: scratch
+            emptyDir: {}
   maxReplicaCount: 6
   pollingInterval: 15
   triggers:
