@@ -1,0 +1,38 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/pod-security-enforce-privileged
+helmCharts:
+  - name: kata-deploy
+    version: 4.0.0
+    repo: oci://ghcr.io/kata-containers/kata-deploy-charts
+    releaseName: kata
+    valuesFile: values.yml
+namespace: kata-containers
+patches:
+  # These four resources carry a Helm `post-delete` hook annotation.  We
+  # render this chart via kustomize's helm inflator and apply the output
+  # directly, so no real `helm` release is tracked; Kubernetes has no
+  # concept of `post-delete`, so the `Job` would just run immediately on
+  # apply and delete the live `kata-deploy-rb`/`kata-deploy-role`/
+  # `kata-deploy-sa` the `DaemonSet` depends on.
+  - path: patches/delete_cleanup_clusterrole.yml
+    target:
+      kind: ClusterRole
+      name: kata-deploy-cleanup-role
+  - path: patches/delete_cleanup_clusterrolebinding.yml
+    target:
+      kind: ClusterRoleBinding
+      name: kata-deploy-cleanup-rb
+  - path: patches/delete_cleanup_serviceaccount.yml
+    target:
+      kind: ServiceAccount
+      name: kata-deploy-sa-cleanup
+  - path: patches/delete_rb_cleanup_job.yml
+    target:
+      kind: Job
+      name: kata-deploy-rb-cleanup
+resources:
+  - namespace.yml
