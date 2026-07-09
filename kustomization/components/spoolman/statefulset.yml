@@ -17,10 +17,6 @@ spec:
       automountServiceAccountToken: false
       containers:
         - env:
-            - name: PGID
-              value: "65534"
-            - name: PUID
-              value: "65534"
             - name: SPOOLMAN_HOST
               valueFrom:
                 fieldRef:
@@ -44,12 +40,11 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              add:
-                - SETUID
-                - SETGID
               drop:
                 - ALL
-            runAsNonRoot: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
@@ -57,7 +52,7 @@ spec:
               name: spoolman-data
       priorityClassName: application
       securityContext:
-        fsGroup: 65534
+        fsGroup: 1000
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
