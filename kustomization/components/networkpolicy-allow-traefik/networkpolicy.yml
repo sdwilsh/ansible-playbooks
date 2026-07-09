@@ -2,13 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: traefik-networkpolicy
+  name: allow-traefik-networkpolicy
 spec:
   ingress:
-    # Allow traffic within the namespace.
-    - from:
-        - podSelector: {}
-    # Allow traffic from the Traefik ingress controller.
     - from:
         - namespaceSelector:
             matchLabels:
