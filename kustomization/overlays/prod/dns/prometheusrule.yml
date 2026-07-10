@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ttlsh-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: dns
+      rules:
+        - alert: dns-no-queries
+          annotations:
+            description: No DNS queries for 15 minutes!
+          expr: sum(rate(blocky_query_total[5m])) * 60 == 0
+          for: 15m
+          labels:
+            severity: page

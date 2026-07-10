@@ -28,5 +28,6 @@ patches:
       name: blocky-svc
 resources:
   - namespace.yml
+  - prometheusrule.yml
   - service.yml
   - servicemonitor.yml
