@@ -12,7 +12,7 @@ helmCharts:
     valuesFile: values.yml
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:323998cf83a2332f6761706df910870a3fa24dd8d4b999db977aa322de553399
+    newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
 namespace: forgejo
 patches:
   - path: patches/cnpg/set_backup_path.yml
