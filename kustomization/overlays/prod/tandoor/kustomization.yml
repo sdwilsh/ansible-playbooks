@@ -7,7 +7,7 @@ components:
   - ../../../components/cnpg-backup
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:323998cf83a2332f6761706df910870a3fa24dd8d4b999db977aa322de553399
+    newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
   - name: vabene1111/recipes
     newTag: 2.6.9@sha256:969c5b3552ffbf18a6f82b3ad5babbae89bfbd30ab6e3195fd3c158bcf3062ed
 namespace: tandoor
