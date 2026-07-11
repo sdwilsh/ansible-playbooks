@@ -13,7 +13,7 @@ configMapGenerator:
       - configmap/scripts/setup_wireguard.sh
 images:
   - name: alpine
-    newTag: 3.24.0@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4
+    newTag: 3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
   - name: dockurr/dnsmasq
     newTag: 2.93@sha256:7ad3c1c802de00d15ef298f2892e4abaf4aa054e2ccc10bf323c000bf393ece5
   - name: lscr.io/linuxserver/transmission
