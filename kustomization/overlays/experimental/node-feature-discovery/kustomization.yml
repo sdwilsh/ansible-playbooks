@@ -4,7 +4,7 @@ kind: Kustomization
 
 helmCharts:
   - name: node-feature-discovery
-    version: 0.18.3
+    version: 0.19.0
     repo: oci://registry.k8s.io/nfd/charts
     releaseName: nfd
     valuesFile: values.yml
