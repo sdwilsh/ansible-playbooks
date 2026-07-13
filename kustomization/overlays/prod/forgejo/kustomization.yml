@@ -6,7 +6,7 @@ components:
   - ../../../components/cnpg-backup
 helmCharts:
   - name: forgejo
-    version: 17.1.1
+    version: 17.1.2
     repo: oci://code.forgejo.org/forgejo-helm
     releaseName: forgejo
     valuesFile: values.yml
