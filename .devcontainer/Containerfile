@@ -61,7 +61,7 @@ RUN curl -o /usr/local/bin/garage \
 
 # Download and Install Helm
 # renovate: datasource=github-releases depName=helm/helm
-ARG HELM_VERSION=v4.2.2
+ARG HELM_VERSION=v4.2.3
 RUN --mount=type=tmpfs,dst=/tmp \
   curl \
     -s \
