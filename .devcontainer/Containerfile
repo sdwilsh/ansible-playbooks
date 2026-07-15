@@ -88,7 +88,7 @@ RUN curl -o /usr/local/bin/longhorncli \
 
 # Setup and Configure OpenPubkey SSH
 # renovate: datasource=github-releases depName=openpubkey/opkssh
-ARG OPKSSH_VERSION=0.15.0
+ARG OPKSSH_VERSION=0.16.0
 RUN --mount=type=cache,dst=/dnf \
   curl -o /dnf/opkssh.rpm \
     -L \
