@@ -11,7 +11,6 @@ spec:
   egress:
     - ports:
         - port: 443
-        - port: 6443
       to:
         - ipBlock:
             cidr: 172.17.0.1/32
