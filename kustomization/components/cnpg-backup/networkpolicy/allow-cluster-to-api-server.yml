@@ -7,10 +7,14 @@ spec:
   egress:
     - ports:
         - port: 443
-        - port: 6443
       to:
         - ipBlock:
             cidr: 172.17.0.1/32
+    - ports:
+        - port: 6443
+      to:
+        - ipBlock:
+            cidr: 10.11.0.101/24 # node01 node IP
   podSelector:
     matchLabels:
       app.kubernetes.io/managed-by: cloudnative-pg
