@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cluster-to-garage-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 3900
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: garage
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: garage
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+      cnpg.io/podRole: instance
+  policyTypes:
+    - Egress
