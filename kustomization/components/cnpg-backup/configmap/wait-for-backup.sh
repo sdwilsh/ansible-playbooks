@@ -24,7 +24,7 @@ do
         exit 1
     fi
 
-    if [ "${output}" == "unkown" ]; then
+    if [ "${output}" == "unknown" ]; then
         echo "Warning: Unknown error while trying to get status..."
         exit 1
     fi
