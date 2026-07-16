@@ -5,6 +5,10 @@ kind: Kustomization
 components:
   - ../../../components/atuin
   - ../../../components/cnpg-backup
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
 images:
   - name: busybox
@@ -25,6 +29,17 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
+replacements:
+  - source:
+      fieldPath: spec.selector
+      kind: Deployment
+      name: atuin-deployment
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
