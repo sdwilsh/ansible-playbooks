@@ -7,6 +7,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
