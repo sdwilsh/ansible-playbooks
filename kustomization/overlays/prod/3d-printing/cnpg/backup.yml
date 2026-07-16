@@ -21,6 +21,8 @@ metadata:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "1"
+  labels:
+    app.kubernetes.io/component: wait-for-backup
   name: spoolman-pre-update-backup-complete-check
 spec:
   containers:

@@ -7,5 +7,6 @@ configMapGenerator:
     files:
       - configmap/wait-for-backup.sh
 resources:
+  - networkpolicy.yml
   - objectstore.yml
   - rbac.yml
