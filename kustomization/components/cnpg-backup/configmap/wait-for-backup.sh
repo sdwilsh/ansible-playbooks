@@ -19,12 +19,12 @@ get_backup_phase() {
 output=$(get_backup_phase)
 while [ "${output}" != "completed" ]
 do
-    if [ "${output}" != "failed" ]; then
+    if [ "${output}" == "failed" ]; then
         echo "Error: Backup of ${BACKUP_RESOURCE} failed!"
         exit 1
     fi
 
-    if [ "${output}" != "unkown" ]; then
+    if [ "${output}" == "unkown" ]; then
         echo "Warning: Unknown error while trying to get status..."
         exit 1
     fi
