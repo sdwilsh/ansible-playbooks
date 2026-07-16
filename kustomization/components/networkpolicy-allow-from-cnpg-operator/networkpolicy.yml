@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-cnpg-operator-networkpolicy
+spec:
+  ingress:
+    # Allow the operator to check things.
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cnpg-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg
+      ports:
+        - port: 5432
+        - port: 8000
+    # Allow `kubectl cnpg status` to work.  This happens via the control plane
+    # proxy server, so we have to allow the control plane node's internal IPs.
+    - from:
+        - ipBlock:
+            cidr: 172.16.0.0/24 # node01 internal IP
+      ports:
+        - port: 8000
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+  policyTypes:
+    - Ingress
