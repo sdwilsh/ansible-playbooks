@@ -4,8 +4,8 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
-  - ../../../components/networkpolicy-allow-traefik
-  - ../../../components/networkpolicy-deny-from-other-namespaces
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-from-this-namespace
   - ../../../components/spoolman
 images:
   - name: docker.io/bitnami/kubectl
@@ -34,7 +34,7 @@ replacements:
           - spec.ingress.0.ports.[port=web].port
         select:
           kind: NetworkPolicy
-          name: allow-traefik-networkpolicy
+          name: allow-from-traefik-networkpolicy
   - source:
       fieldPath: spec.selector
       kind: StatefulSet
@@ -44,7 +44,7 @@ replacements:
           - spec.podSelector
         select:
           kind: NetworkPolicy
-          name: allow-traefik-networkpolicy
+          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
