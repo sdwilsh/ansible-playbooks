@@ -2,12 +2,16 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-this-namespace-networkpolicy
+  name: allow-within-this-namespace-networkpolicy
 spec:
+  egress:
+    - to:
+        - podSelector: {}
   ingress:
     - from:
         - podSelector: {}
   podSelector:
     matchLabels:
   policyTypes:
+    - Egress
     - Ingress
