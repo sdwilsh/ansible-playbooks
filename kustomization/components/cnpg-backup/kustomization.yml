@@ -12,6 +12,7 @@ configMapGenerator:
         argocd.argoproj.io/hook-delete-policy: HookSucceeded
         argocd.argoproj.io/sync-wave: "0"
 resources:
-  - networkpolicy.yml
+  - networkpolicy/allow-backup-check-to-api-server.yml
+  - networkpolicy/allow-cluster-to-api-server.yml
   - objectstore.yml
   - rbac.yml
