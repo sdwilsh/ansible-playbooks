@@ -7,24 +7,32 @@ if [ -z "${BACKUP_RESOURCE}" ]; then
     exit 1
 fi
 
-output=$( \
+get_backup_phase() {
     kubectl \
         get \
         backups.postgresql.cnpg.io \
         "${BACKUP_RESOURCE}" \
         -o jsonpath='{.status.phase}' \
-    ) || exit $?
+        2>/dev/null || echo "unknown"
+}
+
+output=$(get_backup_phase)
 while [ "${output}" != "completed" ]
 do
+    if [ "${output}" != "failed" ]; then
+        echo "Error: Backup of ${BACKUP_RESOURCE} failed!"
+        exit 1
+    fi
+
+    if [ "${output}" != "unkown" ]; then
+        echo "Warning: Unknown error while trying to get status..."
+        exit 1
+    fi
+
     echo "Sleeping for five seconds since the backup of ${BACKUP_RESOURCE} is not yet complete..."
     sleep 5s
-    output=$( \
-        kubectl \
-            get \
-            backups.postgresql.cnpg.io \
-            "${BACKUP_RESOURCE}" \
-            -o jsonpath='{.status.phase}' \
-        ) || exit $?
+
+    output=$(get_backup_phase)
 done
 
 echo "Backup of ${BACKUP_RESOURCE} is complete!"
