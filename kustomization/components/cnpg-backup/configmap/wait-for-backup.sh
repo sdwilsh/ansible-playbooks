@@ -13,7 +13,7 @@ get_backup_phase() {
         backups.postgresql.cnpg.io \
         "${BACKUP_RESOURCE}" \
         -o jsonpath='{.status.phase}' \
-        2>/dev/null || echo "unknown"
+        2>&1 || echo "unknown"
 }
 
 output=$(get_backup_phase)
