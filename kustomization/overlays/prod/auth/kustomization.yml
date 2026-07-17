@@ -8,6 +8,9 @@ components:
   - ../../../components/lldap
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
 configMapGenerator:
   - name: authelia-configmap
     files:
@@ -54,6 +57,17 @@ patches:
     target:
       kind: Deployment
       name: lldap-deployment
+replacements:
+  - source:
+      fieldPath: spec.selector
+      kind: Deployment
+      name: authelia-deployment
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - certificate/lldap.yml
