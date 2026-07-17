@@ -5,6 +5,11 @@ kind: Kustomization
 components:
   - ../../../components/cnpg-backup
   - ../../../components/immich
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
 images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
@@ -26,6 +31,27 @@ patches:
     target:
       kind: Deployment
       name: immich-server
+replacements:
+  - source:
+      fieldPath: spec.template.spec.containers.[name=main].ports.[name=http].name
+      kind: Deployment
+      name: immich-server
+    targets:
+      - fieldPaths:
+          - spec.ingress.0.ports.[port=web].port
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+  - source:
+      fieldPath: spec.selector
+      kind: Deployment
+      name: immich-server
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
