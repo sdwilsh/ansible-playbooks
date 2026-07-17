@@ -1,0 +1,16 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-proton-bridge-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 25
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: proton-mail
+  podSelector: {} # You probably do not want to match all pods!
+  policyTypes:
+    - Egress

@@ -350,7 +350,7 @@ log:
 # https://www.authelia.com/configuration/notifications/introduction/
 notifier:
   smtp:
-    address: submission://proton-bridge-svc.proton-mail.svc.cluster.local:25
+    address: smtp://proton-bridge-svc.proton-mail.svc.cluster.local:25
     sender: no-reply@tswn.us
     timeout: 10s
     tls:
