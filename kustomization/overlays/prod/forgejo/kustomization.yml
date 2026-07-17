@@ -12,6 +12,7 @@ components:
   - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
 helmCharts:
   - name: forgejo
     version: 17.1.2
