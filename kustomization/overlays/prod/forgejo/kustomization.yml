@@ -4,6 +4,12 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
 helmCharts:
   - name: forgejo
     version: 17.1.2
@@ -19,6 +25,27 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
+replacements:
+  - source:
+      fieldPath: spec.template.spec.containers.[name=forgejo].ports.[name=http].name
+      kind: Deployment
+      name: forgejo
+    targets:
+      - fieldPaths:
+          - spec.ingress.0.ports.[port=web].port
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+  - source:
+      fieldPath: spec.selector
+      kind: Deployment
+      name: forgejo
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
