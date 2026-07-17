@@ -33,16 +33,6 @@ patches:
       name: garage-objectstore
 replacements:
   - source:
-      fieldPath: metadata.name
-      kind: Namespace
-    targets:
-      - fieldPaths:
-          - spec.ingress.0.from.0.namespaceSelector.matchLabels.[kubernetes.io/metadata.name]
-          - spec.egress.0.to.0.namespaceSelector.matchLabels.[kubernetes.io/metadata.name]
-        select:
-          kind: NetworkPolicy
-          name: allow-within-this-namespace-networkpolicy
-  - source:
       fieldPath: spec.selector
       kind: Deployment
       name: atuin-deployment

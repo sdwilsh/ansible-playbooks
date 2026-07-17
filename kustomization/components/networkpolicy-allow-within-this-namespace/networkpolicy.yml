@@ -6,14 +6,10 @@ metadata:
 spec:
   egress:
     - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: PLACEHOLDER
+        - podSelector: {}
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: PLACEHOLDER
+        - podSelector: {}
   podSelector:
     matchLabels:
   policyTypes:
