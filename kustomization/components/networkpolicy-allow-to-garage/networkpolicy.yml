@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-garage-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 3900
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: garage
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: garage
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01
+        - ipBlock:
+            cidr: 10.11.0.104/32 # worker01
+        - ipBlock:
+            cidr: 10.11.0.105/32 # worker02
+        - ipBlock:
+            cidr: 10.11.0.106/32 # worker03
+  podSelector: {} # You probably do not want to match all pods!
+  policyTypes:
+    - Egress
