@@ -6,6 +6,8 @@ components:
   - ../../../components/authelia
   - ../../../components/cnpg-backup
   - ../../../components/lldap
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
 configMapGenerator:
   - name: authelia-configmap
     files:
