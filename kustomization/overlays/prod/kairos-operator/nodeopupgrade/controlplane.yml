@@ -2,10 +2,10 @@
 apiVersion: operator.kairos.io/v1alpha1
 kind: NodeOpUpgrade
 metadata:
-  name: kairos-upgrade-control-plane-0.8.1
+  name: kairos-upgrade-control-plane-0.9.0
 spec:
   concurrency: 1
-  image: ghcr.io/marinatedconcrete/kairos-fedora:0.8.1
+  image: ghcr.io/marinatedconcrete/kairos-fedora:0.9.0
   nodeSelector:
     matchExpressions:
       - key: node-role.kubernetes.io/control-plane
