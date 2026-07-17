@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-traefik-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: websecure
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+    - ports:
+        - port: 443
+      to:
+        - ipBlock:
+            cidr: 10.11.1.64/32
+  podSelector: {} # You probably do not want to match all pods!
+  policyTypes:
+    - Egress
