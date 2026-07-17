@@ -14,7 +14,6 @@ configMapGenerator:
 resources:
   - networkpolicy/allow-backup-check-to-api-server.yml
   - networkpolicy/allow-cluster-to-api-server.yml
-  - networkpolicy/allow-cluster-to-coredns.yml
   - networkpolicy/allow-cluster-to-garage.yml
   - objectstore.yml
   - rbac.yml

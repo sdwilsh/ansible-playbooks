@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-cluster-to-coredns-networkpolicy
+  name: allow-to-coredns-networkpolicy
 spec:
   egress:
     - ports:
@@ -17,9 +17,6 @@ spec:
           podSelector:
             matchLabels:
               k8s-app: kube-dns
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/managed-by: cloudnative-pg
-      cnpg.io/podRole: instance
+  podSelector: {}
   policyTypes:
     - Egress
