@@ -12,6 +12,7 @@ components:
   - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
 images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
@@ -33,6 +34,18 @@ patches:
     target:
       kind: Deployment
       name: immich-server
+  - path: patches/restrict_machine-learning.yml
+    target:
+      kind: Deployment
+      name: immich-machine-learning
+  - path: patches/restrict_server.yml
+    target:
+      kind: Deployment
+      name: immich-server
+  - path: patches/restrict_valkey.yml
+    target:
+      kind: Deployment
+      name: immich-valkey
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=main].ports.[name=http].name
