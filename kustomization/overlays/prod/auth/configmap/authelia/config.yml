@@ -153,6 +153,7 @@ identity_providers:
         client_id: argocd
         client_name: Argo CD
         client_secret: $pbkdf2-sha512$310000$V1TXhcVzq2u8HjL4TVDrEQ$H6I9r.US8I841kfBPzEc0qkSR9iIljsMWxRdkLf0WfpQQrzz925qp47pFCGag3BCmf9OPSWFBd4U9lUa87VRXA
+        consent_mode: implicit
         grant_types:
           - authorization_code
         pkce_challenge_method: S256
@@ -195,6 +196,7 @@ identity_providers:
         client_id: brbyX~8fJ1lZxp1ixZ4M5XeEgyzxmc5C-BietrJdGT8Hjr1Fw1R42iPPh3Dq3XznSSuajcWG
         client_name: Immich
         client_secret: $pbkdf2-sha512$310000$omxinbTJUu.5YlmzWZTyhw$n5isxHk/CeWL9EhtQppgnyUUBlGO64icMFj26ZGj4ekwnbg.tunfss9t4kRHOhWyOd.3EQnfJKFngXM8A/pqeQ
+        consent_mode: implicit
         grant_types:
           - authorization_code
         public: false
@@ -311,6 +313,7 @@ identity_providers:
         client_id: lfZhPGvKbU9gY.eFcGHUN1rb5ae_IfaYutn_aSOQ4iMlvHQKSYW752z5.xggDlRigdxYrRMe
         client_name: code.tswn.us
         client_secret: $pbkdf2-sha512$310000$AjRy6iONLpK3ZRp5kL7pJQ$0wJWn/FZlQzNk06BtMclGfPxZ4bULu0EoULyY1eBTewlKrrG1zOrwxzl/iiPqeWW7gUsdu9U5eID5W4XwRtEWw
+        consent_mode: implicit
         grant_types:
           - authorization_code
         pkce_challenge_method: S256
