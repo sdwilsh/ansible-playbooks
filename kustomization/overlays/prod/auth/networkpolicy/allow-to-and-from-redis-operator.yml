@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-redis-operator-networkpolicy
+  name: allow-to-and-from-redis-operator-networkpolicy
 spec:
   egress:
     - to:
