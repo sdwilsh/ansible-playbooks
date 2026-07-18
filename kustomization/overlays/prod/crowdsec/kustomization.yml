@@ -9,6 +9,7 @@ components:
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-baseline
 configMapGenerator:
   - name: crowdsec-configmap
     files:
