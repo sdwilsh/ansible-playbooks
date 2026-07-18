@@ -7,6 +7,7 @@ spec:
   egress:
     - ports:
         - port: 25
+        - port: 143
       to:
         - namespaceSelector:
             matchLabels:

@@ -9,6 +9,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-proton-bridge
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
 images:
@@ -56,6 +57,11 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-proton-bridge-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
