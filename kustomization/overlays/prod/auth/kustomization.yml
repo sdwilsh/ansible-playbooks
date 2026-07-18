@@ -87,4 +87,3 @@ resources:
   - networkpolicy/allow-to-lldap-from-traefik.yml
   - networkpolicy/allow-to-authelia-from-traefik.yml
   - redisreplication.yml
-  - redissentinel.yml
