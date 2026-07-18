@@ -65,3 +65,4 @@ resources:
   - cnpg/cluster.yml
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
+  - networkpolicy/allow-ssh.yml
