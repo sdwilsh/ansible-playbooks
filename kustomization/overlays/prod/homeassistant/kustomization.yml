@@ -6,6 +6,10 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/frigate
   - ../../../components/mosquitto
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
 configMapGenerator:
   - files:
