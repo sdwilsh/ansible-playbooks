@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-loki-networkpolicy
+  namespace: crowdsec
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec 
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - port: 3100
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: loki

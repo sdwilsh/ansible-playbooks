@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-crowdsec-to-hub-networkpolicy
+  namespace: crowdsec
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: crowdsec 
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - port: 443
+      to:
+        - ipBlock:
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 100.64.0.0/10
+              - 169.254.0.0/16
+            cidr: 0.0.0.0/0

@@ -4,6 +4,11 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
 configMapGenerator:
   - name: crowdsec-configmap
     files:
@@ -38,4 +43,6 @@ resources:
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - deployment.yml
+  - networkpolicy/allow-from-crowdsec-to-hub.yml
+  - networkpolicy/allow-to-loki.yml
   - service.yml
