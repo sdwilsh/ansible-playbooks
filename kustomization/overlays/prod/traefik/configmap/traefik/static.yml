@@ -25,6 +25,11 @@ entryPoints:
     address: :8883
   postgres:
     address: :5432
+    transport:
+      respondingTimeouts:
+        idleTimeout: 0s
+        readTimeout: 1h
+        writeTimeout: 1h
   smtpsecure:
     address: :8465
   web:
