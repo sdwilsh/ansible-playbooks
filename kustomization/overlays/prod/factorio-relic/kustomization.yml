@@ -11,6 +11,10 @@ patches:
     target:
       kind: Service
       name: factorio-game-svc
+  - path: patches/use_user_namespace.yml
+    target:
+      kind: StatefulSet
+      name: factorio-statefulset
 resources:
   - namespace.yml
   - ingress.yml
