@@ -12,6 +12,7 @@ components:
   - ../../../components/networkpolicy-allow-to-proton-bridge
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
   - name: authelia-configmap
     files:

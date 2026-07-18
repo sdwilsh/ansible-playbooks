@@ -370,16 +370,15 @@ session:
       expiration: 4h
   redis:
     high_availability:
-      sentinel_name: myMaster
+      sentinel_name: mymaster
       nodes:
-        - host: authelia-redis-sentinel-0.authelia-redis-sentinel-headless.auth.svc.cluster.local
+        - host: authelia-redis-replication-s-0.authelia-redis-replication-s-hl.auth.svc.cluster.local
           port: 26379
-        - host: authelia-redis-sentinel-1.authelia-redis-sentinel-headless.auth.svc.cluster.local
+        - host: authelia-redis-replication-s-1.authelia-redis-replication-s-hl.auth.svc.cluster.local
           port: 26379
-        - host: authelia-redis-sentinel-2.authelia-redis-sentinel-headless.auth.svc.cluster.local
+        - host: authelia-redis-replication-s-2.authelia-redis-replication-s-hl.auth.svc.cluster.local
           port: 26379
-    host: authelia-redis-replication.auth.svc.cluster.local
-    port: 6379
+    port: 26379
 
 # https://www.authelia.com/configuration/storage/introduction/
 storage: 

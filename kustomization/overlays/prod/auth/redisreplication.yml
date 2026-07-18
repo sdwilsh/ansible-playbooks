@@ -30,8 +30,51 @@ spec:
         memory: 256Mi
   podSecurityContext:
     fsGroup: 1000 # redis
+    runAsNonRoot: true
     runAsUser: 1000 # redis
+    seccompProfile:
+      type: RuntimeDefault
   priorityClassName: system-cluster-critical
+  sentinel:
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - authelia-redis-sentinel
+            topologyKey: kubernetes.io/hostname
+    image: quay.io/opstree/redis-sentinel
+    podSecurityContext:
+      fsGroup: 1000 # redis
+      runAsNonRoot: true
+      runAsUser: 1000 # redis
+      seccompProfile:
+        type: RuntimeDefault
+    priorityClassName: system-cluster-critical
+    redisSecret:
+      key: session_redis_high_availability_sentinel_password
+      name: authelia-config-secret
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 256Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+    size: 3
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
   storage:
     volumeClaimTemplate:
       spec:
