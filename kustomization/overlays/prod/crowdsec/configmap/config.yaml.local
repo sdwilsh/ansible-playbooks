@@ -23,6 +23,6 @@ db_config:
 
 prometheus:
   enabled: true
-  level: aggregated
+  level: full
   listen_addr: ${POD_IP}
   listen_port: 6060
