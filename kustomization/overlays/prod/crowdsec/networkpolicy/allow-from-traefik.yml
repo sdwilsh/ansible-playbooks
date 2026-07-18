@@ -11,7 +11,7 @@ spec:
               kubernetes.io/metadata.name: traefik
           podSelector:
             matchLabels:
-              app.kubernetes.io/name: traefik-deployment
+              app.kubernetes.io/name: traefik
   podSelector:
     matchLabels:
       app.kubernetes.io/name: crowdsec
