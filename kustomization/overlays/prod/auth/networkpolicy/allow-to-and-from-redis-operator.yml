@@ -1,0 +1,35 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-redis-operator-networkpolicy
+spec:
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: redis
+          podSelector:
+            matchLabels:
+              name: redis-operator
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: redis
+          podSelector:
+            matchLabels:
+              name: redis-operator
+      ports:
+        - port: 6379
+        - port: 26379
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - authelia-redis-replication
+          - authelia-redis-replication-s
+  policyTypes:
+    - Egress
+    - Ingress
