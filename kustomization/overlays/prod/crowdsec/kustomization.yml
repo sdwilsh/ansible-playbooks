@@ -44,5 +44,6 @@ resources:
   - cnpg/scheduledbackup.yml
   - deployment.yml
   - networkpolicy/allow-from-crowdsec-to-hub.yml
+  - networkpolicy/allow-from-traefik.yml
   - networkpolicy/allow-to-loki.yml
   - service.yml
