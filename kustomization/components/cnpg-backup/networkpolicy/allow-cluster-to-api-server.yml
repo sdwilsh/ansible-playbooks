@@ -18,6 +18,5 @@ spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/managed-by: cloudnative-pg
-      cnpg.io/podRole: instance
   policyTypes:
     - Egress
