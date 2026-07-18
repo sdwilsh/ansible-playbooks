@@ -6,6 +6,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/frigate
   - ../../../components/mosquitto
+  - ../../../components/pod-security-enforce-baseline
 configMapGenerator:
   - files:
       - configmap/frigate/config.yml
