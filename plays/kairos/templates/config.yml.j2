@@ -217,6 +217,15 @@ stages:
             Gateway={{ network.gateway }}
 {% endif %}
 {% endfor %}
+    - name: Configure suborindate GID/UID mappings for the root user
+      commands:
+        - |
+          if ! grep -q "root" /etc/subgid; then
+            echo "root:100000:65536" >> /etc/subgid
+          fi
+          if ! grep -q "root" /etc/subuid; then
+            echo "root:100000:65536" >> /etc/subuid
+          fi
   fs:
     # This step can go away once https://github.com/kairos-io/packages/pull/1011 is released.
     - name: Ensure kairos owns files in its user directory

@@ -1,5 +1,6 @@
 
 [Service]
+Delegate=yes
 ExecStart=
 ExecStart=/usr/bin/k3s server \
     --etcd-s3 \
@@ -20,3 +21,4 @@ ExecStart=/usr/bin/k3s server \
     --tls-san={{ tls_san }} \
 {% endfor %}
     --kube-apiserver-arg=allow-privileged=true
+TasksMax=infinity
