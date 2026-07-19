@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/factorio?ref=kustomize-factorio@v0.1.3
+  - ../../../components/pod-security-enforce-baseline
 namespace: factorio-relic
 patches:
   - path: patches/set_load_balancer.yml
