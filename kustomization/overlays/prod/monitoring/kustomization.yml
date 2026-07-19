@@ -5,9 +5,9 @@ kind: Kustomization
 components:
   - ../../../components/cnpg-backup
   - ../../../components/networkpolicy-allow-from-cnpg-operator
-  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/prometheus
 configMapGenerator:
   - name: alloy-config
@@ -76,3 +76,9 @@ resources:
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
+  - networkpolicy/allow-from-grafana-to-internet.yml
+  - networkpolicy/allow-from-prometheus.yml
+  - networkpolicy/allow-to-alertmanager-from-traefik.yml
+  - networkpolicy/allow-to-grafana-from-traefik.yml
+  - networkpolicy/allow-to-loki.yml
+  - networkpolicy/allow-to-prometheus-from-traefik.yml
