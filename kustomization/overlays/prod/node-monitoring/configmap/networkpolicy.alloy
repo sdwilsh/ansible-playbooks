@@ -10,12 +10,14 @@ loki.source.file "k3s_network_drops" {
 loki.process "parse_json_drops" {
   stage.json {
     expressions = {
+      dest_namespace = "dest_namespace",
       src_namespace = "src_namespace",
     }
   }
 
   stage.labels {
     values = {
+      dest_namespace = "dest_namespace",
       src_namespace = "src_namespace",
     }
   }
