@@ -16,13 +16,13 @@ spec:
       ports:
         - port: 5432
         - port: 8000
-    # Allow `kubectl cnpg status` to work.  This happens via the control plane
-    # proxy server, so we have to allow the control plane node's internal IPs.
+    # This is used by both `kubectl cnpg status`, the operator, and other
+    # cluster Pods.
     - from:
         - ipBlock:
-            cidr: 172.16.0.0/24 # node01 internal IP
+            cidr: 172.16.0.0/16
       ports:
-        - port: 8000
+        - port: 8000 # Status Port
   podSelector:
     matchLabels:
       app.kubernetes.io/managed-by: cloudnative-pg
