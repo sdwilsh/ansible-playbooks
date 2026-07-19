@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-cameras-from-frigate-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 554
+      to:
+        - ipBlock:
+            cidr: 10.67.0.12/32 # front-porch
+        - ipBlock:
+            cidr: 10.67.0.14/32 # front-north-east
+        - ipBlock:
+            cidr: 10.67.0.15/32 # north-gate
+        - ipBlock:
+            cidr: 10.67.0.16/32 # back-porch-north
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: frigate
+  policyTypes:
+    - Egress
