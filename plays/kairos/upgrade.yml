@@ -66,7 +66,7 @@
           - upgrade
           - --recovery
           - --source
-          - "oci:ghcr.io/marinatedconcrete/kairos-ubuntu:{{ recovery_image_version | trim('v') }}"
+          - "oci:ghcr.io/marinatedconcrete/kairos-fedora:{{ target_image_version | trim('v') }}"
       become: true
       when: os_image_version != target_image_version
     - name: Install update
@@ -103,9 +103,9 @@
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
   vars:
-    recovery_image_version: 1.0.3
+    recovery_image_version: 0.9.0
     # renovate: datasource=docker depName=ghcr.io/marinatedconcrete/kairos-fedora
-    target_image_version: 0.8.1
+    target_image_version: 0.9.0
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
   gather_facts: false
