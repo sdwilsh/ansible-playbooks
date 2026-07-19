@@ -4,6 +4,8 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/prometheus
 configMapGenerator:
   - name: alloy-config
