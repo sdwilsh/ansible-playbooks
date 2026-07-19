@@ -15,6 +15,8 @@ alloy:
       - mountPath: /host/var/log/journal
         name: journal
         readOnly: true
+      - mountPath: /tmp/nflog
+        name: nflog-shared-volume
       - mountPath: /tmp/alloy
         name: tmp
   priorityClassName: application-infra
@@ -42,6 +44,59 @@ configReloader:
       type: RuntimeDefault
 
 controller:
+  dnsPolicy: ClusterFirstWithHostNet
+  extraContainers:
+    - name: k3s-nflog-logger-sidecar
+      image: alpine:latest
+      command:
+        - /bin/sh
+        - -c
+      args:
+        - |
+          set -eu
+          
+          apk add --no-cache ca-certificates kubectl python3 tcpdump 
+
+          KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+          
+          kubectl config set-cluster in-cluster \
+            --server=https://kubernetes.default.svc \
+            --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            
+          kubectl config set-credentials sidecar-user --token="$KUBE_TOKEN"
+          kubectl config set-context in-cluster --cluster=in-cluster --user=sidecar-user
+          kubectl config use-context in-cluster
+          
+          exec python3 /app/logger_sidecar.py
+          
+      livenessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - pgrep -f logger_sidecar.py && pgrep -x tcpdump
+        initialDelaySeconds: 15
+        periodSeconds: 20
+        timeoutSeconds: 3
+        failureThreshold: 3
+        
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+            - NET_ADMIN
+            - NET_RAW
+          drop:
+            - ALL
+        readOnlyRootFilesystem: false
+        seccompProfile:
+          type: RuntimeDefault
+      volumeMounts:
+        - name: nflog-shared-volume
+          mountPath: /tmp/nflog
+        - name: scripts
+          mountPath: /app
+  hostNetwork: true
   initContainers:
     - command:
         - sh
@@ -69,6 +124,24 @@ controller:
           name: scripts
         - mountPath: /host/usr/local/lib/systemd/journald.conf.d
           name: journald-conf
+    - command:
+        - sh
+        - -c
+        - mkdir -p /tmp/nflog && touch /tmp/nflog/drops.log
+      image: busybox
+      name: setup-nflog-log-file
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        runAsNonRoot: false
+        readOnlyRootFilesystem: true
+        seccompProfile:
+          type: RuntimeDefault
+      volumeMounts:
+        - mountPath: /tmp/nflog
+          name: nflog-shared-volume
   type: daemonset
   volumes:
     extra:
@@ -80,6 +153,8 @@ controller:
           path: /usr/local/lib/systemd/journald.conf.d
           type: DirectoryOrCreate
         name: journald-conf
+      - emptyDir: {}
+        name: nflog-shared-volume
       - configMap:
           defaultMode: 0777
           name: alloy-scripts-configmap
@@ -100,6 +175,7 @@ service:
 
 serviceAccount:
   create: false
+  name: alloy-node
 
 serviceMonitor:
   enabled: false

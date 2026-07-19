@@ -1,0 +1,30 @@
+local.file_match "k3s_drops_file" {
+  path_targets = [{"__path__" = "/tmp/nflog/drops.log"}]
+}
+
+loki.source.file "k3s_network_drops" {
+  targets    = local.file_match.k3s_drops_file.targets
+  forward_to = [loki.process.parse_json_drops.receiver]
+}
+
+loki.process "parse_json_drops" {
+  stage.json {
+    expressions = {
+      src_namespace = "src_namespace",
+    }
+  }
+
+  stage.labels {
+    values = {
+      src_namespace = "src_namespace",
+    }
+  }
+
+  stage.static_labels {
+    values = {
+      job = "k8s-network-policy-drops",
+    }
+  }
+
+  forward_to = [loki.write.default.receiver]
+}
