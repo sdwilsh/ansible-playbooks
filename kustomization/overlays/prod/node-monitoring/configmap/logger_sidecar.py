@@ -15,12 +15,18 @@ BACKUP_COUNT: int = 1
 
 CONNTRACK_PATH: str = "/proc/net/nf_conntrack"
 VERIFY_DELAY_SECONDS: float = 0.5
+MAX_VERIFY_SECONDS: float = 3.0
 VERIFIER_TICK_SECONDS: float = 0.1
 
 KV_RE: re.Pattern = re.compile(r'(\w+)=(\S+)')
 
-# Flows waiting for their VERIFY_DELAY_SECONDS to elapse before being checked against
-# conntrack, as (captured_at, log_data) pairs, guarded by PENDING_LOCK.
+# Flows waiting for their VERIFY_DELAY_SECONDS to elapse before their first check
+# against conntrack, as (captured_at, log_data) pairs, guarded by PENDING_LOCK.  A flow
+# that is not yet replied on its first check is put back here rather than judged
+# immediately - a Node under momentary load (e.g. many Pods restarting at once) can take
+# a coredns/apiserver reply past 0.5s without the flow actually being blocked, and a
+# single snapshot can't tell "slow" from "dropped".  Only once a flow has gone unreplied
+# for the full MAX_VERIFY_SECONDS is it logged as dropped.
 PENDING: List[Tuple[float, Dict[str, Any]]] = []
 PENDING_LOCK: threading.Lock = threading.Lock()
 
@@ -100,13 +106,19 @@ def parse_endpoint(endpoint_str: str) -> Tuple[str, str]:
 # https://github.com/k3s-io/k3s/issues/9032). Verify against conntrack, which reflects
 # what the kernel actually did with the packet, rather than trusting the log.
 #
-# Matches on the reply-direction tuple (src=dest_ip dst=src_ip sport=dest_port
-# dport=src_port) rather than the original direction: when traffic goes through a
-# Service, NFLOG reports the real backing pod as dest_ip (it taps the pod's own firewall
-# chain, post-DNAT), but conntrack's original-direction tuple records the pre-NAT Service
-# ClusterIP instead - the pod IP never appears as a "dst=" there. The reply tuple always
-# reflects the pod's own address regardless of any NAT on the way in, so anchoring on it
-# works whether the traffic went direct-to-pod or via a Service.
+# Match on the Pod's own (protocol, src, sport) rather than reconstructing a NATed
+# 4-tuple.  Two independent NAT layers can each break a dest-based match: NFLOG reports
+# the post-DNAT dest_ip (it taps the Pod's own firewall chain after any Service DNAT),
+# which never lines up with conntrack's original-direction dst (pre-DNAT); and whenever
+# the destination is outside the Pod network - the apiserver's Node IP via the
+# 172.17.0.1 hairpin, or a real LAN host like a Garage Node or a camera - flannel also
+# SNATs/masquerades the packet, so conntrack's reply-direction dst becomes the *Node's*
+# real IP rather than the Pod's, which never lines up with the Pod IP either.  This was
+# confirmed live: Pods successfully reaching the apiserver and Garage via that hairpin
+# were logged as "dropped" on every single request, because the reply tuple's dst was
+# the Node's masqueraded IP, not the Pod's.  src/sport is the one pair NFLOG and
+# conntrack's original-direction tuple always agree on, since NFLOG taps before any NAT
+# rewrites the source, so anchor there instead.
 #
 # SYN_SENT (TCP) / UNREPLIED (UDP) mean conntrack created the entry but has not yet seen
 # a reply. conntrack can hold tens of thousands of entries and this cluster sees
@@ -114,22 +126,26 @@ def parse_endpoint(endpoint_str: str) -> Tuple[str, str]:
 # once per tick into an index, and every flow due for a check is looked up against that
 # single pass, rather than each flow re-scanning the entire table on its own thread.
 
-def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str, str], bool]]:
-    index: Dict[Tuple[str, str, str, str], bool] = {}
+def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str], bool]]:
+    index: Dict[Tuple[str, str, str], bool] = {}
     try:
         with open(CONNTRACK_PATH, "r") as f:
             for line in f:
+                fields: List[str] = line.split()
+                if len(fields) < 3:
+                    continue
+                protocol: str = fields[2]
                 replied: bool = "SYN_SENT" not in line and "UNREPLIED" not in line
                 seen: Dict[str, int] = {}
-                reply: Dict[str, str] = {}
+                original: Dict[str, str] = {}
                 for key, val in KV_RE.findall(line):
-                    if key not in ("src", "dst", "sport", "dport"):
+                    if key not in ("src", "sport"):
                         continue
                     seen[key] = seen.get(key, 0) + 1
-                    if seen[key] == 2:
-                        reply[key] = val
-                if len(reply) == 4:
-                    flow_key: Tuple[str, str, str, str] = (reply["src"], reply["dst"], reply["sport"], reply["dport"])
+                    if seen[key] == 1:
+                        original[key] = val
+                if len(original) == 2:
+                    flow_key: Tuple[str, str, str] = (protocol, original["src"], original["sport"])
                     index[flow_key] = index.get(flow_key, False) or replied
     except OSError:
         diag_logger.exception(f"Failed to read {CONNTRACK_PATH} for conntrack verification")
@@ -141,27 +157,35 @@ def verifier_loop(logger: logging.Logger) -> None:
         time.sleep(VERIFIER_TICK_SECONDS)
         now: float = time.time()
 
-        ready: List[Dict[str, Any]] = []
+        due: List[Tuple[float, Dict[str, Any]]] = []
         with PENDING_LOCK:
             still_pending: List[Tuple[float, Dict[str, Any]]] = []
             for captured_at, log_data in PENDING:
                 if now - captured_at >= VERIFY_DELAY_SECONDS:
-                    ready.append(log_data)
+                    due.append((captured_at, log_data))
                 else:
                     still_pending.append((captured_at, log_data))
             PENDING[:] = still_pending
 
-        if not ready:
+        if not due:
             continue
 
-        index: Optional[Dict[Tuple[str, str, str, str], bool]] = build_conntrack_index()
-        for log_data in ready:
-            flow_key = (log_data["dest_ip"], log_data["src_ip"], log_data["dest_port"], log_data["src_port"])
+        index: Optional[Dict[Tuple[str, str, str], bool]] = build_conntrack_index()
+        undecided: List[Tuple[float, Dict[str, Any]]] = []
+        for captured_at, log_data in due:
+            flow_key = (log_data["protocol"], log_data["src_ip"], log_data["src_port"])
             replied: Optional[bool] = index.get(flow_key) if index is not None else None
             if replied:
                 continue
+            if now - captured_at < MAX_VERIFY_SECONDS:
+                undecided.append((captured_at, log_data))
+                continue
             log_data["verdict"] = "unknown" if index is None else "dropped"
             logger.info(json.dumps(log_data))
+
+        if undecided:
+            with PENDING_LOCK:
+                PENDING.extend(undecided)
 
 def setup_file_logger() -> logging.Logger:
     logger: logging.Logger = logging.getLogger("AlloyJsonLogger")
@@ -210,9 +234,17 @@ def main() -> None:
                 
                 src_pod, src_ns = resolve_pod_from_ip(src_ip)
                 dest_pod, dest_ns = resolve_pod_from_ip(dest_ip)
-                
+
+                # tcpdump always prints "Flags [...]" first for TCP, even when it also
+                # decodes an application-layer protocol on top (e.g. HTTP).  UDP has no
+                # such fixed marker: unrecognized UDP prints "UDP, length N", but a
+                # well-known port like 53 gets fully decoded instead (e.g. "12345+ A?
+                # example.com. (29)"), so checking for a literal "UDP" token misses it.
+                protocol: str = "tcp" if len(tokens) > 4 and tokens[4] == "Flags" else "udp"
+
                 log_data: Dict[str, Any] = {
                     "raw_time": timestamp,
+                    "protocol": protocol,
                     "src_ip": src_ip, "src_port": src_port, "src_pod": src_pod, "src_namespace": src_ns,
                     "dest_ip": dest_ip, "dest_port": dest_port, "dest_pod": dest_pod, "dest_namespace": dest_ns,
                     "packet_details": " ".join(tokens[4:])
