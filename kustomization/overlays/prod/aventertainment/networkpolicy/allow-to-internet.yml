@@ -2,10 +2,12 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-jellyfin-to-internet-networkpolicy
+  name: allow-to-internet-networkpolicy
 spec:
   egress:
-    - to:
+    - ports:
+        - port: 443
+      to:
         - ipBlock:
             cidr: 0.0.0.0/0
             except:
@@ -14,7 +16,11 @@ spec:
               - 172.16.0.0/12
               - 192.168.0.0/16
   podSelector:
-    matchLabels:
-      app.kubernetes.io/name: jellyfin
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - jellyfin
+          - navidrome
   policyTypes:
     - Egress

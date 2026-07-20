@@ -1,0 +1,19 @@
+---
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - jellyfin
+          - navidrome
+          - tdarr-server
+- op: add
+  path: /spec/ingress/0/ports/-
+  value:
+    port: navidrome-web
+- op: add
+  path: /spec/ingress/0/ports/-
+  value:
+    port: ui

@@ -5,6 +5,11 @@ kind: Kustomization
 components:
   - ../../../components/jellyfin
   - ../../../components/navidrome
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-lldap
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/tdarr
 images:
   - name: jellyfin/jellyfin
@@ -61,8 +66,25 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: tdarr-cache-pvc
+  - path: patches/set_traefik_networkpolicy_pods_and_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-traefik-networkpolicy
+replacements:
+  - source:
+      fieldPath: spec.selector
+      kind: StatefulSet
+      name: jellyfin-statefulset
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-lldap-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml
+  - networkpolicy/allow-to-internet.yml
+  - networkpolicy/allow-to-jellyfin-from-hfp.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml
