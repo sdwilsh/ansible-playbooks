@@ -80,3 +80,4 @@ resources:
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
+  - networkpolicy/allow-from-prometheus.yml
