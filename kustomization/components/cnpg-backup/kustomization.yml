@@ -2,6 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
+components:
+  - ../networkpolicy-allow-to-api-server
 configMapGenerator:
   - files:
       - configmap/wait-for-backup.sh
@@ -11,9 +13,21 @@ configMapGenerator:
         argocd.argoproj.io/hook: PreSync
         argocd.argoproj.io/hook-delete-policy: HookSucceeded
         argocd.argoproj.io/sync-wave: "0"
+patches:
+  - target:
+      kind: NetworkPolicy
+      name: allow-to-api-server-networkpolicy
+    patch: |-
+      - op: replace
+        path: /spec/podSelector
+        value:
+          matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+                - database
+                - wait-for-backup
 resources:
-  - networkpolicy/allow-backup-check-to-api-server.yml
-  - networkpolicy/allow-cluster-to-api-server.yml
   - networkpolicy/allow-cluster-to-garage.yml
   - objectstore.yml
   - rbac.yml

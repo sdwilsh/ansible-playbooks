@@ -28,6 +28,10 @@ patches:
       kind: ObjectStore
       name: garage-objectstore
   # paperless
+  - path: patches/paperless/add_paperless_backup_selector.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-api-server-networkpolicy
   - path: patches/increase_paperless_data_size.yml
     target:
       kind: PersistentVolumeClaim

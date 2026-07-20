@@ -1,0 +1,4 @@
+---
+- op: add
+  path: /spec/podSelector/matchExpressions/0/values/-
+  value: paperless-backup
