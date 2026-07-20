@@ -87,5 +87,6 @@ resources:
   - networkpolicy/allow-to-and-from-redis-operator.yml
   - networkpolicy/allow-to-lldap-from-traefik.yml
   - networkpolicy/allow-to-lldap-from-opencloud.yml
+  - networkpolicy/allow-to-lldap-from-jellyfin.yml
   - networkpolicy/allow-to-authelia-from-traefik.yml
   - redisreplication.yml
