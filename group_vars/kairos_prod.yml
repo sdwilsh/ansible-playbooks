@@ -882,6 +882,12 @@ secrets:
           61626631373035613066626337396263373335373337613231623633306136623166313566393239
           61643730363466333863663766623564303465306137646461313963613731663538663261383061
           33316164663262346364
+  - annotations:
+      kubernetes.io/service-account.name: prometheus-service-account
+    name: prometheus-service-account-token-secret
+    namespace: monitoring
+    stringData: {}
+    type: kubernetes.io/service-account-token
   - name: tandoor-secret
     namespace: tandoor
     stringData:

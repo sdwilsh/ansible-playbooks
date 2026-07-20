@@ -4,3 +4,6 @@ namespaceOverride: node-monitoring
 prometheus:
   monitor:
     enabled: true
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+        targetLabel: node

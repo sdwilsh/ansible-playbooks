@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: kubelet-cadvisor-scrapeconfig
+spec:
+  jobName: kubelet-cadvisor
+  kubernetesSDConfigs:
+    - role: Node
+  scheme: HTTPS
+  metricsPath: /metrics/cadvisor
+  tlsConfig:
+    insecureSkipVerify: true
+  authorization:
+    credentials:
+      name: prometheus-service-account-token-secret
+      key: token

@@ -8,7 +8,7 @@ rules:
       - ""
     resources:
       - nodes
-      - node/metrics
+      - nodes/metrics
       - services
       - endpoints
       - pods

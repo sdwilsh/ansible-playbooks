@@ -23,6 +23,7 @@
           apiVersion: v1
           kind: Secret
           metadata:
+            annotations: "{{ secret.annotations | default({}) }}"
             labels: >-
               {{ secret.labels
                   | default({})
