@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kubectl get *)",
+      "WebFetch(domain:github.com)",
+      "Bash(logcli query *)",
+      "Bash(export LOKI_ADDR=https://loki.hogs.tswn.us)",
+      "Bash(python3 -m json.tool)",
+      "Bash(logcli *)",
+      "Bash(git log *)",
+      "Bash(kubectl config view *)",
+      "Bash(kubectl config current-context *)",
+      "Bash(kubectl describe *)",
+      "Bash(kubectl logs *)",
+      "Skill(artifact-design)",
+      "Bash(just kustomize-build *)",
+      "Bash(kustomize build *)",
+      "Bash(grep *)",
+      "Bash(echo \"exit=$?\")",
+      "WebFetch(domain:kube-vip.io)",
+      "Bash(gh api *)",
+      "WebFetch(domain:api.github.com)"
+    ]
+  }
+}

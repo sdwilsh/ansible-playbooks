@@ -20,9 +20,9 @@ spec:
             - name: BACKUP
               value: "YES"
             - name: PGID
-              value: "65536"
+              value: "65534"
             - name: PUID
-              value: "65536"
+              value: "65534"
             - name: START_MODE
               value: "3"
             - name: TimeZone
@@ -73,7 +73,7 @@ spec:
               name: seven-days-to-die-server
       priorityClassName: application
       securityContext:
-        fsGroup: 65536
+        fsGroup: 65534
       volumes:
         - name: seven-days-to-die-logs
           emptyDir:
