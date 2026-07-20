@@ -2,10 +2,16 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-to-lldap-from-opencloud-networkpolicy
+  name: allow-to-lldap-from-consumers-networkpolicy
 spec:
   ingress:
     - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: aventertainment
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jellyfin
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: opencloud

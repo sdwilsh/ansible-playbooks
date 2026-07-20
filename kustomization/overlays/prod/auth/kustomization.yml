@@ -90,6 +90,5 @@ resources:
   - ingress/lldap.yml
   - middleware/forwardauth.yml
   - networkpolicy/allow-to-and-from-redis-operator.yml
-  - networkpolicy/allow-to-lldap-from-opencloud.yml
-  - networkpolicy/allow-to-lldap-from-jellyfin.yml
+  - networkpolicy/allow-to-lldap-from-consumers.yml
   - redisreplication.yml
