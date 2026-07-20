@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-jellyfin-from-hfp-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.2.0/24
+      ports:
+        - port: discovery
+          protocol: UDP
+        # Not exposing ssdp!
+        - port: web
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+  policyTypes:
+    - Ingress
