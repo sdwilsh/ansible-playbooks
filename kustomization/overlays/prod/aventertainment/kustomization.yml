@@ -55,14 +55,6 @@ patches:
     target:
       kind: Service
       name: navidrome-svc
-  - path: patches/set_tdarr_server_user_and_group.yml
-    target:
-      kind: StatefulSet
-      name: tdarr-server-statefulset
-  - path: patches/set_tdarr_worker_user_and_group.yml
-    target:
-      kind: Deployment
-      name: tdarr-node-deployment
   - path: patches/set_jellyfin_service_ip.yml
     target:
       kind: Service

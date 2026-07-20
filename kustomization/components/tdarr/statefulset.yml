@@ -32,9 +32,9 @@ spec:
             - name: serverPort
               value: "8266"
             - name: PGID
-              value: "65536"
+              value: "65534"
             - name: PUID
-              value: "65536"
+              value: "65534"
             - name: TZ
               value: America/Los_Angeles
             - name: webUIPort
@@ -68,7 +68,7 @@ spec:
               name: tdarr-server
       priorityClassName: application
       securityContext:
-        fsGroup: 65536
+        fsGroup: 65534
       volumes:
         - emptyDir:
           name: tdarr-configs

@@ -47,9 +47,9 @@ spec:
             - name: serverPort
               value: "8266"
             - name: PGID
-              value: "65536"
+              value: "65534"
             - name: PUID
-              value: "65536"
+              value: "65534"
             - name: TZ
               value: America/Los_Angeles
           image: ghcr.io/haveagitgat/tdarr_node
@@ -77,7 +77,7 @@ spec:
               name: tdarr-logs
       priorityClassName: opportunistic
       securityContext:
-        fsGroup: 65536
+        fsGroup: 65534
       volumes:
         - emptyDir:
             medium: Memory

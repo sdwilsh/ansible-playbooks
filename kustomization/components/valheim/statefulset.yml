@@ -32,7 +32,7 @@ spec:
             - name: AUTO_UPDATE_PAUSE_WITH_PLAYERS
               value: "1"
             - name: GUID
-              value: "65536"
+              value: "65534"
             - name: HTTP_PORT
               value: "9090"
             - name: PASSWORD
@@ -45,7 +45,7 @@ spec:
             - name: PUBLIC
               value: "1"
             - name: PUID
-              value: "65536"
+              value: "65534"
             - name: TZ
               value: America/Los_Angeles
           image: mbround18/valheim
@@ -87,7 +87,7 @@ spec:
               name: valheim-saves
       priorityClassName: application
       securityContext:
-        fsGroup: 65536
+        fsGroup: 65534
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim

@@ -15,10 +15,10 @@ spec:
   ruleNamespaceSelector: {}
   ruleSelector: {}
   securityContext:
-    fsGroup: 65536
-    runAsGroup: 65536
+    fsGroup: 65534
+    runAsGroup: 65534
     runAsNonRoot: true
-    runAsUser: 65536
+    runAsUser: 65534
     seccompProfile:
       type: RuntimeDefault
   serviceAccountName: prometheus-service-account
