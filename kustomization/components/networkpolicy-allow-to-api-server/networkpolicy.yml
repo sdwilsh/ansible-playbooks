@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-paperless-backup-to-api-server-networkpolicy
+  name: allow-to-api-server-networkpolicy
 spec:
   egress:
     - ports:
@@ -14,9 +14,8 @@ spec:
         - port: 6443
       to:
         - ipBlock:
-            cidr: 10.11.0.101/32 # node01 node IP
+            cidr: 10.11.0.101/32 # node01
   podSelector:
-    matchLabels:
-      app.kubernetes.io/component: paperless-backup
+    matchLabels: {} # You probably do not want to match all pods!
   policyTypes:
     - Egress

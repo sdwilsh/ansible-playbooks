@@ -4,6 +4,7 @@ kind: Component
 
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/paperless?ref=kustomize-paperless@v1.2.0
+  - ../networkpolicy-allow-to-api-server
 configMapGenerator:
   - name: paperless-backup-scripts-configmap
     files:
@@ -30,11 +31,21 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: paperless-media
+replacements:
+  - source:
+      fieldPath: spec.jobTemplate.spec.template.metadata.labels
+      kind: CronJob
+      name: paperless-backup
+    targets:
+      - fieldPaths:
+          - spec.podSelector.matchLabels
+        select:
+          kind: NetworkPolicy
+          name: allow-to-api-server-networkpolicy
 resources:
   - clusterrole.yaml
   - clusterrolebinding.yaml
   - cronjob.yml
-  - networkpolicy/allow-paperless-backup-to-api-server.yml
   - persistentvolume.yml
   - pvc.yml
   - serviceaccount.yml
