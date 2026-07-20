@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-lldap-from-opencloud-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opencloud
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: opencloud
+      ports:
+        - port: ldaps
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: lldap
+  policyTypes:
+    - Ingress

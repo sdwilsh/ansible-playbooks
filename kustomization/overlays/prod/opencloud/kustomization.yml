@@ -3,6 +3,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-lldap
+  - ../../../components/networkpolicy-allow-to-traefik
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/opencloud
 configMapGenerator:
   # These can be set with an environment variable and can therefore just be
@@ -28,6 +34,37 @@ patches:
     target:
       kind: StatefulSet
       name: opencloud-statefulset
+replacements:
+  - source:
+      fieldPath: spec.template.spec.containers.[name=opencloud].ports.[name=web].name
+      kind: StatefulSet
+      name: opencloud-statefulset
+    targets:
+      - fieldPaths:
+          - spec.ingress.0.ports.[port=web].port
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+  - source:
+      fieldPath: spec.selector
+      kind: StatefulSet
+      name: opencloud-statefulset
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-lldap-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-traefik-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml
