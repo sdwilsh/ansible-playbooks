@@ -280,6 +280,7 @@
           - 10.11.1.64/32 # Traefik
           - 10.11.1.65/32 # Unifi Controller
           - 10.11.1.66/32 # DNS Server
+          - 10.11.1.69/32 # Factorio
           - 10.11.1.70/32 # code.tswn.us SSH Server
           - 10.11.1.72/32 # loki-distributor
           - 10.11.1.74/32 # 7 Days to Die (Relic)

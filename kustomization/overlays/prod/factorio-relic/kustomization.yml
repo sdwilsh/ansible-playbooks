@@ -4,6 +4,9 @@ kind: Kustomization
 
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/factorio?ref=kustomize-factorio@v0.1.3
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
 namespace: factorio-relic
 patches:
@@ -18,3 +21,6 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
+  - networkpolicy/allow-from-factorio-to-internet.yml
+  - networkpolicy/allow-to-admin-from-traefik.yml
+  - networkpolicy/allow-to-game-from-choros.yml

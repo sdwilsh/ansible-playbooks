@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-game-from-choros-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.2.2/32
+      ports:
+        - port: 34197
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: factorio
+  policyTypes:
+    - Ingress
