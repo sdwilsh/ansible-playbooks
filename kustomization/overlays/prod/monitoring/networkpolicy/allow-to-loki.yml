@@ -21,6 +21,8 @@ spec:
           podSelector:
             matchLabels:
               app.kubernetes.io/name: traefik
+        - ipBlock:
+            cidr: 10.11.2.0/24 # hogsflixplus (HFP) remote nodes
       ports:
         - port: 3100
   podSelector:
