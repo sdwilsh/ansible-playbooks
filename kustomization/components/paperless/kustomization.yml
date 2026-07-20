@@ -34,6 +34,7 @@ resources:
   - clusterrole.yaml
   - clusterrolebinding.yaml
   - cronjob.yml
+  - networkpolicy/allow-paperless-backup-to-api-server.yml
   - persistentvolume.yml
   - pvc.yml
   - serviceaccount.yml
