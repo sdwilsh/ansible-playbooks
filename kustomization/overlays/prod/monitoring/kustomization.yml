@@ -6,6 +6,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-garage
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/prometheus
@@ -76,6 +77,7 @@ resources:
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
+  - networkpolicy/allow-from-alertmanager-to-internet.yml
   - networkpolicy/allow-from-grafana-to-internet.yml
   - networkpolicy/allow-from-prometheus.yml
   - networkpolicy/allow-to-alertmanager-from-traefik.yml
