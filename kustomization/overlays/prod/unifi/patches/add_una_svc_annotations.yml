@@ -6,4 +6,5 @@ metadata:
     kube-vip.io/loadbalancerIPs: 10.11.1.65
     traefik.ingress.kubernetes.io/service.serverstransport: unifi-unifi-network-application-serverstransport@kubernetescrd
   name: this-is-ignored-but-is-required
-spec: {}
+spec:
+  externalTrafficPolicy: Local

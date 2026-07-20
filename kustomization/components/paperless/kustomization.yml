@@ -30,6 +30,10 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: paperless-media
+  - path: patches/set_samba_traffic_policy.yml
+    target:
+      kind: Service
+      name: samba-svc
 resources:
   - clusterrole.yaml
   - clusterrolebinding.yaml
