@@ -5,6 +5,7 @@ kind: Kustomization
 components:
   - ../../../components/cnpg-backup
   - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-garage
   - ../../../components/networkpolicy-allow-within-this-namespace
@@ -69,6 +70,10 @@ patches:
   - path: patches/prometheus-adapter/set_correct_apiVersion.yml
     target:
       kind: APIService
+  - path: patches/set_traefik_networkpolicy_pods_and_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - alertmanagerconfig.yml
@@ -80,7 +85,4 @@ resources:
   - networkpolicy/allow-from-alertmanager-to-internet.yml
   - networkpolicy/allow-from-grafana-to-internet.yml
   - networkpolicy/allow-from-prometheus.yml
-  - networkpolicy/allow-to-alertmanager-from-traefik.yml
-  - networkpolicy/allow-to-grafana-from-traefik.yml
   - networkpolicy/allow-to-loki.yml
-  - networkpolicy/allow-to-prometheus-from-traefik.yml

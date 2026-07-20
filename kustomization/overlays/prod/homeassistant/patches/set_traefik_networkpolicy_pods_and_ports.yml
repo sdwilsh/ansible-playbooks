@@ -1,0 +1,19 @@
+---
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - frigate
+          - mosquitto
+          - postgresql
+- op: add
+  path: /spec/ingress/0/ports/-
+  value:
+    port: mqtt
+- op: add
+  path: /spec/ingress/0/ports/-
+  value:
+    port: postgresql
