@@ -7,6 +7,14 @@ spec:
   egress:
     - to:
         - namespaceSelector: {}
+    - to:
+        - ipBlock:
+            cidr: 10.11.0.0/23
+      ports:
+        - port: 9100
+          protocol: TCP
+        - port: 10250
+          protocol: TCP
   podSelector:
     matchLabels:
       app.kubernetes.io/name: prometheus
