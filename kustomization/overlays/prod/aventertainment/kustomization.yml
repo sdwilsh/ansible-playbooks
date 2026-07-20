@@ -7,6 +7,7 @@ components:
   - ../../../components/navidrome
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-lldap
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
@@ -38,6 +39,10 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
+  - path: patches/set_internet_networkpolicy_podselector.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-internet-networkpolicy
   - path: patches/set_navidrome_baseurl.yml
     target:
       kind: StatefulSet
@@ -84,7 +89,6 @@ replacements:
 resources:
   - namespace.yml
   - ingress.yml
-  - networkpolicy/allow-to-internet.yml
   - networkpolicy/allow-to-jellyfin-from-hfp.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml

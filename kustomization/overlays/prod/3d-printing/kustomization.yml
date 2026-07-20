@@ -8,6 +8,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
@@ -50,6 +51,11 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-internet-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

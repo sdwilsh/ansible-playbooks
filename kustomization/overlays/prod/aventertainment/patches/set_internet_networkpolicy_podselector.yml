@@ -1,0 +1,10 @@
+---
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - jellyfin
+          - navidrome

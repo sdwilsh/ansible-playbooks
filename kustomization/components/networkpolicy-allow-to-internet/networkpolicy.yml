@@ -16,11 +16,6 @@ spec:
               - 172.16.0.0/12
               - 192.168.0.0/16
   podSelector:
-    matchExpressions:
-      - key: app.kubernetes.io/name
-        operator: In
-        values:
-          - jellyfin
-          - navidrome
+    matchLabels: {} # You probably do not want to match all pods!
   policyTypes:
     - Egress
