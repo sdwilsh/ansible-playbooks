@@ -9,16 +9,6 @@ metadata:
   name: aventertainment-ingress
 spec:
   rules:
-    - host: jellyfin.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: jellyfin-svc
-                port:
-                  name: web
-            path: /
-            pathType: Prefix
     - host: tdarr.hogs.tswn.us
       http:
         paths:
@@ -39,6 +29,16 @@ metadata:
   name: aventertainment-external-ingress
 spec:
   rules:
+    - host: jellyfin.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: jellyfin-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix
     - host: navidrome.tswn.us
       http:
         paths:
