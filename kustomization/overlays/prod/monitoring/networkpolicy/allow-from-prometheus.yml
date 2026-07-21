@@ -15,6 +15,8 @@ spec:
           protocol: TCP
         - port: 10250
           protocol: TCP
+        - port: 3903 # garage admin/metrics (hostNetwork DaemonSet)
+          protocol: TCP
     - to:
         - ipBlock:
             cidr: 172.17.0.1/32 # kubernetes.default.svc (apiserver ClusterIP)
