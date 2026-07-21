@@ -14,19 +14,18 @@ MAX_BYTES: int = 10 * 1024 * 1024
 BACKUP_COUNT: int = 1
 
 CONNTRACK_PATH: str = "/proc/net/nf_conntrack"
-VERIFY_DELAY_SECONDS: float = 0.5
 MAX_VERIFY_SECONDS: float = 3.0
 VERIFIER_TICK_SECONDS: float = 0.1
 
 KV_RE: re.Pattern = re.compile(r'(\w+)=(\S+)')
 
-# Flows waiting for their VERIFY_DELAY_SECONDS to elapse before their first check
-# against conntrack, as (captured_at, log_data) pairs, guarded by PENDING_LOCK.  A flow
-# that is not yet replied on its first check is put back here rather than judged
-# immediately - a Node under momentary load (e.g. many Pods restarting at once) can take
-# a coredns/apiserver reply past 0.5s without the flow actually being blocked, and a
-# single snapshot can't tell "slow" from "dropped".  Only once a flow has gone unreplied
-# for the full MAX_VERIFY_SECONDS is it logged as dropped.
+# Flows awaiting a verdict, as (captured_at, log_data) pairs, guarded by PENDING_LOCK.
+# Checked against conntrack on every tick starting on the tick right after capture; a
+# flow that is not yet replied is put back here rather than judged immediately - a Node
+# under momentary load (e.g. many Pods restarting at once) can take a coredns/apiserver
+# reply past a tick or two without the flow actually being blocked, and a single
+# snapshot can't tell "slow" from "dropped".  Only once a flow has gone unreplied for
+# the full MAX_VERIFY_SECONDS is it logged as dropped.
 PENDING: List[Tuple[float, Dict[str, Any]]] = []
 PENDING_LOCK: threading.Lock = threading.Lock()
 
@@ -126,8 +125,15 @@ def parse_endpoint(endpoint_str: str) -> Tuple[str, str]:
 # once per tick into an index, and every flow due for a check is looked up against that
 # single pass, rather than each flow re-scanning the entire table on its own thread.
 
-def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str], bool]]:
-    index: Dict[Tuple[str, str, str], bool] = {}
+def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str], Dict[str, Any]]]:
+    # Keyed on the flow's own (protocol, src, sport), same as "replied" above and for the
+    # same reason.  Also carries the reply tuple's src: for a DNATed flow (a Pod talking
+    # to a ClusterIP) that's the real backend Pod that answered.  PREROUTING fills in the
+    # reply tuple as soon as the entry is created - before any actual reply packet
+    # arrives - so it's there even for a flow that's ultimately logged as dropped, and
+    # lets that log entry resolve the true destination Pod instead of the Service IP,
+    # which resolve_pod_from_ip() has no way to map on its own.
+    index: Dict[Tuple[str, str, str], Dict[str, Any]] = {}
     try:
         with open(CONNTRACK_PATH, "r") as f:
             for line in f:
@@ -138,15 +144,21 @@ def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str], bool]]:
                 replied: bool = "SYN_SENT" not in line and "UNREPLIED" not in line
                 seen: Dict[str, int] = {}
                 original: Dict[str, str] = {}
+                reply: Dict[str, str] = {}
                 for key, val in KV_RE.findall(line):
                     if key not in ("src", "sport"):
                         continue
                     seen[key] = seen.get(key, 0) + 1
                     if seen[key] == 1:
                         original[key] = val
+                    elif seen[key] == 2:
+                        reply[key] = val
                 if len(original) == 2:
                     flow_key: Tuple[str, str, str] = (protocol, original["src"], original["sport"])
-                    index[flow_key] = index.get(flow_key, False) or replied
+                    entry: Dict[str, Any] = index.setdefault(flow_key, {"replied": False, "reply_src": ""})
+                    entry["replied"] = entry["replied"] or replied
+                    if reply.get("src"):
+                        entry["reply_src"] = reply["src"]
     except OSError:
         diag_logger.exception(f"Failed to read {CONNTRACK_PATH} for conntrack verification")
         return None
@@ -157,29 +169,27 @@ def verifier_loop(logger: logging.Logger) -> None:
         time.sleep(VERIFIER_TICK_SECONDS)
         now: float = time.time()
 
-        due: List[Tuple[float, Dict[str, Any]]] = []
         with PENDING_LOCK:
-            still_pending: List[Tuple[float, Dict[str, Any]]] = []
-            for captured_at, log_data in PENDING:
-                if now - captured_at >= VERIFY_DELAY_SECONDS:
-                    due.append((captured_at, log_data))
-                else:
-                    still_pending.append((captured_at, log_data))
-            PENDING[:] = still_pending
+            due: List[Tuple[float, Dict[str, Any]]] = list(PENDING)
+            PENDING.clear()
 
         if not due:
             continue
 
-        index: Optional[Dict[Tuple[str, str, str], bool]] = build_conntrack_index()
+        index: Optional[Dict[Tuple[str, str, str], Dict[str, Any]]] = build_conntrack_index()
         undecided: List[Tuple[float, Dict[str, Any]]] = []
         for captured_at, log_data in due:
             flow_key = (log_data["protocol"], log_data["src_ip"], log_data["src_port"])
-            replied: Optional[bool] = index.get(flow_key) if index is not None else None
-            if replied:
+            entry: Optional[Dict[str, Any]] = index.get(flow_key) if index is not None else None
+            if entry is not None and entry["replied"]:
                 continue
             if now - captured_at < MAX_VERIFY_SECONDS:
                 undecided.append((captured_at, log_data))
                 continue
+            if not log_data["dest_pod"] and entry and entry["reply_src"]:
+                pod_name, namespace = resolve_pod_from_ip(entry["reply_src"])
+                if pod_name:
+                    log_data["dest_pod"], log_data["dest_namespace"] = pod_name, namespace
             log_data["verdict"] = "unknown" if index is None else "dropped"
             logger.info(json.dumps(log_data))
 
