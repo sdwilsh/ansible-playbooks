@@ -18,7 +18,7 @@
           apiVersion: apps/v1
           kind: StatefulSet
           metadata:
-            name: "{{ (lookup('file', '../../../components/tandoor/tandoor.yml') | from_yaml).metadata.name }}"
+            name: "{{ (lookup('file', '../../../components/tandoor/statefulset.yml') | from_yaml).metadata.name }}"
             namespace: "{{ k8s_namespace }}"
           spec:
             replicas: 0
