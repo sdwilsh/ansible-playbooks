@@ -15,6 +15,18 @@ spec:
           protocol: TCP
         - port: 10250
           protocol: TCP
+    - to:
+        - ipBlock:
+            cidr: 172.17.0.1/32 # kubernetes.default.svc (apiserver ClusterIP)
+      ports:
+        - port: 443
+          protocol: TCP
+    - to:
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01 (apiserver)
+      ports:
+        - port: 6443
+          protocol: TCP
   podSelector:
     matchLabels:
       app.kubernetes.io/name: prometheus
