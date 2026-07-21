@@ -84,11 +84,12 @@
       "datasourceTemplate": "github-releases",
       "managerFilePatterns": [
         "/^kustomization/.+/.+/kustomization\\.yml$/",
-        "/^kustomization/.+/.+/.+/kustomization\\.yml$/"
+        "/^kustomization/.+/.+/.+/kustomization\\.yml$/",
+        "!kustomization/overlays/prod/keda/kustomization.yml"
       ],
       "matchStrings": [
         "\\s-\\shttps://raw\\.githubusercontent\\.com/(?<depName>cloudnative-pg/cloudnative-pg)/main/releases/cnpg-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\\.yaml",
-        "\\s-\\shttps://github\\.com/(?<depName>(?!kedacore/keda/).*?/.*?)/releases/download/(?<currentValue>v?[0-9]+\\.[0-9]+\\.[0-9]+)/.+"
+        "\\s-\\shttps://github\\.com/(?<depName>.*?/.*?)/releases/download/(?<currentValue>v?[0-9]+\\.[0-9]+\\.[0-9]+)/.+"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
     },
