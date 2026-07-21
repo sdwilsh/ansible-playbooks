@@ -6,11 +6,14 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/3d-printing/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/atuin/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/aventertainment/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/crowdsec/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/forgejo/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/monitoring/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/opencloud/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tandoor/scale-down.yml
@@ -19,5 +22,6 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/unifi/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-forerunner/scale-down.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-relic/scale-down.yml
-# Finally, we can scale down traefik
+# Finally, we can scale down authelia and traefik
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/traefik/scale-down.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/auth/scale-down.yml

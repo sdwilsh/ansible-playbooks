@@ -1,5 +1,9 @@
 ---
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/redis/scale-up.yml
+# authelia's redis-sentinel/redis-replication StatefulSets need the redis operator up
+# first, and its cnpg Clusters need the (never scaled down) cnpg operator - both are
+# satisfied by this point.
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/auth/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/traefik/scale-up.yml
 
@@ -7,11 +11,14 @@
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/3d-printing/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/atuin/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/aventertainment/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/crowdsec/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/forgejo/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/monitoring/scale-up.yml
+- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/opencloud/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tandoor/scale-up.yml
 - ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-up.yml

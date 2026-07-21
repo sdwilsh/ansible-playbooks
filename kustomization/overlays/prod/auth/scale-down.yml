@@ -2,7 +2,12 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Disable automated sync for traffic-apps
+    # Best-effort: when this runs as part of the wider cluster scale-down, traefik may
+    # already be down by the time auth's turn comes up, and the argocd CLI needs it - so
+    # tolerate that and keep going, since disabling sync no longer matters once traefik
+    # itself is on its way down. Run standalone, argocd is still reachable and this
+    # protects the manual scale-down below from being fought by auto-sync.
+    - name: Disable automated sync for auth and traefik
       ansible.builtin.command:
         argv:
           - argocd
@@ -13,8 +18,8 @@
       loop:
         - auth
         - traefik
-    # Note: the argocd command line will stop working once we disable auth!
-    - name: Scale down authelia deployment 
+      ignore_errors: true
+    - name: Scale down authelia deployment
       kubernetes.core.k8s:
         context: "{{ cluster }}"
         state: present

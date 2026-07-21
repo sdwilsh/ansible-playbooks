@@ -2,6 +2,8 @@
 - hosts: localhost
   gather_facts: false
   tasks:
+    # Best-effort, same reasoning as auth/scale-down.yml: this can run after auth (and
+    # therefore forward-auth) is already down, which breaks the argocd CLI too.
     - name: Disable automated sync for traefik
       ansible.builtin.command:
         argv:
@@ -10,7 +12,8 @@
           - set
           - traefik
           - --sync-policy=manual
-    - name: Scale down traefik deployment 
+      ignore_errors: true
+    - name: Scale down traefik deployment
       kubernetes.core.k8s:
         context: "{{ cluster }}"
         state: present
