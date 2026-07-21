@@ -15,7 +15,7 @@ images:
     newTag: latest@sha256:8aabe27dc02296e25e0b19b679c231315e7bb87d4ed5efb968fbe6799377ced1
   # Cannot move to v3, as it breaks hooks entirely: https://github.com/replicatedhq/ttl.sh/pull/179
   - name: registry
-    newTag: 2@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+    newTag: 3@sha256:1be55279f18a2fe1a74edf2664cac61c1bea305b7b4642dab412e7affdcb3e33
   - name: quay.io/curl/curl
     newTag: 8.21.0@sha256:7c12af72ceb38b7432ab85e1a265cff6ae58e06f95539d539b654f2cfa64bb13
 namespace: ttlsh
