@@ -18,6 +18,10 @@ patches:
     target:
       kind: StatefulSet
       name: factorio-statefulset
+  - path: patches/use_stable_factorio_version.yml
+    target:
+      kind: StatefulSet
+      name: factorio-statefulset
 resources:
   - namespace.yml
   - ingress.yml
