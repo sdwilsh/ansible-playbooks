@@ -173,6 +173,7 @@
         "deluan/navidrome",
         "docker.io/grafana/alloy",
         "eclipse-mosquitto",
+        "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/paperless-ngx/paperless-ngx",
         "ghcr.io/squat/generic-device-plugin",
         "gotenberg/gotenberg",
@@ -183,7 +184,6 @@
         "lscr.io/linuxserver/transmission",
         "mbround18/valheim",
         "prometheus/prometheus",
-        "shenxn/protonmail-bridge",
         "stirling-pdf-chart",
         "twpayne/chezmoi",
         "ubuntu/bind9"
@@ -223,6 +223,7 @@
         "docker.io/bitnami/kubectl",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
+        "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/marinatedconcrete/devcontainer-base",
         "ghcr.io/servercontainers/samba",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
