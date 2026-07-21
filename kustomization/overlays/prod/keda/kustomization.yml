@@ -7,4 +7,4 @@ patches:
     target:
       kind: Namespace
 resources:
-  - https://github.com/kedacore/keda/releases/download/v2.20.0/keda-2.20.0.yaml
+  - https://github.com/kedacore/keda/releases/download/v2.20.1/keda-2.20.1.yaml
