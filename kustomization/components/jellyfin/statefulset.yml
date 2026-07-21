@@ -21,6 +21,7 @@ spec:
           ports:
             - containerPort: 7359
               name: discovery
+              protocol: UDP
             - containerPort: 8096
               name: web
             - containerPort: 1900
