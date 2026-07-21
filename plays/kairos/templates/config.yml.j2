@@ -19,6 +19,7 @@ k3s:
   args:
     - --etcd-s3
     - --etcd-s3-config-secret=etcd-s3-secret
+    - --flannel-backend=host-gw
     - --flannel-iface=services
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
@@ -86,6 +87,13 @@ stages:
       sysctl:
         fs.inotify.max_user_instances: "8192"
         fs.inotify.max_user_watches: "524288"
+    - name: Set rp_filter for host-gw
+      sysctl:
+        # Loose (2), not disabled (0): still drops unroutable sources.  Both all and
+        # default are needed - the effective value is max(all, iface), and default only
+        # seeds interfaces created after this applies.
+        net.ipv4.conf.all.rp_filter: "2"
+        net.ipv4.conf.default.rp_filter: "2"
     - name: Disable multipath
       systemctl:
         disable:
