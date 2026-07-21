@@ -54,15 +54,15 @@
           reason: Hibernated
           status: "True"
         wait_timeout: 300 # 5m
-    - name: Scale down immich redis statefulset
+    - name: Scale down immich-valkey deployment
       kubernetes.core.k8s:
         context: "{{ cluster }}"
         state: present
         resource_definition:
           apiVersion: apps/v1
-          kind: StatefulSet
+          kind: Deployment
           metadata:
-            name: immich-redis-master
+            name: immich-valkey
             namespace: "{{ k8s_namespace }}"
           spec:
             replicas: 0
