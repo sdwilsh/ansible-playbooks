@@ -13,7 +13,7 @@ images:
   - name: code.forgejo.org/forgejo/runner
     newTag: 12.13.0@sha256:d85b420efea6f0137fe03f285b05df73e0c34cfbfc2c6a96d22cc52f38106d8c
   - name: docker.io/library/docker
-    newTag: 29.6.1-dind-rootless@sha256:371962f4344295a1eb185f1c9e62064bf4503a7beb8c6e73be3405500041784b
+    newTag: 29.6.2-dind-rootless@sha256:212a9e782c7119fd6a212beaab6b7665a29b663d894d0f6201710c89575ad0ae
 resources:
   - scaledjob.yml
   - triggerauthentication.yml
