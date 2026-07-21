@@ -507,6 +507,7 @@
       "matchPackageNames": ["marinatedconcrete/config"]
     }
   ],
+  "prConcurrentLimit": 50,
   "prHourlyLimit": 6,
   "separateMinorPatch": true
 }
