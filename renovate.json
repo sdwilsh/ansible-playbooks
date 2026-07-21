@@ -170,9 +170,11 @@
         "alpine",
         "argoproj/argo-cd",
         "cert-manager/cert-manager",
+        "code.forgejo.org/forgejo/runner",
         "deluan/navidrome",
         "docker.io/grafana/alloy",
         "eclipse-mosquitto",
+        "forgejo",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/paperless-ngx/paperless-ngx",
         "ghcr.io/squat/generic-device-plugin",
@@ -183,10 +185,11 @@
         "loki",
         "lscr.io/linuxserver/transmission",
         "mbround18/valheim",
+        "prometheus-node-exporter",
         "prometheus/prometheus",
+        "renovate",
         "stirling-pdf-chart",
-        "twpayne/chezmoi",
-        "ubuntu/bind9"
+        "twpayne/chezmoi"
       ],
       "minimumReleaseAge": "3 days",
       "schedule": [
