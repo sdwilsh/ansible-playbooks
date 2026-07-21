@@ -19,6 +19,7 @@ configMapGenerator:
       - configmap/acquis.d/appsec.yaml
       - configmap/acquis.d/authelia.yaml
       - configmap/acquis.d/immich.yaml
+      - configmap/acquis.d/jellyfin.yaml
       - configmap/acquis.d/navidrome.yaml
       - configmap/acquis.d/traefik.yaml
   - name: crowdsec-scripts-configmap

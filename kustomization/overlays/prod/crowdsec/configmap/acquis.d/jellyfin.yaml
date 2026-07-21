@@ -1,0 +1,7 @@
+---
+labels:
+  type: jellyfin
+query: |
+  {namespace="aventertainment", container="jellyfin"}
+source: loki
+url: http://loki-query-frontend.monitoring.svc.cluster.local:3100/

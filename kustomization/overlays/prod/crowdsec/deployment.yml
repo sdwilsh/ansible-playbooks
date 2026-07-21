@@ -30,7 +30,13 @@ spec:
             - /scripts/entrypoint.sh
           env:
             - name: COLLECTIONS
-              value: crowdsecurity/appsec-virtual-patching crowdsecurity/traefik gauth-fr/immich LePresidente/authelia sdwilsh/navidrome
+              value: >-
+                crowdsecurity/appsec-virtual-patching
+                crowdsecurity/traefik
+                gauth-fr/immich
+                LePresidente/authelia
+                LePresidente/jellyfin
+                sdwilsh/navidrome
             - name: CROWDSEC_BYPASS_DB_VOLUME_CHECK
               value: "1"
             - name: DB_HOST
