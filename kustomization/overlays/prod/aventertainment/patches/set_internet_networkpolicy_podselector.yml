@@ -8,3 +8,5 @@
         values:
           - jellyfin
           - navidrome
+          - tdarr-node
+          - tdarr-server

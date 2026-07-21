@@ -6,6 +6,7 @@ metadata:
 spec:
   egress:
     - ports:
+        - port: 80
         - port: 443
       to:
         - ipBlock:
