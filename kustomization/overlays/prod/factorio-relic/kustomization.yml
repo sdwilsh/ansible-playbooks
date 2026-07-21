@@ -27,4 +27,4 @@ resources:
   - ingress.yml
   - networkpolicy/allow-from-factorio-to-internet.yml
   - networkpolicy/allow-to-admin-from-traefik.yml
-  - networkpolicy/allow-to-game-from-choros.yml
+  - networkpolicy/allow-to-game-from-choros-and-home.yml
