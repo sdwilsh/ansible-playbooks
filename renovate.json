@@ -279,7 +279,10 @@
         "pinDigest"
       ],
       "matchPackageNames": [
+        "forgejo",
         "ghcr.io/marinatedconcrete/kairos-fedora",
+        "node-feature-discovery",
+        "prometheus-adapter",
         "quay.io/fedora/fedora-bootc"
       ]
     },
