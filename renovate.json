@@ -204,7 +204,7 @@
         "stirling-pdf-chart",
         "twpayne/chezmoi"
       ],
-      "minimumReleaseAge": "3 days",
+      "minimumReleaseAge": "36 hours",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
@@ -224,7 +224,7 @@
         "ghcr.io/immich-app/immich-server",
         "immich"
       ],
-      "minimumReleaseAge": "1 days",
+      "minimumReleaseAge": "12 hours",
       "schedule": [
         "after 4pm every weekday",
         "every weekend"
@@ -249,7 +249,7 @@
       "matchUpdateTypes": [
         "digest"
       ],
-      "minimumReleaseAge": "3 days",
+      "minimumReleaseAge": "36 hours",
       "schedule": [
         "after 4pm"
       ]
@@ -326,7 +326,7 @@
       "matchFileNames": [
         "kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers.yml"
       ],
-      "minimumReleaseAge": "1 day",
+      "minimumReleaseAge": "12 hours",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
@@ -388,10 +388,8 @@
         "kustomization/overlays/prod/3d-printing/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2,
       "minimumReleaseAge": "2 days"
     },
     {
@@ -400,10 +398,8 @@
         "kustomization/overlays/prod/atuin/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2,
       "minimumReleaseAge": "1 day"
     },
     {
@@ -412,10 +408,8 @@
         "kustomization/overlays/prod/auth/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2,
       "minimumReleaseAge": "1 day"
     },
     {
@@ -424,10 +418,9 @@
         "kustomization/overlays/prod/crowdsec/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2
+      "minimumReleaseAge": "3 days"
     },
     {
       "groupName": "postgres-homeassistant",
@@ -446,8 +439,7 @@
       ],
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql",
-        "ghcr.io/tensorchord/cloudnative-vectorchord",
-        "postgres"
+        "ghcr.io/tensorchord/cloudnative-vectorchord"
       ],
       "minimumGroupSize": 2,
       "minimumReleaseAge": "3 days"
@@ -458,10 +450,9 @@
         "kustomization/overlays/prod/monitoring/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2
+      "minimumReleaseAge": "3 days"
     },
     {
       "groupName": "postgres-paperless",
@@ -469,10 +460,8 @@
         "kustomization/overlays/prod/paperless/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "postgres"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2,
       "minimumReleaseAge": "3 days"
     },
     {
@@ -484,6 +473,15 @@
         "ghcr.io/cloudnative-pg/postgresql"
       ],
       "minimumReleaseAge": "3 days"
+    },
+    {
+      "groupName": "postgres-weekly",
+      "matchPackageNames": [
+        "postgres"
+      ],
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "automerge": true,
