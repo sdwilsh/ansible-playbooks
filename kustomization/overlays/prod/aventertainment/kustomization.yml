@@ -9,7 +9,6 @@ components:
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-lldap
-  - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/tdarr
 images:
@@ -81,6 +80,7 @@ replacements:
 resources:
   - namespace.yml
   - ingress.yml
+  - networkpolicy/allow-tdarr-internal.yml
   - networkpolicy/allow-to-jellyfin-from-hfp.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml

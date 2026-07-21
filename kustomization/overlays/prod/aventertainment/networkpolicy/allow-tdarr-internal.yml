@@ -1,0 +1,36 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-tdarr-server-from-tdarr-node-networkpolicy
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: tdarr-node
+      ports:
+        - port: 8266
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-server
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-tdarr-node-to-tdarr-server-networkpolicy
+spec:
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: tdarr-server
+      ports:
+        - port: 8266
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-node
+  policyTypes:
+    - Egress
