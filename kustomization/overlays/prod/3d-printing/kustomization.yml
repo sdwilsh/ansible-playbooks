@@ -17,7 +17,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
   - name: ghcr.io/donkie/spoolman
-    newTag: 0.24.0@sha256:42135965c42d8d4fdbc1d7ea4aa0d20a521cd1d3a20e099ee9e2ea5289d62c28
+    newTag: 0.25.0@sha256:1c4818a467d42946c3f24850aa45686ab67c06cb80e798470b46a33c2c218381
   - name: postgres
     newTag: 18@sha256:4aabea78cf39b90e834caf3af7d602a18565f6fe2508705c8d01aa63245c2e20
 namespace: 3d-printing
