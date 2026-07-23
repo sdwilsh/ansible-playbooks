@@ -18,10 +18,14 @@ spec:
               name: manyfold-tmp
             - mountPath: /usr/src/app/log
               name: manyfold-app-log
+            - mountPath: /usr/src/app/plugins
+              name: manyfold-app-plugins
             - mountPath: /usr/src/app/tmp
               name: manyfold-app-tmp
       volumes:
         - name: manyfold-app-log
+          emptyDir: {}
+        - name: manyfold-app-plugins
           emptyDir: {}
         - name: manyfold-app-tmp
           emptyDir: {}
