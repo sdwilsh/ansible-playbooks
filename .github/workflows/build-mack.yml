@@ -216,12 +216,12 @@ jobs:
 
       - name: Create Manifest
         run: |
-          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
+          SOURCE_IMAGE="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
           DATE=$(date -u +%Y%m%d)
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            podman manifest create ${IMAGE_FULL}:$tag
-            podman manifest add $IMAGE_FULL:$tag docker://$IMAGE_FULL:latest-amd64.$DATE
-            podman manifest add $IMAGE_FULL:$tag docker://$IMAGE_FULL:latest-arm64.$DATE
+            podman manifest create "${{ env.IMAGE_NAME }}:$tag"
+            podman manifest add "${{ env.IMAGE_NAME }}:$tag" docker://$SOURCE_IMAGE:latest-amd64.$DATE
+            podman manifest add "${{ env.IMAGE_NAME }}:$tag" docker://$SOURCE_IMAGE:latest-arm64.$DATE
           done
 
       - name: Push To GHCR
