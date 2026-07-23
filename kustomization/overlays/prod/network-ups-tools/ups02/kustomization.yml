@@ -21,16 +21,6 @@ patches:
         path: /spec/selector/nut-instance
         value: ups02
   - target:
-      kind: StatefulSet
-      name: nut-statefulset
-    patch: |-
-      - op: add
-        path: /spec/selector/matchLabels/nut-instance
-        value: ups02
-      - op: add
-        path: /spec/template/metadata/labels/nut-instance
-        value: ups02
-  - target:
       kind: ServiceMonitor
     patch: |-
       - op: add
@@ -44,13 +34,24 @@ patches:
         path: /spec/podSelector/matchLabels/nut-instance
         value: ups02
       - op: add
-        path: /spec/egress/0/to/-
+        path: /spec/egress/-
         value:
-          ipBlock:
-            cidr: 10.10.0.31/32 # ups02.hogs.tswn.us
+          ports:
+            - port: 161
+              protocol: UDP
+          to:
+            - ipBlock:
+                cidr: 10.10.0.31/32 # ups02.hogs.tswn.us
   - target:
       kind: NetworkPolicy
       name: allow-from-prometheus-networkpolicy
+    patch: |-
+      - op: add
+        path: /spec/podSelector/matchLabels/nut-instance
+        value: ups02
+  - target:
+      kind: NetworkPolicy
+      name: allow-from-nut-shutdown-agent-networkpolicy
     patch: |-
       - op: add
         path: /spec/podSelector/matchLabels/nut-instance

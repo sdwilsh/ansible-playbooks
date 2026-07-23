@@ -4,11 +4,7 @@ kind: NetworkPolicy
 metadata:
   name: allow-to-snmp-networkpolicy
 spec:
-  egress:
-    - ports:
-        - port: 161
-          protocol: UDP
-      to: []
+  egress: []
   podSelector:
     matchLabels:
       app.kubernetes.io/name: network-ups-tools

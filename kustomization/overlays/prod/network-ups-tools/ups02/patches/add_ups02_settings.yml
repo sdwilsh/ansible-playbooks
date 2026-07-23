@@ -4,7 +4,13 @@ kind: StatefulSet
 metadata:
   name: this-is-ignored-but-is-required
 spec:
+  selector:
+    matchLabels:
+      nut-instance: ups02
   template:
+    metadata:
+      labels:
+        nut-instance: ups02
     spec:
       initContainers:
         - name: generate-config
