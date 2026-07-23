@@ -1,0 +1,16 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: node
+      rules:
+        - alert: node-rebooted
+          annotations:
+            description: "{{ $labels.node }} rebooted (boot time changed) within the last 15 minutes."
+          expr: changes((max by (node) (node_boot_time_seconds))[15m:1m]) > 0
+          labels:
+            severity: page

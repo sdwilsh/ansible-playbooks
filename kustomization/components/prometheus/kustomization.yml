@@ -7,6 +7,7 @@ resources:
   - prometheus.yml
   - rbac.yml
   - rules/argocd.yml
+  - rules/node.yml
   - rules/postgresql.yml
   - rules/volume.yml
   - storageclass.yml
