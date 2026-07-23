@@ -9,6 +9,14 @@ master:
     seccompProfile:
       type: RuntimeDefault
 
+# The chart's post-delete-job.yaml is annotated helm.sh/hook: post-delete,
+# meant to run only on `helm uninstall`.  `kustomize build --enable-helm`
+# doesn't understand Helm hook lifecycle at all - it renders every template
+# unconditionally, so this job (which strips all NFD labels from every node)
+# would otherwise run on *every* apply, racing the master's own labeling and
+# usually winning.
+postDeleteCleanup: false
+
 priorityClassName: system-node-critical
 
 prometheus:
