@@ -10,6 +10,7 @@ configMapGenerator:
       - configmap/scripts/generate_upsd_conf.sh
       - configmap/scripts/generate_upsd_users.sh
       - configmap/scripts/generate_upsmon_conf.sh
+      - configmap/scripts/lib.sh
 resources:
   - networkpolicy/allow-from-prometheus.yml
   - networkpolicy/allow-to-snmp.yml
