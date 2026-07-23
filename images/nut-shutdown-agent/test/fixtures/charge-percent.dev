@@ -1,0 +1,15 @@
+# Exercises `monitor.sh`'s `SHUTDOWN_BELOW_BATTERY_CHARGE_PERCENT` path in
+# isolation.  `SHUTDOWN_AFTER_SECONDS_ON_BATTERY` is left unset for this
+# scenario's test run, so starting on OB here doesn't also race the
+# on-battery-duration trigger; only the charge threshold should fire.
+battery.runtime: 3000
+ups.status: OB
+
+# Start above the test's 50% threshold (i.e. `e2e.sh`'s configured value
+# for this scenario) so the monitor observes a real crossing rather than
+# already being below it at container start.  Three seconds gives
+# `e2e.sh`'s readiness poll a comfortable margin to finish before this
+# fires.
+battery.charge: 55
+TIMER 3
+battery.charge: 45

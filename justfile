@@ -140,6 +140,11 @@ build-mack-vm:
         --type qcow2 \
         localhost/mack:latest
 
+# Builds the images/nut-shutdown-agent container.
+[group('images')]
+build-nut-shutdown-agent:
+    podman build images/nut-shutdown-agent --tag nut-shutdown-agent:latest
+
 # List decisions from crowdsec.  Useful when debugging access problems.
 [group('crowdsec')]
 crowdsec-list-decisions:

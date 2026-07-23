@@ -1,0 +1,18 @@
+# Exercises `monitor.sh`'s `SHUTDOWN_AFTER_SECONDS_ON_BATTERY` path in
+# isolation.  Charge and runtime are set high on purpose; if this scenario
+# triggers a shutdown for the wrong reason (i.e. the charge-percent or
+# runtime-seconds threshold), that's a bug, since neither of those is
+# meant to be exercised here.
+battery.charge: 90
+battery.runtime: 3000
+
+# Start on line power for a beat so the test can observe the actual
+# OL -> OB transition (and confirm the on-battery timer starts from that
+# transition, not from container start), rather than beginning already on
+# battery.  Five seconds gives `e2e.sh`'s readiness poll (which starts this
+# container, then separately polls it) a comfortable margin to finish
+# before this fires; too short a delay risks the transition happening
+# before `monitor.sh` is even running to observe it.
+ups.status: OL
+TIMER 5
+ups.status: OB

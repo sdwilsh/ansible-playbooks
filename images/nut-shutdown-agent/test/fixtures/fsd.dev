@@ -1,0 +1,16 @@
+# Exercises the unconditional FSD backstop.  `e2e.sh` runs this scenario
+# with none of the `SHUTDOWN_*` thresholds set, so a shutdown here can only
+# be explained by the FSD check; a false trigger from any threshold path
+# would be a bug, since none should be active.
+battery.charge: 80
+battery.runtime: 3000
+
+# Start on line power for a beat so the test can observe the actual
+# transition to FSD, rather than beginning already in that state.  Five
+# seconds gives `e2e.sh`'s readiness poll (which starts this container,
+# then separately polls it) a comfortable margin to finish before this
+# fires; too short a delay risks the transition happening before
+# `monitor.sh` is even running to observe it.
+ups.status: OL
+TIMER 5
+ups.status: FSD

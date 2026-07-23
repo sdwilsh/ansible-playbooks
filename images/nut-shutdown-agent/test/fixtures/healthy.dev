@@ -1,0 +1,8 @@
+# Negative control: `e2e.sh` runs this scenario with all three `SHUTDOWN_*`
+# thresholds set (to the same values used by the other scenarios), and
+# every reading here stays comfortably clear of all of them.  If a
+# shutdown fires against this fixture, that's a false positive in
+# `monitor.sh`'s comparisons, not a real trigger condition.
+battery.charge: 95
+battery.runtime: 4000
+ups.status: OL

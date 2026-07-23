@@ -1,0 +1,26 @@
+FROM alpine:3.22.5@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce AS builder
+
+RUN apk add --no-cache \
+    ca-certificates=20260611-r0 \
+    curl=8.14.1-r3
+
+# Download and Install kubectl
+# renovate: datasource=github-releases depName=kubernetes/kubernetes
+ARG KUBECTL_VERSION=v1.36.3
+RUN curl -o /usr/local/bin/kubectl \
+    -f \
+    -L \
+    "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" \
+  && chmod +x /usr/local/bin/kubectl
+
+FROM alpine:3.22.5@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce
+
+RUN apk add --no-cache \
+    nut=2.8.2-r2 \
+    util-linux=2.41-r9
+
+COPY --from=builder /usr/local/bin/kubectl /usr/local/bin/kubectl
+COPY monitor.sh shutdown.sh /
+RUN chmod +x /monitor.sh /shutdown.sh
+
+ENTRYPOINT ["/monitor.sh"]

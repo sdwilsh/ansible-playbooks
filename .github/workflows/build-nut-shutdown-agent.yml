@@ -1,0 +1,99 @@
+---
+name: Build Nut Shutdown Agent Container Image
+on:
+  pull_request:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/workflows/build-nut-shutdown-agent.yml
+      - images/nut-shutdown-agent/**
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/workflows/build-nut-shutdown-agent.yml
+      - images/nut-shutdown-agent/**
+  schedule:
+    - cron: 0 6 * * 1
+  workflow_dispatch:
+
+env:
+  IMAGE_DESC: nut-shutdown-agent -- polls a NUT upsd for battery state and gracefully cordons/drains/powers off the node it runs on.
+  IMAGE_NAME: nut-shutdown-agent
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build_test_push:
+    name: Build, test, and push image
+
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> "${GITHUB_OUTPUT}"
+
+      - name: Build image for testing
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: images/nut-shutdown-agent
+          load: true
+          platforms: linux/amd64
+          push: false
+          tags: nut-shutdown-agent:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run e2e test
+        run: images/nut-shutdown-agent/test/e2e.sh nut-shutdown-agent:ci
+
+      - name: Image Metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        id: metadata
+        with:
+          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=latest.{{date 'YYYYMMDD'}}
+          labels: |
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.description=${{ env.IMAGE_DESC }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/blob/main/images/nut-shutdown-agent/Containerfile
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          context: images/nut-shutdown-agent
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
