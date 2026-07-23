@@ -29,7 +29,7 @@ helmCharts:
     valuesFile: grafana-values.yml
   - name: loki
     namespace: monitoring
-    version: 7.0.0
+    version: 7.1.0
     repo: https://grafana.github.io/helm-charts
     releaseName: loki
     valuesFile: loki-values.yml
