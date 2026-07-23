@@ -23,4 +23,5 @@ patches:
       kind: DaemonSet
       name: garage-ds
 resources:
+  - ingress.yml
   - namespace.yml

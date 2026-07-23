@@ -1,0 +1,20 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: garage-ingress
+spec:
+  rules:
+    - host: s3.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: garage
+                port:
+                  name: s3-api
+            path: /manyfold
+            pathType: Prefix
