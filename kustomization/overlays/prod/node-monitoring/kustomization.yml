@@ -23,13 +23,20 @@ helmCharts:
     repo: https://prometheus-community.github.io/helm-charts
     releaseName: node-exporter
     valuesFile: node-exporter-values.yml
+  - name: prometheus-smartctl-exporter
+    version: 0.17.1
+    repo: https://prometheus-community.github.io/helm-charts
+    releaseName: smartctl-exporter
+    valuesFile: smartctl-exporter-values.yml
 images:
   - name: docker.io/grafana/alloy
     newTag: v1.18.0@sha256:491b0578c04983fd54fe99b587b6fab4404dc46d0dc16677bd6b00cc1140b308
   - name: ghcr.io/jimmidyson/configmap-reload
-    newTag: v0.15.0@sha256:b578b7599d65c0279f6e1aad201bba737b9b15e6a4f308281d9e26f765e6657f 
+    newTag: v0.15.0@sha256:b578b7599d65c0279f6e1aad201bba737b9b15e6a4f308281d9e26f765e6657f
   - name: quay.io/prometheus/node-exporter
     newTag: v1.12.1@sha256:1b4e4438faca4dd7e001dd445d161a4a2091b0fededa84093b3a8dfeae1f1be0
+  - name: quay.io/prometheuscommunity/smartctl-exporter
+    newTag: v0.14.0@sha256:cfe22c36d7d2fac48ebf619707305acb65eb0fb670656eb80f356e606d782bc1
 namespace: node-monitoring
 resources:
   - namespace.yml
