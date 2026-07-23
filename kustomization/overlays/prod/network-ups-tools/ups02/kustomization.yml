@@ -13,6 +13,10 @@ patches:
     target:
       kind: StatefulSet
       name: nut-statefulset
+  - path: patches/expose_to_home_assistant.yml
+    target:
+      kind: Service
+      name: nut-svc
   - target:
       kind: Service
       name: nut-svc
@@ -52,6 +56,13 @@ patches:
   - target:
       kind: NetworkPolicy
       name: allow-from-nut-shutdown-agent-networkpolicy
+    patch: |-
+      - op: add
+        path: /spec/podSelector/matchLabels/nut-instance
+        value: ups02
+  - target:
+      kind: NetworkPolicy
+      name: allow-from-home-assistant-networkpolicy
     patch: |-
       - op: add
         path: /spec/podSelector/matchLabels/nut-instance

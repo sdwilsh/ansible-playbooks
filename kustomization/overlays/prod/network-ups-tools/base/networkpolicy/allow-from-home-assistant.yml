@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-home-assistant-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.117.0.33/32
+      ports:
+        - port: nut
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: network-ups-tools
+  policyTypes:
+    - Ingress
