@@ -157,7 +157,7 @@ customDNS:
     jellyfin IN CNAME traefik.hogs
     loki.hogs IN CNAME traefik.hogs
     longhorn.hogs IN CNAME traefik.hogs
-    manyfold.hogs IN CNAME traefik.hogs
+    manyfold IN CNAME traefik.hogs
     matrix IN CNAME traefik.hogs
     mqtt.hogs IN CNAME traefik.hogs
     musicassistant.hogs IN CNAME traefik.hogs
