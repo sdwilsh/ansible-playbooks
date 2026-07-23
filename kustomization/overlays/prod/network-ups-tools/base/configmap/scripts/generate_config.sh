@@ -2,6 +2,8 @@
 
 set -e
 
+# shellcheck source=kustomization/overlays/prod/network-ups-tools/base/configmap/scripts/lib.sh
+. /scripts/lib.sh
 # shellcheck source=kustomization/overlays/prod/network-ups-tools/base/configmap/scripts/generate_ups_conf.sh
 . /scripts/generate_ups_conf.sh
 # shellcheck source=kustomization/overlays/prod/network-ups-tools/base/configmap/scripts/generate_upsd_conf.sh

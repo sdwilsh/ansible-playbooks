@@ -2,27 +2,17 @@
 
 set -e
 
-if [ -z "${NUT_ADMIN_PASSWORD_FILE}" ]; then
-    echo "NUT_ADMIN_PASSWORD_FILE must be set!  This should point to a file containing the admin user password"
-    exit 1
-else
-  admin_password=$(cat "${NUT_ADMIN_PASSWORD_FILE}")
-fi
+admin_password=$(require_env_file NUT_ADMIN_PASSWORD_FILE "${NUT_ADMIN_PASSWORD_FILE:-}" "This should point to a file containing the admin user password")
+ups_name=$(require_env NUT_UPS_NAME "${NUT_UPS_NAME:-}" "This is used as the ups.conf section name.")
+pod_ip=$(require_env POD_IP "${POD_IP:-}" "")
 
-if [ -z "${NUT_UPS_NAME}" ]; then
-    echo "NUT_UPS_NAME must be set!  This is used as the ups.conf section name."
-    exit 1
-fi
-
-if [ -z "${POD_IP}" ]; then
-    echo "POD_IP must be set!"
-    exit 1
-fi
-
-config_dest=/etc/nut/local/upsmon.conf
-echo "Creating ${config_dest}..."
-printf '%s\n' "
-MONITOR ${NUT_UPS_NAME}@${POD_IP} 1 admin \"${admin_password}\" primary
-" > $config_dest
-
-echo "Successfully setup configuration at ${config_dest}"
+# There is no `SHUTDOWNCMD` here on purpose.  This `upsmon` only monitors
+# this `Pod`'s own local `upsd`; if FSD ever triggered a real shutdown here,
+# it would kill the UPS telemetry source right when every shutdown-agent
+# polling `upsc` depends on it most.  An unset `SHUTDOWNCMD` just logs a
+# startup warning and is a no-op at FSD time (`upsmon` calls
+# `system(NULL)`, which per POSIX does nothing); it does not crash or
+# otherwise misbehave.
+write_config /etc/nut/local/upsmon.conf "
+MONITOR ${ups_name}@${pod_ip} 1 admin \"$(nut_escape "${admin_password}")\" primary
+"

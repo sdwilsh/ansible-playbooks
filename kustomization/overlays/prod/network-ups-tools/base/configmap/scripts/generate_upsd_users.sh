@@ -2,33 +2,18 @@
 
 set -e
 
-if [ -z "${NUT_ADMIN_PASSWORD_FILE}" ]; then
-    echo "NUT_ADMIN_PASSWORD_FILE must be set!  This should point to a file containing the admin user password"
-    exit 1
-else
-  admin_password=$(cat "${NUT_ADMIN_PASSWORD_FILE}")
-fi
+admin_password=$(require_env_file NUT_ADMIN_PASSWORD_FILE "${NUT_ADMIN_PASSWORD_FILE:-}" "This should point to a file containing the admin user password")
+observer_password=$(require_env_file NUT_OBSERVER_PASSWORD_FILE "${NUT_OBSERVER_PASSWORD_FILE:-}" "This should point to a file containing the observer user password")
 
-if [ -z "${NUT_OBSERVER_PASSWORD_FILE}" ]; then
-    echo "NUT_OBSERVER_PASSWORD_FILE must be set!  This should point to a file containing the observer user password"
-    exit 1
-else
-  observer_password=$(cat "${NUT_OBSERVER_PASSWORD_FILE}")
-fi
-
-config_dest=/etc/nut/local/upsd.users
-echo "Creating ${config_dest}..."
-printf '%s\n' "
+write_config /etc/nut/local/upsd.users "
 [admin]
   actions = set
   actions = fsd
   instcmds = all
-  password = \"${admin_password}\"
+  password = \"$(nut_escape "${admin_password}")\"
   upsmon primary
 
 [observer]
-  password = \"${observer_password}\"
+  password = \"$(nut_escape "${observer_password}")\"
   upsmon secondary
-" > $config_dest
-
-echo "Successfully setup configuration at ${config_dest}"
+"
