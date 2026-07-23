@@ -29,6 +29,7 @@ resources:
   - application/longhorn-system.yml
   - application/manyfold.yml
   - application/monitoring.yml
+  - application/network-ups-tools.yml
   - application/node-monitoring.yml
   - application/opencloud.yml
   - application/paperless.yml

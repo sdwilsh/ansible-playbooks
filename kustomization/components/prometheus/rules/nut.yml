@@ -1,0 +1,45 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nut-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: nut
+      rules:
+        - alert: nut-comms-lost
+          annotations:
+            description: "Prometheus has not been able to scrape {{ $labels.job }} for 5 minutes; nut-upsd may be down or unable to reach the UPS over SNMP."
+          expr: up{job=~".*-nut-svc"} == 0
+          for: 5m
+          labels:
+            severity: page
+        - alert: ups-on-battery
+          annotations:
+            description: "{{ $labels.job }} is running on battery power."
+          expr: network_ups_tools_ups_status{flag="OL"} == 0
+          for: 1m
+          labels:
+            severity: page
+        - alert: ups-low-battery
+          annotations:
+            description: "{{ $labels.job }} has a low battery."
+          expr: network_ups_tools_ups_status{flag="LB"} == 1
+          for: 1m
+          labels:
+            severity: page
+        - alert: ups-battery-runtime-short
+          annotations:
+            description: "{{ $labels.job }} only has {{ $value | humanizeDuration }} of battery runtime left."
+          expr: network_ups_tools_battery_runtime < 300
+          for: 1m
+          labels:
+            severity: page
+        - alert: ups-needs-battery-replacement
+          annotations:
+            description: "{{ $labels.job }} is reporting that its battery needs replacement."
+          expr: network_ups_tools_ups_status{flag="RB"} == 1
+          for: 15m
+          labels:
+            severity: warning

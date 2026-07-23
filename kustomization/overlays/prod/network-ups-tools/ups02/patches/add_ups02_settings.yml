@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: generate-config
+          env:
+            - name: NUT_SNMP_AUTHENTICATION_PASSWORD_FILE
+              value: /secrets/nut/instance/snmp_authentication_password
+            - name: NUT_SNMP_PORT
+              value: 10.10.0.31:161 # ups02.hogs.tswn.us
+            - name: NUT_SNMP_PRIVACY_KEY_FILE
+              value: /secrets/nut/instance/snmp_privacy_key
+            - name: NUT_UPS_NAME
+              value: ups02
+          volumeMounts:
+            - mountPath: /secrets/nut/instance
+              name: nut-instance-secrets
+      volumes:
+        - name: nut-instance-secrets
+          secret:
+            secretName: ups02-nut-snmp-secrets

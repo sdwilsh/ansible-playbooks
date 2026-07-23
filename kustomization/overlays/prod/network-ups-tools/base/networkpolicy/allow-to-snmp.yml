@@ -1,0 +1,16 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-snmp-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 161
+          protocol: UDP
+      to: []
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: network-ups-tools
+  policyTypes:
+    - Egress

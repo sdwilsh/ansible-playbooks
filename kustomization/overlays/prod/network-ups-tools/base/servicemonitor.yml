@@ -1,0 +1,14 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: network-ups-tools
+  name: nut-servicemonitor
+spec:
+  endpoints:
+    - path: /ups_metrics
+      port: metrics
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: network-ups-tools

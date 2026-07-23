@@ -1,0 +1,116 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nut-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: network-ups-tools
+  serviceName: nut-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: network-ups-tools
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: TZ
+              value: America/Los_Angeles
+          image: instantlinux/nut-upsd
+          name: nut
+          ports:
+            - containerPort: 3493
+              name: nut
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - SETGID
+                - SETUID
+              drop:
+                - ALL
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/nut/local
+              name: nut-config
+        - env:
+            - name: NUT_EXPORTER_SERVER
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NUT_EXPORTER_VARIABLES
+              value: battery.charge,battery.voltage,battery.voltage.nominal,input.voltage,input.voltage.nominal,ups.load,ups.status,battery.runtime
+          image: ghcr.io/druggeri/nut_exporter
+          name: nut-exporter
+          ports:
+            - containerPort: 9199
+              name: metrics
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - /scripts/generate_config.sh
+          env:
+            - name: NUT_ADMIN_PASSWORD_FILE
+              value: /secrets/nut/shared/admin_password
+            - name: NUT_OBSERVER_PASSWORD_FILE
+              value: /secrets/nut/shared/observer_password
+            - name: NUT_SNMP_AUTHENTICATION_PROTOCOL
+              value: SHA512
+            - name: NUT_SNMP_PRIVACY_PROTOCOL
+              value: AES256
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: busybox
+          name: generate-config
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 100 # nut
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /scripts
+              name: scripts
+            - mountPath: /etc/nut/local
+              name: nut-config
+            - mountPath: /secrets/nut/shared
+              name: nut-shared-secrets
+      priorityClassName: application-infra
+      securityContext:
+        fsGroup: 100 # nut
+      volumes:
+        - name: scripts
+          configMap:
+            defaultMode: 0777
+            name: nut-scripts-configmap
+        - name: nut-config
+          emptyDir:
+            medium: Memory
+        - name: nut-shared-secrets
+          secret:
+            secretName: nut-secrets

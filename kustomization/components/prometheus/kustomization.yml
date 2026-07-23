@@ -8,6 +8,7 @@ resources:
   - rbac.yml
   - rules/argocd.yml
   - rules/node.yml
+  - rules/nut.yml
   - rules/postgresql.yml
   - rules/smartctl.yml
   - rules/volume.yml

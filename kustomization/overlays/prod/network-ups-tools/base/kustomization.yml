@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: nut-scripts-configmap
+    files:
+      - configmap/scripts/generate_config.sh
+      - configmap/scripts/generate_ups_conf.sh
+      - configmap/scripts/generate_upsd_conf.sh
+      - configmap/scripts/generate_upsd_users.sh
+      - configmap/scripts/generate_upsmon_conf.sh
+resources:
+  - networkpolicy/allow-from-prometheus.yml
+  - networkpolicy/allow-to-snmp.yml
+  - service.yml
+  - servicemonitor.yml
+  - statefulset.yml

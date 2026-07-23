@@ -1,0 +1,57 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../base
+labels:
+  - pairs:
+      nut-instance: ups02
+namePrefix: ups02-
+patches:
+  - path: patches/add_ups02_settings.yml
+    target:
+      kind: StatefulSet
+      name: nut-statefulset
+  - target:
+      kind: Service
+      name: nut-svc
+    patch: |-
+      - op: add
+        path: /spec/selector/nut-instance
+        value: ups02
+  - target:
+      kind: StatefulSet
+      name: nut-statefulset
+    patch: |-
+      - op: add
+        path: /spec/selector/matchLabels/nut-instance
+        value: ups02
+      - op: add
+        path: /spec/template/metadata/labels/nut-instance
+        value: ups02
+  - target:
+      kind: ServiceMonitor
+    patch: |-
+      - op: add
+        path: /spec/selector/matchLabels/nut-instance
+        value: ups02
+  - target:
+      kind: NetworkPolicy
+      name: allow-to-snmp-networkpolicy
+    patch: |-
+      - op: add
+        path: /spec/podSelector/matchLabels/nut-instance
+        value: ups02
+      - op: add
+        path: /spec/egress/0/to/-
+        value:
+          ipBlock:
+            cidr: 10.10.0.31/32 # ups02.hogs.tswn.us
+  - target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
+    patch: |-
+      - op: add
+        path: /spec/podSelector/matchLabels/nut-instance
+        value: ups02

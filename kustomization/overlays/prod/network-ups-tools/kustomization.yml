@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-baseline
+images:
+  - name: busybox
+    newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
+  - name: ghcr.io/druggeri/nut_exporter
+    newTag: 3.3.0@sha256:276460d141c732772f8b1fcd785a7de272473e6d39fd85c32b163efc2999cb9a
+  - name: instantlinux/nut-upsd
+    newTag: 2.8.3-r4@sha256:ab2f9988309ee8a47934e03eb836fa5313cc34234f50ea5400ec65c71dd4e0b2
+namespace: network-ups-tools
+resources:
+  - namespace.yml
+  - ups02
