@@ -1,0 +1,46 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: manyfold-pg-cluster
+spec:
+  backup:
+    target: primary
+  bootstrap:
+    initdb:
+      database: manyfold
+      dataChecksums: true
+      owner: manyfold
+  env:
+    - name: TZ
+      value: America/Los_Angeles
+  imageName: ghcr.io/cloudnative-pg/postgresql:18@sha256:9f8d4500ed53901dba42907b05fc7520988b347a79b85c8cf2fa1cb460f2e177
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+        - ro
+  monitoring:
+    tls:
+      enabled: true
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: garage-objectstore
+  postgresql:
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: application-infra
+  storage:
+    size: 5Gi
+    storageClass: cnpg-data-encrypted-storage
+  walStorage:
+    size: 2Gi
+    storageClass: cnpg-wal-encrypted-storage

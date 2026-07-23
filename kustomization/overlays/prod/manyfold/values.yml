@@ -1,0 +1,163 @@
+---
+podSecurityContext:
+  fsGroup: 65534
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - SETUID
+      - SETGID
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
+
+persistence:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+valkey:
+  enabled: false
+
+env:
+  DATABASE_ADAPTER:
+    value: postgresql
+  DATABASE_HOST:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-pg-cluster-app
+        key: host
+  DATABASE_NAME:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-pg-cluster-app
+        key: dbname
+  DATABASE_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-pg-cluster-app
+        key: password
+  DATABASE_PORT:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-pg-cluster-app
+        key: port
+  DATABASE_USER:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-pg-cluster-app
+        key: username
+  FORCE_OIDC:
+    value: enabled
+  HTTPS_ONLY:
+    value: enabled
+  MULTIUSER:
+    value: enabled
+  OIDC_CLIENT_ID:
+    value: LJ07mdgh5ZOSlVUQTJJ2I2YtZkDxOPpY52AtP28FoBndBNHCTHe6W0dVIVL71MTl
+  OIDC_CLIENT_SECRET:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-secret
+        key: oidc_client_secret
+  OIDC_ISSUER:
+    value: https://auth.tswn.us
+  PGID:
+    value: "65534"
+  PUBLIC_HOSTNAME:
+    value: manyfold.tswn.us
+  PUID:
+    value: "65534"
+  REDIS_URL:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-secret
+        key: redis_url
+  SECRET_KEY_BASE:
+    valueFrom:
+      secretKeyRef:
+        name: manyfold-secret
+        key: SECRET_KEY_BASE
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+  requests:
+    cpu: 50m
+
+initContainers:
+  - name: chmod-tmp
+    image: busybox
+    command:
+      - chmod
+      - +t
+      - /tmp
+    securityContext:
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+    resources:
+      limits:
+        cpu: 100m
+        memory: 200Mi
+    volumeMounts:
+      - name: manyfold-tmp
+        mountPath: /tmp
+  - name: wait-for-manyfold-pg-is-ready
+    image: postgres
+    command:
+      - sh
+      - -c
+      - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
+    env:
+      - name: PGDATABASE
+        valueFrom:
+          secretKeyRef:
+            name: manyfold-pg-cluster-app
+            key: dbname
+      - name: PGHOST
+        valueFrom:
+          secretKeyRef:
+            name: manyfold-pg-cluster-app
+            key: host
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: manyfold-pg-cluster-app
+            key: password
+      - name: PGSSLMODE
+        value: require
+      - name: PGUSER
+        valueFrom:
+          secretKeyRef:
+            name: manyfold-pg-cluster-app
+            key: username
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65534
+      seccompProfile:
+        type: RuntimeDefault
+
+ingress:
+  enabled: true
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: auth-forwardauth-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: manyfold.tswn.us
+      paths:
+        - path: /
+          pathType: Prefix

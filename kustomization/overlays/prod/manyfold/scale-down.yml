@@ -10,15 +10,15 @@
           - set
           - manyfold
           - --sync-policy=manual
-    - name: Scale down manyfold statefulset
+    - name: Scale down manyfold deployment
       kubernetes.core.k8s:
         context: "{{ cluster }}"
         state: present
         resource_definition:
           apiVersion: apps/v1
-          kind: StatefulSet
+          kind: Deployment
           metadata:
-            name: manyfold-statefulset
+            name: manyfold
             namespace: "{{ k8s_namespace }}"
           spec:
             replicas: 0

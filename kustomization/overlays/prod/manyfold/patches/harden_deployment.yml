@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      hostUsers: false
+      priorityClassName: application
+      containers:
+        - name: manyfold
+          volumeMounts:
+            - mountPath: /run
+              name: manyfold-run
+            - mountPath: /tmp
+              name: manyfold-tmp
+            - mountPath: /usr/src/app/log
+              name: manyfold-app-log
+            - mountPath: /usr/src/app/tmp
+              name: manyfold-app-tmp
+      volumes:
+        - name: manyfold-app-log
+          emptyDir: {}
+        - name: manyfold-app-tmp
+          emptyDir: {}
+        - name: manyfold-run
+          emptyDir:
+            medium: Memory
+        - name: manyfold-tmp
+          emptyDir: {}

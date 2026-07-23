@@ -3,13 +3,81 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../components/manyfold
+  - ../../../components/cnpg-backup
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-garage
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-to-traefik
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
+helmCharts:
+  - name: manyfold
+    version: 1.0.3
+    repo: https://charts.jeffresc.dev
+    releaseName: manyfold
+    valuesFile: values.yml
 images:
   - name: busybox
     newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
-  - name: ghcr.io/manyfold3d/manyfold-solo
-    newTag: 0.143.2@sha256:af3e7b7f3d2cd340288f2c5d0cf281d5c3cf2e2c9331adc68d69065e8fbec932
+  - name: ghcr.io/manyfold3d/manyfold
+    newTag: 0.143.2@sha256:587bfdda569184a3c87106c48b9ce6322f9a78e863663cac70bb38baeea61aae
 namespace: manyfold
+patches:
+  - path: patches/harden_deployment.yml
+    target:
+      kind: Deployment
+      name: manyfold
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: manyfold-test-connection
+    target:
+      kind: Pod
+      name: manyfold-test-connection
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
+replacements:
+  - source:
+      fieldPath: spec.template.spec.containers.[name=manyfold].ports.[name=http].name
+      kind: Deployment
+      name: manyfold
+    targets:
+      - fieldPaths:
+          - spec.ingress.0.ports.[port=web].port
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+  - source:
+      fieldPath: spec.selector
+      kind: Deployment
+      name: manyfold
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-internet-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-traefik-networkpolicy
 resources:
   - namespace.yml
-  - ingress.yml
+  - cnpg/backup.yml
+  - cnpg/cluster.yml
+  - cnpg/podmonitor.yml
+  - cnpg/scheduledbackup.yml
+  - redis.yml
