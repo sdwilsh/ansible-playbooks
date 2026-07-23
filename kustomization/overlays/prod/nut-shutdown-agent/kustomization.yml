@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+images:
+  - name: ghcr.io/sdwilsh/nut-shutdown-agent
+    newTag: latest@sha256:26f43bc0276d3053d2e90611a7d2863495b05a138719f73e0f1c0568ee6001bc
+namespace: nut-shutdown-agent
+resources:
+  - namespace.yml
+  - control-plane
+  - networkpolicy/allow-to-nut.yml
+  - rbac.yml
+  - worker01
+  - workers

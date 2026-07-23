@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-nut-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: nut
+          protocol: TCP
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: network-ups-tools
+  podSelector: {}
+  policyTypes:
+    - Egress

@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nut-shutdown-agent-daemonset
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nut-shutdown-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nut-shutdown-agent
+    spec:
+      containers:
+        - env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          image: ghcr.io/sdwilsh/nut-shutdown-agent
+          name: nut-shutdown-agent
+          securityContext:
+            privileged: true
+      hostPID: true
+      priorityClassName: critical-application-infra
+      serviceAccountName: nut-shutdown-agent

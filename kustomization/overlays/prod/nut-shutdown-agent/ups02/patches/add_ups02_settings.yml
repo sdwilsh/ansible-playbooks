@@ -1,0 +1,15 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: UPS_HOST
+              value: ups02-nut-svc.network-ups-tools.svc.cluster.local
+            - name: UPS_NAME
+              value: ups02
+          name: nut-shutdown-agent

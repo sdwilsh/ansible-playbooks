@@ -1,0 +1,26 @@
+---
+# `worker02` and `worker03` go down together once the battery drops to
+# fifty percent, after `worker01` has already been sacrificed but well
+# before `node01` (the control plane) needs to react.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - worker02
+                      - worker03
+      containers:
+        - env:
+            - name: SHUTDOWN_BELOW_BATTERY_CHARGE_PERCENT
+              value: "50"
+          name: nut-shutdown-agent

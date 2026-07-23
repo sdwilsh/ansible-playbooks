@@ -1,0 +1,19 @@
+---
+# `worker01` is the first sacrifice: it goes down after just sixty seconds
+# on battery, well before any charge-based or runtime-based threshold
+# would fire, so the remaining nodes get more battery runtime to work with
+# as the UPS drains.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: SHUTDOWN_AFTER_SECONDS_ON_BATTERY
+              value: "60"
+          name: nut-shutdown-agent
+      nodeSelector:
+        kubernetes.io/hostname: worker01

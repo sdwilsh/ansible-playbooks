@@ -1,0 +1,20 @@
+---
+# `node01` (the control plane) is the last to go, staying up as long as
+# possible; six hundred seconds of estimated runtime left is two times
+# systemd's default 300s stop timeout, giving `shutdown.sh`'s
+# cordon/drain/poweroff sequence comfortable margin to actually finish
+# before the battery runs out.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: SHUTDOWN_BELOW_RUNTIME_SECONDS
+              value: "600"
+          name: nut-shutdown-agent
+      nodeSelector:
+        kubernetes.io/hostname: node01

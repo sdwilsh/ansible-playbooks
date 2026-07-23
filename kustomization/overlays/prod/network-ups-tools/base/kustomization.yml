@@ -12,6 +12,7 @@ configMapGenerator:
       - configmap/scripts/generate_upsmon_conf.sh
       - configmap/scripts/lib.sh
 resources:
+  - networkpolicy/allow-from-nut-shutdown-agent.yml
   - networkpolicy/allow-from-prometheus.yml
   - networkpolicy/allow-to-snmp.yml
   - service.yml
