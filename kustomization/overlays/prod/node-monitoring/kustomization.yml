@@ -14,7 +14,7 @@ configMapGenerator:
       - configmap/logger_sidecar.py
 helmCharts:
   - name: alloy
-    version: 1.10.1
+    version: 1.11.0
     repo: https://grafana.github.io/helm-charts
     releaseName: alloy
     valuesFile: alloy-values.yml
