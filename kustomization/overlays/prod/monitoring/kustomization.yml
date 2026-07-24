@@ -40,7 +40,7 @@ helmCharts:
     valuesFile: prometheus-adapter-values.yml
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:558420daf32bbc382e3e9af4537f4073085b336ddd47399a3b70e70087115978
+    newTag: latest@sha256:95de17e6eb92da83a58c90a9df0c4cede634f898d2e6b92ea04f4a6ee6ace08d
   - name: postgres
     newTag: 18@sha256:4aabea78cf39b90e834caf3af7d602a18565f6fe2508705c8d01aa63245c2e20
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
