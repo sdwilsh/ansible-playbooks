@@ -23,7 +23,7 @@ images:
   - name: busybox
     newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
   - name: ghcr.io/manyfold3d/manyfold
-    newTag: 0.143.2@sha256:587bfdda569184a3c87106c48b9ce6322f9a78e863663cac70bb38baeea61aae
+    newTag: 0.146.0@sha256:deea85f2e0e885b9bc80fa5056c705f221d24cabd709b724b76ae8ad77d7bc37
 namespace: manyfold
 patches:
   - path: patches/harden_deployment.yml
