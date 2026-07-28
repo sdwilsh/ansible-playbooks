@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       renovate:
-        specifier: 43.280.4
-        version: 43.280.4(supports-color@7.2.0)(typanion@3.14.0)
+        specifier: 43.280.5
+        version: 43.280.5(supports-color@7.2.0)(typanion@3.14.0)
 
 packages:
 
@@ -1892,8 +1892,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@43.280.4:
-    resolution: {integrity: sha512-YU9OzwdaE5zJWzNXJEHh3mjU7qy/jlZeZQlcUWsRXfG9Ql9vMfb4O0EYz3kWRN2Xgy81jfvvm8LYe7KgZ6UW+Q==}
+  renovate@43.280.5:
+    resolution: {integrity: sha512-ouaPV5NJyZ2FqvBs177llB+cFu7d7ZMWM+7xv7IRVQgDXJDEZe84Tmg3fKt5YqMmbywp4z0cYqnYmopBC7rlFw==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -4612,7 +4612,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@43.280.4(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@43.280.5(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1075.0
       '@aws-sdk/client-ec2': 3.1075.0
