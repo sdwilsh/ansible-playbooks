@@ -1,0 +1,23 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kata-containers-rules
+spec:
+  groups:
+    - name: kata-containers
+      rules:
+        - alert: kata-monitor-down
+          annotations:
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} is down!"
+          expr: up{namespace="kata-containers", pod=~"kata-monitor-.*"} == 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: kata-monitor-scrape-failures
+          annotations:
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} has failed to scrape a Kata shim - a sandbox may be unhealthy."
+          expr: increase(kata_monitor_scrape_failed_count[15m]) > 0
+          for: 15m
+          labels:
+            severity: warning

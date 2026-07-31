@@ -36,3 +36,5 @@ patches:
       name: kata-deploy-rb-cleanup
 resources:
   - namespace.yml
+  - podmonitor.yml
+  - prometheusrule.yml
