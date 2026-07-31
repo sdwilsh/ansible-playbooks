@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       renovate:
-        specifier: 43.285.3
-        version: 43.285.3(supports-color@7.2.0)(typanion@3.14.0)
+        specifier: 43.285.7
+        version: 43.285.7(supports-color@7.2.0)(typanion@3.14.0)
 
 packages:
 
@@ -1763,10 +1763,6 @@ packages:
     resolution: {integrity: sha512-T8BatKGY+k5rU+Q/GTYgrEf2r4xRMevAN5mtXc2aPc4rS1j3s+vWTaO2Wag94neXuCAUAs8cxBL9EeB5EA6diw==}
     engines: {node: '>=16'}
 
-  p-map@7.0.5:
-    resolution: {integrity: sha512-e8vJF4XdVkzqqSHguEMz41mQO1wKwxKm5ENrUJQUu9kLDCtn83cxbyHZcszr4QC5zEA7WffRRC4gsTecC7J9oA==}
-    engines: {node: '>=18'}
-
   p-map@7.0.6:
     resolution: {integrity: sha512-I4Prw6ivkd6p8PiYR1tXASOAOBzIJwu0TB7fqaX0c/8c3QAehNYmX57EijyGGGBt3c/BIowGwV03RVBtXvHEVg==}
     engines: {node: '>=18'}
@@ -1873,8 +1869,8 @@ packages:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
 
-  re2@1.26.0:
-    resolution: {integrity: sha512-QTEfFp0nu1eT/HKKZC+2BKM9Lb8uqprGkcHhro9r3giiKS+1SnNZBZ1m7C7Axi/VR1YGXiu3mp35UA53yHAuNw==}
+  re2@1.26.1:
+    resolution: {integrity: sha512-oi79a4h6EO3PAwNsDMWgeCcsRGQEUa52DIgOiFTZGDEZocEXG9h+oXy0qZqndo47huUeJuVWSoOJIEhOupqOcg==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   read-yaml-file@2.1.0:
@@ -1896,8 +1892,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@43.285.3:
-    resolution: {integrity: sha512-n0Oy5PapMFHsaXgtwGKMKF51Ce506TNEjHeOp3bhUxIsz1DqV2dPL8ozgBo4fD1F+LtoxD4uU1U3yvFo7HknlQ==}
+  renovate@43.285.7:
+    resolution: {integrity: sha512-mEmV3ZICRx94k/ntjxS1TSWl30Ab23pn/ycP00cTpFSUjman6Mc9St02r4OnHaBTT5vIug6HmdTUpXyzwPD15g==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -3262,7 +3258,7 @@ snapshots:
       minipass-collect: 2.0.1
       minipass-flush: 1.0.7
       minipass-pipeline: 1.2.4
-      p-map: 7.0.5
+      p-map: 7.0.6
       ssri: 13.0.1
 
   cacheable-lookup@5.0.4: {}
@@ -4472,8 +4468,6 @@ snapshots:
 
   p-map@6.0.0: {}
 
-  p-map@7.0.5: {}
-
   p-map@7.0.6: {}
 
   p-queue@9.3.1:
@@ -4562,7 +4556,7 @@ snapshots:
 
   quick-lru@5.1.1: {}
 
-  re2@1.26.0:
+  re2@1.26.1:
     dependencies:
       install-artifact-from-github: 1.7.0
       nan: 2.28.0
@@ -4618,7 +4612,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@43.285.3(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@43.285.7(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1075.0
       '@aws-sdk/client-ec2': 3.1075.0
@@ -4740,7 +4734,7 @@ snapshots:
       zod: 4.4.3
     optionalDependencies:
       openpgp: 6.3.1
-      re2: 1.26.0
+      re2: 1.26.1
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@openpgp/web-stream-tools'
