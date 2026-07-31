@@ -29,6 +29,8 @@ spec:
               containerPort: 9080
             - name: websecure
               containerPort: 8443
+            - name: websecure-ci
+              containerPort: 8444
             - name: websecure-ext
               containerPort: 9443
           volumeMounts:
