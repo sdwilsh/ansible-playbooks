@@ -31,6 +31,7 @@ runner:
     DOCKER_TLS_VERIFY: 1
   insecure: false
   labels:
+    - buildah:docker://quay.io/buildah/stable:v1.43.1@sha256:ca4edbaabf71ca330ec9b2714bf8e06c726a6e85ae215cfb1474d2e2c832aacb
     - ci-latest:docker://ghcr.io/marinatedconcrete/github-runner-ci:1.1.0
     - docker:docker://docker:cli
     - fedora-latest:docker://ghcr.io/marinatedconcrete/devcontainer-base:latest
