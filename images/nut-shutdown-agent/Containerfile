@@ -1,4 +1,4 @@
-FROM alpine:3.22.5@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce AS builder
+FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS builder
 
 RUN apk add --no-cache \
     ca-certificates=20260611-r0 \
@@ -13,7 +13,7 @@ RUN curl -o /usr/local/bin/kubectl \
     "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" \
   && chmod +x /usr/local/bin/kubectl
 
-FROM alpine:3.22.5@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce
+FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
 
 RUN apk add --no-cache \
     nut=2.8.2-r2 \
