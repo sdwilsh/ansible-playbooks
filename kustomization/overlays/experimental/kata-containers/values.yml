@@ -3,6 +3,17 @@ deploymentMode: daemonset
 
 monitor:
   enabled: true
+  securityContext:
+    privileged: false
+    runAsUser: 65534
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
 
 k8sDistribution: k3s
 
