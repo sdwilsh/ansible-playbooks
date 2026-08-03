@@ -17,7 +17,7 @@ images:
   - name: code.forgejo.org/forgejo/runner
     newTag: 13.0.0@sha256:7fb853bfe73c229be6349398359c0a7bd01fadfd17c106607b2221150b799ed2
   - name: docker.io/library/docker
-    newTag: 29.6.2-dind-rootless@sha256:212a9e782c7119fd6a212beaab6b7665a29b663d894d0f6201710c89575ad0ae
+    newTag: 29.7.0-dind-rootless@sha256:9da1f7d442f2de6cd9a0b70162117120273c0fbcca7fcc30f6be6eae24746819
 namespace: forgejo-action-runner
 openapi:
   path: openapi.yml
