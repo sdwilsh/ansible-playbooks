@@ -11,7 +11,7 @@ configMapGenerator:
       - configmap/runner.sh
 images:
   - name: code.forgejo.org/forgejo/runner
-    newTag: 12.13.0@sha256:d85b420efea6f0137fe03f285b05df73e0c34cfbfc2c6a96d22cc52f38106d8c
+    newTag: 13.0.0@sha256:7fb853bfe73c229be6349398359c0a7bd01fadfd17c106607b2221150b799ed2
   - name: docker.io/library/docker
     newTag: 29.6.2-dind-rootless@sha256:212a9e782c7119fd6a212beaab6b7665a29b663d894d0f6201710c89575ad0ae
 resources:
