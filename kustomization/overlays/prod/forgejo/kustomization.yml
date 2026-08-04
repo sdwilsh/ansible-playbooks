@@ -20,6 +20,8 @@ helmCharts:
     releaseName: forgejo
     valuesFile: values.yml
 images:
+  - name: code.forgejo.org/forgejo/forgejo
+    newTag: 16.0.2-rootless@sha256:23ccc146e6dc2cd1f5c5435909baae64db873201717f1726490dae649283e6cd
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:95de17e6eb92da83a58c90a9df0c4cede634f898d2e6b92ea04f4a6ee6ace08d
 namespace: forgejo
