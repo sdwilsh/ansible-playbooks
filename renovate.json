@@ -49,7 +49,7 @@
       ],
       "matchStrings": [
         "image:\\n\\s+repository:\\s+(?<depName>.*?)\\n\\s+tag:\\s+(?<currentValue>.*?)\\n",
-        "'#\\srenovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s+tag:\\s(?<currentValue>.*?)\\n"
+        "#\\s*renovate:\\sdatasource=(?<datasource>.*?)\\sdepName=(?<depName>.*?)\\n\\s+tag:\\s(?<currentValue>.*?)\\n"
       ],
       "versioningTemplate": "docker"
     },
