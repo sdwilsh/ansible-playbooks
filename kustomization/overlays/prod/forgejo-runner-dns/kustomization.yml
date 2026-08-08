@@ -20,7 +20,7 @@ generatorOptions:
     app.kubernetes.io/name: coredns
 images:
   - name: docker.io/coredns/coredns
-    newTag: 1.13.1@sha256:9b9128672209474da07c91439bf15ed704ae05ad918dd6454e5b6ae14e35fee6
+    newTag: 1.14.6@sha256:900f9c109f7a33545d3c811516e8376df9019147b750f5ce3e254468769176ea
 patches:
   - path: patches/coredns/mount_configuration.yml
     target:
