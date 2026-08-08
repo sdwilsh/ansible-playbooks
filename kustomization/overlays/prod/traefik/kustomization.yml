@@ -35,4 +35,5 @@ resources:
   - certificate.yml
   - ingress/traefik-dashboard.yml
   - podmonitor.yml
+  - service/traefik-ci.yml
   - service/traefik.yml

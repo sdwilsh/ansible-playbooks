@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-ci-svc
+spec:
+  clusterIP: 172.17.255.250
+  ports:
+    - name: websecure-ci
+      port: 443
+      protocol: TCP
+      targetPort: websecure-ci
+  selector:
+    app.kubernetes.io/name: traefik
+  type: ClusterIP

@@ -7,6 +7,7 @@ namespace: forgejo-runner-dns
 components:
   - ../../../components/coredns
   - ../../../components/networkpolicy-allow-coredns-to-internet
+  - ../../../components/networkpolicy-allow-from-forgejo-runners-to-forgejo-runner-dns
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
