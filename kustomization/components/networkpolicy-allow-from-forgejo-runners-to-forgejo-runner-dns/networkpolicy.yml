@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-forgejo-runners-to-forgejo-runner-dns-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: forgejo-runners-privileged
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: forgejo-runners-restricted
+      ports:
+        - port: dns-tcp
+          protocol: TCP
+        - port: dns-udp
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: coredns
+  policyTypes:
+    - Ingress
