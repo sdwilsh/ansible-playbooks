@@ -6,6 +6,11 @@ metadata:
 spec:
   backup:
     target: primary
+  # This cluster's app database/role are "forgejodb"/"forgejo", not CNPG's
+  # default "app"/"app".  Any future bootstrap.recovery or
+  # bootstrap.pg_basebackup MUST set bootstrap.<type>.database/owner to
+  # match, or CNPG will create a fresh empty "app"/"app" database instead of
+  # using the real one physically present in the cloned/restored data.
   bootstrap:
     initdb:
       database: forgejodb
@@ -31,6 +36,13 @@ spec:
       name: barman-cloud.cloudnative-pg.io
       parameters:
         barmanObjectName: garage-objectstore
+        # Pinned to a distinct server identity because this cluster was
+        # recreated on 2026-08-18 after the original's data was lost; the
+        # object store still holds the original cluster's WAL/backup
+        # history under the "forgejo-pg-cluster" name, and barman-cloud
+        # refuses to archive a different Postgres system ID into an
+        # existing, non-empty archive path for that name.
+        serverName: forgejo-pg-cluster-2026-08-18
   postgresql:
     synchronous:
       failoverQuorum: true
