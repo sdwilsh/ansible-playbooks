@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-service
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+    app.kubernetes.io/component: controller-manager
+spec:
+  ports:
+    - port: 443
+      protocol: TCP
+      targetPort: webhook-server
+  selector:
+    app.kubernetes.io/name: forgejo-runner-operator
+    app.kubernetes.io/component: controller-manager
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validating-webhook-configuration
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+    app.kubernetes.io/component: controller-manager
+webhooks:
+  - name: vconnection.kb.io
+    admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: webhook-service
+        path: /validate-forgejo-tswn-us-v1alpha1-connection
+    failurePolicy: Ignore
+    rules:
+      - apiGroups:
+          - forgejo.tswn.us
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - connections
+    sideEffects: None

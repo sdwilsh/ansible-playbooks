@@ -1,0 +1,96 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: forgejo-runner-operator
+
+components:
+  - ../../../components/forgejo-runner-operator
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+
+configurations:
+  - kustomizeconfig.yml
+
+images:
+  - name: operator
+    newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/operator
+    newTag: v0.6.1@sha256:efa923e2bc6fd51765d93ed337304b8c603068867006303b5a4b0c24838de1cb
+
+replacements:
+  - source:
+      fieldPath: metadata.name
+      kind: Service
+      name: webhook-service
+      version: v1
+    targets:
+      - fieldPaths:
+          - spec.dnsNames.0
+          - spec.dnsNames.1
+        options:
+          create: true
+          delimiter: .
+        select:
+          group: cert-manager.io
+          kind: Certificate
+          name: serving-cert
+          version: v1
+      - fieldPaths:
+          - webhooks.*.clientConfig.service.name
+        options:
+          create: true
+        select:
+          kind: ValidatingWebhookConfiguration
+  - source:
+      fieldPath: metadata.namespace
+      kind: Service
+      name: webhook-service
+      version: v1
+    targets:
+      - fieldPaths:
+          - spec.dnsNames.0
+          - spec.dnsNames.1
+        options:
+          create: true
+          delimiter: .
+          index: 1
+        select:
+          group: cert-manager.io
+          kind: Certificate
+          name: serving-cert
+          version: v1
+  - source:
+      fieldPath: metadata.namespace
+      group: cert-manager.io
+      kind: Certificate
+      name: serving-cert
+      version: v1
+    targets:
+      - fieldPaths:
+          - metadata.annotations.[cert-manager.io/inject-ca-from]
+        options:
+          create: true
+          delimiter: /
+        select:
+          kind: ValidatingWebhookConfiguration
+  - source:
+      fieldPath: metadata.name
+      group: cert-manager.io
+      kind: Certificate
+      name: serving-cert
+      version: v1
+    targets:
+      - fieldPaths:
+          - metadata.annotations.[cert-manager.io/inject-ca-from]
+        options:
+          create: true
+          delimiter: /
+          index: 1
+        select:
+          kind: ValidatingWebhookConfiguration
+
+resources:
+  - namespace.yml
+  - networkpolicy/allow-controller-manager-from-api-server.yml
+  - networkpolicy/allow-controller-manager-to-api-server.yml

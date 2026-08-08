@@ -1,0 +1,4 @@
+namespace:
+  - path: webhooks/clientConfig/service/namespace
+    kind: ValidatingWebhookConfiguration
+    create: true

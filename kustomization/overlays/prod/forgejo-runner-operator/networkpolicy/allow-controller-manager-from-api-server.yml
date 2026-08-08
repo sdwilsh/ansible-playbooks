@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-controller-manager-from-api-server-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01
+      ports:
+        - port: 9443
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: controller-manager
+  policyTypes:
+    - Ingress

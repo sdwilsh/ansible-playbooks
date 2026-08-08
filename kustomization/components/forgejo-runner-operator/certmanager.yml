@@ -1,0 +1,26 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned-issuer
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+    app.kubernetes.io/component: controller-manager
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: serving-cert
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+    app.kubernetes.io/component: controller-manager
+spec:
+  dnsNames:
+    - webhook-service.x.svc
+    - webhook-service.x.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: selfsigned-issuer
+  secretName: webhook-server-cert
