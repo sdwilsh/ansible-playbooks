@@ -4,6 +4,8 @@
     ready
     hosts {
       172.17.172.0 code.tswn.us
+      10.11.1.75 dockerhub-proxy.hogs.tswn.us
+      10.11.1.64 ephemeral-container-registry.hogs.tswn.us
       fallthrough
     }
     # Deliberately not kube-dns: it forwards to the node's resolv.conf,
