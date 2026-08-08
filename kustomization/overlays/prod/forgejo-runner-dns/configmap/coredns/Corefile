@@ -3,9 +3,9 @@
     health
     ready
     hosts {
+      172.17.172.0 code.tswn.us
       fallthrough
     }
-    forward . 172.17.0.10
     # Deliberately not kube-dns: it forwards to the node's resolv.conf,
     # which hits blocky's customDNS map of internal hostnames -> internal
     # VIPs. CI only needs real internet resolution (image registries,
