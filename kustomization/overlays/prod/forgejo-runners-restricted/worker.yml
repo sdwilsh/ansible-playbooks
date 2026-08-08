@@ -1,0 +1,78 @@
+---
+apiVersion: forgejo.tswn.us/v1alpha1
+kind: Worker
+metadata:
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+  name: container
+spec:
+  allowedJobContainerGroups:
+    - end: 65535
+      start: 1
+  allowedJobContainerUsers:
+    - end: 65535
+      start: 1
+  fetchTimeout: 30s
+  jobExecutor:
+    image: job-executor:latest
+  jobTimeout: 1h
+  maxCapacity: 2
+  minCapacity: 0
+  podTemplate:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: GIT_CONFIG_COUNT
+              value: "1"
+            - name: GIT_CONFIG_KEY_0
+              value: safe.directory
+            - name: GIT_CONFIG_VALUE_0
+              value: "*"
+          name: workflow
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/containers/registries.conf
+              name: containers-config
+              readOnly: true
+              subPath: registries.conf
+            - mountPath: /etc/containers/storage.conf
+              name: containers-config
+              readOnly: true
+              subPath: storage.conf
+      dnsConfig:
+        nameservers:
+          - 172.17.251.13
+        options:
+          - name: ndots
+            value: "5"
+        searches:
+          - forgejo-runners-restricted.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      dnsPolicy: None
+      hostUsers: false
+      priorityClassName: application-infra
+      securityContext:
+        runAsNonRoot: true
+      serviceAccountName: forgejo-job
+      volumes:
+        - configMap:
+            defaultMode: 0444
+            name: containers-config-configmap
+          name: containers-config

@@ -1,0 +1,35 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: forgejo-runners-restricted
+
+components:
+  - ../../../components/forgejo-runner-registry-config
+  - ../../../components/forgejo-runner-worker-rbac
+  - ../../../components/networkpolicy-allow-forgejo-connection-manager-to-api-server
+  - ../../../components/networkpolicy-allow-forgejo-runners-to-forgejo-runner-dns
+  - ../../../components/networkpolicy-allow-forgejo-runner-operator-to-traefik
+  - ../../../components/networkpolicy-allow-forgejo-workflow-job-to-internet
+  - ../../../components/networkpolicy-allow-forgejo-workflow-job-to-traefik-ci
+  - ../../../components/networkpolicy-allow-workflow-job-to-dockerhub-proxy
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+
+configurations:
+  - kustomizeconfig.yml
+
+images:
+  - name: connection-manager
+    newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/connection-manager
+    newTag: v0.6.1@sha256:fb89c05e6d35c9b39c7ae13a3796277b781f6e24b122e11305e206ea31bd8d9a
+  - name: job-executor
+    newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/job-executor
+    newTag: v0.6.1@sha256:494128ac1eee0df5ff8b8817ae231f392bd414845d01215afaf4999e8256cb5b
+
+resources:
+  - namespace.yml
+  - connection.yml
+  - networkpolicy/allow-connection-manager-and-job-executor-to-coredns.yml
+  - serviceaccount.yml
+  - worker.yml

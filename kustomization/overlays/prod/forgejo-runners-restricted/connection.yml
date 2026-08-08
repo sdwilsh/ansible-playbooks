@@ -1,0 +1,21 @@
+---
+apiVersion: forgejo.tswn.us/v1alpha1
+kind: Connection
+metadata:
+  name: container
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+spec:
+  connectionManager:
+    image: connection-manager:latest
+  labels:
+    - container
+  pollInterval: 10s
+  tokenRef:
+    key: token
+    name: forgejo-runners-container-token-secret
+  url: https://code.tswn.us
+  uuid: b0416613-6a1e-492a-9b55-20dc68eeba0e
+  workers:
+    - workerRef:
+        name: container

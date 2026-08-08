@@ -1,0 +1,9 @@
+images:
+  - path: spec/connectionManager/image
+    group: forgejo.tswn.us
+    kind: Connection
+    version: v1alpha1
+  - path: spec/jobExecutor/image
+    group: forgejo.tswn.us
+    kind: Worker
+    version: v1alpha1
