@@ -12,7 +12,7 @@ images:
   - name: ghcr.io/druggeri/nut_exporter
     newTag: 3.3.0@sha256:276460d141c732772f8b1fcd785a7de272473e6d39fd85c32b163efc2999cb9a
   - name: instantlinux/nut-upsd
-    newTag: 2.8.3-r4@sha256:ab2f9988309ee8a47934e03eb836fa5313cc34234f50ea5400ec65c71dd4e0b2
+    newTag: 2.8.3-r4@sha256:b516bfa03744b568d2440da3db0246adbcead9c56d5a122446e5592c86e76787
 namespace: network-ups-tools
 resources:
   - namespace.yml
