@@ -145,6 +145,30 @@ build-mack-vm:
 build-nut-shutdown-agent:
     podman build images/nut-shutdown-agent --tag nut-shutdown-agent:latest
 
+# Validate every Corefile by running coredns against it and checking it stays up
+[group('lint')]
+coredns-validate:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    find . -type f -name "Corefile" -not -path "./external_*" | while read -r file; do
+        echo -n "Validating ${file}..."
+        name="coredns-validate-$$"
+        podman run -d --name "${name}" \
+            -v "$(realpath "${file}"):/Corefile:ro" \
+            docker.io/coredns/coredns:latest \
+            -conf /Corefile > /dev/null
+        sleep 3
+        running=$(podman inspect "${name}" --format '{{ "{{.State.Running}}" }}')
+        logs=$(podman logs "${name}" 2>&1)
+        podman rm -f "${name}" > /dev/null
+        if [ "${running}" != "true" ]; then
+            echo "{{ BOLD + RED }}FAILED{{ NORMAL }}"
+            echo "${logs}"
+            exit 1
+        fi
+        echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+    done
+
 # List decisions from crowdsec.  Useful when debugging access problems.
 [group('crowdsec')]
 crowdsec-list-decisions:

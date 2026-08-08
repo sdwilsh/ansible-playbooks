@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: forgejo-runner-dns
+
+components:
+  - ../../../components/coredns
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+configMapGenerator:
+  - name: forgejo-runner-dns-configmap
+    files:
+      - configmap/coredns/Corefile
+generatorOptions:
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=true
+  labels:
+    app.kubernetes.io/name: coredns
+images:
+  - name: docker.io/coredns/coredns
+    newTag: 1.13.1@sha256:9b9128672209474da07c91439bf15ed704ae05ad918dd6454e5b6ae14e35fee6
+patches:
+  - path: patches/coredns/mount_configuration.yml
+    target:
+      kind: Deployment
+      name: coredns-deployment
+resources:
+  - namespace.yml

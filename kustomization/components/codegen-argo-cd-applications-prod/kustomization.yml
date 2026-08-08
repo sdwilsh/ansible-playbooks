@@ -18,6 +18,7 @@ resources:
   - application/external-services.yml
   - application/factorio-relic.yml
   - application/forgejo-action-runner.yml
+  - application/forgejo-runner-dns.yml
   - application/forgejo.yml
   - application/garage.yml
   - application/generic-device-plugin.yml

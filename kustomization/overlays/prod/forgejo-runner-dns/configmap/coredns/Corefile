@@ -1,0 +1,13 @@
+.:53 {
+    errors
+    health
+    ready
+    hosts {
+      fallthrough
+    }
+    forward . 172.17.0.10
+    cache 30
+    loop
+    reload
+    prometheus :9153
+}
