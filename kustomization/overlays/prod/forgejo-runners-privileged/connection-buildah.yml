@@ -1,0 +1,21 @@
+---
+apiVersion: forgejo.tswn.us/v1alpha1
+kind: Connection
+metadata:
+  name: buildah
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+spec:
+  connectionManager:
+    image: connection-manager:latest
+  labels:
+    - buildah
+  pollInterval: 10s
+  tokenRef:
+    key: token
+    name: forgejo-runners-buildah-token-secret
+  url: https://code.tswn.us
+  uuid: a9606a4a-9817-47cb-a133-8d65909440c7
+  workers:
+    - workerRef:
+        name: buildah

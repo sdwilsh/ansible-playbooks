@@ -1,0 +1,49 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: forgejo-runners-privileged
+
+components:
+  - ../../../components/forgejo-runner-registry-config
+  - ../../../components/forgejo-runner-worker-rbac
+  - ../../../components/networkpolicy-allow-forgejo-connection-manager-to-api-server
+  - ../../../components/networkpolicy-allow-forgejo-runners-to-forgejo-runner-dns
+  - ../../../components/networkpolicy-allow-forgejo-runner-operator-to-traefik
+  - ../../../components/networkpolicy-allow-forgejo-workflow-job-to-internet
+  - ../../../components/networkpolicy-allow-forgejo-workflow-job-to-traefik-ci
+  - ../../../components/networkpolicy-allow-workflow-job-to-dockerhub-proxy
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-privileged
+
+configurations:
+  - kustomizeconfig.yml
+
+configMapGenerator:
+  - name: daemon-config-configmap
+    files:
+      - configmap/docker/daemon.json
+  - name: docker-entrypoint-configmap
+    files:
+      - configmap/docker/entrypoint.sh
+
+images:
+  - name: busybox
+    newTag: 1.38.0@sha256:fd8d9aa63ba2f0982b5304e1ee8d3b90a210bc1ffb5314d980eb6962f1a9715d
+  - name: connection-manager
+    newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/connection-manager
+    newTag: v0.6.1@sha256:fb89c05e6d35c9b39c7ae13a3796277b781f6e24b122e11305e206ea31bd8d9a
+  - name: job-executor
+    newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/job-executor
+    newTag: v0.6.1@sha256:494128ac1eee0df5ff8b8817ae231f392bd414845d01215afaf4999e8256cb5b
+  - name: ghcr.io/marinatedconcrete/buildah-action-runner
+    newTag: 1.0.0@sha256:cfd13e62cd832b8b1de45186122acee1904a1637b21c3e2021de7b253a7f69df
+
+resources:
+  - namespace.yml
+  - connection-buildah.yml
+  - connection.yml
+  - networkpolicy/allow-connection-manager-and-job-executor-to-coredns.yml
+  - serviceaccount.yml
+  - worker-buildah.yml
+  - worker-docker.yml

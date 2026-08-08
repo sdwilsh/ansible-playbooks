@@ -1,0 +1,21 @@
+---
+apiVersion: forgejo.tswn.us/v1alpha1
+kind: Connection
+metadata:
+  name: docker
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+spec:
+  connectionManager:
+    image: connection-manager:latest
+  labels:
+    - docker
+  pollInterval: 10s
+  tokenRef:
+    key: token
+    name: forgejo-runners-docker-token-secret
+  url: https://code.tswn.us
+  uuid: c6a79dd2-dfe6-476c-b313-90f6b0ade02f
+  workers:
+    - workerRef:
+        name: docker

@@ -1,0 +1,128 @@
+---
+# Unlike the docker worker, buildah jobs don't get kata isolation or a
+# --privileged escape hatch - they run a plain pod as root under a narrow,
+# explicit capability set. buildah/containers-storage needs root plus
+# CAP_SYS_ADMIN to skip its unshare(CLONE_NEWUSER) re-exec path
+# (MaybeReexecUsingUserNamespace); without it, image builds that install
+# packages or chown files fail outright. hostUsers: false is the actual
+# safety net: Kubernetes remaps in-pod UID 0 to an unprivileged host UID, so
+# this "root" is never real root on the node. This worker still lives in the
+# privileged namespace (PSS has no per-Worker granularity), but sets none of
+# the docker worker's privileged: true / dind sidecar / kata runtimeClassName.
+# CHOWN/DAC_OVERRIDE/FOWNER/FSETID/KILL/NET_BIND_SERVICE/SETFCAP/SETGID/
+# SETPCAP/SETUID/SYS_CHROOT is buildah's (containers/common) default
+# capability set for the process it forks per RUN step; it grants that whole
+# set to the child in one capset(2) call, which is all-or-nothing - missing
+# even one of these (not just SETPCAP) fails the entire call with EPERM
+# ("error setting capabilities for process: setting capabilities: operation
+# not permitted"), regardless of --isolation=chroot.
+apiVersion: forgejo.tswn.us/v1alpha1
+kind: Worker
+metadata:
+  labels:
+    app.kubernetes.io/name: forgejo-runner-operator
+  name: buildah
+spec:
+  allowedJobContainerGroups:
+    - end: 65535
+      start: 0
+  allowedJobContainerUsers:
+    - end: 65535
+      start: 0
+  allowPrivilegedJobContainers: false
+  fetchTimeout: 30s
+  idleCapacity: 0
+  jobExecutor:
+    image: job-executor:latest
+  jobTimeout: 1h
+  maxCapacity: 2
+  minCapacity: 0
+  podTemplate:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: GIT_CONFIG_COUNT
+              value: "1"
+            - name: GIT_CONFIG_KEY_0
+              value: safe.directory
+            - name: GIT_CONFIG_VALUE_0
+              value: "*"
+          image: ghcr.io/marinatedconcrete/buildah-action-runner
+          name: workflow
+          resources:
+            requests:
+              cpu: "4"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - FSETID
+                - KILL
+                - NET_BIND_SERVICE
+                - SETFCAP
+                - SETGID
+                - SETPCAP
+                - SETUID
+                - SYS_ADMIN
+                - SYS_CHROOT
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/containers/registries.conf
+              name: containers-config
+              readOnly: true
+              subPath: registries.conf
+            - mountPath: /etc/containers/storage.conf
+              name: containers-config
+              readOnly: true
+              subPath: storage.conf
+            - mountPath: /var/lib/containers/storage
+              name: scratch
+      dnsConfig:
+        nameservers:
+          - 172.17.251.13
+        options:
+          - name: ndots
+            value: "5"
+        searches:
+          - forgejo-runners-privileged.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      dnsPolicy: None
+      hostUsers: false
+      priorityClassName: application-infra
+      securityContext:
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+      serviceAccountName: forgejo-job
+      volumes:
+        - configMap:
+            defaultMode: 0444
+            name: containers-config-configmap
+          name: containers-config
+        - ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 100Gi
+                storageClassName: longhorn-ephemeral-ssd
+          name: scratch
