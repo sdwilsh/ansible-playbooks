@@ -49,6 +49,16 @@ entryPoints:
         idleTimeout: 3m
         readTimeout: 1h
         writeTimeout: 1h
+  websecure-ci:
+    address: :8444
+    http:
+      middlewares:
+        - strict-transport-security@file
+    transport:
+      respondingTimeouts:
+        idleTimeout: 3m
+        readTimeout: 1h
+        writeTimeout: 1h
   websecure-ext:
     address: :9443
     forwardedHeaders:
