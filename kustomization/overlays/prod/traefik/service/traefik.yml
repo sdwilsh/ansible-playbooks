@@ -32,10 +32,6 @@ spec:
       port: 443
       protocol: TCP
       targetPort: websecure
-    - name: websecure-ci
-      port: 8444
-      protocol: TCP
-      targetPort: websecure-ci
     - name: websecure-ext
       port: 8443
       protocol: TCP
