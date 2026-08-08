@@ -1,0 +1,5 @@
+nameReference:
+  - kind: ConfigMap
+    fieldSpecs:
+      - kind: Worker
+        path: spec/podTemplate/spec/volumes/configMap/name
