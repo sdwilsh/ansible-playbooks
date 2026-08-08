@@ -6,6 +6,11 @@
       fallthrough
     }
     forward . 172.17.0.10
+    # Deliberately not kube-dns: it forwards to the node's resolv.conf,
+    # which hits blocky's customDNS map of internal hostnames -> internal
+    # VIPs. CI only needs real internet resolution (image registries,
+    # package managers, etc.), not a directory of internal services.
+    forward . 1.1.1.1 9.9.9.9
     cache 30
     loop
     reload
