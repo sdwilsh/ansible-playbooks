@@ -85,5 +85,6 @@ resources:
   - networkpolicy/allow-from-alertmanager-to-internet.yml
   - networkpolicy/allow-from-grafana-to-internet.yml
   - networkpolicy/allow-from-prometheus.yml
+  - networkpolicy/allow-prometheus-adapter-from-api-server.yml
   - networkpolicy/allow-to-loki.yml
   - scrapeconfig/kubelet-cadvisor.yml

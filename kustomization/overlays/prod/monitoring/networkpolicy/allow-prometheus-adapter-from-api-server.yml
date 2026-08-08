@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-adapter-from-api-server-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01 (apiserver)
+      ports:
+        - port: 6443
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-adapter
+  policyTypes:
+    - Ingress
