@@ -21,6 +21,19 @@ spec:
     - from:
         - ipBlock:
             cidr: 172.16.0.0/16
+        # `kubectl cnpg status` proxies through the API server, which
+        # connects to Pods on other nodes using the node's own IP rather
+        # than a Pod-network IP. Without these, per-Pod status can only be
+        # fetched for whichever Pod happens to be co-located with the node
+        # running kube-apiserver (node01) - see incident 2026-08-18.
+        - ipBlock:
+            cidr: 10.11.0.101/32
+        - ipBlock:
+            cidr: 10.11.0.104/32
+        - ipBlock:
+            cidr: 10.11.0.105/32
+        - ipBlock:
+            cidr: 10.11.0.106/32
       ports:
         - port: 8000 # Status Port
   podSelector:
