@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-workflow-job-to-dockerhub-proxy-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 5000
+      to:
+        - ipBlock:
+            cidr: 10.11.1.75/32 # dockerhub-proxy.hogs.tswn.us
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: workflow-job
+  policyTypes:
+    - Egress

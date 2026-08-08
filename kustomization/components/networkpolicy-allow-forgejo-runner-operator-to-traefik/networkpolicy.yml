@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-forgejo-runner-operator-to-traefik-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: websecure
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+    - ports:
+        - port: 443
+      to:
+        - ipBlock:
+            cidr: 10.11.1.64/32
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/component
+        operator: In
+        values:
+          - connection-manager
+          - job-executor
+  policyTypes:
+    - Egress
