@@ -56,6 +56,8 @@ loki:
         index:
           prefix: loki_index_
           period: 24h
+  server:
+    log_level: warn
   storage:
     bucketNames:
       admin: monitoring-admin
@@ -127,7 +129,9 @@ distributor:
   serviceAnnotations:
     kube-vip.io/loadbalancerIPs: 10.11.1.72
 compactor:
-  extraArgs: *extraArgs
+  extraArgs:
+    - -config.expand-env=true
+    - -log.level=info
   priorityClassName: application-infra
   replicas: 1
 indexGateway:
