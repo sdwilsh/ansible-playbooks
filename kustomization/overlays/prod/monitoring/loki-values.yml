@@ -18,6 +18,9 @@ loki:
   analytics:
     reporting_enabled: false
   auth_enabled: false
+  compactor:
+    retention_enabled: true
+    delete_request_store: s3
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
