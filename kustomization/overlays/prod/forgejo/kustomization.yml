@@ -15,7 +15,7 @@ components:
   - ../../../components/pod-security-enforce-restricted
 helmCharts:
   - name: forgejo
-    version: 17.1.4
+    version: 17.1.5
     repo: oci://code.forgejo.org/forgejo-helm
     releaseName: forgejo
     valuesFile: values.yml
