@@ -4,5 +4,16 @@ kind: Alertmanager
 metadata:
   name: alertmanager
 spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: alertmanager
+                operator: In
+                values:
+                  - alertmanager
+          topologyKey: kubernetes.io/hostname
+  priorityClassName: critical-application-infra
   replicas: 3
   retention: 168h
