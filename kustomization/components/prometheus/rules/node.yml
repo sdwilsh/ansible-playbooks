@@ -14,3 +14,31 @@ spec:
           expr: changes((max by (node) (node_boot_time_seconds))[15m:1m]) > 0
           labels:
             severity: page
+        - alert: node-not-ready
+          annotations:
+            description: "{{ $labels.node }} has been unready for more than 5 minutes."
+          expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+          for: 5m
+          labels:
+            severity: page
+        - alert: node-unreachable
+          annotations:
+            description: "{{ $labels.node }} is unreachable and its workloads may be stuck instead of rescheduled."
+          expr: kube_node_spec_taint{key="node.kubernetes.io/unreachable",effect="NoSchedule"} == 1
+          for: 2m
+          labels:
+            severity: page
+        - alert: kube-state-metrics-down
+          annotations:
+            description: "kube-state-metrics has not been scraped for 5 minutes; node-not-ready and node-unreachable cannot fire while this is down."
+          expr: up{job="kube-state-metrics"} == 0
+          for: 5m
+          labels:
+            severity: page
+        - alert: node-exporter-down
+          annotations:
+            description: "node-exporter on {{ $labels.instance }} has not been scraped for 5 minutes; the node may be wedged or unreachable."
+          expr: up{job="prometheus-node-exporter"} == 0
+          for: 5m
+          labels:
+            severity: page

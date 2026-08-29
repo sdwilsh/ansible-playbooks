@@ -27,6 +27,11 @@ helmCharts:
     repo: https://grafana.github.io/helm-charts
     releaseName: grafana
     valuesFile: grafana-values.yml
+  - name: kube-state-metrics
+    version: 8.4.1
+    repo: https://prometheus-community.github.io/helm-charts
+    releaseName: kube-state-metrics
+    valuesFile: kube-state-metrics-values.yml
   - name: loki
     namespace: monitoring
     version: 7.3.0
@@ -43,6 +48,8 @@ images:
     newTag: latest@sha256:95de17e6eb92da83a58c90a9df0c4cede634f898d2e6b92ea04f4a6ee6ace08d
   - name: postgres
     newTag: 18@sha256:4aabea78cf39b90e834caf3af7d602a18565f6fe2508705c8d01aa63245c2e20
+  - name: registry.k8s.io/kube-state-metrics/kube-state-metrics
+    newTag: v2.20.0@sha256:42cfe3723a5f058171c627537fb57a3ea0f26e4380fa18555a95cb1a1b4cfc5b
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
     newTag: v0.12.0@sha256:932eae60e2bcf9c4660d6442da066ef1a79b4ea7cc232c61c7303069216ca006
 namespace: monitoring
@@ -84,6 +91,7 @@ resources:
   - ingress.yml
   - networkpolicy/allow-from-alertmanager-to-internet.yml
   - networkpolicy/allow-from-grafana-to-internet.yml
+  - networkpolicy/allow-from-kube-state-metrics-to-api-server.yml
   - networkpolicy/allow-from-prometheus.yml
   - networkpolicy/allow-prometheus-adapter-from-api-server.yml
   - networkpolicy/allow-to-loki.yml

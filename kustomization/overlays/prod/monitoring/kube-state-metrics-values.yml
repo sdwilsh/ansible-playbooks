@@ -1,0 +1,11 @@
+---
+namespaceOverride: monitoring
+
+collectors:
+  - nodes
+
+priorityClassName: application-infra
+
+prometheus:
+  monitor:
+    enabled: true
