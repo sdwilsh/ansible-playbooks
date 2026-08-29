@@ -6,7 +6,7 @@ RUN apk add --no-cache \
 
 # Download and Install kubectl
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=v1.36.3
+ARG KUBECTL_VERSION=v1.37.0
 RUN curl -o /usr/local/bin/kubectl \
     -f \
     -L \
