@@ -1,8 +1,0 @@
-{
-  "data-root": "/var/lib/docker",
-  "exec-opts": [
-    "native.cgroupdriver=cgroupfs"
-  ],
-  "registry-mirrors": ["https://dockerhub-proxy.hogs.tswn.us:5000/"],
-  "storage-driver": "overlay2"
-}

@@ -17,7 +17,6 @@ resources:
   - application/dockerhub-proxy.yml
   - application/external-services.yml
   - application/factorio-relic.yml
-  - application/forgejo-action-runner.yml
   - application/forgejo-runner-dns.yml
   - application/forgejo-runner-operator.yml
   - application/forgejo-runners-privileged.yml
