@@ -2,6 +2,7 @@
 namespaceOverride: monitoring
 
 collectors:
+  - leases
   - nodes
 
 priorityClassName: application-infra

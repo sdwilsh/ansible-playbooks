@@ -12,3 +12,5 @@ patches:
       name: kube-vip-ds
 resources:
   - namespace.yml
+  - podmonitor.yml
+  - prometheusrule.yml

@@ -1,0 +1,26 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kube-vip-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: kube-vip
+      rules:
+        - alert: kube-vip-lease-stale
+          annotations:
+            description: "kube-vip lease {{ $labels.lease }} in {{ $labels.namespace }} hasn't renewed in 120s — its VIP is probably not being advertised."
+          expr: |
+            (time() - kube_lease_renew_time{lease=~"kubevip-.*"} > 120)
+            and on (namespace) (kube_vip_active_services > 0)
+          for: 2m
+          labels:
+            severity: page
+        - alert: kube-vip-election-loop-leak
+          annotations:
+            description: "{{ $labels.name }} in {{ $labels.namespace }} has more than one active election loop."
+          expr: kube_vip_service_election_loops > 1
+          for: 5m
+          labels:
+            severity: page
