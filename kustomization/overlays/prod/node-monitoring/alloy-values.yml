@@ -32,7 +32,7 @@ alloy:
   storagePath: /tmp/alloy
 
 configReloader:
-  enabed: true
+  enabled: true
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
