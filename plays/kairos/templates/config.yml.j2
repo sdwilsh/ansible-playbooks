@@ -22,7 +22,13 @@ k3s:
     - --flannel-backend=host-gw
     - --flannel-iface=services
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
+{% for label in hostvars[host].k3s_node_labels | default([]) %}
+    - --node-label={{ label }}
+{% endfor %}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
+{% for taint in hostvars[host].k3s_node_taints | default([]) %}
+    - --node-taint={{ taint }}
+{% endfor %}
 {% if hostvars[host].k3s_cluster_init | default(False) %}
     - --cluster-init
 {% else %}
@@ -42,7 +48,13 @@ k3s-agent:
   args:
     - --flannel-iface=services
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
+{% for label in hostvars[host].k3s_node_labels | default([]) %}
+    - --node-label={{ label }}
+{% endfor %}
     - --node-name={{ hostvars[host].inventory_hostname_short }}
+{% for taint in hostvars[host].k3s_node_taints | default([]) %}
+    - --node-taint={{ taint }}
+{% endfor %}
 {% endif %}
   enabled: true
   env:

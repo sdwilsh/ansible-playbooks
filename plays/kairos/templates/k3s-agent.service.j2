@@ -4,6 +4,9 @@ Delegate=yes
 ExecStart=
 ExecStart=/usr/bin/k3s agent \
     --flannel-iface=services \
-    --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }} \
-    --node-name={{ inventory_hostname_short }}
+    --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}{% for label in k3s_node_labels | default([]) %} \
+    --node-label={{ label }}{% endfor %} \
+    --node-name={{ inventory_hostname_short }}{% for taint in k3s_node_taints | default([]) %} \
+    --node-taint={{ taint }}{% endfor %}
+
 TasksMax=infinity
