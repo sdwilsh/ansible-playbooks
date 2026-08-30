@@ -338,7 +338,6 @@
       "matchFileNames": [
         "kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers.yml"
       ],
-      "minimumReleaseAge": "12 hours",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
