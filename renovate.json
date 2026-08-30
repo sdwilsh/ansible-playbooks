@@ -161,6 +161,18 @@
         "\\s+name:\\s+kairos-upgrade-workers-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)(?:\\n.*)+\\s+image:\\s+(?<depName>.+):",
         "image:\\s+(?<depName>.+):(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"
       ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "gitea-tags",
+      "registryUrlTemplate": "https://code.tswn.us",
+      "managerFilePatterns": [
+        "/^kustomization/components/forgejo-runner-operator/kustomization\\.yml$/"
+      ],
+      "matchStrings": [
+        "-\\shttps://code\\.tswn\\.us/(?<depName>.+?)/config/crd\\?ref=(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)\\n"
+      ],
+      "versioningTemplate": "semver-coerced"
     }
   ],
   "extends": [
@@ -338,6 +350,15 @@
       "matchPackageNames": [
         "kairos-io/kairos-operator",
         "quay.io/kairos/operator"
+      ]
+    },
+    {
+      "groupName": "forgejo-runner-operator",
+      "matchPackageNames": [
+        "marinatedconcrete/forgejo-runner-operator",
+        "code.tswn.us/marinatedconcrete/forgejo-runner-operator/operator",
+        "code.tswn.us/marinatedconcrete/forgejo-runner-operator/connection-manager",
+        "code.tswn.us/marinatedconcrete/forgejo-runner-operator/job-executor"
       ]
     },
     {
