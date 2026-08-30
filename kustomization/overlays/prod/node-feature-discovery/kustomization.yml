@@ -13,5 +13,5 @@ helmCharts:
 namespace: node-feature-discovery
 resources:
   - namespace.yml
-  - https://github.com/kubernetes-sigs/node-feature-discovery/raw/refs/tags/v0.18.3/deployment/helm/node-feature-discovery/crds/nfd-api-crds.yaml
+  - https://github.com/kubernetes-sigs/node-feature-discovery/raw/refs/tags/v0.19.0/deployment/helm/node-feature-discovery/crds/nfd-api-crds.yaml
 

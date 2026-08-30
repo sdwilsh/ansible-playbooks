@@ -33,6 +33,7 @@ resources:
   - application/manyfold.yml
   - application/monitoring.yml
   - application/network-ups-tools.yml
+  - application/node-feature-discovery.yml
   - application/node-monitoring.yml
   - application/nut-shutdown-agent.yml
   - application/opencloud.yml
