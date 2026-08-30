@@ -92,6 +92,7 @@ resources:
   - cnpg/scheduledbackup.yml
   - ingress.yml
   - networkpolicy/allow-from-alertmanager-to-internet.yml
+  - networkpolicy/allow-from-alloy-to-api-server.yml
   - networkpolicy/allow-from-grafana-to-internet.yml
   - networkpolicy/allow-from-kube-state-metrics-to-api-server.yml
   - networkpolicy/allow-from-prometheus.yml
