@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: this-is-ignored-but-is-required
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: Exists
+              weight: 100

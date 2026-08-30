@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/valheim
+  - ../../../components/schedule-avoid-control-plane
 namespace: valheim-relic
 patches:
   - path: patches/add_valheim_env_vars.yml

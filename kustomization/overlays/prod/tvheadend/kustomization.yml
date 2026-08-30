@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/tvheadend
+  - ../../../components/schedule-avoid-control-plane
 namespace: tvheadend
 patches:
   - path: patches/add_tvheadend_volumes.yml

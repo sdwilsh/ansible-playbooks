@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/transmission
+  - ../../../components/schedule-avoid-control-plane
 configMapGenerator:
   - name: protonvpn-configmap
     files:

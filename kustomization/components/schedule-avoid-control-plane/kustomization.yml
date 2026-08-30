@@ -1,0 +1,9 @@
+---
+# Soft preference (preferredDuringScheduling) away from the control plane; no-op for DaemonSets.
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+patches:
+  - path: patches/avoid_control_plane.yml
+    target:
+      kind: Deployment|StatefulSet|DaemonSet

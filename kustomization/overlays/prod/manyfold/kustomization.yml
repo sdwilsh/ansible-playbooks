@@ -13,6 +13,7 @@ components:
   - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/schedule-avoid-control-plane
 helmCharts:
   - name: manyfold
     version: 1.0.3

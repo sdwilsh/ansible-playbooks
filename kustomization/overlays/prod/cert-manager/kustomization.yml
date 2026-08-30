@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/cert-manager
+  - ../../../components/schedule-prefer-control-plane
 patches:
   - path: patches/add_dns01_recursive_nameservers.yml
     target:

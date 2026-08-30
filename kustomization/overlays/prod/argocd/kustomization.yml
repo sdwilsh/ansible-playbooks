@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/argo-cd
+  - ../../../components/schedule-prefer-control-plane
 namespace: argocd
 patches:
   - target:

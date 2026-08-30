@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/7d2d
+  - ../../../components/schedule-avoid-control-plane
 images:
   - name: vinanrra/7dtd-server
     newTag: v0.9.3@sha256:75d1193fb2470687ee8748f27482524c170f6cbca110e15f48db8d8ff48f15ca

@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/blocky
+  - ../../../components/schedule-prefer-control-plane
 configMapGenerator:
   - name: blocky-configmap
     files:

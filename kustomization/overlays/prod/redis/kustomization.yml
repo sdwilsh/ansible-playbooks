@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/redis-operator
+  - ../../../components/schedule-prefer-control-plane
 namespace: redis
 resources:
   - namespace.yml
