@@ -6,6 +6,7 @@ import json
 import re
 import threading
 import time
+from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
 from typing import Tuple, Dict, Any, List, Optional
 
@@ -41,56 +42,59 @@ logging.basicConfig(
 )
 diag_logger: logging.Logger = logging.getLogger("Diagnostics")
 
-CACHE_TTL_SECONDS: float = 300.0
-POD_CACHE: Dict[str, Dict[str, Any]] = {}
+POD_CACHE_REFRESH_SECONDS: float = 300.0
+POD_IP_MAP: Dict[str, Tuple[str, str]] = {}
+POD_IP_MAP_LOCK: threading.Lock = threading.Lock()
 
-def query_kube_api_for_ip(ip_addr: str) -> Tuple[str, str]:
-    diag_logger.debug(f"Cache miss for internal IP {ip_addr}. Executing live API lookup via native kubectl...")
-    
-    cmd: List[str] = ["kubectl", "get", "pods", "--all-namespaces", "-o", "json", "--request-timeout=2s"]
+def fetch_pod_ip_map() -> Optional[Dict[str, Tuple[str, str]]]:
+    cmd: List[str] = ["kubectl", "get", "pods", "--all-namespaces", "-o", "json", "--request-timeout=10s"]
     res: subprocess.CompletedProcess = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    
+
     if res.returncode != 0:
         diag_logger.error(f"Kubectl API call failed with code {res.returncode}. Stderr: {res.stderr.strip()}")
-        return "", ""
-        
+        return None
+
     if not res.stdout.strip():
-        return "", ""
+        return None
 
     data: Dict[str, Any] = json.loads(res.stdout)
+    ip_map: Dict[str, Tuple[str, str]] = {}
     for item in data.get("items", []):
         status: Dict[str, Any] = item.get("status", {})
         metadata: Dict[str, Any] = item.get("metadata", {})
-        
+
         pod_name: str = str(metadata.get("name", ""))
         namespace: str = str(metadata.get("namespace", ""))
-        
+
         for pod_ip_obj in status.get("podIPs", []):
-            if pod_ip_obj.get("ip") == ip_addr:
-                return pod_name, namespace
-                
-    return "", ""
+            ip: Optional[str] = pod_ip_obj.get("ip")
+            if ip:
+                ip_map[ip] = (pod_name, namespace)
+
+    return ip_map
+
+# A single background thread refreshes a full IP -> (pod, namespace) map on a timer, instead of
+# fetching one Pod's IP on each cache miss.  The Kubernetes API has no way to fetch a Pod by IP,
+# so a per-IP lookup still downloads every Pod on the cluster.  On a per-miss cache, that cost
+# lands on whichever thread hits the miss - the capture loop, for every unresolved IP in a packet.
+# A timer pays that same cost once per interval, off the capture and verifier threads, so a slow
+# API call can never stall packet capture.  A lookup against the map is then a plain, fast dict
+# read.
+def pod_cache_refresh_loop() -> None:
+    while True:
+        ip_map: Optional[Dict[str, Tuple[str, str]]] = fetch_pod_ip_map()
+        if ip_map is not None:
+            with POD_IP_MAP_LOCK:
+                POD_IP_MAP.clear()
+                POD_IP_MAP.update(ip_map)
+        time.sleep(POD_CACHE_REFRESH_SECONDS)
 
 def resolve_pod_from_ip(ip_addr: str) -> Tuple[str, str]:
     if not ip_addr or not ip_addr.startswith("172.16."):
         return "", ""
-        
-    current_time: float = time.time()
-    if ip_addr in POD_CACHE:
-        cache_entry: Dict[str, Any] = POD_CACHE[ip_addr]
-        if current_time < cache_entry["expires"]:
-            return cache_entry["pod"], cache_entry["ns"]
-            
-    pod_name, namespace = query_kube_api_for_ip(ip_addr)
-    POD_CACHE[ip_addr] = {
-        "pod": pod_name,
-        "ns": namespace,
-        "expires": current_time + CACHE_TTL_SECONDS
-    }
-    
-    if pod_name:
-        diag_logger.debug(f"Successfully mapped and cached {ip_addr} -> {namespace}/{pod_name}")
-    return pod_name, namespace
+
+    with POD_IP_MAP_LOCK:
+        return POD_IP_MAP.get(ip_addr, ("", ""))
 
 def parse_endpoint(endpoint_str: str) -> Tuple[str, str]:
     """Safely extracts IP and Port for both IPv4 and IPv6 string styles."""
@@ -100,6 +104,13 @@ def parse_endpoint(endpoint_str: str) -> Tuple[str, str]:
         if len(parts) == 2:
             return str(parts[0]), str(parts[1])
     return endpoint_str, ""
+
+def parse_packet_time(raw_time: str) -> float:
+    """Converts tcpdump's -tttt timestamp (container clock, UTC) to a Unix epoch time."""
+    try:
+        return datetime.strptime(raw_time, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc).timestamp()
+    except ValueError:
+        return time.time()
 
 # kube-router logs a packet via NFLOG whenever the NetworkPolicy chain it happens to
 # evaluate first doesn't match, even if a later chain for the same Pod goes on to accept
@@ -222,6 +233,7 @@ def main() -> None:
     diag_logger.debug("Initializing background netfilter capture sidecar...")
 
     threading.Thread(target=verifier_loop, args=(logger,), daemon=True).start()
+    threading.Thread(target=pod_cache_refresh_loop, daemon=True).start()
 
     cmd: List[str] = ["tcpdump", "-l", "-i", "nflog:100", "-n", "-tttt"]
     process: subprocess.Popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
@@ -269,8 +281,18 @@ def main() -> None:
                     "packet_details": " ".join(tokens[4:])
                 }
 
-                with PENDING_LOCK:
-                    PENDING.append((time.time(), log_data))
+                # Use the packet's own capture time, not the time this line was read, as the start
+                # of its verification window.  A stall between capture and read (e.g. a slow disk
+                # read) can leave a line sitting unread past MAX_VERIFY_SECONDS; queuing it with a
+                # fresh window would check it against a conntrack table taken long after its own
+                # flow closed and its entry was evicted, and wrongly report a real reply as dropped.
+                captured_at: float = parse_packet_time(timestamp)
+                if time.time() - captured_at >= MAX_VERIFY_SECONDS:
+                    log_data["verdict"] = "unknown"
+                    logger.info(json.dumps(log_data))
+                else:
+                    with PENDING_LOCK:
+                        PENDING.append((captured_at, log_data))
             except Exception:
                 diag_logger.exception("A fatal parsing exception occurred while processing a log stream line.")
     except KeyboardInterrupt: 
