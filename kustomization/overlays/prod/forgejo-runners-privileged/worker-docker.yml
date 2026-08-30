@@ -130,6 +130,12 @@ spec:
           name: docker-entrypoint
         - ephemeral:
             volumeClaimTemplate:
+              metadata:
+                labels:
+                  # Use this PVC to configure attached PVs.
+                  recurring-job.longhorn.io/source: enabled
+                  # Opt into the no-backup group since it can easily be recreated.
+                  recurring-job-group.longhorn.io/no-backup: enabled
               spec:
                 accessModes:
                   - ReadWriteOnce
