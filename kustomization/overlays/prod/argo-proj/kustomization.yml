@@ -9,4 +9,5 @@ components:
 namespace: argocd
 resources:
   - application.yml
+  - priorityclass.yml
   - project.yml

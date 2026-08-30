@@ -106,7 +106,7 @@ spec:
           - svc.cluster.local
           - cluster.local
       dnsPolicy: None
-      priorityClassName: application-infra
+      priorityClassName: continuous-integration
       runtimeClassName: kata-qemu-runtime-rs
       securityContext:
         runAsGroup: 0

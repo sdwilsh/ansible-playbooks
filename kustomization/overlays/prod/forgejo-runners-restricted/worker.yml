@@ -67,7 +67,7 @@ spec:
           - cluster.local
       dnsPolicy: None
       hostUsers: false
-      priorityClassName: application-infra
+      priorityClassName: continuous-integration
       securityContext:
         runAsNonRoot: true
       serviceAccountName: forgejo-job
