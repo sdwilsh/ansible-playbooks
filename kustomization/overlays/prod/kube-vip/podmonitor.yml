@@ -4,9 +4,9 @@ kind: PodMonitor
 metadata:
   name: kube-vip-podmonitor
 spec:
+  podMetricsEndpoints:
+    - path: /metrics
+      portNumber: 2112
   selector:
     matchLabels:
       app.kubernetes.io/name: kube-vip-svc-ds
-  podMetricsEndpoints:
-    - portNumber: 2112
-      path: /metrics
