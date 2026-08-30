@@ -10,7 +10,7 @@ spec:
         port: web
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
-  priorityClassName: application
+  priorityClassName: critical-application-infra
   retention: 4w
   ruleNamespaceSelector: {}
   ruleSelector: {}
