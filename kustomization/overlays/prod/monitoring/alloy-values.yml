@@ -16,7 +16,6 @@ alloy:
     extra:
       - mountPath: /tmp/alloy
         name: tmp
-  priorityClassName: application-infra
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:

@@ -19,7 +19,6 @@ alloy:
         name: nflog-shared-volume
       - mountPath: /tmp/alloy
         name: tmp
-  priorityClassName: application-infra
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -142,6 +141,7 @@ controller:
       volumeMounts:
         - mountPath: /tmp/nflog
           name: nflog-shared-volume
+  priorityClassName: critical-application-infra
   type: daemonset
   volumes:
     extra:
