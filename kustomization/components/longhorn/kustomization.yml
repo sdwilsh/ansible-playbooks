@@ -12,6 +12,7 @@ patches:
 resources:
     # renovate: datasource=github-releases
   - https://raw.githubusercontent.com/longhorn/longhorn/v1.12.1/deploy/longhorn.yaml
+  - networkpolicy.yml
   - podmonitor.yml
   - recurringjob.yml
   - storageclass.yml
