@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-prometheus-adapter-to-api-server-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 443
+      to:
+        - ipBlock:
+            cidr: 172.17.0.1/32 # kubernetes.default.svc (apiserver ClusterIP)
+    - ports:
+        - port: 6443
+      to:
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01 (apiserver)
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-adapter
+  policyTypes:
+    - Egress
