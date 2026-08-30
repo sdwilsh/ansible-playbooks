@@ -15,9 +15,11 @@ BACKUP_COUNT: int = 1
 
 CONNTRACK_PATH: str = "/proc/net/nf_conntrack"
 MAX_VERIFY_SECONDS: float = 3.0
-VERIFIER_TICK_SECONDS: float = 0.1
-
-KV_RE: re.Pattern = re.compile(r'(\w+)=(\S+)')
+# Each tick reads and parses the whole conntrack table (see build_conntrack_index()).
+# The table can hold tens of thousands of entries.  A short tick makes this run often
+# and costs CPU on every node.  This tick still gives each flow several checks before
+# it reaches MAX_VERIFY_SECONDS.
+VERIFIER_TICK_SECONDS: float = 0.5
 
 # Flows awaiting a verdict, as (captured_at, log_data) pairs, guarded by PENDING_LOCK.
 # Checked against conntrack on every tick starting on the tick right after capture; a
@@ -142,23 +144,30 @@ def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str], Dict[str, Any
                     continue
                 protocol: str = fields[2]
                 replied: bool = "SYN_SENT" not in line and "UNREPLIED" not in line
-                seen: Dict[str, int] = {}
-                original: Dict[str, str] = {}
-                reply: Dict[str, str] = {}
-                for key, val in KV_RE.findall(line):
-                    if key not in ("src", "sport"):
+                # Read src and sport from the fields already split above.  A conntrack
+                # line has a dozen or more fields, such as byte and packet counters,
+                # mark, secctx, and zone.  Only two of them matter here.
+                original_src: Optional[str] = None
+                original_sport: Optional[str] = None
+                reply_src: Optional[str] = None
+                for field in fields:
+                    eq: int = field.find('=')
+                    if eq == -1:
                         continue
-                    seen[key] = seen.get(key, 0) + 1
-                    if seen[key] == 1:
-                        original[key] = val
-                    elif seen[key] == 2:
-                        reply[key] = val
-                if len(original) == 2:
-                    flow_key: Tuple[str, str, str] = (protocol, original["src"], original["sport"])
+                    key: str = field[:eq]
+                    if key == "src":
+                        if original_src is None:
+                            original_src = field[eq + 1:]
+                        else:
+                            reply_src = field[eq + 1:]
+                    elif key == "sport" and original_sport is None:
+                        original_sport = field[eq + 1:]
+                if original_src is not None and original_sport is not None:
+                    flow_key: Tuple[str, str, str] = (protocol, original_src, original_sport)
                     entry: Dict[str, Any] = index.setdefault(flow_key, {"replied": False, "reply_src": ""})
                     entry["replied"] = entry["replied"] or replied
-                    if reply.get("src"):
-                        entry["reply_src"] = reply["src"]
+                    if reply_src:
+                        entry["reply_src"] = reply_src
     except OSError:
         diag_logger.exception(f"Failed to read {CONNTRACK_PATH} for conntrack verification")
         return None
