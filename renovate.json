@@ -216,7 +216,6 @@
         "stirling-pdf-chart",
         "twpayne/chezmoi"
       ],
-      "minimumReleaseAge": "36 hours",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
@@ -236,7 +235,6 @@
         "ghcr.io/immich-app/immich-server",
         "immich"
       ],
-      "minimumReleaseAge": "12 hours",
       "schedule": [
         "after 4pm every weekday",
         "every weekend"
@@ -261,7 +259,6 @@
       "matchUpdateTypes": [
         "digest"
       ],
-      "minimumReleaseAge": "36 hours",
       "schedule": [
         "after 4pm"
       ]
@@ -410,7 +407,10 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "2 days"
+      "schedule": [
+        "after 4pm on monday",
+        "after 4pm on thursday"
+      ]
     },
     {
       "groupName": "postgres-atuin",
@@ -420,7 +420,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "1 day"
+      "schedule": [
+        "after 4pm"
+      ]
     },
     {
       "groupName": "postgres-auth",
@@ -430,7 +432,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "1 day"
+      "schedule": [
+        "after 4pm"
+      ]
     },
     {
       "groupName": "postgres-crowdsec",
@@ -440,7 +444,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "3 days"
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-homeassistant",
@@ -450,7 +456,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "3 days"
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-immich",
@@ -462,7 +470,9 @@
         "ghcr.io/tensorchord/cloudnative-vectorchord"
       ],
       "minimumGroupSize": 2,
-      "minimumReleaseAge": "3 days"
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-monitoring",
@@ -472,7 +482,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "3 days"
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-paperless",
@@ -482,7 +494,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "3 days"
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-tandoor",
@@ -492,7 +506,9 @@
       "matchPackageNames": [
         "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumReleaseAge": "3 days"
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-weekly",
