@@ -449,6 +449,18 @@
       ]
     },
     {
+      "groupName": "postgres-forgejo",
+      "matchFileNames": [
+        "kustomization/overlays/prod/forgejo/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql"
+      ],
+      "schedule": [
+        "after 4pm on friday"
+      ]
+    },
+    {
       "groupName": "postgres-homeassistant",
       "matchFileNames": [
         "kustomization/overlays/prod/homeassistant/**"
@@ -470,6 +482,18 @@
         "ghcr.io/tensorchord/cloudnative-vectorchord"
       ],
       "minimumGroupSize": 2,
+      "schedule": [
+        "after 4pm on friday"
+      ]
+    },
+    {
+      "groupName": "postgres-manyfold",
+      "matchFileNames": [
+        "kustomization/overlays/prod/manyfold/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql"
+      ],
       "schedule": [
         "after 4pm on friday"
       ]
