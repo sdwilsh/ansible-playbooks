@@ -20,7 +20,7 @@ configMapGenerator:
       - configmap/authelia/config.yml
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:95de17e6eb92da83a58c90a9df0c4cede634f898d2e6b92ea04f4a6ee6ace08d
+    newTag: latest@sha256:65447dcbb2813878e22265949a4ba4cca02f8d008ff3fe66a25354b511f28015
   - name: postgres
     newTag: 18@sha256:22c89fe0d0f507606260237fd55e51f6137f58b2d5bcf6152242b96d9fe8f9a4
   - name: quay.io/opstree/redis-sentinel
