@@ -55,7 +55,8 @@ jobs:
             echo "PLATFORM=linux/amd64" >> ${GITHUB_ENV}
           fi
 
-      - name: Checkout
+      - &checkout
+        name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Mount BTRFS for podman storage
@@ -150,7 +151,8 @@ jobs:
               sudo -E podman push "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
           done
 
-      - name: Install Cosign
+      - &install_cosign
+        name: Install Cosign
         uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
@@ -232,3 +234,83 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
+
+  build_push_build_files:
+    name: Build and push build-files image
+
+    env:
+      IMAGE_DESC: Mack build files—the build-time scripts and files shared by Mack and other Kairos-based images.
+      IMAGE_NAME: mack-build-files
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - *checkout
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> "${GITHUB_OUTPUT}"
+
+      - name: Image Metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        id: metadata
+        with:
+          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=latest.{{date 'YYYYMMDD'}}
+          labels: |
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.description=${{ env.IMAGE_DESC }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/blob/main/images/mack/Containerfile
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+
+      - name: Build image for testing
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: images/mack
+          file: images/mack/Containerfile
+          target: ctx
+          load: true
+          platforms: linux/amd64
+          push: false
+          tags: mack-build-files:ci
+          cache-from: type=gha,scope=mack-build-files
+          cache-to: type=gha,scope=mack-build-files
+
+      - *ghcr_login
+
+      - name: Build and push image
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        id: push
+        with:
+          context: images/mack
+          file: images/mack/Containerfile
+          target: ctx
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          annotations: ${{ steps.metadata.outputs.annotations }}
+          cache-from: type=gha,scope=mack-build-files
+          cache-to: type=gha,scope=mack-build-files
+
+      - *install_cosign
+
+      - name: Sign container image
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}"
+        env:
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
