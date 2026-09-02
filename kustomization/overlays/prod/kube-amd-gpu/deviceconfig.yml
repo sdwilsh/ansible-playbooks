@@ -1,0 +1,12 @@
+---
+apiVersion: amd.com/v1alpha1
+kind: DeviceConfig
+metadata:
+  name: strixhalo
+spec:
+  selector:
+    hardware.hogs.tswn.us/gpu: strixhalo
+  driver:
+    # The OS image build already includes the `amdgpu` driver and
+    # firmware.  The operator must not build or load the driver again.
+    enable: false

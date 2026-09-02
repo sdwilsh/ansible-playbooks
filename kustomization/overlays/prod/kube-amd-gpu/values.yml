@@ -1,0 +1,38 @@
+---
+# This cluster already runs NFD separately.
+node-feature-discovery:
+  enabled: false
+
+# The chart's rule does not meet our needs; we supply our own.
+installdefaultNFDRule: false
+
+# The OS image bakes in the driver.  `watch: false` stops the
+# controller from polling for KMM CRDs that do not exist here.
+kmm:
+  enabled: false
+  watch: false
+
+# Avoids a duplicate default `DeviceConfig`.  This overlay defines its
+# own, in `deviceconfig.yml`.
+crds:
+  defaultCR:
+    install: false
+    upgrade: false
+
+draDriver:
+  deviceClass:
+    create: false
+
+remediation:
+  enabled: false
+  installCRDs: false
+
+controllerManager:
+  manager:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault

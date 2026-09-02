@@ -1,0 +1,6 @@
+---
+$patch: delete
+apiVersion: this-is-ignored-but-is-required
+kind: this-is-ignored-but-is-required
+metadata:
+  name: this-is-ignored-but-is-required

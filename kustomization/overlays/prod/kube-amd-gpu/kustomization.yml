@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-privileged
+  - ../../../components/schedule-prefer-control-plane
+helmCharts:
+  - name: gpu-operator-charts
+    version: v1.5.1
+    repo: https://rocm.github.io/gpu-operator
+    releaseName: gpu-operator
+    valuesFile: values.yml
+    includeCRDs: true
+namespace: kube-amd-gpu
+patches:
+  # `kustomize build --enable-helm` does not know about Helm hook
+  # lifecycle.  It renders every hook template on every apply.  Without
+  # this patch, the chart's pre-delete, post-delete, and pre-upgrade
+  # `Job`s delete the `DeviceConfig` and the operator's CRDs on every
+  # sync.
+  - path: patches/delete_helm_hooks.yml
+    target:
+      annotationSelector: helm.sh/hook
+resources:
+  - namespace.yml
+  - deviceconfig.yml

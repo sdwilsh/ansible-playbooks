@@ -28,6 +28,7 @@ resources:
   - application/immich.yml
   - application/kairos-operator.yml
   - application/kata-containers.yml
+  - application/kube-amd-gpu.yml
   - application/kube-vip.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
