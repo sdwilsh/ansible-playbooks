@@ -251,12 +251,12 @@ jobs:
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
 
-  build_push_build_files:
-    name: Build and push build-files image
+  build_push_mack_kairos:
+    name: Build and push mack-kairos image
 
     env:
-      IMAGE_DESC: Mack build files—the build-time scripts and files shared by Mack and other Kairos-based images.
-      IMAGE_NAME: mack-build-files
+      IMAGE_DESC: Mack's build files, on top of kairos-fedora instead of fedora-bootc, for k3s cluster nodes.
+      IMAGE_NAME: mack-kairos
 
     permissions:
       contents: read
@@ -295,13 +295,15 @@ jobs:
         with:
           context: images/mack
           file: images/mack/Containerfile
-          target: ctx
+          target: mack-kairos
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           load: true
           platforms: linux/amd64
           push: false
-          tags: mack-build-files:ci
-          cache-from: type=gha,scope=mack-build-files
-          cache-to: type=gha,scope=mack-build-files
+          tags: mack-kairos:ci
+          cache-from: type=gha,scope=mack-kairos
+          cache-to: type=gha,scope=mack-kairos,mode=max
 
       - *ghcr_login
 
@@ -312,14 +314,16 @@ jobs:
         with:
           context: images/mack
           file: images/mack/Containerfile
-          target: ctx
+          target: mack-kairos
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           annotations: ${{ steps.metadata.outputs.annotations }}
-          cache-from: type=gha,scope=mack-build-files
-          cache-to: type=gha,scope=mack-build-files
+          cache-from: type=gha,scope=mack-kairos
+          cache-to: type=gha,scope=mack-kairos,mode=max
 
       - *install_cosign
 

@@ -112,6 +112,19 @@ build-mack platform="linux/amd64" tag="mack":
 
     podman build "${PODMAN_BUILD_ARGS[@]}" images/mack
 
+# Builds the images/mack container's mack-kairos target.
+[group('images')]
+build-mack-kairos platform="linux/amd64":
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    GIT_SHA=unknown
+    if [[ -z "$(git status -s)" ]]; then
+        GIT_SHA=$(git rev-parse --short HEAD)
+    fi
+
+    podman build images/mack --target mack-kairos --platform={{ platform }} --build-arg GIT_SHA="${GIT_SHA}" --tag mack-kairos:latest
+
 # Builds the images/mack container as a virtual machine.
 [group('images')]
 build-mack-vm:
