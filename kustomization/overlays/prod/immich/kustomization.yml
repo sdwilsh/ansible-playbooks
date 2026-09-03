@@ -15,7 +15,7 @@ components:
   - ../../../components/pod-security-enforce-restricted
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:65447dcbb2813878e22265949a4ba4cca02f8d008ff3fe66a25354b511f28015
+    newTag: latest@sha256:e0fcb25c485a8ad0665d0dd4b4a67cefb6baee32b0e3b19f54f1b468c49c1ed5
   - name: ghcr.io/immich-app/immich-server
     newTag: v3.1.0@sha256:b434cb9287eea1471c9974845914d4dd328c9c2d652e446ed4930f99944f0ceb
   - name: ghcr.io/immich-app/immich-machine-learning
