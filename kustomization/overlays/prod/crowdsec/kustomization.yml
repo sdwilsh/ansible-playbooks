@@ -29,7 +29,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:65447dcbb2813878e22265949a4ba4cca02f8d008ff3fe66a25354b511f28015
   - name: ghcr.io/crowdsecurity/crowdsec
-    newTag: v1.8.0@sha256:99eb4df235527e978595ef5ebb30182831686dc875521de67ef39b7659a86897 
+    newTag: v1.8.1@sha256:0f2523fa61ef507f15d953045cface490cc880670c62f2755ced17524107f71a 
   - name: postgres
     newTag: 18@sha256:22c89fe0d0f507606260237fd55e51f6137f58b2d5bcf6152242b96d9fe8f9a4
 namespace: crowdsec
