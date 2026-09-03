@@ -26,3 +26,8 @@ worker:
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
+  tolerations:
+    - effect: NoSchedule
+      key: gpu
+      operator: Equal
+      value: strixhalo
