@@ -2,12 +2,13 @@
 apiVersion: operator.kairos.io/v1alpha1
 kind: NodeOpUpgrade
 metadata:
-  name: kairos-upgrade-control-plane-0.9.0
+  name: kairos-upgrade-control-plane-mack-20260903
 spec:
   concurrency: 1
-  image: ghcr.io/marinatedconcrete/kairos-fedora:0.9.0
+  image: ghcr.io/sdwilsh/mack-kairos:latest.20260903@sha256:ea72c35b4d39815f56b4634671db95910f8e0b5894c15ccc458733abaa5061ca
   nodeSelector:
     matchExpressions:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
   stopOnFailure: true
+  upgradeRecovery: true

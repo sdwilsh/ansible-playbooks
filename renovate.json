@@ -152,14 +152,15 @@
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
+      "versioningTemplate": "regex:^(?<major>\\d{4})(?<minor>\\d{2})(?<patch>\\d{2})$",
       "managerFilePatterns": [
         "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane\\.yml$/",
         "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers\\.yml$/"
       ],
       "matchStrings": [
-        "\\s+name:\\s+kairos-upgrade-control-plane-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)(?:\\n.*)+\\s+image:\\s+(?<depName>.+):",
-        "\\s+name:\\s+kairos-upgrade-workers-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)(?:\\n.*)+\\s+image:\\s+(?<depName>.+):",
-        "image:\\s+(?<depName>.+):(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"
+        "\\s+name:\\s+kairos-upgrade-control-plane-mack-(?<currentValue>[0-9]{8})(?:\\n.*)+?\\s+image:\\s+(?<depName>[^:\\s]+):",
+        "\\s+name:\\s+kairos-upgrade-workers-mack-(?<currentValue>[0-9]{8})(?:\\n.*)+?\\s+image:\\s+(?<depName>[^:\\s]+):",
+        "image:\\s+(?<depName>[^:\\s]+):latest\\.(?<currentValue>[0-9]{8})@(?<currentDigest>sha256:[a-f0-9]{64})"
       ]
     },
     {
