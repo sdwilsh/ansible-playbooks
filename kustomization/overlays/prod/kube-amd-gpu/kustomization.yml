@@ -27,4 +27,5 @@ patches:
       annotationSelector: helm.sh/hook
 resources:
   - namespace.yml
-  - deviceconfig.yml
+  - deviceconfig/shared.yml
+  - deviceconfig/strixhalo.yml

@@ -1,0 +1,26 @@
+---
+apiVersion: amd.com/v1alpha1
+kind: DeviceConfig
+metadata:
+  name: strixhalo
+spec:
+  devicePlugin:
+    # gpuworker01/gpuworker02 carry this taint.  Without it, the
+    # device-plugin and node-labeller pods never schedule there.  The
+    # operator then never advertises amd.com/gpu on these nodes.
+    devicePluginTolerations:
+      - effect: NoSchedule
+        key: gpu
+        operator: Equal
+        value: strixhalo
+    nodeLabellerTolerations:
+      - effect: NoSchedule
+        key: gpu
+        operator: Equal
+        value: strixhalo
+  driver:
+    # The OS image build already includes the `amdgpu` driver and
+    # firmware.  The operator must not build or load the driver again.
+    enable: false
+  selector:
+    hardware.hogs.tswn.us/gpu: strixhalo

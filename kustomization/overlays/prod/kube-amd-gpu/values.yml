@@ -13,7 +13,7 @@ kmm:
   watch: false
 
 # Avoids a duplicate default `DeviceConfig`.  This overlay defines its
-# own, in `deviceconfig.yml`.
+# own, in `deviceconfig/`.
 crds:
   defaultCR:
     install: false

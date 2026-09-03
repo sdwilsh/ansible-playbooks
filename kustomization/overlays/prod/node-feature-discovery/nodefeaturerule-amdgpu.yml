@@ -18,3 +18,29 @@ spec:
               matchExpressions:
                 vendor: {op: In, value: ["1002"]}
                 class: {op: In, value: ["0300"]}
+    # These two rules classify an AMD GPU node by its PCI device ID.
+    # Device 1586 is Strix Halo's own ID (pci-ids.ucw.cz).  No manual
+    # label is needed.  The taint stays a manual decision, in
+    # host_vars.
+    #
+    # A node with two AMD GPUs could match both rules.  NFD applies
+    # rules in order.  A later rule overwrites an earlier rule's
+    # label.  strixhalo is listed last, so it wins that conflict.
+    - name: "amd shared gpu present"
+      labels:
+        hardware.hogs.tswn.us/gpu: shared
+      matchFeatures:
+        - feature: "pci.device"
+          matchExpressions:
+            vendor: {op: In, value: ["1002"]}
+            class: {op: In, value: ["0300"]}
+            device: {op: NotIn, value: ["1586"]}
+    - name: "amd strixhalo gpu present"
+      labels:
+        hardware.hogs.tswn.us/gpu: strixhalo
+      matchFeatures:
+        - feature: "pci.device"
+          matchExpressions:
+            vendor: {op: In, value: ["1002"]}
+            class: {op: In, value: ["0300"]}
+            device: {op: In, value: ["1586"]}

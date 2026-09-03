@@ -1,0 +1,17 @@
+---
+apiVersion: amd.com/v1alpha1
+kind: DeviceConfig
+metadata:
+  name: shared
+spec:
+  driver:
+    # The OS image build already includes the `amdgpu` driver and
+    # firmware.  The operator must not build or load the driver again.
+    enable: false
+  selector:
+    # amdgpu-rules sets this label by PCI device ID, not by hostname.
+    # The value is `shared` on any AMD GPU other than Strix Halo's
+    # chip.  The value is `strixhalo` on that chip.  This keeps the
+    # selector distinct from the strixhalo DeviceConfig's, on any
+    # node.
+    hardware.hogs.tswn.us/gpu: shared
