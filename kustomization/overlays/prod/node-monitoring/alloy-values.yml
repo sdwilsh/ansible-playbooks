@@ -142,6 +142,11 @@ controller:
         - mountPath: /tmp/nflog
           name: nflog-shared-volume
   priorityClassName: critical-application-infra
+  tolerations:
+    - effect: NoSchedule
+      key: gpu
+      operator: Equal
+      value: strixhalo
   type: daemonset
   volumes:
     extra:
