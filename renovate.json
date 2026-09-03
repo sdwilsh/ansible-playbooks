@@ -33,16 +33,6 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/^plays/kairos/upgrade\\.yml$/"
-      ],
-      "datasourceTemplate": "docker",
-      "matchStrings": [
-        "#\\s*renovate:\\sdepName=(?<depName>.*?)\\n\\s+kairos_version: \"(?<currentValue>.*?)\""
-      ]
-    },
-    {
-      "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
         "/^kustomization/.+/.+/.*values\\.yml$/"
@@ -292,6 +282,7 @@
       "matchPackageNames": [
         "forgejo",
         "ghcr.io/marinatedconcrete/kairos-fedora",
+        "ghcr.io/sdwilsh/mack-kairos",
         "node-feature-discovery",
         "prometheus-adapter",
         "quay.io/fedora/fedora-bootc"

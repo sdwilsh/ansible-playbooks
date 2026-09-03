@@ -43,57 +43,9 @@
       become: true
       register: k3s_agent_service
       when: not k3s_controlplane
-    - name: Read in current version
-      ansible.builtin.slurp:
-        src: /etc/kairos-release
-      register: osreleasefile
-    - name: Decode release metadata
-      ansible.builtin.set_fact:
-        contents: "{{ osreleasefile['content'] | b64decode }}"
-    - name: Extract metadata
-      ansible.builtin.set_fact:
-        os_image_version: '{{ contents | regex_findall(''^KAIROS_VERSION="(.*)"$'', multiline=True) | last | trim(''v'') }}'
-    - name: Print os image
-      ansible.builtin.debug:
-        var: os_image_version
-    - name: Print target image
-      ansible.builtin.debug:
-        var: target_image_version
-    - name: Install Recovery Update
-      ansible.builtin.command:
-        argv:
-          - kairos-agent
-          - upgrade
-          - --recovery
-          - --source
-          - "oci:ghcr.io/marinatedconcrete/kairos-fedora:{{ target_image_version | trim('v') }}"
-      become: true
-      when: os_image_version != target_image_version
-    - name: Install update
-      ansible.builtin.command:
-        argv:
-          - kairos-agent
-          - upgrade
-          - --source
-          - "oci:ghcr.io/marinatedconcrete/kairos-fedora:{{ target_image_version | trim('v') }}"
-      become: true
-      when: os_image_version != target_image_version
     - name: Note if the host needs to be rebooted
       ansible.builtin.set_fact:
-        reboot_required: "{{ os_image_version != target_image_version or config.changed or k3s_service.changed or k3s_agent_service.changed }}"
-    - name: Save etcd snapshot before upgrade
-      ansible.builtin.command:
-        argv:
-          - k3s
-          - etcd-snapshot
-          - save
-          - --etcd-s3
-          - --etcd-s3-config-secret=etcd-s3-secret
-      become: true
-      run_once: true
-      when:
-        - inventory_hostname in groups['kairos_controlplane']
-        - os_image_version != target_image_version
+        reboot_required: "{{ config.changed or k3s_service.changed or k3s_agent_service.changed }}"
     - name: Schedule Drain and Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
@@ -102,10 +54,6 @@
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
-  vars:
-    recovery_image_version: 0.9.0
-    # renovate: datasource=docker depName=ghcr.io/marinatedconcrete/kairos-fedora
-    target_image_version: 0.9.0
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
   gather_facts: false
