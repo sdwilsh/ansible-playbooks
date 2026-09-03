@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+/ctx/kairos/configure-serial-console.sh
+
 # kairos-operator compares KAIROS_VERSION to decide whether a node
 # needs an upgrade.  A plain kairos-fedora bump changes this value.
 # Our own hardening changes do not change this value.  This step adds
