@@ -22,10 +22,10 @@ configurations:
 images:
   - name: connection-manager
     newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/connection-manager
-    newTag: v0.6.1@sha256:fb89c05e6d35c9b39c7ae13a3796277b781f6e24b122e11305e206ea31bd8d9a
+    newTag: v0.7.0@sha256:a39ece9506f91b6ed5e3bddb8497b3e07349a44e40a2c4e9ac4c7b9920583813
   - name: job-executor
     newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/job-executor
-    newTag: v0.6.1@sha256:494128ac1eee0df5ff8b8817ae231f392bd414845d01215afaf4999e8256cb5b
+    newTag: v0.7.0@sha256:e3a3f41fa5130576e01f43899a37b8cc09a7f40ee8c9d905f88152fbdf16c4bf
 
 resources:
   - namespace.yml

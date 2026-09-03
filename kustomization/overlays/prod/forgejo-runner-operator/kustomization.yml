@@ -16,7 +16,7 @@ configurations:
 images:
   - name: operator
     newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/operator
-    newTag: v0.6.1@sha256:efa923e2bc6fd51765d93ed337304b8c603068867006303b5a4b0c24838de1cb
+    newTag: v0.7.0@sha256:e3dd0743e994fa2b1132fa72125b841f31b6569bbfe5e70a2c323f747335ff6d
 
 replacements:
   - source:
