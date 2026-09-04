@@ -6,13 +6,21 @@ metadata:
 spec:
   template:
     spec:
+      # Only run on things than can handle AV1.
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: hardware.hogs.tswn.us/gpu
+                    operator: Exists
       containers:
         - name: jellyfin
           resources:
             limits:
-              amd.com/gpu: 1
+              devic.es/render: 1
             requests:
-              amd.com/gpu: 1
+              devic.es/render: 1
       tolerations:
         - effect: NoSchedule
           key: gpu
