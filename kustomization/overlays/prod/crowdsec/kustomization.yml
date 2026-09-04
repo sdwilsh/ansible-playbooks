@@ -27,7 +27,7 @@ configMapGenerator:
       - configmap/scripts/entrypoint.sh
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:e0fcb25c485a8ad0665d0dd4b4a67cefb6baee32b0e3b19f54f1b468c49c1ed5
+    newTag: latest@sha256:b29d8c1665b70817259ceecaea16ab27aab6368b48daf485d19436c809067492
   - name: ghcr.io/crowdsecurity/crowdsec
     newTag: v1.8.0@sha256:99eb4df235527e978595ef5ebb30182831686dc875521de67ef39b7659a86897 
   - name: postgres
