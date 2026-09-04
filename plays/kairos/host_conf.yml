@@ -14,6 +14,19 @@
           - "'k3s_token' in hostvars[host]"
       tags:
         - always
+    - name: Sanity Check network interfaces
+      ansible.builtin.assert:
+        fail_msg: >-
+          Host '{{ host }}' has no real MAC address or interface name set.
+          Confirm the real hardware facts first.
+        that:
+          - hostvars[host].common__interfaces.bonds is defined or
+            ((hostvars[host].common__interfaces.interfaces | first).mac
+            | ansible.utils.macaddr) is not none
+          - hostvars[host].common__interfaces.bonds is defined or
+            (hostvars[host].common__interfaces.interfaces | first).name != 'TODO'
+      tags:
+        - always
     - name: Create temporary directory to host configuration from
       ansible.builtin.tempfile:
         state: directory
