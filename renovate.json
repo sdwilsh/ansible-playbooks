@@ -325,10 +325,12 @@
       ]
     },
     {
+      "description": "Control plane takes an image before the workers do.",
       "groupName": "kairos-control-plane",
       "matchFileNames": [
         "kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane.yml"
       ],
+      "minimumReleaseAge": "1 day",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
@@ -336,10 +338,12 @@
       ]
     },
     {
+      "description": "Workers wait for the control plane to take an image first.",
       "groupName": "kairos-workers",
       "matchFileNames": [
         "kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers.yml"
       ],
+      "minimumReleaseAge": "4 days",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
