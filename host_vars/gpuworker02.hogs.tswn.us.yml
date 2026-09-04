@@ -1,0 +1,13 @@
+---
+common__interfaces:
+  interfaces:
+    - mac: 9c:bf:0d:01:f6:30
+      name: enp191s0
+
+common__ip_addresses:
+  - 10.11.0.121/23
+
+kairos__disks_to_format: []
+
+k3s_node_taints:
+  - gpu=strixhalo:NoSchedule

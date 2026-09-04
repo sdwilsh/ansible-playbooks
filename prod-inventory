@@ -29,6 +29,8 @@ node01.hogs.tswn.us ansible_host=10.11.0.101
 kairos_node
 
 [kairos_worker]
+gpuworker01.hogs.tswn.us ansible_host=10.11.0.120
+gpuworker02.hogs.tswn.us ansible_host=10.11.0.121
 worker01.hogs.tswn.us ansible_host=10.11.0.104
 worker02.hogs.tswn.us ansible_host=10.11.0.105
 worker03.hogs.tswn.us ansible_host=10.11.0.106

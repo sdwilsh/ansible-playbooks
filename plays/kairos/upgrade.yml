@@ -58,11 +58,9 @@
   hosts: ToReboot
   gather_facts: false
   order: sorted
-  serial:
-    - 1 # This will always be the first control plane node.
-    - 1 # This will be the second node.
-    - 1 # This will be the third node.
-    - 2 # The remaining nodes in chunks of two.
+  # A larger batch can reboot two nodes that hold single-replica
+  # Longhorn volumes at the same time.
+  serial: 1
   strategy: free
   tasks:
     - name: Drain

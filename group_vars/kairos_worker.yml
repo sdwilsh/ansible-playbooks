@@ -2,3 +2,5 @@
 reboot_test_command: systemctl is-active --quiet k3s-agent
 
 k3s_controlplane: false
+k3s_node_labels: []
+k3s_node_taints: []
