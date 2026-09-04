@@ -7,18 +7,11 @@ spec:
   template:
     spec:
       containers:
-        - env:
-            - name: ROC_ENABLE_PRE_VEGA
-              value: "1"
-          name: jellyfin
+        - name: jellyfin
           resources:
             limits:
               amd.com/gpu: 1
             requests:
-      securityContext:
-        supplementalGroups:
-          - 44 # video
-          - 109 # render
               amd.com/gpu: 1
       tolerations:
         - effect: NoSchedule
