@@ -123,7 +123,7 @@ stages:
         - path: /etc/hosts
           permissions: 0644
           content: |
-            127.0.0.1 localhost {{ inventory_hostname }}
+            127.0.0.1 localhost {{ hostvars[host].inventory_hostname }}
             10.11.0.14 services-nfs.hogs.tswn.us
             10.11.1.73 pool.ntp.hogs.tswn.us
 {% for host in controlplane_hosts %}
