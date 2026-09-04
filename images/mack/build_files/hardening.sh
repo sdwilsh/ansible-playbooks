@@ -22,6 +22,11 @@ ansible-galaxy collection install --upgrade -r requirements.yml
 ansible-playbook tasks.yml -l localhost
 popd
 
+# The ssh_hardening role runs with ssh_server_hardening disabled, so it
+# writes no sshd config.  Ship the drop-in directly.
+rsync -rvK /ctx/sshd/ /
+chmod 0600 /etc/ssh/sshd_config.d/50-no-password-auth.conf
+
 # Cleanup
 rm -rf ~/.ansible
 dnf remove -y "${TEMPORARY_PACKAGES[@]}"
