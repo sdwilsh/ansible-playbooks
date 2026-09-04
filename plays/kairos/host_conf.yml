@@ -27,6 +27,20 @@
             (hostvars[host].common__interfaces.interfaces | first).name != 'TODO'
       tags:
         - always
+    - name: Sanity Check localroot password hash
+      ansible.builtin.assert:
+        fail_msg: >-
+          The localroot `password` in `common__unix_users` must hold a
+          crypt hash, not a password.  Generate one with
+          `mkpasswd --method=yescrypt`.
+        that:
+          - localroot.password is match('^\$[1-9a-z]+\$')
+      vars:
+        localroot: >-
+          {{ common__unix_users | selectattr('name', 'equalto', 'localroot') | first }}
+      when: common__unix_users | selectattr('name', 'equalto', 'localroot') | list | length > 0
+      tags:
+        - always
     - name: Create temporary directory to host configuration from
       ansible.builtin.tempfile:
         state: directory

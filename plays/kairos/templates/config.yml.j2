@@ -1,3 +1,4 @@
+#jinja2: lstrip_blocks: True
 #cloud-config
 
 hostname: {{ hostvars[host].inventory_hostname }}
@@ -10,6 +11,32 @@ users:
     ssh_authorized_keys:
 {% for item in common__keys %}
       - {{ item.type }} {{ item.key }}
+{% endfor %}
+{# The `common-users` role does not run on a Kairos host, so these
+   blocks are the only thing that creates these accounts here.  The
+   uid and the gid match the other hosts, so /home stays consistent. #}
+{% for user in common__unix_users %}
+  {% set group = common__unix_groups | selectattr('name', 'equalto', user.name) | first | default(none) %}
+  - name: {{ user.name }}
+    {% if group is not none and user.group is not defined %}
+    gid: "{{ group.gid }}"
+    {% endif %}
+    {% if user.sudo | default(false) or (group is not none and group.sudo | default(false)) %}
+    groups:
+      - admin
+    {% endif %}
+    {% if user.password | default('') | length > 0 %}
+    passwd: {{ user.password }}
+    {% else %}
+    lock_passwd: true
+    {% endif %}
+    {% if user.group is defined %}
+    primary_group: {{ user.group }}
+    {% endif %}
+    {% if user.shell is defined %}
+    shell: {{ user.shell }}
+    {% endif %}
+    uid: "{{ user.uid }}"
 {% endfor %}
 
 {% if hostvars[host].k3s_controlplane %}

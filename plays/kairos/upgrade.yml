@@ -3,6 +3,22 @@
   gather_facts: false
   order: sorted
   tasks:
+    - name: Sanity Check localroot password hash
+      ansible.builtin.assert:
+        fail_msg: >-
+          The localroot `password` in `common__unix_users` must hold a
+          crypt hash, not a password.  Generate one with
+          `mkpasswd --method=yescrypt`.
+        that:
+          - localroot.password is match('^\$[1-9a-z]+\$')
+      delegate_to: localhost
+      run_once: true
+      vars:
+        localroot: >-
+          {{ common__unix_users | selectattr('name', 'equalto', 'localroot') | first }}
+      when: common__unix_users | selectattr('name', 'equalto', 'localroot') | list | length > 0
+      tags:
+        - always
     - name: Ensure configuration is up-to-date
       ansible.builtin.template:
         dest: /oem/90_custom.yaml
