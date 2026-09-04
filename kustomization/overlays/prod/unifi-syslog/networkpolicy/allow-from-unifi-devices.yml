@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-unifi-devices-networkpolicy
+  namespace: unifi-syslog
+spec:
+  ingress:
+    - from:
+        # UniFi does not route Activity Logging (Syslog) through the Network
+        # Application controller.  Each adopted device sends its own syslog stream
+        # directly.
+        - ipBlock:
+            cidr: 10.10.0.0/24
+        # The gateway device comes in on the same VLAN.
+        - ipBlock:
+            cidr: 10.11.0.1/32
+      ports:
+        - port: syslog
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: alloy
+      app.kubernetes.io/name: alloy
+  policyTypes:
+    - Ingress

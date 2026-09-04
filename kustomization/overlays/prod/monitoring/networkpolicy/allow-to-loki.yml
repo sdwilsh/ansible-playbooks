@@ -21,6 +21,12 @@ spec:
           podSelector:
             matchLabels:
               app.kubernetes.io/name: traefik
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: unifi-syslog
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: alloy
         - ipBlock:
             cidr: 10.11.2.0/24 # hogsflixplus (HFP) remote nodes
         - ipBlock:

@@ -49,6 +49,7 @@ resources:
   - application/ttlsh.yml
   - application/tvheadend.yml
   - application/unifi-network-mcp.yml
+  - application/unifi-syslog.yml
   - application/unifi.yml
   - application/valheim-forerunner.yml
   - application/valheim-relic.yml

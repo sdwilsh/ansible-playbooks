@@ -1,0 +1,12 @@
+loki.source.syslog "unifi" {
+  listener {
+    address       = "0.0.0.0:514"
+    protocol      = "udp"
+    syslog_format = "rfc3164"
+    labels        = {
+      job = "unifi",
+    }
+  }
+
+  forward_to = [loki.write.default.receiver]
+}

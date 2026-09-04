@@ -1,0 +1,65 @@
+---
+alloy:
+  configMap:
+    create: false
+    key: /
+    name: alloy-config
+  extraEnv:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+  extraPorts:
+    - name: syslog
+      port: 514
+      protocol: UDP
+      targetPort: 514
+  listenAddr: $(POD_IP)
+  mounts:
+    extra:
+      - mountPath: /tmp/alloy
+        name: tmp
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsGroup: 473 # alloy
+    runAsNonRoot: true
+    runAsUser: 473 # alloy
+    seccompProfile:
+      type: RuntimeDefault
+  storagePath: /tmp/alloy
+
+configReloader:
+  enabled: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsGroup: 473 # alloy
+    runAsNonRoot: true
+    runAsUser: 473 # alloy
+    seccompProfile:
+      type: RuntimeDefault
+
+controller:
+  priorityClassName: application-infra
+  replicas: 1
+  type: deployment
+  volumes:
+    extra:
+      - emptyDir: {}
+        name: tmp
+
+crds:
+  create: false
+
+rbac:
+  create: false
+
+service:
+  enabled: false
