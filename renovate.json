@@ -57,6 +57,18 @@
     },
     {
       "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/^kustomization/overlays/prod/kube-amd-gpu/deviceconfig/.+\\.yml$/"
+      ],
+      "matchStrings": [
+        "devicePluginImage:\\s+(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})",
+        "nodeLabellerImage:\\s+(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "managerFilePatterns": [
         "/^kustomization/.+/.+/kustomization\\.yml$/",
         "/^kustomization/.+/.+/.+/kustomization\\.yml$/"
@@ -245,7 +257,8 @@
         "ghcr.io/servercontainers/samba",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
         "lscr.io/linuxserver/code-server",
-        "postgres"
+        "postgres",
+        "rocm/k8s-device-plugin"
       ],
       "matchUpdateTypes": [
         "digest"
