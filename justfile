@@ -125,6 +125,24 @@ build-mack-kairos platform="linux/amd64":
 
     podman build images/mack --target mack-kairos --platform={{ platform }} --build-arg GIT_SHA="${GIT_SHA}" --tag mack-kairos:latest
 
+# Builds a bootable ISO that installs a new Kairos node.
+[group('images')]
+build-mack-kairos-iso image="ghcr.io/sdwilsh/mack-kairos:latest":
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    mkdir -p output-mack-kairos
+
+    sudo podman run \
+        --rm \
+        -it \
+        --privileged \
+        --pull=newer \
+        --security-opt label=type:unconfined_t \
+        -v ./output-mack-kairos:/output \
+        quay.io/kairos/auroraboot:latest \
+        build-iso --output /output/ {{ image }}
+
 # Builds the images/mack container as a virtual machine.
 [group('images')]
 build-mack-vm:

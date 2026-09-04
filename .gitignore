@@ -7,6 +7,7 @@ node_modules
 config.toml
 output-loki
 output-mack
+output-mack-kairos
 
 # Roles and Collections that are managed by ansible-galaxy.
 external_collections/
