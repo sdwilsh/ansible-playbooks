@@ -37,6 +37,10 @@ spec:
             cidr: 10.11.0.105/32 # worker02 (alloy-node hostNetwork DaemonSet)
         - ipBlock:
             cidr: 10.11.0.106/32 # worker03 (alloy-node hostNetwork DaemonSet)
+        - ipBlock:
+            cidr: 10.11.0.120/32 # gpuworker01 (alloy-node hostNetwork DaemonSet)
+        - ipBlock:
+            cidr: 10.11.0.121/32 # gpuworker02 (alloy-node hostNetwork DaemonSet)
       ports:
         - port: 3100
   podSelector:
