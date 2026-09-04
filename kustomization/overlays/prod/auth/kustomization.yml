@@ -22,7 +22,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:b29d8c1665b70817259ceecaea16ab27aab6368b48daf485d19436c809067492
   - name: postgres
-    newTag: 18@sha256:22c89fe0d0f507606260237fd55e51f6137f58b2d5bcf6152242b96d9fe8f9a4
+    newTag: 18@sha256:4ef4dbc939d61acea57712655ddb4b4ab27419c913f94cca0cd57cb3ea3c2280
   - name: quay.io/opstree/redis-sentinel
     newTag: v8.10.1@sha256:99c6953e947b8e958198b6670d44800f388240a5e1939414be39a74c05953c0e
   - name: quay.io/opstree/redis
