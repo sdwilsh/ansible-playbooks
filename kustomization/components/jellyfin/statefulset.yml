@@ -30,10 +30,8 @@ spec:
             limits:
               cpu: 2000m
               memory: 8Gi
-              devic.es/quicksync: 1
             requests:
               cpu: 500m
-              devic.es/quicksync: 1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

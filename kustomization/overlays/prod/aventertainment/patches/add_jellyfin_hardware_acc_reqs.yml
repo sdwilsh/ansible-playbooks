@@ -13,13 +13,15 @@ spec:
           name: jellyfin
           resources:
             limits:
-              devic.es/kfd: 1
-              devic.es/render: 1
+              amd.com/gpu: 1
             requests:
-              devic.es/kfd: 1
-              devic.es/render: 1
-      nodeName: worker03
       securityContext:
         supplementalGroups:
           - 44 # video
           - 109 # render
+              amd.com/gpu: 1
+      tolerations:
+        - effect: NoSchedule
+          key: gpu
+          operator: Equal
+          value: strixhalo
