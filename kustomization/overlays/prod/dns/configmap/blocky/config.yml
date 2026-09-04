@@ -64,6 +64,8 @@ customDNS:
     worker01.hogs.tswn.us: 10.11.0.104
     worker02.hogs.tswn.us: 10.11.0.105
     worker03.hogs.tswn.us: 10.11.0.106
+    gpuworker01.hogs.tswn.us: 10.11.0.120
+    gpuworker02.hogs.tswn.us: 10.11.0.121
     paperless-samba.hogs.tswn.us: 10.11.1.32
     traefik.hogs.tswn.us: 10.11.1.64
     unifi-inform.tswn.us: 10.11.1.65
