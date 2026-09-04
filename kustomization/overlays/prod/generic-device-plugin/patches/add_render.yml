@@ -1,0 +1,13 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: --device
+# Many processes can open the render node at the same time.
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: |
+    name: render
+    groups:
+      - count: 4
+        paths:
+          - path: /dev/dri/renderD128

@@ -14,5 +14,9 @@ patches:
       kind: DaemonSet
       name: generic-device-plugin
     path: patches/add_quicksync.yml
+  - target:
+      kind: DaemonSet
+      name: generic-device-plugin
+    path: patches/add_render.yml
 resources:
   - namespace.yml
