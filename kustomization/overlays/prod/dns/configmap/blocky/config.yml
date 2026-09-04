@@ -177,6 +177,7 @@ customDNS:
     transmission.hogs IN CNAME traefik.hogs
     tvheadend.hogs IN CNAME traefik.hogs
     unifi IN CNAME traefik.hogs
+    unifi-mcp.hogs IN CNAME traefik.hogs
 
 connectIPVersion: v4
 

@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-mcp-clients-middleware@kubernetescrd,unifi-network-mcp-shared-secret-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: unifi-network-mcp-ingress
+spec:
+  rules:
+    - host: unifi-mcp.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: unifi-network-mcp-svc
+                port:
+                  name: web
+            path: /
+            pathType: Prefix

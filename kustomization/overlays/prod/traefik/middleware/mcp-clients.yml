@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: mcp-clients-middleware
+spec:
+  ipAllowList:
+    sourceRange:
+      - 10.117.0.9/32 # lighterthansome

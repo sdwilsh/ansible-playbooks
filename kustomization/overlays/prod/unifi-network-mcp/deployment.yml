@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi-network-mcp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unifi-network-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unifi-network-mcp
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: HOME
+              value: /tmp
+            - name: UNIFI_MCP_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_MCP_ALLOWED_HOSTS
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_MCP_HTTP_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_MCP_HTTP_ENABLED
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_NETWORK_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_NETWORK_HOST
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_NETWORK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: UNIFI_NETWORK_PASSWORD
+                  name: unifi-network-mcp-secret
+            - name: UNIFI_NETWORK_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_NETWORK_PORT
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_NETWORK_SITE
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_NETWORK_SITE
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_NETWORK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: UNIFI_NETWORK_USERNAME
+                  name: unifi-network-mcp-secret
+            - name: UNIFI_NETWORK_VERIFY_SSL
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_NETWORK_VERIFY_SSL
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_POLICY_CREATE
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_POLICY_CREATE
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_POLICY_DELETE
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_POLICY_DELETE
+                  name: unifi-network-mcp-configmap
+            - name: UNIFI_POLICY_UPDATE
+              valueFrom:
+                configMapKeyRef:
+                  key: UNIFI_POLICY_UPDATE
+                  name: unifi-network-mcp-configmap
+          image: ghcr.io/sirkirby/unifi-network-mcp
+          livenessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: web
+            timeoutSeconds: 5
+          name: unifi-network-mcp
+          ports:
+            - containerPort: 3000
+              name: web
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: web
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+      enableServiceLinks: false
+      volumes:
+        - emptyDir: {}
+          name: tmp

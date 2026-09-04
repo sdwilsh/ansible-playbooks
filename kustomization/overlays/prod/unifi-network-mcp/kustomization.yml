@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+configMapGenerator:
+  - name: unifi-network-mcp-configmap
+    literals:
+      - UNIFI_MCP_ALLOWED_HOSTS=unifi-mcp.hogs.tswn.us,localhost,127.0.0.1
+      - UNIFI_MCP_HTTP_ENABLED=true
+      - UNIFI_NETWORK_HOST=unifi-network-application-svc.unifi.svc.cluster.local
+      - UNIFI_NETWORK_PORT=443
+      - UNIFI_NETWORK_SITE=default
+      - UNIFI_NETWORK_VERIFY_SSL=false
+      - UNIFI_POLICY_CREATE=false
+      - UNIFI_POLICY_DELETE=false
+      - UNIFI_POLICY_UPDATE=false
+images:
+  - name: ghcr.io/sirkirby/unifi-network-mcp
+    newTag: 0.29.8@sha256:bddbdfac11fee58b63ace7e4923a93977f3b7c41a4d11f0c38ecf47429511d48
+namespace: unifi-network-mcp
+resources:
+  - namespace.yml
+  - deployment.yml
+  - ingress.yml
+  - middleware/shared-secret.yml
+  - networkpolicy/allow-egress-to-unifi.yml
+  - service.yml

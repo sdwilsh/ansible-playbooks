@@ -35,6 +35,7 @@ resources:
   - namespace.yml
   - certificate.yml
   - ingress/traefik-dashboard.yml
+  - middleware/mcp-clients.yml
   - podmonitor.yml
   - service/traefik-ci.yml
   - service/traefik.yml

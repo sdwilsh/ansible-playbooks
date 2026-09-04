@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-to-unifi-networkpolicy
+  namespace: unifi-network-mcp
+spec:
+  egress:
+    - ports:
+        - port: una-web
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: unifi
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: unifi-network-application
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: unifi-network-mcp
+  policyTypes:
+    - Egress

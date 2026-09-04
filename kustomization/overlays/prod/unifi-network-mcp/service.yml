@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi-network-mcp-svc
+spec:
+  ports:
+    - name: web
+      port: 3000
+      protocol: TCP
+      targetPort: web
+  selector:
+    app.kubernetes.io/name: unifi-network-mcp
+  type: ClusterIP
