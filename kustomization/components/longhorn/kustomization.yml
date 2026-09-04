@@ -18,4 +18,5 @@ resources:
   - networkpolicy.yml
   - podmonitor.yml
   - recurringjob.yml
+  - setting.yml
   - storageclass.yml
