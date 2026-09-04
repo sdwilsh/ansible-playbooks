@@ -4,6 +4,9 @@ kind: DeviceConfig
 metadata:
   name: shared
 spec:
+  devicePlugin:
+    enableDevicePlugin: true
+    enableNodeLabeller: true
   driver:
     # The OS image build already includes the `amdgpu` driver and
     # firmware.  The operator must not build or load the driver again.
