@@ -4,9 +4,9 @@ kind: Kustomization
 
 images:
   - name: quay.io/kairos/operator
-    newTag: v0.1.3@sha256:8605519a3c72688116f3568fa6fcaea6210cc296778ca3a327c2d97d486e3167
+    newTag: v0.2.1@sha256:eba30a1006eae233fd8c2eead6671fd4fdacf2fc8bb097a8664ca01f47040426
 namespace: kairos-operator
 resources:
-  - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.1.3
+  - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.2.1
   - nodeopupgrade/controlplane.yml
   - nodeopupgrade/workers.yml
