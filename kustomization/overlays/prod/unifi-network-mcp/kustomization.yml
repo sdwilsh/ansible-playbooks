@@ -10,7 +10,13 @@ components:
 configMapGenerator:
   - name: unifi-network-mcp-configmap
     literals:
-      - UNIFI_MCP_ALLOWED_HOSTS=unifi-mcp.hogs.tswn.us,localhost,127.0.0.1
+      # The library changes a bare hostname to "host:*".  This value can
+      # match only a Host header that has a port.  Traefik does not add a
+      # port for standard HTTPS traffic.  So the allowlist can never match
+      # here.  Traefik already blocks unknown IP addresses, and the server
+      # itself rejects any request with an Origin header.  This check adds
+      # no extra protection.
+      - UNIFI_MCP_ENABLE_DNS_REBINDING_PROTECTION=false
       - UNIFI_MCP_HTTP_ENABLED=true
       - UNIFI_NETWORK_HOST=unifi-network-application-svc.unifi.svc.cluster.local
       - UNIFI_NETWORK_PORT=443
@@ -27,6 +33,5 @@ resources:
   - namespace.yml
   - deployment.yml
   - ingress.yml
-  - middleware/shared-secret.yml
   - networkpolicy/allow-egress-to-unifi.yml
   - service.yml

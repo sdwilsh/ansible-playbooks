@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.middlewares: traefik-mcp-clients-middleware@kubernetescrd,unifi-network-mcp-shared-secret-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-mcp-clients-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: unifi-network-mcp-ingress
 spec:
