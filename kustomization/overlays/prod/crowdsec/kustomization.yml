@@ -22,6 +22,7 @@ configMapGenerator:
       - configmap/acquis.d/jellyfin.yaml
       - configmap/acquis.d/navidrome.yaml
       - configmap/acquis.d/traefik.yaml
+      - configmap/acquis.d/unifi.yaml
   - name: crowdsec-scripts-configmap
     files:
       - configmap/scripts/entrypoint.sh

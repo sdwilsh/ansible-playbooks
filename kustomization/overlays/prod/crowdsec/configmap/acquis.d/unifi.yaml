@@ -1,0 +1,17 @@
+---
+# Alloy parses the syslog header.  Therefore Loki holds only the message body.
+# The crowdsecurity/unifi-logs parser needs a full syslog line, and that parser
+# is not usable here.  The crowdsecurity/non-syslog parser sets "program" from
+# the type below.  Then the crowdsecurity/iptables-logs parser reads the lines
+# that have the "kernel" program.
+#
+# The query selects only the WAN_LOCAL drop rules.  The
+# crowdsecurity/iptables-logs parser sets the "iptables_drop" type only when
+# "OUT" is empty.  Forwarded traffic has a value in "OUT".  Therefore forwarded
+# drops cannot start a scenario.
+labels:
+  type: kernel
+query: |
+  {job="unifi"} |= `[WAN_LOCAL-D-`
+source: loki
+url: http://loki-query-frontend.monitoring.svc.cluster.local:3100/

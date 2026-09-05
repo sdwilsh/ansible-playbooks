@@ -32,6 +32,7 @@ spec:
             - name: COLLECTIONS
               value: >-
                 crowdsecurity/appsec-virtual-patching
+                crowdsecurity/iptables
                 crowdsecurity/traefik
                 gauth-fr/immich
                 LePresidente/authelia
