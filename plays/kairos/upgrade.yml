@@ -70,6 +70,7 @@
       delegate_to: localhost
       loop: "{{ ansible_play_batch }}"
       when: hostvars[item].reboot_required
+
 - name: Serially drain and reboot hosts that need to be rebooted
   hosts: ToReboot
   gather_facts: false
@@ -79,22 +80,36 @@
   serial: 1
   strategy: free
   tasks:
-    - name: Drain
-      ansible.builtin.shell:
-        cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --pod-selector='{{ pod_selectors | join(',') }}' --kubeconfig ~/.kube/config"
-      delegate_to: localhost
-      vars:
-        pod_selectors: []
-    - name: Reboot
-      ansible.builtin.reboot:
-        pre_reboot_delay: 60 # seconds
-        connect_timeout: 240 # seconds
-        test_command: "{{ reboot_test_command }}"
-      become: true
-    - name: Uncordon
-      kubernetes.core.k8s_drain:
-        name: "{{ inventory_hostname_short }}"
-        state: uncordon
-      delegate_to: localhost
-      retries: 3
-      delay: 10
+    # `kubectl drain` does not have a default timeout.  The
+    # PodDisruptionBudget of a Longhorn instance-manager can report zero
+    # permitted disruptions until Longhorn stops the replicas on the node.
+    # Without `--timeout`, `kubectl drain` does not return, and the node
+    # stays cordoned.
+    #
+    # With `--timeout`, `kubectl drain` exits with an error, and the
+    # `always` section uncordons the node.  Without the `always` section,
+    # the play stops and the node stays cordoned and empty until an operator
+    # uncordons it.  The play stops because `serial: 1` makes one failed
+    # host a failed batch.
+    - name: Drain, reboot, and uncordon the host
+      block:
+        - name: Drain
+          ansible.builtin.shell:
+            cmd: "kubectl drain {{ inventory_hostname_short }} --ignore-daemonsets --delete-emptydir-data --force --timeout=600s --pod-selector='{{ pod_selectors | join(',') }}' --kubeconfig ~/.kube/config"
+          delegate_to: localhost
+          vars:
+            pod_selectors: []
+        - name: Reboot
+          ansible.builtin.reboot:
+            pre_reboot_delay: 60 # seconds
+            connect_timeout: 240 # seconds
+            test_command: "{{ reboot_test_command }}"
+          become: true
+      always:
+        - name: Uncordon
+          kubernetes.core.k8s_drain:
+            name: "{{ inventory_hostname_short }}"
+            state: uncordon
+          delegate_to: localhost
+          retries: 3
+          delay: 10
