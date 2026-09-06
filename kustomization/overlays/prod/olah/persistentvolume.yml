@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: olah-cache-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1Ti
+  claimRef:
+    name: olah-cache-pvc
+    namespace: olah
+  nfs:
+    path: /mnt/rust0/nfs/olah
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain

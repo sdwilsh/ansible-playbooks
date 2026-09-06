@@ -250,6 +250,7 @@
       "matchPackageNames": [
         "busybox",
         "docker.io/bitnami/kubectl",
+        "docker.io/xiahan2019/olah",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",

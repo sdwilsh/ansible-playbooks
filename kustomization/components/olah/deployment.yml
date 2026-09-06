@@ -1,0 +1,148 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: olah-deployment
+  labels:
+    app.kubernetes.io/name: olah
+spec:
+  replicas: 1
+  # `cache-version-guard` deletes the cache when the image has a different
+  # version.  A rolling update starts the new pod while the old pod serves, so
+  # the delete takes the files that the old pod reads.  Recreate stops the old
+  # pod first.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: olah
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: olah
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: olah
+          image: docker.io/xiahan2019/olah
+          # The image ENTRYPOINT is `olah-cli`.  The default CMD only sets
+          # `--repos-path`, which ignores the config file.
+          args:
+            - -c
+            - /app/configs.toml
+            # The default is "./logs", below the /app WORKDIR, which
+            # `readOnlyRootFilesystem` makes read only.  olah stops at startup
+            # before it reads the config.  This path is the writable emptyDir.
+            - --log-path
+            - /tmp/logs
+            # One worker serves one download at a time.  A large transfer
+            # blocks the other clients, which showed up as `httpx.ReadTimeout`.
+            #
+            # Every worker deletes old files each hour, and the workers do not
+            # tell each other what they delete.  A worker that finds an item
+            # already gone does not count the space, so it deletes more.  The
+            # cache stays far below `cache-size-limit`, which keeps this code
+            # from running.  Watch the size of the cache.
+            - --workers
+            - "4"
+          ports:
+            - containerPort: 8090
+              name: web
+          volumeMounts:
+            - mountPath: /app/configs.toml
+              name: olah-config
+              subPath: configs.toml
+              readOnly: true
+            - mountPath: /data/repos
+              name: olah-cache
+            - mountPath: /data/mirrors
+              name: olah-mirrors
+            - mountPath: /tmp
+              name: tmp
+          readinessProbe:
+            tcpSocket:
+              port: web
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: web
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 8Gi
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      enableServiceLinks: false
+      initContainers:
+        # olah cannot read a cache that a different version wrote.  See
+        # `configmap/cache_guard.py` for the rules that this container applies.
+        - name: cache-version-guard
+          image: docker.io/xiahan2019/olah
+          command:
+            - python3
+            # Send each message as the script makes it.  Every message is a
+            # record of a delete, and a buffer loses the records if the
+            # container stops in the middle of the work.
+            - -u
+            - /scripts/cache_guard.py
+          volumeMounts:
+            - mountPath: /data/repos
+              name: olah-cache
+            - mountPath: /scripts
+              name: olah-scripts
+              readOnly: true
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      priorityClassName: application-infra
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: olah-cache
+          persistentVolumeClaim:
+            claimName: olah-cache-pvc
+        # Only for mirror repositories that this cluster holds, and there are
+        # none.  olah needs the path to exist.
+        - name: olah-mirrors
+          emptyDir: {}
+        - name: olah-config
+          configMap:
+            name: olah-configmap
+        - name: olah-scripts
+          configMap:
+            name: olah-scripts-configmap
+        # olah writes a log line for each request to Huggingface, and the pod
+        # only stops when the image changes.  The limit stops the log from
+        # taking the ephemeral storage of the node.
+        - name: tmp
+          emptyDir:
+            sizeLimit: 1Gi

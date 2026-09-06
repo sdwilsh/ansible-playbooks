@@ -1,0 +1,25 @@
+---
+# This rule admits the clients of the cache.  A client also needs a path out
+# of its own namespace, which the `networkpolicy-allow-to-olah` component
+# gives it.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-olah-from-consumers-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              hogs.tswn.us/olah-client: "true"
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/olah-client: "true"
+      ports:
+        - port: web
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: olah
+  policyTypes:
+    - Ingress

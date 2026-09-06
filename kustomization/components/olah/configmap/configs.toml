@@ -1,0 +1,48 @@
+[basic]
+host = "0.0.0.0"
+port = 8090
+repos-path = "/data/repos"
+# olah reads "900GB" as 900 * 1024**3.  The ZFS dataset has a quota of 1 TiB,
+# and olah deletes old files one time each hour, so this value leaves 124 GiB
+# for the files that arrive between two of those hours.
+#
+# An NFS volume does not apply the capacity in the PersistentVolume, so this
+# value and the quota are the only two controls.  Keep this value below the
+# quota.  olah must delete files first, because a full dataset makes olah
+# answer with an error.
+cache-size-limit = "900GB"
+cache-clean-strategy = "LRU"
+cache-compression = "none"
+# Keep Xet files in the cache, and do not send the client to xethub.hf.co.  A
+# download that goes through does not stay in the cache.
+xet-passthrough = false
+hf-scheme = "https"
+hf-netloc = "huggingface.co"
+hf-lfs-netloc = "cdn-lfs.huggingface.co"
+# olah writes its own address into every resolve and LFS URL that it answers
+# with, so this must be the address that clients dial.  The default is
+# localhost:8090, which sends a client to its own loopback address, where the
+# client stops.
+mirror-scheme = "http"
+mirror-netloc = "olah-svc.olah.svc.cluster.local:8090"
+mirror-lfs-netloc = "olah-svc.olah.svc.cluster.local:8090"
+mirrors-path = ["/data/mirrors"]
+
+[accessibility]
+offline = false
+
+[[accessibility.proxy]]
+repo = "*"
+allow = true
+
+[[accessibility.proxy]]
+repo = "*/*"
+allow = true
+
+[[accessibility.cache]]
+repo = "*"
+allow = true
+
+[[accessibility.cache]]
+repo = "*/*"
+allow = true
