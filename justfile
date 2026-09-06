@@ -8,6 +8,56 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
+# Syntax-check every playbook under `plays/` and `roles/`
+[group('lint')]
+ansible-syntax-check:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    # A play needs a `hosts:` key.  A role's task/handler/vars file, or an
+    # `include_tasks` fragment, does not.  This script uses that key to
+    # find real playbooks.  `ansible-lint` already checks the other files.
+    #
+    # `!vault`/`!unsafe` get a permissive constructor: this only checks
+    # file structure, not real values.
+    playbooks_output=$(
+        find plays roles site.yml -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 \
+            | xargs -0 python3 -c '
+    import sys, yaml
+
+    class Loader(yaml.SafeLoader):
+        pass
+
+    Loader.add_constructor("!vault", lambda loader, node: loader.construct_scalar(node))
+    Loader.add_constructor("!unsafe", lambda loader, node: loader.construct_scalar(node))
+
+    failed = False
+    for path in sys.argv[1:]:
+        try:
+            with open(path) as f:
+                documents = list(yaml.load_all(f, Loader=Loader))
+        except Exception as e:
+            print(f"{path}: {e}", file=sys.stderr)
+            failed = True
+            continue
+        for data in documents:
+            if isinstance(data, list) and any(isinstance(p, dict) and "hosts" in p for p in data):
+                print(path)
+                break
+
+    sys.exit(1 if failed else 0)
+    '
+    )
+    playbooks=()
+    if [ -n "${playbooks_output}" ]; then
+        mapfile -t playbooks <<< "${playbooks_output}"
+    fi
+    # `-i` gives real groups to plays that target hosts other than `localhost`.
+    # `ANSIBLE_DEPRECATION_WARNINGS` quiets a deprecation warning from a
+    # vendored role under `external_roles/` - not ours to fix here.
+    ANSIBLE_CONFIG=ansible-ci.cfg ANSIBLE_DEPRECATION_WARNINGS=false \
+        ansible-playbook --syntax-check -i prod-inventory "${playbooks[@]}"
+
 # Syncs the argocd application.
 [group('argocd')]
 argocd-argocd:

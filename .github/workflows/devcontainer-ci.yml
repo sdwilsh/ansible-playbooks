@@ -52,6 +52,7 @@ jobs:
           runCmd: |
             set -euxo pipefail
             just ansible-lint
+            just ansible-scale-order-check
             just hadolint
             just justcheck
             just renovate-validate
