@@ -42,3 +42,23 @@ spec:
           for: 5m
           labels:
             severity: page
+        - alert: node-memory-available-low
+          annotations:
+            description: "{{ $labels.node }} has less than 5% of its memory available; the kernel is close to the OOM killer."
+          expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.05
+          for: 10m
+          labels:
+            severity: page
+        # The GPU takes system memory through GTT.  The kubelet reads
+        # `memory.available` from the root cgroup, which does not include GTT
+        # pages, so `eviction-hard` cannot protect a GPU node.  node-exporter
+        # reads `/proc/meminfo`, which does include GTT pages, so the metric
+        # below is the only signal that sees the memory of the GPU.  See
+        # `group_vars/kairos_gpuworker.yml`.
+        - alert: gpu-node-memory-available-low
+          annotations:
+            description: "{{ $labels.node }} has less than 12 GiB of memory available. The GPU can hold 115 GiB in GTT, the kernel cannot reclaim GTT pages, and `oom_score` does not count them, so the OOM killer stops an unrelated process."
+          expr: node_memory_MemAvailable_bytes{node=~"gpuworker[0-9]+"} < 12 * 1024 ^ 3
+          for: 15m
+          labels:
+            severity: warning
