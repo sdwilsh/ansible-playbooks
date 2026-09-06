@@ -7,6 +7,11 @@ ExecStart=/usr/bin/k3s server \
     --etcd-s3-config-secret=etcd-s3-secret \
     --flannel-backend=host-gw \
     --flannel-iface=services \
+{# `%%` escapes a literal `%` for systemd.  See the note in
+   `k3s-agent.service.j2`. #}
+{% for arg in k3s_kubelet_args | default([]) %}
+    --kubelet-arg={{ arg | replace('%', '%%') }} \
+{% endfor %}
     --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }} \
 {% for label in k3s_node_labels | default([]) %}
     --node-label={{ label }} \

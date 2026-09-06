@@ -1,3 +1,36 @@
 ---
+# `ttm.pages_limit` sets the GTT limit to 30146560 pages (115 GiB).  GTT is
+# the system memory that the GPU can use.  The default limit is
+# `MemTotal` / 2, which is 62.54 GiB on each node.  The limit is a ceiling.
+# The GPU takes the pages on demand, and gives the pages back when the
+# workload stops.
+#
+# Each node has 125.07 GiB of memory.  A limit of 115 GiB keeps a floor of
+# 10.07 GiB.  The measured working set of the operating system and the other
+# pods is 2.21 GiB.  The GTT page tables use approximately 0.5 GiB more at
+# this limit, and that quantity increases with the limit.  The floor must
+# also hold the memory of the inference process that is not GTT, because
+# the kubelet charges that memory to `kubepods.slice`, not to the floor.
+#
+# Do not raise the limit above 115 GiB.  The GPU does not fail safely.  The
+# kernel does not reclaim GTT pages.  `oom_score` does not count GTT pages.
+kairos__extra_cmdline:
+  - ttm.pages_limit=30146560
+
+# Do not use `system-reserved` to hold memory for the GPU.  The kernel does
+# not charge GTT pages to a cgroup, so a reservation only makes
+# `kubepods.slice` smaller.
+k3s_kubelet_args:
+  # These settings are based on a measured working set of these is 2.21 GiB.
+  # 4Gi is larger than the 2.21 GiB working set, and gives the kubelet a
+  # margin of approximately four read intervals of 10 seconds.
+  #
+  # This threshold does not detect the GTT pages that the GPU uses, because
+  # the kubelet reads `memory.available` from the root cgroup.
+  - eviction-hard=memory.available<4Gi,imagefs.available<5%,nodefs.available<5%
+  # `kube-reserved` keeps memory for the operating system, the kubelet, and
+  # the container runtime.
+  - kube-reserved=memory=6Gi
+
 k3s_node_taints:
   - gpu=strixhalo:NoSchedule

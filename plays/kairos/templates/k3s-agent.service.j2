@@ -2,8 +2,13 @@
 [Service]
 Delegate=yes
 ExecStart=
+{# systemd reads `%` in `ExecStart` as a specifier prefix.  A `%` before a
+   letter or a digit causes a fatal error in the unit file, and the k3s-agent
+   service does not start.  `%%` is the escape for a literal `%`.  The
+   `eviction-hard` value contains `%`, so the template escapes every `%`. #}
 ExecStart=/usr/bin/k3s agent \
-    --flannel-iface=services \
+    --flannel-iface=services{% for arg in k3s_kubelet_args | default([]) %} \
+    --kubelet-arg={{ arg | replace('%', '%%') }}{% endfor %} \
     --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}{% for label in k3s_node_labels | default([]) %} \
     --node-label={{ label }}{% endfor %} \
     --node-name={{ inventory_hostname_short }}{% for taint in k3s_node_taints | default([]) %} \

@@ -59,9 +59,87 @@
       become: true
       register: k3s_agent_service
       when: not k3s_controlplane
+    # `kairos-agent` applies `grub_options` only at the first boot; see
+    # `config.yml.j2`.  The tasks below write the same `extra_cmdline` GRUB
+    # variable, so the arguments also apply to an installed node.  The tasks
+    # run on all hosts.  On a host that does not set
+    # `kairos__extra_cmdline`, the tasks remove the arguments that an
+    # earlier run set.
+    #
+    # `grub2-editenv <file> list` creates the file when the file does not
+    # exist.  For this reason, `Read the OEM GRUB environment` runs only
+    # when the file exists.  Without that condition, a run with no change
+    # writes to the OEM partition.
+    - name: Check if the OEM GRUB environment file exists
+      ansible.builtin.stat:
+        path: /oem/grubenv
+      become: true
+      register: grubenv_file
+    - name: Read the OEM GRUB environment
+      ansible.builtin.command:
+        argv:
+          - grub2-editenv
+          - /oem/grubenv
+          - list
+      become: true
+      changed_when: false
+      register: grubenv_current
+      when: grubenv_file.stat.exists
+    # `argv` keeps the full assignment as one command argument.  With `cmd`,
+    # shlex splits the string on spaces.  A value with two kernel arguments
+    # then becomes two command arguments, and `grub2-editenv` rejects the
+    # command.
+    #
+    # A failure here stops the play for this host before the reboot
+    # decision.  The host then has the new files on disk and the old
+    # configuration in memory.
+    - name: Set the extra kernel arguments
+      ansible.builtin.command:
+        argv:
+          - grub2-editenv
+          - /oem/grubenv
+          - set
+          - "extra_cmdline={{ kairos__extra_cmdline | join(' ') }}"
+      become: true
+      register: grubenv_set
+      when:
+        - kairos__extra_cmdline | default([]) | length > 0
+        - "'extra_cmdline=' ~ (kairos__extra_cmdline | join(' ')) not in (grubenv_current.stdout_lines | default([]))"
+    - name: Remove the extra kernel arguments
+      ansible.builtin.command:
+        argv:
+          - grub2-editenv
+          - /oem/grubenv
+          - unset
+          - extra_cmdline
+      become: true
+      register: grubenv_unset
+      when:
+        - kairos__extra_cmdline | default([]) | length == 0
+        - grubenv_current.stdout | default('') is search('^extra_cmdline=', multiline=True)
+    # The tasks above write files.  Only a reboot applies them.  A run that
+    # writes the files but does not reboot leaves new files on disk and the
+    # old configuration in memory.  `Remove old network files` makes this
+    # state worse, because the `initramfs` stage writes those files again
+    # only at the next boot.
+    #
+    # For this reason the condition below also compares the kernel command
+    # line.  A host that has the files but not the arguments gets a reboot
+    # on the next run.  Without this comparison, the next run finds no
+    # change, and skips the host.
+    - name: Read the active kernel command line
+      ansible.builtin.slurp:
+        src: /proc/cmdline
+      become: true
+      register: proc_cmdline
     - name: Note if the host needs to be rebooted
       ansible.builtin.set_fact:
-        reboot_required: "{{ config.changed or k3s_service.changed or k3s_agent_service.changed }}"
+        reboot_required: >-
+          {{ config.changed or k3s_service.changed or k3s_agent_service.changed
+             or grubenv_set.changed or grubenv_unset.changed
+             or (kairos__extra_cmdline | default([])
+                 | difference((proc_cmdline.content | b64decode).split())
+                 | length > 0) }}
     - name: Schedule Drain and Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
@@ -105,6 +183,23 @@
             connect_timeout: 240 # seconds
             test_command: "{{ reboot_test_command }}"
           become: true
+        # GRUB finds the environment block with a search for a file named
+        # `grubenv` on all partitions.  Another partition with that file can
+        # make GRUB read the wrong one.  The arguments are then absent, and
+        # the play gives no other sign.  Do not test
+        # `/sys/module/ttm/parameters/pages_limit`: that value is writable
+        # at run time, so it can hold the new number while the kernel
+        # command line does not.
+        - name: Verify the kernel command line has the extra arguments
+          ansible.builtin.slurp:
+            src: /proc/cmdline
+          become: true
+          register: proc_cmdline_after
+          failed_when: >-
+            kairos__extra_cmdline
+            | difference((proc_cmdline_after.content | b64decode).split())
+            | length > 0
+          when: kairos__extra_cmdline | default([]) | length > 0
       always:
         - name: Uncordon
           kubernetes.core.k8s_drain:

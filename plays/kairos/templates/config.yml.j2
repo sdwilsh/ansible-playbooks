@@ -1,6 +1,19 @@
 #jinja2: lstrip_blocks: True
 #cloud-config
 
+{% if hostvars[host].kairos__extra_cmdline | default([]) | length > 0 %}
+{# All nodes use the same mack-kairos image, so put hardware-specific
+   arguments in `kairos__extra_cmdline`.
+
+   Kairos applies `grub_options` only at first-install, because the
+   `GrubFirstBootOptions` hook does not run when
+   `/usr/local/.kairos/sentinel_firstboot` exists.  For an installed node,
+   `plays/kairos/upgrade.yml` writes the same GRUB variable with
+   `grub2-editenv`. #}
+grub_options:
+  extra_cmdline: "{{ hostvars[host].kairos__extra_cmdline | join(' ') }}"
+{% endif %}
+
 hostname: {{ hostvars[host].inventory_hostname }}
 
 users:
@@ -48,6 +61,11 @@ k3s:
     - --etcd-s3-config-secret=etcd-s3-secret
     - --flannel-backend=host-gw
     - --flannel-iface=services
+{# `%%` escapes a literal `%` for systemd.  See the note in
+   `k3s-agent.service.j2`. #}
+{% for arg in hostvars[host].k3s_kubelet_args | default([]) %}
+    - --kubelet-arg={{ arg | replace('%', '%%') }}
+{% endfor %}
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
 {% for label in hostvars[host].k3s_node_labels | default([]) %}
     - --node-label={{ label }}
@@ -74,6 +92,11 @@ k3s:
 k3s-agent:
   args:
     - --flannel-iface=services
+{# `%%` escapes a literal `%` for systemd.  See the note in
+   `k3s-agent.service.j2`. #}
+{% for arg in hostvars[host].k3s_kubelet_args | default([]) %}
+    - --kubelet-arg={{ arg | replace('%', '%%') }}
+{% endfor %}
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
 {% for label in hostvars[host].k3s_node_labels | default([]) %}
     - --node-label={{ label }}
