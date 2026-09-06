@@ -1,0 +1,3 @@
+---
+k3s_node_taints:
+  - gpu=strixhalo:NoSchedule

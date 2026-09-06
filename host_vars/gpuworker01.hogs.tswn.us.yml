@@ -8,6 +8,3 @@ common__ip_addresses:
   - 10.11.0.120/23
 
 kairos__disks_to_format: []
-
-k3s_node_taints:
-  - gpu=strixhalo:NoSchedule

@@ -28,13 +28,17 @@ node01.hogs.tswn.us ansible_host=10.11.0.101
 [kairos_controlplane:children]
 kairos_node
 
-[kairos_worker]
+[kairos_gpuworker]
 gpuworker01.hogs.tswn.us ansible_host=10.11.0.120
 gpuworker02.hogs.tswn.us ansible_host=10.11.0.121
+
+[kairos_worker]
 worker01.hogs.tswn.us ansible_host=10.11.0.104
 worker02.hogs.tswn.us ansible_host=10.11.0.105
 worker03.hogs.tswn.us ansible_host=10.11.0.106
+
 [kairos_worker:children]
+kairos_gpuworker
 kairos_node
 
 [kairos_prod:children]
