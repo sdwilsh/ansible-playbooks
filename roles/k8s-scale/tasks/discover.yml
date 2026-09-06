@@ -1,0 +1,42 @@
+---
+# This task finds workloads in the live cluster.  It does not use a list of
+# names.  The `redis` operator makes some `StatefulSet`s from custom resources.
+# These `StatefulSet`s are not in the `kustomize build` output.
+- name: "Discover Deployments in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s_info:
+    context: "{{ k8s_scale_context }}"
+    api_version: apps/v1
+    kind: Deployment
+    namespace: "{{ k8s_scale_namespace }}"
+  register: k8s_scale_discover_deployments
+
+- name: "Discover StatefulSets in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s_info:
+    context: "{{ k8s_scale_context }}"
+    api_version: apps/v1
+    kind: StatefulSet
+    namespace: "{{ k8s_scale_namespace }}"
+  register: k8s_scale_discover_statefulsets
+
+- name: "Discover cnpg Clusters in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s_info:
+    context: "{{ k8s_scale_context }}"
+    api_version: postgresql.cnpg.io/v1
+    kind: Cluster
+    namespace: "{{ k8s_scale_namespace }}"
+  register: k8s_scale_discover_cnpg_clusters
+
+- name: Compute discovered workloads, honoring the exclusion list
+  ansible.builtin.set_fact:
+    k8s_scale_workloads: >-
+      {{
+        (k8s_scale_discover_deployments.resources + k8s_scale_discover_statefulsets.resources)
+        | rejectattr("metadata.name", "in", k8s_scale_exclude)
+        | list
+      }}
+    k8s_scale_cnpg_clusters: >-
+      {{
+        k8s_scale_discover_cnpg_clusters.resources
+        | rejectattr("metadata.name", "in", k8s_scale_exclude)
+        | list
+      }}

@@ -1,21 +1,22 @@
 ---
+# Use this playbook to turn auto-sync back on for every namespace.
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Initialize the list of namespaces that failed to scale up
+    - name: Initialize the list of namespaces that failed to restore sync
       ansible.builtin.set_fact:
         k8s_scale_failed_namespaces: []
 
     - ansible.builtin.include_tasks: tasks/scale-one-namespace.yml
       vars:
-        k8s_scale_target_direction: up
+        k8s_scale_target_direction: restore-sync
       loop: "{{ k8s_scale_up_order }}"
       loop_control:
         loop_var: k8s_scale_target_namespace
 
-    - name: Fail if any namespace failed to scale up
+    - name: Fail if any namespace failed to restore sync
       ansible.builtin.fail:
         msg: >-
-          The following namespaces failed to scale up:
+          The following namespaces failed to restore sync:
           {{ k8s_scale_failed_namespaces | join(", ") }}
       when: k8s_scale_failed_namespaces | length > 0

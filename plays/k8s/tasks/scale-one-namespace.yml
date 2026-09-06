@@ -1,0 +1,16 @@
+---
+# One namespace failing must not stop the whole run.  This file
+# records a failure in `k8s_scale_failed_namespaces`, then moves
+# on to the next namespace.
+- block:
+    - name: "Run k8s-scale ({{ k8s_scale_target_direction }}) for {{ k8s_scale_target_namespace }}"
+      ansible.builtin.include_role:
+        name: k8s-scale
+      vars:
+        k8s_scale_direction: "{{ k8s_scale_target_direction }}"
+        k8s_scale_namespace: "{{ k8s_scale_target_namespace }}"
+        k8s_scale_exclude: "{{ k8s_scale_excludes[k8s_scale_target_namespace] | default([]) }}"
+  rescue:
+    - name: "Record failure for {{ k8s_scale_target_namespace }}"
+      ansible.builtin.set_fact:
+        k8s_scale_failed_namespaces: "{{ k8s_scale_failed_namespaces + [k8s_scale_target_namespace] }}"

@@ -1,0 +1,20 @@
+---
+# tasks file for k8s-scale
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - k8s_scale_direction in ["down", "up", "restore-sync"]
+      - k8s_scale_namespace is defined
+    fail_msg: >-
+      k8s_scale_direction must be one of down/up/restore-sync
+      (got "{{ k8s_scale_direction | default('undefined') }}"),
+      and k8s_scale_namespace must be set.
+
+- ansible.builtin.include_tasks: scale_down.yml
+  when: k8s_scale_direction == "down"
+
+- ansible.builtin.include_tasks: scale_up.yml
+  when: k8s_scale_direction == "up"
+
+- ansible.builtin.include_tasks: restore_sync.yml
+  when: k8s_scale_direction == "restore-sync"

@@ -1,0 +1,33 @@
+---
+# `argocd app set --sync-policy` only patches `spec.syncPolicy` on the
+# `Application` object.  This task patches that object directly, with the
+# same `kubernetes.core.k8s` module the rest of the role uses.  This needs
+# no `argocd` CLI, no login, and no kube context namespace.  This task
+# works under `--check`, for this reason.
+#
+# `syncPolicy.automated: {}` turns sync on
+# (`plays/codegen/templates/resources/application.yml.j2` sets this by
+# default).  Removing the `automated` key turns sync off.  `--sync-policy=manual`
+# has the same effect.  Ansible does not template a dict key written directly
+# in YAML.  This task builds the patch value in `vars:` for that reason.
+# `tasks/scale_up.yml` uses the same pattern.
+- name: "Set sync policy to {{ k8s_scale_argocd_sync_policy }} for {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s:
+    context: "{{ k8s_scale_context }}"
+    state: patched
+    resource_definition:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      metadata:
+        name: "{{ k8s_scale_namespace }}"
+        namespace: "{{ k8s_scale_argocd_namespace }}"
+      spec:
+        syncPolicy: "{{ k8s_scale_argocd_sync_policy_patch }}"
+  vars:
+    k8s_scale_argocd_sync_policy_patch: >-
+      {{
+        {'automated': {}}
+        if k8s_scale_argocd_sync_policy == 'automated'
+        else {'automated': None}
+      }}
+  ignore_errors: "{{ k8s_scale_argocd_best_effort }}"

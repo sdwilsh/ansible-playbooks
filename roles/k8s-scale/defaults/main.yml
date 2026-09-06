@@ -1,0 +1,15 @@
+---
+# defaults file for k8s-scale
+k8s_scale_context: default
+k8s_scale_replicas_annotation: ansible.sdwilsh.com/pre-scale-down-replicas
+k8s_scale_argocd_namespace: argocd
+k8s_scale_cnpg_timeout: 300 # 5 minutes
+# This value is a per-workload budget, not a budget for the whole
+# namespace.  The role starts every workload's change without waiting, then
+# waits for every workload at the same time.  See `tasks/scale_down.yml` and
+# `tasks/scale_up.yml`.
+k8s_scale_wait_timeout: 600 # 10 minutes
+# The role checks on a workload's real state at this interval, in
+# seconds, during a wait.
+k8s_scale_poll_interval: 5
+k8s_scale_exclude: []

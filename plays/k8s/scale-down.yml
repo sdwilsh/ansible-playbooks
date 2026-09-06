@@ -1,28 +1,21 @@
 ---
-# Scale down operators that might fight our ability to scale applications down.
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/prometheus-operator/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/redis/scale-down.yml
-# Scale down any application that uses longhorn storage.
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/3d-printing/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/atuin/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/aventertainment/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/crowdsec/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/factorio-relic/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/forgejo/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/homeassistant/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/immich/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/manyfold/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/monitoring/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/opencloud/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/paperless/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/proton-mail/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tandoor/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/transmission/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/ttlsh/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/tvheadend/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/unifi/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-forerunner/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/valheim-relic/scale-down.yml
-# Finally, we can scale down authelia and traefik
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/traefik/scale-down.yml
-- ansible.builtin.import_playbook: ../../kustomization/overlays/prod/auth/scale-down.yml
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Initialize the list of namespaces that failed to scale down
+      ansible.builtin.set_fact:
+        k8s_scale_failed_namespaces: []
+
+    - ansible.builtin.include_tasks: tasks/scale-one-namespace.yml
+      vars:
+        k8s_scale_target_direction: down
+      loop: "{{ k8s_scale_down_order }}"
+      loop_control:
+        loop_var: k8s_scale_target_namespace
+
+    - name: Fail if any namespace failed to scale down
+      ansible.builtin.fail:
+        msg: >-
+          The following namespaces failed to scale down:
+          {{ k8s_scale_failed_namespaces | join(", ") }}
+      when: k8s_scale_failed_namespaces | length > 0

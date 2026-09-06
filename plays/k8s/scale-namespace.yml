@@ -1,0 +1,13 @@
+---
+# Use this playbook to run one namespace through `k8s-scale`.  Set `direction`
+# to `up`, `down`, or `restore-sync`, and set `namespace`.
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: "Scale {{ direction }} namespace"
+      ansible.builtin.include_role:
+        name: k8s-scale
+      vars:
+        k8s_scale_direction: "{{ direction }}"
+        k8s_scale_namespace: "{{ namespace }}"
+        k8s_scale_exclude: "{{ k8s_scale_excludes[namespace] | default([]) }}"

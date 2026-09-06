@@ -1,0 +1,106 @@
+---
+# Best-effort.  `selfHeal: false` already stops Argo CD from fighting the
+# scale-down.  A failed patch here must not abort the whole shutdown.
+- ansible.builtin.include_tasks: argocd_sync_policy.yml
+  vars:
+    k8s_scale_argocd_sync_policy: manual
+    k8s_scale_argocd_best_effort: true
+
+- ansible.builtin.include_tasks: discover.yml
+
+# Record the replica count only if not already recorded.  This stops a later
+# run from overwriting a good value with a stale one.  Read `spec.replicas`,
+# not `status.replicas`.  The status value can lag during a rollout.
+#
+# `wait: false` patches every workload without waiting.  The next task waits
+# for all of them at once.
+- name: "Scale down Deployments/StatefulSets in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s:
+    context: "{{ k8s_scale_context }}"
+    state: patched
+    resource_definition:
+      apiVersion: "{{ item.apiVersion }}"
+      kind: "{{ item.kind }}"
+      metadata:
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace }}"
+        annotations: "{{ k8s_scale_new_annotation }}"
+      spec:
+        replicas: 0
+    wait: false
+  vars:
+    k8s_scale_new_annotation: >-
+      {{
+        {k8s_scale_replicas_annotation: item.spec.replicas | string}
+        if k8s_scale_replicas_annotation not in (item.metadata.annotations | default({}))
+        else {}
+      }}
+  loop: "{{ k8s_scale_workloads }}"
+  loop_control:
+    label: "{{ item.kind }}/{{ item.metadata.name }}"
+
+# Check `Pod`s, not workload status.  A `Deployment`/`StatefulSet` reports 0
+# replicas as soon as `Pod`s start to terminate, not once they are gone and
+# their Longhorn volumes released.
+- name: "Wait for {{ item.kind }}/{{ item.metadata.name }} pods to terminate in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s_info:
+    context: "{{ k8s_scale_context }}"
+    kind: Pod
+    namespace: "{{ item.metadata.namespace }}"
+    label_selectors: "{{ k8s_scale_pod_label_selectors }}"
+  vars:
+    k8s_scale_pod_label_selectors: >-
+      {{
+        item.spec.selector.matchLabels | dict2items | map(attribute='key')
+        | zip(item.spec.selector.matchLabels | dict2items | map(attribute='value'))
+        | map('join', '=') | list
+      }}
+  register: k8s_scale_down_pods
+  until: k8s_scale_down_pods.resources | length == 0
+  retries: "{{ ((k8s_scale_wait_timeout / k8s_scale_poll_interval) | round(0, 'ceil') | int) + 1 }}"
+  delay: "{{ k8s_scale_poll_interval }}"
+  loop: "{{ k8s_scale_workloads }}"
+  loop_control:
+    label: "{{ item.kind }}/{{ item.metadata.name }}"
+
+# Each `cnpg` `Cluster` hibernates independently.  `wait: false` starts every
+# hibernation without waiting, as above.
+- name: "Hibernate cnpg Clusters in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s:
+    context: "{{ k8s_scale_context }}"
+    state: patched
+    resource_definition:
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      metadata:
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace }}"
+        annotations:
+          cnpg.io/hibernation: "on"
+    wait: false
+  loop: "{{ k8s_scale_cnpg_clusters }}"
+  loop_control:
+    label: "Cluster/{{ item.metadata.name }}"
+
+- name: "Wait for {{ item.metadata.name }} cnpg Cluster to hibernate in {{ k8s_scale_namespace }}"
+  kubernetes.core.k8s_info:
+    context: "{{ k8s_scale_context }}"
+    api_version: postgresql.cnpg.io/v1
+    kind: Cluster
+    name: "{{ item.metadata.name }}"
+    namespace: "{{ item.metadata.namespace }}"
+  register: k8s_scale_down_cnpg_status
+  until: >-
+    (k8s_scale_down_cnpg_status.resources
+     | selectattr('status.conditions', 'defined')
+     | map(attribute='status.conditions')
+     | flatten(levels=1)
+     | selectattr('type', 'equalto', 'cnpg.io/hibernation')
+     | selectattr('status', 'equalto', 'True')
+     | selectattr('reason', 'equalto', 'Hibernated')
+     | list | length) > 0
+  retries: "{{ ((k8s_scale_cnpg_timeout / k8s_scale_poll_interval) | round(0, 'ceil') | int) + 1 }}"
+  delay: "{{ k8s_scale_poll_interval }}"
+  loop: "{{ k8s_scale_cnpg_clusters }}"
+  loop_control:
+    label: "Cluster/{{ item.metadata.name }}"

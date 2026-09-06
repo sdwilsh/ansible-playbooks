@@ -1,0 +1,18 @@
+---
+# `k8s_scale_down_order` and `k8s_scale_up_order` must name the same set
+# of namespaces.  `plays/k8s/restore-sync.yml` uses `k8s_scale_up_order` to
+# reach every namespace `scale-down.yml` can touch.
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Assert k8s_scale_down_order and k8s_scale_up_order name the same namespaces
+      ansible.builtin.assert:
+        that:
+          - k8s_scale_down_order | length == (k8s_scale_down_order | unique | length)
+          - k8s_scale_up_order | length == (k8s_scale_up_order | unique | length)
+          - (k8s_scale_down_order | sort) == (k8s_scale_up_order | sort)
+        fail_msg: >-
+          k8s_scale_down_order and k8s_scale_up_order (group_vars/all.yml) must contain
+          no duplicates and must be the same set of namespaces, in some order for each.
+          down-only: {{ k8s_scale_down_order | difference(k8s_scale_up_order) }}.
+          up-only: {{ k8s_scale_up_order | difference(k8s_scale_down_order) }}.

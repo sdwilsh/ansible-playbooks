@@ -8,7 +8,7 @@ default:
 ansible-lint:
     @ansible-lint --offline
 
-# Syntax-check every playbook under `plays/` and `roles/`
+# Syntax-check every playbook under `plays/`, `roles/`, and `site.yml`
 [group('lint')]
 ansible-syntax-check:
     #!/usr/bin/env bash
@@ -18,8 +18,8 @@ ansible-syntax-check:
     # `include_tasks` fragment, does not.  This script uses that key to
     # find real playbooks.  `ansible-lint` already checks the other files.
     #
-    # `!vault`/`!unsafe` get a permissive constructor: this only checks
-    # file structure, not real values.
+    # `!vault` and `!unsafe` get a permissive constructor.  This script checks
+    # file structure only.  It does not check real values.
     playbooks_output=$(
         find plays roles site.yml -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 \
             | xargs -0 python3 -c '
@@ -54,9 +54,15 @@ ansible-syntax-check:
     fi
     # `-i` gives real groups to plays that target hosts other than `localhost`.
     # `ANSIBLE_DEPRECATION_WARNINGS` quiets a deprecation warning from a
-    # vendored role under `external_roles/` - not ours to fix here.
+    # vendored role under `external_roles/`.  That role is not ours to fix here.
     ANSIBLE_CONFIG=ansible-ci.cfg ANSIBLE_DEPRECATION_WARNINGS=false \
         ansible-playbook --syntax-check -i prod-inventory "${playbooks[@]}"
+
+# Check that `k8s_scale_down_order` and `k8s_scale_up_order` name the same namespaces,
+# with no duplicates
+[group('lint')]
+ansible-scale-order-check:
+    ANSIBLE_CONFIG=ansible-ci.cfg ansible-playbook -i prod-inventory plays/k8s/scale-order-check.yml
 
 # Syncs the argocd application.
 [group('argocd')]
@@ -259,6 +265,12 @@ crowdsec-list-decisions:
 [group('codegen')]
 generate-argo-cd-applications:
     ansible-playbook plays/codegen/argo-cd-applications.yml --extra-vars overlay=prod
+
+# Scale a single namespace up or down
+[group('k8s')]
+k8s-scale direction namespace:
+    ansible-playbook plays/k8s/scale-namespace.yml \
+        --extra-vars "direction={{ direction }} namespace={{ namespace }}"
 
 # Check `just` syntax
 [group('just')]

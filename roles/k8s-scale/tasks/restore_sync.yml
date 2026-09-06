@@ -1,0 +1,10 @@
+---
+# Use this task after a scale-down or scale-up run stops before it finishes.
+# This task turns auto-sync back on for one namespace.  It does not change
+# any replica count.  An operator can run this task for every namespace.  The
+# operator does not have to find the namespaces that still have manual
+# sync.
+- ansible.builtin.include_tasks: argocd_sync_policy.yml
+  vars:
+    k8s_scale_argocd_sync_policy: automated
+    k8s_scale_argocd_best_effort: false

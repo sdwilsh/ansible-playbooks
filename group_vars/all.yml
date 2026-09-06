@@ -73,3 +73,93 @@ docker__users:
 
 reboot_test_command: whoami
 ssh_listen_to: "{{ common__ip_addresses | ansible.utils.ipaddr('address') }}"
+
+# These lists contain the namespaces to scale down and up, in the correct order for
+# each operation.  Comments below each entry explain the ordering constraints.  These
+# lists and `k8s_scale_excludes` below are the only data in the scale-up/scale-down
+# pipeline that must be maintained manually.  The role finds all other data, for
+# example, workload names and replica counts, from the live cluster.
+k8s_scale_down_order:
+  # Put operators first that could fight the scale-down.
+  - prometheus-operator
+  - redis
+  # These applications use Longhorn storage.  The list shows them in
+  # alphabetical order.
+  - 3d-printing
+  - atuin
+  - aventertainment
+  - factorio-relic
+  - forgejo
+  - homeassistant
+  - immich
+  - manyfold
+  - monitoring
+  - opencloud
+  - paperless
+  - tandoor
+  - transmission
+  - ttlsh
+  - tvheadend
+  - unifi
+  - valheim-forerunner
+  - valheim-relic
+  # ORDER IS NOW VERY IMPORTANT!
+  # Scale down `traefik` and `auth` next.
+  - traefik
+  - auth
+  # Scale down crowdsec and proton-mail last.  `traefik`'s `crowdsec-bouncer`
+  # plugin queries the `crowdsec` LAPI and AppSec endpoints live, for every
+  # request.  `authelia` sends email through the `proton-bridge` SMTP endpoint
+  # in the `proton-mail` namespace.  Scale down `traefik` and `auth` first.  This
+  # keeps both endpoints available, until `traefik` and `auth` themselves go
+  # down.
+  - crowdsec
+  - proton-mail
+
+k8s_scale_up_order:
+  # Scale up `redis` and `proton-mail` first.  `authelia`'s `redis-sentinel` and
+  # `redis-replication` `StatefulSet`s need the `redis` operator.  `authelia`'s
+  # `cnpg` `Cluster`s need the `cnpg` operator.  The role never scales down the
+  # `cnpg` operator.  `authelia` sends email through the `proton-bridge` SMTP
+  # endpoint in the `proton-mail` namespace.  `proton-mail` must come up before
+  # `auth`, for this reason.  `traefik`'s `crowdsec-bouncer` plugin queries
+  # `crowdsec` live, for every request.  `crowdsec` must come up before
+  # `traefik`, for this reason.
+  - redis
+  - proton-mail
+  - auth
+  - crowdsec
+  - traefik
+  # Order is less important now.
+  - prometheus-operator
+  - 3d-printing
+  - atuin
+  - aventertainment
+  - factorio-relic
+  - forgejo
+  - homeassistant
+  - immich
+  - manyfold
+  - monitoring
+  - opencloud
+  - paperless
+  - tandoor
+  - transmission
+  - ttlsh
+  - tvheadend
+  - unifi
+  - valheim-forerunner
+  - valheim-relic
+
+# These workloads must stay up, even when their namespace is scaled down.
+k8s_scale_excludes:
+  # The `monitoring` namespace has two aggregated `APIService`s.  `prometheus-adapter`
+  # is the backend for both `APIService`s.  The `APIService`s are
+  # `v1beta1.metrics.k8s.io` and `v1beta1.custom.metrics.k8s.io`.  If
+  # `prometheus-adapter` scales down to zero, both `APIService`s stay
+  # registered, but have no backend.  After this, every later API request
+  # from `kubernetes.core.k8s` or from `kubectl` must wait for the aggregation
+  # proxy to time out.  This adds delay and causes some requests to fail
+  # during a large namespace shutdown.
+  monitoring:
+    - prometheus-adapter
