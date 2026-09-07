@@ -54,7 +54,7 @@ ansible-syntax-check:
     fi
     # `-i` gives real groups to plays that target hosts other than `localhost`.
     # `ANSIBLE_DEPRECATION_WARNINGS` quiets a deprecation warning from a
-    # vendored role under `external_roles/`.  That role is not ours to fix here.
+    # vendored role under `.ansible/roles/`.  That role is not ours to fix here.
     ANSIBLE_CONFIG=ansible-ci.cfg ANSIBLE_DEPRECATION_WARNINGS=false \
         ansible-playbook --syntax-check -i prod-inventory "${playbooks[@]}"
 
@@ -237,7 +237,7 @@ build-nut-shutdown-agent:
 coredns-validate:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "Corefile" -not -path "./external_*" | while read -r file; do
+    find . -type f -name "Corefile" -not -path "./.ansible/*" | while read -r file; do
         echo -n "Validating ${file}..."
         name="coredns-validate-$$"
         podman run -d --name "${name}" \
@@ -277,7 +277,7 @@ k8s-scale direction namespace:
 justcheck:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "justfile" -not -path "./external_*" | while read -r file; do
+    find . -type f -name "justfile" -not -path "./.ansible/*" | while read -r file; do
         echo -n "Running \`just --fmt --check\` on ${file}..."
         just --unstable --fmt --check -f ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
@@ -288,7 +288,7 @@ justcheck:
 justfix:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "justfile" -not -path "./external_*" | while read -r file; do
+    find . -type f -name "justfile" -not -path "./.ansible/*" | while read -r file; do
         echo "Running \`just --fmt\` on ${file}..."
         just --unstable --fmt -f ${file}
     done
@@ -298,7 +298,7 @@ justfix:
 hadolint:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "Containerfile*" -not -path "./external_*" | while read -r file; do
+    find . -type f -name "Containerfile*" -not -path "./.ansible/*" | while read -r file; do
         echo -n "Running \`hadolint\` on ${file}..."
         hadolint ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
@@ -360,7 +360,7 @@ run-mack: build-mack-vm
 shellcheck:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "*.sh" -not -path "./external_*" -not -path "*/charts/*" | while read -r file; do
+    find . -type f -name "*.sh" -not -path "./.ansible/*" -not -path "*/charts/*" | while read -r file; do
         echo -n "Running \`shellcheck -x\` on ${file}..."
         shellcheck -x ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"

@@ -9,9 +9,8 @@ output-loki
 output-mack
 output-mack-kairos
 
-# Roles and Collections that are managed by ansible-galaxy.
-external_collections/
-external_roles/
+# `ansible-galaxy` and `ansible-lint` write Roles and Collections here.
+.ansible/
 
 # Helm chart expansion by kustomize.  This isn't the suggested way, but home-prod isn't prod.
 kustomization/**/charts

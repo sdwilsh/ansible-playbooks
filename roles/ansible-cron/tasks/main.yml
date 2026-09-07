@@ -27,6 +27,14 @@
     repo: "https://github.com/sdwilsh/ansible-playbooks.git"
     dest: "/src/ansible-playbooks"
     update: false
+# Transitional.  Remove this task after every host runs it one time.
+- name: "Remove the legacy galaxy directories"
+  ansible.builtin.file:
+    path: "/src/ansible-playbooks/{{ item }}"
+    state: absent
+  loop:
+    - "external_collections"
+    - "external_roles"
 - name: "Ensure /src/ansible-playbooks is owned by ansible"
   ansible.builtin.file:
     state: "directory"
@@ -85,10 +93,10 @@
       export ANSIBLE_LOG_PATH=/var/log/ansible.log
 
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing collections"
-      ansible-galaxy collection install --force -U -p external_collections/ -r requirements.yml
+      ansible-galaxy collection install --force -U -p .ansible/collections/ -r requirements.yml
 
       /usr/bin/logger -p user.notice -t ansible-cron -- "Installing roles"
-      ansible-galaxy role install --force-with-deps -p external_roles/ -r requirements.yml
+      ansible-galaxy role install --force-with-deps -p .ansible/roles/ -r requirements.yml
 
       /usr/bin/logger -p user.notice -t ansible-cron -- "Running ansible"
       ansible-playbook --connection=local -i {{ ansible_cron__inventory_file }} -l {{ inventory_hostname }} site.yml

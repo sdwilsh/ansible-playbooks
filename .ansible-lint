@@ -1,8 +1,6 @@
 ---
 exclude_paths:
   - .github/
-  - external_collections/
-  - external_roles/
   - kustomization/
 profile: min
 skip_list:
