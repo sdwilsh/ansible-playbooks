@@ -2,6 +2,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+configMapGenerator:
+  # k3s manages the CoreDNS deployment.  That deployment mounts a ConfigMap
+  # with this exact name.  So kustomize must not add a hash suffix.
+  - name: coredns-custom
+    files:
+      - configmap/coredns/tswn.us.server
+    options:
+      disableNameSuffixHash: true
 namespace: kube-system
 resources:
   - servicemonitor.yml

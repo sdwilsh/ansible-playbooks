@@ -1,0 +1,37 @@
+# Send all tswn.us queries to blocky.  Do not send them to the public
+# resolvers.  The resolv.conf file on the node lists three servers: blocky and
+# two public resolvers.  The forward plugin in the primary server block selects
+# one of the three servers at random.  Without this block, the public resolvers
+# answer most queries for an internal name.  The public resolvers give the
+# public Cloudflare address.  For a name that is only internal, they give
+# NXDOMAIN.
+tswn.us:53 {
+    errors
+    # This block must read the NodeHosts file, because this block receives all
+    # tswn.us queries.  The primary server block receives none of them.  k3s
+    # writes the node names and the node addresses into that file.
+    #
+    # The following list holds the names that must resolve when blocky does
+    # not answer.  Do not put a name in the NodeHosts file and in this list.
+    # The hosts plugin adds this list to the entries from the file.  It does
+    # not replace them, and a name in both places gets two records.
+    #
+    # A name in this list gets no PTR record, because a PTR query goes to the
+    # in-addr.arpa zone.  The primary server block holds that zone.  The
+    # cluster makes almost no PTR queries, so this is acceptable.
+    hosts /etc/coredns/NodeHosts {
+      10.11.1.64 auth.tswn.us
+      10.11.1.64 code.tswn.us
+      10.11.1.64 idm.tswn.us
+      10.11.1.64 s3.tswn.us
+      10.11.1.73 pool.ntp.hogs.tswn.us
+      10.11.1.75 dockerhub-proxy.hogs.tswn.us
+      ttl 60
+      reload 15s
+      fallthrough
+    }
+    prometheus :9153
+    cache 30
+    loop
+    forward . 10.11.1.66
+}
