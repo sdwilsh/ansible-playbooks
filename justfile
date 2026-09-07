@@ -237,11 +237,18 @@ build-nut-shutdown-agent:
 coredns-validate:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "Corefile" -not -path "./.ansible/*" | while read -r file; do
+    # A custom server file reads the NodeHosts file that k3s writes into the
+    # `coredns` ConfigMap.  That file is not in this repository.  So give
+    # CoreDNS an empty NodeHosts file.  This recipe checks the syntax only.
+    stub="$(mktemp)"
+    trap 'rm -f "${stub}"' EXIT
+
+    find . -type f \( -name "Corefile" -o -name "*.server" \) -not -path "./.ansible/*" | while read -r file; do
         echo -n "Validating ${file}..."
         name="coredns-validate-$$"
         podman run -d --name "${name}" \
             -v "$(realpath "${file}"):/Corefile:ro,z" \
+            -v "${stub}:/etc/coredns/NodeHosts:ro,z" \
             docker.io/coredns/coredns:latest \
             -conf /Corefile > /dev/null
         sleep 3
