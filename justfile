@@ -241,7 +241,7 @@ coredns-validate:
         echo -n "Validating ${file}..."
         name="coredns-validate-$$"
         podman run -d --name "${name}" \
-            -v "$(realpath "${file}"):/Corefile:ro" \
+            -v "$(realpath "${file}"):/Corefile:ro,z" \
             docker.io/coredns/coredns:latest \
             -conf /Corefile > /dev/null
         sleep 3
