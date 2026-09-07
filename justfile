@@ -232,6 +232,137 @@ build-mack-vm:
 build-nut-shutdown-agent:
     podman build images/nut-shutdown-agent --tag nut-shutdown-agent:latest
 
+# Check that the fixed CoreDNS hosts entries agree with blocky
+[group('lint')]
+coredns-drift-check:
+    #!/usr/bin/env python3
+    # The tswn.us server block holds some fixed names.  These names resolve
+    # when blocky does not answer.  blocky is the source of truth for them.
+    # This check compares the two files.  It fails when the two files do not
+    # agree.  It reads files only.  It does not send a query.
+    #
+    # Do not put two open braces together in this recipe.  just reads them as
+    # the start of an expression.
+    import ipaddress
+    import sys
+
+    import yaml
+
+    SERVER = "kustomization/overlays/prod/kube-system/configmap/coredns/tswn.us.server"
+    BLOCKY = "kustomization/overlays/prod/dns/configmap/blocky/config.yml"
+    BLOCKY_SVC = "kustomization/overlays/prod/dns/patches/blocky/set_load_balancer_ips.yml"
+    ZONE = "tswn.us"
+    # These names must stay in the block.  The NodeHosts file no longer holds
+    # them, so this file is the only place that keeps them fixed.
+    REQUIRED = {
+        "auth.tswn.us",
+        "code.tswn.us",
+        "dockerhub-proxy.hogs.tswn.us",
+        "idm.tswn.us",
+        "pool.ntp.hogs.tswn.us",
+        "s3.tswn.us",
+    }
+
+    problems = []
+
+    def address_or_none(text):
+        try:
+            return ipaddress.ip_address(text)
+        except ValueError:
+            return None
+
+    # Read the inline hosts entries and the forward upstreams.
+    hosts, upstreams, in_hosts = {}, [], False
+    for raw in open(SERVER):
+        line = raw.split("#")[0].strip()
+        if not line:
+            continue
+        if line.startswith("hosts "):
+            in_hosts = True
+        elif in_hosts and line == "}":
+            in_hosts = False
+        elif line.startswith("forward "):
+            upstreams = line.split()[2:]
+        elif in_hosts:
+            fields = line.split()
+            if fields[0] in ("ttl", "reload", "fallthrough", "no_reverse"):
+                continue
+            if address_or_none(fields[0]) is None or len(fields) < 2:
+                problems.append(f"cannot read this hosts line: {line}")
+                continue
+            for name in fields[1:]:
+                hosts.setdefault(name.rstrip(".").lower(), []).append(fields[0])
+
+    # Read the address of every name that blocky knows.
+    custom = yaml.safe_load(open(BLOCKY))["customDNS"]
+    mapping = {k.rstrip(".").lower(): v for k, v in (custom["mapping"] or {}).items()}
+    cnames, origin = {}, ZONE
+
+    def qualify(name):
+        if name.endswith("."):
+            return name.rstrip(".").lower()
+        return f"{name}.{origin}".lower()
+
+    for raw in (custom.get("zone") or "").splitlines():
+        line = raw.split(";")[0].strip()
+        if not line:
+            continue
+        if line.startswith("$ORIGIN"):
+            fields = line.split()
+            if len(fields) > 1:
+                origin = fields[1].rstrip(".").lower()
+            continue
+        if line.startswith("$"):
+            continue
+        fields = line.split()
+        found = [i for i, f in enumerate(fields) if i and f in ("A", "AAAA", "CNAME")]
+        if not found or found[0] + 1 >= len(fields):
+            continue
+        index = found[0]
+        if fields[index] == "CNAME":
+            cnames[qualify(fields[0])] = qualify(fields[index + 1])
+        else:
+            mapping.setdefault(qualify(fields[0]), fields[index + 1])
+
+    def resolve(name, seen=frozenset()):
+        """Follow the CNAME chain to an address, as blocky does."""
+        if name in seen:
+            return None
+        if name in mapping:
+            return mapping[name]
+        if name in cnames:
+            return resolve(cnames[name], seen | {name})
+        return None
+
+    annotations = yaml.safe_load(open(BLOCKY_SVC))["metadata"]["annotations"]
+    vip = annotations["kube-vip.io/loadbalancerIPs"]
+
+    print("Checking CoreDNS hosts entries against blocky...", end="", flush=True)
+
+    if not upstreams:
+        problems.append("the block has no forward line")
+    for upstream in upstreams:
+        if upstream != vip:
+            problems.append(f"forward sends to {upstream}, but blocky listens on {vip}")
+    for name in sorted(REQUIRED - set(hosts)):
+        problems.append(f"{name} is required, but the block does not hold it")
+    for name, addresses in sorted(hosts.items()):
+        if len(addresses) > 1:
+            problems.append(f"{name} has {len(addresses)} entries: {', '.join(addresses)}")
+        elif not (name == ZONE or name.endswith(f".{ZONE}")):
+            problems.append(f"{name} is outside {ZONE}, so this block never serves it")
+        elif (expected := resolve(name)) is None:
+            problems.append(f"{name} is {addresses[0]} here, but blocky does not know it")
+        elif address_or_none(expected) != address_or_none(addresses[0]):
+            problems.append(f"{name} is {addresses[0]} here, but blocky says {expected}")
+
+    if problems:
+        print("{{ BOLD + RED }}FAILED{{ NORMAL }}", flush=True)
+        for problem in problems:
+            print(f"  {problem}", file=sys.stderr)
+        sys.exit(1)
+    print("{{ BOLD + GREEN }}OK{{ NORMAL }}")
+
 # Validate every Corefile by running coredns against it and checking it stays up
 [group('lint')]
 coredns-validate:
