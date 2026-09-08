@@ -1,6 +1,6 @@
 # Send all tswn.us queries to blocky.  Do not send them to the public
 # resolvers.  The resolv.conf file on the node lists three servers: blocky and
-# two public resolvers.  The forward plugin in the primary server block selects
+# two public resolvers.  The forward plugin in the default server block selects
 # one of the three servers at random.  Without this block, the public resolvers
 # answer most queries for an internal name.  The public resolvers give the
 # public Cloudflare address.  For a name that is only internal, they give
@@ -8,7 +8,7 @@
 tswn.us:53 {
     errors
     # This block must read the NodeHosts file, because this block receives all
-    # tswn.us queries.  The primary server block receives none of them.  k3s
+    # tswn.us queries.  The default server block receives none of them.  k3s
     # writes the node names and the node addresses into that file.
     #
     # The following list holds the names that must resolve when blocky does
@@ -16,9 +16,9 @@ tswn.us:53 {
     # The hosts plugin adds this list to the entries from the file.  It does
     # not replace them, and a name in both places gets two records.
     #
-    # A name in this list gets no PTR record, because a PTR query goes to the
-    # in-addr.arpa zone.  The primary server block holds that zone.  The
-    # cluster makes almost no PTR queries, so this is acceptable.
+    # A name in this list has no PTR record.  A PTR query goes to the
+    # 10.in-addr.arpa block, and that block reads the NodeHosts file only.
+    # The cluster sends very few PTR queries, so this is acceptable.
     hosts /etc/coredns/NodeHosts {
       10.11.1.64 auth.tswn.us
       10.11.1.64 code.tswn.us
@@ -39,5 +39,11 @@ tswn.us:53 {
       serve_stale 1h verify 200ms
     }
     loop
-    forward . 10.11.1.66
+    # The health check of the forward plugin sends a query for the root zone
+    # by default.  blocky gives a malformed answer to that query, and thus
+    # CoreDNS marks blocky as unavailable.  blocky answers correctly for
+    # tswn.us, so the health check uses that name.
+    forward . 10.11.1.66 {
+      health_check 5s domain tswn.us.
+    }
 }
