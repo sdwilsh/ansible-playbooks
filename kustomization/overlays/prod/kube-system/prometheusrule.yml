@@ -1,0 +1,55 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: coredns-rules
+spec:
+  groups:
+    - name: coredns
+      rules:
+        # blocky is the only upstream server for the internal zones.  The
+        # constant hosts entries and the stale cache keep some names available
+        # during a short blocky failure.  A query for a different name
+        # receives SERVFAIL.
+        #
+        # The zone receives very few queries, so this rule uses `increase`
+        # over a long window.  A rule with `rate` and a `for` clause does not
+        # trigger at this query rate.
+        - alert: coredns-internal-zone-servfail
+          annotations:
+            description: CoreDNS gives SERVFAIL for {{ $labels.zone }}.  Check blocky.
+          expr: |
+            sum by (zone) (increase(coredns_dns_responses_total{rcode="SERVFAIL",zone=~"tswn\\.us\\.|10\\.in-addr\\.arpa\\."}[15m])) > 0
+          labels:
+            severity: warning
+        # This counter increases when all the upstream servers of a forward
+        # block are not available.  The internal zones have one upstream
+        # server, so this counter finds a blocky failure.  The counter has no
+        # zone label, because CoreDNS keeps one counter for all the blocks.
+        - alert: coredns-all-upstreams-down
+          annotations:
+            description: CoreDNS on {{ $labels.pod }} has no upstream server.  Check blocky.
+          expr: sum by (pod) (rate(coredns_forward_healthcheck_broken_total[5m])) > 0
+          for: 10m
+          labels:
+            severity: page
+        # `absent` gives a value when the selector matches no series.  Thus
+        # this rule triggers when Prometheus can reach no CoreDNS target.  The
+        # alert above cannot find this condition, because it reads a metric
+        # that CoreDNS supplies.
+        - alert: coredns-down
+          annotations:
+            description: Prometheus can reach no CoreDNS target.  Cluster DNS is down.
+          expr: absent(up{job="kube-dns"} == 1)
+          for: 5m
+          labels:
+            severity: page
+        # This rule finds the loss of one or two pods.  It cannot find the
+        # loss of all of them, because `count` of no series gives no series.
+        - alert: coredns-degraded
+          annotations:
+            description: Fewer than three CoreDNS targets are up.
+          expr: count(up{job="kube-dns"} == 1) < 3
+          for: 10m
+          labels:
+            severity: warning
