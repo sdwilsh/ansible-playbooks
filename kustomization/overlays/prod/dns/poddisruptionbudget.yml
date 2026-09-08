@@ -1,0 +1,13 @@
+---
+# Keep one of the two blocky pods available during node maintenance.  blocky
+# has an anti-affinity rule, so the two pods are always on different nodes.  A
+# drain of one node can thus evict one pod only.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: blocky-pdb
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blocky

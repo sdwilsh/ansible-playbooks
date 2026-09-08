@@ -29,6 +29,7 @@ patches:
       name: blocky-svc
 resources:
   - namespace.yml
+  - poddisruptionbudget.yml
   - prometheusrule.yml
   - service.yml
   - servicemonitor.yml
