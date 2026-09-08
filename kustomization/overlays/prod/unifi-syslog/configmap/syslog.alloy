@@ -1,3 +1,51 @@
+// loki.relabel rewrites the label set of each entry by applying one or more
+// relabeling rules.  loki.source.syslog parses the RFC3164 header into labels
+// that start with `__`, and then removes them.  Without these rules, every
+// UniFi device writes into one stream, and the device is unknown.
+loki.relabel "unifi" {
+  // This component gives its rules to loki.source.syslog below.  It does not
+  // forward entries itself.
+  forward_to = []
+
+  // Label creation - "hostname" field from "__syslog_message_hostname"
+  // This is the name of the device that sent the line.
+  rule {
+    source_labels = ["__syslog_message_hostname"]
+    action        = "replace"
+    target_label  = "hostname"
+  }
+
+  // Label creation - "source_ip" field from "__syslog_connection_ip_address"
+  // The listener sets this from the UDP source address, so it is always
+  // present.  It identifies the device when the device sends no hostname.
+  // Each device has one address, so this label adds no streams.
+  rule {
+    source_labels = ["__syslog_connection_ip_address"]
+    action        = "replace"
+    target_label  = "source_ip"
+  }
+
+  // Label creation - "app" field from "__syslog_message_app_name"
+  // For example: `hostapd`, `kernel`, `mcad`, `stahtd`, `wevent`.
+  rule {
+    source_labels = ["__syslog_message_app_name"]
+    action        = "replace"
+    target_label  = "app"
+  }
+
+  // Label creation - "severity" field from "__syslog_message_severity"
+  // Syslog has eight severities.  Loki also reads this field to set
+  // `detected_level`.
+  rule {
+    source_labels = ["__syslog_message_severity"]
+    action        = "replace"
+    target_label  = "severity"
+  }
+
+  // Do not promote "__syslog_message_proc_id".  It holds a process id, which
+  // gives a new stream after each restart of the process.
+}
+
 loki.source.syslog "unifi" {
   listener {
     address       = "0.0.0.0:514"
@@ -5,6 +53,29 @@ loki.source.syslog "unifi" {
     syslog_format = "rfc3164"
     labels        = {
       job = "unifi",
+    }
+  }
+
+  relabel_rules = loki.relabel.unifi.rules
+  forward_to    = [loki.process.unifi.receiver]
+}
+
+// loki.process receives log entries from other Loki components, applies one or
+// more processing stages, and forwards the results to the list of receivers in
+// the component's arguments.
+loki.process "unifi" {
+  // Each label makes a new stream, and "app" with "severity" together multiply
+  // the number of streams.  This stage moves the two fields out of the label
+  // set and into structured metadata.  A query can still select on them.
+  //
+  // This also keeps `service_name`.  Loki builds that field from the first
+  // match in a fixed list of labels, and "app" comes before "job" in that
+  // list.  An "app" label in the push makes `service_name` the name of the
+  // process instead of `unifi`.
+  stage.structured_metadata {
+    values = {
+      app      = "",
+      severity = "",
     }
   }
 
