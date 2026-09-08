@@ -7,6 +7,7 @@ configMapGenerator:
   # with this exact name.  So kustomize must not add a hash suffix.
   - name: coredns-custom
     files:
+      - configmap/coredns/10.in-addr.arpa.server
       - configmap/coredns/tswn.us.server
     options:
       disableNameSuffixHash: true

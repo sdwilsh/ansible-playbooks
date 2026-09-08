@@ -1,0 +1,28 @@
+# Send the PTR queries for the 10.0.0.0/8 range to blocky.
+10.in-addr.arpa:53 {
+    errors
+    # k3s writes the node addresses into the NodeHosts file.  The hosts plugin
+    # makes a PTR record for each address in that file.  This block receives
+    # all the 10.in-addr.arpa queries.  Therefore this block must read the
+    # NodeHosts file to keep those PTR records.
+    #
+    # The `.` argument is necessary.  The hosts plugin discards each name that
+    # is outside its zone argument, and the default zone is the zone of this
+    # block.  The node names are outside 10.in-addr.arpa, so without the `.`
+    # the plugin discards every line of the file.
+    hosts /etc/coredns/NodeHosts . {
+      ttl 60
+      reload 15s
+      fallthrough
+    }
+    prometheus :9153
+    cache 30 {
+      serve_stale 1h verify 200ms
+    }
+    loop
+    # blocky gives a malformed answer for the root zone, so the health check
+    # uses a name that blocky answers correctly.
+    forward . 10.11.1.66 {
+      health_check 5s domain tswn.us.
+    }
+}
