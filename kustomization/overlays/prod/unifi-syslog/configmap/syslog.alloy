@@ -1,51 +1,40 @@
-// loki.relabel rewrites the label set of each entry by applying one or more
-// relabeling rules.  loki.source.syslog parses the RFC3164 header into labels
-// that start with `__`, and then removes them.  Without these rules, every
-// UniFi device writes into one stream, and the device is unknown.
+// loki.source.syslog puts the RFC3164 header fields in `__` labels and then
+// removes them.  Without these rules, all devices share one stream.
 loki.relabel "unifi" {
-  // This component gives its rules to loki.source.syslog below.  It does not
-  // forward entries itself.
+  // loki.source.syslog below uses only the rules.  This component sends no
+  // entries.
   forward_to = []
 
-  // Label creation - "hostname" field from "__syslog_message_hostname"
-  // This is the name of the device that sent the line.
   rule {
     source_labels = ["__syslog_message_hostname"]
     action        = "replace"
     target_label  = "hostname"
   }
 
-  // Label creation - "source_ip" field from "__syslog_connection_ip_address"
-  // The listener sets this from the UDP source address, so it is always
-  // present.  It identifies the device when the device sends no hostname.
-  // Each device has one address, so this label adds no streams.
+  // Always present, unlike the hostname.  Each device has one address.
   rule {
     source_labels = ["__syslog_connection_ip_address"]
     action        = "replace"
     target_label  = "source_ip"
   }
 
-  // Label creation - "device_tag" field from "__syslog_message_app_name"
-  // A UniFi device puts its MAC address, its model and its firmware version in
-  // the RFC3164 tag field, as `1c0b8b0003b5,E7-8.7.11+19419`.  It does not put
-  // the name of the process there.  The gateway sends no tag.
+  // UniFi puts `<mac>,<model>-<firmware>` in the tag field, not the name of
+  // the process.  The gateway sends no tag.
   rule {
     source_labels = ["__syslog_message_app_name"]
     action        = "replace"
     target_label  = "device_tag"
   }
 
-  // Label creation - "severity" field from "__syslog_message_severity"
-  // Syslog has eight severities.  Loki also reads this field to set
-  // `detected_level`.
+  // Loki also reads this field to set `detected_level`.
   rule {
     source_labels = ["__syslog_message_severity"]
     action        = "replace"
     target_label  = "severity"
   }
 
-  // Do not promote "__syslog_message_proc_id".  It holds a process id, which
-  // gives a new stream after each restart of the process.
+  // Do not add "__syslog_message_proc_id".  A process id makes a new stream at
+  // each restart.
 }
 
 loki.source.syslog "unifi" {
@@ -62,9 +51,6 @@ loki.source.syslog "unifi" {
   forward_to    = [loki.process.unifi.receiver]
 }
 
-// loki.process receives log entries from other Loki components, applies one or
-// more processing stages, and forwards the results to the list of receivers in
-// the component's arguments.
 loki.process "unifi" {
   // The name of the process is in the message, not in the tag field.  The
   // shapes are `proc[pid]: `, `proc: `, `hostname proc[pid]: ` and
@@ -90,15 +76,10 @@ loki.process "unifi" {
     template = `{{ if .Value }}{{ .Value }}{{ else if .fw_chain }}firewall{{ else }}unparsed{{ end }}`
   }
 
-  // Each label makes a new stream, and "device_tag" with "severity" together
-  // multiply the number of streams.  "device_tag" also changes on each firmware
-  // update.  "process" comes from a regular expression over text that the
-  // device controls, so its set of values has no limit.  This stage moves the
-  // four fields out of the label set and into structured metadata.  A query can
-  // still select on them.
-  //
-  // Do not name an optional group in a stage.regex above.  A named group that
-  // does not match writes an empty value, and this stage keeps empty values.
+  // These are not labels.  The device controls the text, so the values of
+  // "process" have no limit, and each field multiplies the stream count.
+  // Do not give a name to an optional group above.  A group that does not
+  // match writes an empty value, and this stage keeps it.
   stage.structured_metadata {
     values = {
       device_tag = "",
