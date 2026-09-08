@@ -1,0 +1,14 @@
+---
+# Keep two of the three CoreDNS pods available during node maintenance.  A
+# drain evicts one pod at a time, and the pod moves to the node that has no
+# CoreDNS pod.  `maxUnavailable` keeps this limit correct if the replica count
+# changes.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: coredns-pdb
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      k8s-app: kube-dns

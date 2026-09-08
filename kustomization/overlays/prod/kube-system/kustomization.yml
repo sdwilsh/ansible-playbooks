@@ -14,5 +14,6 @@ configMapGenerator:
 namespace: kube-system
 resources:
   - deployment.yml
+  - poddisruptionbudget.yml
   - prometheusrule.yml
   - servicemonitor.yml
