@@ -66,13 +66,44 @@ loki.source.syslog "unifi" {
 // more processing stages, and forwards the results to the list of receivers in
 // the component's arguments.
 loki.process "unifi" {
+  // The name of the process is in the message, not in the tag field.  The
+  // shapes are `proc[pid]: `, `proc: `, `hostname proc[pid]: ` and
+  // `proc[pid][pid]: `.  A message of two words and a colon, as
+  // `syslogd started: `, gives the wrong word.  That costs no streams, because
+  // the value is structured metadata.
+  stage.regex {
+    expression = `^(?:[\w.-]+ )?(?P<process>[A-Za-z][\w.-]*)(?:\[\d+\])*: `
+  }
+
+  // A firewall line has no process.  A chain name can contain a digit, as
+  // `CUSTOM5_CUSTOM4`.
+  stage.regex {
+    expression = `^\[(?P<fw_chain>[A-Z_0-9]+)-[A-Z]-\d+\]`
+  }
+
+  // Both stages above are silent when they do not match.  This value makes
+  // every entry complete, so a query can count the misses.
+  // TODO: alert when `unparsed` is more than 100 each day.  It is 8 today.
+  // The Loki ruler holds no rule groups.
+  stage.template {
+    source   = "process"
+    template = `{{ if .Value }}{{ .Value }}{{ else if .fw_chain }}firewall{{ else }}unparsed{{ end }}`
+  }
+
   // Each label makes a new stream, and "device_tag" with "severity" together
   // multiply the number of streams.  "device_tag" also changes on each firmware
-  // update.  This stage moves the two fields out of the label set and into
-  // structured metadata.  A query can still select on them.
+  // update.  "process" comes from a regular expression over text that the
+  // device controls, so its set of values has no limit.  This stage moves the
+  // four fields out of the label set and into structured metadata.  A query can
+  // still select on them.
+  //
+  // Do not name an optional group in a stage.regex above.  A named group that
+  // does not match writes an empty value, and this stage keeps empty values.
   stage.structured_metadata {
     values = {
       device_tag = "",
+      fw_chain   = "",
+      process    = "",
       severity   = "",
     }
   }
