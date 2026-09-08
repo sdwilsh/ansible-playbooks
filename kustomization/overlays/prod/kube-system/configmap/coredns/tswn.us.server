@@ -31,7 +31,13 @@ tswn.us:53 {
       fallthrough
     }
     prometheus :9153
-    cache 30
+    # Keep an answer for one hour after it expires.  CoreDNS gives the old
+    # answer only when blocky does not answer.  Therefore the names that are
+    # not in the list above remain available during a short blocky failure.
+    # The timeout of 200ms limits the delay when blocky does not answer.
+    cache 30 {
+      serve_stale 1h verify 200ms
+    }
     loop
     forward . 10.11.1.66
 }
