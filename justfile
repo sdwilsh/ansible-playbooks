@@ -236,24 +236,27 @@ build-nut-shutdown-agent:
 [group('lint')]
 coredns-drift-check:
     #!/usr/bin/env python3
-    # The tswn.us server block holds some fixed names.  These names resolve
-    # when blocky does not answer.  blocky is the source of truth for them.
-    # This check compares the two files.  It fails when the two files do not
-    # agree.  It reads files only.  It does not send a query.
+    # A CoreDNS server file holds some fixed names.  These names resolve when
+    # blocky does not answer.  blocky is the source of truth for them.  This
+    # check compares the files.  It fails when they do not agree.  It reads
+    # files only.  It does not send a query.
     #
     # Do not put two open braces together in this recipe.  just reads them as
     # the start of an expression.
+    import glob
     import ipaddress
+    import re
     import sys
 
     import yaml
 
-    SERVER = "kustomization/overlays/prod/kube-system/configmap/coredns/tswn.us.server"
+    OVERLAY = "kustomization/overlays/prod/kube-system"
+    SERVERS = f"{OVERLAY}/configmap/coredns/*.server"
+    KUSTOMIZATION = f"{OVERLAY}/kustomization.yml"
     BLOCKY = "kustomization/overlays/prod/dns/configmap/blocky/config.yml"
     BLOCKY_SVC = "kustomization/overlays/prod/dns/patches/blocky/set_load_balancer_ips.yml"
-    ZONE = "tswn.us"
-    # These names must stay in the block.  The NodeHosts file no longer holds
-    # them, so this file is the only place that keeps them fixed.
+    # These names must stay in a server file.  The NodeHosts file no longer
+    # holds them, so the server files are the only place that keeps them fixed.
     REQUIRED = {
         "auth.tswn.us",
         "code.tswn.us",
@@ -271,32 +274,39 @@ coredns-drift-check:
         except ValueError:
             return None
 
-    # Read the inline hosts entries and the forward upstreams.
-    hosts, upstreams, in_hosts = {}, [], False
-    for raw in open(SERVER):
-        line = raw.split("#")[0].strip()
-        if not line:
-            continue
-        if line.startswith("hosts "):
-            in_hosts = True
-        elif in_hosts and line == "}":
-            in_hosts = False
-        elif line.startswith("forward "):
-            upstreams = line.split()[2:]
-        elif in_hosts:
-            fields = line.split()
-            if fields[0] in ("ttl", "reload", "fallthrough", "no_reverse"):
+    def read_server_file(path):
+        """Return the zone, the inline hosts entries and the forward upstreams."""
+        zone, hosts, upstreams, in_hosts = None, {}, [], False
+        for raw in open(path):
+            line = raw.split("#")[0].strip()
+            if not line:
                 continue
-            if address_or_none(fields[0]) is None or len(fields) < 2:
-                problems.append(f"cannot read this hosts line: {line}")
-                continue
-            for name in fields[1:]:
-                hosts.setdefault(name.rstrip(".").lower(), []).append(fields[0])
+            header = re.match(r"^(\S+):53 *\{$", line)
+            if header and not in_hosts:
+                zone = header.group(1).rstrip(".").lower()
+            elif line.startswith("hosts "):
+                in_hosts = True
+            elif in_hosts and line == "}":
+                in_hosts = False
+            elif line.startswith("forward "):
+                upstreams += [f for f in line.split()[2:] if f != "{"]
+            elif in_hosts:
+                fields = line.split()
+                if fields[0] in ("ttl", "reload", "fallthrough", "no_reverse"):
+                    continue
+                if len(fields) < 2 or address_or_none(fields[0]) is None:
+                    problems.append(f"{path}: cannot read this hosts line: {line}")
+                    continue
+                for name in fields[1:]:
+                    hosts.setdefault(name.rstrip(".").lower(), []).append(fields[0])
+        if zone is None:
+            problems.append(f"{path}: no server block header found")
+        return zone, hosts, upstreams
 
     # Read the address of every name that blocky knows.
     custom = yaml.safe_load(open(BLOCKY))["customDNS"]
     mapping = {k.rstrip(".").lower(): v for k, v in (custom["mapping"] or {}).items()}
-    cnames, origin = {}, ZONE
+    cnames, origin = {}, ""
 
     def qualify(name):
         if name.endswith("."):
@@ -339,22 +349,43 @@ coredns-drift-check:
 
     print("Checking CoreDNS hosts entries against blocky...", end="", flush=True)
 
-    if not upstreams:
-        problems.append("the block has no forward line")
-    for upstream in upstreams:
-        if upstream != vip:
-            problems.append(f"forward sends to {upstream}, but blocky listens on {vip}")
-    for name in sorted(REQUIRED - set(hosts)):
-        problems.append(f"{name} is required, but the block does not hold it")
-    for name, addresses in sorted(hosts.items()):
-        if len(addresses) > 1:
-            problems.append(f"{name} has {len(addresses)} entries: {', '.join(addresses)}")
-        elif not (name == ZONE or name.endswith(f".{ZONE}")):
-            problems.append(f"{name} is outside {ZONE}, so this block never serves it")
-        elif (expected := resolve(name)) is None:
-            problems.append(f"{name} is {addresses[0]} here, but blocky does not know it")
-        elif address_or_none(expected) != address_or_none(addresses[0]):
-            problems.append(f"{name} is {addresses[0]} here, but blocky says {expected}")
+    paths = sorted(glob.glob(SERVERS))
+    if not paths:
+        problems.append(f"no server file matches {SERVERS}")
+    # A file that the kustomization does not list never reaches CoreDNS.  Such
+    # a file must not satisfy the list of required names.
+    listed = yaml.safe_load(open(KUSTOMIZATION))
+    generated = set()
+    for generator in listed.get("configMapGenerator") or []:
+        if generator.get("name") == "coredns-custom":
+            generated = {f"{OVERLAY}/{f}" for f in generator.get("files") or []}
+    for path in paths:
+        if path not in generated:
+            problems.append(f"{path} is not in the configMapGenerator of the kustomization")
+    for path in sorted(generated - set(paths)):
+        problems.append(f"{path} is in the kustomization, but the file is missing")
+    seen_names = set()
+    for path in paths:
+        zone, hosts, upstreams = read_server_file(path)
+        seen_names |= set(hosts)
+        if not upstreams:
+            problems.append(f"{path}: the block has no forward line")
+        for upstream in upstreams:
+            if upstream != vip:
+                problems.append(f"{path}: forward sends to {upstream}, not to blocky at {vip}")
+        for name, addresses in sorted(hosts.items()):
+            if len(addresses) > 1:
+                problems.append(f"{name} has {len(addresses)} entries: {', '.join(addresses)}")
+            elif zone and not (name == zone or name.endswith(f".{zone}")):
+                problems.append(f"{name} is outside {zone}, so {path} never serves it")
+            elif zone and zone.endswith(".arpa"):
+                continue
+            elif (expected := resolve(name)) is None:
+                problems.append(f"{name} is {addresses[0]} here, but blocky does not know it")
+            elif address_or_none(expected) != address_or_none(addresses[0]):
+                problems.append(f"{name} is {addresses[0]} here, but blocky says {expected}")
+    for name in sorted(REQUIRED - seen_names):
+        problems.append(f"{name} is required, but no server file holds it")
 
     if problems:
         print("{{ BOLD + RED }}FAILED{{ NORMAL }}", flush=True)
