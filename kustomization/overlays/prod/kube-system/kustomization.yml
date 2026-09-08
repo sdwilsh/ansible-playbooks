@@ -13,4 +13,5 @@ configMapGenerator:
       disableNameSuffixHash: true
 namespace: kube-system
 resources:
+  - deployment.yml
   - servicemonitor.yml

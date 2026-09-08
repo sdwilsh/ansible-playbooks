@@ -1,0 +1,27 @@
+---
+# k3s controls the CoreDNS Deployment.  The k3s manifest does not give a
+# replica count.  Therefore the replica count remains at the value in this
+# file, and k3s does not change that count.  Argo CD uses a server-side apply
+# for this file.  Thus Argo CD controls the `replicas` field only.  Argo CD
+# also writes its own tracking annotation.  It does not control the other
+# fields of the Deployment.
+#
+# Do not add other fields to this file.  A different field causes a conflict
+# between Argo CD and k3s.
+#
+# This file records the replica count.  It does not enforce it.  A manual
+# `kubectl scale` takes the field, and then every sync of this application
+# fails until someone removes that field manager.
+#
+# Argo CD cannot create the Deployment from this file, because the file has no
+# selector and no pod template.  Only k3s creates the Deployment.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    # Never delete the Deployment.  Without this, an Argo CD prune removes
+    # cluster DNS if someone deletes this file from the repository.
+    argocd.argoproj.io/sync-options: Prune=false
+  name: coredns
+spec:
+  replicas: 3
