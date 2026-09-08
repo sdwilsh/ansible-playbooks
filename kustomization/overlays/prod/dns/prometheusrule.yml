@@ -2,12 +2,16 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: ttlsh-rules
-  namespace: prometheus
+  name: dns-rules
 spec:
   groups:
     - name: dns
       rules:
+        # This rule finds a blocky that runs but answers no query.  It cannot
+        # find a blocky that is not there.  Prometheus removes the series when
+        # the target goes away, `sum` of no series gives no series, and a rule
+        # with no series does not trigger.  The `blocky-down` rule below finds
+        # that condition.
         - alert: dns-no-queries
           annotations:
             description: No DNS queries for 15 minutes!
@@ -15,3 +19,22 @@ spec:
           for: 15m
           labels:
             severity: page
+        # `absent` gives a value when the selector matches no series.  Thus
+        # this rule triggers when Prometheus can reach no blocky target.
+        - alert: blocky-down
+          annotations:
+            description: Prometheus can reach no blocky target.  Internal names do not resolve.
+          expr: absent(up{job="blocky-metrics-svc"} == 1)
+          for: 5m
+          labels:
+            severity: page
+        # This rule finds the loss of one replica.  It cannot find the loss of
+        # all of them, because `count` of no series gives no series.  The rule
+        # above finds that condition.
+        - alert: blocky-replica-down
+          annotations:
+            description: blocky has fewer than two targets.  It has no spare replica.
+          expr: count(up{job="blocky-metrics-svc"} == 1) < 2
+          for: 15m
+          labels:
+            severity: warning
