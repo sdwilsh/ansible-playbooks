@@ -252,6 +252,7 @@ coredns-drift-check:
 
     OVERLAY = "kustomization/overlays/prod/kube-system"
     SERVERS = f"{OVERLAY}/configmap/coredns/*.server"
+    OVERRIDES = f"{OVERLAY}/configmap/coredns/*.override"
     KUSTOMIZATION = f"{OVERLAY}/kustomization.yml"
     BLOCKY = "kustomization/overlays/prod/dns/configmap/blocky/config.yml"
     BLOCKY_SVC = "kustomization/overlays/prod/dns/patches/blocky/set_load_balancer_ips.yml"
@@ -274,9 +275,9 @@ coredns-drift-check:
         except ValueError:
             return None
 
-    def read_server_file(path):
+    def read_server_file(path, is_override=False):
         """Return the zone, the inline hosts entries and the forward upstreams."""
-        zone, hosts, upstreams, in_hosts = None, {}, [], False
+        zone, hosts, upstreams, in_hosts, policy = None, {}, [], False, None
         for raw in open(path):
             line = raw.split("#")[0].strip()
             if not line:
@@ -288,6 +289,8 @@ coredns-drift-check:
                 in_hosts = True
             elif in_hosts and line == "}":
                 in_hosts = False
+            elif line.startswith("policy "):
+                policy = line.split()[1]
             elif line.startswith("forward "):
                 upstreams += [f for f in line.split()[2:] if f != "{"]
             elif in_hosts:
@@ -299,9 +302,9 @@ coredns-drift-check:
                     continue
                 for name in fields[1:]:
                     hosts.setdefault(name.rstrip(".").lower(), []).append(fields[0])
-        if zone is None:
+        if zone is None and not is_override:
             problems.append(f"{path}: no server block header found")
-        return zone, hosts, upstreams
+        return zone, hosts, upstreams, policy
 
     # Read the address of every name that blocky knows.
     custom = yaml.safe_load(open(BLOCKY))["customDNS"]
@@ -350,6 +353,7 @@ coredns-drift-check:
     print("Checking CoreDNS hosts entries against blocky...", end="", flush=True)
 
     paths = sorted(glob.glob(SERVERS))
+    overrides = sorted(glob.glob(OVERRIDES))
     if not paths:
         problems.append(f"no server file matches {SERVERS}")
     # A file that the kustomization does not list never reaches CoreDNS.  Such
@@ -359,14 +363,26 @@ coredns-drift-check:
     for generator in listed.get("configMapGenerator") or []:
         if generator.get("name") == "coredns-custom":
             generated = {f"{OVERLAY}/{f}" for f in generator.get("files") or []}
-    for path in paths:
+    for path in paths + overrides:
         if path not in generated:
             problems.append(f"{path} is not in the configMapGenerator of the kustomization")
-    for path in sorted(generated - set(paths)):
+    for path in sorted(generated - set(paths) - set(overrides)):
         problems.append(f"{path} is in the kustomization, but the file is missing")
+
+    # An override file replaces the forward plugin of the default server block.
+    # It must send every query to blocky first.  A different policy, or a
+    # different first server, returns the random behaviour that it corrects.
+    for path in overrides:
+        _, _, upstreams, policy = read_server_file(path, is_override=True)
+        if not upstreams:
+            problems.append(f"{path}: the file has no forward line")
+        elif upstreams[0] != vip:
+            problems.append(f"{path}: the first upstream is {upstreams[0]}, not blocky at {vip}")
+        if policy != "sequential":
+            problems.append(f"{path}: the policy is {policy}, but it must be sequential")
     seen_names = set()
     for path in paths:
-        zone, hosts, upstreams = read_server_file(path)
+        zone, hosts, upstreams, _ = read_server_file(path)
         seen_names |= set(hosts)
         if not upstreams:
             problems.append(f"{path}: the block has no forward line")

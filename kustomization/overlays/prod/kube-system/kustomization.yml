@@ -8,6 +8,7 @@ configMapGenerator:
   - name: coredns-custom
     files:
       - configmap/coredns/10.in-addr.arpa.server
+      - configmap/coredns/forward.override
       - configmap/coredns/tswn.us.server
     options:
       disableNameSuffixHash: true

@@ -1,0 +1,21 @@
+# Replace the forward plugin of the default server block.  The k3s Corefile
+# imports this file before its own forward line.  Both lines accept all names,
+# so CoreDNS uses this one, and the line from k3s never runs.
+#
+# The default server block sends each query to one of the three resolvers in
+# the resolv.conf file on the node, and it makes that choice at random.  Two
+# of the three resolvers are public.  Thus blocky receives one query in three.
+# The block lists of blocky do not apply to the other two queries, and a name
+# that blocky maps to an internal address gets the public address instead.
+#
+# `sequential` sends every query to blocky first.  CoreDNS uses the public
+# resolvers only when blocky does not answer.
+#
+# The health check of the forward plugin sends a query for the root zone by
+# default.  blocky gives a malformed answer to that query, and thus CoreDNS
+# marks blocky as unavailable.  blocky answers correctly for tswn.us, so the
+# health check uses that name.
+    forward . 10.11.1.66 1.1.1.1 9.9.9.9 {
+      policy sequential
+      health_check 5s domain tswn.us.
+    }
