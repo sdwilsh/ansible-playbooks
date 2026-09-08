@@ -25,12 +25,14 @@ loki.relabel "unifi" {
     target_label  = "source_ip"
   }
 
-  // Label creation - "app" field from "__syslog_message_app_name"
-  // For example: `hostapd`, `kernel`, `mcad`, `stahtd`, `wevent`.
+  // Label creation - "device_tag" field from "__syslog_message_app_name"
+  // A UniFi device puts its MAC address, its model and its firmware version in
+  // the RFC3164 tag field, as `1c0b8b0003b5,E7-8.7.11+19419`.  It does not put
+  // the name of the process there.  The gateway sends no tag.
   rule {
     source_labels = ["__syslog_message_app_name"]
     action        = "replace"
-    target_label  = "app"
+    target_label  = "device_tag"
   }
 
   // Label creation - "severity" field from "__syslog_message_severity"
@@ -64,18 +66,14 @@ loki.source.syslog "unifi" {
 // more processing stages, and forwards the results to the list of receivers in
 // the component's arguments.
 loki.process "unifi" {
-  // Each label makes a new stream, and "app" with "severity" together multiply
-  // the number of streams.  This stage moves the two fields out of the label
-  // set and into structured metadata.  A query can still select on them.
-  //
-  // This also keeps `service_name`.  Loki builds that field from the first
-  // match in a fixed list of labels, and "app" comes before "job" in that
-  // list.  An "app" label in the push makes `service_name` the name of the
-  // process instead of `unifi`.
+  // Each label makes a new stream, and "device_tag" with "severity" together
+  // multiply the number of streams.  "device_tag" also changes on each firmware
+  // update.  This stage moves the two fields out of the label set and into
+  // structured metadata.  A query can still select on them.
   stage.structured_metadata {
     values = {
-      app      = "",
-      severity = "",
+      device_tag = "",
+      severity   = "",
     }
   }
 
