@@ -8,7 +8,6 @@ components:
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
-  - ../../../components/networkpolicy-allow-to-garage
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-allow-within-this-namespace
