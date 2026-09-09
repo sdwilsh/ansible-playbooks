@@ -21,6 +21,14 @@ spec:
               devic.es/render: 1
             requests:
               devic.es/render: 1
+      securityContext:
+        # The render node belongs to the `render` group on the host.  These
+        # are the group IDs on Fedora, which each node runs.  The pod runs
+        # as `nobody`, so it needs these groups if the render node does not
+        # permit all users.
+        supplementalGroups:
+          - 39 # video
+          - 105 # render
       tolerations:
         - effect: NoSchedule
           key: gpu
