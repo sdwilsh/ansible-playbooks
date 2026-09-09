@@ -34,6 +34,10 @@ patches:
     target:
       kind: StatefulSet
       name: opencloud-statefulset
+  - path: patches/opencloud/add_lldap_client_label.yml
+    target:
+      kind: StatefulSet
+      name: opencloud-statefulset
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=opencloud].ports.[name=web].name
@@ -55,11 +59,6 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-lldap-networkpolicy
       - fieldPaths:
           - spec.podSelector
         select:

@@ -30,6 +30,10 @@ patches:
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
+  - path: patches/add_lldap_client_label.yml
+    target:
+      kind: StatefulSet
+      name: jellyfin-statefulset
   - path: patches/add_navidrome_volumes.yml
     target:
       kind: StatefulSet
@@ -70,17 +74,6 @@ patches:
     target:
       kind: NetworkPolicy
       name: allow-from-traefik-networkpolicy
-replacements:
-  - source:
-      fieldPath: spec.selector
-      kind: StatefulSet
-      name: jellyfin-statefulset
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-lldap-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml

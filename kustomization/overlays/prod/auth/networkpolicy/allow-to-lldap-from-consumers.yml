@@ -8,16 +8,10 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              kubernetes.io/metadata.name: aventertainment
+              hogs.tswn.us/lldap-client: "true"
           podSelector:
             matchLabels:
-              app.kubernetes.io/name: jellyfin
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: opencloud
-          podSelector:
-            matchLabels:
-              app.kubernetes.io/name: opencloud
+              hogs.tswn.us/lldap-client: "true"
       ports:
         - port: ldaps
           protocol: TCP

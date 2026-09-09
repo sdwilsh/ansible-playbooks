@@ -1,0 +1,13 @@
+---
+# The `networkpolicy-allow-to-lldap` component selects the clients of the
+# directory with this label, and lldap admits them with the same label.  See
+# the README of that component.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    metadata:
+      labels:
+        hogs.tswn.us/lldap-client: "true"
