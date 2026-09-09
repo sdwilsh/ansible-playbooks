@@ -1,0 +1,98 @@
+---
+# The `linux_mcp_hosts` group in `prod-inventory` lists the hosts that the
+# `linux-mcp` MCP server reads.  This play writes the three files that come
+# from that list.
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    # Setup
+    - ansible.builtin.set_fact:
+        root_dir: "{{ playbook_dir }}/../.."
+    - ansible.builtin.set_fact:
+        component_dir: "{{ root_dir }}/kustomization/components/codegen-linux-mcp-prod"
+    - name: Fail when a host has no address
+      ansible.builtin.assert:
+        fail_msg: >-
+          Every host in `linux_mcp_hosts` needs an `ansible_host` value in
+          `prod-inventory`.
+        that:
+          - >-
+            groups['linux_mcp_hosts'] | map('extract', hostvars, 'ansible_host')
+            | select('defined') | list | length == groups['linux_mcp_hosts'] | length
+    - name: Collect the name and the address of each host
+      ansible.builtin.set_fact:
+        mcp_hosts: >-
+          {{ mcp_hosts | default([])
+             + [{'name': item, 'address': hostvars[item].ansible_host}] }}
+      loop: "{{ groups['linux_mcp_hosts'] }}"
+    # Every generated file uses this order.  The files then read the same way.
+    - name: Sort the hosts by name
+      ansible.builtin.set_fact:
+        mcp_hosts: "{{ mcp_hosts | sort(attribute='name') }}"
+    - name: Read the host key of each host
+      ansible.builtin.command:
+        argv:
+          - ssh-keyscan
+          - -T
+          - "10"
+          - -t
+          - ed25519
+          - "{{ item.name }}"
+      changed_when: false
+      failed_when: false
+      loop: "{{ mcp_hosts }}"
+      loop_control:
+        label: "{{ item.name }}"
+      register: keyscan
+    - name: Fail when a host gives no key
+      ansible.builtin.assert:
+        fail_msg: >-
+          `ssh-keyscan` got no key from these hosts:
+          {{ keyscan.results | rejectattr('stdout', 'defined')
+             | union(keyscan.results | selectattr('stdout', 'equalto', ''))
+             | map(attribute='item.name') | join(', ') }}.
+          Start each host, or take it out of `linux_mcp_hosts` in
+          `prod-inventory`.
+        that:
+          - keyscan.results | rejectattr('stdout', 'defined') | list | length == 0
+          - keyscan.results | selectattr('stdout', 'equalto', '') | list | length == 0
+    - name: Delete existing codegen
+      ansible.builtin.file:
+        path: "{{ component_dir }}"
+        state: absent
+
+    # Generate Resources
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        mode: "0755"
+        path: "{{ component_dir }}/{{ item }}"
+        state: directory
+      loop:
+        - configmap
+        - networkpolicy
+    - name: Generate the Kustomization
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/kustomization.yml"
+        mode: "0644"
+        src: resources/linux-mcp-kustomization.yml.j2
+    - name: Generate the NetworkPolicy
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/networkpolicy/allow-to-linux-hosts.yml"
+        mode: "0644"
+        src: resources/linux-mcp-networkpolicy.yml.j2
+    - name: Generate the policy file
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/configmap/policy.yml"
+        mode: "0644"
+        src: resources/linux-mcp-policy.yml.j2
+    - name: Generate the known_hosts file
+      ansible.builtin.template:
+        dest: "{{ component_dir }}/configmap/known_hosts"
+        mode: "0644"
+        src: resources/linux-mcp-known-hosts.j2
+      vars:
+        host_keys: >-
+          {{ keyscan.results | map(attribute='stdout_lines') | flatten
+             | reject('match', '^#') | sort }}
+  vars:
+    play_name: plays/codegen/linux-mcp.yml

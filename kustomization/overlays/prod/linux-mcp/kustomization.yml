@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/codegen-linux-mcp-prod
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+images:
+  - name: quay.io/redhat-services-prod/rhel-lightspeed-tenant/linux-mcp-server
+    newTag: 1.6.0@sha256:167e054dfb412a53b731c3dfc2a7aa20d6fca3de7d185e4122d0f5fbf0094420
+namespace: linux-mcp
+resources:
+  - namespace.yml
+  - deployment.yml
+  - egress-service.yml
+  - ingress.yml
+  - service.yml

@@ -451,6 +451,11 @@ crowdsec-list-decisions:
 generate-argo-cd-applications:
     ansible-playbook plays/codegen/argo-cd-applications.yml --extra-vars overlay=prod
 
+# Generates/updates the `linux-mcp` NetworkPolicy, policy, and `known_hosts` files
+[group('codegen')]
+generate-linux-mcp:
+    ansible-playbook plays/codegen/linux-mcp.yml
+
 # Scale a single namespace up or down
 [group('k8s')]
 k8s-scale direction namespace:

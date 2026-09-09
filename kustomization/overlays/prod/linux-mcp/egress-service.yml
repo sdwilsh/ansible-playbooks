@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kube-vip.io/egress: "true"
+    # Change the source address for SSH only.  `kube-vip` uses nftables here,
+    # and that code path reads only the `protocol:port` form.  A bare port
+    # number is dropped without a message, and then every port changes.
+    kube-vip.io/egress-destination-ports: "tcp:22"
+    kube-vip.io/loadbalancerIPs: 10.11.1.100
+  name: linux-mcp-egress-svc
+spec:
+  externalTrafficPolicy: Local
+  ports:
+    # The API refuses a Service with no port.  This service exposes nothing.
+    # `networkpolicy-allow-from-traefik` permits the only ingress to the pod,
+    # and `linux-mcp-svc` carries that traffic.
+    - name: web
+      port: 8000
+      protocol: TCP
+      targetPort: web
+  selector:
+    app.kubernetes.io/name: linux-mcp
+  type: LoadBalancer

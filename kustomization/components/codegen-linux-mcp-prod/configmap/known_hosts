@@ -1,0 +1,15 @@
+# @codegen-command: ansible-playbook plays/codegen/linux-mcp.yml
+# @generated
+# `ssh-keyscan` does not authenticate a key.  To validate this file, run
+# `ssh-keygen -lf known_hosts` here.  Then run
+# `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` on each host.  Use a
+# console for that command, and not SSH.  Compare the two fingerprints.
+choros.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDlTRlMOkQg/C+UFQhLNLt/VsjTlQAAiaR4SyAWwOwyp
+gpuworker01.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP7Dom4Xl16cxi8/T0XteH3wkZFNacCFeWBc1YG5TjcY
+gpuworker02.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF2CXs5hxvwkNzQJnWvODQ02scajObpN//LL9oVzMMHI
+harvest.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaAKIgwRbxz/sSqj69TRnKuTScKCcnKvAtape2LJPoE
+monitor.house.gem.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGDsCp2NbnB37xOr1fQMzwERZfulGzMhRq8EQZouG74j
+node01.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC/6WYONbaSX6I7G2o2OpXQELF3Q6v4yyZw7DzLee9NX
+worker01.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4OqyiF1/4dCI5ejcx8KCEqIOKVTt92w0F2ktS7TLHf
+worker02.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4OqyiF1/4dCI5ejcx8KCEqIOKVTt92w0F2ktS7TLHf
+worker03.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIbzD4VLjhtfGzp1AYMImsGbKPIAWefrL3M1TpxdfK2V

@@ -1,0 +1,62 @@
+# @codegen-command: ansible-playbook plays/codegen/linux-mcp.yml
+# @generated
+---
+# The server reads `host` as a glob, so each rule names one host in full.
+# `all_users: true` accepts a caller with no claims.  This server has no
+# caller authentication.  `read_file` reads any path that the remote account
+# can read, so each rule removes that tool.
+rules:
+  - action: ssh_default
+    all_users: true
+    host: choros.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: gpuworker01.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: gpuworker02.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: harvest.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: monitor.house.gem.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: node01.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: worker01.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: worker02.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file
+  - action: ssh_default
+    all_users: true
+    host: worker03.hogs.tswn.us
+    tools:
+      - "@fixed"
+      - -read_file

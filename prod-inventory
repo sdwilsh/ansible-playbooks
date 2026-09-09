@@ -48,5 +48,10 @@ kairos_worker
 [kairos:children]
 kairos_prod
 
+[linux_mcp_hosts:children]
+kairos_prod
+rpi
+sos
+
 [sos]
 choros.tswn.us ansible_host=23.94.59.52

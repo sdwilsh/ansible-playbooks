@@ -1,0 +1,16 @@
+# @codegen-command: ansible-playbook {{ play_name }}
+# @generated
+---
+# The server reads `host` as a glob, so each rule names one host in full.
+# `all_users: true` accepts a caller with no claims.  This server has no
+# caller authentication.  `read_file` reads any path that the remote account
+# can read, so each rule removes that tool.
+rules:
+{% for entry in mcp_hosts %}
+  - action: ssh_default
+    all_users: true
+    host: {{ entry.name }}
+    tools:
+      - "@fixed"
+      - -read_file
+{% endfor %}

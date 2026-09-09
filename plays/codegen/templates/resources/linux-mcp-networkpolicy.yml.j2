@@ -1,0 +1,21 @@
+# @codegen-command: ansible-playbook {{ play_name }}
+# @generated
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-linux-hosts-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 22
+      to:
+{% for entry in mcp_hosts %}
+        - ipBlock:
+            cidr: {{ entry.address }}/32 # {{ entry.name }}
+{% endfor %}
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: linux-mcp
+  policyTypes:
+    - Egress

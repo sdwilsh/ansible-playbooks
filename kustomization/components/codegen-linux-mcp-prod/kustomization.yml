@@ -1,0 +1,13 @@
+# @codegen-command: ansible-playbook plays/codegen/linux-mcp.yml
+# @generated
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: linux-mcp-configmap
+    files:
+      - configmap/known_hosts
+      - configmap/policy.yml
+resources:
+  - networkpolicy/allow-to-linux-hosts.yml

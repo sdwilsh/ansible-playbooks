@@ -1,0 +1,20 @@
+---
+common__linux_mcp_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPJs95ug2JV1Q942f2n/VbaOe0yT6m0OOaV8e7yYHebB
+
+common__host_unix_groups:
+  - name: linux-mcp
+    gid: 2048
+common__host_unix_users:
+  # `adm` and `systemd-journal` let the account read the logs.  The account
+  # needs no other access.  `restrict` turns off port forwarding, agent
+  # forwarding and a pty.  Without `restrict`, this key opens a tunnel into
+  # the node network.
+  - name: linux-mcp
+    authorized_keys: "{{ ['restrict ' ~ common__linux_mcp_public_key] if common__linux_mcp_public_key | length > 0 else [] }}"
+    extra_groups:
+      - adm
+      - systemd-journal
+    # `!` locks the account.  A Kairos host uses `lock_passwd` for the same
+    # result.  An empty value makes the password field empty, and not locked.
+    password: "!"
+    uid: 2048

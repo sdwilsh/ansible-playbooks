@@ -1,0 +1,106 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linux-mcp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: linux-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: linux-mcp
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - --host
+            - $(POD_IP)
+          command:
+            - linux-mcp-server
+          env:
+            # `LINUX_MCP_ALLOWED_LOG_PATHS` stays unset.  The `read_log_file`
+            # tool then reads no file at all.
+            - name: LINUX_MCP_KNOWN_HOSTS_PATH
+              value: /etc/linux-mcp/ssh/known_hosts
+            - name: LINUX_MCP_LOG_DIR
+              value: /tmp/logs
+            - name: LINUX_MCP_PATH
+              value: /mcp
+            # Without this value, the server denies every call.  The
+            # "allow everything" shortcut needs the stdio transport.
+            - name: LINUX_MCP_POLICY_PATH
+              value: /etc/linux-mcp/ssh/policy.yml
+            - name: LINUX_MCP_PORT
+              value: "8000"
+            - name: LINUX_MCP_SEARCH_FOR_SSH_KEY
+              value: "false"
+            - name: LINUX_MCP_SSH_KEY_PATH
+              value: /etc/linux-mcp/ssh-key/id_ed25519
+            # The `run_script` and `both` toolsets can change a host.  The
+            # `fixed` toolset holds only read tools.  Keep this value.
+            - name: LINUX_MCP_TOOLSET
+              value: fixed
+            - name: LINUX_MCP_TRANSPORT
+              value: streamable-http
+            - name: LINUX_MCP_USER
+              value: linux-mcp
+            - name: LINUX_MCP_VERIFY_HOST_KEYS
+              value: "true"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: quay.io/redhat-services-prod/rhel-lightspeed-tenant/linux-mcp-server
+          livenessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: web
+            timeoutSeconds: 5
+          name: linux-mcp
+          ports:
+            - containerPort: 8000
+              name: web
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: web
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/linux-mcp/ssh
+              name: known-hosts
+              readOnly: true
+            - mountPath: /etc/linux-mcp/ssh-key
+              name: ssh-key
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 1001
+      volumes:
+        - configMap:
+            name: linux-mcp-configmap
+          name: known-hosts
+        - name: ssh-key
+          secret:
+            defaultMode: 0440
+            secretName: linux-mcp-secret
+        - emptyDir: {}
+          name: tmp

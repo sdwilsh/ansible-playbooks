@@ -1,0 +1,9 @@
+# @codegen-command: ansible-playbook {{ play_name }}
+# @generated
+# `ssh-keyscan` does not authenticate a key.  To validate this file, run
+# `ssh-keygen -lf known_hosts` here.  Then run
+# `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` on each host.  Use a
+# console for that command, and not SSH.  Compare the two fingerprints.
+{% for line in host_keys %}
+{{ line }}
+{% endfor %}
