@@ -10,10 +10,15 @@ common__home_prefix: /home/
 #     sudo: true
 common__unix_groups: []
 
-# Users to create.  For example:
-# common__unix_groups:
+# Users to create.  `extra_groups` and `authorized_keys` are both optional.
+# For example:
+# common__unix_users:
 #   - name: "ansible"
-#     gid: 2000
+#     uid: 2000
+#     extra_groups:
+#       - adm
+#     authorized_keys:
+#       - ssh-ed25519 AAAA...
 common__unix_users: []
 
 # Host-specific groups to create.  For example:
@@ -23,8 +28,10 @@ common__unix_users: []
 #     sudo: true
 common__host_unix_groups: []
 
-# Host-specific users to create.  For example:
-# common__unix_groups:
+# Host-specific users to create.  A group file can also set this, for a set of
+# hosts that share an account.  A `host_vars` file then replaces it, and does
+# not add to it.  Takes the same keys as `common__unix_users`.  For example:
+# common__host_unix_users:
 #   - name: someuser
-#     gid: 9000
+#     uid: 9000
 common__host_unix_users: []

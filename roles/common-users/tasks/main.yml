@@ -10,8 +10,10 @@
     label: "{{ item.name }}"
 - name: Create users
   ansible.builtin.user:
+    append: true
     expires: -1
     group: "{{ item.group | default(item.name) }}"
+    groups: "{{ item.extra_groups | default([]) }}"
     home: "{{ common__home_prefix }}{{ item.name }}"
     name: "{{ item.name }}"
     password: "{{ item.password | default('') }}"
@@ -64,6 +66,19 @@
   loop_control:
     label: "{{ item.description }}"
   become: true
+# `exclusive` makes the list replace every other key for that user.  An empty
+# list writes an empty file, which is how a key goes away again.
+- name: Deploy public keys to users that name their own
+  ansible.posix.authorized_key:
+    exclusive: true
+    key: "{{ user.authorized_keys | join('\n') }}"
+    state: present
+    user: "{{ user.name }}"
+  become: true
+  loop: "{{ (common__unix_users + common__host_unix_users) | selectattr('authorized_keys', 'defined') }}"
+  loop_control:
+    label: "{{ user.name }}"
+    loop_var: user
 - name: Setup sudoers
   ansible.builtin.template:
     src: sudoers.j2

@@ -28,18 +28,21 @@ users:
 {# The `common-users` role does not run on a Kairos host, so these
    blocks are the only thing that creates these accounts here.  The
    uid and the gid match the other hosts, so /home stays consistent. #}
-{% for user in common__unix_users %}
-  {% set group = common__unix_groups | selectattr('name', 'equalto', user.name) | first | default(none) %}
+{% for user in common__unix_users + hostvars[host].common__host_unix_users | default([]) %}
+  {% set group = (common__unix_groups + hostvars[host].common__host_unix_groups | default([])) | selectattr('name', 'equalto', user.name) | first | default(none) %}
   - name: {{ user.name }}
     {% if group is not none and user.group is not defined %}
     gid: "{{ group.gid }}"
     {% endif %}
-    {% if user.sudo | default(false) or (group is not none and group.sudo | default(false)) %}
+    {% set extra_groups = (['admin'] if (user.sudo | default(false) or (group is not none and group.sudo | default(false))) else []) + (user.extra_groups | default([])) %}
+    {% if extra_groups | length > 0 %}
     groups:
-      - admin
+    {% for extra_group in extra_groups %}
+      - {{ extra_group }}
+    {% endfor %}
     {% endif %}
     {% if user.password | default('') | length > 0 %}
-    passwd: {{ user.password }}
+    passwd: "{{ user.password }}"
     {% else %}
     lock_passwd: true
     {% endif %}
@@ -48,6 +51,12 @@ users:
     {% endif %}
     {% if user.shell is defined %}
     shell: {{ user.shell }}
+    {% endif %}
+    {% if user.authorized_keys | default([]) | length > 0 %}
+    ssh_authorized_keys:
+    {% for key in user.authorized_keys %}
+      - {{ key }}
+    {% endfor %}
     {% endif %}
     uid: "{{ user.uid }}"
 {% endfor %}
@@ -114,9 +123,14 @@ k3s-agent:
 {% endif %}
 
 stages:
-{% if "kairos__disks_to_format" in hostvars[host] and hostvars[host].kairos__disks_to_format | length > 0 %}
+{% set keyed_users = (common__unix_users + hostvars[host].common__host_unix_users | default([]))
+     | selectattr('authorized_keys', 'defined') | list %}
+{% set disks_to_format = hostvars[host].kairos__disks_to_format | default([]) %}
+{% if disks_to_format | length > 0 or keyed_users | length > 0 %}
   boot:
-{% for disk in hostvars[host].kairos__disks_to_format %}
+{% endif %}
+{% if disks_to_format | length > 0 %}
+{% for disk in disks_to_format %}
 {% if 'nvme' in disk %}
 {% set partition_path = "%sp1" % disk %}
 {% else %}
@@ -144,6 +158,27 @@ stages:
         - mkdir -p /usr/local/disk{{ loop.index0 }}/longhorn
 {% endfor %}
 {% endif %}
+{# yip adds an `ssh_authorized_keys` entry, and it never removes one.  A key
+   that leaves the list stays on the host.  This step writes the whole file on
+   each boot. #}
+{% for user in keyed_users %}
+  {% set group = (common__unix_groups + hostvars[host].common__host_unix_groups | default([])) | selectattr('name', 'equalto', user.name) | first | default(none) %}
+    - name: Write the authorized_keys file of {{ user.name }}
+      directories:
+        - path: /home/{{ user.name }}/.ssh
+          permissions: 0700
+          owner: {{ user.uid }}
+          group: {{ group.gid if group is not none else user.uid }}
+      files:
+        - path: /home/{{ user.name }}/.ssh/authorized_keys
+          permissions: 0600
+          owner: {{ user.uid }}
+          group: {{ group.gid if group is not none else user.uid }}
+          content: |
+{% for key in user.authorized_keys %}
+            {{ key }}
+{% endfor %}
+{% endfor %}
   initramfs:
     - name: Set inotify max values
       sysctl:
