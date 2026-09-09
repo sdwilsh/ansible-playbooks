@@ -6,7 +6,7 @@ metadata:
 spec:
   template:
     spec:
-      # Only run on things than can handle AV1.
+      # Only run on things that can handle AV1.
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -15,12 +15,24 @@ spec:
                   - key: hardware.hogs.tswn.us/gpu
                     operator: Exists
       containers:
-        - name: jellyfin
+        - env:
+            # Mesa keeps its shader cache here.  It also keeps the built-in
+            # shaders of the Vulkan driver here.  The default place is
+            # `/cache`, which is an `emptyDir`.  A move to a different node
+            # empties it.  The first playback after a move must then build
+            # every shader again.  That start is slow, and the client stops
+            # before the first segment is ready.
+            - name: MESA_SHADER_CACHE_DIR
+              value: /shader-cache
+          name: jellyfin
           resources:
             limits:
               devic.es/render: 1
             requests:
               devic.es/render: 1
+          volumeMounts:
+            - mountPath: /shader-cache
+              name: jellyfin-shader-cache
       securityContext:
         # The render node belongs to the `render` group on the host.  These
         # are the group IDs on Fedora, which each node runs.  The pod runs

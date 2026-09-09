@@ -22,6 +22,10 @@ patches:
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
+  - path: patches/add_jellyfin_shader_cache_volume.yml
+    target:
+      kind: StatefulSet
+      name: jellyfin-statefulset
   - path: patches/add_jellyfin_volumes.yml
     target:
       kind: StatefulSet

@@ -1,0 +1,15 @@
+---
+- op: add
+  path: /spec/volumeClaimTemplates/-
+  value:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: jellyfin-shader-cache
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+      storageClassName: longhorn-ephemeral
