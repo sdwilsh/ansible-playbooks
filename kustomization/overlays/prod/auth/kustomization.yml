@@ -60,6 +60,10 @@ patches:
     target:
       kind: Deployment
       name: lldap-deployment
+  - path: patches/lldap/add_proton_bridge_client_label.yml
+    target:
+      kind: Deployment
+      name: lldap-deployment
   - path: patches/lldap/add_smtp.yml
     target:
       kind: Deployment
