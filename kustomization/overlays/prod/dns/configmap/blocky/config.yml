@@ -146,6 +146,7 @@ customDNS:
     argocd-mcp.hogs IN CNAME traefik.hogs
     atuin IN CNAME traefik.hogs
     auth IN CNAME traefik.hogs
+    bifrost.hogs IN CNAME traefik.hogs
     cloud IN CNAME traefik.hogs
     code IN CNAME traefik.hogs
     ephemeral-container-registry.hogs IN CNAME traefik.hogs

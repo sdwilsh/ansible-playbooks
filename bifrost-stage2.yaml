@@ -1,0 +1,620 @@
+apiVersion: v1
+data:
+  config.json: "{\n  \"$schema\": \"https://www.getbifrost.ai/schema\",\n  \"client\"\
+    : {\n    \"allowed_origins\": [\n      \"https://bifrost.hogs.tswn.us\"\n    ],\n\
+    \    \"drop_excess_requests\": true,\n    \"enforce_auth_on_inference\": true,\n\
+    \    \"initial_pool_size\": 10,\n    \"log_retention_days\": 90,\n    \"max_request_body_size_mb\"\
+    : 32,\n    \"mcp_disable_auto_tool_inject\": true,\n    \"whitelisted_routes\"\
+    : [\n      \"/metrics\"\n    ]\n  },\n  \"config_store\": {\n    \"config\": {\n\
+    \      \"db_name\": \"env.PG_DBNAME\",\n      \"host\": \"env.PG_HOST\",\n   \
+    \   \"max_idle_conns\": 2,\n      \"max_open_conns\": 5,\n      \"password\":\
+    \ \"env.PG_PASSWORD\",\n      \"port\": \"5432\",\n      \"ssl_mode\": \"require\"\
+    ,\n      \"user\": \"env.PG_USER\"\n    },\n    \"enabled\": true,\n    \"type\"\
+    : \"postgres\"\n  },\n  \"encryption_key\": \"env.BIFROST_ENCRYPTION_KEY\",\n\
+    \  \"governance\": {\n    \"auth_config\": {\n      \"admin_password\": \"env.BIFROST_ADMIN_PASSWORD\"\
+    ,\n      \"admin_username\": \"env.BIFROST_ADMIN_USERNAME\",\n      \"is_enabled\"\
+    : true\n    },\n    \"budgets\": [\n      {\n        \"id\": \"budget-triage\"\
+    ,\n        \"max_limit\": 10.0,\n        \"reset_duration\": \"1M\",\n       \
+    \ \"virtual_key_id\": \"vk-triage\"\n      },\n      {\n        \"id\": \"budget-security-review\"\
+    ,\n        \"max_limit\": 10.0,\n        \"reset_duration\": \"1M\",\n       \
+    \ \"virtual_key_id\": \"vk-security-review\"\n      },\n      {\n        \"id\"\
+    : \"budget-interactive\",\n        \"max_limit\": 50.0,\n        \"reset_duration\"\
+    : \"1M\",\n        \"virtual_key_id\": \"vk-interactive\"\n      }\n    ],\n \
+    \   \"rate_limits\": [\n      {\n        \"id\": \"rl-interactive\",\n       \
+    \ \"request_max_limit\": 2000,\n        \"request_reset_duration\": \"1h\",\n\
+    \        \"token_max_limit\": 20000000,\n        \"token_reset_duration\": \"\
+    1h\"\n      },\n      {\n        \"id\": \"rl-security-review\",\n        \"request_max_limit\"\
+    : 500,\n        \"request_reset_duration\": \"1h\",\n        \"token_max_limit\"\
+    : 5000000,\n        \"token_reset_duration\": \"1h\"\n      },\n      {\n    \
+    \    \"id\": \"rl-triage\",\n        \"request_max_limit\": 500,\n        \"request_reset_duration\"\
+    : \"1h\",\n        \"token_max_limit\": 5000000,\n        \"token_reset_duration\"\
+    : \"1h\"\n      }\n    ],\n    \"virtual_keys\": [\n      {\n        \"calendar_aligned\"\
+    : true,\n        \"id\": \"vk-triage\",\n        \"name\": \"triage\",\n     \
+    \   \"rate_limit_id\": \"rl-triage\"\n      },\n      {\n        \"calendar_aligned\"\
+    : true,\n        \"id\": \"vk-security-review\",\n        \"name\": \"security-review\"\
+    ,\n        \"rate_limit_id\": \"rl-security-review\"\n      },\n      {\n    \
+    \    \"calendar_aligned\": true,\n        \"id\": \"vk-interactive\",\n      \
+    \  \"name\": \"interactive\",\n        \"rate_limit_id\": \"rl-interactive\"\n\
+    \      }\n    ]\n  },\n  \"logs_store\": {\n    \"config\": {\n      \"db_name\"\
+    : \"env.PG_DBNAME\",\n      \"host\": \"env.PG_HOST\",\n      \"matview_refresh_interval\"\
+    : \"5m\",\n      \"max_idle_conns\": 3,\n      \"max_open_conns\": 10,\n     \
+    \ \"password\": \"env.PG_PASSWORD\",\n      \"port\": \"5432\",\n      \"ssl_mode\"\
+    : \"require\",\n      \"user\": \"env.PG_USER\"\n    },\n    \"enabled\": true,\n\
+    \    \"type\": \"postgres\"\n  },\n  \"mcp\": {\n    \"client_configs\": []\n\
+    \  },\n  \"source_of_truth\": \"config.json\"\n}\n"
+kind: ConfigMap
+metadata:
+  name: bifrost-config-configmap-dm4dk67988
+  namespace: bifrost
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bifrost-svc
+  namespace: bifrost
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: web
+  selector:
+    app.kubernetes.io/name: bifrost
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bifrost-deployment
+  namespace: bifrost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bifrost
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: APP_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: APP_PORT
+          value: '8080'
+        - name: BIFROST_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: BIFROST_ADMIN_PASSWORD
+              name: bifrost-secret
+        - name: BIFROST_ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: BIFROST_ADMIN_USERNAME
+              name: bifrost-secret
+        - name: BIFROST_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              key: BIFROST_ENCRYPTION_KEY
+              name: bifrost-secret
+        - name: LOG_LEVEL
+          value: info
+        - name: LOG_STYLE
+          value: json
+        - name: PG_DBNAME
+          valueFrom:
+            secretKeyRef:
+              key: dbname
+              name: bifrost-pg-cluster-app
+        - name: PG_HOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name: bifrost-pg-cluster-app
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: bifrost-pg-cluster-app
+        - name: PG_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: bifrost-pg-cluster-app
+        - name: TZ
+          value: America/Los_Angeles
+        image: docker.io/maximhq/bifrost:v2.1.0@sha256:653b74a8410e5757375aa9a25ce21f90f4591fc11d65879451939b6172ce80ed
+        name: bifrost
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: web
+          periodSeconds: 5
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        startupProbe:
+          failureThreshold: 60
+          httpGet:
+            path: /health
+            port: web
+          periodSeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /app/data
+          name: app-data
+        - mountPath: /app/data/config.json
+          name: config
+          readOnly: true
+          subPath: config.json
+        - mountPath: /tmp
+          name: tmp
+      enableServiceLinks: false
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}...";
+          sleep 10; done;
+        env:
+        - name: PGDATABASE
+          valueFrom:
+            secretKeyRef:
+              key: dbname
+              name: bifrost-pg-cluster-app
+        - name: PGHOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name: bifrost-pg-cluster-app
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: bifrost-pg-cluster-app
+        - name: PGSSLMODE
+          value: require
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: bifrost-pg-cluster-app
+        image: postgres:18@sha256:4aabea78cf39b90e834caf3af7d602a18565f6fe2508705c8d01aa63245c2e20
+        name: wait-for-bifrost-pg-is-ready
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+          seccompProfile:
+            type: RuntimeDefault
+      priorityClassName: application-infra
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - emptyDir: {}
+        name: app-data
+      - configMap:
+          name: bifrost-config-configmap-dm4dk67988
+        name: config
+      - emptyDir: {}
+        name: tmp
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: bifrost-pg-cluster-podmonitor
+  namespace: bifrost
+spec:
+  podMetricsEndpoints:
+  - port: metrics
+    scheme: https
+    tlsConfig:
+      ca:
+        secret:
+          key: ca.crt
+          name: bifrost-pg-cluster-ca
+      serverName: bifrost-pg-cluster-rw
+  selector:
+    matchLabels:
+      cnpg.io/cluster: bifrost-pg-cluster
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: bifrost-podmonitor
+  namespace: bifrost
+spec:
+  podMetricsEndpoints:
+  - path: /metrics
+    port: web
+    scheme: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: bifrost-rules
+  namespace: bifrost
+spec:
+  groups:
+  - interval: 1m
+    name: bifrost
+    rules:
+    - alert: bifrost-down
+      annotations:
+        description: The model gateway has no available replica for more than 5 minutes!  Every
+          unattended agent run that needs a model fails until it returns.
+      expr: kube_deployment_status_replicas_available{exported_namespace="bifrost"}
+        == 0
+      for: 5m
+      labels:
+        severity: page
+    - alert: bifrost-out-of-memory
+      annotations:
+        description: '{{ $labels.container }} in {{ $labels.namespace }} went above
+          its memory limit in the last hour!'
+      expr: increase(container_oom_events_total{namespace="bifrost", container!=""}[1h])
+        > 0
+      for: 5m
+      labels:
+        severity: warning
+    - alert: bifrost-log-store-large
+      annotations:
+        description: The bifrost database holds {{ $value | humanize1024 }}B.
+      expr: max by (datname) (cnpg_pg_database_size_bytes{datname="bifrost"}) > 20
+        * 1024 ^ 3
+      for: 1h
+      labels:
+        severity: warning
+    - alert: bifrost-spend-rate-high
+      annotations:
+        description: The {{ $labels.virtual_key_name }} virtual key spent ${{ $value
+          | printf "%.2f" }} in the last hour.
+      expr: sum by (virtual_key_name) (increase(bifrost_cost_total[1h])) > 1
+      for: 5m
+      labels:
+        severity: warning
+    - alert: bifrost-upstream-errors-high
+      annotations:
+        description: More than a quarter of the calls to {{ $labels.provider }} failed
+          in the last 15 minutes.
+      expr: "sum by (provider) (rate(bifrost_error_requests_total[15m]))\n  / sum\
+        \ by (provider) (rate(bifrost_upstream_requests_total[15m])) > 0.25\nand sum\
+        \ by (provider) (increase(bifrost_upstream_requests_total[15m])) > 10"
+      for: 15m
+      labels:
+        severity: warning
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-mcp-clients-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.priority: '20'
+    traefik.ingress.kubernetes.io/router.tls: 'true'
+  name: bifrost-api-ingress
+  namespace: bifrost
+spec:
+  rules:
+  - host: bifrost.hogs.tswn.us
+    http:
+      paths:
+      - backend:
+          service:
+            name: bifrost-svc
+            port:
+              name: web
+        path: /anthropic
+        pathType: Prefix
+      - backend:
+          service:
+            name: bifrost-svc
+            port:
+              name: web
+        path: /v1
+        pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: auth-forwardauth-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.priority: '10'
+    traefik.ingress.kubernetes.io/router.tls: 'true'
+  name: bifrost-ingress
+  namespace: bifrost
+spec:
+  rules:
+  - host: bifrost.hogs.tswn.us
+    http:
+      paths:
+      - backend:
+          service:
+            name: bifrost-svc
+            port:
+              name: web
+        path: /
+        pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cluster-to-garage-networkpolicy
+  namespace: bifrost
+spec:
+  egress:
+  - ports:
+    - port: 3900
+    to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: garage
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: garage
+    - ipBlock:
+        cidr: 10.11.0.101/32
+    - ipBlock:
+        cidr: 10.11.0.104/32
+    - ipBlock:
+        cidr: 10.11.0.105/32
+    - ipBlock:
+        cidr: 10.11.0.106/32
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-cnpg-operator-networkpolicy
+  namespace: bifrost
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: cnpg-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: cloudnative-pg
+    ports:
+    - port: 5432
+    - port: 8000
+  - from:
+    - ipBlock:
+        cidr: 172.16.0.0/16
+    - ipBlock:
+        cidr: 10.11.0.101/32
+    - ipBlock:
+        cidr: 10.11.0.104/32
+    - ipBlock:
+        cidr: 10.11.0.105/32
+    - ipBlock:
+        cidr: 10.11.0.106/32
+    ports:
+    - port: 8000
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-prometheus-networkpolicy
+  namespace: bifrost
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: prometheus
+    ports:
+    - port: web
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-prometheus-to-cnpg-cluster-networkpolicy
+  namespace: bifrost
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: prometheus
+    ports:
+    - port: metrics
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg
+      cnpg.io/podRole: instance
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-traefik-networkpolicy
+  namespace: bifrost
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: traefik
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: traefik
+    ports:
+    - port: web
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-api-server-networkpolicy
+  namespace: bifrost
+spec:
+  egress:
+  - ports:
+    - port: 443
+    to:
+    - ipBlock:
+        cidr: 172.17.0.1/32
+  - ports:
+    - port: 6443
+    to:
+    - ipBlock:
+        cidr: 10.11.0.101/32
+  podSelector:
+    matchExpressions:
+    - key: app.kubernetes.io/component
+      operator: In
+      values:
+      - database
+      - wait-for-backup
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-coredns-networkpolicy
+  namespace: bifrost
+spec:
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+    to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+  podSelector: {}
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-internet-networkpolicy
+  namespace: bifrost
+spec:
+  egress:
+  - ports:
+    - port: 80
+    - port: 443
+    to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8
+        - 169.254.0.0/16
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-within-this-namespace-networkpolicy
+  namespace: bifrost
+spec:
+  egress:
+  - to:
+    - podSelector: {}
+  ingress:
+  - from:
+    - podSelector: {}
+  podSelector:
+    matchLabels: null
+  policyTypes:
+  - Egress
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-networkpolicy
+  namespace: bifrost
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  - Ingress
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: bifrost-nightly-scheduledbackup
+  namespace: bifrost
+spec:
+  backupOwnerReference: cluster
+  cluster:
+    name: bifrost-pg-cluster
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  schedule: 0 15 7 * * *

@@ -11,6 +11,7 @@ resources:
   - application/atuin.yml
   - application/auth.yml
   - application/aventertainment.yml
+  - application/bifrost.yml
   - application/cert-manager.yml
   - application/cnpg-system.yml
   - application/crowdsec.yml

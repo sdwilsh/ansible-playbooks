@@ -1,0 +1,172 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bifrost-deployment
+spec:
+  # Do not increase this number.  Bifrost keeps the spend of each virtual
+  # key in memory, and it writes that value to the database every 10
+  # seconds.  Only the enterprise plan supports syncing across instances.
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bifrost
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: APP_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: APP_PORT
+              value: "8080"
+            - name: BIFROST_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: BIFROST_ADMIN_PASSWORD
+                  name: bifrost-secret
+            - name: BIFROST_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: BIFROST_ADMIN_USERNAME
+                  name: bifrost-secret
+            - name: BIFROST_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: BIFROST_ENCRYPTION_KEY
+                  name: bifrost-secret
+            - name: LOG_LEVEL
+              value: info
+            - name: LOG_STYLE
+              value: json
+            - name: PG_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: bifrost-pg-cluster-app
+            - name: PG_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: bifrost-pg-cluster-app
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: bifrost-pg-cluster-app
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: bifrost-pg-cluster-app
+            - name: TZ
+              value: America/Los_Angeles
+          image: docker.io/maximhq/bifrost
+          name: bifrost
+          ports:
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: web
+            periodSeconds: 5
+            timeoutSeconds: 3
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000 # bifrost
+            seccompProfile:
+              type: RuntimeDefault
+          startupProbe:
+            # Bifrost runs the migrations of both stores at start, and it
+            # makes indexes on the `logs` table.  This takes minutes when
+            # the table is large.  The readiness probe starts only after
+            # this probe is successful.
+            failureThreshold: 60
+            httpGet:
+              path: /health
+              port: web
+            periodSeconds: 10
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /app/data
+              name: app-data
+            - mountPath: /app/data/config.json
+              name: config
+              readOnly: true
+              subPath: config.json
+            - mountPath: /tmp
+              name: tmp
+      enableServiceLinks: false
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - until pg_isready; do echo "waiting for database ${PGHOST}:${PGPORT}/${PGDATABASE}..."; sleep 10; done;
+          env:
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: bifrost-pg-cluster-app
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: bifrost-pg-cluster-app
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: bifrost-pg-cluster-app
+            - name: PGSSLMODE
+              value: require
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: bifrost-pg-cluster-app
+          image: postgres
+          name: wait-for-bifrost-pg-is-ready
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      priorityClassName: application-infra
+      securityContext:
+        fsGroup: 1000 # bifrost
+      volumes:
+        # Nothing should be stored here because data is stored PostgreSQL.
+        - emptyDir: {}
+          name: app-data
+        - configMap:
+            name: bifrost-config-configmap
+          name: config
+        - emptyDir: {}
+          name: tmp

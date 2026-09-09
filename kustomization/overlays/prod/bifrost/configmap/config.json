@@ -1,0 +1,121 @@
+{
+  "$schema": "https://www.getbifrost.ai/schema",
+  "client": {
+    "allowed_origins": [
+      "https://bifrost.hogs.tswn.us"
+    ],
+    "drop_excess_requests": true,
+    "enforce_auth_on_inference": true,
+    "initial_pool_size": 10,
+    "log_retention_days": 90,
+    "max_request_body_size_mb": 32,
+    "mcp_disable_auto_tool_inject": true,
+    "whitelisted_routes": [
+      "/metrics"
+    ]
+  },
+  "config_store": {
+    "config": {
+      "db_name": "env.PG_DBNAME",
+      "host": "env.PG_HOST",
+      "max_idle_conns": 2,
+      "max_open_conns": 5,
+      "password": "env.PG_PASSWORD",
+      "port": "5432",
+      "ssl_mode": "require",
+      "user": "env.PG_USER"
+    },
+    "enabled": true,
+    "type": "postgres"
+  },
+  "encryption_key": "env.BIFROST_ENCRYPTION_KEY",
+  "governance": {
+    "auth_config": {
+      "admin_password": "env.BIFROST_ADMIN_PASSWORD",
+      "admin_username": "env.BIFROST_ADMIN_USERNAME",
+      "is_enabled": true
+    },
+    "budgets": [
+      {
+        "id": "budget-triage",
+        "max_limit": 10.0,
+        "reset_duration": "1M",
+        "virtual_key_id": "vk-triage"
+      },
+      {
+        "id": "budget-security-review",
+        "max_limit": 10.0,
+        "reset_duration": "1M",
+        "virtual_key_id": "vk-security-review"
+      },
+      {
+        "id": "budget-interactive",
+        "max_limit": 50.0,
+        "reset_duration": "1M",
+        "virtual_key_id": "vk-interactive"
+      }
+    ],
+    "rate_limits": [
+      {
+        "id": "rl-interactive",
+        "request_max_limit": 2000,
+        "request_reset_duration": "1h",
+        "token_max_limit": 20000000,
+        "token_reset_duration": "1h"
+      },
+      {
+        "id": "rl-security-review",
+        "request_max_limit": 500,
+        "request_reset_duration": "1h",
+        "token_max_limit": 5000000,
+        "token_reset_duration": "1h"
+      },
+      {
+        "id": "rl-triage",
+        "request_max_limit": 500,
+        "request_reset_duration": "1h",
+        "token_max_limit": 5000000,
+        "token_reset_duration": "1h"
+      }
+    ],
+    "virtual_keys": [
+      {
+        "calendar_aligned": true,
+        "id": "vk-triage",
+        "name": "triage",
+        "rate_limit_id": "rl-triage"
+      },
+      {
+        "calendar_aligned": true,
+        "id": "vk-security-review",
+        "name": "security-review",
+        "rate_limit_id": "rl-security-review"
+      },
+      {
+        "calendar_aligned": true,
+        "id": "vk-interactive",
+        "name": "interactive",
+        "rate_limit_id": "rl-interactive"
+      }
+    ]
+  },
+  "logs_store": {
+    "config": {
+      "db_name": "env.PG_DBNAME",
+      "host": "env.PG_HOST",
+      "matview_refresh_interval": "5m",
+      "max_idle_conns": 3,
+      "max_open_conns": 10,
+      "password": "env.PG_PASSWORD",
+      "port": "5432",
+      "ssl_mode": "require",
+      "user": "env.PG_USER"
+    },
+    "enabled": true,
+    "type": "postgres"
+  },
+  "mcp": {
+    "client_configs": []
+  },
+  "source_of_truth": "config.json"
+}

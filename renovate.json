@@ -447,6 +447,26 @@
       ]
     },
     {
+      "description": "The gateway holds every provider credential, so a release waits.",
+      "groupName": "bifrost",
+      "matchPackageNames": [
+        "docker.io/maximhq/bifrost"
+      ],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "groupName": "postgres-bifrost",
+      "matchFileNames": [
+        "kustomization/overlays/prod/bifrost/**"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/cloudnative-pg/postgresql"
+      ],
+      "schedule": [
+        "after 4pm"
+      ]
+    },
+    {
       "groupName": "postgres-crowdsec",
       "matchFileNames": [
         "kustomization/overlays/prod/crowdsec/**"

@@ -1,0 +1,51 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: bifrost-pg-cluster
+spec:
+  backup:
+    target: primary
+  bootstrap:
+    initdb:
+      builtinLocale: C.UTF-8
+      database: bifrost
+      dataChecksums: true
+      encoding: UTF8
+      localeProvider: builtin
+      owner: bifrost
+  env:
+    - name: TZ
+      value: America/Los_Angeles
+  imageName: ghcr.io/cloudnative-pg/postgresql:18@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices:
+        - r
+        - ro
+  monitoring:
+    tls:
+      enabled: true
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters:
+        barmanObjectName: garage-objectstore
+  postgresql:
+    parameters:
+      max_slot_wal_keep_size: 4GB
+    synchronous:
+      failoverQuorum: true
+      method: any
+      number: 1
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: application-infra
+  storage:
+    size: 32Gi
+    storageClass: cnpg-data-encrypted-storage
+  walStorage:
+    size: 16Gi
+    storageClass: cnpg-wal-encrypted-storage

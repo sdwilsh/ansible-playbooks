@@ -1,0 +1,48 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: bifrost-rules
+spec:
+  groups:
+    - name: bifrost
+      interval: 1m
+      rules:
+        - alert: bifrost-down
+          annotations:
+            description: "The model gateway has no available replica for more than 5 minutes!  Every unattended agent run that needs a model fails until it returns."
+          expr: kube_deployment_status_replicas_available{exported_namespace="bifrost"} == 0
+          for: 5m
+          labels:
+            severity: page
+        - alert: bifrost-out-of-memory
+          annotations:
+            description: "{{ $labels.container }} in {{ $labels.namespace }} went above its memory limit in the last hour!"
+          expr: increase(container_oom_events_total{namespace="bifrost", container!=""}[1h]) > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: bifrost-log-store-large
+          annotations:
+            description: "The bifrost database holds {{ $value | humanize1024 }}B."
+          expr: max by (datname) (cnpg_pg_database_size_bytes{datname="bifrost"}) > 20 * 1024 ^ 3
+          for: 1h
+          labels:
+            severity: warning
+        - alert: bifrost-spend-rate-high
+          annotations:
+            description: "The {{ $labels.virtual_key_name }} virtual key spent ${{ $value | printf \"%.2f\" }} in the last hour."
+          expr: sum by (virtual_key_name) (increase(bifrost_cost_total[1h])) > 1
+          for: 5m
+          labels:
+            severity: warning
+        - alert: bifrost-upstream-errors-high
+          annotations:
+            description: "More than a quarter of the calls to {{ $labels.provider }} failed in the last 15 minutes."
+          expr: |-
+            sum by (provider) (rate(bifrost_error_requests_total[15m]))
+              / sum by (provider) (rate(bifrost_upstream_requests_total[15m])) > 0.25
+            and sum by (provider) (increase(bifrost_upstream_requests_total[15m])) > 10
+          for: 15m
+          labels:
+            severity: warning

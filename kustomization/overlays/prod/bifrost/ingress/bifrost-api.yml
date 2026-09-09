@@ -1,0 +1,31 @@
+---
+# This is for agents to communicate with Bifrost.  It has a higher priority
+# than the other `Ingress`, so Authelia covers every other path by default.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-mcp-clients-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.priority: "20"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: bifrost-api-ingress
+spec:
+  rules:
+    - host: bifrost.hogs.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: bifrost-svc
+                port:
+                  name: web
+            path: /anthropic
+            pathType: Prefix
+          - backend:
+              service:
+                name: bifrost-svc
+                port:
+                  name: web
+            path: /v1
+            pathType: Prefix

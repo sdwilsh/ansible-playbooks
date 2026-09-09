@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bifrost-svc
+spec:
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: web
+  selector:
+    app.kubernetes.io/name: bifrost
+  type: ClusterIP

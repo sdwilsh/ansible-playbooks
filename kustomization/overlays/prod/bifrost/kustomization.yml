@@ -1,0 +1,62 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/cnpg-backup
+  - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+configMapGenerator:
+  # `providers` are not declared so they can live in the database and not be
+  # prune because the `source_of_truth` is this config file.
+  - name: bifrost-config-configmap
+    files:
+      - configmap/config.json
+images:
+  - name: docker.io/bitnami/kubectl
+    newTag: latest@sha256:b29d8c1665b70817259ceecaea16ab27aab6368b48daf485d19436c809067492
+  - name: docker.io/maximhq/bifrost
+    newTag: v2.1.0@sha256:653b74a8410e5757375aa9a25ce21f90f4591fc11d65879451939b6172ce80ed
+  - name: postgres
+    newTag: 18@sha256:4aabea78cf39b90e834caf3af7d602a18565f6fe2508705c8d01aa63245c2e20
+namespace: bifrost
+patches:
+  - path: patches/cnpg/set_backup_path.yml
+    target:
+      kind: ObjectStore
+      name: garage-objectstore
+replacements:
+  - source:
+      fieldPath: spec.selector
+      kind: Deployment
+      name: bifrost-deployment
+    targets:
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-from-traefik-networkpolicy
+      - fieldPaths:
+          - spec.podSelector
+        select:
+          kind: NetworkPolicy
+          name: allow-to-internet-networkpolicy
+resources:
+  - namespace.yml
+  - cnpg/backup.yml
+  - cnpg/cluster.yml
+  - cnpg/podmonitor.yml
+  - cnpg/scheduledbackup.yml
+  - deployment.yml
+  - ingress/bifrost-api.yml
+  - ingress/bifrost.yml
+  - networkpolicy/allow-from-prometheus.yml
+  - podmonitor.yml
+  - prometheusrule.yml
+  - service.yml
