@@ -4,6 +4,7 @@ kind: Namespace
 metadata:
   labels:
     hogs.tswn.us/lldap-client: "true"
+    hogs.tswn.us/traefik-client: "true"
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/enforce-version: latest
     pod-security.kubernetes.io/warn: restricted

@@ -4,4 +4,5 @@ kind: Namespace
 metadata:
   labels:
     hogs.tswn.us/garage-client: "true"
+    hogs.tswn.us/traefik-client: "true"
   name: this-is-ignored-but-is-required

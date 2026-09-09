@@ -1,0 +1,6 @@
+---
+# Manyfold keeps the model files in a Garage bucket.  It reads that bucket at
+# `https://s3.tswn.us`, which the Garage `Ingress` serves through Traefik!
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1traefik-client
+  value: "true"

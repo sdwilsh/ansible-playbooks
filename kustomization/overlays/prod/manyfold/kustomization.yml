@@ -27,6 +27,10 @@ images:
     newTag: 0.149.0@sha256:047d4a82fe41e12aff3ab14f9f7f2ead0553a0d768d8a3e8d56e5004bbd758ef
 namespace: manyfold
 patches:
+  - path: patches/add_traefik_client_label.yml
+    target:
+      kind: Deployment
+      name: manyfold
   - path: patches/harden_deployment.yml
     target:
       kind: Deployment
@@ -70,11 +74,6 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-to-internet-networkpolicy
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

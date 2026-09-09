@@ -34,6 +34,10 @@ patches:
     target:
       kind: Deployment
       name: forgejo
+  - path: patches/forgejo/add_traefik_client_label.yml
+    target:
+      kind: Deployment
+      name: forgejo
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=forgejo].ports.[name=http].name
@@ -55,11 +59,6 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

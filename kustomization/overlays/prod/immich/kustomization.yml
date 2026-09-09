@@ -34,6 +34,10 @@ patches:
     target:
       kind: Deployment
       name: immich-server
+  - path: patches/add_traefik_client_label.yml
+    target:
+      kind: Deployment
+      name: immich-server
   - path: patches/restrict_machine-learning.yml
     target:
       kind: Deployment
@@ -67,11 +71,6 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
