@@ -28,7 +28,11 @@ spec:
               name: ssdp
           resources:
             limits:
-              cpu: 2000m
+              # A transcode needs the CPU most at the start.  It builds the
+              # GPU shaders, and it reads and parses the file.  Two cores
+              # make that start too slow, and the client stops before the
+              # first segment is ready.
+              cpu: 8000m
               memory: 8Gi
             requests:
               cpu: 500m
