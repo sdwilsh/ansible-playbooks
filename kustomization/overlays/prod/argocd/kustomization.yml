@@ -13,6 +13,10 @@ patches:
     path: patches/add_oidc_config.yml
   - target:
       kind: ConfigMap
+      name: argocd-cm
+    path: patches/add_mcp_account.yml
+  - target:
+      kind: ConfigMap
       name: argocd-rbac-cm
     path: patches/add_oidc_policy.yml
 resources:

@@ -4,6 +4,4 @@ kind: ConfigMap
 metadata:
   name: this-is-ignored-but-is-required
 data:
-  policy.csv: |
-    g, argocd-admin, role:admin
-    g, mcp, role:readonly
+  accounts.mcp: apiKey
