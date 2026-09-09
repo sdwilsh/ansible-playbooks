@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+configMapGenerator:
+  - name: argocd-mcp-configmap
+    literals:
+      # `argocd-cmd-params-cm` sets `server.insecure: "true"`, so the service
+      # serves plain HTTP.  The server needs no TLS settings.
+      - ARGOCD_BASE_URL=http://argocd-server.argocd.svc.cluster.local
+images:
+  - name: ghcr.io/argoproj-labs/mcp-for-argocd
+    newTag: v0.9.0@sha256:dffc6c719d8635be2d5f2c8ad1c0178540325da4b40da0b373307e12b4c48f86
+namespace: argocd-mcp
+resources:
+  - namespace.yml
+  - deployment.yml
+  - ingress.yml
+  - networkpolicy/allow-to-argocd.yml
+  - service.yml
