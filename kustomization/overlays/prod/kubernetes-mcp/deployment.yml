@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-mcp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kubernetes-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kubernetes-mcp
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - args:
+            # `--read-only` keeps only the tools that report
+            # `readOnlyHint: true`.  It removes `pods_exec`, `pods_run`,
+            # `pods_delete`, `resources_create_or_update`, `resources_delete`
+            # and `resources_scale`.
+            - --read-only
+            # This flag removes the tools that report `destructiveHint: true`.
+            # `--read-only` already removes all of them.  A later version can
+            # mark a read tool as destructive.  This flag then removes it.
+            - --disable-destructive
+            # The cluster has one context.  This flag makes the server ignore
+            # any other context.  It removes no tool today.
+            - --disable-multi-cluster
+            # The `config` toolset shows the kubeconfig.  The server reads the
+            # cluster from inside a pod, so that toolset has no use here.
+            - --toolsets
+            - core
+            - --port
+            - "8080"
+            - --bind-address
+            - $(POD_IP)
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: ghcr.io/containers/kubernetes-mcp-server
+          livenessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: web
+            timeoutSeconds: 5
+          name: kubernetes-mcp
+          ports:
+            - containerPort: 8080
+              name: web
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: web
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      enableServiceLinks: false
+      serviceAccountName: kubernetes-mcp

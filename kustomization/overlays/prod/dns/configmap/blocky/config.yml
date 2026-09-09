@@ -158,6 +158,7 @@ customDNS:
     imap.hogs IN CNAME traefik.hogs
     immich IN CNAME traefik.hogs
     jellyfin IN CNAME traefik.hogs
+    kubernetes-mcp.hogs IN CNAME traefik.hogs
     loki.hogs IN CNAME traefik.hogs
     longhorn.hogs IN CNAME traefik.hogs
     manyfold IN CNAME traefik.hogs

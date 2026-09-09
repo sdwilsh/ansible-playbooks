@@ -32,6 +32,7 @@ resources:
   - application/kube-amd-gpu.yml
   - application/kube-system.yml
   - application/kube-vip.yml
+  - application/kubernetes-mcp.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
   - application/monitoring.yml
