@@ -34,6 +34,10 @@ patches:
     target:
       kind: Deployment
       name: authelia-deployment
+  - path: patches/authelia/add_proton_bridge_client_label.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
   # cnpg
   - path: patches/cnpg/set_backup_path.yml
     target:
@@ -64,17 +68,6 @@ patches:
     target:
       kind: NetworkPolicy
       name: allow-from-traefik-networkpolicy
-replacements:
-  - source:
-      fieldPath: spec.selector
-      kind: Deployment
-      name: authelia-deployment
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-proton-bridge-networkpolicy
 resources:
   - namespace.yml
   - certificate/lldap.yml
