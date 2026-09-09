@@ -75,6 +75,11 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
+  - path: patches/loki/add_garage_client_label.yml
+    target:
+      kind: Deployment|StatefulSet
+      labelSelector: app.kubernetes.io/name=loki,app.kubernetes.io/component
+        notin (memcached-chunks-cache,memcached-results-cache)
   - path: patches/loki/drop_secrets_from_role.yml
     target:
       kind: Role
