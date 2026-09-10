@@ -29,22 +29,6 @@
       vars:
         controlplane_hosts: "{{ groups['kairos_controlplane'] }}"
         host: "{{ inventory_hostname }}"
-    # If the config changes, including files that should no longer exist, we want to make sure the new config is what applies.
-    - name: Remove old network files
-      block:
-        - name: Collect all network configuration files
-          ansible.builtin.find:
-            paths: /etc/systemd/network/
-          register: collected_network_files
-        - name: Remove all collected network files
-          ansible.builtin.file:
-            path: "{{ item.path }}"
-            state: absent
-          become: true
-          loop: "{{ collected_network_files.files }}"
-          loop_control:
-            label: "{{ item.path }}"
-      when: config.changed
     - name: Ensure k3s service file is up-to-date
       ansible.builtin.template:
         dest: /etc/systemd/system/k3s.service.d/override.conf
@@ -117,21 +101,27 @@
       when:
         - kairos__extra_cmdline | default([]) | length == 0
         - grubenv_current.stdout | default('') is search('^extra_cmdline=', multiline=True)
-    # The tasks above write files.  Only a reboot applies them.  A run that
-    # writes the files but does not reboot leaves new files on disk and the
-    # old configuration in memory.  `Remove old network files` makes this
-    # state worse, because the `initramfs` stage writes those files again
-    # only at the next boot.
-    #
-    # For this reason the condition below also compares the kernel command
-    # line.  A host that has the files but not the arguments gets a reboot
-    # on the next run.  Without this comparison, the next run finds no
-    # change, and skips the host.
+    # The tasks above write files.  Only a boot applies them.  A run that
+    # writes the files but stops before the reboot because the drain fails
+    # gives no `changed` result on the next run.  That run skips the host.
     - name: Read the active kernel command line
       ansible.builtin.slurp:
         src: /proc/cmdline
       become: true
       register: proc_cmdline
+    - name: Read the boot time
+      ansible.builtin.slurp:
+        src: /proc/stat
+      become: true
+      register: proc_stat
+    - name: Read the times of the files that a boot applies
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      become: true
+      loop:
+        - /oem/90_custom.yaml
+        - "/etc/systemd/system/{{ 'k3s' if k3s_controlplane else 'k3s-agent' }}.service.d/override.conf"
+      register: boot_applied_files
     - name: Note if the host needs to be rebooted
       ansible.builtin.set_fact:
         reboot_required: >-
@@ -139,7 +129,17 @@
              or grubenv_set.changed or grubenv_unset.changed
              or (kairos__extra_cmdline | default([])
                  | difference((proc_cmdline.content | b64decode).split())
-                 | length > 0) }}
+                 | length > 0)
+             or (boot_time | int > 0
+                 and newest_file_time | int > boot_time | int + 300) }}
+      vars:
+        boot_time: >-
+          {{ proc_stat.content | b64decode
+             | regex_search('^btime (\d+)$', '\1', multiline=True)
+             | default(['0'], true) | first }}
+        newest_file_time: >-
+          {{ boot_applied_files.results | selectattr('stat.exists')
+             | map(attribute='stat.mtime') | max | default(0) }}
     - name: Schedule Drain and Reboot
       ansible.builtin.add_host:
         name: "{{ item }}"
@@ -177,6 +177,26 @@
           delegate_to: localhost
           vars:
             pod_selectors: []
+        # The boot writes every file in this directory again, so a file that
+        # the configuration no longer holds stays on disk until a task removes
+        # it.  The removal comes here, between the drain and the reboot,
+        # because only the next boot writes the files again.
+        - name: Collect all network configuration files
+          ansible.builtin.find:
+            file_type: any
+            hidden: true
+            paths: /etc/systemd/network/
+          become: true
+          failed_when: collected_network_files.skipped_paths | default({}) | length > 0
+          register: collected_network_files
+        - name: Remove all collected network files
+          ansible.builtin.file:
+            path: "{{ item.path }}"
+            state: absent
+          become: true
+          loop: "{{ collected_network_files.files }}"
+          loop_control:
+            label: "{{ item.path }}"
         - name: Reboot
           ansible.builtin.reboot:
             pre_reboot_delay: 60 # seconds
