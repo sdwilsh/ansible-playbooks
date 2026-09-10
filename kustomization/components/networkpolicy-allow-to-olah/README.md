@@ -1,17 +1,18 @@
 # Allow To Olah Component
 
-This component gives your pods a path to the [olah](https://github.com/vtuber-plan/olah) cache in
+This component gives your `Pod`s a path to the [olah](https://github.com/vtuber-plan/olah) cache in
 the `olah` namespace.  olah is a cache for [Hugging Face](https://huggingface.co).  olah keeps a
 model on disk after one workload downloads it.  The next workload reads that model from the disk.
 
-This component opens the egress side, in your namespace.  olah has an ingress rule that must admit
-your pods as well.  That rule is `allow-to-olah-from-consumers-networkpolicy`, in
-`kustomization/overlays/prod/olah/networkpolicy/`.  The rule looks for a label on your namespace,
-and for the same label on each pod.  The NetworkPolicy drops the connection when one of the two
+This component opens the egress side, in your `Namespace`.  olah has an ingress rule that must
+admit your `Pod`s as well.  That rule is `allow-to-olah-from-consumers-networkpolicy`, in
+`kustomization/overlays/prod/olah/networkpolicy/`.  The rule looks for a label on your
+`Namespace`, and for the same label on each `Pod`.  The `NetworkPolicy` drops the connection when
+one of the two
 labels is absent.  olah itself accepts every request that arrives, so the two rules are the only
 control.
 
-Your namespace also needs the `networkpolicy-allow-to-coredns` component.  Without it the client
+Your `Namespace` also needs the `networkpolicy-allow-to-coredns` component.  Without it the client
 cannot resolve the name of the olah `Service`.
 
 # Example Usage
@@ -44,11 +45,12 @@ metadata:
 
 ### Pods
 
-Put the same label on each pod that reads the cache.  The NetworkPolicy drops a connection from a
-pod that does not have the label, and the label on the namespace does not change that result.
+Put the same label on each `Pod` that reads the cache.  The `NetworkPolicy` drops a connection from
+a `Pod` that does not have the label, and the label on the `Namespace` does not change that
+result.
 
-The label does two things.  The ingress rule in the olah namespace looks for it.  The egress rule
-in this component uses it to select the pods that get the path out.
+The label does two things.  The ingress rule in the `olah` namespace looks for it.  The egress
+rule in this component uses it to select the `Pod`s that get the path out.
 
 ```yaml
 ---
