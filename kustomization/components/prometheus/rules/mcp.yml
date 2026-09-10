@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: mcp-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: mcp
+      interval: 1m
+      rules:
+        - alert: mcp-server-unavailable
+          annotations:
+            description: "{{ $labels.deployment }} in {{ $labels.namespace }} has no available replica for more than 10 minutes!"
+          expr: kube_deployment_status_replicas_available{namespace=~".+-mcp"} == 0
+          for: 10m
+          labels:
+            severity: warning
+        - alert: mcp-server-out-of-memory
+          annotations:
+            description: "{{ $labels.container }} in {{ $labels.namespace }} went above its memory limit in the last hour!"
+          expr: increase(container_oom_events_total{namespace=~".+-mcp", container!=""}[1h]) > 0
+          for: 5m
+          labels:
+            severity: warning
