@@ -1,0 +1,86 @@
+---
+groups:
+  - name: linux-mcp
+    interval: 1m
+    rules:
+      # The account cannot connect to a host.  A new key, a new image, or a
+      # `common-users` run that failed can cause this.
+      #
+      # The server writes this line also when a host key does not agree with
+      # `known_hosts`.  For that cause, run `just generate-linux-mcp`.
+      - alert: linux-mcp-ssh-auth-failing
+        expr: |
+          sum by (target) (
+            count_over_time(
+              {namespace="linux-mcp"}
+              |= "SSH_AUTH_FAILED"
+              | regexp `SSH_AUTH_FAILED: (?P<target>[^@ ]+)@`
+              | target != ""
+              [1h]
+            )
+          ) > 2
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "linux-mcp cannot connect to {{ $labels.target }}"
+          description: >-
+            The `linux-mcp` account did not authenticate to
+            {{ $labels.target }} in the last hour.  For a Kairos host, the
+            key comes from `plays/kairos/host_conf.yml`.  For the other
+            hosts, it comes from the `common-users` role in `site.yml`.
+            Compare `common__linux_mcp_public_key` with the
+            `authorized_keys` file of the account.  If the host has a new
+            host key, run `just generate-linux-mcp`.
+      # A tool was denied for a host.  Usually the host has no rule, and
+      # `prod-inventory` and the generated policy do not agree.
+      - alert: linux-mcp-unexpected-tool-denial
+        expr: |
+          sum by (tool, target) (
+            count_over_time(
+              {namespace="linux-mcp"}
+              |= "Authorization denied"
+              | regexp `tool=(?P<tool>[a-z_]+), host=(?P<target>[^,]+)`
+              | tool != ""
+              | tool != "read_file"
+              | tool != "read_log_file"
+              | target =~ `[a-z0-9-]+([.][a-z0-9-]+)*[.]tswn[.]us`
+              [1h]
+            )
+          ) > 0
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "linux-mcp denied {{ $labels.tool }} for {{ $labels.target }}"
+          description: >-
+            No policy rule matched {{ $labels.target }}.  Add the host to
+            `linux_mcp_hosts` in `prod-inventory` and run
+            `just generate-linux-mcp`.
+      # The server cannot open a connection to a host.  The count needs more
+      # than three failures, because one reboot causes two or three.
+      #
+      # This line has no host name, so the label holds an address.  The
+      # comments in `allow-to-linux-hosts.yml` give the name for each address.
+      - alert: linux-mcp-host-unreachable
+        expr: |
+          sum by (target) (
+            count_over_time(
+              {namespace="linux-mcp"}
+              |= "TOOL_COMPLETE"
+              |= "Connect call failed"
+              | regexp `Connect call failed \('(?P<target>[^']+)'`
+              | target != ""
+              [1h]
+            )
+          ) > 3
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "linux-mcp cannot reach {{ $labels.target }}"
+          description: >-
+            More than three connections to {{ $labels.target }} failed in
+            the last hour.  Make sure that the host runs, and that the
+            NetworkPolicy `allow-to-linux-hosts-networkpolicy` and the
+            firewall both permit port 22.

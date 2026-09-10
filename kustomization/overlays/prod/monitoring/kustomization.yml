@@ -16,6 +16,13 @@ configMapGenerator:
     files:
       - configmap/kubernetes.alloy
       - configmap/loki.alloy
+  - name: loki-rules-configmap
+    files:
+      - configmap/loki/linux-mcp.yaml
+    options:
+      disableNameSuffixHash: true
+      labels:
+        loki_rule: "true"
 helmCharts:
   - name: alloy
     version: 1.12.1
