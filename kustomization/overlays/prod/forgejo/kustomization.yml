@@ -21,7 +21,7 @@ helmCharts:
     valuesFile: values.yml
 images:
   - name: code.forgejo.org/forgejo/forgejo
-    newTag: 16.0.3-rootless@sha256:214f4ae63ee78be1e445e58573c88dc7215e72091210852e0df94eaac1a25685
+    newTag: 16.0.4-rootless@sha256:a263a1298e89e0bdf019005ce1927e9aadaa8f1bd2a94a3e66ad94e2a89e19ce
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:b29d8c1665b70817259ceecaea16ab27aab6368b48daf485d19436c809067492
 namespace: forgejo
