@@ -28,7 +28,17 @@ if [ -z "${cluster}" ]; then
     exit 1
 fi
 
-if ! kubectl get clusters.postgresql.cnpg.io "${cluster}" -o name > /dev/null 2>&1; then
+# `--ignore-not-found` gives an empty result and a zero status when the
+# cluster does not exist.  Any other failure, for example a `Forbidden` from
+# a role that lost its permission, keeps a non-zero status.  Without this
+# flag the two look the same, and the script then skips the backup and
+# reports success each time the read fails.  Very bad!
+if ! found=$(kubectl get clusters.postgresql.cnpg.io "${cluster}" --ignore-not-found -o name 2>/dev/null); then
+    echo "Error: Cannot read the ${cluster} cluster!"
+    exit 1
+fi
+
+if [ -z "${found}" ]; then
     echo "The ${cluster} cluster does not exist yet, so there is no data to back up."
     exit 0
 fi
