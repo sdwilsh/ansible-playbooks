@@ -1,0 +1,15 @@
+---
+# A pod that a node advertises with `externalTrafficPolicy: Local` needs
+# `kube-vip` on that same node.  A workload can tolerate a taint, so `kube-vip`
+# must tolerate every taint, or the VIP of that workload has no node to
+# advertise it.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists

@@ -18,6 +18,10 @@ patches:
     target:
       kind: DaemonSet
       name: kube-vip-ds
+  - path: patches/tolerate_each_taint.yml
+    target:
+      kind: DaemonSet
+      name: kube-vip-svc-ds
 resources:
   - namespace.yml
   - podmonitor.yml
