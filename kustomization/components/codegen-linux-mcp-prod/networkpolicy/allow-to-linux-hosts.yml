@@ -17,8 +17,6 @@ spec:
         - ipBlock:
             cidr: 10.11.0.121/32 # gpuworker02.hogs.tswn.us
         - ipBlock:
-            cidr: 10.10.0.6/32 # harvest.hogs.tswn.us
-        - ipBlock:
             cidr: 10.117.0.24/32 # monitor.house.gem.hogs.tswn.us
         - ipBlock:
             cidr: 10.11.0.101/32 # node01.hogs.tswn.us
