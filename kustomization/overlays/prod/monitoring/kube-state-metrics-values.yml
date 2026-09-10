@@ -3,8 +3,10 @@ namespaceOverride: monitoring
 
 collectors:
   - deployments
+  - endpointslices
   - leases
   - nodes
+  - services
 
 priorityClassName: application-infra
 
