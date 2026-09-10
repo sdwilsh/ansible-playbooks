@@ -11,8 +11,8 @@ spec:
       rules:
         - alert: mcp-server-unavailable
           annotations:
-            description: "{{ $labels.deployment }} in {{ $labels.namespace }} has no available replica for more than 10 minutes!"
-          expr: kube_deployment_status_replicas_available{namespace=~".+-mcp"} == 0
+            description: "{{ $labels.deployment }} in {{ $labels.exported_namespace }} has no available replica for more than 10 minutes!"
+          expr: kube_deployment_status_replicas_available{exported_namespace=~".+-mcp"} == 0
           for: 10m
           labels:
             severity: warning
