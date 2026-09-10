@@ -6,6 +6,10 @@ components:
   - https://github.com/marinatedconcrete/config/kustomization/components/kube-vip?ref=kustomize-kube-vip@v4.0.6
 namespace: kube-vip
 patches:
+  - path: patches/add_metrics_port.yml
+    target:
+      kind: DaemonSet
+      name: kube-vip-svc-ds
   - path: patches/set_egress_cidrs.yml
     target:
       kind: DaemonSet

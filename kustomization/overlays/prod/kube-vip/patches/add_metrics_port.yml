@@ -1,0 +1,19 @@
+---
+# `kube-vip` serves the metrics on port 2112 by default, but the container
+# declares no port.  `kube-vip-podmonitor` selects a port by number, and the
+# operator makes a rule that keeps a target only when the pod declares that
+# port.  Without this port, the rule drops each target, and Prometheus gets no
+# metric from `kube-vip`.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: kube-vip
+          ports:
+            - containerPort: 2112
+              name: metrics
+              protocol: TCP

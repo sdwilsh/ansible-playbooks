@@ -10,10 +10,13 @@ spec:
       rules:
         - alert: kube-vip-lease-stale
           annotations:
-            description: "kube-vip lease {{ $labels.lease }} in {{ $labels.namespace }} hasn't renewed in 120s — its VIP is probably not being advertised."
+            description: "kube-vip lease {{ $labels.lease }} in {{ $labels.exported_namespace }} hasn't renewed in 120s — its VIP is probably not being advertised."
           expr: |
             (time() - kube_lease_renew_time{lease=~"kubevip-.*"} > 120)
-            and on (namespace) (kube_vip_active_services > 0)
+            and on (exported_namespace) label_replace(
+              kube_vip_active_services > 0,
+              "exported_namespace", "$1", "namespace", "(.+)"
+            )
           for: 2m
           labels:
             severity: page
