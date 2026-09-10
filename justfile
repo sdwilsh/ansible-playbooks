@@ -494,6 +494,57 @@ hadolint:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Check that each tool the `linux-mcp` policy denies is a tool the server has
+[group('lint')]
+linux-mcp-validate:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    # The server accepts a tool name that does not exist.  It gives no message,
+    # and the rule then has no effect, which permits the tool.  The policy is a
+    # generated file, so a name with an error is difficult to see.
+    policy="kustomization/components/codegen-linux-mcp-prod/configmap/policy.yml"
+    overlay="kustomization/overlays/prod/linux-mcp/kustomization.yml"
+
+    image=$(python3 -c "
+    import sys, yaml
+    k = yaml.safe_load(open(sys.argv[1]))
+    for i in k.get('images', []):
+        if i['name'].endswith('linux-mcp-server'):
+            print(i['name'] + ':' + i['newTag'])
+            break
+    " "${overlay}")
+    echo -n "Reading the tools of ${image%%@*}..."
+
+    tools=$(podman run --rm --entrypoint sh "${image}" -c '
+    python3 -c "
+    import ast, pathlib
+    base = pathlib.Path(__import__(\"linux_mcp_server\").__file__).parent / \"tools\"
+    names = set()
+    for f in sorted(base.glob(\"*.py\")):
+        for node in ast.walk(ast.parse(f.read_text())):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                for d in node.decorator_list:
+                    fn = d.func if isinstance(d, ast.Call) else d
+                    if getattr(fn, \"attr\", None) == \"tool\":
+                        names.add(node.name)
+    print(chr(10).join(sorted(names)))
+    "')
+    echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+
+    rc=0
+    for denied in $(grep -oE -- "- -[a-z_]+" "${policy}" | sed "s/^- -//" | sort -u); do
+        echo -n "Checking \`${denied}\`..."
+        if grep -qx -- "${denied}" <<< "${tools}"; then
+            echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+        else
+            echo "{{ BOLD + RED }}FAILED{{ NORMAL }}"
+            echo "  The policy denies \`${denied}\`, but the server has no tool with that name."
+            echo "  Correct the name in \`plays/codegen/templates/resources/linux-mcp-policy.yml.j2\`."
+            rc=1
+        fi
+    done
+    exit "${rc}"
+
 # Build production overlay with `kustomize`
 [group('lint')]
 kustomize-build:
