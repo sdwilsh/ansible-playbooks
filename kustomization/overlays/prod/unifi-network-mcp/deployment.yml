@@ -92,6 +92,12 @@ spec:
             tcpSocket:
               port: web
             timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 320Mi
+            requests:
+              cpu: 25m
+              memory: 128Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -106,6 +112,7 @@ spec:
             - mountPath: /tmp
               name: tmp
       enableServiceLinks: false
+      priorityClassName: application-infra
       volumes:
         - emptyDir: {}
           name: tmp

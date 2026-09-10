@@ -60,6 +60,12 @@ spec:
             tcpSocket:
               port: web
             timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 192Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -71,4 +77,5 @@ spec:
             seccompProfile:
               type: RuntimeDefault
       enableServiceLinks: false
+      priorityClassName: application-infra
       serviceAccountName: kubernetes-mcp
