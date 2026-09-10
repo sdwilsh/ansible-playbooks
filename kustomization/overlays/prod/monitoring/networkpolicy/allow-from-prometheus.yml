@@ -11,11 +11,13 @@ spec:
         - ipBlock:
             cidr: 10.11.0.0/23
       ports:
+        - port: 2112 # kube-vip metrics (hostNetwork DaemonSet)
+          protocol: TCP
+        - port: 3903 # garage admin/metrics (hostNetwork DaemonSet)
+          protocol: TCP
         - port: 9100
           protocol: TCP
         - port: 10250
-          protocol: TCP
-        - port: 3903 # garage admin/metrics (hostNetwork DaemonSet)
           protocol: TCP
     - to:
         - ipBlock:
