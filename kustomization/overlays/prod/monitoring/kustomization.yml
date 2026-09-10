@@ -68,6 +68,10 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
+  - path: patches/loki/drop_secrets_from_role.yml
+    target:
+      kind: Role
+      name: loki
   - path: patches/loki/set_service_type_load_balancer.yml
     target:
       kind: Service
@@ -95,6 +99,7 @@ resources:
   - networkpolicy/allow-from-alloy-to-api-server.yml
   - networkpolicy/allow-from-grafana-to-internet.yml
   - networkpolicy/allow-from-kube-state-metrics-to-api-server.yml
+  - networkpolicy/allow-from-loki-ruler-to-api-server.yml
   - networkpolicy/allow-from-prometheus-adapter-to-api-server.yml
   - networkpolicy/allow-from-prometheus.yml
   - networkpolicy/allow-prometheus-adapter-from-api-server.yml

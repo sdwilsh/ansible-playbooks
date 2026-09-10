@@ -73,6 +73,14 @@ loki:
       enabled: true
   querier:
     max_concurrent: 4
+  rulerConfig:
+    alertmanager_url: http://_web._tcp.alertmanager-operated.monitoring.svc.cluster.local
+    enable_alertmanager_discovery: true
+    rule_path: /var/loki/rules-temp
+    storage:
+      local:
+        directory: /etc/loki/rules
+      type: local
   schemaConfig:
     configs:
       - from: "2024-04-01"
@@ -88,7 +96,6 @@ loki:
     bucketNames:
       admin: monitoring-admin
       chunks: monitoring-chunks
-      ruler: monitoring-ruler
     s3:
       accessKeyId: GKd80820999ad3096edba1edf0
       disable_dualstack: true
@@ -172,6 +179,23 @@ ruler:
   maxUnavailable: 1
   priorityClassName: application-infra
   replicas: 2
+  sidecar: true
+
+sidecar:
+  rules:
+    folder: /etc/loki/rules/fake
+    resource: configmap
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+
+rbac:
+  namespaced: true
 
 # Zero-out replics for non-Distributed pieces per documentation.
 bloomPlanner:
