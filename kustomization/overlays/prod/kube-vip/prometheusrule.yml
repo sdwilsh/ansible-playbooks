@@ -12,17 +12,18 @@ spec:
           annotations:
             description: "kube-vip lease {{ $labels.lease }} in {{ $labels.exported_namespace }} hasn't renewed in 120s — its VIP is probably not being advertised."
           expr: |
-            (time() - kube_lease_renew_time{lease=~"kubevip-.*"} > 120)
-            and on (exported_namespace) label_replace(
-              kube_vip_active_services > 0,
-              "exported_namespace", "$1", "namespace", "(.+)"
+            label_replace(
+              time() - kube_lease_renew_time{lease=~"kubevip-.*"} > 120,
+              "svc", "$1", "lease", "kubevip-(.+)"
             )
+            and on (exported_namespace, svc)
+            label_replace(kube_vip_service_election_loops, "svc", "$1", "name", "(.+)")
           for: 2m
           labels:
             severity: page
         - alert: kube-vip-election-loop-leak
           annotations:
-            description: "{{ $labels.name }} in {{ $labels.namespace }} has more than one active election loop."
+            description: "{{ $labels.name }} in {{ $labels.exported_namespace }} has more than one active election loop."
           expr: kube_vip_service_election_loops > 1
           for: 5m
           labels:
