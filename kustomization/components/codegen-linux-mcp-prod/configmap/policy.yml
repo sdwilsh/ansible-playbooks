@@ -3,8 +3,11 @@
 ---
 # The server reads `host` as a glob, so each rule names one host in full.
 # `all_users: true` accepts a caller with no claims.  This server has no
-# caller authentication.  `read_file` reads any path that the remote account
-# can read, so each rule removes that tool.
+# caller authentication.  Each rule removes `read_file` and `read_log_file`.
+# Both read files that the remote account can read.
+#
+# A name that no tool has passes the syntax test and then does nothing.  The
+# server gives no message for it, so keep these two names correct.
 rules:
   - action: ssh_default
     all_users: true
@@ -12,51 +15,60 @@ rules:
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: gpuworker01.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: gpuworker02.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: harvest.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: monitor.house.gem.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: node01.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: worker01.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: worker02.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
   - action: ssh_default
     all_users: true
     host: worker03.hogs.tswn.us
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file

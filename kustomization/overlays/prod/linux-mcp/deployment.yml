@@ -21,8 +21,9 @@ spec:
           command:
             - linux-mcp-server
           env:
-            # `LINUX_MCP_ALLOWED_LOG_PATHS` stays unset.  The `read_log_file`
-            # tool then reads no file at all.
+            # `LINUX_MCP_ALLOWED_LOG_PATHS` is not in this list.  An unset
+            # variable lets `read_log_file` read no file.  The policy also
+            # denies that tool.
             - name: LINUX_MCP_KNOWN_HOSTS_PATH
               value: /etc/linux-mcp/ssh/known_hosts
             - name: LINUX_MCP_LOG_DIR

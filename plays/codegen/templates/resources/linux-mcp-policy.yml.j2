@@ -3,8 +3,11 @@
 ---
 # The server reads `host` as a glob, so each rule names one host in full.
 # `all_users: true` accepts a caller with no claims.  This server has no
-# caller authentication.  `read_file` reads any path that the remote account
-# can read, so each rule removes that tool.
+# caller authentication.  Each rule removes `read_file` and `read_log_file`.
+# Both tools read the files that the remote account can read.
+#
+# The server accepts a tool name that does not exist.  It gives no message, and
+# the rule then has no effect.  Keep these two names correct.
 rules:
 {% for entry in mcp_hosts %}
   - action: ssh_default
@@ -13,4 +16,5 @@ rules:
     tools:
       - "@fixed"
       - -read_file
+      - -read_log_file
 {% endfor %}
