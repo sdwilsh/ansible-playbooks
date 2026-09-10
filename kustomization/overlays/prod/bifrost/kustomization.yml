@@ -57,6 +57,7 @@ resources:
   - ingress/bifrost-api.yml
   - ingress/bifrost.yml
   - networkpolicy/allow-from-prometheus.yml
+  - networkpolicy/allow-to-mcp-servers.yml
   - podmonitor.yml
   - prometheusrule.yml
   - service.yml

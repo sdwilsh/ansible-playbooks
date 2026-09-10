@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/codegen-linux-mcp-prod
+  - ../../../components/networkpolicy-allow-from-bifrost
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all

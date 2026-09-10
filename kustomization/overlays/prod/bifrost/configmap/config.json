@@ -82,18 +82,96 @@
       {
         "calendar_aligned": true,
         "id": "vk-triage",
+        "mcp_configs": [
+          {
+            "mcp_client_name": "argocd",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "grafana",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "kubernetes",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "linux",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "unifi",
+            "tools_to_execute": [
+              "*"
+            ]
+          }
+        ],
         "name": "triage",
         "rate_limit_id": "rl-triage"
       },
       {
         "calendar_aligned": true,
         "id": "vk-security-review",
+        "mcp_configs": [
+          {
+            "mcp_client_name": "linux",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "unifi",
+            "tools_to_execute": [
+              "*"
+            ]
+          }
+        ],
         "name": "security-review",
         "rate_limit_id": "rl-security-review"
       },
       {
         "calendar_aligned": true,
         "id": "vk-interactive",
+        "mcp_configs": [
+          {
+            "mcp_client_name": "argocd",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "grafana",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "kubernetes",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "linux",
+            "tools_to_execute": [
+              "*"
+            ]
+          },
+          {
+            "mcp_client_name": "unifi",
+            "tools_to_execute": [
+              "*"
+            ]
+          }
+        ],
         "name": "interactive",
         "rate_limit_id": "rl-interactive"
       }
@@ -115,7 +193,48 @@
     "type": "postgres"
   },
   "mcp": {
-    "client_configs": []
+    "client_configs": [
+      {
+        "connection_string": "http://argocd-mcp-svc.argocd-mcp.svc.cluster.local:3000/mcp",
+        "connection_type": "http",
+        "name": "argocd",
+        "tools_to_execute": [
+          "*"
+        ]
+      },
+      {
+        "connection_string": "http://grafana-mcp-svc.grafana-mcp.svc.cluster.local:8000/mcp",
+        "connection_type": "http",
+        "name": "grafana",
+        "tools_to_execute": [
+          "*"
+        ]
+      },
+      {
+        "connection_string": "http://kubernetes-mcp-svc.kubernetes-mcp.svc.cluster.local:8080/mcp",
+        "connection_type": "http",
+        "name": "kubernetes",
+        "tools_to_execute": [
+          "*"
+        ]
+      },
+      {
+        "connection_string": "http://linux-mcp-svc.linux-mcp.svc.cluster.local:8000/mcp",
+        "connection_type": "http",
+        "name": "linux",
+        "tools_to_execute": [
+          "*"
+        ]
+      },
+      {
+        "connection_string": "http://unifi-network-mcp-svc.unifi-network-mcp.svc.cluster.local:3000/mcp",
+        "connection_type": "http",
+        "name": "unifi",
+        "tools_to_execute": [
+          "*"
+        ]
+      }
+    ]
   },
   "source_of_truth": "config.json"
 }
