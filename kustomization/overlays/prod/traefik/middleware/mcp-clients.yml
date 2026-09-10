@@ -7,3 +7,4 @@ spec:
   ipAllowList:
     sourceRange:
       - 10.117.0.9/32 # lighterthansome
+      - 10.117.2.3/32 # lighterthansome, over the VPN
