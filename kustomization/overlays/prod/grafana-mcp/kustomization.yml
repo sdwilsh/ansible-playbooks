@@ -5,6 +5,7 @@ kind: Kustomization
 components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-grafana
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
@@ -21,5 +22,4 @@ resources:
   - namespace.yml
   - deployment.yml
   - ingress.yml
-  - networkpolicy/allow-to-grafana.yml
   - service.yml
