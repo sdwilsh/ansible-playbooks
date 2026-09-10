@@ -17,7 +17,11 @@ subjects:
     name: kubernetes-mcp
     namespace: kubernetes-mcp
 ---
-# `view` has no rule for these four resources.  This role adds only them.
+# This role adds only the rules that `view` does not have.
+#
+# Do not add `nodes/proxy`.  The `nodes_log` and `nodes_stats_summary` tools
+# need it, and they fail without it.  That subresource reaches every kubelet
+# endpoint through the API server, which gives code execution on a node.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -27,12 +31,20 @@ rules:
       - ""
     resources:
       - nodes
-      - nodes/metrics
       - persistentvolumes
     verbs:
       - get
       - list
       - watch
+  # `prometheus-adapter` supplies `metrics.k8s.io` in this cluster.
+  - apiGroups:
+      - metrics.k8s.io
+    resources:
+      - nodes
+      - pods
+    verbs:
+      - get
+      - list
   - apiGroups:
       - storage.k8s.io
     resources:
