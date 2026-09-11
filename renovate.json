@@ -447,7 +447,8 @@
       ]
     },
     {
-      "description": "The gateway holds every provider credential, so a release waits.",
+      "allowedVersions": "/^v\\d+\\.\\d+\\.\\d+$/",
+      "description": "This image has a second series of tags with no `v`, and the newest of those is older than the newest release.",
       "groupName": "bifrost",
       "matchPackageNames": [
         "docker.io/maximhq/bifrost"
