@@ -25,6 +25,10 @@ patches:
   - path: patches/delete_helm_hooks.yml
     target:
       annotationSelector: helm.sh/hook
+  - path: patches/keep_api_server_networkpolicy_wide.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-api-server-networkpolicy
 resources:
   - namespace.yml
   - deviceconfig/shared.yml

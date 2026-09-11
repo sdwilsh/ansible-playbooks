@@ -1,0 +1,13 @@
+---
+# The operator makes the `Pod`s of the device plugin and of the node labeller
+# from the `DeviceConfig` resources, and the `DeviceConfig` CRD gives no field
+# for a label on those `Pod`s.  Its `podAnnotations` field is for the metrics
+# exporter, and its `labels` field is for the `ServiceMonitor`.  The node
+# labeller writes the labels of the node, so it must reach the API server.
+#
+# This rule therefore keeps every `Pod` of the namespace.  Remove this patch on
+# the day that the CRD gives a field for the labels of those `Pod`s.
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchLabels: {}

@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: nut-shutdown-agent
+        hogs.tswn.us/api-server-client: "true"
     spec:
       containers:
         - env:
