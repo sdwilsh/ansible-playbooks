@@ -21,6 +21,32 @@ spec:
           for: 2m
           labels:
             severity: page
+        # `kube-vip` advertises the address of a LoadBalancer service only
+        # while it runs an election loop for that service.  A service with no
+        # loop has no node to advertise its address, and no lease to go stale,
+        # so `kube-vip-lease-stale` cannot find it.
+        - alert: kube-vip-service-unmanaged
+          annotations:
+            description: "kube-vip runs no election loop for {{ $labels.exported_service }} in {{ $labels.exported_namespace }} — its VIP is not advertised."
+          expr: |
+            (
+              kube_service_spec_type{type="LoadBalancer"}
+              unless on (exported_namespace, exported_service)
+              label_replace(
+                kube_vip_service_election_loops,
+                "exported_service", "$1", "name", "(.+)"
+              )
+            )
+            and on (exported_namespace, exported_service)
+            label_replace(
+              count by (exported_namespace, endpointslice) (
+                kube_endpointslice_endpoints{ready="true"}
+              ),
+              "exported_service", "$1", "endpointslice", "(.+)-[a-z0-9]{5}"
+            )
+          for: 5m
+          labels:
+            severity: page
         - alert: kube-vip-election-loop-leak
           annotations:
             description: "{{ $labels.name }} in {{ $labels.exported_namespace }} has more than one active election loop."
