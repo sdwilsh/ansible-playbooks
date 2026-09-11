@@ -10,6 +10,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-loki
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
@@ -66,6 +67,5 @@ resources:
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - deployment.yml
-  - networkpolicy/allow-from-crowdsec-to-hub.yml
   - podmonitor.yml
   - service.yml

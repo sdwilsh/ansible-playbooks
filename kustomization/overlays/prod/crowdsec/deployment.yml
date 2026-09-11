@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: crowdsec
+        hogs.tswn.us/internet-client: "true"
     spec:
       affinity:
         podAntiAffinity:
