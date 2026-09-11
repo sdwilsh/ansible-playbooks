@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: ghcr.io/authelia/authelia
-    newTag: 4.39.23@sha256:0b6409d5cfa1bc244812fa4094f0272421ac156b864ed4178c60480c3f6d3ee9 
+    newTag: 4.39.25@sha256:a039d87fb842f0af4f83c03434f5fb6ec45d4b46e86b8b3ac571cc104bbe6e6d 
 resources:
   - deployment.yml
   - service.yml
