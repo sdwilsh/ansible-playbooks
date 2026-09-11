@@ -6,6 +6,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
@@ -39,6 +40,10 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
+  - path: patches/set_traefik_networkpolicy_pods_and_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
@@ -47,6 +52,5 @@ resources:
   - cnpg/scheduledbackup.yml
   - deployment.yml
   - networkpolicy/allow-from-crowdsec-to-hub.yml
-  - networkpolicy/allow-from-traefik.yml
   - networkpolicy/allow-to-loki.yml
   - service.yml
