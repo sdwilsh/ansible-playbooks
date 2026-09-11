@@ -28,8 +28,15 @@ spec:
             description: "{{ $labels.disk }} on {{ $labels.node }} is not ready because {{ $labels.condition_reason }}"
           expr: longhorn_disk_status{condition="ready"} == 0
           for: 15m
+          labels:
+            severity: page
+        # Longhorn keeps the replicas that are already on the disk.  It only
+        # stops the placement of new replicas.  This is a warning, because no
+        # volume goes offline.
         - alert: longhorn-disk-not-schedulable
           annotations:
             description: "{{ $labels.disk }} on {{ $labels.node }} cannot be scheduled because {{ $labels.condition_reason }}"
           expr: longhorn_disk_status{condition="schedulable"} == 0
           for: 15m
+          labels:
+            severity: warning
