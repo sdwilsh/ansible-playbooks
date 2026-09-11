@@ -80,6 +80,11 @@ patches:
       kind: Deployment|StatefulSet
       labelSelector: app.kubernetes.io/name=loki,app.kubernetes.io/component
         notin (memcached-chunks-cache,memcached-results-cache)
+  - path: patches/loki/add_traefik_route_label.yml
+    target:
+      kind: Deployment|StatefulSet
+      labelSelector: app.kubernetes.io/name=loki,app.kubernetes.io/component in
+        (compactor,distributor,query-frontend,ruler)
   - path: patches/loki/drop_secrets_from_role.yml
     target:
       kind: Role

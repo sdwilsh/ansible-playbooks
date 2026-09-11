@@ -3,3 +3,9 @@
   path: /spec/ingress/0/ports/-
   value:
     port: grafana
+# Loki's Ingress points to `http-metrics` port, which confusingly services more
+# than just metrics.
+- op: add
+  path: /spec/ingress/0/ports/-
+  value:
+    port: http-metrics

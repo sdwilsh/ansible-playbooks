@@ -9,6 +9,7 @@ components:
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-loki
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
@@ -53,6 +54,10 @@ patches:
     target:
       kind: Deployment
       name: crowdsec-deployment
+  - path: patches/add_loki_client_label.yml
+    target:
+      kind: Deployment
+      name: crowdsec-deployment
 resources:
   - namespace.yml
   - cnpg/backup.yml
@@ -61,6 +66,5 @@ resources:
   - cnpg/scheduledbackup.yml
   - deployment.yml
   - networkpolicy/allow-from-crowdsec-to-hub.yml
-  - networkpolicy/allow-to-loki.yml
   - podmonitor.yml
   - service.yml
