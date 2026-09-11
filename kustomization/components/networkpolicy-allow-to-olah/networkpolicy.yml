@@ -5,16 +5,16 @@ metadata:
   name: allow-to-olah-networkpolicy
 spec:
   egress:
-    - to:
+    - ports:
+        - port: web
+          protocol: TCP
+      to:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: olah
           podSelector:
             matchLabels:
               app.kubernetes.io/name: olah
-      ports:
-        - port: web
-          protocol: TCP
   podSelector:
     matchLabels:
       hogs.tswn.us/olah-client: "true"

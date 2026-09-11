@@ -5,16 +5,16 @@ metadata:
   name: allow-to-grafana-networkpolicy
 spec:
   egress:
-    - to:
+    - ports:
+        - port: grafana
+          protocol: TCP
+      to:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: monitoring
           podSelector:
             matchLabels:
               app.kubernetes.io/name: grafana
-      ports:
-        - port: grafana
-          protocol: TCP
   podSelector:
     matchLabels:
       hogs.tswn.us/grafana-client: "true"

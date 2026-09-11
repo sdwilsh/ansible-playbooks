@@ -5,16 +5,16 @@ metadata:
   name: allow-to-lldap-networkpolicy
 spec:
   egress:
-    - to:
+    - ports:
+        - port: ldaps
+          protocol: TCP
+      to:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: auth
           podSelector:
             matchLabels:
               app.kubernetes.io/name: lldap
-      ports:
-        - port: ldaps
-          protocol: TCP
   podSelector:
     matchLabels:
       hogs.tswn.us/lldap-client: "true"

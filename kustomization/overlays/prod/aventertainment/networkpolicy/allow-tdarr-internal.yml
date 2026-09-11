@@ -23,12 +23,12 @@ metadata:
   name: allow-tdarr-node-to-tdarr-server-networkpolicy
 spec:
   egress:
-    - to:
+    - ports:
+        - port: 8266
+      to:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: tdarr-server
-      ports:
-        - port: 8266
   podSelector:
     matchLabels:
       app.kubernetes.io/name: tdarr-node

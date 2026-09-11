@@ -7,10 +7,7 @@ spec:
   egress:
     - to:
         - namespaceSelector: {}
-    - to:
-        - ipBlock:
-            cidr: 10.11.0.0/23
-      ports:
+    - ports:
         - port: 2112 # kube-vip metrics (hostNetwork DaemonSet)
           protocol: TCP
         - port: 3903 # garage admin/metrics (hostNetwork DaemonSet)
@@ -19,18 +16,21 @@ spec:
           protocol: TCP
         - port: 10250
           protocol: TCP
-    - to:
+      to:
         - ipBlock:
-            cidr: 172.17.0.1/32 # kubernetes.default.svc (apiserver ClusterIP)
-      ports:
+            cidr: 10.11.0.0/23
+    - ports:
         - port: 443
           protocol: TCP
-    - to:
+      to:
         - ipBlock:
-            cidr: 10.11.0.101/32 # node01 (apiserver)
-      ports:
+            cidr: 172.17.0.1/32 # kubernetes.default.svc (apiserver ClusterIP)
+    - ports:
         - port: 6443
           protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01 (apiserver)
   podSelector:
     matchLabels:
       app.kubernetes.io/name: prometheus

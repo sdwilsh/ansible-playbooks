@@ -5,16 +5,16 @@ metadata:
   name: allow-to-mcp-servers-networkpolicy
 spec:
   egress:
-    - to:
+    - ports:
+        - port: web
+          protocol: TCP
+      to:
         - namespaceSelector:
             matchLabels:
               hogs.tswn.us/bifrost-route: "true"
           podSelector:
             matchLabels:
               hogs.tswn.us/bifrost-route: "true"
-      ports:
-        - port: web
-          protocol: TCP
   podSelector:
     matchLabels:
       app.kubernetes.io/name: bifrost
