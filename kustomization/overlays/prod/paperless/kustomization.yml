@@ -8,6 +8,7 @@ components:
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
+  - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-proton-bridge
   - ../../../components/networkpolicy-allow-within-this-namespace
@@ -28,10 +29,6 @@ patches:
       kind: ObjectStore
       name: garage-objectstore
   # paperless
-  - path: patches/paperless/add_paperless_backup_selector.yml
-    target:
-      kind: NetworkPolicy
-      name: allow-to-api-server-networkpolicy
   - path: patches/paperless/add_proton_bridge_client_label.yml
     target:
       kind: StatefulSet

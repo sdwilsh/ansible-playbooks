@@ -11,6 +11,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/component: paperless-backup
+            hogs.tswn.us/api-server-client: "true"
         spec:
           containers:
             - env:

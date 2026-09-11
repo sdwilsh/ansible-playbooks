@@ -11,19 +11,6 @@ opens both.
 This component is the egress side, and the egress side is the only control.  The API server is not
 a `Pod` in this cluster, so a `NetworkPolicy` cannot filter the other end.
 
-## The CloudNativePG Path
-
-The `cnpg-backup` component brings this component in, and it replaces the `podSelector` with a list
-that names the `database` component and the `wait-for-backup` component.  Twelve overlays get the
-rule that way.
-
-Two rules follow from that.
-
-- do not add this component to an overlay that has `cnpg-backup`.  Two copies of the same
-  `NetworkPolicy` stop the build with `may not add resource with an already registered id`.
-- the `hogs.tswn.us/api-server-client` label does nothing in such an overlay.  `cnpg-backup`
-  replaces the whole `podSelector`, so no rule reads the label there.
-
 # Example Usage
 
 ```yaml

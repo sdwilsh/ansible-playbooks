@@ -6,6 +6,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-garage
   - ../../../components/networkpolicy-allow-within-this-namespace
