@@ -1,0 +1,6 @@
+---
+- op: replace
+  path: /spec/ingress/0/ports
+  value:
+    - port: metrics-api
+    - port: metrics-ms

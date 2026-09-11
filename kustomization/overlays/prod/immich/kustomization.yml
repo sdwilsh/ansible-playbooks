@@ -6,6 +6,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/immich
   - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
@@ -54,6 +55,14 @@ patches:
     target:
       kind: Deployment
       name: immich-server
+  - path: patches/add_prometheus_target_label.yml
+    target:
+      kind: Deployment
+      name: immich-server
+  - path: patches/set_prometheus_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=main].ports.[name=http].name
@@ -73,4 +82,3 @@ resources:
   - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
-  - networkpolicy/allow-from-prometheus.yml

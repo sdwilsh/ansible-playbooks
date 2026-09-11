@@ -7,6 +7,7 @@ components:
   - ../../../components/cnpg-backup
   - ../../../components/lldap
   - ../../../components/networkpolicy-allow-from-cnpg-operator
+  - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-from-prometheus-to-cnpg-cluster
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
@@ -76,6 +77,14 @@ patches:
     target:
       kind: Deployment
       name: lldap-deployment
+  - path: patches/authelia/add_prometheus_target_label.yml
+    target:
+      kind: Deployment
+      name: authelia-deployment
+  - path: patches/set_prometheus_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
 resources:
   - namespace.yml
   - certificate/lldap.yml

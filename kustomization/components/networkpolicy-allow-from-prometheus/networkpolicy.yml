@@ -13,11 +13,12 @@ spec:
             matchLabels:
               app.kubernetes.io/name: prometheus
       ports:
-        - port: metrics-api
-        - port: metrics-ms
+        # A `Pod` that names its port differently, or that gives more than one
+        # port, needs a patch in its overlay.
+        - port: metrics
+          protocol: TCP
   podSelector:
     matchLabels:
-      app.kubernetes.io/instance: immich
-      app.kubernetes.io/name: server
+      hogs.tswn.us/prometheus-target: "true"
   policyTypes:
     - Ingress
