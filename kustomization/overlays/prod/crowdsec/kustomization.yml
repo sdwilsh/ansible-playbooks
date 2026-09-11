@@ -57,4 +57,5 @@ resources:
   - deployment.yml
   - networkpolicy/allow-from-crowdsec-to-hub.yml
   - networkpolicy/allow-to-loki.yml
+  - podmonitor.yml
   - service.yml
