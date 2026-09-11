@@ -1,0 +1,24 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: loki-servicemonitor
+spec:
+  endpoints:
+    - interval: 15s
+      path: /metrics
+      port: http-metrics
+      scheme: http
+  jobLabel: app.kubernetes.io/component
+  selector:
+    matchExpressions:
+      # Each component also has a headless `Service` that selects the same
+      # pods.  The chart puts this label on the headless one only.  Without
+      # this line, Prometheus reads each pod two times.
+      - key: prometheus.io/service-monitor
+        operator: NotIn
+        values:
+          - "false"
+    matchLabels:
+      app.kubernetes.io/instance: loki
+      app.kubernetes.io/name: loki

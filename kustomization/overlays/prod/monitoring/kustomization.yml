@@ -118,3 +118,4 @@ resources:
   - networkpolicy/allow-to-grafana.yml
   - networkpolicy/allow-to-loki.yml
   - scrapeconfig/kubelet-cadvisor.yml
+  - servicemonitor/loki.yml
