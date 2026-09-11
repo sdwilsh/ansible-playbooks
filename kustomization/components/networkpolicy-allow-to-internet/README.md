@@ -4,9 +4,10 @@ This component gives your `Pod`s a path out of the cluster.  A `Pod` that reads 
 this path.  A `Pod` that pulls a catalogue, or that sends a message to a service on the internet,
 needs it as well.
 
-The rule opens port `80` and port `443` to `0.0.0.0/0`.  It removes the private ranges and the
-link-local range from that block, so the path goes to the internet only.  A `Pod` cannot reach
-another `Namespace`, the nodes, or the home network through this rule.
+The rule opens port `80` and port `443` to `0.0.0.0/0`.  It removes the private ranges, the
+link-local range, and the shared address space of RFC 6598 from that block, so the path goes to the
+internet only.  A `Pod` cannot reach another `Namespace` directly, nor the nodes, nor the home
+network, through this rule.
 
 This component opens the egress side, in your `Namespace`.  This side is the only network control.
 The other end is not a `Pod` in this cluster, so a `NetworkPolicy` cannot filter it.
