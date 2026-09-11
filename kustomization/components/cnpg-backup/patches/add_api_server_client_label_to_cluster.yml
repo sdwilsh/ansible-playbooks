@@ -1,0 +1,9 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  inheritedMetadata:
+    labels:
+      hogs.tswn.us/api-server-client: "true"

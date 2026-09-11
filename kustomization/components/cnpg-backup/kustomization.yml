@@ -14,6 +14,14 @@ configMapGenerator:
         argocd.argoproj.io/hook-delete-policy: HookSucceeded
         argocd.argoproj.io/sync-wave: "0"
 patches:
+  - path: patches/add_api_server_client_label_to_check.yml
+    target:
+      kind: Pod
+      labelSelector: app.kubernetes.io/component=wait-for-backup
+  - path: patches/add_api_server_client_label_to_cluster.yml
+    target:
+      group: postgresql.cnpg.io
+      kind: Cluster
   - target:
       kind: NetworkPolicy
       name: allow-to-api-server-networkpolicy

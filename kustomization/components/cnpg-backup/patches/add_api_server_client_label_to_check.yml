@@ -1,0 +1,4 @@
+---
+- op: add
+  path: /metadata/labels/hogs.tswn.us~1api-server-client
+  value: "true"
