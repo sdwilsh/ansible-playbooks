@@ -32,17 +32,6 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
-replacements:
-  - source:
-      fieldPath: spec.selector
-      kind: Deployment
-      name: bifrost-deployment
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

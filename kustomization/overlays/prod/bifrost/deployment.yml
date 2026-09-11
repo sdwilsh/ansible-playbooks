@@ -18,6 +18,7 @@ spec:
       labels:
         app.kubernetes.io/name: bifrost
         hogs.tswn.us/internet-client: "true"
+        hogs.tswn.us/traefik-route: "true"
     spec:
       automountServiceAccountToken: false
       containers:
