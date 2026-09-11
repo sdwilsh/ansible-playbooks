@@ -1,0 +1,9 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  podMetadata:
+    labels:
+      hogs.tswn.us/traefik-route: "true"

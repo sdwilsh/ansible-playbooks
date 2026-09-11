@@ -38,6 +38,10 @@ patches:
     target:
       kind: Deployment
       name: forgejo
+  - path: patches/forgejo/add_traefik_route_label.yml
+    target:
+      kind: Deployment
+      name: forgejo
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=forgejo].ports.[name=http].name
@@ -46,16 +50,6 @@ replacements:
     targets:
       - fieldPaths:
           - spec.ingress.0.ports.[port=web].port
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
-  - source:
-      fieldPath: spec.selector
-      kind: Deployment
-      name: forgejo
-    targets:
-      - fieldPaths:
-          - spec.podSelector
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy

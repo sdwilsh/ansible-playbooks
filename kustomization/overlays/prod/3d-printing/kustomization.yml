@@ -30,6 +30,10 @@ patches:
     target:
       kind: StatefulSet
       name: spoolman-statefulset
+  - path: patches/spoolman/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: spoolman-statefulset
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=spoolman].ports.[name=spoolman-web].name
@@ -46,11 +50,6 @@ replacements:
       kind: StatefulSet
       name: spoolman-statefulset
     targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
       - fieldPaths:
           - spec.podSelector
         select:

@@ -47,6 +47,10 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: Deployment
+      name: manyfold
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=manyfold].ports.[name=http].name
@@ -63,11 +67,6 @@ replacements:
       kind: Deployment
       name: manyfold
     targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
       - fieldPaths:
           - spec.podSelector
         select:

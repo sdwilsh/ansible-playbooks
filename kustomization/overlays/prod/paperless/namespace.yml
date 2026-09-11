@@ -4,4 +4,5 @@ kind: Namespace
 metadata:
   labels:
     hogs.tswn.us/proton-bridge-client: "true"
+    hogs.tswn.us/traefik-route: "true"
   name: this-is-ignored-but-is-required

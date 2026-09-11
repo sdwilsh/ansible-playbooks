@@ -42,6 +42,10 @@ patches:
     target:
       kind: StatefulSet
       name: opencloud-statefulset
+  - path: patches/opencloud/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: opencloud-statefulset
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=opencloud].ports.[name=web].name
@@ -50,16 +54,6 @@ replacements:
     targets:
       - fieldPaths:
           - spec.ingress.0.ports.[port=web].port
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
-  - source:
-      fieldPath: spec.selector
-      kind: StatefulSet
-      name: opencloud-statefulset
-    targets:
-      - fieldPaths:
-          - spec.podSelector
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy

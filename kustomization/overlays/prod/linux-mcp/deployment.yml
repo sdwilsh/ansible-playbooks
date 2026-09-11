@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: linux-mcp
+        hogs.tswn.us/traefik-route: "true"
     spec:
       automountServiceAccountToken: false
       containers:

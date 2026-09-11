@@ -55,17 +55,10 @@ patches:
   - path: patches/use_important_longhorn_group.yml
     target:
       kind: PersistentVolumeClaim
-replacements:
-  - source:
-      fieldPath: spec.selector
+  - path: patches/paperless/add_traefik_route_label.yml
+    target:
       kind: StatefulSet
       name: paperless
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

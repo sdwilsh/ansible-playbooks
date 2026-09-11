@@ -23,6 +23,10 @@ images:
     newTag: 18@sha256:29ee7bb30d804447dc9a91fd0d74322ae1dc3a4072cc6346f70a5ed6e783b565
 namespace: atuin
 patches:
+  - path: patches/atuin/add_traefik_route_label.yml
+    target:
+      kind: Deployment
+      name: atuin-deployment
   - path: patches/atuin/set_config_env.yml
     target:
       kind: Deployment
@@ -31,17 +35,6 @@ patches:
     target:
       kind: ObjectStore
       name: garage-objectstore
-replacements:
-  - source:
-      fieldPath: spec.selector
-      kind: Deployment
-      name: atuin-deployment
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

@@ -50,6 +50,10 @@ patches:
     target:
       kind: Deployment
       name: immich-valkey
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: Deployment
+      name: immich-server
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=main].ports.[name=http].name
@@ -58,16 +62,6 @@ replacements:
     targets:
       - fieldPaths:
           - spec.ingress.0.ports.[port=web].port
-        select:
-          kind: NetworkPolicy
-          name: allow-from-traefik-networkpolicy
-  - source:
-      fieldPath: spec.selector
-      kind: Deployment
-      name: immich-server
-    targets:
-      - fieldPaths:
-          - spec.podSelector
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
