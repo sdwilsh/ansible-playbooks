@@ -35,7 +35,7 @@ helmCharts:
     releaseName: grafana
     valuesFile: grafana-values.yml
   - name: kube-state-metrics
-    version: 8.4.1
+    version: 8.4.2
     repo: https://prometheus-community.github.io/helm-charts
     releaseName: kube-state-metrics
     valuesFile: kube-state-metrics-values.yml
