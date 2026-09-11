@@ -15,8 +15,11 @@ components:
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
-  # `providers` are not declared so they can live in the database and not be
-  # prune because the `source_of_truth` is this config file.
+  # This file may set governance.budgets and governance.rate_limits.  Do
+  # not set providers, governance.pricing_overrides, or
+  # governance.virtual_keys here.  Bifrost replaces the database content
+  # of any section this file sets, on every sync.  Manage those three
+  # through the dashboard instead.
   - name: bifrost-config-configmap
     files:
       - configmap/config.json
