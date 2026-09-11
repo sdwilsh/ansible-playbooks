@@ -22,6 +22,11 @@ spec:
             - --allow-unauthenticated
             - --allowed-host-header
             - argocd-mcp.hogs.tswn.us
+            # Bifrost reaches this server on the pod network, so the Host
+            # header carries the name of the Service.  This server compares
+            # the name only, so one value covers the port as well.
+            - --allowed-host-header
+            - argocd-mcp-svc.argocd-mcp.svc.cluster.local
             - --bind-address
             - $(POD_IP)
           env:

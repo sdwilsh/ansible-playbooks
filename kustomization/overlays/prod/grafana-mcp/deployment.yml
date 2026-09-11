@@ -35,8 +35,12 @@ spec:
             - streamable-http
             - -address
             - $(POD_IP):8000
+            # Bifrost reaches this server on the pod network, so the Host
+            # header carries the name of the Service.  This server compares
+            # the port as well, so each name needs the form with the port
+            # and the form without it.
             - -allowed-hosts
-            - grafana-mcp.hogs.tswn.us,grafana-mcp.hogs.tswn.us:443
+            - grafana-mcp.hogs.tswn.us,grafana-mcp-svc.grafana-mcp.svc.cluster.local:8000
             # The default limit is 10 seconds.  A Loki query over the full
             # 1 week of retention takes about 4.5 seconds at the query
             # frontend, before the Grafana proxy adds its own time.
