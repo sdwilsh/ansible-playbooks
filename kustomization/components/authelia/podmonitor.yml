@@ -6,7 +6,7 @@ metadata:
 spec:
   podMetricsEndpoints:
     - path: /metrics
-      port: metrics
+      port: auth-metrics
   selector:
     matchLabels:
       app.kubernetes.io/name: authelia

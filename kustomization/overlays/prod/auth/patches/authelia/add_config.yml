@@ -49,9 +49,6 @@ spec:
             - name: X_AUTHELIA_CONFIG_FILTERS
               value: template
           name: authelia
-          ports:
-            - containerPort: 9959
-              name: auth-metrics
           volumeMounts:
             - mountPath: /config/
               name: authelia-configuration

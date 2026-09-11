@@ -68,7 +68,7 @@ spec:
             timeoutSeconds: 3
           ports:
             - containerPort: 9959
-              name: metrics
+              name: auth-metrics
             - containerPort: 9091
               name: web
           securityContext:
