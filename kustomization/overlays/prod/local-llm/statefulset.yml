@@ -1,0 +1,160 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: local-llm-statefulset
+spec:
+  replicas: 1
+  serviceName: local-llm-svc
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: local-llm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: local-llm
+        hogs.tswn.us/bifrost-route: "true"
+        hogs.tswn.us/olah-client: "true"
+    spec:
+      automountServiceAccountToken: false
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: hardware.hogs.tswn.us/gpu
+                    operator: In
+                    values:
+                      - strixhalo
+      tolerations:
+        - effect: NoSchedule
+          key: gpu
+          operator: Equal
+          value: strixhalo
+      initContainers:
+        - name: fetch-model
+          image: docker.io/curlimages/curl
+          command:
+            - sh
+            - /scripts/fetch-model.sh
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /models
+              name: model-cache
+            - mountPath: /scripts
+              name: local-llm-scripts
+              readOnly: true
+      containers:
+        - name: llama-server
+          image: ghcr.io/ggml-org/llama.cpp
+          # The image `ENTRYPOINT` is `/app/tools.sh`.  It reads the first
+          # argument and picks a program to run.  `--server` runs
+          # `llama-server` with the rest of the arguments.
+          args:
+            - --server
+            - -m
+            - /models/Qwen3-Coder-Next-Q8_0-00001-of-00003.gguf
+            - --host
+            - $(POD_IP)
+            - --port
+            - "8080"
+            # `auto` is the default and does not log how it resolved.
+            - -fa
+            - "on"
+            - -ngl
+            - "999"
+            # Without this, the model name Bifrost sees is the file path.
+            - -a
+            - Qwen3-Coder-Next-Q8_0
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: 8080
+              name: web
+          volumeMounts:
+            - mountPath: /models
+              name: model-cache
+            - mountPath: /tmp
+              name: tmp
+          # tcpSocket cannot see model-loading state; /health can.
+          # startupProbe covers the full load, so livenessProbe cannot
+          # kill the pod mid-load.
+          startupProbe:
+            httpGet:
+              path: /health
+              port: web
+            periodSeconds: 15
+            failureThreshold: 80
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: web
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: web
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 5
+          resources:
+            limits:
+              amd.com/gpu: 1
+              cpu: 8000m
+              # Ceiling is this node's non-GTT margin (group_vars/kairos_gpuworker.yml), not this process's own need (measured RSS ~300Mi).
+              memory: 6Gi
+            requests:
+              amd.com/gpu: 1
+              cpu: 2000m
+              # A low request raises this pod's OOM-kill priority under node memory pressure.
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - configMap:
+            name: local-llm-scripts-configmap
+          name: local-llm-scripts
+        - name: tmp
+          emptyDir:
+            sizeLimit: 2Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: model-cache
+        labels:
+          recurring-job.longhorn.io/source: enabled
+          recurring-job-group.longhorn.io/default: disabled
+          # olah can always rebuild this cache; a backup of it wastes
+          # backup storage.
+          recurring-job-group.longhorn.io/no-backup: enabled
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Gi
+        storageClassName: longhorn-ephemeral

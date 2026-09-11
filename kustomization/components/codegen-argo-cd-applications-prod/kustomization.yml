@@ -36,6 +36,7 @@ resources:
   - application/kube-vip.yml
   - application/kubernetes-mcp.yml
   - application/linux-mcp.yml
+  - application/local-llm.yml
   - application/longhorn-system.yml
   - application/manyfold.yml
   - application/monitoring.yml

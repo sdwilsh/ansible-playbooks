@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    hogs.tswn.us/bifrost-route: "true"
+    hogs.tswn.us/olah-client: "true"
+  name: this-is-ignored-but-is-required

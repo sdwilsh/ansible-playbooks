@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-from-bifrost
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-olah
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+configMapGenerator:
+  - name: local-llm-scripts-configmap
+    files:
+      - configmap/fetch-model.sh
+images:
+  - name: docker.io/curlimages/curl
+    newTag: 8.11.1@sha256:c1fe1679c34d9784c1b0d1e5f62ac0a79fca01fb6377cdd33e90473c6f9f9a69
+  - name: ghcr.io/ggml-org/llama.cpp
+    newTag: full-vulkan-b10902@sha256:33ed2a8936e94ac893a50eed3d2958141d352198233d107e58c1c7ee3b96a9b4
+namespace: local-llm
+resources:
+  - namespace.yml
+  - service.yml
+  - statefulset.yml
