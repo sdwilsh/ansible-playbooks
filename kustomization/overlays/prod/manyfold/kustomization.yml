@@ -52,6 +52,10 @@ patches:
     target:
       kind: Deployment
       name: manyfold
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: Deployment
+      name: manyfold
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=manyfold].ports.[name=http].name
@@ -63,16 +67,6 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
-  - source:
-      fieldPath: spec.selector
-      kind: Deployment
-      name: manyfold
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-internet-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml

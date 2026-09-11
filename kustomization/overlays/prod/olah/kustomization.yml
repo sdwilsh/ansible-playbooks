@@ -12,21 +12,11 @@ images:
   - name: docker.io/xiahan2019/olah
     newTag: 0.5.1@sha256:a5fec886e874ca978a8b011a231337a3d7c8da9ae8a6c283ba2030bf5d259a6b
 namespace: olah
-replacements:
-  # The `networkpolicy-allow-to-internet` component matches every pod, which
-  # the comment in that component says to change.  This replacement narrows
-  # the rule to the olah Deployment, and it reads the labels from the
-  # Deployment, so the two do not move apart.
-  - source:
-      fieldPath: spec.selector
+patches:
+  - path: patches/add_internet_client_label.yml
+    target:
       kind: Deployment
       name: olah-deployment
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-internet-networkpolicy
 resources:
   - namespace.yml
   - networkpolicy/allow-to-olah-from-consumers.yml

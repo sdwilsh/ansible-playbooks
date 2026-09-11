@@ -17,6 +17,7 @@ spec:
               - 172.16.0.0/12
               - 192.168.0.0/16
   podSelector:
-    matchLabels: {} # You probably do not want to match all pods!
+    matchLabels:
+      hogs.tswn.us/internet-client: "true"
   policyTypes:
     - Egress

@@ -17,6 +17,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: bifrost
+        hogs.tswn.us/internet-client: "true"
     spec:
       automountServiceAccountToken: false
       containers:

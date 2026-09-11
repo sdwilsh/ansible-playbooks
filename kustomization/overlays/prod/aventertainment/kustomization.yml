@@ -46,10 +46,6 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
-  - path: patches/set_internet_networkpolicy_podselector.yml
-    target:
-      kind: NetworkPolicy
-      name: allow-to-internet-networkpolicy
   - path: patches/set_navidrome_baseurl.yml
     target:
       kind: StatefulSet
@@ -86,6 +82,22 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: jellyfin-statefulset
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: Deployment
+      name: tdarr-node-deployment
 resources:
   - namespace.yml
   - ingress.yml

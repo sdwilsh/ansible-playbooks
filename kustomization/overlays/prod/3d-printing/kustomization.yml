@@ -35,6 +35,10 @@ patches:
     target:
       kind: StatefulSet
       name: spoolman-statefulset
+  - path: patches/spoolman/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: spoolman-statefulset
 replacements:
   - source:
       fieldPath: spec.template.spec.containers.[name=spoolman].ports.[name=spoolman-web].name
@@ -46,16 +50,6 @@ replacements:
         select:
           kind: NetworkPolicy
           name: allow-from-traefik-networkpolicy
-  - source:
-      fieldPath: spec.selector
-      kind: StatefulSet
-      name: spoolman-statefulset
-    targets:
-      - fieldPaths:
-          - spec.podSelector
-        select:
-          kind: NetworkPolicy
-          name: allow-to-internet-networkpolicy
 resources:
   - namespace.yml
   - cnpg/backup.yml
