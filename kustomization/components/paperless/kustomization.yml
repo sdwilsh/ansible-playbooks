@@ -35,9 +35,9 @@ patches:
       kind: Service
       name: samba-svc
 resources:
-  - clusterrole.yaml
-  - clusterrolebinding.yaml
   - cronjob.yml
   - persistentvolume.yml
   - pvc.yml
+  - role.yml
+  - rolebinding.yml
   - serviceaccount.yml

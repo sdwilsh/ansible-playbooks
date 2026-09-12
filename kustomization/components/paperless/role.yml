@@ -1,17 +1,21 @@
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: paperless-backup-clusterrole
+  name: paperless-backup-role
 rules:
   - apiGroups:
       - ''
+    resourceNames:
+      - paperless-0
     resources:
       - pods
     verbs:
       - get
   - apiGroups:
       - ''
+    resourceNames:
+      - paperless-0
     resources:
       - pods/exec
     verbs:
