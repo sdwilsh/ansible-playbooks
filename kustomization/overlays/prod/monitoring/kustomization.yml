@@ -125,6 +125,7 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
+  - middleware/loki-clients.yml
   - networkpolicy/allow-from-alertmanager-to-internet.yml
   - networkpolicy/allow-from-alloy-to-api-server.yml
   - networkpolicy/allow-from-grafana-to-internet.yml

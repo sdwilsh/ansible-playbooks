@@ -220,6 +220,7 @@ gateway:
 ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: monitoring-loki-clients-middleware@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   enabled: true
   hosts:
