@@ -24,27 +24,8 @@ components:
 
 ## Required Labels
 
-### Namespace
-
-Put the `hogs.tswn.us/api-server-client` label on your `namespace.yml`.  No rule reads this label.
-It is a marker for a person who reads the overlay, and it shows which `Namespace`s hold a client of
-the API server.  The other components in this group use the same label on the `Namespace`, so keep
-it here as well.
-
-```yaml
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    hogs.tswn.us/api-server-client: "true"
-  name: this-is-ignored-but-is-required
-```
-
-### Pods
-
-Put the same label on each `Pod` that calls the API server.  The `NetworkPolicy` drops the
-connection from a `Pod` that does not have the label.
+Put the `hogs.tswn.us/api-server-client` label on each `Pod` that calls the API server.  The
+`NetworkPolicy` drops the connection from a `Pod` that does not have the label.
 
 Many workloads come from a Helm chart or from a shared component, and you cannot write in those
 files.  Add the label with a patch, and give the patch a `target` in your `kustomization.yml`.
