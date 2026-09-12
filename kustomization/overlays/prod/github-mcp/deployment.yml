@@ -1,0 +1,80 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-mcp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: github-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: github-mcp
+        hogs.tswn.us/bifrost-route: "true"
+        hogs.tswn.us/internet-client: "true"
+        hogs.tswn.us/traefik-route: "true"
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            # Every caller sends its own token.  This overlay leaves some
+            # flags out on purpose.  See `README.md`.
+            - http
+            - --toolsets
+            - actions,context,issues,pull_requests,repos,users
+            # This is only the public URL in the OAuth metadata.  It is not
+            # the GitHub API host.  `--gh-host` is that flag.
+            - --base-url
+            - https://github-mcp.hogs.tswn.us
+            - --listen-host
+            - $(POD_IP)
+            - --port
+            - "8082"
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: ghcr.io/github/github-mcp-server
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              # `/` answers 401 without a token.  Only this route is outside
+              # the token middleware, so a probe must use this route.
+              path: /.well-known/oauth-protected-resource
+              port: web
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: github-mcp
+          ports:
+            - containerPort: 8082
+              name: web
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /.well-known/oauth-protected-resource
+              port: web
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65532 # nonroot
+            seccompProfile:
+              type: RuntimeDefault
+      enableServiceLinks: false
+      priorityClassName: application-infra

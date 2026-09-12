@@ -105,6 +105,18 @@
         ]
       },
       {
+        "auth_type": "per_user_headers",
+        "connection_string": "http://github-mcp-svc.github-mcp.svc.cluster.local:8082/",
+        "connection_type": "http",
+        "name": "github",
+        "per_user_header_keys": [
+          "Authorization"
+        ],
+        "tools_to_execute": [
+          "*"
+        ]
+      },
+      {
         "connection_string": "http://grafana-mcp-svc.grafana-mcp.svc.cluster.local:8000/mcp",
         "connection_type": "http",
         "name": "grafana",

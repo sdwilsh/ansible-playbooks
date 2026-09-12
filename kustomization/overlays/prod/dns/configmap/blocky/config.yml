@@ -153,6 +153,7 @@ customDNS:
     factorio-relic-admin IN CNAME traefik.hogs
     frigate.hogs IN CNAME traefik.hogs
     garage-admin.hogs IN CNAME traefik.hogs
+    github-mcp.hogs IN CNAME traefik.hogs
     grafana-mcp.hogs IN CNAME traefik.hogs
     grafana.hogs IN CNAME traefik.hogs
     homeassistant.hogs IN CNAME traefik.hogs

@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-from-bifrost
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
+images:
+  - name: ghcr.io/github/github-mcp-server
+    newTag: v1.12.1@sha256:0ba840c46a237879c8300e7fddb0b6347f20e029ccb9cbe2ce4a943daa1ff560
+namespace: github-mcp
+resources:
+  - namespace.yml
+  - deployment.yml
+  - ingress.yml
+  - service.yml
