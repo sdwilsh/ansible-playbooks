@@ -20,7 +20,21 @@ spec:
             matchLabels:
               hogs.tswn.us/loki-client: "true"
         - ipBlock:
-            cidr: 10.11.2.0/24 # hogsflixplus (HFP) remote nodes
+            cidr: 10.11.2.2/32 # choros (alloy, through the WireGuard tunnel)
+        - ipBlock:
+            cidr: 10.11.2.31/32 # hogsflixplus01 (HFP remote node)
+        - ipBlock:
+            cidr: 10.11.2.32/32 # hogsflixplus02 (HFP remote node)
+        - ipBlock:
+            cidr: 10.11.2.33/32 # hogsflixplus03 (HFP remote node)
+        - ipBlock:
+            cidr: 10.11.2.34/32 # hogsflixplus04 (HFP remote node)
+        - ipBlock:
+            cidr: 10.11.2.35/32 # hogsflixplus05 (HFP remote node)
+        - ipBlock:
+            cidr: 10.11.2.36/32 # hogsflixplus06 (HFP remote node)
+        - ipBlock:
+            cidr: 10.11.2.37/32 # hogsflixplus07 (HFP remote node)
         - ipBlock:
             cidr: 10.11.0.101/32 # node01 (alloy-node hostNetwork DaemonSet)
         - ipBlock:
