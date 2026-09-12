@@ -73,8 +73,8 @@ spec:
             severity: warning
         - alert: DatabaseMetricsDisappeared
           annotations:
-            description: Prometheus got metrics from the database in {{ $labels.namespace }} 6 hours ago, and it gets none now. A PodMonitor that selects no Pod gives this result, and it makes no other alarm, because a rule with no data does not fire. Compare the PodMonitor of that namespace with the name of its Cluster. The alarm stops 6 hours after you remove a database on purpose.
-            summary: Prometheus stopped getting metrics from a database.
+            description: The database in {{ $labels.namespace }} gave metrics 6 hours ago.  Now it gives none.  Three faults cause this.  The Pods of the Cluster are not in the Running state.  A NetworkPolicy stops Prometheus.  The selector of the PodMonitor does not have the name of the Cluster.  No other alarm shows these faults.  A rule with no data does not fire.  This alarm stops 6 hours after you remove a database.
+            summary: A database gives no metrics.
           expr: |-
             count by (namespace) (cnpg_collector_up offset 6h)
               unless
