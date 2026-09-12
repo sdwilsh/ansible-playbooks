@@ -6,6 +6,7 @@ collectors:
   - endpointslices
   - leases
   - nodes
+  - pods
   - services
 
 priorityClassName: application-infra
