@@ -25,6 +25,10 @@ spec:
                 configMapKeyRef:
                   key: UNIFI_MCP_ENABLE_DNS_REBINDING_PROTECTION
                   name: unifi-network-mcp-configmap
+            - name: UNIFI_MCP_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: UNIFI_MCP_HTTP_ENABLED
               valueFrom:
                 configMapKeyRef:
