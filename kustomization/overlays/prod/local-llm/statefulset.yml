@@ -76,6 +76,10 @@ spec:
             - Qwen3-Coder-Next-Q8_0
             - --parallel
             - "1"
+            # The default is 262144 tokens.  Host memory increases with the
+            # context, and the kernel stopped the server near 153000 tokens.
+            - --ctx-size
+            - "131072"
           env:
             - name: POD_IP
               valueFrom:
