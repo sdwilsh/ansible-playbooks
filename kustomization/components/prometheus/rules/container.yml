@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: container-rules
+  namespace: prometheus
+spec:
+  groups:
+    - name: general.container
+      interval: 5m
+      rules:
+        - alert: container-oom-killed
+          annotations:
+            description: "The OOM killer stopped the container {{ $labels.exported_container }} in {{ $labels.exported_namespace }}/{{ $labels.exported_pod }}.  The container used more memory than its limit."
+          expr: kube_pod_container_status_last_terminated_reason{reason="OOMKilled"} == 1
+          for: 1m
+          labels:
+            severity: page
+        - alert: container-memory-near-limit
+          annotations:
+            description: "The container {{ $labels.container }} in {{ $labels.namespace }}/{{ $labels.pod }} uses {{ $value }}% of its memory limit.  The OOM killer stops the container at 100%."
+          expr: 100 * container_memory_working_set_bytes{container!=""} / (container_spec_memory_limit_bytes{container!=""} > 0) > 80
+          for: 10m
+          labels:
+            severity: warning
