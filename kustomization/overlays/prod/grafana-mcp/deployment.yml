@@ -46,6 +46,8 @@ spec:
             # frontend, before the Grafana proxy adds its own time.
             - -grafana-timeout
             - 60s
+            - -healthz-address
+            - $(POD_IP):8081
           # The image entrypoint also sets `--transport sse`.  This command
           # replaces the entrypoint.  The flags above are then the whole
           # command line.
@@ -69,21 +71,25 @@ spec:
           image: docker.io/grafana/mcp-grafana
           livenessProbe:
             failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: healthz
             periodSeconds: 10
             successThreshold: 1
-            tcpSocket:
-              port: web
             timeoutSeconds: 5
           name: grafana-mcp
           ports:
+            - containerPort: 8081
+              name: healthz
             - containerPort: 8000
               name: web
           readinessProbe:
             failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: healthz
             periodSeconds: 10
             successThreshold: 1
-            tcpSocket:
-              port: web
             timeoutSeconds: 5
           resources:
             limits:
