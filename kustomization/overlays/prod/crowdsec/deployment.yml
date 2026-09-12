@@ -44,6 +44,15 @@ spec:
                 sdwilsh/navidrome
             - name: CROWDSEC_BYPASS_DB_VOLUME_CHECK
               value: "1"
+            # The entrypoint registers the local agent as a machine with this
+            # name, and it takes `localhost` when the name is absent.  Two
+            # `Pod`s then use one machine: the second `Pod` deletes the machine
+            # and makes it again with a new password, which stops the first
+            # `Pod`.  The name of the `Pod` gives each one its own machine.
+            - name: CUSTOM_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
@@ -64,11 +73,6 @@ spec:
                 secretKeyRef:
                   key: username
                   name: crowdsec-pg-cluster-app
-            - name: LOCAL_API_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: local_password
-                  name: crowdsec-credentials-secret
             - name: POD_IP
               valueFrom:
                 fieldRef:
