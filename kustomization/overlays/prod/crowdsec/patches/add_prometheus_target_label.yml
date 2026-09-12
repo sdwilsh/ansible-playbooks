@@ -1,4 +1,0 @@
----
-- op: add
-  path: /spec/template/metadata/labels/hogs.tswn.us~1prometheus-target
-  value: "true"

@@ -5,13 +5,5 @@ kind: Kustomization
 components:
   - ../../../components/longhorn
 patches:
-  - path: patches/change_ingress_host.yml
-    target:
-      kind: Ingress
-      name: longhorn-frontend-ingress
-  - path: patches/set_ingress_middleware.yml
-    target:
-      kind: Ingress
-      name: longhorn-frontend-ingress
 resources:
   - ingress.yml

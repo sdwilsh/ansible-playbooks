@@ -13,6 +13,9 @@ spec:
       labels:
         app.kubernetes.io/name: crowdsec
         hogs.tswn.us/internet-client: "true"
+        hogs.tswn.us/loki-client: "true"
+        hogs.tswn.us/prometheus-target: "true"
+        hogs.tswn.us/traefik-route: "true"
     spec:
       affinity:
         podAntiAffinity:
