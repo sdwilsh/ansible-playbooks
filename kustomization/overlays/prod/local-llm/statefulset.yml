@@ -74,6 +74,8 @@ spec:
             # Without this, the model name Bifrost sees is the file path.
             - -a
             - Qwen3-Coder-Next-Q8_0
+            - --parallel
+            - "1"
           env:
             - name: POD_IP
               valueFrom:
