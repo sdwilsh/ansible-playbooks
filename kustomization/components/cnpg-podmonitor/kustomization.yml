@@ -1,0 +1,43 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+replacements:
+  # The name of the `Cluster` goes in four fields.  A `delimiter` of `-` cuts
+  # the value at each `-`, and `index: 0` writes the name of the `Cluster` in
+  # the first part.  `cnpg-ca` therefore becomes `<cluster>-ca`.
+  #
+  # Each target finds the `PodMonitor` with a label, and not with a name.  One
+  # target writes the name, and a target after it would find nothing if it
+  # looked for the name.  A label does not change, so the order is free.
+  #
+  # Is this overengineered?  Maybe...
+  - source:
+      fieldPath: metadata.name
+      group: postgresql.cnpg.io
+      kind: Cluster
+    targets:
+      - fieldPaths:
+          - metadata.name
+        options:
+          delimiter: '-'
+          index: 0
+        select:
+          kind: PodMonitor
+          labelSelector: kustomize.hogs.tswn.us/cnpg-podmonitor=true
+      - fieldPaths:
+          - spec.podMetricsEndpoints.0.tlsConfig.ca.secret.name
+          - spec.podMetricsEndpoints.0.tlsConfig.serverName
+        options:
+          delimiter: '-'
+          index: 0
+        select:
+          kind: PodMonitor
+          labelSelector: kustomize.hogs.tswn.us/cnpg-podmonitor=true
+      - fieldPaths:
+          - spec.selector.matchLabels.[cnpg.io/cluster]
+        select:
+          kind: PodMonitor
+          labelSelector: kustomize.hogs.tswn.us/cnpg-podmonitor=true
+resources:
+  - podmonitor.yml

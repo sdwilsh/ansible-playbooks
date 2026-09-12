@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
+  - ../../../components/cnpg-podmonitor
   - ../../../components/immich
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-prometheus
@@ -80,6 +81,5 @@ resources:
   - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/database.yml
-  - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml

@@ -2,17 +2,19 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: tandoor-pg-cluster-podmonitor
+  labels:
+    kustomize.hogs.tswn.us/cnpg-podmonitor: "true"
+  name: cnpg-podmonitor
 spec:
-  selector:
-    matchLabels:
-      cnpg.io/cluster: tandoor-pg-cluster
   podMetricsEndpoints:
     - port: metrics
       scheme: https
       tlsConfig:
         ca:
           secret:
-            name: tandoor-pg-cluster-ca
             key: ca.crt
-        serverName: tandoor-pg-cluster-rw
+            name: cnpg-ca
+        serverName: cnpg-rw
+  selector:
+    matchLabels:
+      cnpg.io/cluster: cnpg

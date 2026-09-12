@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
+  - ../../../components/cnpg-podmonitor
   - ../../../components/networkpolicy-allow-from-cnpg-operator
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-api-server
@@ -122,7 +123,6 @@ resources:
   - alertmanagerconfig.yml
   - cnpg/backup.yml
   - cnpg/cluster.yml
-  - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
   - networkpolicy/allow-from-alertmanager-to-internet.yml

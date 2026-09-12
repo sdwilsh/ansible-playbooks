@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/cnpg-backup
+  - ../../../components/cnpg-podmonitor
   - ../../../components/frigate
   - ../../../components/mosquitto
   - ../../../components/networkpolicy-allow-from-cnpg-operator
@@ -70,7 +71,6 @@ resources:
   - cnpg/cluster.yml
   - cnpg/ingressroutetcp.yml
   - cnpg/middlewaretcp.yml
-  - cnpg/podmonitor.yml
   - cnpg/scheduledbackup.yml
   - cnpg/tlsoption.yml
   - ingress.yml
