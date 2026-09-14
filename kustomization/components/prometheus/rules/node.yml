@@ -54,11 +54,13 @@ spec:
         # pages, so `eviction-hard` cannot protect a GPU node.  node-exporter
         # reads `/proc/meminfo`, which does include GTT pages, so the metric
         # below is the only signal that sees the memory of the GPU.  See
-        # `group_vars/kairos_gpuworker.yml`.
+        # `group_vars/kairos_gpuworker.yml`.  8 GiB is less than the floor
+        # that remains when the `local-llm` container uses all of its limit,
+        # so normal use of that limit does not cause an alarm.
         - alert: gpu-node-memory-available-low
           annotations:
-            description: "{{ $labels.node }} has less than 12 GiB of memory available. The GPU can hold 115 GiB in GTT, the kernel cannot reclaim GTT pages, and `oom_score` does not count them, so the OOM killer stops an unrelated process."
-          expr: node_memory_MemAvailable_bytes{node=~"gpuworker[0-9]+"} < 12 * 1024 ^ 3
+            description: "{{ $labels.node }} has less than 8 GiB of memory available. The GPU can hold 108 GiB in GTT, the kernel cannot reclaim GTT pages, and `oom_score` does not count them, so the OOM killer stops an unrelated process."
+          expr: node_memory_MemAvailable_bytes{node=~"gpuworker[0-9]+"} < 8 * 1024 ^ 3
           for: 15m
           labels:
             severity: warning

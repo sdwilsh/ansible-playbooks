@@ -120,8 +120,9 @@ spec:
             limits:
               amd.com/gpu: 1
               cpu: 8000m
-              # Ceiling is this node's non-GTT margin (group_vars/kairos_gpuworker.yml), not this process's own need (measured RSS ~300Mi).
-              memory: 6Gi
+              # This limit and the GTT limit are one budget.  Read
+              # `group_vars/kairos_gpuworker.yml` before you change it.
+              memory: 10Gi
             requests:
               amd.com/gpu: 1
               cpu: 2000m
