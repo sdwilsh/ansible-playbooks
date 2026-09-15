@@ -1,0 +1,60 @@
+FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS builder
+
+# hadolint ignore=DL3018
+RUN apk add --no-cache \
+    ca-certificates \
+    curl \
+    xz
+
+# renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
+ARG S6_OVERLAY_VERSION=v3.2.3.2
+WORKDIR /download
+RUN mkdir -p /s6root \
+  && for part in noarch x86_64; do \
+       url="https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-${part}.tar.xz"; \
+       curl -f -L -O "${url}" \
+    && curl -f -L -O "${url}.sha256" \
+    && sha256sum -c "s6-overlay-${part}.tar.xz.sha256" \
+    && tar -C /s6root -Jxpf "s6-overlay-${part}.tar.xz" \
+    || exit 1; \
+     done
+
+FROM ghcr.io/ggml-org/llama.cpp:server-vulkan-v0.4.1@sha256:43e0e25ca654d839ebda39fd6c2f200b36e9efb3e597ba90d0aaeff1be95ca53
+
+COPY --from=builder /s6root/ /
+COPY scripts/ /usr/local/bin/
+RUN chmod 0755 /usr/local/bin/check-servers.sh \
+    /usr/local/bin/check-supervisor.sh \
+    /usr/local/bin/generate-model-services.sh
+
+# An exec probe gets this `PATH`.
+# `llama-server` finds its libraries in `/app`.
+# The Mesa shader cache can take 1 GB of `/tmp`.
+ENV PATH="/command:${PATH}" \
+    LD_LIBRARY_PATH=/app \
+    MESA_SHADER_CACHE_DISABLE=true
+
+# `rc.init` runs the hook and compiles the tree in the same boot, so both
+# read `S6_RUNTIME_BUNDLEDIR`.  A hook that fails must stop the container,
+# and the default of `S6_BEHAVIOUR_IF_STAGE2_FAILS` makes it a warning.
+# The pod gives `/run` a world-writable `emptyDir` that s6 does not own.
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
+    S6_READ_ONLY_ROOT=1 \
+    S6_RUNTIME_BUNDLEDIR=/run/s6-overlay/s6-rc.d \
+    S6_STAGE2_HOOK=/usr/local/bin/generate-model-services.sh \
+    S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES=1
+
+# The container fails at run time without these files.
+RUN test -L /var/run \
+  && [ "$(readlink -f /var/run)" = "/run" ] \
+  && test -x /app/llama-server \
+  && test -x /bin/bash \
+  && test -x /usr/bin/curl \
+  && test -x /command/with-contenv \
+  && test -x /command/s6-svstat \
+  && test -x /command/s6-rc-compile \
+  && test -x /usr/local/bin/check-servers.sh \
+  && test -x /usr/local/bin/check-supervisor.sh \
+  && test -x /usr/local/bin/generate-model-services.sh
+
+ENTRYPOINT ["/init"]

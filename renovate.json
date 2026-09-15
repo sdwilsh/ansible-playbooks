@@ -410,6 +410,21 @@
       "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
     },
     {
+      "description": "llama.cpp publishes many build tags each day.  Follow the release tags.",
+      "groupName": "llama-cpp",
+      "matchFileNames": [
+        "images/sif/Containerfile"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/ggml-org/llama.cpp"
+      ],
+      "minimumReleaseAge": "7 days",
+      "schedule": [
+        "after 4pm on friday"
+      ],
+      "versioning": "regex:^server-vulkan-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
       "groupName": "postgres-3d-printing",
       "matchFileNames": [
         "kustomization/overlays/prod/3d-printing/**"

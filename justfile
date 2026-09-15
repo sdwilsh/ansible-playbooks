@@ -232,6 +232,11 @@ build-mack-vm:
 build-nut-shutdown-agent:
     podman build images/nut-shutdown-agent --tag nut-shutdown-agent:latest
 
+# Builds the images/sif container.
+[group('images')]
+build-sif:
+    podman build images/sif --tag localhost/sif:latest
+
 # Check that the fixed CoreDNS hosts entries agree with blocky
 [group('lint')]
 coredns-drift-check:
