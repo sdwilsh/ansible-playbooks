@@ -15,6 +15,9 @@ common__nameservers:
   addresses:
     - 10.11.0.1
 
+# `LimitMEMLOCK` for the k3s unit.  8388608 is the value that appears to be the default.
+k3s_limit_memlock: 8388608
+
 kairos_managed_networks:
   - name: transit
     vlan_id: 2

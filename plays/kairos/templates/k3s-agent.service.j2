@@ -14,4 +14,5 @@ ExecStart=/usr/bin/k3s agent \
     --node-name={{ inventory_hostname_short }}{% for taint in k3s_node_taints | default([]) %} \
     --node-taint={{ taint }}{% endfor %}
 
+LimitMEMLOCK={{ k3s_limit_memlock }}
 TasksMax=infinity
