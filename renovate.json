@@ -13,6 +13,19 @@
     },
     {
       "customType": "regex",
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "ROCm/FastFlowLM",
+      "description": "The datasource hashes the release asset, so Renovate changes the version and the checksum together.",
+      "managerFilePatterns": [
+        "/^images/vergil/Containerfile$/"
+      ],
+      "matchStrings": [
+        "ARG FLM_VERSION=(?<currentValue>\\S+)\\nARG FLM_SHA256=(?<currentDigest>[a-f0-9]{64})"
+      ],
+      "autoReplaceStringTemplate": "ARG FLM_VERSION={{{newValue}}}\nARG FLM_SHA256={{{newDigest}}}"
+    },
+    {
+      "customType": "regex",
       "managerFilePatterns": [
         "/(^|/|\\.).*\\.sh$/"
       ],
@@ -423,6 +436,20 @@
         "after 4pm on friday"
       ],
       "versioning": "regex:^server-vulkan-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
+      "description": "A new FastFlowLM release needs a new checksum in the Containerfile.",
+      "groupName": "fastflowlm",
+      "matchFileNames": [
+        "images/vergil/Containerfile"
+      ],
+      "matchPackageNames": [
+        "ROCm/FastFlowLM"
+      ],
+      "minimumReleaseAge": "7 days",
+      "schedule": [
+        "after 4pm on friday"
+      ]
     },
     {
       "groupName": "postgres-3d-printing",

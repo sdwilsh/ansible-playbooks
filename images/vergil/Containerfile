@@ -1,0 +1,81 @@
+FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS builder
+
+# Alpine serves one version of each package for a branch, and a rebuild
+# replaces it.  A version pin therefore stops the build at the next rebuild.
+# hadolint ignore=DL3018
+RUN apk add --no-cache \
+    ca-certificates \
+    curl
+
+# Renovate changes both lines together.  Keep the hash under the version, and
+# keep the version in the tag form, because the datasource reads the tag.
+ARG FLM_VERSION=v1.0.5
+ARG FLM_SHA256=dd797ccfda5e0f97e3b683c9b304bce7d0051f8e5d650b9eb001d01a83b19d2c
+WORKDIR /download
+RUN archive="fastflowlm_${FLM_VERSION#v}_linux.tar.gz" \
+  && curl -f -L -O \
+       "https://github.com/ROCm/FastFlowLM/releases/download/${FLM_VERSION}/${archive}" \
+  && echo "${FLM_SHA256}  ${archive}" > runtime.sha256 \
+  && sha256sum -c runtime.sha256 \
+  && mkdir -p /opt/vergil \
+  && tar -C /opt/vergil -xzf "${archive}"
+
+# The probe sends this clip.  The hash pins the audio, so a new tag stops the
+# build until a person accepts a new clip.
+# renovate: datasource=github-releases depName=ggml-org/whisper.cpp
+ARG WHISPER_CPP_VERSION=v1.9.4
+ARG PROBE_SHA256=59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e
+RUN curl -f -L -o /opt/vergil/probe.wav \
+      "https://raw.githubusercontent.com/ggml-org/whisper.cpp/${WHISPER_CPP_VERSION}/samples/jfk.wav" \
+  && echo "${PROBE_SHA256}  /opt/vergil/probe.wav" > probe.sha256 \
+  && sha256sum -c probe.sha256
+
+FROM docker.io/library/ubuntu:26.04@sha256:513c074113a871b51a8d16ab445c88779d6452d937a164fb5cc479f32668a41d
+
+# `flm-real` needs `libgomp.so.1` and `libcurl.so.4`.  Ubuntu names those
+# packages `libgomp1` and `libcurl4t64`.  The probe uses `curl` and `jq`.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates curl jq libcurl4t64 libgomp1 \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /opt/vergil/ /opt/vergil/
+COPY check-transcription.sh /opt/vergil/
+
+# The update check reaches GitHub, and a `deny-all` egress policy makes it
+# time out at each start.
+#
+# `model_list.json` sets `model_path` to `models`, so a model goes to
+# `${FLM_MODEL_PATH}/models/<Name>`.  The second `models` is correct.
+#
+# A library can fall back to `${HOME}`.  `/tmp` is writable.
+#
+# `flm` finds the xclbin, the config and the model info from `/proc/self/exe`,
+# and it sets `LD_LIBRARY_PATH` and `XILINX_XRT`.  Do not set those here.
+ENV FLM_DISABLE_UPDATE_CHECK=yes \
+    FLM_MODEL_PATH=/models \
+    HOME=/tmp
+
+# Each test finds a defect that otherwise stops the container at run time.
+#
+# The two counts must agree.  A gap in the multiarch mirror breaks the XRT
+# library search at device open.
+#
+# Whisper needs five xclbins.
+#
+# `ldd` reads `flm-real` only.  A listing of `lib/` names libraries that no
+# start loads, and one that the wrapper finds with `LD_LIBRARY_PATH`.
+#
+# The `version` command gives status 0.  The `--version` option does not.
+# hadolint ignore=DL4006,SC2012
+RUN test -x /opt/vergil/flm \
+  && test -x /opt/vergil/flm-real \
+  && test -x /bin/bash \
+  && test -x /usr/bin/curl \
+  && test -x /usr/bin/jq \
+  && test "$(ls /opt/vergil/lib/libxrt*.so* | wc -l)" \
+        = "$(ls /opt/vergil/lib/x86_64-linux-gnu/ | wc -l)" \
+  && test "$(ls /opt/vergil/xclbins/Whisper-V3-Turbo-NPU2/ | wc -l)" = 5 \
+  && ! ldd /opt/vergil/flm-real | grep 'not found' \
+  && FLM_DISABLE_UPDATE_CHECK=yes /opt/vergil/flm version
+
+ENTRYPOINT ["/opt/vergil/flm"]

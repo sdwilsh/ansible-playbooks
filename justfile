@@ -237,6 +237,11 @@ build-nut-shutdown-agent:
 build-sif:
     podman build images/sif --tag localhost/sif:latest
 
+# Builds the images/vergil container.
+[group('images')]
+build-vergil:
+    podman build images/vergil --tag vergil:latest
+
 # Check that the fixed CoreDNS hosts entries agree with blocky
 [group('lint')]
 coredns-drift-check:

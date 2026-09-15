@@ -1,0 +1,100 @@
+---
+name: Build Vergil Container Image
+on:
+  pull_request:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/workflows/build-vergil.yml
+      - images/vergil/**
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/workflows/build-vergil.yml
+      - images/vergil/**
+  workflow_dispatch:
+
+env:
+  IMAGE_DESC: vergil -- runs the FastFlowLM runtime on an AMD NPU.
+  IMAGE_NAME: vergil
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build_test_push:
+    name: Build, test, and push image
+
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> "${GITHUB_OUTPUT}"
+
+      - name: Build image for testing
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: images/vergil
+          file: images/vergil/Containerfile
+          load: true
+          platforms: linux/amd64
+          push: false
+          tags: vergil:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # The runner has python3 and docker.  The test needs nothing else.
+      - name: Run e2e test
+        run: images/vergil/test/e2e.py vergil:ci
+
+      - name: Image Metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        id: metadata
+        with:
+          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=latest.{{date 'YYYYMMDD'}}
+          labels: |
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.description=${{ env.IMAGE_DESC }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/blob/main/images/vergil/Containerfile
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          context: images/vergil
+          file: images/vergil/Containerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
