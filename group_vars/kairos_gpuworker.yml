@@ -44,5 +44,10 @@ k3s_kubelet_args:
   # does not enforce this reservation as a cgroup.
   - kube-reserved=memory=6Gi
 
+# FastFlowLM maps NPU memory with `MAP_LOCKED`, which counts against
+# `RLIMIT_MEMLOCK`.  A `Pod` with the `restricted` pod security standard cannot
+# otherwise raise the limit, so it must be set by the k3s service.
+k3s_limit_memlock: 8589934592
+
 k3s_node_taints:
   - gpu=strixhalo:NoSchedule
