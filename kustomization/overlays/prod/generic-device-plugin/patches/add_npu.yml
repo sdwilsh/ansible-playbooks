@@ -1,0 +1,12 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: --device
+# One server uses the device at a time.
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: |
+    name: npu
+    groups:
+      - paths:
+          - path: /dev/accel
