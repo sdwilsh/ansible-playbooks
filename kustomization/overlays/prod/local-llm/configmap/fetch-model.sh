@@ -1,5 +1,8 @@
 #!/bin/sh
 # Get each model shard through olah.  Check each one after the download.
+# `MODELS` gives one record per model, the same format
+# `generate-model-services.sh` reads: alias|base URL|shard names|port|ctx.
+# This script uses the base URL and the shard names only.
 #
 # llama-server has its own downloader.  It cannot use olah.  It calls the
 # Hugging Face "refs" endpoint to find the commit for "main".  olah does
@@ -12,38 +15,47 @@
 # every download catches this.
 set -eu
 
-base="http://olah-svc.olah.svc.cluster.local:8090/unsloth/Qwen3-Coder-Next-GGUF/resolve/ce09c67b53bc8739eef83fe67b2f5d293c270632/Q8_0"
+[ -n "${MODELS:-}" ] || { echo "fetch-model.sh: MODELS has no value" >&2; exit 1; }
 
-for f in \
-  Qwen3-Coder-Next-Q8_0-00001-of-00003.gguf \
-  Qwen3-Coder-Next-Q8_0-00002-of-00003.gguf \
-  Qwen3-Coder-Next-Q8_0-00003-of-00003.gguf; do
-  echo "fetching $f"
+# The record has the same fields as `generate-model-services.sh` reads.
+# shellcheck disable=SC2034
+while IFS='|' read -r alias base shards port ctx; do
+  [ -n "$alias" ] || continue
 
-  # A new `Pod`'s egress fails for a few seconds after the pod starts.  The
-  # network policy has not taken effect yet.  "--retry-all-errors" covers
-  # this.
-  curl -fsS --retry 20 --retry-all-errors --retry-delay 10 \
-    --max-time 43200 --speed-limit 1024 --speed-time 300 \
-    -C - -o "/models/$f" "$base/$f"
+  for f in $shards; do
+    # The URL has no directory.  The path may hold one, for a model
+    # kept under its own subdirectory of /models.
+    name=${f##*/}
+    echo "fetching $f"
 
-  want=$(curl -fsSI "$base/$f" | tr -d '\r' | tr '[:upper:]' '[:lower:]' | \
-    sed -n 's/^etag: *"\{0,1\}\([0-9a-f]*\)"\{0,1\}$/\1/p')
+    # A new `Pod`'s egress fails for a few seconds after the pod starts.
+    # The network policy has not taken effect yet.  "--retry-all-errors"
+    # covers this.  "--create-dirs" makes the subdirectory; curl does not
+    # make it on its own.
+    curl -fsS --retry 20 --retry-all-errors --retry-delay 10 \
+      --max-time 43200 --speed-limit 1024 --speed-time 300 \
+      --create-dirs -C - -o "/models/$f" "$base/$name"
 
-  sidecar="/models/$f.sha256-verified"
-  if [ -f "$sidecar" ] && [ "$(cat "$sidecar")" = "$want" ]; then
-    echo "$f already checked against this etag, skip the hash"
-    continue
-  fi
+    want=$(curl -fsSI "$base/$name" | tr -d '\r' | tr '[:upper:]' '[:lower:]' | \
+      sed -n 's/^etag: *"\{0,1\}\([0-9a-f]*\)"\{0,1\}$/\1/p')
 
-  got=$(sha256sum "/models/$f" | cut -d' ' -f1)
+    sidecar="/models/$f.sha256-verified"
+    if [ -f "$sidecar" ] && [ "$(cat "$sidecar")" = "$want" ]; then
+      echo "$f already checked against this etag, skip the hash"
+      continue
+    fi
 
-  if [ "$want" != "$got" ]; then
-    echo "checksum mismatch for $f: want $want got $got" >&2
-    rm -f "$sidecar"
-    rm -f "/models/$f"
-    exit 1
-  fi
+    got=$(sha256sum "/models/$f" | cut -d' ' -f1)
 
-  echo "$want" > "$sidecar"
-done
+    if [ "$want" != "$got" ]; then
+      echo "checksum mismatch for $f: want $want got $got" >&2
+      rm -f "$sidecar"
+      rm -f "/models/$f"
+      exit 1
+    fi
+
+    echo "$want" > "$sidecar"
+  done
+done <<EOF
+$MODELS
+EOF

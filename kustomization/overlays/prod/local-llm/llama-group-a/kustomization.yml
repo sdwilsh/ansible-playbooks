@@ -4,6 +4,10 @@ kind: Kustomization
 
 components:
   - ../base
+configMapGenerator:
+  - name: local-llm-models-configmap
+    files:
+      - MODELS=configmap/models.txt
 namePrefix: group-a-
 patches:
   - path: patches/set_models.yml
