@@ -6,9 +6,11 @@ a read-only root.  The `flm` wrapper makes a directory and a symbolic link at
 each start, and a read-only root refuses the link without a message.  The
 tarball holds a complete multiarch mirror, so the wrapper skips each link.
 
-`check-transcription.sh` runs against a stub server.  The real server answers
-200 with a body of `null` when it loads no ASR model, and a status check does
-not find that state.
+`check-transcription.sh` and `check-vision.sh` run against a stub server.  The
+real server answers 200 with a body of `null` when it loads no ASR model, and
+a status check does not find that state.  The stub reads the chat request and
+answers 400 for a request that carries no image, so each vision scenario
+checks the request of the probe as well as the answer.
 
 Usage: e2e.py <image-tag>
 """
@@ -34,13 +36,19 @@ PROBE_SCRIPT = f"{PREFIX}/check-transcription.sh"
 PROBE_WAV = f"{PREFIX}/probe.wav"
 PROBE_SHA256 = "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e"
 PROBE_BYTES = "352078"
+VISION_SCRIPT = f"{PREFIX}/check-vision.sh"
+PROBE_PNG = f"{PREFIX}/probe.png"
+PROBE_PNG_SHA256 = (
+    "05c6e798a3bad3a1044575d89eb66223cd038e36bdbbd81baf9028f4408e4541"
+)
+PROBE_PNG_BYTES = "3319"
 # The pod gives `/models` a volume.  The server stops at that path before it
 # opens the device when the path is absent.
 MODEL_MOUNT = ["--tmpfs", "/models:rw,size=16m"]
 
 # A scenario that stops early makes no result, and a suite that only counts
 # failures then reports success.  Raise this number with each assertion.
-EXPECTED_ASSERTIONS = 18
+EXPECTED_ASSERTIONS = 29
 
 
 class Report:
@@ -256,6 +264,29 @@ def probe_clip(report: Report, harness: Harness) -> None:
     report.check("the clip hashes to the pin", lines[2] == PROBE_SHA256, lines[2])
 
 
+def probe_image(report: Report, harness: Harness) -> None:
+    """The image must stay the image that the probe reads."""
+    result = harness.shell(
+        f"dd if={PROBE_PNG} bs=1 skip=1 count=3 2>/dev/null; echo;"
+        f" sha256sum {PROBE_PNG} | cut -d' ' -f1;"
+        f" stat -c %s {PROBE_PNG}"
+    )
+    lines = result.stdout.splitlines()
+    report.check(
+        "the image holds the probe image",
+        result.returncode == 0 and len(lines) == 3
+        and lines[2] == PROBE_PNG_BYTES,
+        result.stdout + result.stderr,
+    )
+    if len(lines) != 3:
+        return
+    report.check("the probe image is a PNG", lines[0] == "PNG", lines[0])
+    report.check(
+        "the probe image hashes to the pin", lines[1] == PROBE_PNG_SHA256,
+        lines[1],
+    )
+
+
 def transcription_probe(report: Report, harness: Harness) -> None:
     """`jq -e` must reject each body that holds no transcript."""
     no_address = runtime("exec", harness.server, PROBE_SCRIPT)
@@ -277,6 +308,35 @@ def transcription_probe(report: Report, harness: Harness) -> None:
         with stub_server(mode):
             result = runtime(
                 "exec", "-e", "POD_IP=127.0.0.1", harness.server, PROBE_SCRIPT,
+                timeout=60,
+            )
+        report.check(
+            name, (result.returncode == 0) == (wanted == 0),
+            f"exit {result.returncode}\n{result.stdout}{result.stderr}",
+        )
+
+
+def vision_probe(report: Report, harness: Harness) -> None:
+    """`jq -e` must reject each body that holds no answer."""
+    no_address = runtime("exec", harness.server, VISION_SCRIPT)
+    report.check(
+        "the vision probe fails with no POD_IP",
+        no_address.returncode != 0 and "POD_IP has no value" in no_address.stderr,
+        no_address.stdout + no_address.stderr,
+    )
+
+    for mode, wanted, name in (
+        ("text", 0, "an answer gives success"),
+        ("null", 1, "a chat body of null fails"),
+        ("null-text", 1, "a content field of null fails"),
+        ("empty-text", 1, "an empty content field fails"),
+        ("no-choices", 1, "an empty choices array fails"),
+        ("error", 1, "a chat status of 500 fails"),
+        ("stall", 1, "a chat stall past the timeout fails"),
+    ):
+        with stub_server(mode):
+            result = runtime(
+                "exec", "-e", "POD_IP=127.0.0.1", harness.server, VISION_SCRIPT,
                 timeout=60,
             )
         report.check(
@@ -329,7 +389,9 @@ def main() -> int:
             ("security-context", security_context),
             ("multiarch-mirror", multiarch_mirror),
             ("probe-clip", probe_clip),
+            ("probe-image", probe_image),
             ("transcription-probe", transcription_probe),
+            ("vision-probe", vision_probe),
             ("serve-without-device", serve_without_device),
         ):
             print(f"=== {name} ===", flush=True)

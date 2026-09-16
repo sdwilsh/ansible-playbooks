@@ -1,6 +1,6 @@
 #!/bin/sh
-# Ask the server to transcribe the probe clip.  The `startupProbe` and the
-# `livenessProbe` run this script.
+# Ask the server to transcribe the probe clip.  The `startupProbe` runs this
+# script.  A transcription holds the NPU, so no other probe runs it.
 #
 # The server answers 200 with a body of `null` when it loads no ASR model.
 # A status check does not find this state.

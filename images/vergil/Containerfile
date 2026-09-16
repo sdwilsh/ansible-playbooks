@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /opt/vergil/ /opt/vergil/
-COPY check-transcription.sh /opt/vergil/
+COPY check-transcription.sh check-vision.sh probe.png /opt/vergil/
 
 # The update check reaches GitHub, and a `deny-all` egress policy makes it
 # time out at each start.
@@ -60,7 +60,8 @@ ENV FLM_DISABLE_UPDATE_CHECK=yes \
 # The two counts must agree.  A gap in the multiarch mirror breaks the XRT
 # library search at device open.
 #
-# Whisper needs five xclbins.
+# Whisper needs five xclbins.  Qwen3-VL needs six.  A model directory that
+# the archive drops takes the model out of service.
 #
 # `ldd` reads `flm-real` only.  A listing of `lib/` names libraries that no
 # start loads, and one that the wrapper finds with `LD_LIBRARY_PATH`.
@@ -75,6 +76,7 @@ RUN test -x /opt/vergil/flm \
   && test "$(ls /opt/vergil/lib/libxrt*.so* | wc -l)" \
         = "$(ls /opt/vergil/lib/x86_64-linux-gnu/ | wc -l)" \
   && test "$(ls /opt/vergil/xclbins/Whisper-V3-Turbo-NPU2/ | wc -l)" = 5 \
+  && test "$(ls /opt/vergil/xclbins/Qwen3-VL-4B-Instruct-NPU2/ | wc -l)" = 6 \
   && ! ldd /opt/vergil/flm-real | grep 'not found' \
   && FLM_DISABLE_UPDATE_CHECK=yes /opt/vergil/flm version
 

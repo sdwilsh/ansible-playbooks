@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Answer `/v1/audio/transcriptions` with one chosen body.
+"""Answer the transcription path and the chat path with one chosen body.
 
 The server reads the whole request first, because `curl` sends the probe clip
 as a multipart body.  `HTTP/1.1` answers the `Expect: 100-continue` header
@@ -21,8 +21,38 @@ BODIES: dict[str, Any] = {
     "null-text": {"text": None},
     "text": {"text": "hello"},
 }
+CHAT_PATH = "/v1/chat/completions"
+
+
+def choice(content: Any) -> dict[str, Any]:
+    return {"choices": [{"message": {"content": content}}]}
+
+
+CHAT_BODIES: dict[str, Any] = {
+    "empty-text": choice(""),
+    "no-choices": {"choices": []},
+    "null": None,
+    "null-text": choice(None),
+    "text": choice("PROBE"),
+}
 # The probe gives the server 20 seconds.  This stall is longer than that.
 STALL_SECONDS = 25
+DATA_URL = "data:image/png;base64,"
+
+
+def chat_request_fault(request: bytes) -> str:
+    """Name the fault of a chat request.  An empty answer means no fault."""
+    try:
+        content = json.loads(request)["messages"][0]["content"]
+    except (LookupError, TypeError, ValueError) as fault:
+        return f"the request holds no message content: {fault}"
+    parts = {part.get("type"): part for part in content}
+    if "image_url" not in parts or "text" not in parts:
+        return f"the message holds these parts only: {sorted(parts)}"
+    url = parts["image_url"].get("image_url", {}).get("url", "")
+    if not url.startswith(DATA_URL):
+        return f"the image url starts with {url[:32]!r}"
+    return ""
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
@@ -31,15 +61,25 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         remaining = int(self.headers.get("Content-Length") or 0)
+        request = b""
         while remaining > 0:
-            remaining -= len(self.rfile.read(min(remaining, 65536)))
+            part = self.rfile.read(min(remaining, 65536))
+            remaining -= len(part)
+            request += part
+        if self.path == CHAT_PATH and (fault := chat_request_fault(request)):
+            self.send_error(400, fault)
+            return
         if self.mode == "stall":
             time.sleep(STALL_SECONDS)
             return
         if self.mode == "error":
             self.send_error(500, "no model")
             return
-        body = json.dumps(BODIES[self.mode]).encode()
+        bodies = CHAT_BODIES if self.path == CHAT_PATH else BODIES
+        if self.mode not in bodies:
+            self.send_error(500, f"{self.mode} is no mode of {self.path}")
+            return
+        body = json.dumps(bodies[self.mode]).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
@@ -55,7 +95,7 @@ def main() -> int:
         print("Usage: stub-flm-server.py <mode> [port]", file=sys.stderr)
         return 2
     mode = sys.argv[1]
-    if mode not in set(BODIES) | {"error", "stall"}:
+    if mode not in set(BODIES) | set(CHAT_BODIES) | {"error", "stall"}:
         print(f"unknown mode: {mode}", file=sys.stderr)
         return 2
     Handler.mode = mode

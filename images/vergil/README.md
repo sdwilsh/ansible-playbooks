@@ -1,8 +1,9 @@
 # vergil
 
-Runs the FastFlowLM server (`flm`) on an AMD NPU.  The server answers
-`/v1/audio/transcriptions`.  `check-transcription.sh` is the `startupProbe`
-and the `livenessProbe`, and the end-to-end test uses it too.
+Runs the FastFlowLM server (`flm`) on an AMD NPU.  `serve --asr 1` answers
+`/v1/audio/transcriptions`, and a vision model tag answers
+`/v1/chat/completions`.  `check-transcription.sh` and `check-vision.sh` are
+the `startupProbe` of each form, and the end-to-end test uses both.
 
 ## Build and test
 
