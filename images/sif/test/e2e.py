@@ -90,9 +90,14 @@ class Harness:
             (self.models / shard).touch()
 
         # This directory takes the place of the `emptyDir` on `/run`.  It
-        # lives through a container restart.
+        # lives through a container restart.  The kubelet gives that volume
+        # to root, and s6 stops when `/run` belongs to a third uid, so a
+        # container with root makes root the owner here as well.
         self.run_dir.mkdir()
         self.run_dir.chmod(0o777)
+        result = self.as_root("chown 0:0 /mnt && chmod 0777 /mnt")
+        if result.returncode != 0:
+            raise RuntimeError(f"cannot give /run to root: {result.stderr}")
 
     def common_arguments(self) -> list[str]:
         return [
@@ -175,17 +180,20 @@ class Harness:
         environment = [] if models is None else ["-e", f"MODELS={models}"]
         return runtime("exec", *environment, name, f"{SCRIPTS_DIR}/{script}")
 
+    def as_root(self, command: str) -> Result:
+        """Run a command as root, with the run directory on `/mnt`."""
+        return runtime(
+            "run", "--rm", "--user", "0:0",
+            "-v", f"{self.run_dir}:/mnt:Z",
+            "--entrypoint", "/bin/sh", self.image,
+            "-c", command,
+        )
+
     def clean(self) -> None:
         for name in self.containers:
             runtime("rm", "-f", name)
-        # The container writes as uid 1000.  Root in a container removes the
-        # tree.
-        runtime(
-            "run", "--rm", "--user", "0:0",
-            "-v", f"{self.run_dir}:/stale:Z",
-            "--entrypoint", "/bin/sh", self.image,
-            "-c", "rm -rf /stale/..?* /stale/.[!.]* /stale/*",
-        )
+        # Root owns the tree, and the user of this script does not.
+        self.as_root("rm -rf /mnt/..?* /mnt/.[!.]* /mnt/*")
 
 
 def two_models(report: Report, harness: Harness) -> None:
