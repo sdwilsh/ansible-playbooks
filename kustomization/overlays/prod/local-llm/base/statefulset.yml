@@ -54,65 +54,50 @@ spec:
               readOnly: true
       containers:
         - name: llama-server
-          image: ghcr.io/ggml-org/llama.cpp
-          # The image `ENTRYPOINT` is `/app/tools.sh`.  It reads the first
-          # argument and picks a program to run.  `--server` runs
-          # `llama-server` with the rest of the arguments.
-          args:
-            - --server
-            - -m
-            - /models/Qwen3-Coder-Next-Q8_0-00001-of-00003.gguf
-            - --host
-            - $(POD_IP)
-            - --port
-            - "8080"
-            # `auto` is the default and does not log how it resolved.
-            - -fa
-            - "on"
-            - -ngl
-            - "999"
-            # Without this, the model name Bifrost sees is the file path.
-            - -a
-            - Qwen3-Coder-Next-Q8_0
-            - --parallel
-            - "1"
-            # The default is 262144 tokens.  Host memory increases with the
-            # context, and the kernel stopped the server near 153000 tokens.
-            - --ctx-size
-            - "131072"
+          # The image holds the arguments of each server.  A container takes
+          # `MODELS`, `POD_IP`, a writable `/run` and the models on `/models`.
+          image: ghcr.io/sdwilsh/sif
           env:
+            # A line is `alias|base URL|shard names|port|context size`.
+            # Very Important: GTT, not host memory, bounds context; see
+            # `group_vars/kairos_gpuworker.yml`.
+            - name: MODELS
+              value: |-
+                Qwen3-Coder-Next-Q8_0|http://olah-svc.olah.svc.cluster.local:8090/unsloth/Qwen3-Coder-Next-GGUF/resolve/ce09c67b53bc8739eef83fe67b2f5d293c270632/Q8_0|Qwen3-Coder-Next-Q8_0-00001-of-00003.gguf Qwen3-Coder-Next-Q8_0-00002-of-00003.gguf Qwen3-Coder-Next-Q8_0-00003-of-00003.gguf|8080|131072
             - name: POD_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
           ports:
+            # Each model is hosted on a port defined in `MODELS` above.
             - containerPort: 8080
               name: web
           volumeMounts:
             - mountPath: /models
               name: model-cache
+            - mountPath: /run
+              name: run
             - mountPath: /tmp
               name: tmp
-          # tcpSocket cannot see model-loading state; /health can.
-          # startupProbe covers the full load, so livenessProbe cannot
-          # kill the pod mid-load.
           startupProbe:
-            httpGet:
-              path: /health
-              port: web
+            exec:
+              command:
+                - /usr/local/bin/check-servers.sh
             periodSeconds: 15
+            timeoutSeconds: 5
             failureThreshold: 80
           readinessProbe:
-            httpGet:
-              path: /health
-              port: web
+            exec:
+              command:
+                - /usr/local/bin/check-servers.sh
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
           livenessProbe:
-            httpGet:
-              path: /health
-              port: web
+            # s6 will restart a dead server, so just check the s6 supervisor.
+            exec:
+              command:
+                - /usr/local/bin/check-supervisor.sh
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 5
@@ -146,6 +131,10 @@ spec:
         - configMap:
             name: local-llm-scripts-configmap
           name: local-llm-scripts
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 16Mi
+          name: run
         - name: tmp
           emptyDir:
             sizeLimit: 2Gi
