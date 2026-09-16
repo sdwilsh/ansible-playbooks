@@ -477,7 +477,7 @@ k8s-scale direction namespace:
 justcheck:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "justfile" -not -path "./.ansible/*" | while read -r file; do
+    git ls-files 'justfile' '*/justfile' | while read -r file; do
         echo -n "Running \`just --fmt --check\` on ${file}..."
         just --unstable --fmt --check -f ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
@@ -488,7 +488,7 @@ justcheck:
 justfix:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "justfile" -not -path "./.ansible/*" | while read -r file; do
+    git ls-files 'justfile' '*/justfile' | while read -r file; do
         echo "Running \`just --fmt\` on ${file}..."
         just --unstable --fmt -f ${file}
     done
@@ -498,7 +498,7 @@ justfix:
 hadolint:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "Containerfile*" -not -path "./.ansible/*" | while read -r file; do
+    git ls-files '*Containerfile*' | while read -r file; do
         echo -n "Running \`hadolint\` on ${file}..."
         hadolint ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
@@ -611,7 +611,7 @@ run-mack: build-mack-vm
 shellcheck:
     #!/usr/bin/env bash
     set -eou pipefail
-    find . -type f -name "*.sh" -not -path "./.ansible/*" -not -path "*/charts/*" | while read -r file; do
+    git ls-files '*.sh' ':!*/charts/*' | while read -r file; do
         echo -n "Running \`shellcheck -x\` on ${file}..."
         shellcheck -x ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
