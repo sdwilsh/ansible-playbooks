@@ -43,10 +43,25 @@ while IFS='|' read -r alias base shards port ctx; do
     [ -n "$field" ] || fatal "record $alias does not have five fields"
   done
 
-  # The `run` script takes the alias as a word.  Another character
-  # truncates the argument list.
+  # The alias becomes a service directory name and an argument of the
+  # `run` script.  A canonical model name holds a dot.
   case "$alias" in
-    *[!a-zA-Z0-9_-]*) fatal "alias $alias has a character that s6 rejects" ;;
+    *[!a-zA-Z0-9._-]*)
+      fatal "alias $alias has a character outside A-Z a-z 0-9 . _ -" ;;
+  esac
+  # `llama-server` takes the argument after `-a` as the alias, even an
+  # option.  A dash at the start gives the wrong alias, or the server
+  # does not start.
+  case "$alias" in
+    -*) fatal "alias $alias starts with a dash" ;;
+  esac
+  # A dot at the edge of the alias is a directory entry of its own, or it
+  # hides the service directory from `s6-rc-compile`.  Two dots together
+  # belong to no model name.
+  case "$alias" in
+    .*) fatal "alias $alias starts with a dot" ;;
+    *.) fatal "alias $alias ends with a dot" ;;
+    *..*) fatal "alias $alias has two dots together" ;;
   esac
   # This script writes `user`, `user2` and `<alias>-log` of its own.  An
   # alias with one of these names replaces that file.
@@ -80,7 +95,7 @@ while IFS='|' read -r alias base shards port ctx; do
 #!/command/with-contenv sh
 cd /app
 exec 2>&1
-exec ./llama-server -m /models/$1 -a $alias --host "\$POD_IP" --port $port --ctx-size $ctx --metrics -fa on -ngl 999 --parallel 1
+exec ./llama-server -m /models/$1 -a "$alias" --host "\$POD_IP" --port $port --ctx-size $ctx --metrics -fa on -ngl 999 --parallel 1
 EOF
 
   # The "1" sends each line to standard output.

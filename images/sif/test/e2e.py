@@ -29,7 +29,7 @@ SCRIPTS_DIR = "/usr/local/bin"
 
 # The suite must make this many results.  A scenario that stops early makes
 # fewer.
-EXPECTED_ASSERTIONS = 30
+EXPECTED_ASSERTIONS = 40
 
 
 class Report:
@@ -331,6 +331,46 @@ def two_models(report: Report, harness: Harness) -> None:
     report.check("no service reports a fatal", "fatal:" not in stderr, stderr)
 
 
+def dotted_alias(report: Report, harness: Harness) -> None:
+    """A canonical model name holds a dot, and s6 keeps that name."""
+    name = "dotted-alias"
+    alias = "Qwen3.6-35B-A3B"
+    harness.start(
+        name, "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('dotted-alias')}"
+    )
+
+    ready = wait_for(
+        30, lambda: harness.probe(name, "check-servers.sh").returncode == 0
+    )
+    report.check("a dotted alias answers /health", ready, harness.logs(name)[1])
+
+    expected = (
+        f"[{alias}] starting -m /models/alpha-00001-of-00001.gguf -a {alias}"
+        " --host 127.0.0.1 --port 8080 --ctx-size 4096"
+        " --metrics -fa on -ngl 999 --parallel 1"
+    )
+    stdout = harness.logs(name)[0]
+    report.check(
+        "a dotted alias starts with the whole argument list",
+        expected in stdout,
+        f"want: {expected}\ngot:\n{stdout}",
+    )
+
+    pid, uid = harness.supervised(name, alias)
+    report.check(
+        f"s6-supervise owns {alias} as uid 1000",
+        pid is not None and uid == "1000",
+        harness.processes(name),
+    )
+
+    supervisor = harness.probe(name, "check-supervisor.sh")
+    report.check(
+        "check-supervisor.sh finds the service of a dotted alias",
+        supervisor.returncode == 0,
+        supervisor.stdout + supervisor.stderr,
+    )
+
+
 def hook_failure(
     report: Report, harness: Harness, name: str, message: str, *extra: str
 ) -> None:
@@ -369,12 +409,35 @@ def negatives(report: Report, harness: Harness) -> None:
         "-v", f"{FIXTURES_DIR}/bad-type:/etc/s6-overlay/s6-rc.d:ro,Z",
     )
     hook_failure(
-        report, harness, "bad-alias", "has a character that s6 rejects",
+        report, harness, "bad-alias", "has a character outside A-Z a-z 0-9 . _ -",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('bad-alias')}",
     )
     hook_failure(
         report, harness, "reserved-alias", "is a name that s6-overlay uses",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('reserved-alias')}",
+    )
+    # `s6-rc-compile` drops a service directory that starts with a dot, and
+    # "." or ".." names the parent of the tree.
+    for fixture_name in ("leading-dot-alias", "dot-alias", "dot-dot-alias"):
+        hook_failure(
+            report, harness, fixture_name, "starts with a dot",
+            "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture(fixture_name)}",
+        )
+    hook_failure(
+        report, harness, "trailing-dot-alias", "ends with a dot",
+        "-e", "POD_IP=127.0.0.1",
+        "-e", f"MODELS={fixture('trailing-dot-alias')}",
+    )
+    hook_failure(
+        report, harness, "double-dot-alias", "has two dots together",
+        "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('double-dot-alias')}",
+    )
+    # `-a --host` gives the alias the value "--host", and the address then
+    # becomes an argument that `llama-server` rejects.
+    hook_failure(
+        report, harness, "leading-dash-alias", "starts with a dash",
+        "-e", "POD_IP=127.0.0.1",
+        "-e", f"MODELS={fixture('leading-dash-alias')}",
     )
     # "8080" and "08080" are one port with two spellings.
     hook_failure(
@@ -451,6 +514,7 @@ def main() -> int:
 
     scenarios: tuple[tuple[str, Callable[[Report, Harness], None]], ...] = (
         ("two-models", two_models),
+        ("dotted-alias", dotted_alias),
         ("negatives", negatives),
         ("missing-user2", missing_user2),
         ("stale-tree", stale_tree),
