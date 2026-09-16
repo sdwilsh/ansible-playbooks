@@ -18,7 +18,7 @@
 #   slack                                        0.39 GiB
 #
 # llama.cpp allocates the KV cache at startup, so the GTT quantity does not
-# change with traffic.  A target of two models needs 103.70 GiB.  One model
+# change with traffic.  A target of two models needs 103.70 GiB.  Two models
 # runs at present.
 #
 # The GPU does not fail safely.  The kernel does not reclaim GTT pages.

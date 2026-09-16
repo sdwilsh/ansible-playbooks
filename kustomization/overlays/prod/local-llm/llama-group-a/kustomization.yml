@@ -10,7 +10,15 @@ configMapGenerator:
       - MODELS=configmap/models.txt
 namePrefix: group-a-
 patches:
+  - path: patches/add_ports.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
   - path: patches/set_models.yml
     target:
       kind: StatefulSet
       name: local-llm-statefulset
+  - path: patches/serve_additional_models.yml
+    target:
+      kind: Service
+      name: local-llm-svc

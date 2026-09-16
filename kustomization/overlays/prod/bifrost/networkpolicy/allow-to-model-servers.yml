@@ -8,6 +8,8 @@ spec:
     - ports:
         - port: model-api
           protocol: TCP
+        - port: model-api2
+          protocol: TCP
       to:
         - namespaceSelector:
             matchLabels:

@@ -56,6 +56,7 @@ spec:
 
 Additionally, the network policy assumes the `port` is named one of the following:
 - `model-api`
+- `model-api2`
 - `web`
 
 Many workloads come from a Helm chart or from a shared component, and you cannot write in those

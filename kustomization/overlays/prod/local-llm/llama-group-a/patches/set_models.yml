@@ -14,6 +14,13 @@ spec:
                 configMapKeyRef:
                   key: MODELS
                   name: local-llm-models-configmap
+          # check-servers.sh asks two servers in sequence.  The rule is
+          # timeoutSeconds >= 4 * N + 2, periodSeconds >= timeoutSeconds + 5.
+          startupProbe:
+            timeoutSeconds: 10
+          readinessProbe:
+            periodSeconds: 15
+            timeoutSeconds: 10
       initContainers:
         - name: fetch-model
           env: *models
