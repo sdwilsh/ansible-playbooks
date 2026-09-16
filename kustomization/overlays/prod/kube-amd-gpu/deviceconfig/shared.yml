@@ -9,7 +9,7 @@ spec:
     # fix for github.com/ROCm/k8s-device-plugin/issues/186.  The
     # `latest` tag includes the fix.  Pin its digest until a new
     # release ships.
-    devicePluginImage: rocm/k8s-device-plugin:latest@sha256:e2b8f0b8ef5a7a8edc46133dd8d3c54d25cf67de2513a3ce3232107f6efed6f7
+    devicePluginImage: rocm/k8s-device-plugin:latest@sha256:af786b911a3dfb64ed162152a9f07fd563a29602c15e661eb49408b7b4989df2
     enableDevicePlugin: true
     enableNodeLabeller: true
     # No release tag exists past v1.31.0.10.  That release lacks the
