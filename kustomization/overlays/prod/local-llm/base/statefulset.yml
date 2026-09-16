@@ -58,12 +58,11 @@ spec:
           # `MODELS`, `POD_IP`, a writable `/run` and the models on `/models`.
           image: ghcr.io/sdwilsh/sif
           env:
-            # A line is `alias|base URL|shard names|port|context size`.
-            # Very Important: GTT, not host memory, bounds context; see
+            # `MODELS` is required to be set via a patch in each component!
+            # A record is `alias|base URL|shard names|port|context size`, and
+            # `fetch-model.sh` gets the shards from the same base URL.  GTT,
+            # not host memory, bounds context; see
             # `group_vars/kairos_gpuworker.yml`.
-            - name: MODELS
-              value: |-
-                Qwen3-Coder-Next-Q8_0|http://olah-svc.olah.svc.cluster.local:8090/unsloth/Qwen3-Coder-Next-GGUF/resolve/ce09c67b53bc8739eef83fe67b2f5d293c270632/Q8_0|Qwen3-Coder-Next-Q8_0-00001-of-00003.gguf Qwen3-Coder-Next-Q8_0-00002-of-00003.gguf Qwen3-Coder-Next-Q8_0-00003-of-00003.gguf|8080|131072
             - name: POD_IP
               valueFrom:
                 fieldRef:

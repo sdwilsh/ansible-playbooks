@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../base
+namePrefix: group-a-
+patches:
+  - path: patches/set_models.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
