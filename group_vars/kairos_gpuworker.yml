@@ -22,8 +22,20 @@
 # | **total**                       | 17.07 |                  |
 #
 # llama.cpp allocates the KV cache at startup, so the GTT quantity does not
-# change with traffic.  A target of two models needs 103.70 GiB.  Two models
-# runs at present.
+# change with traffic.  Two models run, both with q8_0 K and V:
+#
+# | Item                          |    GiB | Source         |
+# | ----------------------------- | -----: | -------------- |
+# | model weights                 |  98.98 | server log     |
+# | coder KV cache, 131072 tokens |   1.59 | server log     |
+# | 35B aux KV cache, 65536       |   0.66 | server log     |
+# | compute buffers and overhead  |   1.64 | maths          |
+# | **total**                     | 102.87 | `gpu_used_gtt` |
+# | headroom to the 108 GiB limit |   5.13 | maths          |
+#
+# An NPU server on this node class takes its own container limit from the
+# floor, and that lowers the GTT limit.  A change to the limit needs a
+# reboot.
 #
 # The GPU does not fail safely.  The kernel does not reclaim GTT pages.
 # `oom_score` does not count GTT pages.  A change to this value needs a
