@@ -35,50 +35,7 @@
       "admin_password": "env.BIFROST_ADMIN_PASSWORD",
       "admin_username": "env.BIFROST_ADMIN_USERNAME",
       "is_enabled": true
-    },
-    "budgets": [
-      {
-        "id": "budget-triage",
-        "max_limit": 10.0,
-        "reset_duration": "1M",
-        "virtual_key_id": "vk-triage"
-      },
-      {
-        "id": "budget-security-review",
-        "max_limit": 10.0,
-        "reset_duration": "1M",
-        "virtual_key_id": "vk-security-review"
-      },
-      {
-        "id": "budget-interactive",
-        "max_limit": 50.0,
-        "reset_duration": "1M",
-        "virtual_key_id": "vk-interactive"
-      }
-    ],
-    "rate_limits": [
-      {
-        "id": "rl-interactive",
-        "request_max_limit": 2000,
-        "request_reset_duration": "1h",
-        "token_max_limit": 20000000,
-        "token_reset_duration": "1h"
-      },
-      {
-        "id": "rl-security-review",
-        "request_max_limit": 500,
-        "request_reset_duration": "1h",
-        "token_max_limit": 5000000,
-        "token_reset_duration": "1h"
-      },
-      {
-        "id": "rl-triage",
-        "request_max_limit": 500,
-        "request_reset_duration": "1h",
-        "token_max_limit": 5000000,
-        "token_reset_duration": "1h"
-      }
-    ]
+    }
   },
   "logs_store": {
     "config": {
