@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-model-servers-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: model-api
+          protocol: TCP
+      to:
+        - namespaceSelector:
+            matchLabels:
+              hogs.tswn.us/bifrost-route: "true"
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/bifrost-route: "true"
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  policyTypes:
+    - Egress
+

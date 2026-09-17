@@ -5,9 +5,9 @@ metadata:
   name: local-llm-svc
 spec:
   ports:
-    - name: web
+    - name: model-api
       port: 8080
       protocol: TCP
-      targetPort: web
+      targetPort: model-api
   selector:
     app.kubernetes.io/name: local-llm

@@ -13,6 +13,8 @@ spec:
             matchLabels:
               app.kubernetes.io/name: bifrost
       ports:
+        - port: model-api
+          protocol: TCP
         - port: web
           protocol: TCP
   podSelector:

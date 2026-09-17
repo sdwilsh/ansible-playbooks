@@ -71,7 +71,7 @@ spec:
           ports:
             # Each model is hosted on a port defined in `MODELS` above.
             - containerPort: 8080
-              name: web
+              name: model-api
           volumeMounts:
             - mountPath: /models
               name: model-cache

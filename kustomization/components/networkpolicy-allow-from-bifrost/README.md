@@ -54,6 +54,10 @@ spec:
         hogs.tswn.us/bifrost-route: "true"
 ```
 
+Additionally, the network policy assumes the `port` is named one of the following:
+- `model-api`
+- `web`
+
 Many workloads come from a Helm chart or from a shared component, and you cannot write in those
 files.  Add the label with a patch, and give the patch a `target` in your `kustomization.yml`.
 
