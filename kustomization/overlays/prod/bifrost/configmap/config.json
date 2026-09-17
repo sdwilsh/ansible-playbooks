@@ -134,8 +134,13 @@
           "Authorization": "Bearer env.KAGI_API_KEY"
         },
         "name": "kagi",
+        "tool_pricing": {
+          "kagi_extract": 0.004,
+          "kagi_search_fetch": 0.012
+        },
         "tools_to_execute": [
-          "*"
+          "kagi_extract",
+          "kagi_search_fetch"
         ]
       },
       {
