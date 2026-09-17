@@ -58,6 +58,11 @@ spec:
           # `MODELS`, `POD_IP`, a writable `/run` and the models on `/models`.
           image: ghcr.io/sdwilsh/sif
           env:
+            # q8_0 frees up a decent chunk of GTT compared to f16.
+            - name: LLAMA_ARG_CACHE_TYPE_K
+              value: q8_0
+            - name: LLAMA_ARG_CACHE_TYPE_V
+              value: q8_0
             # `MODELS` is required to be set via a patch in each component!
             # A record is `alias|base URL|shard names|port|context size`, and
             # `fetch-model.sh` gets the shards from the same base URL.  GTT,
