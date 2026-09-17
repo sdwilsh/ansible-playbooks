@@ -17,7 +17,7 @@ configMapGenerator:
       - GRAFANA_URL=http://grafana.monitoring.svc.cluster.local
 images:
   - name: docker.io/grafana/mcp-grafana
-    newTag: 1.4.1@sha256:cfcf06863c23b2db64c41b0379d1efe95703aca4ba5434d90674f72ec0b7d810
+    newTag: 1.5.1@sha256:07c6614a8f8b6477e572444874c8c07baf145473977f014497cb59262af1944c
 namespace: grafana-mcp
 resources:
   - namespace.yml
