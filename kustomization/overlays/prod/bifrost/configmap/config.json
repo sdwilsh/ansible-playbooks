@@ -126,6 +126,18 @@
         ]
       },
       {
+        "auth_type": "headers",
+        "connection_string": "https://mcp.kagi.com/mcp",
+        "connection_type": "http",
+        "headers": {
+          "Authorization": "Bearer env.KAGI_API_KEY"
+        },
+        "name": "kagi",
+        "tools_to_execute": [
+          "*"
+        ]
+      },
+      {
         "connection_string": "http://kubernetes-mcp-svc.kubernetes-mcp.svc.cluster.local:8080/mcp",
         "connection_type": "http",
         "name": "kubernetes",

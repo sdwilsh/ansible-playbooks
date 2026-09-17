@@ -44,6 +44,11 @@ spec:
                 secretKeyRef:
                   key: BIFROST_ENCRYPTION_KEY
                   name: bifrost-secret
+            - name: KAGI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: KAGI_API_KEY
+                  name: bifrost-secret
             - name: LOG_LEVEL
               value: info
             - name: LOG_STYLE
