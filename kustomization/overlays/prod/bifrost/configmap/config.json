@@ -127,6 +127,7 @@
       },
       {
         "auth_type": "headers",
+        "client_id": "kagi",
         "connection_string": "https://mcp.kagi.com/mcp",
         "connection_type": "http",
         "headers": {
