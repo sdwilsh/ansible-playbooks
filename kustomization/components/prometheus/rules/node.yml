@@ -59,7 +59,7 @@ spec:
         # so normal use of that limit does not cause an alarm.
         - alert: gpu-node-memory-available-low
           annotations:
-            description: "{{ $labels.node }} has less than 8 GiB of memory available. The GPU can hold 108 GiB in GTT, the kernel cannot reclaim GTT pages, and `oom_score` does not count them, so the OOM killer stops an unrelated process."
+            description: "{{ $labels.node }} has less than 8 GiB of memory available. The GPU holds most of the memory of the node in GTT, the kernel cannot reclaim GTT pages, and `oom_score` does not count them, so the OOM killer stops an unrelated process."
           expr: node_memory_MemAvailable_bytes{node=~"gpuworker[0-9]+"} < 8 * 1024 ^ 3
           for: 15m
           labels:
