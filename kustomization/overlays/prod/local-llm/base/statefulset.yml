@@ -58,6 +58,10 @@ spec:
           # `MODELS`, `POD_IP`, a writable `/run` and the models on `/models`.
           image: ghcr.io/sdwilsh/sif
           env:
+            # Each server keeps a prompt cache in host memory.  This limits
+            # it as it directly competes for scarce container memory.
+            - name: LLAMA_ARG_CACHE_RAM
+              value: "2048"
             # q8_0 frees up a decent chunk of GTT compared to f16.
             - name: LLAMA_ARG_CACHE_TYPE_K
               value: q8_0
