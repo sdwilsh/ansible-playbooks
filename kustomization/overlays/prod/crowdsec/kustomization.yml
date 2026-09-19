@@ -38,7 +38,7 @@ images:
   - name: ghcr.io/crowdsecurity/crowdsec
     newTag: v1.8.1@sha256:0f2523fa61ef507f15d953045cface490cc880670c62f2755ced17524107f71a 
   - name: postgres
-    newTag: 18@sha256:4ef4dbc939d61acea57712655ddb4b4ab27419c913f94cca0cd57cb3ea3c2280
+    newTag: 18@sha256:86c951e05bf56c93d95d397747fb8820ac76cc3bedb78f43abd83eedbe3666ae
 namespace: crowdsec
 patches:
   - path: patches/cnpg/set_backup_path.yml
