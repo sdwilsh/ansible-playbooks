@@ -8,7 +8,7 @@ components:
   - ../../../components/networkpolicy-deny-all
 images:
   - name: ghcr.io/sdwilsh/nut-shutdown-agent
-    newTag: latest@sha256:0e3259cea1b827d82e3a72274d0085f008ba52433123784f45064fdf86fc0f2a
+    newTag: latest@sha256:379575fbb2ff791e8743620ecfdc0b9da4ea7ed058320e7c7b207fc21d68ac8b
 namespace: nut-shutdown-agent
 resources:
   - namespace.yml
