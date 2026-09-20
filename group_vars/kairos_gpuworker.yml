@@ -11,11 +11,15 @@
 # Each node has 125.07 GiB of memory.  A limit of 108 GiB keeps a floor of
 # 17.07 GiB:
 #
-#   operating system and other pods (measured)   2.21 GiB
-#   GTT page tables                              0.47 GiB
-#   `local-llm` container limit                 10.00 GiB
-#   `eviction-hard` reserve                      4.00 GiB
-#   slack                                        0.39 GiB
+# | Item                            |   GiB | Source           |
+# | ------------------------------- | ----: | ---------------- |
+# | operating system and other pods |  2.21 | measured         |
+# | GTT page tables                 |  0.47 | measured         |
+# | `local-llm` container           | 10.00 | limit            |
+# | metrics exporter container      |  0.13 | limit            |
+# | `eviction-hard` reserve         |  4.00 | kubelet argument |
+# | slack                           |  0.26 | maths            |
+# | **total**                       | 17.07 |                  |
 #
 # llama.cpp allocates the KV cache at startup, so the GTT quantity does not
 # change with traffic.  A target of two models needs 103.70 GiB.  Two models
