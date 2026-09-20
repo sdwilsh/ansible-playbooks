@@ -8,3 +8,29 @@ common__ip_addresses:
   - 10.11.0.120/23
 
 kairos__disks_to_format: []
+
+# This node holds model group A.  `group_vars/kairos_gpuworker.yml` gives
+# the common floor and the rule for this value.  The floor of this node:
+#
+# | Item                  |   GiB | Source     |
+# | --------------------- | ----: | ---------- |
+# | common floor          |  7.07 | group vars |
+# | `local-llm` container | 10.00 | limit      |
+# | **total**             | 17.07 |            |
+#
+# 125.07 - 17.07 = 108 GiB, which is 28311552 pages.  Group A takes:
+#
+# | Item                           |    GiB | Source         |
+# | ------------------------------ | -----: | -------------- |
+# | model weights                  |  98.98 | server log     |
+# | coder KV cache, 131072 tokens  |   1.59 | server log     |
+# | 35B aux KV cache, 131072       |   1.33 | server log     |
+# | compute buffers and overhead   |   1.69 | maths          |
+# | **total**                      | 103.59 | projected      |
+# | headroom to the 108 GiB limit  |   4.41 | maths          |
+#
+# The total is a projection.  `gpu_used_gtt` gives 102.87 GiB with the aux
+# at 65536, and the wider aux adds 0.72 GiB.  Read `gpu_used_gtt` again
+# after the aux starts at 131072.
+kairos__extra_cmdline:
+  - ttm.pages_limit=28311552

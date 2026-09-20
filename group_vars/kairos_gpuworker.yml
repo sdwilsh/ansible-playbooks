@@ -1,51 +1,50 @@
 ---
-# `ttm.pages_limit` sets the GTT limit to 28311552 pages (108 GiB).  GTT is
-# the system memory that the GPU can use.  The default limit is
-# `MemTotal` / 2, which is 62.54 GiB on each node.  The limit is a ceiling.
-# The GPU takes the pages on demand, and gives the pages back when the
-# workload stops.
+# `ttm.pages_limit` sets the GTT limit.  GTT is the system memory that the
+# GPU can use.  The limit is a ceiling.  The GPU takes the pages on demand,
+# and gives the pages back when the workload stops.
 #
-# This limit and the `local-llm` container memory limit are one budget.
-# Change the two values together.  The kubelet charges the memory of the
+# This limit and the container memory limits of the node are one budget.
+# Change the values together.  The kubelet charges the memory of the
 # inference process that is not GTT to `kubepods.slice`, not to the floor.
-# Each node has 125.07 GiB of memory.  A limit of 108 GiB keeps a floor of
-# 17.07 GiB:
+# Each node has 125.07 GiB of memory, so:
 #
-# | Item                            |   GiB | Source           |
-# | ------------------------------- | ----: | ---------------- |
-# | operating system and other pods |  2.21 | measured         |
-# | GTT page tables                 |  0.47 | measured         |
-# | `local-llm` container           | 10.00 | limit            |
-# | metrics exporter container      |  0.13 | limit            |
-# | `eviction-hard` reserve         |  4.00 | kubelet argument |
-# | slack                           |  0.26 | maths            |
-# | **total**                       | 17.07 |                  |
+#   GTT limit = 125.07 GiB - (the floor of the node)
 #
-# llama.cpp allocates the KV cache at startup, so the GTT quantity does not
-# change with traffic.  Two models run, both with q8_0 K and V:
-#
-# | Item                          |    GiB | Source         |
-# | ----------------------------- | -----: | -------------- |
-# | model weights                 |  98.98 | server log     |
-# | coder KV cache, 131072 tokens |   1.59 | server log     |
-# | 35B aux KV cache, 65536       |   0.66 | server log     |
-# | compute buffers and overhead  |   1.64 | maths          |
-# | **total**                     | 102.87 | `gpu_used_gtt` |
-# | headroom to the 108 GiB limit |   5.13 | maths          |
-#
-# An NPU server on this node class takes its own container limit from the
-# floor, and that lowers the GTT limit.  A change to the limit needs a
-# reboot.
+# An affinity term keeps each model group and each NPU server on one node.
+# The floor is thus different on each node, and `kairos__extra_cmdline`
+# lives in `host_vars` with the floor table of that node.  A node with no
+# entry takes the kernel default of 62.54 GiB.  That default is too small
+# for a model group, so the server stops at startup.  It does not put the
+# node at risk.
 #
 # The GPU does not fail safely.  The kernel does not reclaim GTT pages.
-# `oom_score` does not count GTT pages.  A change to this value needs a
+# `oom_score` does not count GTT pages.  A change to the limit needs a
 # reboot of the node.
-kairos__extra_cmdline:
-  - ttm.pages_limit=28311552
-
+#
 # Do not use `system-reserved` to hold memory for the GPU.  The kernel does
 # not charge GTT pages to a cgroup, so a reservation only makes
 # `kubepods.slice` smaller.
+#
+# Each node has the same floor of 7.07 GiB.  The `host_vars` file of the
+# node adds the container limit of each server to it.
+#
+# | Item                            |  GiB | Source           |
+# | ------------------------------- | ---: | ---------------- |
+# | operating system and other pods | 2.21 | measured         |
+# | GTT page tables                 | 0.47 | measured         |
+# | metrics exporter container      | 0.13 | limit            |
+# | `eviction-hard` reserve         | 4.00 | kubelet argument |
+# | slack                           | 0.26 | maths            |
+# | **total**                       | 7.07 |                  |
+#
+# The GPU page tables map the GTT, so their size follows the limit: 0.47
+# GiB at a limit of 108 GiB, which is 0.44% of the limit.  The floor thus
+# holds a term of the limit that it sets, and the limit is:
+#
+#   GTT limit = (125.07 GiB - the floor with no page tables) / 1.0044
+#
+# Between a limit of 101 GiB and a limit of 108 GiB the page tables change
+# by 0.03 GiB, and the slack holds that.  Keep 0.47 GiB on each node.
 k3s_kubelet_args:
   # These settings are based on a measured working set of 2.21 GiB.
   # 4Gi is larger than the 2.21 GiB working set, and gives the kubelet a

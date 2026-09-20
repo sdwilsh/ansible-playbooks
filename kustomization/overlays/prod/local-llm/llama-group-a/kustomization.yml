@@ -14,6 +14,10 @@ patches:
     target:
       kind: StatefulSet
       name: local-llm-statefulset
+  - path: patches/pin_node.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
   - path: patches/set_models.yml
     target:
       kind: StatefulSet

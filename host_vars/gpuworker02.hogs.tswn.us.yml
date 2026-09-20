@@ -8,3 +8,18 @@ common__ip_addresses:
   - 10.11.0.121/23
 
 kairos__disks_to_format: []
+
+# This node is for model group B, which does not exist yet.  The
+# `local-llm` row below keeps the space for it, so that group B does not
+# need a second reboot.  `group_vars/kairos_gpuworker.yml` gives the
+# common floor and the rule for this value.  The floor of this node:
+#
+# | Item                  |   GiB | Source     |
+# | --------------------- | ----: | ---------- |
+# | common floor          |  7.07 | group vars |
+# | `local-llm` container | 10.00 | reserved   |
+# | **total**             | 17.07 |            |
+#
+# 125.07 - 17.07 = 108 GiB, which is 28311552 pages.
+kairos__extra_cmdline:
+  - ttm.pages_limit=28311552

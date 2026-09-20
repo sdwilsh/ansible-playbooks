@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: hardware.hogs.tswn.us/gpu
+                    operator: In
+                    values:
+                      - strixhalo
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - gpuworker01
