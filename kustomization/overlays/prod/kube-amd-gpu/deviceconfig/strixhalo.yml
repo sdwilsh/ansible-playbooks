@@ -32,5 +32,29 @@ spec:
     # The OS image build already includes the `amdgpu` driver and
     # firmware.  The operator must not build or load the driver again.
     enable: false
+  metricsExporter:
+    enable: true
+    prometheus:
+      serviceMonitor:
+        enable: true
+        relabelings:
+          - action: replace
+            sourceLabels:
+              - __meta_kubernetes_pod_node_name
+            targetLabel: node
+    # The GTT ceiling and the memory limit of `local-llm` are one budget.
+    # See `group_vars/kairos_gpuworker.yml`.  This limit makes the memory
+    # of the exporter a known quantity in that budget.
+    resource:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 32Mi
+    tolerations:
+      - effect: NoSchedule
+        key: gpu
+        operator: Equal
+        value: strixhalo
   selector:
     hardware.hogs.tswn.us/gpu: strixhalo

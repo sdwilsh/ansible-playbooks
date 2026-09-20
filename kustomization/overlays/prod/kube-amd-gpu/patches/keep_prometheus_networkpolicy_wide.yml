@@ -1,0 +1,16 @@
+---
+# The operator makes the `Pod`s of the metrics exporter from the
+# `DeviceConfig` resources.  The CRD gives no field for a label on those
+# `Pod`s.  Its `podAnnotations` field writes annotations, and its `labels`
+# field writes the labels of the `ServiceMonitor`.  The exporter `Pod`
+# therefore does not have the `hogs.tswn.us/prometheus-target` label.
+#
+# This rule therefore keeps every `Pod` of the namespace.  The port name in
+# `set_prometheus_networkpolicy_ports.yml` limits the rule to the exporter.
+# No other `Pod` of this namespace has a container port with that name.
+# Remove this patch on the day that the CRD gives a field for the labels of
+# those `Pod`s.
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchLabels: {}

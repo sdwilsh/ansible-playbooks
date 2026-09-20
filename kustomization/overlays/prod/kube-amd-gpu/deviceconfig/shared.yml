@@ -21,6 +21,22 @@ spec:
     # The OS image build already includes the `amdgpu` driver and
     # firmware.  The operator must not build or load the driver again.
     enable: false
+  metricsExporter:
+    enable: true
+    prometheus:
+      serviceMonitor:
+        enable: true
+        relabelings:
+          - action: replace
+            sourceLabels:
+              - __meta_kubernetes_pod_node_name
+            targetLabel: node
+    resource:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 32Mi
   selector:
     # amdgpu-rules sets this label by PCI device ID, not by hostname.
     # The value is `shared` on any AMD GPU other than Strix Halo's

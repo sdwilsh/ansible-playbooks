@@ -53,7 +53,8 @@ spec:
         # `memory.available` from the root cgroup, which does not include GTT
         # pages, so `eviction-hard` cannot protect a GPU node.  node-exporter
         # reads `/proc/meminfo`, which does include GTT pages, so the metric
-        # below is the only signal that sees the memory of the GPU.  See
+        # below is the signal for the memory that remains on the node.
+        # `gpu_used_gtt` gives the quantity that the GPU holds.  See
         # `group_vars/kairos_gpuworker.yml`.  8 GiB is less than the floor
         # that remains when the `local-llm` container uses all of its limit,
         # so normal use of that limit does not cause an alarm.

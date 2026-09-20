@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
@@ -29,6 +30,14 @@ patches:
     target:
       kind: NetworkPolicy
       name: allow-to-api-server-networkpolicy
+  - path: patches/keep_prometheus_networkpolicy_wide.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
+  - path: patches/set_prometheus_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
 resources:
   - namespace.yml
   - deviceconfig/shared.yml

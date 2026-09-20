@@ -1,0 +1,8 @@
+---
+# The operator names the container port of the metrics exporter
+# `exporter-port`.  The component opens `metrics`.  No `Pod` of this
+# namespace has a container port with that name.
+- op: replace
+  path: /spec/ingress/0/ports
+  value:
+    - port: exporter-port
