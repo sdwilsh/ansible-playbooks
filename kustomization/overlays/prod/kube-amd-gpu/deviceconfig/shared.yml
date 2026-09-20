@@ -33,10 +33,12 @@ spec:
             targetLabel: node
     resource:
       limits:
+        # This limit is intentionally tight.  This monitoring should not
+        # cause memory pressure to occur!
         memory: 128Mi
       requests:
         cpu: 10m
-        memory: 32Mi
+        memory: 96Mi
   selector:
     # amdgpu-rules sets this label by PCI device ID, not by hostname.
     # The value is `shared` on any AMD GPU other than Strix Halo's

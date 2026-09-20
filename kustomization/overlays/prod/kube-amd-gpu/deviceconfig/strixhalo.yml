@@ -42,15 +42,15 @@ spec:
             sourceLabels:
               - __meta_kubernetes_pod_node_name
             targetLabel: node
-    # The GTT ceiling and the memory limit of `local-llm` are one budget.
-    # See `group_vars/kairos_gpuworker.yml`.  This limit makes the memory
-    # of the exporter a known quantity in that budget.
     resource:
       limits:
+        # This limit is intentionally tight.  This monitoring should not
+        # cause memory pressure to occur!
+        # See `group_vars/kairos_gpuworker.yml`.
         memory: 128Mi
       requests:
         cpu: 10m
-        memory: 32Mi
+        memory: 96Mi
     tolerations:
       - effect: NoSchedule
         key: gpu
