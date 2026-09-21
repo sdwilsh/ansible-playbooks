@@ -49,6 +49,8 @@ spec:
                 secretKeyRef:
                   key: KAGI_API_KEY
                   name: bifrost-secret
+            - name: KAGI_AUTHORIZATION_HEADER
+              value: Bearer $(KAGI_API_KEY)
             - name: LOG_LEVEL
               value: info
             - name: LOG_STYLE

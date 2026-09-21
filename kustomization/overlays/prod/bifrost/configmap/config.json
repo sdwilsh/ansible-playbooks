@@ -88,7 +88,7 @@
         "connection_string": "https://mcp.kagi.com/mcp",
         "connection_type": "http",
         "headers": {
-          "Authorization": "Bearer env.KAGI_API_KEY"
+          "Authorization": "env.KAGI_AUTHORIZATION_HEADER"
         },
         "name": "kagi",
         "tool_pricing": {
