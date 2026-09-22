@@ -22,7 +22,7 @@ spec:
     # fix for github.com/ROCm/k8s-device-plugin/issues/186.  The
     # `labeller-latest` tag includes the fix.  Pin its digest until a
     # new release ships.
-    nodeLabellerImage: rocm/k8s-device-plugin:labeller-latest@sha256:21dad61e390826d958003958029e89ac00198513e60d48ea30244b4ef9c264ec
+    nodeLabellerImage: rocm/k8s-device-plugin:labeller-latest@sha256:5ccb7af7d3b22621b3991730c5d805b8d1f0974d6d974bfb3430ad4db5b62628
     nodeLabellerTolerations:
       - effect: NoSchedule
         key: gpu
