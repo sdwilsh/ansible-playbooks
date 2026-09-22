@@ -27,7 +27,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:6e9c5284a0dac06e84de9f4d97852d2e6513442ee7ec3a66d35009eec86e1e62
   - name: docker.io/maximhq/bifrost
-    newTag: v2.1.1@sha256:9e65eb4d0b292c25aaf46d194c705344f19c833a29e30155038bbe551eac7245
+    newTag: v2.2.0@sha256:12d6bbab32b44e3bb88869c6f5ca9304b53a9c43cb55c57a29f851037bcc19e1
   - name: postgres
     newTag: 18@sha256:86c951e05bf56c93d95d397747fb8820ac76cc3bedb78f43abd83eedbe3666ae
 namespace: bifrost
