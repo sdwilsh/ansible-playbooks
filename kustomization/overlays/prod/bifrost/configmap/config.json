@@ -57,6 +57,7 @@
       {
         "connection_string": "http://argocd-mcp-svc.argocd-mcp.svc.cluster.local:3000/mcp",
         "connection_type": "http",
+        "is_code_mode_client": true,
         "name": "argocd",
         "tools_to_execute": [
           "*"
@@ -66,6 +67,7 @@
         "auth_type": "per_user_headers",
         "connection_string": "https://api.githubcopilot.com/mcp/",
         "connection_type": "http",
+        "is_code_mode_client": true,
         "name": "github",
         "per_user_header_keys": [
           "Authorization"
@@ -77,6 +79,7 @@
       {
         "connection_string": "http://grafana-mcp-svc.grafana-mcp.svc.cluster.local:8000/mcp",
         "connection_type": "http",
+        "is_code_mode_client": true,
         "name": "grafana",
         "tools_to_execute": [
           "*"
@@ -90,6 +93,7 @@
         "headers": {
           "Authorization": "env.KAGI_AUTHORIZATION_HEADER"
         },
+        "is_code_mode_client": true,
         "name": "kagi",
         "tool_pricing": {
           "kagi_extract": 0.004,
@@ -103,6 +107,7 @@
       {
         "connection_string": "http://kubernetes-mcp-svc.kubernetes-mcp.svc.cluster.local:8080/mcp",
         "connection_type": "http",
+        "is_code_mode_client": true,
         "name": "kubernetes",
         "tools_to_execute": [
           "*"
@@ -111,6 +116,7 @@
       {
         "connection_string": "http://linux-mcp-svc.linux-mcp.svc.cluster.local:8000/mcp",
         "connection_type": "http",
+        "is_code_mode_client": true,
         "name": "linux",
         "tools_to_execute": [
           "*"
@@ -119,6 +125,7 @@
       {
         "connection_string": "http://unifi-network-mcp-svc.unifi-network-mcp.svc.cluster.local:3000/mcp",
         "connection_type": "http",
+        "is_code_mode_client": true,
         "name": "unifi",
         "tools_to_execute": [
           "*"
