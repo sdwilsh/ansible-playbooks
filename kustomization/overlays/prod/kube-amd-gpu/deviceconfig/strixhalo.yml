@@ -37,6 +37,7 @@ spec:
     prometheus:
       serviceMonitor:
         enable: true
+        interval: 15s
         relabelings:
           - action: replace
             sourceLabels:
