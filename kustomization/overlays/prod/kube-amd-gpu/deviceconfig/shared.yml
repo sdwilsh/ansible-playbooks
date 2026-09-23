@@ -26,6 +26,9 @@ spec:
     prometheus:
       serviceMonitor:
         enable: true
+        metricRelabelings:
+          - action: labeldrop
+            regex: (container|namespace|pod)
         relabelings:
           - action: replace
             sourceLabels:

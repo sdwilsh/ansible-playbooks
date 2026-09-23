@@ -38,6 +38,9 @@ spec:
       serviceMonitor:
         enable: true
         interval: 15s
+        metricRelabelings:
+          - action: labeldrop
+            regex: (container|namespace|pod)
         relabelings:
           - action: replace
             sourceLabels:
