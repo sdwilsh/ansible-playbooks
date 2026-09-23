@@ -8,7 +8,7 @@ components:
   - ../../../components/pod-security-enforce-baseline
 images:
   - name: busybox
-    newTag: 1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
+    newTag: 1.38.0@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
   - name: ghcr.io/druggeri/nut_exporter
     newTag: 3.3.0@sha256:276460d141c732772f8b1fcd785a7de272473e6d39fd85c32b163efc2999cb9a
   - name: instantlinux/nut-upsd
