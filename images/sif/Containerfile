@@ -19,7 +19,7 @@ RUN mkdir -p /s6root \
     || exit 1; \
      done
 
-FROM ghcr.io/ggml-org/llama.cpp:server-vulkan-v0.4.1@sha256:43e0e25ca654d839ebda39fd6c2f200b36e9efb3e597ba90d0aaeff1be95ca53
+FROM ghcr.io/ggml-org/llama.cpp:server-vulkan-v0.5.0@sha256:be586c648cb79d2cd75d0c38a6541e1f16c47a7c6621d3e711470a467fc38744
 
 COPY --from=builder /s6root/ /
 COPY scripts/ /usr/local/bin/
