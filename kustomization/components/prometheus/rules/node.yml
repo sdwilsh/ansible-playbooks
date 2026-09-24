@@ -64,3 +64,10 @@ spec:
           for: 15m
           labels:
             severity: warning
+        - alert: gpu-apu-fan-stalled
+          annotations:
+            description: "{{ $labels.node }} has turned its APU fan below 100 RPM for five minutes."
+          expr: node_hwmon_fan_rpm{sensor="fan1",node=~"gpuworker[0-9]+"} < 100
+          for: 5m
+          labels:
+            severity: warning
