@@ -16,7 +16,7 @@ images:
   - name: docker.io/curlimages/curl
     newTag: 8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
   - name: ghcr.io/sdwilsh/sif
-    newTag: latest@sha256:e21c4d4188a5d3643e740254ac2feb6b38553bf7fdc2eb8dd8232846a4646326
+    newTag: latest@sha256:47887005d883e92c178dc8e123adb8ab479c3184466c6ee0c160699b01b88876
 namespace: local-llm
 resources:
   - namespace.yml
