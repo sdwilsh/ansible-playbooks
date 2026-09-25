@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: kubelet-scrapeconfig
+spec:
+  authorization:
+    credentials:
+      key: token
+      name: prometheus-service-account-token-secret
+  jobName: kubelet
+  kubernetesSDConfigs:
+    - role: Node
+  metricsPath: /metrics
+  scheme: HTTPS
+  tlsConfig:
+    insecureSkipVerify: true
