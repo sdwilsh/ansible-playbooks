@@ -9,20 +9,34 @@ spec:
     - name: general.volume
       interval: 5m
       rules:
+        # The kubelet reports the bytes that the filesystem uses.
+        # `max by` removes the node.  The kubelet of every node that mounts a
+        # `ReadWriteMany` volume reports that volume, and the rule must alert
+        # one time.  A kubelet reports a volume only while a node mounts it, so
+        # these rules do not watch the volume of a workload that scaled to zero.
         - alert: longhorn-volume-utilization-high
           annotations:
-            description: "{{ $value }}% of {{ $labels.pvc }} disk used!"
-          expr: (100 * longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) > 85 < 95
+            description: "{{ $value }}% of {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} filesystem used!"
+          expr: (100 * max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes) / max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_capacity_bytes)) > 85 < 95
           for: 5m
           labels:
             severity: warning
         - alert: longhorn-volume-utilization-dangerously-high
           annotations:
-            description: "{{ $value }}% of {{ $labels.pvc }} disk used!"
-          expr: (100 * longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) > 95
+            description: "{{ $value }}% of {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} filesystem used!"
+          expr: (100 * max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes) / max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_capacity_bytes)) > 95
           for: 15m
           labels:
             severity: page
+        # A rule that reads an absent series never fires, and it reports no
+        # error.  This rule makes that condition visible.
+        - alert: kubelet-volume-stats-absent
+          annotations:
+            description: "kubelet_volume_stats_used_bytes is absent, so no rule watches how full a volume is"
+          expr: absent(kubelet_volume_stats_used_bytes)
+          for: 30m
+          labels:
+            severity: warning
         - alert: longhorn-disk-not-ready
           annotations:
             description: "{{ $labels.disk }} on {{ $labels.node }} is not ready because {{ $labels.condition_reason }}"
