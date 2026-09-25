@@ -40,3 +40,20 @@ spec:
           for: 15m
           labels:
             severity: warning
+        # A full disk stops every volume with a replica on it.  These rules read
+        # the physical bytes.  The reserved bytes only stop new replicas, and
+        # `longhorn-disk-not-schedulable` reports that condition.
+        - alert: longhorn-disk-utilization-high
+          annotations:
+            description: "{{ $value }}% of {{ $labels.disk }} on {{ $labels.node }} used!"
+          expr: (100 * longhorn_disk_usage_bytes / longhorn_disk_capacity_bytes) > 85 < 95
+          for: 5m
+          labels:
+            severity: warning
+        - alert: longhorn-disk-utilization-dangerously-high
+          annotations:
+            description: "{{ $value }}% of {{ $labels.disk }} on {{ $labels.node }} used!"
+          expr: (100 * longhorn_disk_usage_bytes / longhorn_disk_capacity_bytes) > 95
+          for: 15m
+          labels:
+            severity: page
