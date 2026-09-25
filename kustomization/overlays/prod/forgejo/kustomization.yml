@@ -25,7 +25,7 @@ images:
   - name: code.forgejo.org/forgejo/forgejo
     newTag: 16.0.5-rootless@sha256:5effb7305584aca479b29fde6f9631a6dbe86ae798ae02eeea33a3666f0c0bf8
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:6e9c5284a0dac06e84de9f4d97852d2e6513442ee7ec3a66d35009eec86e1e62
+    newTag: latest@sha256:ab90e1058e5a658cc94b4e7eb6d48e5758cfd6d77b5dd1869513aec3a3054673
 namespace: forgejo
 patches:
   - path: patches/cnpg/set_backup_path.yml
