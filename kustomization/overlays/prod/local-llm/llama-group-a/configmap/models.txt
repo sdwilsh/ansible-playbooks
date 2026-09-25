@@ -1,2 +1,2 @@
-Qwen3-Coder-Next-Q8_0|http://olah-svc.olah.svc.cluster.local:8090/unsloth/Qwen3-Coder-Next-GGUF/resolve/ce09c67b53bc8739eef83fe67b2f5d293c270632/Q8_0|Qwen3-Coder-Next-Q8_0-00001-of-00003.gguf Qwen3-Coder-Next-Q8_0-00002-of-00003.gguf Qwen3-Coder-Next-Q8_0-00003-of-00003.gguf|8080|131072
+Ling-3.0-flash|http://olah-svc.olah.svc.cluster.local:8090/bartowski/Ling-3.0-flash-GGUF/resolve/7e1a1243566501d52af98e9aa7a7a61986279c6d/Ling-3.0-flash-IQ4_XS|Ling-3.0-flash-IQ4_XS-00001-of-00002.gguf Ling-3.0-flash-IQ4_XS-00002-of-00002.gguf|8080|131072
 Qwen3.6-35B-A3B|http://olah-svc.olah.svc.cluster.local:8090/unsloth/Qwen3.6-35B-A3B-GGUF/resolve/a483e9e6cbd595906af30beda3187c2663a1118c|aux/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf|8081|131072

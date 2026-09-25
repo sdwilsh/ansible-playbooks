@@ -20,17 +20,16 @@ kairos__disks_to_format: []
 #
 # 125.07 - 17.07 = 108 GiB, which is 28311552 pages.  Group A takes:
 #
-# | Item                           |    GiB | Source         |
-# | ------------------------------ | -----: | -------------- |
-# | model weights                  |  98.98 | server log     |
-# | coder KV cache, 131072 tokens  |   1.59 | server log     |
-# | 35B aux KV cache, 131072       |   1.33 | server log     |
-# | compute buffers and overhead   |   1.69 | maths          |
-# | **total**                      | 103.59 | projected      |
-# | headroom to the 108 GiB limit  |   4.41 | maths          |
+# | Item                          |   GiB | Source     |
+# | ----------------------------- | ----: | ---------- |
+# | Ling weights + KV, 131072     | 63.15 | measured   |
+# | 35B aux weights               | 20.82 | server log |
+# | 35B aux KV cache, 131072      |  1.33 | server log |
+# | compute buffers and overhead  |  1.69 | maths      |
+# | **total**                     | 86.99 | projected  |
+# | headroom to the 108 GiB limit | 21.01 | maths      |
 #
-# The total is a projection.  `gpu_used_gtt` gives 102.87 GiB with the aux
-# at 65536, and the wider aux adds 0.72 GiB.  Read `gpu_used_gtt` again
-# after the aux starts at 131072.
+# Ling holds 131072 tokens, not its trained 262144.  The GPU loses its
+# Vulkan context above approximately 141000 tokens.
 kairos__extra_cmdline:
   - ttm.pages_limit=28311552
