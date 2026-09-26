@@ -1,9 +1,11 @@
 #!/bin/sh
 # Write one s6 service for each record in `MODELS`.  A record is one line
-# with five fields, and a "|" between each field:
-#   alias|base URL|shard names|port|context size
+# with six fields, and a "|" between each field:
+#   alias|base URL|shard names|port|context size|extra arguments
 # The shard names have a space between each name.  The server finds the
-# other shards from the first name.
+# other shards from the first name.  The extra arguments are optional.
+# This script puts them at the end of the command line.  An argument
+# there replaces the same argument from this script.
 #
 # `rc.init` runs this script as `S6_STAGE2_HOOK`, before it compiles the
 # service database.  s6 removes the environment first, so `printcontenv`
@@ -33,14 +35,14 @@ ports=""
 
 # The record has the same fields for each script.
 # shellcheck disable=SC2034
-while IFS='|' read -r alias base shards port ctx; do
+while IFS='|' read -r alias base shards port ctx extra; do
   [ -n "$alias" ] || continue
 
-  case "$ctx" in
-    *'|'*) fatal "record $alias has more than five fields" ;;
+  case "$extra" in
+    *'|'*) fatal "record $alias has more than six fields" ;;
   esac
   for field in "$base" "$shards" "$port" "$ctx"; do
-    [ -n "$field" ] || fatal "record $alias does not have five fields"
+    [ -n "$field" ] || fatal "record $alias has an empty field"
   done
 
   # The alias becomes a service directory name and an argument of the
@@ -81,6 +83,13 @@ while IFS='|' read -r alias base shards port ctx; do
   case "$ctx" in
     *[!0-9]*) fatal "context size $ctx of $alias is not a number" ;;
   esac
+  # The `run` script below holds the extra arguments, and a shell reads
+  # that file.  This list allows only letters, numbers, a space and the
+  # four symbols that an option needs.
+  case "$extra" in
+    *[!A-Za-z0-9\ ._=-]*)
+      fatal "extra arguments of $alias have a character outside A-Z a-z 0-9 space . _ = -" ;;
+  esac
 
   # shellcheck disable=SC2086
   set -- $shards
@@ -95,7 +104,7 @@ while IFS='|' read -r alias base shards port ctx; do
 #!/command/with-contenv sh
 cd /app
 exec 2>&1
-exec ./llama-server -m /models/$1 -a "$alias" --host "\$POD_IP" --port $port --ctx-size $ctx --metrics -fa on -ngl 999 --parallel 1
+exec ./llama-server -m /models/$1 -a "$alias" --host "\$POD_IP" --port $port --ctx-size $ctx --metrics -fa on -ngl 999 --parallel 1 $extra
 EOF
 
   # The "1" sends each line to standard output.

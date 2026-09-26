@@ -9,7 +9,7 @@ set -eu
 
 # The record has the same fields for each script.
 # shellcheck disable=SC2034
-while IFS='|' read -r alias base shards port ctx; do
+while IFS='|' read -r alias base shards port ctx extra; do
   [ -n "$alias" ] || continue
 
   /command/s6-svstat -o up "/run/service/$alias" > /dev/null

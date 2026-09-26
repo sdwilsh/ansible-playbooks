@@ -1,7 +1,8 @@
 #!/bin/sh
 # Get each model shard through olah.  Check each one after the download.
 # `MODELS` gives one record per model, the same format
-# `generate-model-services.sh` reads: alias|base URL|shard names|port|ctx.
+# `generate-model-services.sh` reads:
+# alias|base URL|shard names|port|ctx|extra arguments.
 # This script uses the base URL and the shard names only.
 #
 # llama-server has its own downloader.  It cannot use olah.  It calls the
@@ -19,7 +20,7 @@ set -eu
 
 # The record has the same fields as `generate-model-services.sh` reads.
 # shellcheck disable=SC2034
-while IFS='|' read -r alias base shards port ctx; do
+while IFS='|' read -r alias base shards port ctx extra; do
   [ -n "$alias" ] || continue
 
   for f in $shards; do

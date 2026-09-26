@@ -10,7 +10,7 @@ set -eu
 
 # The record has the same fields for each script.
 # shellcheck disable=SC2034
-while IFS='|' read -r alias base shards port ctx; do
+while IFS='|' read -r alias base shards port ctx extra; do
   [ -n "$alias" ] || continue
 
   curl -fsS --max-time 4 -o /dev/null "http://$POD_IP:$port/health"
