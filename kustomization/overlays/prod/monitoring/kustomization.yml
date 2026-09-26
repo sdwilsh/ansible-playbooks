@@ -27,7 +27,7 @@ configMapGenerator:
         loki_rule: "true"
 helmCharts:
   - name: alloy
-    version: 1.12.1
+    version: 1.13.0
     repo: https://grafana.github.io/helm-charts
     releaseName: alloy
     valuesFile: alloy-values.yml
