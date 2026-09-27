@@ -14,6 +14,11 @@ spec:
                 configMapKeyRef:
                   key: MODELS
                   name: local-llm-models-configmap
+          # Two servers hold 4311 MiB at their highest, of which the aux
+          # model holds 2532 MiB.
+          resources:
+            limits:
+              memory: 8Gi
           # check-servers.sh asks two servers in sequence.  The rule is
           # timeoutSeconds >= 4 * N + 2, periodSeconds >= timeoutSeconds + 5.
           startupProbe:

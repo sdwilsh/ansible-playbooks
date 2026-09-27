@@ -10,22 +10,29 @@ common__ip_addresses:
 kairos__disks_to_format: []
 
 # This node holds model group A.  `group_vars/kairos_gpuworker.yml` gives
-# the common floor and the rule for this value.  The floor of this node:
+# the common floor and the rule for the largest safe GTT limit.
 #
-# | Item                  |   GiB | Source     |
-# | --------------------- | ----: | ---------- |
-# | common floor          |  7.07 | group vars |
-# | `local-llm` container | 10.00 | limit      |
-# | **total**             | 17.07 |            |
+# This node takes less than that rule permits.  A measurement gives what
+# group A needs, and the node keeps the rest for other work.
 #
-# 125.07 - 17.07 = 108 GiB, which is 28311552 pages.  Group A takes:
+# | Item                  |    GiB | Source            |
+# | --------------------- | -----: | ----------------- |
+# | common floor          |   7.07 | group vars        |
+# | `local-llm` container |   8.00 | group A patch     |
+# | GTT for group A       |  96.00 | limit             |
+# | **total**             | 111.07 |                   |
+# | free for other work   |  14.00 | 125.07 less total |
 #
-# | Item                          |   GiB | Source   |
-# | ----------------------------- | ----: | -------- |
-# | group A, both models, 196608  | 91.28 | measured |
-# | headroom to the 108 GiB limit | 16.72 | maths    |
+# Each limit holds a margin over a measurement:
 #
-# `gpu_used_gtt` gave 93475 MiB for four samples while the context moved.
+# | Item             | measured | limit | margin |
+# | ---------------- | -------: | ----: | -----: |
+# | group A GTT      |    91.28 | 96.00 |   4.72 |
+# | container memory |     4.21 |  8.00 |   3.79 |
+#
+# 96 GiB is 25165824 pages.  `gpu_used_gtt` gave 93475 MiB for four
+# samples, for both models at 196608 tokens.  The container held 4311
+# MiB at its highest, under a session of agent work.
 # Ling holds 196608 tokens.  The model trains to 262144.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
@@ -33,4 +40,4 @@ kairos__disks_to_format: []
 # These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
   - amdgpu.lockup_timeout=10000,180000,10000,10000
-  - ttm.pages_limit=28311552
+  - ttm.pages_limit=25165824
