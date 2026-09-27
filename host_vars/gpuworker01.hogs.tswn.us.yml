@@ -20,16 +20,17 @@ kairos__disks_to_format: []
 #
 # 125.07 - 17.07 = 108 GiB, which is 28311552 pages.  Group A takes:
 #
-# | Item                          |   GiB | Source     |
-# | ----------------------------- | ----: | ---------- |
-# | Ling weights + KV, 131072     | 63.15 | measured   |
-# | 35B aux weights               | 20.82 | server log |
-# | 35B aux KV cache, 131072      |  1.33 | server log |
-# | compute buffers and overhead  |  1.69 | maths      |
-# | **total**                     | 86.99 | projected  |
-# | headroom to the 108 GiB limit | 21.01 | maths      |
+# | Item                          |   GiB | Source   |
+# | ----------------------------- | ----: | -------- |
+# | group A, both models, 196608  | 91.28 | measured |
+# | headroom to the 108 GiB limit | 16.72 | maths    |
 #
-# Ling holds 131072 tokens, not its trained 262144.  The GPU loses its
-# Vulkan context above approximately 141000 tokens.
+# `gpu_used_gtt` gave 93475 MiB for four samples while the context moved.
+# Ling holds 196608 tokens.  The model trains to 262144.
+#
+# The AMD driver stops a compute job after 2 seconds.  A large context
+# makes each job longer, and the GPU then loses its Vulkan context.
+# These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
+  - amdgpu.lockup_timeout=10000,180000,10000,10000
   - ttm.pages_limit=28311552

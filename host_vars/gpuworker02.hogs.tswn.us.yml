@@ -21,5 +21,9 @@ kairos__disks_to_format: []
 # | **total**             | 17.07 |            |
 #
 # 125.07 - 17.07 = 108 GiB, which is 28311552 pages.
+# The AMD driver stops a compute job after 2 seconds.  A large context
+# makes each job longer, and the GPU then loses its Vulkan context.
+# These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
+  - amdgpu.lockup_timeout=10000,180000,10000,10000
   - ttm.pages_limit=28311552
