@@ -7,6 +7,11 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.120/23
 
+# The GPU holds 91.28 GiB of GTT.  The kubelet does not read GTT pages,
+# so this value is the 96 GiB limit of this node.  The scheduler then
+# sees 19.07 GiB.
+k3s_system_reserved_memory: 96Gi
+
 kairos__disks_to_format: []
 
 # This node holds model group A.  `group_vars/kairos_gpuworker.yml` gives

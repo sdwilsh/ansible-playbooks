@@ -21,9 +21,9 @@
 # `oom_score` does not count GTT pages.  A change to the limit needs a
 # reboot of the node.
 #
-# Do not use `system-reserved` to hold memory for the GPU.  The kernel does
-# not charge GTT pages to a cgroup, so a reservation only makes
-# `kubepods.slice` smaller.
+# `k3s_system_reserved_memory` below tells the kubelet about this memory.
+# That argument changes `allocatable` only.  k3s takes the default value of
+# `--enforce-node-allocatable=pods`, so no cgroup holds the reservation.
 #
 # Each node has the same floor of 7.07 GiB.  The `host_vars` file of the
 # node adds the container limit of each server to it.
@@ -45,6 +45,12 @@
 #
 # Between a limit of 96 GiB and a limit of 108 GiB the page tables change
 # by 0.05 GiB, and the slack holds that.  Keep 0.47 GiB on each node.
+
+# This value is the memory that `system-reserved` keeps.  The GPU page
+# tables map the GTT ceiling, and they use 0.47 GiB on each node.  A node
+# with a model group sets a larger value in `host_vars`.
+k3s_system_reserved_memory: 512Mi
+
 k3s_kubelet_args:
   # These settings are based on a measured working set of 2.21 GiB.
   # 4Gi is larger than the 2.21 GiB working set, and gives the kubelet a
@@ -58,6 +64,10 @@ k3s_kubelet_args:
   # purpose.  The budget above uses the measurement, because the kubelet
   # does not enforce this reservation as a cgroup.
   - kube-reserved=memory=6Gi
+  # `system-reserved` keeps memory for a component outside Kubernetes.
+  # The amdgpu driver is such a component.  The kubelet does not read GTT
+  # pages, so the scheduler needs this value.
+  - system-reserved=memory={{ k3s_system_reserved_memory }}
 
 # FastFlowLM maps NPU memory with `MAP_LOCKED`, which counts against
 # `RLIMIT_MEMLOCK`.  A `Pod` with the `restricted` pod security standard cannot
