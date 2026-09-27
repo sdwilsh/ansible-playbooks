@@ -43,8 +43,8 @@
 #
 #   GTT limit = (125.07 GiB - the floor with no page tables) / 1.0044
 #
-# Between a limit of 101 GiB and a limit of 108 GiB the page tables change
-# by 0.03 GiB, and the slack holds that.  Keep 0.47 GiB on each node.
+# Between a limit of 96 GiB and a limit of 108 GiB the page tables change
+# by 0.05 GiB, and the slack holds that.  Keep 0.47 GiB on each node.
 k3s_kubelet_args:
   # These settings are based on a measured working set of 2.21 GiB.
   # 4Gi is larger than the 2.21 GiB working set, and gives the kubelet a
