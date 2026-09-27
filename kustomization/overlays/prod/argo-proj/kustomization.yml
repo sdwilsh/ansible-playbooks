@@ -5,7 +5,7 @@ kind: Kustomization
 components:
   - ../../../components/codegen-argo-cd-applications-prod
   # There's not a great spot to include this, alas!
-  - https://github.com/marinatedconcrete/config/kustomization/components/priorityclass?ref=kustomize-priorityclass@v1.0.3
+  - https://github.com/marinatedconcrete/config/kustomization/components/priorityclass?ref=kustomize-priorityclass@v1.0.4
 namespace: argocd
 resources:
   - application.yml
