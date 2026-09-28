@@ -147,7 +147,9 @@ spec:
           emptyDir:
             sizeLimit: 2Gi
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: model-cache
         labels:
           recurring-job.longhorn.io/source: enabled
