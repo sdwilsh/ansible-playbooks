@@ -15,7 +15,7 @@
       "customType": "regex",
       "datasourceTemplate": "github-release-attachments",
       "depNameTemplate": "ROCm/FastFlowLM",
-      "description": "The datasource hashes the release asset, so Renovate changes the version and the checksum together.",
+      "description": "The `github-release-attachments` datasource computes the checksum of the release file. Renovate replaces the version line and the checksum line together.",
       "managerFilePatterns": [
         "/^images/vergil/Containerfile$/"
       ],
