@@ -1,4 +1,4 @@
-FROM docker.io/grafana/alloy:v1.20.0@sha256:f111cce835516c5f99166342be7038496b52ced16667be5a11e19258a3e4cd30
+FROM docker.io/grafana/alloy:v1.20.1@sha256:2aa2099af76c0098d4af7a4d6e48f86cb66dc1a000222ad927a1c67c6542d13f
 
 # This exists only due to the lack of curl in the Alloy container:
 # https://github.com/grafana/alloy/issues/477
