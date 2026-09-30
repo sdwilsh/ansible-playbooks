@@ -12,5 +12,8 @@ output-mack-kairos
 # `ansible-galaxy` and `ansible-lint` write Roles and Collections here.
 .ansible/
 
+# Python writes this beside every test suite it runs.
+__pycache__/
+
 # Helm chart expansion by kustomize.  This isn't the suggested way, but home-prod isn't prod.
 kustomization/**/charts
