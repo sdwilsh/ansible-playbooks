@@ -555,12 +555,12 @@ linux-mcp-validate:
     done
     exit "${rc}"
 
-# Build production overlay with `kustomize`
+# Build every overlay with `kustomize`
 [group('lint')]
 kustomize-build:
     #!/usr/bin/env bash
     set -eou pipefail
-    find kustomization/overlays/prod -mindepth 1 -maxdepth 1 -type d  | while read -r file; do
+    find kustomization/overlays -mindepth 2 -maxdepth 2 -type d  | while read -r file; do
         echo -n "Running \`kustomize build --enable-helm\` on ${file}..."
         kustomize build --enable-helm ${file} > /dev/null
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
