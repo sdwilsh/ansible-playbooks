@@ -49,6 +49,7 @@
     mode: "u=rw,g=,o="
     owner: "ansible"
     group: "ansible"
+  no_log: true # The result would show the vault password.
 
 - name: "Ensure logfile exists"
   ansible.builtin.file:

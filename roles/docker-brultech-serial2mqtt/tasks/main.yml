@@ -28,6 +28,7 @@
     owner: "brultech"
     group: "brultech"
     mode: "u=rw,g=r"
+  no_log: true # The result would show the MQTT password.
   register: config
   vars:
     brultech_config:

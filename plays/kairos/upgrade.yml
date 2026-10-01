@@ -25,6 +25,7 @@
         src: templates/config.yml.j2
         validate: kairos validate %s
       become: true
+      no_log: true # The result would show the k3s token.
       register: config
       vars:
         controlplane_hosts: "{{ groups['kairos_controlplane'] }}"

@@ -49,6 +49,7 @@
       ansible.builtin.template:
         dest: "{{ workdir.path }}/config.yml"
         src: templates/config.yml.j2
+      no_log: true # The result would show the k3s token.
       vars:
         controlplane_hosts: "{{ groups['kairos_controlplane'] }}"
     - name: Host configuration on port 9000

@@ -22,3 +22,4 @@
         api-token: "{{ certmanager_cloudflare_api_token }}"
       type: Opaque
     state: present
+  no_log: true # The result would show the API token.

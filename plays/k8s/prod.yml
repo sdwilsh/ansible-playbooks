@@ -37,6 +37,7 @@
           stringData: "{{ secret.stringData }}"
           type: "{{ secret.type | default('Opaque') }}"
         state: present
+      no_log: true # The result would show every secret value.
       loop: "{{ secrets }}"
       loop_control:
         label: "{{ secret.namespace }}/{{ secret.name }}"

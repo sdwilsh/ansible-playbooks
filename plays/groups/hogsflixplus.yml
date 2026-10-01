@@ -103,6 +103,7 @@
           mtu: 1280
           peer-routes: true
           private-key: "{{ wireguard__privkey }}"
+      no_log: true # Contains the wireguard private key!
       tags:
         - hfp-wireguard
     - name: Add Wireguard Peer
