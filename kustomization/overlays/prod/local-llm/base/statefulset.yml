@@ -128,6 +128,7 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
       enableServiceLinks: false
+      priorityClassName: critical-application-infra
       securityContext:
         fsGroup: 1000
         runAsGroup: 1000
