@@ -23,21 +23,22 @@ kairos__disks_to_format: []
 # | Item                  |    GiB | Source            |
 # | --------------------- | -----: | ----------------- |
 # | common floor          |   7.07 | group vars        |
-# | `local-llm` container |   8.00 | group A patch     |
+# | `local-llm` container |  12.00 | group A patch     |
 # | GTT for group A       |  96.00 | limit             |
-# | **total**             | 111.07 |                   |
-# | free for other work   |  14.00 | 125.07 less total |
+# | **total**             | 115.07 |                   |
+# | free for other work   |  10.00 | 125.07 less total |
 #
 # Each limit holds a margin over a measurement:
 #
 # | Item             | measured | limit | margin |
 # | ---------------- | -------: | ----: | -----: |
 # | group A GTT      |    91.28 | 96.00 |   4.72 |
-# | container memory |     4.21 |  8.00 |   3.79 |
+# | container memory |     4.21 | 12.00 |   7.79 |
 #
 # 96 GiB is 25165824 pages.  `gpu_used_gtt` gave 93475 MiB for four
 # samples, for both models at 196608 tokens.  The container held 4311
-# MiB at its highest, under a session of agent work.
+# MiB at its highest, under a session of agent work.  That measurement
+# predates the larger prompt cache, so container memory now grows.
 # Ling holds 196608 tokens.  The model trains to 262144.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context

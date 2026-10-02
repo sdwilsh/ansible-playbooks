@@ -8,17 +8,20 @@ spec:
     spec:
       containers:
         - name: llama-server
-          env: &models
-            - name: MODELS
+          env:
+            - name: LLAMA_ARG_CACHE_RAM
+              value: "4096"
+            - &models
+              name: MODELS
               valueFrom:
                 configMapKeyRef:
                   key: MODELS
                   name: local-llm-models-configmap
-          # Two servers hold 4311 MiB at their highest, of which the aux
-          # model holds 2532 MiB.
+          # Two servers hold 4311 MiB at their highest.  The two prompt
+          # caches above add 8192 MiB.
           resources:
             limits:
-              memory: 8Gi
+              memory: 12Gi
           # check-servers.sh asks two servers in sequence.  The rule is
           # timeoutSeconds >= 4 * N + 2, periodSeconds >= timeoutSeconds + 5.
           startupProbe:
@@ -28,4 +31,5 @@ spec:
             timeoutSeconds: 10
       initContainers:
         - name: fetch-model
-          env: *models
+          env:
+            - *models
