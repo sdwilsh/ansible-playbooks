@@ -9,8 +9,8 @@ RUN apk add --no-cache \
 
 # Renovate changes both lines together.  Keep the hash under the version, and
 # keep the version in the tag form, because the datasource reads the tag.
-ARG FLM_VERSION=v1.0.5
-ARG FLM_SHA256=dd797ccfda5e0f97e3b683c9b304bce7d0051f8e5d650b9eb001d01a83b19d2c
+ARG FLM_VERSION=v1.0.6
+ARG FLM_SHA256=99f1032656b3dd8135675ca3be4e3aa4169e732ecd2d5fb886b24570b0a80851
 WORKDIR /download
 RUN archive="fastflowlm_${FLM_VERSION#v}_linux.tar.gz" \
   && curl -f -L -O \
