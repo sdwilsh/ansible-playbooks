@@ -30,7 +30,7 @@ RUN curl -f -L -o /opt/vergil/probe.wav \
   && echo "${PROBE_SHA256}  /opt/vergil/probe.wav" > probe.sha256 \
   && sha256sum -c probe.sha256
 
-FROM docker.io/library/ubuntu:26.04@sha256:3595d7fc4286a33fad0fd853a4063e654287a9c3787437d7937c94ca3f7a804e
+FROM docker.io/library/ubuntu:26.04@sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7
 
 # `flm-real` needs `libgomp.so.1` and `libcurl.so.4`.  Ubuntu names those
 # packages `libgomp1` and `libcurl4t64`.  The probe uses `curl` and `jq`.
