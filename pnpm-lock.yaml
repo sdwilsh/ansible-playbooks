@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       renovate:
-        specifier: 44.121.4
-        version: 44.121.4(supports-color@7.2.0)(typanion@3.14.0)
+        specifier: 44.126.0
+        version: 44.126.0(supports-color@7.2.0)(typanion@3.14.0)
 
 packages:
 
@@ -1844,8 +1844,8 @@ packages:
     resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
     engines: {node: '>=12'}
 
-  prettier@3.9.8:
-    resolution: {integrity: sha512-WRFq3Wn3WId7LLROfMLdH7xaFr2jR62wU8nLO6rQUOLOxNZUviyJQs1M0iIhLexSFy+L+w0ch66wtoO2jRjG0A==}
+  prettier@3.9.9:
+    resolution: {integrity: sha512-Z/CJHIkdujO/OtN7nXUii0Rf3VT5SRuhjBA82Xvu2XhBUgX3nhP67T0LHceBdQLex7OOFGTox+Q5Yg8Jk2Qivg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -1913,8 +1913,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@44.121.4:
-    resolution: {integrity: sha512-XW5qVXevtTP/P2nbF0SLHHp5e6czmKoouxeUCMHTdzAJH2DOeHA62XnsKAw6GsKzLJVn0AUpY1KEPq1ZSLymkA==}
+  renovate@44.126.0:
+    resolution: {integrity: sha512-V/wzkDFSV76JSBqsH1WcOFSZ8AaJo9i2XktIBTpYuUmNf1kvanMwyz4/aP5Fw/lXP6dLZYxrsIKLYc8h3xukuA==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -4535,7 +4535,7 @@ snapshots:
   picomatch@4.0.7:
     optional: true
 
-  prettier@3.9.8: {}
+  prettier@3.9.9: {}
 
   pretty-ms@9.3.1:
     dependencies:
@@ -4638,7 +4638,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@44.121.4(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@44.126.0(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1117.0
       '@aws-sdk/client-ec2': 3.1117.0
@@ -4737,7 +4737,7 @@ snapshots:
       p-queue: 9.3.3
       p-throttle: 8.1.1
       parse-link-header: 2.0.0
-      prettier: 3.9.8
+      prettier: 3.9.9
       protobufjs: 8.8.0
       punycode: 2.3.1
       remark: 15.0.1(supports-color@7.2.0)
