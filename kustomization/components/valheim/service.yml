@@ -13,9 +13,6 @@ spec:
     - name: game2
       protocol: UDP
       port: 2457
-    - name: game3
-      protocol: UDP
-      port: 2458
 ---
 apiVersion: v1
 kind: Service
