@@ -92,6 +92,8 @@
 
           [Pod]
           Network=hogs-services.network
+          # A fixed address keeps UDP conntrack entries valid across restarts.
+          IP=10.11.2.129
           # 7 Days to Die (Relic)
           PublishPort={{ ansible_facts['default_ipv4'].address }}:26900:26900/tcp
           PublishPort={{ ansible_facts['default_ipv4'].address }}:26900:26900/udp
