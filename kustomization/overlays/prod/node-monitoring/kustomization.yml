@@ -36,7 +36,7 @@ images:
   - name: quay.io/prometheus/node-exporter
     newTag: v1.12.1@sha256:1b4e4438faca4dd7e001dd445d161a4a2091b0fededa84093b3a8dfeae1f1be0
   - name: quay.io/prometheuscommunity/smartctl-exporter
-    newTag: v0.14.0@sha256:cfe22c36d7d2fac48ebf619707305acb65eb0fb670656eb80f356e606d782bc1
+    newTag: v0.15.0@sha256:a76e08dbf5db4781fefd1ed81c65ad46ae8d2849dae6b6d3acebcde2fc4e59d6
 namespace: node-monitoring
 resources:
   - namespace.yml
