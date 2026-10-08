@@ -20,7 +20,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:f7f9e4f64d9e114650c115a4ac6fd383394b3d494061a8f17b1a0f6c8d55bc25
   - name: ghcr.io/immich-app/immich-server
-    newTag: v3.2.4@sha256:d317916b28090c33eb36b308464ea391f8b7df1d850fcfea227a39ec879718c2
+    newTag: v3.3.0@sha256:be56bc12c17a84617a979ad1eab1d9105bbec1955ffa7da09b3f9cf79d3bd09d
   - name: ghcr.io/immich-app/immich-machine-learning
     newTag: v3.2.4@sha256:e16c2f166a8174901959fdf85e2e4c7bd1ebc4b37e0b6655de97c41408a260c4
   - name: postgres
