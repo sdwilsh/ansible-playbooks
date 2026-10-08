@@ -27,13 +27,6 @@ spec:
                 name: bifrost-svc
                 port:
                   name: web
-            path: /anthropic
-            pathType: Prefix
-          - backend:
-              service:
-                name: bifrost-svc
-                port:
-                  name: web
             path: /mcp
             pathType: Prefix
           - backend:
