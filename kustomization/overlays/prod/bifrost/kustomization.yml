@@ -43,6 +43,7 @@ resources:
   - cnpg/scheduledbackup.yml
   - deployment.yml
   - ingress/bifrost-api.yml
+  - ingress/bifrost-llm-api.yml
   - ingress/bifrost.yml
   - networkpolicy/allow-from-prometheus.yml
   - networkpolicy/allow-to-mcp-servers.yml
