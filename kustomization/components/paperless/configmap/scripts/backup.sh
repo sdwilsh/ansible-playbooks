@@ -21,7 +21,6 @@ kubectl \
     -- \
     document_exporter \
         /tmp \
-        --compare-checksums \
         --split-manifest \
         --zip \
         --zip-name "${BACKUP_FILENAME}"
