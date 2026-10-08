@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       renovate:
-        specifier: 44.132.2
-        version: 44.132.2(supports-color@7.2.0)(typanion@3.14.0)
+        specifier: 44.132.6
+        version: 44.132.6(supports-color@7.2.0)(typanion@3.14.0)
 
 packages:
 
@@ -1892,8 +1892,8 @@ packages:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
 
-  re2@1.26.1:
-    resolution: {integrity: sha512-oi79a4h6EO3PAwNsDMWgeCcsRGQEUa52DIgOiFTZGDEZocEXG9h+oXy0qZqndo47huUeJuVWSoOJIEhOupqOcg==}
+  re2@1.27.0:
+    resolution: {integrity: sha512-z5Vascmj7lQbU3YdfYJUDkBGGTnoAObcVW/CSbpI3WbVb1vZQsSzSWcGkfKU0JKrrGfPZwPr8EVHwYXKQKLVXw==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   read-yaml-file@2.1.0:
@@ -1915,8 +1915,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@44.132.2:
-    resolution: {integrity: sha512-RD5+d1UPhvTj55u6wbZUY/Fhb2LRkYfo9ZqymjH8XeiKub37aNdDNJPgksnOjsyHPMzLMh6DeMTrEBRnQzBgvA==}
+  renovate@44.132.6:
+    resolution: {integrity: sha512-/9jC2dLW0KqkyO6vf8V9kUTsBgHrXiwY51FgjH5Kz5I+q5ClmLGcb6PIR2gq2pWTMDS+0OqLdBhbgWAAHxirLQ==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -4590,7 +4590,7 @@ snapshots:
 
   quick-lru@5.1.1: {}
 
-  re2@1.26.1:
+  re2@1.27.0:
     dependencies:
       install-artifact-from-github: 1.8.1
       nan: 2.29.0
@@ -4646,7 +4646,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@44.132.2(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@44.132.6(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -4773,7 +4773,7 @@ snapshots:
       zod: 4.6.5
     optionalDependencies:
       openpgp: 6.3.2
-      re2: 1.26.1
+      re2: 1.27.0
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@openpgp/web-stream-tools'
