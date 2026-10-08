@@ -167,6 +167,7 @@
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
+      "extractVersionTemplate": "^latest\\.(?<version>\\d{8})$",
       "versioningTemplate": "regex:^(?<major>\\d{4})(?<minor>\\d{2})(?<patch>\\d{2})$",
       "managerFilePatterns": [
         "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane\\.yml$/",
