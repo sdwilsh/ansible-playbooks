@@ -1,6 +1,14 @@
 {
   "$schema": "https://www.getbifrost.ai/schema",
   "client": {
+    "allow_direct_keys": false,
+    "allowed_headers": [
+      "Authorization",
+      "Content-Type",
+      "x-bf-vk",
+      "x-bf-api-key",
+      "X-Request-Id"
+    ],
     "allowed_origins": [
       "https://bifrost.hogs.tswn.us"
     ],
