@@ -356,7 +356,6 @@
       "matchFileNames": [
         "kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane.yml"
       ],
-      "minimumReleaseAge": "1 day",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
@@ -369,7 +368,6 @@
       "matchFileNames": [
         "kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers.yml"
       ],
-      "minimumReleaseAge": "4 days",
       "schedule": [
         "after 4pm on tuesday",
         "after 4pm on thursday",
