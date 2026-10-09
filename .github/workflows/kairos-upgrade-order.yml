@@ -1,0 +1,64 @@
+---
+name: Kairos Upgrade Order
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/kairos-upgrade-order.yml
+      - kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers.yml
+      - .github/scripts/check-kairos-order.sh
+  push:
+    branches:
+      - main
+    paths:
+      - kustomization/overlays/prod/kairos-operator/nodeopupgrade/controlplane.yml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_order:
+    name: Control plane upgrades before workers
+
+    if: github.event_name == 'pull_request'
+
+    permissions:
+      contents: read
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Check control plane image
+        run: .github/scripts/check-kairos-order.sh origin/main
+
+  rerun_workers_check:
+    name: Re-run the workers check
+
+    if: github.event_name == 'push'
+
+    permissions:
+      actions: write
+      contents: read
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Re-run the latest check on open workers PRs
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run list \
+            --workflow kairos-upgrade-order.yml \
+            --event pull_request \
+            --branch renovate/kairos-workers \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[].databaseId' |
+            xargs --no-run-if-empty -n1 gh run rerun
