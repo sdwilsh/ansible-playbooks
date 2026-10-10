@@ -4,7 +4,7 @@ kind: Component
 
 images:
   - name: ghcr.io/dancwilliams/protonmail-bridge-docker
-    newTag: v3.27.0@sha256:f2c1b0d88ae78e5fbbfd47e6652fc2d8993e02319e5e06028d2cb04766716dcd
+    newTag: v3.27.1@sha256:09b756bc8728ad0c19132add1a7561a3dc378a13182bcebd3e5a30299ab44c50
 resources:
   - service.yml
   - statefulset.yml
