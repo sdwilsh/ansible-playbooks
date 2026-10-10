@@ -24,7 +24,7 @@ images:
   - name: ghcr.io/immich-app/immich-machine-learning
     newTag: v3.3.1@sha256:513c831cfb010ad319341a0c86b42c575a0d5b688d3e8cae346ee624074a58ed
   - name: postgres
-    newTag: 18@sha256:5a5a84b19854a9ffaa54082c166ff4ec27473a361e496e5ea167f298f2da9722
+    newTag: 18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
 namespace: immich
 patches:
   # cnpg

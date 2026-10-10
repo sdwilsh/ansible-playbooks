@@ -19,7 +19,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:999d5eb28f404b45f15117f2a110ff23c6164f76edac261d75d783b6e88252b7
   - name: postgres
-    newTag: 18@sha256:5a5a84b19854a9ffaa54082c166ff4ec27473a361e496e5ea167f298f2da9722
+    newTag: 18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
   - name: quay.io/opstree/redis
     newTag: v8.10.1@sha256:d3ef5a7f11eb501034b6612b842c864e1946088c52c04b29a22f38b1fe37c99b
 namespace: paperless
