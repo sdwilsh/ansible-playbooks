@@ -1,0 +1,12 @@
+---
+certManager:
+  enable: true
+manager:
+  heartbeat:
+    enabled: false
+  pod:
+    labels:
+      hogs.tswn.us/api-server-client: "true"
+  priorityClassName: application-infra
+prometheus:
+  enable: true
