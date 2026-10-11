@@ -14,7 +14,7 @@ helmCharts:
     releaseName: hermes-agent-operator
     repo: oci://ghcr.io/hermeum/charts
     valuesFile: values.yml
-    version: 0.5.3
+    version: 0.5.5
 namespace: hermes-agent-operator
 resources:
   - namespace.yml
