@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       renovate:
-        specifier: 44.143.0
-        version: 44.143.0(supports-color@7.2.0)(typanion@3.14.0)
+        specifier: 44.148.3
+        version: 44.148.3(supports-color@7.2.0)(typanion@3.14.0)
 
 packages:
 
@@ -147,8 +147,8 @@ packages:
   '@cdktf/hcl2json@0.21.0':
     resolution: {integrity: sha512-cwX3i/mSJI/cRrtqwEPRfawB7pXgNioriSlkvou8LWiCrrcDe9ZtTbAbu8W1tEJQpe1pnX9VEgpzf/BbM7xF8Q==}
 
-  '@containerbase/base@14.28.0':
-    resolution: {integrity: sha512-3wPgbeBSCs9mU7XVEy2qzeDKPO92CFM/kmoWv4SPCtzxav9OBWN6HNxpTBGzk6PwWHDc3HVq8cKIhIBzQd717w==}
+  '@containerbase/base@14.30.1':
+    resolution: {integrity: sha512-oEpsUn/iR2XCUjgCL9aK1fLhSsJ7QHneUjMfeky9IY0OjWzJNUU9IakOj4DsH1SrSDL2M8DtOzmpVlMc5PCJ1w==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -462,8 +462,8 @@ packages:
       '@opentelemetry/api':
         optional: true
 
-  '@renovatebot/base-image@13.115.1':
-    resolution: {integrity: sha512-NTuX+Wd0dMFXRlgrtzdZ7gVm6+OgEqosVZ4WMP2iPR88Z8O/F8s32I7oKGPtaqhUJrJktSlenCGWh1LMvqJQRw==}
+  '@renovatebot/base-image@13.117.2':
+    resolution: {integrity: sha512-uMN7vOmFVp6f2OqfBGWe3oNXXVamYuo7B4MJ+cgp0RQh4VoqLmN/HvgGKmddJH6RnD5W3WINdAe886RyTCiM8g==}
     engines: {node: '>=24.10.0'}
     peerDependencies:
       zod: ^4.0.0
@@ -505,8 +505,8 @@ packages:
   '@simple-git/args-pathspec@1.0.4':
     resolution: {integrity: sha512-EtMX6XjRWSastG2SdkmSQByPtJ9dx/NIjnHbpQPCYt62j4RmSx5rgLTGpw0YCjF5h191gZOmBfheOT23cRSFdw==}
 
-  '@simple-git/argv-parser@1.1.1':
-    resolution: {integrity: sha512-Q9lBcfQ+VQCpQqGJFHe5yooOS5hGdLFFbJ5R+R5aDsnkPCahtn1hSkMcORX65J2Z5lxSkD0lQorMsncuBQxYUw==}
+  '@simple-git/argv-parser@2.0.1':
+    resolution: {integrity: sha512-M++IaVWrN+vYalilOHfwvT2IL3wYZtVEBQpmX6DLSOJLtxbZ+SUeIDE3IiPogzhPACLajwtxfa5rp+ZX1FczzQ==}
 
   '@sindresorhus/is@4.6.0':
     resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
@@ -1230,8 +1230,8 @@ packages:
   grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
 
-  handlebars@4.7.9:
-    resolution: {integrity: sha512-4E71E0rpOaQuJR2A3xDZ+GM1HyWYv1clR58tC8emQNeQe3RH7MAzSbat+V0wG78LQBo6m6bzSG/L4pBuCsgnUQ==}
+  handlebars@4.7.10:
+    resolution: {integrity: sha512-P5VJMVM7qgBn6vjXMw8WG9uVI+ncf2pi72j4de4yz5ZULLj2RGqLYaKOYGsgyrViQ0tePOVlN1tDCCXXtFqXKg==}
     engines: {node: '>=0.4.7'}
     hasBin: true
 
@@ -1276,8 +1276,8 @@ packages:
   humanize-ms@1.2.1:
     resolution: {integrity: sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==}
 
-  ignore@7.0.10:
-    resolution: {integrity: sha512-HpbUakT7xp5miBUywCHf36ZEuAJNklBJDDsGpUIjMzOSmM8ELSfA9Sa/QDPeNeqeoN31u+UTCkL4klCOVvRm4Q==}
+  ignore@7.0.11:
+    resolution: {integrity: sha512-YChdK5txDjwGUvgR7oCJcLGkwi3LDh8Zx8tS7ndYciLEg/oOCL26VUBSUEtgS7EjiybcBqFxh5j0rAdDX7/bbg==}
     engines: {node: '>= 4'}
 
   import-in-the-middle@3.5.2:
@@ -1929,8 +1929,8 @@ packages:
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
 
-  renovate@44.143.0:
-    resolution: {integrity: sha512-NXLjMqqYtdXzMwH8tlOAfX9s7hbi287rFKeDpw8c2RPqiHAl7SLRu2Ly21yFIYiI/O3lk8A0PW5InwYqvtNUMw==}
+  renovate@44.148.3:
+    resolution: {integrity: sha512-1OiYvpiTZda9qfWkEUMraFB9Z2n0HhMqFZB8WtI61gYFV6+zi32e//CzfPtUm3J5v8H+Eiy+e06cPIDwjGgnZg==}
     engines: {node: ^24.11.0, pnpm: ^11.0.0}
     hasBin: true
 
@@ -2043,8 +2043,8 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
-  simple-git@3.36.0:
-    resolution: {integrity: sha512-cGQjLjK8bxJw4QuYT7gxHw3/IouVESbhahSsHrX97MzCL1gu2u7oy38W6L2ZIGECEfIBG4BabsWDPjBxJENv9Q==}
+  simple-git@4.0.2:
+    resolution: {integrity: sha512-l0sIsv9VrPwovKELFDBOj/lhmIcbMvxBk2B+hRhsMM4/VL3gKtuZvYnBNixVo+N/0HnqQx2cBdLvxnAbygHpqA==}
 
   slugify@1.6.9:
     resolution: {integrity: sha512-vZ7rfeehZui7wQs438JXBckYLkIIdfHOXsaVEUMyS5fHo1483l1bMdo0EDSWYclY0yZKFOipDy4KHuKs6ssvdg==}
@@ -2615,7 +2615,7 @@ snapshots:
     dependencies:
       fs-extra: 11.3.0
 
-  '@containerbase/base@14.28.0(zod@4.6.5)':
+  '@containerbase/base@14.30.1(zod@4.6.5)':
     optionalDependencies:
       zod: 4.6.5
 
@@ -2947,9 +2947,9 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
 
-  '@renovatebot/base-image@13.115.1(zod@4.6.5)':
+  '@renovatebot/base-image@13.117.2(zod@4.6.5)':
     dependencies:
-      '@containerbase/base': 14.28.0(zod@4.6.5)
+      '@containerbase/base': 14.30.1(zod@4.6.5)
     optionalDependencies:
       zod: 4.6.5
 
@@ -2994,7 +2994,7 @@ snapshots:
 
   '@simple-git/args-pathspec@1.0.4': {}
 
-  '@simple-git/argv-parser@1.1.1':
+  '@simple-git/argv-parser@2.0.1':
     dependencies:
       '@simple-git/args-pathspec': 1.0.4
 
@@ -3816,7 +3816,7 @@ snapshots:
 
   grapheme-splitter@1.0.4: {}
 
-  handlebars@4.7.9:
+  handlebars@4.7.10:
     dependencies:
       minimist: 1.2.8
       neo-async: 2.6.2
@@ -3864,7 +3864,7 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
-  ignore@7.0.10: {}
+  ignore@7.0.11: {}
 
   import-in-the-middle@3.5.2:
     dependencies:
@@ -4666,7 +4666,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  renovate@44.143.0(supports-color@7.2.0)(typanion@3.14.0):
+  renovate@44.148.3(supports-color@7.2.0)(typanion@3.14.0):
     dependencies:
       '@aws-sdk/client-codecommit': 3.1139.0
       '@aws-sdk/client-ec2': 3.1139.0
@@ -4699,7 +4699,7 @@ snapshots:
       '@pnpm/parse-overrides': 1001.0.4
       '@qnighy/marshal': 0.1.3
       '@redis/client': 6.3.0(@opentelemetry/api@1.9.1)
-      '@renovatebot/base-image': 13.115.1(zod@4.6.5)
+      '@renovatebot/base-image': 13.117.2(zod@4.6.5)
       '@renovatebot/detect-tools': 4.0.21
       '@renovatebot/good-enough-parser': 2.0.1
       '@renovatebot/osv-offline': 3.0.12(supports-color@7.2.0)
@@ -4743,8 +4743,8 @@ snapshots:
       google-auth-library: 11.1.0(supports-color@7.2.0)
       got: 16.0.0
       graph-data-structure: 4.5.0
-      handlebars: 4.7.9
-      ignore: 7.0.10
+      handlebars: 4.7.10
+      ignore: 7.0.11
       ini: 6.0.0
       json-dup-key-validator: 1.0.3
       json-stringify-pretty-compact: 4.0.0
@@ -4778,7 +4778,7 @@ snapshots:
       semver-stable: 3.0.0
       semver-utils: 1.1.4
       shlex: 3.0.0
-      simple-git: 3.36.0(supports-color@7.2.0)
+      simple-git: 4.0.2(supports-color@7.2.0)
       slugify: 1.6.9
       source-map-support: 0.5.21
       strip-json-comments: 5.0.3
@@ -4909,12 +4909,12 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  simple-git@3.36.0(supports-color@7.2.0):
+  simple-git@4.0.2(supports-color@7.2.0):
     dependencies:
       '@kwsites/file-exists': 1.1.1(supports-color@7.2.0)
       '@kwsites/promise-deferred': 1.1.1
       '@simple-git/args-pathspec': 1.0.4
-      '@simple-git/argv-parser': 1.1.1
+      '@simple-git/argv-parser': 2.0.1
       debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
