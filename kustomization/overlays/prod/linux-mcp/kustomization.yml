@@ -11,7 +11,7 @@ components:
   - ../../../components/pod-security-enforce-restricted
 images:
   - name: quay.io/redhat-services-prod/rhel-lightspeed-tenant/linux-mcp-server
-    newTag: 1.6.0@sha256:167e054dfb412a53b731c3dfc2a7aa20d6fca3de7d185e4122d0f5fbf0094420
+    newTag: 1.7.0@sha256:8fdd597785d2863154e0b9d6e10b5ed6a42feee1f4fcc684f3ac0c5934d6b8d5
 namespace: linux-mcp
 resources:
   - namespace.yml
