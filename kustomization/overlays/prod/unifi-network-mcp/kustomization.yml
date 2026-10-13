@@ -28,7 +28,7 @@ configMapGenerator:
       - UNIFI_POLICY_UPDATE=false
 images:
   - name: ghcr.io/sirkirby/unifi-network-mcp
-    newTag: 0.37.2@sha256:e379a85c4b5c2a7450694b66339832b0e4897ccab9aa72ddccc311525767c014
+    newTag: 0.38.0@sha256:e4fc4b6df83b573c1a52028bc8f35e047dfcc937b69ae56d8eaf981899e22ea5
 namespace: unifi-network-mcp
 resources:
   - namespace.yml
