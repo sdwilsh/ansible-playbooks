@@ -17,7 +17,7 @@ images:
   - name: registry
     newTag: 2@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
   - name: quay.io/curl/curl
-    newTag: 8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
+    newTag: 8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06
 namespace: ttlsh
 patches:
   - path: patches/configure-hooks.yml
