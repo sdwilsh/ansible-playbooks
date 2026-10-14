@@ -14,7 +14,7 @@ configMapGenerator:
       - configmap/fetch-model.sh
 images:
   - name: docker.io/curlimages/curl
-    newTag: 8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
+    newTag: 8.23.0@sha256:a134550be58ab783810e613ae96fd253c38f7bdd16d9bf9be350700c7a29ac06
   - name: ghcr.io/sdwilsh/sif
     newTag: latest@sha256:e9d4ff873c79abe11b6ca451c1a46228d12fdf23499229877b6dcc7b7f94ea9d
 namespace: local-llm
