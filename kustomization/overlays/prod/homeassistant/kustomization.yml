@@ -26,7 +26,7 @@ images:
   - name: busybox
     newTag: 1.38.0@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:999d5eb28f404b45f15117f2a110ff23c6164f76edac261d75d783b6e88252b7
+    newTag: latest@sha256:dbe04f493d362c47db291edb3382aeb56cf430a6271daa56311f5b8e82fecf2a
 namespace: homeassistant
 patches:
   # cnpg
