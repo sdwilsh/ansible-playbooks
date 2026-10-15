@@ -16,7 +16,7 @@ spec:
     # fix for github.com/ROCm/k8s-device-plugin/issues/186.  The
     # `labeller-latest` tag includes the fix.  Pin its digest until a
     # new release ships.
-    nodeLabellerImage: rocm/k8s-device-plugin:labeller-latest@sha256:d8050962b9cd15198b92bf226ecf3a1617eef4dff7167aefec1fd7cd07bfcb5c
+    nodeLabellerImage: rocm/k8s-device-plugin:labeller-latest@sha256:58e981ca1fb9d75dcab2c165c747c5bdee8b96e199408d6ab3bbd43a5715189b
   driver:
     # The OS image build already includes the `amdgpu` driver and
     # firmware.  The operator must not build or load the driver again.
