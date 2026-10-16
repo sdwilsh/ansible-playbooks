@@ -67,6 +67,7 @@
         "connection_type": "http",
         "is_code_mode_client": true,
         "name": "argocd",
+        "tool_execution_timeout": "5m",
         "tools_to_execute": [
           "*"
         ]
@@ -89,6 +90,7 @@
         "connection_type": "http",
         "is_code_mode_client": true,
         "name": "grafana",
+        "tool_execution_timeout": "5m",
         "tools_to_execute": [
           "*"
         ]
@@ -117,6 +119,7 @@
         "connection_type": "http",
         "is_code_mode_client": true,
         "name": "kubernetes",
+        "tool_execution_timeout": "5m",
         "tools_to_execute": [
           "*"
         ]
