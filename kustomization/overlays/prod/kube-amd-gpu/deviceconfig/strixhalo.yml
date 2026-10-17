@@ -9,7 +9,7 @@ spec:
     # fix for github.com/ROCm/k8s-device-plugin/issues/186.  The
     # `latest` tag includes the fix.  Pin its digest until a new
     # release ships.
-    devicePluginImage: rocm/k8s-device-plugin:latest@sha256:10e37c03e1b1013b280419ecff8dc28b27d2a6fc747fd0b0d440c70b9d77ebb6
+    devicePluginImage: rocm/k8s-device-plugin:latest@sha256:727d0e19499d383f0ee659d4e2299e8a2449335a012a91046ce194b2f34329bc
     # gpuworker01/gpuworker02 carry this taint.  Without it, the
     # device-plugin and node-labeller pods never schedule there.  The
     # operator then never advertises amd.com/gpu on these nodes.
