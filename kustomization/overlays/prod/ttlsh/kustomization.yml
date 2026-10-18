@@ -7,6 +7,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/opstree-redis-images
   - ../../../components/ttlsh
 images:
   - name: busybox
@@ -22,6 +23,8 @@ images:
     newTag: 2@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
   - name: quay.io/curl/curl
     newTag: 8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
+  - name: quay.io/opstree/redis
+    newTag: v8.10.1@sha256:d3ef5a7f11eb501034b6612b842c864e1946088c52c04b29a22f38b1fe37c99b
 namespace: ttlsh
 patches:
   - path: patches/add_prometheus_target_label.yml
