@@ -15,3 +15,10 @@ spec:
           for: 2m
           labels:
             severity: page
+        - alert: authelia-redis-not-ready
+          annotations:
+            description: "Fewer Authelia Redis pods are ready than the StatefulSet wants for more than 5 minutes, or the metric is missing.  Sessions can fail."
+          expr: kube_statefulset_status_replicas_ready{exported_namespace="auth",statefulset="authelia-redis-replication"} < kube_statefulset_replicas{exported_namespace="auth",statefulset="authelia-redis-replication"} or absent(kube_statefulset_status_replicas_ready{exported_namespace="auth",statefulset="authelia-redis-replication"})
+          for: 5m
+          labels:
+            severity: warning
