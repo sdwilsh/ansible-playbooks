@@ -7,3 +7,10 @@ images:
     kind: RedisReplication
     path: spec/sentinel/image
     version: v1beta2
+nameReference:
+  - kind: ConfigMap
+    fieldSpecs:
+      - group: redis.redis.opstreelabs.in
+        kind: RedisReplication
+        path: spec/redisConfig/additionalRedisConfig
+        version: v1beta2

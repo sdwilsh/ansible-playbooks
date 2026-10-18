@@ -20,6 +20,9 @@ configMapGenerator:
   - name: authelia-configmap
     files:
       - configmap/authelia/config.yml
+  - name: authelia-redis-additional
+    files:
+      - configmap/redis/redis-additional.conf
 configurations:
   - kustomizeconfig.yml
 images:

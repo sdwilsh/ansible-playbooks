@@ -35,6 +35,9 @@ spec:
     seccompProfile:
       type: RuntimeDefault
   priorityClassName: system-cluster-critical
+  redisConfig:
+    # Turns off AOF.  A power cut then cannot corrupt the data file.
+    additionalRedisConfig: authelia-redis-additional
   sentinel:
     affinity:
       podAntiAffinity:
