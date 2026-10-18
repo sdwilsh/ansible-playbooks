@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: auth-rules
+spec:
+  groups:
+    - name: auth
+      interval: 1m
+      rules:
+        - alert: authelia-down
+          annotations:
+            description: "Authelia has no available replica for more than 2 minutes, or its metric is missing.  Cluster login is down."
+          expr: sum(kube_deployment_status_replicas_available{deployment="authelia-deployment",exported_namespace="auth"}) == 0 or absent(kube_deployment_status_replicas_available{deployment="authelia-deployment",exported_namespace="auth"})
+          for: 2m
+          labels:
+            severity: page
