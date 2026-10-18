@@ -20,6 +20,8 @@ configMapGenerator:
   - name: authelia-configmap
     files:
       - configmap/authelia/config.yml
+configurations:
+  - kustomizeconfig.yml
 images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:26837860fa038ce221416ee0fd211a0ee300f67e24e88faecca0423088400b99

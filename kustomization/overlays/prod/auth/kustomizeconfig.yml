@@ -1,0 +1,5 @@
+images:
+  - group: redis.redis.opstreelabs.in
+    kind: RedisReplication
+    path: spec/sentinel/image
+    version: v1beta2
