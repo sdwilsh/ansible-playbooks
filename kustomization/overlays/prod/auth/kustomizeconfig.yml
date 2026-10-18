@@ -1,12 +1,3 @@
-images:
-  - group: redis.redis.opstreelabs.in
-    kind: RedisReplication
-    path: spec/kubernetesConfig/image
-    version: v1beta2
-  - group: redis.redis.opstreelabs.in
-    kind: RedisReplication
-    path: spec/sentinel/image
-    version: v1beta2
 nameReference:
   - kind: ConfigMap
     fieldSpecs:
