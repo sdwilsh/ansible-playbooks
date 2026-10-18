@@ -18,7 +18,8 @@ spec:
         - alert: container-memory-near-limit
           annotations:
             description: "The container {{ $labels.container }} in {{ $labels.namespace }}/{{ $labels.pod }} uses {{ $value }}% of its memory limit.  The OOM killer stops the container at 100%."
-          expr: 100 * container_memory_working_set_bytes{container!=""} / (container_spec_memory_limit_bytes{container!=""} > 0) > 80
+          # The AMD metrics exporter stays near its limit and has no OOM kills.
+          expr: 100 * container_memory_working_set_bytes{container!=""} / (container_spec_memory_limit_bytes{container!=""} > 0) > 80 unless on (container, namespace) container_memory_working_set_bytes{container="metrics-exporter-container",namespace="kube-amd-gpu"}
           for: 10m
           labels:
             severity: warning
