@@ -14,3 +14,10 @@ priorityClassName: application-infra
 prometheus:
   monitor:
     enabled: true
+
+resources:
+  limits:
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
