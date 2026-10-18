@@ -14,6 +14,7 @@ components:
   - ../../../components/networkpolicy-allow-to-proton-bridge
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/opstree-redis-images
   - ../../../components/pod-security-enforce-baseline
 images:
   - name: docker.io/bitnami/kubectl
