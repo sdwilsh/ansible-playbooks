@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: workload-rules
+spec:
+  groups:
+    - name: workload
+      interval: 1m
+      rules:
+        - alert: pod-crash-looping
+          annotations:
+            description: "The pod {{ $labels.exported_namespace }}/{{ $labels.exported_pod }} is in CrashLoopBackOff for more than 10 minutes."
+          expr: max by (exported_namespace,exported_pod) (kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"}) == 1
+          for: 10m
+          labels:
+            severity: warning

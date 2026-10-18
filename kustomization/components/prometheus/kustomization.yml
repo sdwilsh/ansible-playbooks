@@ -14,4 +14,5 @@ resources:
   - rules/postgresql.yml
   - rules/smartctl.yml
   - rules/volume.yml
+  - rules/workload.yml
   - storageclass.yml
