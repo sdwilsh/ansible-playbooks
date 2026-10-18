@@ -1,0 +1,18 @@
+# Plain `images:` skips custom resources.  These paths make it rewrite the Redis kinds too.
+images:
+  - group: redis.redis.opstreelabs.in
+    kind: Redis
+    path: spec/kubernetesConfig/image
+    version: v1beta2
+  - group: redis.redis.opstreelabs.in
+    kind: RedisReplication
+    path: spec/kubernetesConfig/image
+    version: v1beta2
+  - group: redis.redis.opstreelabs.in
+    kind: RedisReplication
+    path: spec/sentinel/image
+    version: v1beta2
+  - group: redis.redis.opstreelabs.in
+    kind: RedisSentinel
+    path: spec/kubernetesConfig/image
+    version: v1beta2
