@@ -15,3 +15,10 @@ spec:
           for: 10m
           labels:
             severity: warning
+        - alert: node-near-pod-limit
+          annotations:
+            description: "The node {{ $labels.node }} runs {{ $value | humanizePercentage }} of its pod limit for more than 15 minutes.  New pods can fail to schedule."
+          expr: max by (node) (label_replace(kubelet_running_pods,"node","$1","instance","(.*)")) / max by (node) (kube_node_status_allocatable{resource="pods"}) > 0.85
+          for: 15m
+          labels:
+            severity: warning
