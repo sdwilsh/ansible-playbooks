@@ -8,6 +8,7 @@ collectors:
   - nodes
   - pods
   - services
+  - statefulsets
 
 priorityClassName: application-infra
 
