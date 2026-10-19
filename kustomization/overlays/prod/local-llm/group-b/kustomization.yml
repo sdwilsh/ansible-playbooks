@@ -1,0 +1,39 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../base
+configMapGenerator:
+  - name: local-llm-models-configmap
+    files:
+      - MODELS=configmap/models.txt
+# Group A selects `local-llm`.  Group B selects `local-llm-group-b` to keep
+# the groups apart.
+labels:
+  - includeSelectors: true
+    includeTemplates: true
+    pairs:
+      app.kubernetes.io/name: local-llm-group-b
+namePrefix: group-b-
+patches:
+  - path: patches/add_ports.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
+  - path: patches/pin_node.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
+  - path: patches/set_models.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
+  - path: patches/set_storage.yml
+    target:
+      kind: StatefulSet
+      name: local-llm-statefulset
+  - path: patches/serve_additional_models.yml
+    target:
+      kind: Service
+      name: local-llm-svc

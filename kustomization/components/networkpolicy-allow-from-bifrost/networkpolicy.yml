@@ -17,6 +17,8 @@ spec:
           protocol: TCP
         - port: model-api2
           protocol: TCP
+        - port: model-api3
+          protocol: TCP
         - port: web
           protocol: TCP
   podSelector:

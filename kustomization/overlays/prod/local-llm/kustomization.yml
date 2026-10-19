@@ -21,3 +21,4 @@ namespace: local-llm
 resources:
   - namespace.yml
   - ./group-a
+  - ./group-b

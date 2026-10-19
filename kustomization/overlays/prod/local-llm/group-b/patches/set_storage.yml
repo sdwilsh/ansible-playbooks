@@ -1,0 +1,5 @@
+---
+# The files total 53.03 GiB.  Add 20% for 63.63 GiB, and round up to 64Gi.
+- op: replace
+  path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+  value: 64Gi

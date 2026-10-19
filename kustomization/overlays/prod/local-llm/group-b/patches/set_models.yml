@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: llama-server
+          env:
+            - &models
+              name: MODELS
+              valueFrom:
+                configMapKeyRef:
+                  key: MODELS
+                  name: local-llm-models-configmap
+          # check-servers.sh asks three servers in sequence.  The rule is
+          # timeoutSeconds >= 4 * N + 2, periodSeconds >= timeoutSeconds + 5.
+          readinessProbe:
+            periodSeconds: 19
+            timeoutSeconds: 14
+          # Three servers share this limit.  The RAM caches are 1 GiB and
+          # 20 GiB.  GTT peaks at 31.96 GiB.  The request fits the 81.07 GiB of
+          # allocatable memory.  See `group_vars/kairos_gpuworker.yml`.
+          resources:
+            limits:
+              memory: 80Gi
+            requests:
+              memory: 72Gi
+          startupProbe:
+            failureThreshold: 240
+            periodSeconds: 19
+            timeoutSeconds: 14
+      initContainers:
+        - name: fetch-model
+          env:
+            - *models
