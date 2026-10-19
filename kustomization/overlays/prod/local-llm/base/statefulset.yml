@@ -68,10 +68,9 @@ spec:
             - name: LLAMA_ARG_CACHE_TYPE_V
               value: q8_0
             # `MODELS` is required to be set via a patch in each component!
-            # A record is `alias|base URL|shard names|port|context size`, and
-            # `fetch-model.sh` gets the shards from the same base URL.  GTT,
-            # not host memory, bounds context; see
-            # `group_vars/kairos_gpuworker.yml`.
+            # A record is `alias|base URL|shard names|port|context|extras|kind`.
+            # The header of `fetch-model.sh` lists the forms of a shard name,
+            # such as a full URL or the directory of an `asr` record.
             - name: POD_IP
               valueFrom:
                 fieldRef:
