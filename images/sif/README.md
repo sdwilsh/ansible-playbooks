@@ -13,7 +13,8 @@ writable `/run` and the models on `/models`.
 
 `MODELS` takes seven fields for each record, and the last two are optional:
 `alias|base URL|shard names|port|context size|extra arguments|kind`.  The kind is `llm` or `asr`,
-and empty means `llm`.  An `asr` record names a model directory, and its context is optional.
+and empty means `llm`.  The extra arguments must not hold `--host`, `--port`, `-i` or `-p`.  An
+`asr` record names a model directory, and its context is optional.
 
 ## Build And Test
 

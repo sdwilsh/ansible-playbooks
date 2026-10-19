@@ -29,7 +29,7 @@ SCRIPTS_DIR = "/usr/local/bin"
 
 # The suite must make this many results.  A scenario that stops early makes
 # fewer.
-EXPECTED_ASSERTIONS = 50
+EXPECTED_ASSERTIONS = 54
 
 
 class Report:
@@ -517,6 +517,15 @@ def negatives(report: Report, harness: Harness) -> None:
         report, harness, "eight-fields", "has more than seven fields",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('eight-fields')}",
     )
+    # The hook writes `--host` and `--port`.  A second copy changes the
+    # address that the probes use.
+    for fixture_name in (
+        "repeat-host", "repeat-port", "repeat-port-equals", "repeat-port-short"
+    ):
+        hook_failure(
+            report, harness, fixture_name, "repeat --host or --port",
+            "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture(fixture_name)}",
+        )
     hook_failure(
         report, harness, "asr-file", "is not a directory",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('asr-file')}",

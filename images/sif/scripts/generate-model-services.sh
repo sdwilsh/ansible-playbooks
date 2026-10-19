@@ -8,6 +8,8 @@
 # record has a model directory in place of the shard names.
 # This script puts the extra arguments at the end of the command line.
 # An argument there replaces the same argument from this script.
+# The script rejects `--host` and `--port` there.  It also rejects the short
+# forms `-i` and `-p`.
 #
 # `rc.init` runs this script as `S6_STAGE2_HOOK`, before it compiles the
 # service database.  s6 removes the environment first, so `printcontenv`
@@ -100,6 +102,14 @@ while IFS='|' read -r alias base shards port ctx extra kind; do
     *[!A-Za-z0-9\ ._=/-]*)
       fatal "extra arguments of $alias have a character outside A-Z a-z 0-9 space . _ = / -" ;;
   esac
+  # The script sets the address of the server.  The probes use that address.
+  # shellcheck disable=SC2086
+  for word in $extra; do
+    case "$word" in
+      --host|--host=*|--port|--port=*|-i|-p)
+        fatal "extra arguments of $alias repeat --host or --port" ;;
+    esac
+  done
 
   # shellcheck disable=SC2086
   set -- $shards
