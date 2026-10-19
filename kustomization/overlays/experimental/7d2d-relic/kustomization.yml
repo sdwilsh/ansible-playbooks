@@ -7,7 +7,7 @@ components:
   - ../../../components/schedule-avoid-control-plane
 images:
   - name: vinanrra/7dtd-server
-    newTag: v0.9.3@sha256:75d1193fb2470687ee8748f27482524c170f6cbca110e15f48db8d8ff48f15ca
+    newTag: v0.10.0@sha256:dfd94fe7abd234c6ff42596fec3ff55b0e5fdb66b62c66a2275fce5cbd576efe
 namespace: 7d2d-relic
 patches:
   - path: patches/set_load_balancer.yml
