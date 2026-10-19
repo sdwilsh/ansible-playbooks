@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: llama-server
+          env:
+            - &models
+              name: MODELS
+              valueFrom:
+                configMapKeyRef:
+                  key: MODELS
+                  name: local-llm-models-configmap
+          # check-servers.sh asks one server.  The rule is
+          # timeoutSeconds >= 4 * N + 2, periodSeconds >= timeoutSeconds + 5.
+          readinessProbe:
+            periodSeconds: 11
+            timeoutSeconds: 6
+          # The cgroup peak is 15.42 GiB with the RAM cache full.  The request
+          # fits the 19.07 GiB of allocatable memory, beside the DaemonSets.
+          # GTT peaks at 95.34 GiB with a 6 GiB expanded-KV store.
+          resources:
+            limits:
+              memory: 20Gi
+            requests:
+              memory: 18Gi
+          # A cold load of 92 GB from a remote replica can take over 20 minutes.
+          startupProbe:
+            failureThreshold: 240
+            periodSeconds: 15
+            timeoutSeconds: 6
+      initContainers:
+        - name: fetch-model
+          env:
+            - *models
