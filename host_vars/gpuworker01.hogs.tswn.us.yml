@@ -7,43 +7,40 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.120/23
 
-# The GPU holds 91.28 GiB of GTT.  The kubelet does not read GTT pages,
-# so this value is the 96 GiB limit of this node.  The scheduler then
+# The GPU holds 95.34 GiB of GTT.  The kubelet does not read GTT pages,
+# so this value is the 98 GiB limit of this node.  The scheduler then
 # sees 19.07 GiB.
-k3s_system_reserved_memory: 96Gi
+k3s_system_reserved_memory: 98Gi
 
 kairos__disks_to_format: []
 
 # This node holds model group A.  `group_vars/kairos_gpuworker.yml` gives
 # the common floor and the rule for the largest safe GTT limit.
 #
-# This node takes less than that rule permits.  A measurement gives what
-# group A needs, and the node keeps the rest for other work.
-#
 # | Item                  |    GiB | Source            |
 # | --------------------- | -----: | ----------------- |
 # | common floor          |   7.07 | group vars        |
-# | `local-llm` container |  12.00 | group A patch     |
-# | GTT for group A       |  96.00 | limit             |
-# | **total**             | 115.07 |                   |
-# | free for other work   |  10.00 | 125.07 less total |
+# | `local-llm` container |  20.00 | group A patch     |
+# | GTT for group A       |  98.00 | limit             |
+# | **total**             | 125.07 |                   |
+# | free for other work   |   0.00 | 125.07 less total |
 #
 # Each limit holds a margin over a measurement:
 #
 # | Item             | measured | limit | margin |
 # | ---------------- | -------: | ----: | -----: |
-# | group A GTT      |    91.28 | 96.00 |   4.72 |
-# | container memory |     4.21 | 12.00 |   7.79 |
+# | group A GTT      |    95.34 | 98.00 |   2.66 |
+# | container memory |    15.42 | 20.00 |   4.58 |
 #
-# 96 GiB is 25165824 pages.  `gpu_used_gtt` gave 93475 MiB for four
-# samples, for both models at 196608 tokens.  The container held 4311
-# MiB at its highest, under a session of agent work.  That measurement
-# predates the larger prompt cache, so container memory now grows.
-# Ling holds 196608 tokens.  The model trains to 262144.
+# 98 GiB is 25690112 pages.  The GTT peak is 95.34 GiB with gufo v0.21.0.0
+# and the 6 GiB expanded-KV store.  gufo v0.17.1.0 gave 94.71 GiB, and
+# 96.68 GiB with an 8 GiB store.  The container held 15.42 GiB at its
+# highest, with the 15 GiB RAM cache full.  Ling holds 196608 tokens.  The
+# model trains to 262144.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.
 # These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
   - amdgpu.lockup_timeout=10000,180000,10000,10000
-  - ttm.pages_limit=25165824
+  - ttm.pages_limit=25690112

@@ -43,8 +43,8 @@
 #
 #   GTT limit = (125.07 GiB - the floor with no page tables) / 1.0044
 #
-# Between a limit of 96 GiB and a limit of 108 GiB the page tables change
-# by 0.05 GiB, and the slack holds that.  Keep 0.47 GiB on each node.
+# The page tables use 0.43 GiB at a limit of 98 GiB and 0.16 GiB at a limit
+# of 36 GiB.  The value of 0.47 GiB covers both.  Keep it on each node.
 
 # This value is the memory that `system-reserved` keeps.  The GPU page
 # tables map the GTT ceiling, and they use 0.47 GiB on each node.  A node
@@ -60,10 +60,10 @@ k3s_kubelet_args:
   # the kubelet reads `memory.available` from the root cgroup.
   - eviction-hard=memory.available<4Gi,imagefs.available<5%,nodefs.available<5%
   # `kube-reserved` keeps memory for the operating system, the kubelet, and
-  # the container runtime.  It is larger than the measured working set on
-  # purpose.  The budget above uses the measurement, because the kubelet
-  # does not enforce this reservation as a cgroup.
-  - kube-reserved=memory=6Gi
+  # the container runtime.  The value of 4Gi is larger than the measured
+  # 2.21 GiB working set on purpose.  The budget above uses the measurement,
+  # because the kubelet does not enforce this reservation as a cgroup.
+  - kube-reserved=memory=4Gi
   # `system-reserved` keeps memory for a component outside Kubernetes.
   # The amdgpu driver is such a component.  The kubelet does not read GTT
   # pages, so the scheduler needs this value.

@@ -7,23 +7,34 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.121/23
 
+# The GPU holds 31.96 GiB of GTT at its highest.  The kubelet does not
+# read GTT pages, so this value is the 36 GiB limit of this node.  The
+# scheduler then sees 81.07 GiB.
+k3s_system_reserved_memory: 36Gi
+
 kairos__disks_to_format: []
 
-# This node is for model group B, which does not exist yet.  The
-# `local-llm` row below keeps the space for it, so that group B does not
-# need a second reboot.  `group_vars/kairos_gpuworker.yml` gives the
-# common floor and the rule for this value.  The floor of this node:
+# This node holds model group B.  `group_vars/kairos_gpuworker.yml` gives
+# the common floor and the rule for the largest safe GTT limit.
 #
-# | Item                  |   GiB | Source     |
-# | --------------------- | ----: | ---------- |
-# | common floor          |  7.07 | group vars |
-# | `local-llm` container | 10.00 | reserved   |
-# | **total**             | 17.07 |            |
+# | Item                  |    GiB | Source            |
+# | --------------------- | -----: | ----------------- |
+# | common floor          |   7.07 | group vars        |
+# | `local-llm` container |  80.00 | group B patch     |
+# | GTT for group B       |  36.00 | limit             |
+# | **total**             | 123.07 |                   |
+# | free for other work   |   2.00 | 125.07 less total |
 #
-# 125.07 - 17.07 = 108 GiB, which is 28311552 pages.
+# | Item        | measured | limit | margin |
+# | ----------- | -------: | ----: | -----: |
+# | group B GTT |    31.96 | 36.00 |   4.04 |
+#
+# 36 GiB is 9437184 pages.  `gpu_used_gtt` gave 31.9 GiB while the three
+# servers were idle, and 31.96 GiB at a peak.
+#
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.
 # These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
   - amdgpu.lockup_timeout=10000,180000,10000,10000
-  - ttm.pages_limit=28311552
+  - ttm.pages_limit=9437184

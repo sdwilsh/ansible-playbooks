@@ -54,9 +54,10 @@ spec:
         # reads `/proc/meminfo`, which does include GTT pages, so the metric
         # below is the signal for the memory that remains on the node.
         # `gpu_used_gtt` gives the quantity that the GPU holds.  See
-        # `group_vars/kairos_gpuworker.yml`.  8 GiB is less than the floor
-        # that remains when the `local-llm` container uses all of its limit,
-        # so normal use of that limit does not cause an alarm.
+        # `group_vars/kairos_gpuworker.yml`.  At the full limit of the
+        # `local-llm` container, 4.26 GiB (gpuworker01) and 6.26 GiB
+        # (gpuworker02) remain.  A container at its limit for 15 minutes
+        # causes this alert.
         - alert: gpu-node-memory-available-low
           annotations:
             description: "{{ $labels.node }} has less than 8 GiB of memory available. The GPU holds most of the memory of the node in GTT, the kernel cannot reclaim GTT pages, and `oom_score` does not count them, so the OOM killer stops an unrelated process."
