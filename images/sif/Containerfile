@@ -27,17 +27,19 @@ FROM docker.io/nixos/nix:2.35.0@sha256:e64644d9e86a9b0e5033d00dd32bda36e6aa930e1
 
 ARG GUFO_VERSION
 ARG GUFO_COMMIT
+# A build can set a local flake source, for example `git+file:///gufo-src?rev=...`.
+ARG GUFO_FLAKE_REF=github:sdwilsh/gufo/${GUFO_COMMIT}
 # The expression sets the release version.  The flake accepts only X.Y.Z in `version.txt`.
 # hadolint ignore=DL4006
 RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf \
   && nix build --out-link /gufo-result --expr " \
-       (builtins.getFlake \"github:sdwilsh/gufo/${GUFO_COMMIT}\").packages.x86_64-linux.default.override { \
+       (builtins.getFlake \"${GUFO_FLAKE_REF}\").packages.x86_64-linux.default.override { \
          releaseVersion = \"${GUFO_VERSION#v}\"; }" \
   && ! LD_TRACE_LOADED_OBJECTS=1 /gufo-result/bin/gufo | grep 'not found'
 
 # The image gets `ps` from the nixpkgs that the gufo flake pins.
 RUN nix build --out-link /procps-result --expr " \
-       (builtins.getFlake \"github:sdwilsh/gufo/${GUFO_COMMIT}\").inputs.nixpkgs.legacyPackages.x86_64-linux.procps"
+       (builtins.getFlake \"${GUFO_FLAKE_REF}\").inputs.nixpkgs.legacyPackages.x86_64-linux.procps"
 
 # hadolint ignore=DL4006,SC3040
 RUN set -o pipefail \
