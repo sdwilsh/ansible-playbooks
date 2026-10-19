@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_DESC: sif -- runs one llama.cpp server for each model of a node under an s6 supervision tree.
+  IMAGE_DESC: sif -- runs one gufo server for each model of a node under an s6 supervision tree.
   IMAGE_NAME: sif
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
 

@@ -26,6 +26,20 @@
     },
     {
       "customType": "regex",
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "sdwilsh/gufo",
+      "description": "Renovate replaces the tag line and the commit line together, so the commit stays the digest of the tag.",
+      "managerFilePatterns": [
+        "/^images/sif/Containerfile$/"
+      ],
+      "matchStrings": [
+        "ARG GUFO_VERSION=(?<currentValue>\\S+)\\nARG GUFO_COMMIT=(?<currentDigest>[a-f0-9]{40})"
+      ],
+      "autoReplaceStringTemplate": "ARG GUFO_VERSION={{{newValue}}}\nARG GUFO_COMMIT={{{newDigest}}}",
+      "versioningTemplate": "loose"
+    },
+    {
+      "customType": "regex",
       "managerFilePatterns": [
         "/(^|/|\\.).*\\.sh$/"
       ],
@@ -429,21 +443,6 @@
         "quay.io/kairos/kairos-ubuntu-22-lts"
       ],
       "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
-    },
-    {
-      "description": "llama.cpp publishes many build tags each day.  Follow the release tags.",
-      "groupName": "llama-cpp",
-      "matchFileNames": [
-        "images/sif/Containerfile"
-      ],
-      "matchPackageNames": [
-        "ghcr.io/ggml-org/llama.cpp"
-      ],
-      "minimumReleaseAge": "7 days",
-      "schedule": [
-        "after 4pm on friday"
-      ],
-      "versioning": "regex:^server-vulkan-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     },
     {
       "description": "A new FastFlowLM release needs a new checksum in the Containerfile.",

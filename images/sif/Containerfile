@@ -1,3 +1,7 @@
+# The commit is the commit of the tag `GUFO_VERSION`.  Renovate changes both lines.
+ARG GUFO_VERSION=v0.17.1.0
+ARG GUFO_COMMIT=06ef1e5b42ba2173e5edf039bbc27fa391bc3ee2
+
 FROM alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 AS builder
 
 # hadolint ignore=DL3018
@@ -19,8 +23,39 @@ RUN mkdir -p /s6root \
     || exit 1; \
      done
 
-FROM ghcr.io/ggml-org/llama.cpp:server-vulkan-v0.5.0@sha256:be586c648cb79d2cd75d0c38a6541e1f16c47a7c6621d3e711470a467fc38744
+FROM docker.io/nixos/nix:2.35.0@sha256:e64644d9e86a9b0e5033d00dd32bda36e6aa930e1b582bbee9e9f0e41f1bfe4a AS gufo-builder
 
+ARG GUFO_VERSION
+ARG GUFO_COMMIT
+# The expression sets the release version.  The flake accepts only X.Y.Z in `version.txt`.
+# hadolint ignore=DL4006
+RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf \
+  && nix build --out-link /gufo-result --expr " \
+       (builtins.getFlake \"github:sdwilsh/gufo/${GUFO_COMMIT}\").packages.x86_64-linux.default.override { \
+         releaseVersion = \"${GUFO_VERSION#v}\"; }" \
+  && ! LD_TRACE_LOADED_OBJECTS=1 /gufo-result/bin/gufo | grep 'not found'
+
+# The image gets `ps` from the nixpkgs that the gufo flake pins.
+RUN nix build --out-link /procps-result --expr " \
+       (builtins.getFlake \"github:sdwilsh/gufo/${GUFO_COMMIT}\").inputs.nixpkgs.legacyPackages.x86_64-linux.procps"
+
+# hadolint ignore=DL4006,SC3040
+RUN set -o pipefail \
+  && mkdir -p /rootfs/nix/store /rootfs/usr/local/bin \
+  && nix-store -qR /gufo-result /procps-result | tee /closure.txt | xargs cp -a -t /rootfs/nix/store \
+  && ln -s "$(readlink -f /gufo-result)/bin/gufo" /rootfs/usr/local/bin/gufo \
+  && ln -s "$(readlink -f /procps-result)/bin/ps" /rootfs/usr/local/bin/ps \
+  # These lines print the closure size and any build-only library.
+  && wc -l < /closure.txt \
+  && { grep -E 'hipcub|rocprim|rocwmma' /closure.txt || true; }
+
+# The base image holds bash, curl and a glibc `ldd` for the closures.
+FROM registry.fedoraproject.org/fedora:44@sha256:1ff9eb02e4e2d7fb1175becac7139b2960c4fdcccedce81c86ec25b98ef3124d
+
+ARG GUFO_VERSION
+LABEL org.opencontainers.image.version="${GUFO_VERSION}"
+
+COPY --from=gufo-builder /rootfs/ /
 COPY --from=builder /s6root/ /
 COPY scripts/ /usr/local/bin/
 RUN chmod 0755 /usr/local/bin/check-servers.sh \
@@ -28,11 +63,7 @@ RUN chmod 0755 /usr/local/bin/check-servers.sh \
     /usr/local/bin/generate-model-services.sh
 
 # An exec probe gets this `PATH`.
-# `llama-server` finds its libraries in `/app`.
-# The Mesa shader cache can take 1 GB of `/tmp`.
-ENV PATH="/command:${PATH}" \
-    LD_LIBRARY_PATH=/app \
-    MESA_SHADER_CACHE_DISABLE=true
+ENV PATH="/command:${PATH}"
 
 # `rc.init` runs the hook and compiles the tree in the same boot, so both
 # read `S6_RUNTIME_BUNDLEDIR`.  A hook that fails must stop the container,
@@ -45,11 +76,18 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES=1
 
 # The container fails at run time without these files.
-RUN test -L /var/run \
+# hadolint ignore=DL4006,SC3040
+RUN set -o pipefail \
+  && test -L /var/run \
   && [ "$(readlink -f /var/run)" = "/run" ] \
-  && test -x /app/llama-server \
+  && test -x /usr/local/bin/gufo \
   && test -x /bin/bash \
   && test -x /usr/bin/curl \
+  && test -x /usr/local/bin/ps \
+  && ! ldd "$(readlink -f /usr/local/bin/ps)" | grep "not found" \
+  && ! ldd "$(readlink -f /usr/local/bin/gufo)" | grep "not found" \
+  && /usr/local/bin/gufo --version \
+  && /usr/local/bin/ps --version \
   && test -x /command/with-contenv \
   && test -x /command/s6-svstat \
   && test -x /command/s6-rc-compile \

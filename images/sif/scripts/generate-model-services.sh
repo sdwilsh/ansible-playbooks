@@ -1,11 +1,13 @@
 #!/bin/sh
 # Write one s6 service for each record in `MODELS`.  A record is one line
-# with six fields, and a "|" between each field:
-#   alias|base URL|shard names|port|context size|extra arguments
+# with seven fields, and a "|" between each field:
+#   alias|base URL|shard names|port|context size|extra arguments|kind
 # The shard names have a space between each name.  The server finds the
-# other shards from the first name.  The extra arguments are optional.
-# This script puts them at the end of the command line.  An argument
-# there replaces the same argument from this script.
+# other shards from the first name.  The extra arguments and the kind are
+# optional.  The kind is `llm` or `asr`, and empty means `llm`.  An `asr`
+# record has a model directory in place of the shard names.
+# This script puts the extra arguments at the end of the command line.
+# An argument there replaces the same argument from this script.
 #
 # `rc.init` runs this script as `S6_STAGE2_HOOK`, before it compiles the
 # service database.  s6 removes the environment first, so `printcontenv`
@@ -35,15 +37,23 @@ ports=""
 
 # The record has the same fields for each script.
 # shellcheck disable=SC2034
-while IFS='|' read -r alias base shards port ctx extra; do
+while IFS='|' read -r alias base shards port ctx extra kind; do
   [ -n "$alias" ] || continue
 
-  case "$extra" in
-    *'|'*) fatal "record $alias has more than six fields" ;;
+  case "$kind" in
+    *'|'*) fatal "record $alias has more than seven fields" ;;
   esac
-  for field in "$base" "$shards" "$port" "$ctx"; do
+  for field in "$base" "$shards" "$port"; do
     [ -n "$field" ] || fatal "record $alias has an empty field"
   done
+  case "$kind" in
+    ''|llm) kind=llm ;;
+    asr) ;;
+    *) fatal "kind $kind of $alias is not llm or asr" ;;
+  esac
+  # `gufo serve asr` has a default context.
+  { [ -n "$ctx" ] || [ "$kind" = asr ]; } ||
+    fatal "record $alias has an empty field"
 
   # The alias becomes a service directory name and an argument of the
   # `run` script.  A canonical model name holds a dot.
@@ -51,8 +61,8 @@ while IFS='|' read -r alias base shards port ctx extra; do
     *[!a-zA-Z0-9._-]*)
       fatal "alias $alias has a character outside A-Z a-z 0-9 . _ -" ;;
   esac
-  # `llama-server` takes the argument after `-a` as the alias, even an
-  # option.  A dash at the start gives the wrong alias, or the server
+  # `gufo` takes the argument after `--served-model-name` as the alias,
+  # even an option.  A dash at the start gives the wrong alias, or the server
   # does not start.
   case "$alias" in
     -*) fatal "alias $alias starts with a dash" ;;
@@ -85,26 +95,39 @@ while IFS='|' read -r alias base shards port ctx extra; do
   esac
   # The `run` script below holds the extra arguments, and a shell reads
   # that file.  This list allows only letters, numbers, a space and the
-  # four symbols that an option needs.
+  # five symbols that an option needs.
   case "$extra" in
-    *[!A-Za-z0-9\ ._=-]*)
-      fatal "extra arguments of $alias have a character outside A-Z a-z 0-9 space . _ = -" ;;
+    *[!A-Za-z0-9\ ._=/-]*)
+      fatal "extra arguments of $alias have a character outside A-Z a-z 0-9 space . _ = / -" ;;
   esac
 
   # shellcheck disable=SC2086
   set -- $shards
-  [ -f "/models/$1" ] || fatal "/models/$1 of $alias is missing"
+  if [ "$kind" = asr ]; then
+    [ -d "/models/$1" ] || fatal "/models/$1 of $alias is not a directory"
+    command="gufo serve asr"
+    context=""
+    [ -z "$ctx" ] || context="--context $ctx"
+  else
+    [ -f "/models/$1" ] || fatal "/models/$1 of $alias is missing"
+    command="gufo serve llm"
+    context="--context $ctx"
+  fi
 
   mkdir -p "$bundledir/$alias/dependencies.d" \
     "$bundledir/$alias-log/dependencies.d"
   echo longrun > "$bundledir/$alias/type"
   echo "$alias-log" > "$bundledir/$alias/producer-for"
   : > "$bundledir/$alias/dependencies.d/base"
+  # `gufo` stops at start if `TMPDIR` is not a directory.  The `run` script
+  # makes one directory for each service.
   cat > "$bundledir/$alias/run" <<EOF
 #!/command/with-contenv sh
-cd /app
 exec 2>&1
-exec ./llama-server -m /models/$1 -a "$alias" --host "\$POD_IP" --port $port --ctx-size $ctx --metrics -fa on -ngl 999 --parallel 1 $extra
+TMPDIR=/tmp/gufo-$alias
+export TMPDIR
+mkdir -p "\$TMPDIR"
+exec $command --host "\$POD_IP" --port $port --model /models/$1 $context --served-model-name "$alias" $extra
 EOF
 
   # The "1" sends each line to standard output.

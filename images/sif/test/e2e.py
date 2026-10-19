@@ -29,7 +29,7 @@ SCRIPTS_DIR = "/usr/local/bin"
 
 # The suite must make this many results.  A scenario that stops early makes
 # fewer.
-EXPECTED_ASSERTIONS = 40
+EXPECTED_ASSERTIONS = 50
 
 
 class Report:
@@ -86,8 +86,13 @@ class Harness:
             "alpha-00001-of-00001.gguf",
             "beta-00001-of-00002.gguf",
             "beta-00002-of-00002.gguf",
+            "draft.gguf",
+            "mmproj.gguf",
+            "qwen-00001-of-00001.gguf",
         ):
             (self.models / shard).touch()
+        (self.models / "Qwen3-ASR-1.7B").mkdir()
+        (self.models / "Qwen3-ASR-1.7B" / "model.safetensors").touch()
 
         # This directory takes the place of the `emptyDir` on `/run`.  It
         # lives through a container restart.  The kubelet gives that volume
@@ -107,7 +112,7 @@ class Harness:
             "--user", "1000:1000",
             "--tmpfs", "/tmp:rw,size=64m",
             "-v", f"{TEST_DIR}:/test:ro,Z",
-            "-v", f"{TEST_DIR}/stub-llama-server.sh:/app/llama-server:ro,Z",
+            "-v", f"{TEST_DIR}/stub-gufo.sh:/usr/local/bin/gufo:ro,Z",
             "-v", f"{self.models}:/models:ro,Z",
         ]
 
@@ -209,17 +214,16 @@ def two_models(report: Report, harness: Harness) -> None:
         "each model server answers /health", ready, harness.logs(name)[1]
     )
 
-    # A truncated argument list gives `llama-server` the defaults of the
-    # image.
+    # The stub checks the arguments, and a wrong one stops it.
     stdout = harness.logs(name)[0]
     for alias, shard, port in (
         ("alpha", "alpha-00001-of-00001.gguf", "8080"),
         ("beta", "beta-00001-of-00002.gguf", "8081"),
     ):
         expected = (
-            f"[{alias}] starting -m /models/{shard} -a {alias}"
-            f" --host 127.0.0.1 --port {port} --ctx-size 4096"
-            " --metrics -fa on -ngl 999 --parallel 1"
+            f"[{alias}] starting serve llm --host 127.0.0.1 --port {port}"
+            f" --model /models/{shard} --context 4096"
+            f" --served-model-name {alias}"
         )
         report.check(
             f"{alias} starts with the whole argument list",
@@ -345,9 +349,9 @@ def dotted_alias(report: Report, harness: Harness) -> None:
     report.check("a dotted alias answers /health", ready, harness.logs(name)[1])
 
     expected = (
-        f"[{alias}] starting -m /models/alpha-00001-of-00001.gguf -a {alias}"
-        " --host 127.0.0.1 --port 8080 --ctx-size 4096"
-        " --metrics -fa on -ngl 999 --parallel 1"
+        f"[{alias}] starting serve llm --host 127.0.0.1 --port 8080"
+        " --model /models/alpha-00001-of-00001.gguf --context 4096"
+        f" --served-model-name {alias}"
     )
     stdout = harness.logs(name)[0]
     report.check(
@@ -369,6 +373,57 @@ def dotted_alias(report: Report, harness: Harness) -> None:
         supervisor.returncode == 0,
         supervisor.stdout + supervisor.stderr,
     )
+
+
+def kinds(report: Report, harness: Harness) -> None:
+    """Start two llm records (explicit and default kind) and two asr records."""
+    name = "kinds"
+    harness.start(
+        name, "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('three-kinds')}"
+    )
+    ready = wait_for(
+        30, lambda: harness.probe(name, "check-servers.sh").returncode == 0
+    )
+    report.check("every kind answers /health", ready, harness.logs(name)[1])
+
+    stdout = harness.logs(name)[0]
+    qwen = "Qwen3.8-27B"
+    asr = "Qwen3-ASR-1.7B"
+    for label, expected in (
+        (
+            "an explicit llm kind",
+            "[alpha] starting serve llm --host 127.0.0.1 --port 8080"
+            " --model /models/alpha-00001-of-00001.gguf --context 4096"
+            " --served-model-name alpha -v --log-progress",
+        ),
+        (
+            "extra arguments go last",
+            f"[{qwen}] starting serve llm --host 127.0.0.1 --port 8081"
+            " --model /models/qwen-00001-of-00001.gguf --context 8192"
+            f" --served-model-name {qwen} --speculative dflash2"
+            " --dflash-model /models/draft.gguf --mmproj /models/mmproj.gguf",
+        ),
+        (
+            "an asr record with no context",
+            f"[{asr}] starting serve asr --host 127.0.0.1 --port 8082"
+            f" --model /models/{asr} --served-model-name {asr}",
+        ),
+        (
+            "an asr record with a context",
+            "[asr-context] starting serve asr --host 127.0.0.1 --port 8083"
+            f" --model /models/{asr} --context 2048"
+            " --served-model-name asr-context",
+        ),
+        (
+            "a TMPDIR for each service",
+            "[alpha] tmpdir /tmp/gufo-alpha",
+        ),
+    ):
+        report.check(
+            f"{label} gives the right command",
+            expected in stdout,
+            f"want: {expected}\ngot:\n{stdout}",
+        )
 
 
 def hook_failure(
@@ -432,8 +487,8 @@ def negatives(report: Report, harness: Harness) -> None:
         report, harness, "double-dot-alias", "has two dots together",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('double-dot-alias')}",
     )
-    # `-a --host` gives the alias the value "--host", and the address then
-    # becomes an argument that `llama-server` rejects.
+    # `--served-model-name --host` gives the alias the value "--host", and
+    # the address then becomes an argument that `gufo` rejects.
     hook_failure(
         report, harness, "leading-dash-alias", "starts with a dash",
         "-e", "POD_IP=127.0.0.1",
@@ -448,6 +503,23 @@ def negatives(report: Report, harness: Harness) -> None:
     hook_failure(
         report, harness, "bad-context", "is not a number",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('bad-context')}",
+    )
+    # Only an `asr` record may leave the context empty.
+    hook_failure(
+        report, harness, "empty-context", "has an empty field",
+        "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('empty-context')}",
+    )
+    hook_failure(
+        report, harness, "bad-kind", "is not llm or asr",
+        "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('bad-kind')}",
+    )
+    hook_failure(
+        report, harness, "eight-fields", "has more than seven fields",
+        "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('eight-fields')}",
+    )
+    hook_failure(
+        report, harness, "asr-file", "is not a directory",
+        "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('asr-file')}",
     )
 
 
@@ -515,6 +587,7 @@ def main() -> int:
     scenarios: tuple[tuple[str, Callable[[Report, Harness], None]], ...] = (
         ("two-models", two_models),
         ("dotted-alias", dotted_alias),
+        ("kinds", kinds),
         ("negatives", negatives),
         ("missing-user2", missing_user2),
         ("stale-tree", stale_tree),
