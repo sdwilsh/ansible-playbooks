@@ -27,7 +27,7 @@ configurations:
   - kustomizeconfig.yml
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:26837860fa038ce221416ee0fd211a0ee300f67e24e88faecca0423088400b99
+    newTag: latest@sha256:9b58231669c7c371ecd976626a61d72ae7e46326f30932e8934a087f5f26fbd8
   - name: postgres
     newTag: 18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
   - name: quay.io/opstree/redis-sentinel

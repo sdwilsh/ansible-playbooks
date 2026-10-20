@@ -54,7 +54,7 @@ helmCharts:
     valuesFile: prometheus-adapter-values.yml
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:26837860fa038ce221416ee0fd211a0ee300f67e24e88faecca0423088400b99
+    newTag: latest@sha256:9b58231669c7c371ecd976626a61d72ae7e46326f30932e8934a087f5f26fbd8
   - name: docker.io/grafana/alloy
     newTag: v1.20.1@sha256:2aa2099af76c0098d4af7a4d6e48f86cb66dc1a000222ad927a1c67c6542d13f
   - name: postgres
