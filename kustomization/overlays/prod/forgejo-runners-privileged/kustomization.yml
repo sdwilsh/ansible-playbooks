@@ -37,7 +37,7 @@ images:
     newName: code.tswn.us/marinatedconcrete/forgejo-runner-operator/job-executor
     newTag: v0.7.0@sha256:e3a3f41fa5130576e01f43899a37b8cc09a7f40ee8c9d905f88152fbdf16c4bf
   - name: ghcr.io/marinatedconcrete/buildah-action-runner
-    newTag: 1.0.2@sha256:b95951979dc254552d7f419375473bb306075b3e135fddef17bdba28082b7492
+    newTag: 1.0.3@sha256:1586dbb33eb5041f7e3559ed2e11326fa50c1ecc714cfe84c1ff162928dba19a
 
 resources:
   - namespace.yml
