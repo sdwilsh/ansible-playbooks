@@ -25,7 +25,7 @@ images:
   - name: busybox
     newTag: 1.38.0@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
   - name: ghcr.io/manyfold3d/manyfold
-    newTag: 0.151.0@sha256:cebdd568b98f09932ef79135962b77fcf8e44833a644273f232548594207ca91
+    newTag: 0.153.0@sha256:f69029a8f21b76de0b1558f175de19009324f96e4ecd80143997e97174c08fa4
 namespace: manyfold
 patches:
   - path: patches/add_traefik_client_label.yml
