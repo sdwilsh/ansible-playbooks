@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # renovate: datasource=github-releases depName=openpubkey/opkssh
-OPKSSH_VERSION=0.19.0
+OPKSSH_VERSION=0.19.1
 
 rsync -rvK /ctx/opkssh/ /
 chown 473:473 /etc/alloy/opkssh.alloy
