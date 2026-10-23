@@ -6,7 +6,7 @@ components:
   - ../../../components/pod-security-enforce-privileged
 helmCharts:
   - name: node-feature-discovery
-    version: 0.20.0
+    version: 0.20.1
     repo: oci://registry.k8s.io/nfd/charts
     releaseName: nfd
     valuesFile: values.yml
