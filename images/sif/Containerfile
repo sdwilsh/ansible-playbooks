@@ -1,6 +1,6 @@
 # The commit is the commit of the tag `GUFO_VERSION`.  Renovate changes both lines.
-ARG GUFO_VERSION=v0.17.1.0
-ARG GUFO_COMMIT=06ef1e5b42ba2173e5edf039bbc27fa391bc3ee2
+ARG GUFO_VERSION=v0.21.0.0
+ARG GUFO_COMMIT=69399d552a78753368de91f4b2c20b288d2d4cd7
 
 FROM alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS builder
 
@@ -30,12 +30,15 @@ ARG GUFO_COMMIT
 # A build can set a local flake source, for example `git+file:///gufo-src?rev=...`.
 ARG GUFO_FLAKE_REF=github:sdwilsh/gufo/${GUFO_COMMIT}
 # The expression sets the release version.  The flake accepts only X.Y.Z in `version.txt`.
+# `bin/gufo` is a wrapper script.  The ELF is `bin/.gufo-wrapped`, so the
+# library checks read that file and must find `libamdhip64`.
 # hadolint ignore=DL4006
 RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf \
   && nix build --out-link /gufo-result --expr " \
        (builtins.getFlake \"${GUFO_FLAKE_REF}\").packages.x86_64-linux.default.override { \
          releaseVersion = \"${GUFO_VERSION#v}\"; }" \
-  && ! LD_TRACE_LOADED_OBJECTS=1 /gufo-result/bin/gufo | grep 'not found'
+  && LD_TRACE_LOADED_OBJECTS=1 /gufo-result/bin/.gufo-wrapped | grep -q libamdhip64 \
+  && ! LD_TRACE_LOADED_OBJECTS=1 /gufo-result/bin/.gufo-wrapped | grep 'not found'
 
 # The image gets `ps` from the nixpkgs that the gufo flake pins.
 RUN nix build --out-link /procps-result --expr " \
@@ -87,7 +90,8 @@ RUN set -o pipefail \
   && test -x /usr/bin/curl \
   && test -x /usr/local/bin/ps \
   && ! ldd "$(readlink -f /usr/local/bin/ps)" | grep "not found" \
-  && ! ldd "$(readlink -f /usr/local/bin/gufo)" | grep "not found" \
+  && ldd "$(dirname "$(readlink -f /usr/local/bin/gufo)")/.gufo-wrapped" | grep -q libamdhip64 \
+  && ! ldd "$(dirname "$(readlink -f /usr/local/bin/gufo)")/.gufo-wrapped" | grep "not found" \
   && /usr/local/bin/gufo --version \
   && /usr/local/bin/ps --version \
   && test -x /command/with-contenv \
