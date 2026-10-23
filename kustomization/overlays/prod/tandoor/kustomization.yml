@@ -18,7 +18,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:9b58231669c7c371ecd976626a61d72ae7e46326f30932e8934a087f5f26fbd8
   - name: vabene1111/recipes
-    newTag: 2.6.15@sha256:2e759dd1478a2ed119ee474e28522079fb1cfa50b3fd25cba89f6b9a67abad72
+    newTag: 2.7.1@sha256:10e3d2cef6b4eaa24a9c548a25dc892ce70266fc888bd85d4b349eb5a7143945
 namespace: tandoor
 patches:
   - path: patches/tandoor/set_config_env.yml
