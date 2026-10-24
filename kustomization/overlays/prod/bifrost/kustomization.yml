@@ -25,7 +25,7 @@ configMapGenerator:
       - configmap/config.json
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:9b58231669c7c371ecd976626a61d72ae7e46326f30932e8934a087f5f26fbd8
+    newTag: latest@sha256:6d9e8ad566a6d2dcb4a7a6120d030bd65bddbcc952246f4b31022834d9be7e02
   - name: docker.io/maximhq/bifrost
     newTag: v2.3.0@sha256:8f37e33a8caa85faf59a875605c61d1d934738e517d8fe96e2d9fcf6f0ef9098
   - name: postgres
