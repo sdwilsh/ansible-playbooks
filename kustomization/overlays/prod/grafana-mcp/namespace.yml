@@ -5,5 +5,4 @@ metadata:
   labels:
     hogs.tswn.us/bifrost-route: "true"
     hogs.tswn.us/grafana-client: "true"
-    hogs.tswn.us/traefik-route: "true"
   name: this-is-ignored-but-is-required

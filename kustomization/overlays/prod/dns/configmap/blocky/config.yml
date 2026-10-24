@@ -143,7 +143,6 @@ customDNS:
     7d2d-relic-admin IN CNAME traefik.hogs
     alertmanager.hogs IN CNAME traefik.hogs
     argo-cd.hogs IN CNAME traefik.hogs
-    argocd-mcp.hogs IN CNAME traefik.hogs
     atuin IN CNAME traefik.hogs
     auth IN CNAME traefik.hogs
     bifrost IN CNAME traefik.hogs
@@ -154,15 +153,12 @@ customDNS:
     factorio-relic-admin IN CNAME traefik.hogs
     frigate.hogs IN CNAME traefik.hogs
     garage-admin.hogs IN CNAME traefik.hogs
-    grafana-mcp.hogs IN CNAME traefik.hogs
     grafana.hogs IN CNAME traefik.hogs
     homeassistant.hogs IN CNAME traefik.hogs
     idm IN CNAME traefik.hogs
     imap.hogs IN CNAME traefik.hogs
     immich IN CNAME traefik.hogs
     jellyfin IN CNAME traefik.hogs
-    kubernetes-mcp.hogs IN CNAME traefik.hogs
-    linux-mcp.hogs IN CNAME traefik.hogs
     loki.hogs IN CNAME traefik.hogs
     longhorn.hogs IN CNAME traefik.hogs
     manyfold IN CNAME traefik.hogs
@@ -185,7 +181,6 @@ customDNS:
     transmission.hogs IN CNAME traefik.hogs
     tvheadend.hogs IN CNAME traefik.hogs
     unifi IN CNAME traefik.hogs
-    unifi-mcp.hogs IN CNAME traefik.hogs
 
 connectIPVersion: v4
 

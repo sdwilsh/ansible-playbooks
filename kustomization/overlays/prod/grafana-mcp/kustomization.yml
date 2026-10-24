@@ -4,7 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/networkpolicy-allow-from-bifrost
-  - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-grafana
   - ../../../components/networkpolicy-deny-all
@@ -22,5 +21,4 @@ namespace: grafana-mcp
 resources:
   - namespace.yml
   - deployment.yml
-  - ingress.yml
   - service.yml

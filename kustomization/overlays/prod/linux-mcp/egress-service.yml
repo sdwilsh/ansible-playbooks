@@ -14,7 +14,7 @@ spec:
   externalTrafficPolicy: Local
   ports:
     # The API refuses a Service with no port.  This service exposes nothing.
-    # `networkpolicy-allow-from-traefik` permits the only ingress to the pod,
+    # `networkpolicy-allow-from-bifrost` permits the only ingress to the pod,
     # and `linux-mcp-svc` carries that traffic.
     - name: web
       port: 8000

@@ -4,7 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/networkpolicy-allow-from-bifrost
-  - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
@@ -33,6 +32,5 @@ namespace: unifi-network-mcp
 resources:
   - namespace.yml
   - deployment.yml
-  - ingress.yml
   - networkpolicy/allow-egress-to-unifi.yml
   - service.yml
