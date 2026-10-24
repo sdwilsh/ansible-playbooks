@@ -22,7 +22,7 @@ spec:
             timeoutSeconds: 6
           # The cgroup peak is 15.42 GiB with the RAM cache full.  The request
           # fits the 19.07 GiB of allocatable memory, beside the DaemonSets.
-          # GTT peaks at 95.34 GiB with a 6 GiB expanded-KV store.
+          # GTT peaks at 91.40 GiB with a 2 GiB expanded-KV store.
           resources:
             limits:
               memory: 20Gi
