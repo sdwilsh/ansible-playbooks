@@ -23,7 +23,7 @@ RUN archive="fastflowlm_${FLM_VERSION#v}_linux.tar.gz" \
 # The probe sends this clip.  The hash pins the audio, so a new tag stops the
 # build until a person accepts a new clip.
 # renovate: datasource=github-releases depName=ggml-org/whisper.cpp
-ARG WHISPER_CPP_VERSION=v1.9.4
+ARG WHISPER_CPP_VERSION=v1.9.5
 ARG PROBE_SHA256=59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e
 RUN curl -f -L -o /opt/vergil/probe.wav \
       "https://raw.githubusercontent.com/ggml-org/whisper.cpp/${WHISPER_CPP_VERSION}/samples/jfk.wav" \
