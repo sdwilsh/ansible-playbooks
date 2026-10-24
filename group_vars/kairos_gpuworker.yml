@@ -44,7 +44,8 @@
 #   GTT limit = (125.07 GiB - the floor with no page tables) / 1.0044
 #
 # The page tables use 0.43 GiB at a limit of 98 GiB and 0.16 GiB at a limit
-# of 36 GiB.  The value of 0.47 GiB covers both.  Keep it on each node.
+# of 36 GiB.  The value of 0.47 GiB covers both limits and the 38 GiB limit
+# of gpuworker02.  Keep it on each node.
 
 # This value is the memory that `system-reserved` keeps.  The GPU page
 # tables map the GTT ceiling, and they use 0.47 GiB on each node.  A node
