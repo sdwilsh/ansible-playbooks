@@ -7,7 +7,7 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.121/23
 
-# The GPU holds 32.48 GiB of GTT at its highest.  The kubelet does not
+# The GPU holds 32.66 GiB of GTT at its highest.  The kubelet does not
 # read GTT pages, so this value is the 38 GiB limit of this node.  The
 # scheduler then sees 79.07 GiB.
 k3s_system_reserved_memory: 38Gi
@@ -27,11 +27,16 @@ kairos__disks_to_format: []
 #
 # | Item        | measured | limit | margin |
 # | ----------- | -------: | ----: | -----: |
-# | group B GTT |    32.48 | 38.00 |   5.52 |
+# | group B GTT |    32.66 | 38.00 |   5.34 |
 #
-# 38 GiB is 9961472 pages.  With gufo v0.21.0.0 the GTT is 32.48 GiB, idle
-# and with a 95672-token prompt on each 27B server.  The margin must be at
-# least 4 GiB plus one RAM-cache segment, or the Q8 cache gets no memory.
+# 38 GiB is 9961472 pages.  With gufo v0.21.0.0 the GTT peaks at 32.66 GiB
+# with this config.  The margin must be at least 4 GiB plus one RAM-cache
+# segment, or the Q8 cache gets no memory.
+#
+# The container limit gives the Q8 cache 5,930,110,976 bytes, so it has
+# a 6 GiB setting.  Q4 needs no cache, but gufo has no off value (0 means
+# auto).  So Q4 has 512 MiB, the smallest sensible value.  Q4 also has the
+# image projector, because gufo loads a projector beside the model.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.

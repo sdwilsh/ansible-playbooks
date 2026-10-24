@@ -68,6 +68,24 @@ fetch() {
   echo "$stamp" > "$sidecar"
 }
 
+# gufo loads any projector beside the model.  Remove each projector that
+# the record does not list, and its marker.  $1 is the model directory.
+drop_projectors() {
+  dir=$1
+  shift
+  for p in "$dir"/mmproj*.gguf; do
+    [ -e "$p" ] || continue
+    listed=""
+    for f in "$@"; do
+      if [ "${f##*/}" = "${p##*/}" ]; then listed=1; fi
+    done
+    if [ -z "$listed" ]; then
+      echo "removing unlisted projector $p"
+      rm -f "$p" "$p.sha256-verified"
+    fi
+  done
+}
+
 # The record has the same fields as `generate-model-services.sh` reads.
 # shellcheck disable=SC2034
 while IFS='|' read -r alias base shards port ctx extra kind; do
@@ -93,6 +111,7 @@ while IFS='|' read -r alias base shards port ctx extra kind; do
   case $1 in
     */*) prefix=${1%/*}/ ;;
   esac
+  drop_projectors "/models/${prefix%/}" "$@"
   for f in "$@"; do
     case $f in
       http*) fetch "$f" "$prefix${f##*/}" ;;
