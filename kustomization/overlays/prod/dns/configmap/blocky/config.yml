@@ -15,6 +15,9 @@ blocking:
     threat-intelligence-feeds:
       # https://github.com/hagezi/dns-blocklists#tif
       - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif.txt
+  loading:
+    downloads:
+      timeout: 2m
 
 bootstrapDns:
   # Cloudflare DNS
