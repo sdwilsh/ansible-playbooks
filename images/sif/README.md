@@ -12,9 +12,18 @@ The image holds the scripts and the `S6_` settings.  A container needs `MODELS`,
 writable `/run` and the models on `/models`.
 
 `MODELS` takes seven fields for each record, and the last two are optional:
-`alias|base URL|shard names|port|context size|extra arguments|kind`.  The kind is `llm` or `asr`,
-and empty means `llm`.  The extra arguments must not hold `--host`, `--port`, `-i` or `-p`.  An
-`asr` record names a model directory, and its context is optional.
+`alias|base URL|shard names|port|context size|extra arguments|kind`.  The extra arguments must
+not hold `--host`, `--port`, `-i` or `-p`.
+
+| Kind            | Server                 | Shard names                               | Context size  |
+| --------------- | ---------------------- | ----------------------------------------- | ------------- |
+| `llm`, or empty | `gufo serve llm`       | Model files; the first one is the model   | Required      |
+| `asr`           | `gufo serve asr`       | The model directory, then the files in it | Optional      |
+| `embedding`     | `gufo serve embedding` | The model directory, then the files in it | Must be empty |
+
+An `llm` shard name is a path under the base URL, or the full URL of a file of another
+repository.  gufo loads a projector (`mmproj*.gguf`) beside an `llm` model, so the fetch step
+removes a projector that the record does not list.
 
 ## Build And Test
 

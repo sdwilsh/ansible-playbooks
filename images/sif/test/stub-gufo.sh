@@ -14,8 +14,8 @@ echo "starting $*"
 [ "${1:-}" = serve ] || fail "the first argument is not serve"
 kind=${2:-}
 case "$kind" in
-  llm | asr) ;;
-  *) fail "the subcommand $kind is not llm or asr" ;;
+  llm | asr | embedding) ;;
+  *) fail "the subcommand $kind is not llm, asr or embedding" ;;
 esac
 shift 2
 
@@ -58,6 +58,10 @@ done
 if [ "$kind" = asr ]; then
   [ -d "$model" ] || fail "the ASR model $model is not a directory"
   [ -z "$speculative$draft$mmproj" ] || fail "asr takes no LLM option"
+elif [ "$kind" = embedding ]; then
+  [ -d "$model" ] || fail "the embedding model $model is not a directory"
+  [ -z "$context$speculative$draft$mmproj" ] ||
+    fail "embedding takes no context or LLM option"
 else
   [ -f "$model" ] || fail "the model $model is not a file"
   [ -n "$context" ] || fail "llm needs --context"

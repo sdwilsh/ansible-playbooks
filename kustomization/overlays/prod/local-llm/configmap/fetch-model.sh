@@ -5,7 +5,8 @@
 #
 # An `llm` token is a path under the base URL, or the full URL of a file of
 # another repository.  A full URL goes to the directory of the first token.
-# An `asr` record names its model directory first, then the files in it.
+# An `asr` or `embedding` record names its model directory first, then the
+# files in it.
 #
 # olah does not serve the Hugging Face "refs" endpoint.  So each base URL
 # names a fixed commit, and the script asks for it through "resolve".
@@ -97,7 +98,7 @@ while IFS='|' read -r alias base shards port ctx extra kind; do
   set -- $shards
   set +f
 
-  if [ "$kind" = asr ]; then
+  if [ "$kind" = asr ] || [ "$kind" = embedding ]; then
     dir=$1
     shift
     for f in "$@"; do

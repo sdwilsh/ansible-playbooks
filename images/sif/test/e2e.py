@@ -29,7 +29,7 @@ SCRIPTS_DIR = "/usr/local/bin"
 
 # The suite must make this many results.  A scenario that stops early makes
 # fewer.
-EXPECTED_ASSERTIONS = 54
+EXPECTED_ASSERTIONS = 57
 
 
 class Report:
@@ -93,6 +93,8 @@ class Harness:
             (self.models / shard).touch()
         (self.models / "Qwen3-ASR-1.7B").mkdir()
         (self.models / "Qwen3-ASR-1.7B" / "model.safetensors").touch()
+        (self.models / "embeddinggemma-2").mkdir()
+        (self.models / "embeddinggemma-2" / "model.safetensors").touch()
 
         # This directory takes the place of the `emptyDir` on `/run`.  It
         # lives through a container restart.  The kubelet gives that volume
@@ -376,7 +378,7 @@ def dotted_alias(report: Report, harness: Harness) -> None:
 
 
 def kinds(report: Report, harness: Harness) -> None:
-    """Start two llm records (explicit and default kind) and two asr records."""
+    """Start two llm, two asr and one embedding record."""
     name = "kinds"
     harness.start(
         name, "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('three-kinds')}"
@@ -389,6 +391,7 @@ def kinds(report: Report, harness: Harness) -> None:
     stdout = harness.logs(name)[0]
     qwen = "Qwen3.8-27B"
     asr = "Qwen3-ASR-1.7B"
+    embedding = "embeddinggemma-2"
     for label, expected in (
         (
             "an explicit llm kind",
@@ -413,6 +416,12 @@ def kinds(report: Report, harness: Harness) -> None:
             "[asr-context] starting serve asr --host 127.0.0.1 --port 8083"
             f" --model /models/{asr} --context 2048"
             " --served-model-name asr-context",
+        ),
+        (
+            "an embedding record with no context",
+            f"[{embedding}] starting serve embedding --host 127.0.0.1"
+            f" --port 8084 --model /models/{embedding}"
+            f" --served-model-name {embedding}",
         ),
         (
             "a TMPDIR for each service",
@@ -510,7 +519,7 @@ def negatives(report: Report, harness: Harness) -> None:
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('empty-context')}",
     )
     hook_failure(
-        report, harness, "bad-kind", "is not llm or asr",
+        report, harness, "bad-kind", "is not llm, asr or embedding",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('bad-kind')}",
     )
     hook_failure(
@@ -529,6 +538,16 @@ def negatives(report: Report, harness: Harness) -> None:
     hook_failure(
         report, harness, "asr-file", "is not a directory",
         "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('asr-file')}",
+    )
+    hook_failure(
+        report, harness, "embedding-file", "is not a directory",
+        "-e", "POD_IP=127.0.0.1", "-e", f"MODELS={fixture('embedding-file')}",
+    )
+    # `gufo serve embedding` has no `--context` option.
+    hook_failure(
+        report, harness, "embedding-context", "is embedding and has a context",
+        "-e", "POD_IP=127.0.0.1",
+        "-e", f"MODELS={fixture('embedding-context')}",
     )
 
 

@@ -2,3 +2,4 @@ alpha|http://olah.invalid/alpha|alpha-00001-of-00001.gguf|8080|4096|-v --log-pro
 Qwen3.8-27B|http://olah.invalid/qwen|qwen-00001-of-00001.gguf|8081|8192|--speculative dflash2 --dflash-model /models/draft.gguf --mmproj /models/mmproj.gguf
 Qwen3-ASR-1.7B|http://olah.invalid/asr|Qwen3-ASR-1.7B|8082|||asr
 asr-context|http://olah.invalid/asr|Qwen3-ASR-1.7B|8083|2048||asr
+embeddinggemma-2|http://olah.invalid/embedding|embeddinggemma-2|8084|||embedding

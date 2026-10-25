@@ -4,8 +4,9 @@
 #   alias|base URL|shard names|port|context size|extra arguments|kind
 # The shard names have a space between each name.  The server finds the
 # other shards from the first name.  The extra arguments and the kind are
-# optional.  The kind is `llm` or `asr`, and empty means `llm`.  An `asr`
-# record has a model directory in place of the shard names.
+# optional.  The kind is `llm`, `asr` or `embedding`, and empty means `llm`.
+# An `asr` or `embedding` record has a model directory in place of the
+# shard names.  An `embedding` record has no context size.
 # This script puts the extra arguments at the end of the command line.
 # An argument there replaces the same argument from this script.
 # The script rejects `--host` and `--port` there.  It also rejects the short
@@ -50,12 +51,15 @@ while IFS='|' read -r alias base shards port ctx extra kind; do
   done
   case "$kind" in
     ''|llm) kind=llm ;;
-    asr) ;;
-    *) fatal "kind $kind of $alias is not llm or asr" ;;
+    asr|embedding) ;;
+    *) fatal "kind $kind of $alias is not llm, asr or embedding" ;;
   esac
-  # `gufo serve asr` has a default context.
-  { [ -n "$ctx" ] || [ "$kind" = asr ]; } ||
+  # `gufo serve asr` has a default context.  `gufo serve embedding` has
+  # no context option.
+  { [ -n "$ctx" ] || [ "$kind" != llm ]; } ||
     fatal "record $alias has an empty field"
+  { [ -z "$ctx" ] || [ "$kind" != embedding ]; } ||
+    fatal "record $alias is embedding and has a context size"
 
   # The alias becomes a service directory name and an argument of the
   # `run` script.  A canonical model name holds a dot.
@@ -113,9 +117,9 @@ while IFS='|' read -r alias base shards port ctx extra kind; do
 
   # shellcheck disable=SC2086
   set -- $shards
-  if [ "$kind" = asr ]; then
+  if [ "$kind" != llm ]; then
     [ -d "/models/$1" ] || fatal "/models/$1 of $alias is not a directory"
-    command="gufo serve asr"
+    command="gufo serve $kind"
     context=""
     [ -z "$ctx" ] || context="--context $ctx"
   else
