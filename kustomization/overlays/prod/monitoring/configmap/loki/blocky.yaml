@@ -1,0 +1,29 @@
+---
+groups:
+  - name: blocky
+    interval: 1m
+    rules:
+      # Blocky keeps a list that it did not read to the end.  The cut last
+      # line is also an entry, and it can block a full TLD.  The
+      # `blocky_failed_downloads_total` metric does not count this failure.
+      - alert: blocky-list-cut
+        expr: |
+          sum by (pod, source) (
+            count_over_time(
+              {namespace="dns"}
+              |= "list_cache"
+              |= "non resumable parse error"
+              | json
+              [5h]
+            )
+          ) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "blocky did not read all of {{ $labels.source }}"
+          description: >-
+            {{ $labels.pod }} stopped reading {{ $labels.source }} before
+            the end, and kept the part that it read.  The last line can be
+            cut, and a cut line can block names that are safe.  Look at the
+            `parse error` line in the blocky log.  If the download timed
+            out, increase `blocking.loading.downloads.timeout`.

@@ -20,6 +20,7 @@ configMapGenerator:
       - configmap/loki.alloy
   - name: loki-rules-configmap
     files:
+      - configmap/loki/blocky.yaml
       - configmap/loki/linux-mcp.yaml
     options:
       disableNameSuffixHash: true
