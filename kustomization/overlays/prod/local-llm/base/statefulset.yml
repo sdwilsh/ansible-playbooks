@@ -71,6 +71,9 @@ spec:
             - containerPort: 8080
               name: model-api
           volumeMounts:
+            # gufo's disk prompt cache.  Each server has its own directory.
+            - mountPath: /cache
+              name: disk-cache
             - mountPath: /models
               name: model-cache
             - mountPath: /run
@@ -155,3 +158,16 @@ spec:
           requests:
             storage: 200Gi
         storageClassName: longhorn-ephemeral
+    # local-path does not enforce this size: the 1Gi test claim showed the
+    # whole 3.6T disk.  Each server limits its cache with --cache-disk-bytes.
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: disk-cache
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 72Gi
+        storageClassName: local-path
