@@ -6,7 +6,7 @@ metadata:
 spec:
   podMetricsEndpoints:
     - path: /metrics
-      portNumber: 2112
+      port: metrics
   selector:
     matchLabels:
       app.kubernetes.io/name: kube-vip-svc-ds
