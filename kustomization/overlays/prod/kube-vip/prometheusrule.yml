@@ -7,16 +7,25 @@ spec:
   groups:
     - name: kube-vip
       rules:
+        # A service with no ready endpoint has no node to advertise it, so its
+        # lease does not renew.  Page only for a service with a ready endpoint.
         - alert: kube-vip-lease-stale
           annotations:
             description: "kube-vip lease {{ $labels.lease }} in {{ $labels.exported_namespace }} hasn't renewed in 120s — its VIP is probably not being advertised."
           expr: |
             label_replace(
               time() - kube_lease_renew_time{lease=~"kubevip-.*"} > 120,
-              "svc", "$1", "lease", "kubevip-(.+)"
+              "exported_service", "$1", "lease", "kubevip-(.+)"
             )
-            and on (exported_namespace, svc)
-            label_replace(kube_vip_service_election_loops, "svc", "$1", "name", "(.+)")
+            and on (exported_namespace, exported_service)
+            kube_service_spec_type{type="LoadBalancer"}
+            and on (exported_namespace, exported_service)
+            label_replace(
+              count by (exported_namespace, endpointslice) (
+                kube_endpointslice_endpoints{ready="true"}
+              ),
+              "exported_service", "$1", "endpointslice", "(.+)-[a-z0-9]{5}"
+            )
           for: 2m
           labels:
             severity: page
