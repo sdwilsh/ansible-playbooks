@@ -1,0 +1,25 @@
+---
+# Each node probes the API server VIP from the host network, so a node that
+# cannot reach the VIP shows the fault even when the other nodes can.
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: alloy-node-podmonitor
+spec:
+  podMetricsEndpoints:
+    - params:
+        module:
+          - apiserver
+        target:
+          - https://10.11.0.100:6443/livez
+      path: /api/v0/component/prometheus.exporter.blackbox.api_vip/metrics
+      port: http-metrics
+      relabelings:
+        - action: replace
+          sourceLabels:
+            - __meta_kubernetes_pod_node_name
+          targetLabel: node
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: alloy
+      app.kubernetes.io/name: node

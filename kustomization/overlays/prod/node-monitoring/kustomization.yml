@@ -5,6 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: alloy-config
     files:
+      - configmap/api-vip.alloy
       - configmap/journal.alloy
       - configmap/loki.alloy
       - configmap/networkpolicy.alloy
@@ -40,4 +41,5 @@ images:
 namespace: node-monitoring
 resources:
   - namespace.yml
+  - podmonitor.yml
   - rbac.yml

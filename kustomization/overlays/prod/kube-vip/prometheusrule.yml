@@ -71,3 +71,12 @@ spec:
           for: 2m
           labels:
             severity: page
+        # Each node probes the VIP from the host network, so this alert names
+        # the node that cannot reach it.
+        - alert: kube-vip-control-plane-vip-unreachable
+          annotations:
+            description: "{{ $labels.node }} cannot reach the API server through its VIP 10.11.0.100."
+          expr: probe_success{job="node-monitoring/alloy-node-podmonitor"} == 0
+          for: 2m
+          labels:
+            severity: page

@@ -1,0 +1,6 @@
+// `alloy-node-podmonitor` sets the probe target.  The probe sends no
+// credentials, so the API server answers 401.  The check is a TLS connection
+// through the VIP that the cluster CA verifies.
+prometheus.exporter.blackbox "api_vip" {
+  config = "{ modules: { apiserver: { prober: http, timeout: 5s, http: { fail_if_not_ssl: true, tls_config: { ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt }, valid_status_codes: [200, 401, 403] } } } }"
+}

@@ -16,6 +16,8 @@ spec:
           protocol: TCP
         - port: 10250
           protocol: TCP
+        - port: 12345 # alloy-node API server VIP probe (hostNetwork DaemonSet)
+          protocol: TCP
       to:
         - ipBlock:
             cidr: 10.11.0.0/23
