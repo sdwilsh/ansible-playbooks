@@ -62,3 +62,12 @@ spec:
           for: 5m
           labels:
             severity: page
+        # kube-vip renews this lease through the API server, so a stale lease
+        # can also mean that the API server is down.
+        - alert: kube-vip-control-plane-lease-stale
+          annotations:
+            description: "kube-vip lease plndr-cp-lock hasn't renewed in 60s.  Either the API server is down, or no node advertises its VIP 10.11.0.100."
+          expr: time() - kube_lease_renew_time{exported_namespace="kube-vip", lease="plndr-cp-lock"} > 60
+          for: 2m
+          labels:
+            severity: page
