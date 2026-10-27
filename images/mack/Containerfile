@@ -4,7 +4,7 @@ COPY build_files /
 
 # This stage builds kairos-fedora with Mack's build files.  k3s cluster
 # nodes use this image.
-FROM ghcr.io/marinatedconcrete/kairos-fedora:0.10.1@sha256:0788f05890392ce10f702f5f7803ba12573365ea99b58ecf7290513e620b8b1a AS mack-kairos
+FROM ghcr.io/marinatedconcrete/kairos-fedora:0.11.0@sha256:2206e21308b9eb9ebf9dc46b759b147882f4946886327ad578c4a4b7bc937542 AS mack-kairos
 
 ARG TARGETPLATFORM
 ARG GIT_SHA=unknown
