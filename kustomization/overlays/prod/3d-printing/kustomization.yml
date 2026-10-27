@@ -17,7 +17,7 @@ components:
   - ../../../components/spoolman
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:6d9e8ad566a6d2dcb4a7a6120d030bd65bddbcc952246f4b31022834d9be7e02
+    newTag: latest@sha256:eaf442416e6f6b37ea76cc03dbdacc1d85f4c061670df7974dd1387288a11e50
   - name: ghcr.io/donkie/spoolman
     newTag: 0.27.0@sha256:7aba565eff774c6dda212d4204de8fa30bf68d513127ef875cc7ef3197a4664e
   - name: postgres
