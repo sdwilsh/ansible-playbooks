@@ -7,7 +7,7 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.120/23
 
-# The GPU holds 91.40 GiB of GTT.  The kubelet does not read GTT pages,
+# The GPU holds 94.07 GiB of GTT.  The kubelet does not read GTT pages,
 # so this value is the 98 GiB limit of this node.  The scheduler then
 # sees 19.07 GiB.
 k3s_system_reserved_memory: 98Gi
@@ -29,14 +29,13 @@ kairos__disks_to_format: []
 #
 # | Item             | measured | limit | margin |
 # | ---------------- | -------: | ----: | -----: |
-# | group A GTT      |    91.40 | 98.00 |   6.60 |
-# | container memory |    15.42 | 20.00 |   4.58 |
+# | group A GTT      |    94.07 | 98.00 |   3.93 |
+# | container memory |    11.93 | 20.00 |   8.07 |
 #
-# 98 GiB is 25690112 pages.  The GTT peak is 91.40 GiB with gufo v0.21.0.0
-# and the 2 GiB expanded-KV store.  The margin must be at least 4.95 GiB:
-# gufo puts a 0.95 GiB RAM-cache segment in GTT only if 4 GiB stays free.
-# The container held 15.42 GiB at its highest, with the 15 GiB RAM cache
-# full.  Ling holds 196608 tokens.  The model trains to 262144.
+# 98 GiB is 25690112 pages.  The GTT peak is 94.07 GiB with gufo v0.21.0.0
+# and DeepSeek V4 Flash with DSpark at 196608 tokens.  The container held
+# 11.93 GiB at its highest, with a 4 GiB RAM cache.  The DSpark model uses
+# host memory, so a 15 GiB RAM cache does not fit the 20 GiB limit.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.
