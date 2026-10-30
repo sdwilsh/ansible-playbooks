@@ -27,10 +27,10 @@ removes a projector that the record does not list.
 
 ## Build And Test
 
-A stage of the `Containerfile` builds `gufo` with the nix flake of the fork `sdwilsh/gufo`.  The
+A stage of the `Containerfile` builds `gufo` with the nix flake of `gufo-org/gufo`.  The
 build uses the commit `GUFO_COMMIT`, which is the tag `GUFO_VERSION`.  Renovate changes both
 lines together.  The flake lock pins nixpkgs, so it also pins ROCm and the compiler.  The final
-image holds the nix closure of the `gufo` package of the fork's flake, and `ps` from the same
+image holds the nix closure of the `gufo` package of that flake, and `ps` from the same
 nixpkgs.
 
 A tag needs the `localhost/` prefix.  `sif:` is the Singularity transport of

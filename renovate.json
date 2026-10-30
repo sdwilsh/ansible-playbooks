@@ -14,7 +14,7 @@
     {
       "customType": "regex",
       "datasourceTemplate": "github-tags",
-      "depNameTemplate": "sdwilsh/gufo",
+      "depNameTemplate": "gufo-org/gufo",
       "description": "Renovate replaces the tag line and the commit line together, so the commit stays the digest of the tag.",
       "managerFilePatterns": [
         "/^images/sif/Containerfile$/"

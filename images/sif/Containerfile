@@ -1,6 +1,6 @@
 # The commit is the commit of the tag `GUFO_VERSION`.  Renovate changes both lines.
-ARG GUFO_VERSION=v0.21.0.0
-ARG GUFO_COMMIT=69399d552a78753368de91f4b2c20b288d2d4cd7
+ARG GUFO_VERSION=v0.28.0
+ARG GUFO_COMMIT=33731145678c1e3edb1ad05f3224d2d08f1c3983
 
 FROM alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS builder
 
@@ -28,12 +28,18 @@ FROM docker.io/nixos/nix:2.35.4@sha256:f159a58f390677f41e8e900a74b6e2f9c7f27b364
 ARG GUFO_VERSION
 ARG GUFO_COMMIT
 # A build can set a local flake source, for example `git+file:///gufo-src?rev=...`.
-ARG GUFO_FLAKE_REF=github:sdwilsh/gufo/${GUFO_COMMIT}
+ARG GUFO_FLAKE_REF=github:gufo-org/gufo/${GUFO_COMMIT}
+# A build can limit nix, for example `NIX_CONFIG="max-jobs = 1"`.
+ARG NIX_CONFIG=""
 # The expression sets the release version.  The flake accepts only X.Y.Z in `version.txt`.
 # `bin/gufo` is a wrapper script.  The ELF is `bin/.gufo-wrapped`, so the
 # library checks read that file and must find `libamdhip64`.
+# Nix ignores the `nixConfig` of the flake.  The cache holds the ROCm closure.
 # hadolint ignore=DL4006
-RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf \
+RUN { echo "experimental-features = nix-command flakes"; \
+      echo "extra-substituters = https://gufo.cachix.org"; \
+      echo "extra-trusted-public-keys = gufo.cachix.org-1:rfZe3n4lHINgyoACKzs5EthIZmBNvEyCCtufUpth0PE="; \
+    } >> /etc/nix/nix.conf \
   && nix build --out-link /gufo-result --expr " \
        (builtins.getFlake \"${GUFO_FLAKE_REF}\").packages.x86_64-linux.default.override { \
          releaseVersion = \"${GUFO_VERSION#v}\"; }" \
