@@ -10,7 +10,7 @@ components:
   - ../../../components/pod-security-enforce-restricted
 images:
   - name: ghcr.io/containers/kubernetes-mcp-server
-    newTag: v0.0.67@sha256:e47f6ccc5347e1ea6be495d8d9ab55ac8a995fe87800fb984fa770cebe14ad44
+    newTag: v0.1.1@sha256:d616331a99184d42f7471eac5ae257192e7065bb684ad115cc95c2e76cfbc2d1
 namespace: kubernetes-mcp
 resources:
   - namespace.yml
