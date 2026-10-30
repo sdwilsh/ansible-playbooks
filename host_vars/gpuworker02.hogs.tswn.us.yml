@@ -7,10 +7,10 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.121/23
 
-# The GPU holds 32.66 GiB of GTT at its highest.  The kubelet does not
-# read GTT pages, so this value is the 38 GiB limit of this node.  The
-# scheduler then sees 79.07 GiB.
-k3s_system_reserved_memory: 38Gi
+# The GPU holds 78.88 GiB of GTT at its highest.  The kubelet does not
+# read GTT pages, so this value is the 84 GiB limit of this node.  The
+# scheduler then sees 33.07 GiB.
+k3s_system_reserved_memory: 84Gi
 
 kairos__disks_to_format: []
 
@@ -20,27 +20,27 @@ kairos__disks_to_format: []
 # | Item                  |    GiB | Source            |
 # | --------------------- | -----: | ----------------- |
 # | common floor          |   7.07 | group vars        |
-# | `local-llm` container |  80.00 | group B patch     |
-# | GTT for group B       |  38.00 | limit             |
-# | **total**             | 125.07 |                   |
-# | free for other work   |   0.00 | 125.07 less total |
+# | `local-llm` container |  24.00 | group B patch     |
+# | GTT for group B       |  84.00 | limit             |
+# | **total**             | 115.07 |                   |
+# | free for other work   |  10.00 | 125.07 less total |
 #
 # | Item        | measured | limit | margin |
 # | ----------- | -------: | ----: | -----: |
-# | group B GTT |    32.66 | 38.00 |   5.34 |
+# | group B GTT |    78.88 | 84.00 |   5.12 |
 #
-# 38 GiB is 9961472 pages.  With gufo v0.21.0.0 the GTT peaks at 32.66 GiB
-# with this config.  The margin must be at least 4 GiB plus one RAM-cache
-# segment, or the Q8 cache gets no memory.
+# 84 GiB is 22020096 pages.  gufo v0.28.0 puts the weights of a model in GTT
+# when 4 GiB stays free after them.  With 38 GiB, Q8 did not get the GTT
+# for its session state, and it did not start.  With 84 GiB, both weight
+# sets fit, and the GTT peaks at 78.88 GiB.  The weights then use no
+# container memory, so the container needs 24 GiB.
 #
-# The container limit gives the Q8 cache 5,930,110,976 bytes, so it has
-# a 6 GiB setting.  Q4 needs no cache, but gufo has no off value (0 means
-# auto).  So Q4 has 512 MiB, the smallest sensible value.  Q4 also has the
-# image projector, because gufo loads a projector beside the model.
+# Q4 has no RAM cache, and Q8 has 6 GiB.  Q4 also has the image projector,
+# because gufo loads a projector beside the model.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.
 # These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
   - amdgpu.lockup_timeout=10000,180000,10000,10000
-  - ttm.pages_limit=9961472
+  - ttm.pages_limit=22020096

@@ -20,14 +20,14 @@ spec:
           readinessProbe:
             periodSeconds: 19
             timeoutSeconds: 14
-          # Three servers share this limit.  RAM caches: 512 MiB (Q4), 6 GiB
-          # (Q8).  GTT peaks at 32.66 GiB.  The request fits the 79.07 GiB of
-          # allocatable memory.  See `group_vars/kairos_gpuworker.yml`.
+          # Three servers share this limit.  The weights are in GTT, so the
+          # container holds the 6 GiB Q8 RAM cache and the file cache.  The
+          # request fits the 33.07 GiB of allocatable memory.
           resources:
             limits:
-              memory: 80Gi
+              memory: 24Gi
             requests:
-              memory: 72Gi
+              memory: 20Gi
           startupProbe:
             failureThreshold: 240
             periodSeconds: 19

@@ -20,7 +20,7 @@ spec:
           readinessProbe:
             periodSeconds: 11
             timeoutSeconds: 6
-          # The cgroup peak is 11.93 GiB with a 4 GiB RAM cache.  A 15 GiB cache
+          # The cgroup peak is 11.48 GiB with a 4 GiB RAM cache.  A 15 GiB cache
           # does not fit with DSpark.  The request fits the 19.07 GiB of
           # allocatable memory, beside the DaemonSets.
           resources:
