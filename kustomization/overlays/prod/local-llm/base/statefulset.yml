@@ -124,6 +124,9 @@ spec:
       priorityClassName: critical-application-infra
       securityContext:
         fsGroup: 1000
+        # DeepSeek rejects a cache file that has group bits.  The default
+        # policy adds them at each start.
+        fsGroupChangePolicy: OnRootMismatch
         runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
