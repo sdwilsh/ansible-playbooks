@@ -28,12 +28,13 @@ fetch() {
   # The network policy has not taken effect yet.  "--retry-all-errors"
   # covers this.  "--create-dirs" makes the subdirectory; curl does not
   # make it on its own.
+  # BusyBox `wc -c` reads all of a file.  `stat` reads only its size.
   before=none
-  [ ! -f "/models/$f" ] || before=$(wc -c < "/models/$f")
+  [ ! -f "/models/$f" ] || before=$(stat -c %s "/models/$f")
   curl -fsS --retry 20 --retry-all-errors --retry-delay 10 \
     --max-time 43200 --speed-limit 1024 --speed-time 300 \
     --create-dirs -C - -o "/models/$f" "$url"
-  after=$(wc -c < "/models/$f")
+  after=$(stat -c %s "/models/$f")
 
   headers=$(curl -fsSI "$url" | tr -d '\r' | tr '[:upper:]' '[:lower:]')
   want=$(echo "$headers" |
@@ -53,7 +54,7 @@ fetch() {
 
   # A git hash has 40 digits and covers a header and the file.
   if [ "${#want}" -eq 40 ]; then
-    got=$({ printf 'blob %s\0' "$(wc -c < "/models/$f")"; cat "/models/$f"; } |
+    got=$({ printf 'blob %s\0' "$(stat -c %s "/models/$f")"; cat "/models/$f"; } |
       sha1sum | cut -d' ' -f1)
   else
     got=$(sha256sum "/models/$f" | cut -d' ' -f1)
