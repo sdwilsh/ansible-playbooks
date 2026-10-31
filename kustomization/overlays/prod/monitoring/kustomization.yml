@@ -59,7 +59,7 @@ images:
   - name: docker.io/grafana/alloy
     newTag: v1.21.3@sha256:8ab871206bd2d8f89277f53abffee5f452a293980788d52f85fa183a87a505a4
   - name: postgres
-    newTag: 18@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+    newTag: 18@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
   - name: registry.k8s.io/kube-state-metrics/kube-state-metrics
     newTag: v2.20.0@sha256:42cfe3723a5f058171c627537fb57a3ea0f26e4380fa18555a95cb1a1b4cfc5b
   - name: registry.k8s.io/prometheus-adapter/prometheus-adapter
