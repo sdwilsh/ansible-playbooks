@@ -7,10 +7,10 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.121/23
 
-# The GPU holds 78.88 GiB of GTT at its highest.  The kubelet does not
-# read GTT pages, so this value is the 84 GiB limit of this node.  The
-# scheduler then sees 33.07 GiB.
-k3s_system_reserved_memory: 84Gi
+# The GPU holds 81.99 GiB of GTT at its highest.  The kubelet does not
+# read GTT pages, so this value is the 88 GiB limit of this node.  The
+# scheduler then sees 29.07 GiB.
+k3s_system_reserved_memory: 88Gi
 
 kairos__disks_to_format: []
 
@@ -21,19 +21,25 @@ kairos__disks_to_format: []
 # | --------------------- | -----: | ----------------- |
 # | common floor          |   7.07 | group vars        |
 # | `local-llm` container |  24.00 | group B patch     |
-# | GTT for group B       |  84.00 | limit             |
-# | **total**             | 115.07 |                   |
-# | free for other work   |  10.00 | 125.07 less total |
+# | GTT for group B       |  88.00 | limit             |
+# | **total**             | 119.07 |                   |
+# | free for other work   |   6.00 | 125.07 less total |
 #
-# | Item        | measured | limit | margin |
-# | ----------- | -------: | ----: | -----: |
-# | group B GTT |    78.88 | 84.00 |   5.12 |
+# | Item                  | measured | limit | margin |
+# | --------------------- | -------: | ----: | -----: |
+# | Q4, Q8 and ASR        |    78.88 |       |        |
+# | EmbeddingGemma 2      |     3.11 |       |        |
+# | group B GTT           |    81.99 | 88.00 |   6.01 |
 #
-# 84 GiB is 22020096 pages.  gufo v0.28.0 puts the weights of a model in GTT
+# 88 GiB is 23068672 pages.  gufo v0.28.0 puts the weights of a model in GTT
 # when 4 GiB stays free after them.  With 38 GiB, Q8 did not get the GTT
 # for its session state, and it did not start.  With 84 GiB, both weight
 # sets fit, and the GTT peaks at 78.88 GiB.  The weights then use no
 # container memory, so the container needs 24 GiB.
+#
+# EmbeddingGemma 2 holds 1.10 GiB of GTT when it is ready.  The first image
+# and the first audio request add their encoders, for 3.11 GiB.  At 88 GiB,
+# the margin is larger than the 5.12 GiB margin before this server.
 #
 # Q4 has no RAM cache, and Q8 has 6 GiB.  Q4 also has the image projector,
 # because gufo loads a projector beside the model.
@@ -43,4 +49,4 @@ kairos__disks_to_format: []
 # These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
   - amdgpu.lockup_timeout=10000,180000,10000,10000
-  - ttm.pages_limit=22020096
+  - ttm.pages_limit=23068672
