@@ -15,14 +15,18 @@ spec:
                 configMapKeyRef:
                   key: MODELS
                   name: local-llm-models-configmap
-          # check-servers.sh asks three servers in sequence.  The rule is
+            # The GPU maps 8 compute queues for all processes together.  Each
+            # server holds 2 queues at a cap of 1, so the 4 servers fit.
+            - name: GPU_MAX_HW_QUEUES
+              value: "1"
+          # check-servers.sh asks four servers in sequence.  The rule is
           # timeoutSeconds >= 4 * N + 2, periodSeconds >= timeoutSeconds + 5.
           readinessProbe:
-            periodSeconds: 19
-            timeoutSeconds: 14
-          # Three servers share this limit.  The weights are in GTT, so the
+            periodSeconds: 23
+            timeoutSeconds: 18
+          # Four servers share this limit.  The weights are in GTT, so the
           # container holds the 6 GiB Q8 RAM cache and the file cache.  The
-          # request fits the 33.07 GiB of allocatable memory.
+          # request fits the 29.07 GiB of allocatable memory.
           resources:
             limits:
               memory: 24Gi
@@ -30,8 +34,8 @@ spec:
               memory: 20Gi
           startupProbe:
             failureThreshold: 240
-            periodSeconds: 19
-            timeoutSeconds: 14
+            periodSeconds: 23
+            timeoutSeconds: 18
       initContainers:
         - name: fetch-model
           env:

@@ -13,3 +13,5 @@ spec:
               name: model-api2
             - containerPort: 8082
               name: model-api3
+            - containerPort: 8083
+              name: model-api4

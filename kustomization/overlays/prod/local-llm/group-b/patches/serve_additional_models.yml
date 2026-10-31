@@ -13,3 +13,7 @@ spec:
       port: 8082
       protocol: TCP
       targetPort: model-api3
+    - name: model-api4
+      port: 8083
+      protocol: TCP
+      targetPort: model-api4
