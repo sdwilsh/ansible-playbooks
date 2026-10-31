@@ -390,6 +390,7 @@
       ]
     },
     {
+      "allowedVersions": "/^v?\\d+\\.\\d+\\.[1-9]\\d*$/",
       "description": "Group for all Longhorn updates",
       "groupName": "longhorn",
       "matchPackageNames": [
