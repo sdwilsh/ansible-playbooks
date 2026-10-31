@@ -12,6 +12,8 @@ spec:
           protocol: TCP
         - port: model-api3
           protocol: TCP
+        - port: model-api4
+          protocol: TCP
       to:
         - namespaceSelector:
             matchLabels:
