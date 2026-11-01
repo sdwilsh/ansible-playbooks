@@ -168,6 +168,8 @@ objects:
     person:
       min_score: 0.6
       threshold: 0.8
+  genai:
+    enabled: true
   track:
     - amazon
     - bird
@@ -194,6 +196,9 @@ record:
   detections:
     retain: {}
     pre_capture: 10
+review:
+  genai:
+    enabled: true
 semantic_search:
   enabled: true
   model: embeddings
