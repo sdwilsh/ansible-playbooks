@@ -39,9 +39,18 @@ cameras:
             - detect
     motion:
       mask:
-        - 0.684,0,1,0,1,0.097,0.684,0.097
-        - 0.672,0.654,0.659,0.815,0.645,1,0.702,1,0.718,0.831,0.727,0.649,0.731,0.475,0.734,0.292,0.72,0.138,0.707,0,0.649,0,0.67,0.304,0.672,0.481
-        - 0.367,0.405,0,0.374,0,0,0.46,0.003,0.503,0.063,0.507,0.225,0.365,0.223
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.684,0,1,0,1,0.097,0.684,0.097
+        motion_mask_2:
+          friendly_name: Motion Mask 2
+          enabled: true
+          coordinates: 0.672,0.654,0.659,0.815,0.645,1,0.702,1,0.718,0.831,0.727,0.649,0.731,0.475,0.734,0.292,0.72,0.138,0.707,0,0.649,0,0.67,0.304,0.672,0.481
+        motion_mask_3:
+          friendly_name: Motion Mask 3
+          enabled: true
+          coordinates: 0.367,0.405,0,0.374,0,0,0.46,0.003,0.503,0.063,0.507,0.225,0.365,0.223
   Front_North_East:
     detect:
       enabled: true
@@ -60,13 +69,26 @@ cameras:
             - detect
     motion:
       mask:
-        - 0.684,0,1,0,1,0.097,0.684,0.097
-        - 0.753,0.385,0.667,0.37,0.522,0.221,0.516,0,0.814,0
-        - 0,0.183,0.434,0.093,0.517,0.084,0.515,0,0,0
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.684,0,1,0,1,0.097,0.684,0.097
+        motion_mask_2:
+          friendly_name: Motion Mask 2
+          enabled: true
+          coordinates: 0.753,0.385,0.667,0.37,0.522,0.221,0.516,0,0.814,0
+        motion_mask_3:
+          friendly_name: Motion Mask 3
+          enabled: true
+          coordinates: 0,0.183,0.434,0.093,0.517,0.084,0.515,0,0,0
     objects:
       filters:
         person:
-          mask: 0.758,0.296,0.669,0.294,0.452,0,0.757,0
+          mask:
+            object_mask_1:
+              friendly_name: Object Mask 1 (person)
+              enabled: true
+              coordinates: 0.758,0.296,0.669,0.294,0.452,0,0.757,0
   # North_Gate:
   #   detect:
   #     enabled: true
@@ -179,4 +201,4 @@ snapshots:
   enabled: true
 ui:
   time_format: 24hour
-version: 0.17-0
+version: 0.18-0
