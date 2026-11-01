@@ -13,6 +13,7 @@ components:
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
@@ -41,6 +42,10 @@ patches:
       kind: StatefulSet
       name: frigate-statefulset
   - path: patches/frigate/add_frigate_env_vars.yml
+    target:
+      kind: StatefulSet
+      name: frigate-statefulset
+  - path: patches/frigate/add_traefik_client_label.yml
     target:
       kind: StatefulSet
       name: frigate-statefulset

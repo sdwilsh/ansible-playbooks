@@ -94,6 +94,17 @@ detectors:
     device: usb
 face_recognition:
   enabled: true
+genai:
+  bifrost:
+    provider: openai
+    base_url: https://bifrost.tswn.us/v1
+    api_key: "{FRIGATE_BIFROST_API_KEY}"
+    model: Qwen3.8-27B-Q4_K_XL
+    provider_options:
+      context_size: 131072
+    roles:
+      - chat
+      - descriptions
 go2rtc:
   rtsp:
     username: frigate

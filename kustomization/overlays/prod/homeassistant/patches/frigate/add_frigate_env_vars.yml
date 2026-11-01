@@ -8,6 +8,11 @@ spec:
     spec:
       containers:
         - env:
+            - name: FRIGATE_BIFROST_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frigate-secret
+                  key: bifrost_api_key
             - name: FRIGATE_MQTT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -23,4 +28,6 @@ spec:
                 secretKeyRef:
                   name: frigate-secret
                   key: api_key
+            - name: TZ
+              value: America/Los_Angeles
           name: frigate

@@ -1,0 +1,3 @@
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1traefik-client
+  value: "true"
