@@ -86,3 +86,4 @@ resources:
   - ingress.yml
   - ingressroutetcp.yml
   - networkpolicy/allow-to-cameras-from-frigate.yml
+  - networkpolicy/allow-to-embeddings-from-frigate.yml

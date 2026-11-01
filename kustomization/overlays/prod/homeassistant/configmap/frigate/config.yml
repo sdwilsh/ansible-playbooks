@@ -118,9 +118,8 @@ face_recognition:
   enabled: true
 genai:
   embeddings:
-    provider: openai
-    base_url: https://bifrost.tswn.us/v1
-    api_key: "{FRIGATE_BIFROST_API_KEY}"
+    provider: llamacpp
+    base_url: http://group-b-local-llm-svc.local-llm.svc.cluster.local:8083
     model: embeddinggemma-2
     roles:
       - embeddings

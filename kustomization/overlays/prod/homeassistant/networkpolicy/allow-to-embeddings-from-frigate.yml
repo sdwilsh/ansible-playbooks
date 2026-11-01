@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-embeddings-from-frigate-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: model-api4
+          protocol: TCP
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: local-llm
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: local-llm-group-b
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: frigate
+  policyTypes:
+    - Egress

@@ -20,5 +20,6 @@ images:
 namespace: local-llm
 resources:
   - namespace.yml
+  - networkpolicy/allow-from-frigate.yml
   - ./group-a
   - ./group-b
