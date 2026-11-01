@@ -95,7 +95,14 @@ detectors:
 face_recognition:
   enabled: true
 genai:
-  bifrost:
+  embeddings:
+    provider: openai
+    base_url: https://bifrost.tswn.us/v1
+    api_key: "{FRIGATE_BIFROST_API_KEY}"
+    model: embeddinggemma-2
+    roles:
+      - embeddings
+  text_and_image:
     provider: openai
     base_url: https://bifrost.tswn.us/v1
     api_key: "{FRIGATE_BIFROST_API_KEY}"
@@ -167,8 +174,9 @@ record:
     pre_capture: 10
 semantic_search:
   enabled: true
-  model_size: small
+  model: embeddings
 snapshots:
   enabled: true
 ui:
   time_format: 24hour
+version: 0.17-0
