@@ -8,6 +8,10 @@ components:
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
+configMapGenerator:
+  - name: kubernetes-mcp-configmap
+    files:
+      - configmap/server.toml
 images:
   - name: ghcr.io/containers/kubernetes-mcp-server
     newTag: v0.0.69@sha256:1da9d62ad0c008a6cadcf2718c86c2e2d18753ca1d9f1f3313068980794b24f2

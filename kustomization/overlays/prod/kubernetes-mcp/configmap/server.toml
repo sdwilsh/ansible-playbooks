@@ -1,0 +1,9 @@
+port = "8080"
+# The pod network namespace holds only loopback and the pod IP, so binding
+# every address exposes the same surface as binding the pod IP.
+bind_address = "0.0.0.0"
+# The `config` toolset shows the kubeconfig.  The server reads the cluster
+# from inside a pod, so that toolset has no use here.
+toolsets = ["core"]
+read_only = true
+disable_destructive = true

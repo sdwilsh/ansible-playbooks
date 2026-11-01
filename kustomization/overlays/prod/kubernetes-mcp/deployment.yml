@@ -18,31 +18,8 @@ spec:
       automountServiceAccountToken: true
       containers:
         - args:
-            # `--read-only` keeps only the tools that report
-            # `readOnlyHint: true`.  It removes `pods_exec`, `pods_run`,
-            # `pods_delete`, `resources_create_or_update`, `resources_delete`
-            # and `resources_scale`.
-            - --read-only
-            # This flag removes the tools that report `destructiveHint: true`.
-            # `--read-only` already removes all of them.  A later version can
-            # mark a read tool as destructive.  This flag then removes it.
-            - --disable-destructive
-            # The cluster has one context.  This flag makes the server ignore
-            # any other context.  It removes no tool today.
-            - --disable-multi-cluster
-            # The `config` toolset shows the kubeconfig.  The server reads the
-            # cluster from inside a pod, so that toolset has no use here.
-            - --toolsets
-            - core
-            - --port
-            - "8080"
-            - --bind-address
-            - $(POD_IP)
-          env:
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
+            - --config
+            - /etc/kubernetes-mcp/server.toml
           image: ghcr.io/containers/kubernetes-mcp-server
           livenessProbe:
             failureThreshold: 3
@@ -78,6 +55,14 @@ spec:
             runAsUser: 65534
             seccompProfile:
               type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/kubernetes-mcp
+              name: config
+              readOnly: true
       enableServiceLinks: false
       priorityClassName: application-infra
       serviceAccountName: kubernetes-mcp
+      volumes:
+        - configMap:
+            name: kubernetes-mcp-configmap
+          name: config
