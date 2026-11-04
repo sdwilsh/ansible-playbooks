@@ -20,7 +20,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:bedd34c910e2a5ce9836813d16444af449d7fe07a29136d59f34e861e8e660c5
   - name: ghcr.io/atuinsh/atuin
-    newTag: 18.24.4@sha256:1cb33a7126b748e0ad6d18d0f52e9bb805a98a196feccd597bf66544f58cf68e
+    newTag: 18.24.5@sha256:8064b33c2e92705159da2e69ee8f9c147f1de87dc66d21b6d4834abd10256a7d
   - name: postgres
     newTag: 18@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
 namespace: atuin
