@@ -14,7 +14,7 @@ configMapGenerator:
       - configmap/server.toml
 images:
   - name: ghcr.io/containers/kubernetes-mcp-server
-    newTag: v0.1.1@sha256:d616331a99184d42f7471eac5ae257192e7065bb684ad115cc95c2e76cfbc2d1
+    newTag: v0.1.2@sha256:c289505b06079d7f265a6fef977ce1abbfbbb4271772db17db5b58edbf44c255
 namespace: kubernetes-mcp
 resources:
   - namespace.yml
