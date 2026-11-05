@@ -217,7 +217,6 @@
         "patch"
       ],
       "matchPackageNames": [
-        "actions/checkout",
         "alloy",
         "alpine",
         "argoproj/argo-cd",
@@ -290,6 +289,39 @@
       ],
       "schedule": [
         "after 4pm"
+      ]
+    },
+    {
+      "automerge": true,
+      "automergeType": "branch",
+      "description": "Build inputs and tooling.  CI builds and lints the branch, and each deploy is a separate update.  Gufo stays manual because each release gets a benchmark.",
+      "matchFileNames": [
+        ".devcontainer/**",
+        "images/**"
+      ],
+      "matchPackageNames": [
+        "!gufo-org/gufo"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "automerge": true,
+      "automergeType": "branch",
+      "description": "GitHub's own actions.  Third-party actions stay manual because the image workflows give them write tokens.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "actions/*"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
       ]
     },
     {
