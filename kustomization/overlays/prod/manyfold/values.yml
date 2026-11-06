@@ -111,7 +111,7 @@ initContainers:
       - name: manyfold-tmp
         mountPath: /tmp
   - name: wait-for-manyfold-pg-is-ready
-    image: postgres@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
+    image: postgres
     command:
       - sh
       - -c

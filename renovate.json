@@ -320,6 +320,13 @@
       ]
     },
     {
+      "description": "Each kustomization pins its images in its images list, and kustomize applies the pins to the chart output.  A pin in a Helm values file only duplicates it.",
+      "enabled": false,
+      "matchManagers": [
+        "helm-values"
+      ]
+    },
+    {
       "enabled": false,
       "groupName": "no-pin",
       "matchUpdateTypes": [
