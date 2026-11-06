@@ -75,6 +75,7 @@ k3s:
 {% for arg in hostvars[host].k3s_kubelet_args | default([]) %}
     - --kubelet-arg={{ arg | replace('%', '%%') }}
 {% endfor %}
+    - --kubelet-arg=volume-plugin-dir={{ hostvars[host].k3s_volume_plugin_dir }}
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
 {% for label in hostvars[host].k3s_node_labels | default([]) %}
     - --node-label={{ label }}
@@ -95,6 +96,7 @@ k3s:
 {% for tls_san in hostvars[host].k3s_controlplane_san %}
     - --tls-san={{ tls_san }}
 {% endfor %}
+    - --kube-controller-manager-arg=flex-volume-plugin-dir={{ hostvars[host].k3s_volume_plugin_dir }}
 {% else %}
 # Note that Kairos does not update this after first-install.  The service unit is managed by ansible.
 # See k3s-agent.service.j2
@@ -106,6 +108,7 @@ k3s-agent:
 {% for arg in hostvars[host].k3s_kubelet_args | default([]) %}
     - --kubelet-arg={{ arg | replace('%', '%%') }}
 {% endfor %}
+    - --kubelet-arg=volume-plugin-dir={{ hostvars[host].k3s_volume_plugin_dir }}
     - --node-ip={{ hostvars[host].common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}
 {% for label in hostvars[host].k3s_node_labels | default([]) %}
     - --node-label={{ label }}

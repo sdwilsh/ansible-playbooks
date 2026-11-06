@@ -18,6 +18,11 @@ common__nameservers:
 # `LimitMEMLOCK` for the k3s unit.  8388608 is the value that appears to be the default.
 k3s_limit_memlock: 8388608
 
+# Kairos makes /usr/libexec read-only.  The default FlexVolume dir of the
+# kubelet and kube-controller-manager is in /usr/libexec.  Each logs an error
+# at start when it cannot create the dir.
+k3s_volume_plugin_dir: /var/lib/kubelet/volumeplugins
+
 kairos_managed_networks:
   - name: transit
     vlan_id: 2

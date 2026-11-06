@@ -12,6 +12,7 @@ ExecStart=/usr/bin/k3s server \
 {% for arg in k3s_kubelet_args | default([]) %}
     --kubelet-arg={{ arg | replace('%', '%%') }} \
 {% endfor %}
+    --kubelet-arg=volume-plugin-dir={{ k3s_volume_plugin_dir }} \
     --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }} \
 {% for label in k3s_node_labels | default([]) %}
     --node-label={{ label }} \
@@ -32,6 +33,7 @@ ExecStart=/usr/bin/k3s server \
 {% for tls_san in k3s_controlplane_san %}
     --tls-san={{ tls_san }} \
 {% endfor %}
+    --kube-controller-manager-arg=flex-volume-plugin-dir={{ k3s_volume_plugin_dir }} \
     --kube-apiserver-arg=allow-privileged=true
 LimitMEMLOCK={{ k3s_limit_memlock }}
 TasksMax=infinity

@@ -9,6 +9,7 @@ ExecStart=
 ExecStart=/usr/bin/k3s agent \
     --flannel-iface=services{% for arg in k3s_kubelet_args | default([]) %} \
     --kubelet-arg={{ arg | replace('%', '%%') }}{% endfor %} \
+    --kubelet-arg=volume-plugin-dir={{ k3s_volume_plugin_dir }} \
     --node-ip={{ common__ip_addresses | ansible.utils.ipaddr('10.11.0.0/23') | ansible.utils.ipaddr('address') | first }}{% for label in k3s_node_labels | default([]) %} \
     --node-label={{ label }}{% endfor %} \
     --node-name={{ inventory_hostname_short }}{% for taint in k3s_node_taints | default([]) %} \
