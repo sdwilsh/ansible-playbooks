@@ -6,6 +6,7 @@ kind: Component
 
 resources:
   - application/3d-printing.yml
+  - application/argo-rollouts.yml
   - application/argocd-mcp.yml
   - application/argocd.yml
   - application/atuin.yml
