@@ -1,6 +1,6 @@
 # The commit is the commit of the tag `GUFO_VERSION`.  Renovate changes both lines.
-ARG GUFO_VERSION=v0.30.0
-ARG GUFO_COMMIT=f801b8cac07428191d3fb8923926f31f13dde795
+ARG GUFO_VERSION=v0.31.0
+ARG GUFO_COMMIT=be7bd3be303f6d0f6c24f8ef544d0798b4281684
 
 FROM alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS builder
 
