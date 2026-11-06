@@ -1,0 +1,12 @@
+---
+# Group B labels each Pod `local-llm-group-b`.  A smoke test Pod with that
+# label would match the Service and the model NetworkPolicies.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: local-llm-smoke-test

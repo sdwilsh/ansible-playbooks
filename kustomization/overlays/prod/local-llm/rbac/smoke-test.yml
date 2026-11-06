@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: local-llm-smoke-test
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: local-llm-smoke-test-role
+rules:
+  - apiGroups:
+      - apps
+    resourceNames:
+      - group-a-local-llm-statefulset
+      - group-b-local-llm-statefulset
+    resources:
+      - statefulsets/scale
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: local-llm-smoke-test-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: local-llm-smoke-test-role
+subjects:
+  - kind: ServiceAccount
+    name: local-llm-smoke-test

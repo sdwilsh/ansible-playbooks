@@ -1,0 +1,58 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-smoke-test-networkpolicy
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              hogs.tswn.us/local-llm-smoke-test: "true"
+      ports:
+        - port: model-api
+          protocol: TCP
+        - port: model-api2
+          protocol: TCP
+        - port: model-api3
+          protocol: TCP
+        - port: model-api4
+          protocol: TCP
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - local-llm
+          - local-llm-group-b
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-models-from-smoke-test-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: model-api
+          protocol: TCP
+        - port: model-api2
+          protocol: TCP
+        - port: model-api3
+          protocol: TCP
+        - port: model-api4
+          protocol: TCP
+      to:
+        - podSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - local-llm
+                  - local-llm-group-b
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/local-llm-smoke-test: "true"
+  policyTypes:
+    - Egress

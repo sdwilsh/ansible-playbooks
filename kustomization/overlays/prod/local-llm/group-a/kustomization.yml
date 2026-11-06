@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../base
+  - ../smoke-test
 configMapGenerator:
   - name: local-llm-models-configmap
     files:
@@ -18,3 +19,20 @@ patches:
     target:
       kind: StatefulSet
       name: local-llm-statefulset
+replacements:
+  - source:
+      kind: StatefulSet
+      name: group-a-local-llm-statefulset
+    targets:
+      - fieldPaths:
+          - spec.template.spec.containers.[name=smoke-test].env.[name=STATEFULSET].value
+        select:
+          kind: Job
+  - source:
+      kind: Service
+      name: group-a-local-llm-svc
+    targets:
+      - fieldPaths:
+          - spec.template.spec.containers.[name=smoke-test].env.[name=SERVICE].value
+        select:
+          kind: Job
