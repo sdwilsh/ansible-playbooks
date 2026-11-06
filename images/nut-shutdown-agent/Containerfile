@@ -22,7 +22,7 @@ RUN apk add --no-cache \
     util-linux
 
 COPY --from=builder /usr/local/bin/kubectl /usr/local/bin/kubectl
-COPY monitor.sh shutdown.sh /
-RUN chmod +x /monitor.sh /shutdown.sh
+COPY healthy.sh monitor.sh shutdown.sh /
+RUN chmod +x /healthy.sh /monitor.sh /shutdown.sh
 
 ENTRYPOINT ["/monitor.sh"]

@@ -70,7 +70,10 @@ check_threshold() {
 echo "Monitoring ${ups_target} for node ${NODE_NAME}..."
 
 while true; do
+    # `healthy.sh` reads these two files, so keep the paths the same in both.
+    touch /tmp/nut-loop-heartbeat
     if data=$(upsc "${ups_target}" 2>/dev/null); then
+        touch /tmp/nut-heartbeat
         status=$(extract "${data}" ups.status)
         charge=$(extract "${data}" battery.charge)
         runtime=$(extract "${data}" battery.runtime)
