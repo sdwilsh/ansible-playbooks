@@ -174,12 +174,12 @@ build-mack-kairos platform="linux/amd64":
     #!/usr/bin/env bash
     set -eou pipefail
 
-    GIT_SHA=unknown
+    MACK_VERSION=unknown
     if [[ -z "$(git status -s)" ]]; then
-        GIT_SHA=$(git rev-parse --short HEAD)
+        MACK_VERSION=$(git rev-parse --short HEAD)
     fi
 
-    podman build images/mack --target mack-kairos --platform={{ platform }} --build-arg GIT_SHA="${GIT_SHA}" --tag mack-kairos:latest
+    podman build images/mack --target mack-kairos --platform={{ platform }} --build-arg MACK_VERSION="${MACK_VERSION}" --tag mack-kairos:latest
 
 # Builds a bootable ISO that installs a new Kairos node.
 [group('images')]
