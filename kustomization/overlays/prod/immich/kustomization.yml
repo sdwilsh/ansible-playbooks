@@ -49,6 +49,10 @@ patches:
     target:
       kind: Deployment
       name: immich-server
+  - path: patches/set_server_strategy.yml
+    target:
+      kind: Deployment
+      name: immich-server
   - path: patches/restrict_valkey.yml
     target:
       kind: Deployment

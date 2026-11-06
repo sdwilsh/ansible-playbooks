@@ -1,0 +1,7 @@
+---
+# The data volume is ReadWriteOnce.  A rolling update can start the new pod on
+# another node, where the volume cannot attach while the old pod holds it.
+- op: replace
+  path: /spec/strategy
+  value:
+    type: Recreate
