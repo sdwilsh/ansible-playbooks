@@ -23,9 +23,11 @@ ansible-playbook tasks.yml -l localhost
 popd
 
 # The ssh_hardening role runs with ssh_server_hardening disabled, so it
-# writes no sshd config.  Ship the drop-in directly.
+# writes no sshd config.  Ship the drop-ins directly.
 rsync -rvK /ctx/sshd/ /
-chmod 0600 /etc/ssh/sshd_config.d/50-no-password-auth.conf
+chmod 0600 \
+    /etc/ssh/sshd_config.d/04-no-root-login.conf \
+    /etc/ssh/sshd_config.d/50-no-password-auth.conf
 
 # Cleanup
 rm -rf ~/.ansible
