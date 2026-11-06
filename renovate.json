@@ -276,6 +276,7 @@
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/marinatedconcrete/devcontainer-base",
+        "ghcr.io/sdwilsh/nut-shutdown-agent",
         "postgres",
         "rocm/k8s-device-plugin"
       ],
