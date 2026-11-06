@@ -350,13 +350,20 @@
         "pinDigest"
       ],
       "matchPackageNames": [
-        "forgejo",
         "ghcr.io/marinatedconcrete/kairos-fedora",
         "ghcr.io/sdwilsh/mack-kairos",
-        "node-feature-discovery",
-        "prometheus-adapter",
         "quay.io/fedora/fedora-bootc"
       ]
+    },
+    {
+      "description": "A helmCharts version cannot hold a digest.  A pin of an OCI chart fails the whole pin branch.",
+      "matchDepTypes": [
+        "HelmChart"
+      ],
+      "matchManagers": [
+        "kustomize"
+      ],
+      "pinDigests": false
     },
     {
       "automerge": true,
