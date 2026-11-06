@@ -221,13 +221,11 @@
         "alpine",
         "argoproj/argo-cd",
         "cert-manager/cert-manager",
-        "code.forgejo.org/forgejo/runner",
         "deluan/navidrome",
         "docker.io/grafana/alloy",
         "eclipse-mosquitto",
         "forgejo",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
-        "ghcr.io/paperless-ngx/paperless-ngx",
         "ghcr.io/squat/generic-device-plugin",
         "gotenberg/gotenberg",
         "grafana",
@@ -278,9 +276,7 @@
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/marinatedconcrete/devcontainer-base",
-        "ghcr.io/servercontainers/samba",
         "ghcr.io/tensorchord/cloudnative-vectorchord",
-        "lscr.io/linuxserver/code-server",
         "postgres",
         "rocm/k8s-device-plugin"
       ],
@@ -325,24 +321,6 @@
       ]
     },
     {
-      "automerge": true,
-      "automergeType": "branch",
-      "description": "Group for all just automergeable updates",
-      "groupName": "just-automerge",
-      "matchPackageNames": [
-        "casey/just"
-      ],
-      "matchUpdateTypes": [
-        "digest",
-        "major",
-        "minor",
-        "patch"
-      ],
-      "schedule": [
-        "after 4pm on friday"
-      ]
-    },
-    {
       "enabled": false,
       "groupName": "no-pin",
       "matchUpdateTypes": [
@@ -374,8 +352,7 @@
         "11notes/traefik",
         "ghcr.io/authelia/authelia",
         "maxlerebourg/crowdsec-bouncer-traefik-plugin",
-        "traefik/traefik",
-        "traefik"
+        "traefik/traefik"
       ],
       "matchUpdateTypes": [
         "digest",
@@ -444,8 +421,7 @@
         "11notes/traefik",
         "ghcr.io/authelia/authelia",
         "maxlerebourg/crowdsec-bouncer-traefik-plugin",
-        "traefik/traefik",
-        "traefik"
+        "traefik/traefik"
       ],
       "matchUpdateTypes": [
         "major"
@@ -464,12 +440,6 @@
         "ghcr.io/immich-app/immich-server",
         "immich"
       ]
-    },
-    {
-      "matchPackageNames": [
-        "quay.io/kairos/kairos-ubuntu-22-lts"
-      ],
-      "versioning": "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-k3sv\\d+\\.\\d+\\.\\d+\\+k3s\\d+$"
     },
     {
       "groupName": "postgres-3d-printing",
@@ -649,17 +619,6 @@
         "digest",
         "minor",
         "patch"
-      ],
-      "schedule": [
-        "after 4pm on friday"
-      ]
-    },
-    {
-      "automerge": true,
-      "automergeType": "branch",
-      "groupName": "renovate",
-      "matchPackageNames": [
-        "renovatebot/renovate"
       ],
       "schedule": [
         "after 4pm on friday"
