@@ -1,0 +1,73 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: local-llm-smoke-test-analysistemplate
+spec:
+  metrics:
+    - name: smoke-test
+      provider:
+        job:
+          spec:
+            activeDeadlineSeconds: 1800
+            backoffLimit: 0
+            template:
+              metadata:
+                labels:
+                  app.kubernetes.io/name: local-llm-smoke-test
+                  hogs.tswn.us/api-server-client: "true"
+                  hogs.tswn.us/local-llm-smoke-test: "true"
+              spec:
+                automountServiceAccountToken: true
+                containers:
+                  - name: smoke-test
+                    # A replacement in each group sets `ROLLOUT` and `SERVICE`.
+                    command:
+                      - sh
+                      - /scripts/smoke-test.sh
+                    env:
+                      - name: MODELS
+                        valueFrom:
+                          configMapKeyRef:
+                            key: MODELS
+                            name: local-llm-models-configmap
+                      - name: ROLLOUT
+                        value: this-is-ignored-but-is-required
+                      - name: SERVICE
+                        value: this-is-ignored-but-is-required
+                    image: docker.io/curlimages/curl
+                    resources:
+                      limits:
+                        cpu: 100m
+                        memory: 64Mi
+                      requests:
+                        cpu: 10m
+                        memory: 16Mi
+                    securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                        drop:
+                          - ALL
+                      readOnlyRootFilesystem: true
+                    volumeMounts:
+                      - mountPath: /scripts
+                        name: scripts
+                        readOnly: true
+                      - mountPath: /tmp
+                        name: tmp
+                enableServiceLinks: false
+                restartPolicy: Never
+                securityContext:
+                  runAsGroup: 1000
+                  runAsNonRoot: true
+                  runAsUser: 1000
+                  seccompProfile:
+                    type: RuntimeDefault
+                serviceAccountName: local-llm-smoke-test
+                volumes:
+                  - configMap:
+                      name: local-llm-smoke-test-scripts-configmap
+                    name: scripts
+                  - emptyDir:
+                      sizeLimit: 16Mi
+                    name: tmp

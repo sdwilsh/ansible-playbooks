@@ -10,12 +10,12 @@ metadata:
   name: local-llm-smoke-test-role
 rules:
   - apiGroups:
-      - apps
+      - argoproj.io
     resourceNames:
-      - group-a-local-llm-statefulset
-      - group-b-local-llm-statefulset
+      - group-a-local-llm-rollout
+      - group-b-local-llm-rollout
     resources:
-      - statefulsets/scale
+      - rollouts/scale
     verbs:
       - get
 ---

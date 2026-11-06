@@ -1,5 +1,0 @@
----
-# The files total 54.45 GiB.  64Gi keeps 9.55 GiB free.
-- op: replace
-  path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
-  value: 64Gi

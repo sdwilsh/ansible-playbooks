@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: local-llm-rollout
+spec:
+  # The update stops and returns to the stable pod when the new pod is not
+  # ready by the deadline.  Each group sets `progressDeadlineSeconds`.
+  progressDeadlineAbort: true
+  replicas: 1
+  strategy:
+    canary:
+      # Each node has one GPU.  The old pod stops before the new pod starts.
+      maxSurge: 0
+      maxUnavailable: 1
+      steps:
+        - setWeight: 100
+        - analysis:
+            templates:
+              - templateName: local-llm-smoke-test-analysistemplate
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: local-llm-deployment
+    scaleDown: never

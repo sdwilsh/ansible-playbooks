@@ -18,40 +18,38 @@ labels:
       app.kubernetes.io/name: local-llm-group-b
 namePrefix: group-b-
 patches:
+  - path: patches/set_cache_sizes.yml
+  - path: patches/set_progress_deadline.yml
   - path: patches/add_ports.yml
     target:
-      kind: StatefulSet
-      name: local-llm-statefulset
+      kind: Deployment
+      name: local-llm-deployment
   - path: patches/pin_node.yml
     target:
-      kind: StatefulSet
-      name: local-llm-statefulset
+      kind: Deployment
+      name: local-llm-deployment
   - path: patches/set_models.yml
     target:
-      kind: StatefulSet
-      name: local-llm-statefulset
-  - path: patches/set_storage.yml
-    target:
-      kind: StatefulSet
-      name: local-llm-statefulset
+      kind: Deployment
+      name: local-llm-deployment
   - path: patches/serve_additional_models.yml
     target:
       kind: Service
       name: local-llm-svc
 replacements:
   - source:
-      kind: StatefulSet
-      name: group-b-local-llm-statefulset
+      kind: Rollout
+      name: group-b-local-llm-rollout
     targets:
       - fieldPaths:
-          - spec.template.spec.containers.[name=smoke-test].env.[name=STATEFULSET].value
+          - spec.metrics.[name=smoke-test].provider.job.spec.template.spec.containers.[name=smoke-test].env.[name=ROLLOUT].value
         select:
-          kind: Job
+          kind: AnalysisTemplate
   - source:
       kind: Service
       name: group-b-local-llm-svc
     targets:
       - fieldPaths:
-          - spec.template.spec.containers.[name=smoke-test].env.[name=SERVICE].value
+          - spec.metrics.[name=smoke-test].provider.job.spec.template.spec.containers.[name=smoke-test].env.[name=SERVICE].value
         select:
-          kind: Job
+          kind: AnalysisTemplate

@@ -11,28 +11,30 @@ configMapGenerator:
       - MODELS=configmap/models.txt
 namePrefix: group-a-
 patches:
+  - path: patches/set_cache_sizes.yml
+  - path: patches/set_progress_deadline.yml
   - path: patches/pin_node.yml
     target:
-      kind: StatefulSet
-      name: local-llm-statefulset
+      kind: Deployment
+      name: local-llm-deployment
   - path: patches/set_models.yml
     target:
-      kind: StatefulSet
-      name: local-llm-statefulset
+      kind: Deployment
+      name: local-llm-deployment
 replacements:
   - source:
-      kind: StatefulSet
-      name: group-a-local-llm-statefulset
+      kind: Rollout
+      name: group-a-local-llm-rollout
     targets:
       - fieldPaths:
-          - spec.template.spec.containers.[name=smoke-test].env.[name=STATEFULSET].value
+          - spec.metrics.[name=smoke-test].provider.job.spec.template.spec.containers.[name=smoke-test].env.[name=ROLLOUT].value
         select:
-          kind: Job
+          kind: AnalysisTemplate
   - source:
       kind: Service
       name: group-a-local-llm-svc
     targets:
       - fieldPaths:
-          - spec.template.spec.containers.[name=smoke-test].env.[name=SERVICE].value
+          - spec.metrics.[name=smoke-test].provider.job.spec.template.spec.containers.[name=smoke-test].env.[name=SERVICE].value
         select:
-          kind: Job
+          kind: AnalysisTemplate

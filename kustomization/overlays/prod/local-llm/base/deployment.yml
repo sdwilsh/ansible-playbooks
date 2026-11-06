@@ -1,14 +1,12 @@
 ---
+# The `Rollout` runs this `Pod` template.  Keep 0 replicas here.  A pod of
+# this `Deployment` takes the GPU away from the `Rollout`.
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: local-llm-statefulset
+  name: local-llm-deployment
 spec:
-  replicas: 1
-  serviceName: local-llm-svc
-  persistentVolumeClaimRetentionPolicy:
-    whenDeleted: Retain
-    whenScaled: Retain
+  replicas: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: local-llm
@@ -133,9 +131,15 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       volumes:
+        - name: disk-cache
+          persistentVolumeClaim:
+            claimName: local-llm-disk-cache-pvc
         - configMap:
             name: local-llm-scripts-configmap
           name: local-llm-scripts
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: local-llm-model-cache-pvc
         - emptyDir:
             medium: Memory
             sizeLimit: 16Mi
@@ -143,34 +147,3 @@ spec:
         - name: tmp
           emptyDir:
             sizeLimit: 2Gi
-  volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: model-cache
-        labels:
-          recurring-job.longhorn.io/source: enabled
-          recurring-job-group.longhorn.io/default: disabled
-          # olah can always rebuild this cache; a backup of it wastes
-          # backup storage.
-          recurring-job-group.longhorn.io/no-backup: enabled
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 200Gi
-        storageClassName: longhorn-ephemeral
-    # local-path does not enforce this size: the 1Gi test claim showed the
-    # whole 3.6T disk.  Each server limits its cache with --cache-disk-bytes.
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: disk-cache
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 72Gi
-        storageClassName: local-path

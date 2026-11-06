@@ -1,0 +1,9 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: local-llm-rollout
+spec:
+  # More than the 5520 s startup probe budget, with time to fetch a changed
+  # model.  A missing value is not an error.  Argo Rollouts then uses 600 s.
+  progressDeadlineSeconds: 7200

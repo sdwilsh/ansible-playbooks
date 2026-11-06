@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    recurring-job-group.longhorn.io/default: disabled
+    # olah can rebuild this cache.  A backup of it wastes backup storage.
+    recurring-job-group.longhorn.io/no-backup: enabled
+    recurring-job.longhorn.io/source: enabled
+  name: local-llm-model-cache-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-ephemeral
+---
+# Each group sets the size of each claim.  local-path does not enforce this
+# size.  A 1Gi test claim showed the whole 3.6T disk.  Each server limits its
+# cache with --cache-disk-bytes.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-llm-disk-cache-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path

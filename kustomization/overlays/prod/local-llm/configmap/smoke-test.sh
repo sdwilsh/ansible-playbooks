@@ -1,7 +1,7 @@
 #!/bin/sh
 # Ask each model in `MODELS` for one answer, and exit 1 when one fails.  Skip a
-# StatefulSet stopped on purpose (`spec.replicas` 0).  Env: MODELS, SERVICE
-# (host of the Service) and STATEFULSET.
+# Rollout stopped on purpose (`spec.replicas` 0).  Env: MODELS, ROLLOUT and
+# SERVICE (host of the Service).
 set -u
 
 ATTEMPTS=3
@@ -11,23 +11,23 @@ BODY=/tmp/body
 
 log() { echo "$(date -u +%H:%M:%S) $*"; }
 
-[ -n "${MODELS:-}" ] && [ -n "${SERVICE:-}" ] && [ -n "${STATEFULSET:-}" ] || {
-  log "FAIL: MODELS, SERVICE and STATEFULSET need a value"
+[ -n "${MODELS:-}" ] && [ -n "${ROLLOUT:-}" ] && [ -n "${SERVICE:-}" ] || {
+  log "FAIL: MODELS, ROLLOUT and SERVICE need a value"
   exit 1
 }
 
 sa=/var/run/secrets/kubernetes.io/serviceaccount
 code=$(curl -sS --max-time 20 -o "$BODY" -w '%{http_code}' \
   --cacert "$sa/ca.crt" -H "Authorization: Bearer $(cat "$sa/token")" \
-  "https://kubernetes.default.svc/apis/apps/v1/namespaces/$(cat "$sa/namespace")/statefulsets/$STATEFULSET/scale") || code=000
+  "https://kubernetes.default.svc/apis/argoproj.io/v1alpha1/namespaces/$(cat "$sa/namespace")/rollouts/$ROLLOUT/scale") || code=000
 if [ "$code" != 200 ]; then
-  log "FAIL: scale of $STATEFULSET answered HTTP $code"
+  log "FAIL: scale of $ROLLOUT answered HTTP $code"
   exit 1
 fi
 # The API server pretty-prints JSON, so drop the white space first.  It omits
 # `replicas` from `spec` when the value is 0.
 if tr -d ' \n\t' < "$BODY" | grep -Eq '"spec":\{(\}|"replicas":0[,}])'; then
-  log "SKIP: $STATEFULSET has 0 replicas"
+  log "SKIP: $ROLLOUT has 0 replicas"
   exit 0
 fi
 

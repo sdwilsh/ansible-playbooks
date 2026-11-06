@@ -1,0 +1,22 @@
+---
+# Kustomize does not know the Argo Rollouts kinds.  These entries tell it
+# the names that a `Rollout` and an `AnalysisTemplate` refer to.
+nameReference:
+  - fieldSpecs:
+      - kind: Rollout
+        path: spec/strategy/canary/steps/analysis/templates/templateName
+    group: argoproj.io
+    kind: AnalysisTemplate
+  - fieldSpecs:
+      - kind: AnalysisTemplate
+        path: spec/metrics/provider/job/spec/template/spec/containers/env/valueFrom/configMapKeyRef/name
+      - kind: AnalysisTemplate
+        path: spec/metrics/provider/job/spec/template/spec/volumes/configMap/name
+    kind: ConfigMap
+    version: v1
+  - fieldSpecs:
+      - kind: Rollout
+        path: spec/workloadRef/name
+    group: apps
+    kind: Deployment
+    version: v1
