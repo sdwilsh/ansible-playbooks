@@ -20,7 +20,23 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           image: ghcr.io/sdwilsh/nut-shutdown-agent
+          livenessProbe:
+            exec:
+              command:
+                - /healthy.sh
+                - live
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
           name: nut-shutdown-agent
+          readinessProbe:
+            exec:
+              command:
+                - /healthy.sh
+                - ready
+            periodSeconds: 10
+            timeoutSeconds: 5
           securityContext:
             privileged: true
       hostPID: true
