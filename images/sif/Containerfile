@@ -61,7 +61,7 @@ RUN set -o pipefail \
   && { grep -E 'hipcub|rocprim|rocwmma' /closure.txt || true; }
 
 # The base image holds bash, curl and a glibc `ldd` for the closures.
-FROM registry.fedoraproject.org/fedora:44@sha256:d86cfa65ed3ac64009cb7039eea74657365733819806a41fec0510aa1fccc314
+FROM registry.fedoraproject.org/fedora:44@sha256:b3e011d47e686a89781495c9a87bc80349af742965e5d51e79cd51711982e4a2
 
 ARG GUFO_VERSION
 LABEL org.opencontainers.image.version="${GUFO_VERSION}"
