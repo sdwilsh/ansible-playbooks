@@ -276,7 +276,6 @@
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/marinatedconcrete/devcontainer-base",
-        "ghcr.io/tensorchord/cloudnative-vectorchord",
         "postgres",
         "rocm/k8s-device-plugin"
       ],
@@ -541,10 +540,8 @@
         "kustomization/overlays/prod/immich/**"
       ],
       "matchPackageNames": [
-        "ghcr.io/cloudnative-pg/postgresql",
-        "ghcr.io/tensorchord/cloudnative-vectorchord"
+        "ghcr.io/cloudnative-pg/postgresql"
       ],
-      "minimumGroupSize": 2,
       "schedule": [
         "after 4pm on friday"
       ]
