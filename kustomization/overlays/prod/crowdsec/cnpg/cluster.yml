@@ -23,6 +23,9 @@ spec:
       disabledDefaultServices:
         - r
         - ro
+  # Replicate asynchronously.
+  maxSyncReplicas: 0
+  minSyncReplicas: 0
   monitoring:
     tls:
       enabled: true
@@ -32,11 +35,6 @@ spec:
       name: barman-cloud.cloudnative-pg.io
       parameters:
         barmanObjectName: garage-objectstore
-  postgresql:
-    synchronous:
-      failoverQuorum: true
-      method: any
-      number: 1
   primaryUpdateMethod: switchover
   primaryUpdateStrategy: unsupervised
   priorityClassName: critical-application-infra
