@@ -7,7 +7,7 @@ COPY build_files /
 FROM ghcr.io/marinatedconcrete/kairos-fedora:1.0.0@sha256:d8fe653c13468119fdc4e9d90d97fb0d0628a5a3b3ce2fd47ffb3d32fd723562 AS mack-kairos
 
 ARG TARGETPLATFORM
-ARG GIT_SHA=unknown
+ARG MACK_VERSION=unknown
 
 # Each stage needs its own cache ID here.  This stage and the mack stage
 # below mount the same paths.  A shared ID mixes the two stages' caches.

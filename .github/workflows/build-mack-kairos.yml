@@ -1,0 +1,242 @@
+---
+name: Build Mack Kairos Container Image
+on:
+  pull_request:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/scripts/next-mack-kairos-version.sh
+      - .github/workflows/build-mack-kairos.yml
+      - images/mack/Containerfile
+      - images/mack/build_files/**
+      - images/mack/release-notes-components.sh
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - .github/scripts/next-mack-kairos-version.sh
+      - .github/workflows/build-mack-kairos.yml
+      - images/mack/Containerfile
+      - images/mack/build_files/**
+      - images/mack/release-notes-components.sh
+  schedule:
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+
+env:
+  IMAGE_DESC: Mack's build files, on top of kairos-fedora instead of fedora-bootc, for k3s cluster nodes.
+  IMAGE_NAME: mack-kairos
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
+
+# A release run must not cancel another release run after it creates its tag.
+concurrency:
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+
+jobs:
+  version:
+    name: Reserve release version
+
+    # Only the schedule and manual runs on main release an image.  Later
+    # steps check the result of this job, not the event.
+    if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+
+    concurrency:
+      cancel-in-progress: false
+      group: mack-kairos-release
+
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          sparse-checkout: .github/scripts
+
+      # The tag reserves the version number.  A failed run leaves its tag,
+      # so the next run takes the next number and never reuses an image tag.
+      - name: Create version tag
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        id: version
+        run: |
+          prefix=$(date -u +%Y.%-m)
+          version=$(
+            gh api --paginate "repos/${GH_REPO}/git/matching-refs/tags/mack-kairos-${prefix}." --jq '.[].ref' |
+              sed 's|^refs/tags/||' |
+              .github/scripts/next-mack-kairos-version.sh "${prefix}"
+          )
+          gh api "repos/${GH_REPO}/git/refs" -f ref="refs/tags/mack-kairos-${version}" -f sha="${GITHUB_SHA}"
+          echo "tag=mack-kairos-${version}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+  build:
+    name: Build and push mack-kairos image
+
+    needs: version
+
+    if: ${{ !cancelled() && (needs.version.result == 'success' || needs.version.result == 'skipped') }}
+
+    outputs:
+      previous-tag: ${{ steps.release_notes.outputs.previous-tag }}
+
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)" >> "${GITHUB_OUTPUT}"
+
+      - name: Image Metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        id: metadata
+        with:
+          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.description=${{ env.IMAGE_DESC }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/blob/main/images/mack/Containerfile
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ needs.version.outputs.version }},enable=${{ needs.version.result == 'success' }}
+
+      - name: Build image for testing
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          build-args: |
+            MACK_VERSION=${{ needs.version.outputs.version || github.sha }}
+          cache-from: type=gha,scope=mack-kairos
+          cache-to: type=gha,scope=mack-kairos,mode=max
+          context: images/mack
+          file: images/mack/Containerfile
+          load: true
+          platforms: linux/amd64
+          push: false
+          tags: mack-kairos:ci
+          target: mack-kairos
+
+      - name: Generate Image Release Notes
+        id: release_notes
+        uses: marinatedconcrete/config/actions/image-release-notes@392d574759d1fdb31b44508c630cea78a25c7867 # image-release-notes-1.0.0
+        with:
+          artifact-name: mack-kairos-release-notes
+          component: mack-kairos
+          components-script: images/mack/release-notes-components.sh
+          highlight-packages: kernel systemd
+          image: mack-kairos:ci
+          tag: ${{ needs.version.outputs.tag }}
+          version: ${{ needs.version.outputs.version || github.sha }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4
+        if: ${{ needs.version.result == 'success' }}
+        with:
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        if: ${{ needs.version.result == 'success' }}
+        id: push
+        with:
+          annotations: ${{ steps.metadata.outputs.annotations }}
+          build-args: |
+            MACK_VERSION=${{ needs.version.outputs.version || github.sha }}
+          cache-from: type=gha,scope=mack-kairos
+          cache-to: type=gha,scope=mack-kairos,mode=max
+          context: images/mack
+          file: images/mack/Containerfile
+          labels: ${{ steps.metadata.outputs.labels }}
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          target: mack-kairos
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
+        if: ${{ needs.version.result == 'success' }}
+
+      - name: Sign container image
+        env:
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+        if: ${{ needs.version.result == 'success' }}
+        run: |
+          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}"
+
+  release:
+    name: Create GitHub release
+
+    needs:
+      - version
+      - build
+
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+
+      - name: Download release notes
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: mack-kairos-release-notes
+          path: build/release
+
+      - name: Create release
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          PREVIOUS_TAG: ${{ needs.build.outputs.previous-tag }}
+          TAG: ${{ needs.version.outputs.tag }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          if gh release view "${TAG}" > /dev/null 2>&1; then
+            exit 0
+          fi
+          if [[ -n "${PREVIOUS_TAG}" ]]; then
+            body=$(git log --format='- %s (%h)' "${PREVIOUS_TAG}..${TAG}" -- images/mack .github/workflows/build-mack-kairos.yml)
+            body=${body:-No changes to the image build files.}
+          else
+            body="First versioned release."
+          fi
+          gh release create "${TAG}" --title "mack-kairos ${VERSION}" --verify-tag --notes "${body}"
+
+      - name: Publish Image Release Notes
+        uses: marinatedconcrete/config/actions/image-release-notes/publish@392d574759d1fdb31b44508c630cea78a25c7867 # image-release-notes-1.0.0
+        with:
+          component: mack-kairos
+          tag: ${{ needs.version.outputs.tag }}
