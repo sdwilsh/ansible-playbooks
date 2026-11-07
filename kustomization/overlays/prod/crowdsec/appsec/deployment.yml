@@ -34,6 +34,8 @@ spec:
           env:
             - name: COLLECTIONS
               value: crowdsecurity/appsec-virtual-patching
+            - name: CROWDSEC_BYPASS_DB_VOLUME_CHECK
+              value: "1"
             - name: CUSTOM_HOSTNAME
               valueFrom:
                 fieldRef:
