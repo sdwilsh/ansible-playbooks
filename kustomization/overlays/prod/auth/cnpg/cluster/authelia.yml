@@ -32,6 +32,9 @@ spec:
         barmanObjectName: garage-objectstore
   postgresql:
     synchronous:
+      # Without a standby, writes continue.  A failover then needs only the
+      # standbys that are available.
+      dataDurability: preferred
       failoverQuorum: true
       method: any
       number: 1
