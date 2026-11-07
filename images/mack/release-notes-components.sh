@@ -22,8 +22,9 @@ row() {
 
 [ -f "$kairos_release" ] || exit 0
 
+# kairos-agent 2 prints "kairos-agent version X".  Version 4 prints "kairos X".
 row "Kairos Agent" "$(kairos-agent --version 2>/dev/null |
-    sed -n 's/^kairos-agent version //p' | head -n 1)"
+    sed -n -e 's/^kairos-agent version //p' -e 's/^kairos //p' | head -n 1)"
 row "kairos-init" "$(read_var KAIROS_INIT_VERSION)"
 row "Kubernetes ($(read_var KAIROS_SOFTWARE_VERSION_PREFIX))" \
     "$(read_var KAIROS_SOFTWARE_VERSION)"
