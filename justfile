@@ -642,3 +642,46 @@ longhorn-allow-trim:
     set -eou pipefail
 
     ansible localhost --module-name include_role --args name=marinatedconcrete.config.longhorn_allow_encrypted_trim
+
+# Log in to Proton Mail Bridge again, for example after an "Invalid refresh token" error.
+[group('proton')]
+proton-bridge-login:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    namespace=proton-mail
+    statefulset=proton-bridge-statefulset
+    pod=proton-bridge-login
+    image=$(kubectl -n "${namespace}" get statefulset "${statefulset}" -o jsonpath='{.spec.template.spec.containers[0].image}')
+    overrides=$(jq -n --arg image "${image}" --arg claim "data-${statefulset}-0" --arg pod "${pod}" '{
+        spec: {
+            containers: [{
+                name: $pod,
+                image: $image,
+                command: ["sleep", "infinity"],
+                volumeMounts: [{name: "data", mountPath: "/root"}]
+            }],
+            volumes: [{name: "data", persistentVolumeClaim: {claimName: $claim}}]
+        }
+    }')
+
+    # The login needs the bridge volume.  Stop the bridge and pause its Argo CD auto-sync.
+    # On exit, start the bridge and enable auto-sync again.
+    current_context=$(kubectl config view -o jsonpath='{.contexts[?(@.name == "default")].context.namespace}')
+    kubectl config set-context --current --namespace argocd
+    restore() {
+        kubectl -n "${namespace}" delete pod "${pod}" --ignore-not-found
+        kubectl -n "${namespace}" scale statefulset "${statefulset}" --replicas=1
+        argocd --core app set proton-mail --sync-policy automated
+        kubectl config set-context --current --namespace "${current_context}"
+    }
+    argocd --core app set proton-mail --sync-policy none
+    trap restore EXIT
+
+    kubectl -n "${namespace}" scale statefulset "${statefulset}" --replicas=0
+    kubectl -n "${namespace}" wait --for=delete "pod/${statefulset}-0" --timeout=180s
+    kubectl -n "${namespace}" run "${pod}" --restart=Never --image="${image}" --overrides="${overrides}"
+    kubectl -n "${namespace}" wait --for=condition=Ready "pod/${pod}" --timeout=180s
+    # Run the CLI through `kubectl exec`.  The container log does not record an exec session.
+    echo "In the bridge CLI, run 'login', then 'info' to see the bridge password, then 'exit'."
+    kubectl -n "${namespace}" exec -it "${pod}" -- bash /protonmail/entrypoint.sh init
