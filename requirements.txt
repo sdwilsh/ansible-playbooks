@@ -1,3 +1,4 @@
+ansible-core ==2.22.0
 ansible-dev-tools ==26.11.0
 ansible-pylibssh ==1.4.0
 kubernetes ==37.0.2

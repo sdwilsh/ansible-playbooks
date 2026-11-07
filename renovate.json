@@ -433,6 +433,21 @@
       ]
     },
     {
+      "description": "Ansible Python tooling.  ansible-dev-tools does not pin ansible-core, so requirements.txt pins it, and the group updates them together.",
+      "groupName": "ansible",
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchPackageNames": [
+        "ansible-core",
+        "ansible-dev-tools",
+        "ansible-pylibssh"
+      ],
+      "schedule": [
+        "after 4pm on tuesday"
+      ]
+    },
+    {
       "groupName": "kairos-operator",
       "matchPackageNames": [
         "kairos-io/kairos-operator",
