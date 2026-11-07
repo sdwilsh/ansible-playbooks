@@ -254,8 +254,11 @@
           PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 34197 --jump DNAT --to-destination 10.11.1.69:34197
           PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.69 --dport 34197 --jump MASQUERADE
 
-          # Traefik Port Forwarding
-          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 443 --jump DNAT --to-destination 10.11.1.64:8443
+          # Traefik Port Forwarding.  Traefik trusts the client address that
+          # Cloudflare sends.  Thus, forward only connections from Cloudflare.
+          {% for cidr in cloudflare_ips_v4 %}
+          PreUp = iptables --table nat --append PREROUTING --protocol tcp --source {{ cidr }} --dport 443 --jump DNAT --to-destination 10.11.1.64:8443
+          {% endfor %}
           PreUp = iptables --table nat --append POSTROUTING --protocol tcp --destination 10.11.1.64 --dport 8443 --jump MASQUERADE
 
           # Unifi Inform Forwarding

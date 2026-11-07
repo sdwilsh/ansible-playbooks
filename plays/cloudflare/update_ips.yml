@@ -33,3 +33,8 @@
         line: "          forwardedHeadersTrustedIPs: [{{ ips_v4 | join(',') }}]"
         path: "{{ root_dir }}/kustomization/overlays/prod/traefik/configmap/traefik/dynamic.yml"
         regexp: "forwardedHeadersTrustedIPs:"
+    - name: Update choros forwarding to traefik
+      ansible.builtin.lineinfile:
+        line: "cloudflare_ips_v4: [{{ ips_v4 | join(',') }}]"
+        path: "{{ root_dir }}/host_vars/choros.tswn.us.yml"
+        regexp: "^cloudflare_ips_v4:"
