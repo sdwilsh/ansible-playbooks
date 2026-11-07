@@ -267,6 +267,21 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "branch",
+      "description": "Patch updates with a clean history and a small blast radius.  Each name is a separate decision.",
+      "matchPackageNames": [
+        "prometheus-smartctl-exporter"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "schedule": [
+        "after 4pm every weekday",
+        "every weekend"
+      ]
+    },
+    {
       "description": "Automatic Patch Updates",
       "automerge": true,
       "automergeType": "branch",
@@ -290,6 +305,7 @@
       "matchPackageNames": [
         "busybox",
         "docker.io/bitnami/kubectl",
+        "docker.io/redis",
         "docker.io/xiahan2019/olah",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
