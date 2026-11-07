@@ -1,6 +1,11 @@
 ---
 http:
   middlewares:
+    cloudflare-real-ip:
+      plugin:
+        cloudflarerealip:
+          # 10.11.2.2 is choros.
+          trustedPeers: [10.11.2.2/32]
     crowdsec:
       plugin:
         crowdsec-bouncer:

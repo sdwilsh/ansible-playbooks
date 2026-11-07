@@ -9,6 +9,11 @@ configMapGenerator:
   - name: crowdsec-pages-configmap
     files:
       - configmap/crowdsec/pages/ban.html
+  - name: traefik-cloudflarerealip-plugin
+    files:
+      - plugins/cloudflarerealip/.traefik.yml
+      - plugins/cloudflarerealip/cloudflarerealip.go
+      - plugins/cloudflarerealip/go.mod
   - name: traefik-config
     files:
       - configmap/traefik/dynamic.yml
