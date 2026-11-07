@@ -14,6 +14,11 @@ crowdsec_service:
 
 db_config:
   db_name: ${DB_NAME}
+  flush:
+    # The local agent cannot unregister on exit, because the local API stops
+    # first.  This deletes the machine of each old `Pod`.
+    agents_autodelete:
+      login_password: 1d
   host: ${DB_HOST}
   password: ${DB_PASSWORD}
   port: 5432
