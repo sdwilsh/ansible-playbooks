@@ -29,7 +29,7 @@ images:
   - name: docker.io/maximhq/bifrost
     newTag: v2.4.0@sha256:a1c90607dcfd13c1fb2f9476ceb3bb24407a50ade7fdf3e61a59fb42b09e5c57
   - name: postgres
-    newTag: 18@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
+    newTag: 18@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
 namespace: bifrost
 patches:
   - path: patches/cnpg/set_backup_path.yml
