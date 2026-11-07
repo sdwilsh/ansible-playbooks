@@ -364,6 +364,13 @@
       ]
     },
     {
+      "description": "The highest fedora-bootc tag is rawhide.  Without this, Renovate offers only rawhide and never the next stable release.",
+      "matchPackageNames": [
+        "quay.io/fedora/fedora-bootc"
+      ],
+      "separateMultipleMajor": true
+    },
+    {
       "enabled": false,
       "groupName": "no-pin",
       "matchUpdateTypes": [
