@@ -266,7 +266,12 @@
       "description": "Patch updates that the operator approved for each package after a review of its update history.",
       "matchPackageNames": [
         "code.forgejo.org/forgejo/forgejo",
-        "ghcr.io/crowdsecurity/crowdsec"
+        "docker.io/curlimages/curl",
+        "docker.io/redis",
+        "ghcr.io/atuinsh/atuin",
+        "ghcr.io/crowdsecurity/crowdsec",
+        "ghcr.io/marinatedconcrete/buildah-action-runner",
+        "quay.io/curl/curl"
       ],
       "matchUpdateTypes": [
         "patch"
@@ -302,6 +307,7 @@
         "docker.io/bitnami/kubectl",
         "docker.io/redis",
         "docker.io/xiahan2019/olah",
+        "eclipse-mosquitto",
         "ghcr.io/blakeblackshear/frigate",
         "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
