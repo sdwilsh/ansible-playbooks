@@ -6,7 +6,7 @@ http:
         crowdsec-bouncer:
           banHTMLFilePath: /pages/ban.html
           crowdsecAppsecEnabled: true
-          crowdsecAppsecHost: crowdsec-svc.crowdsec.svc.cluster.local:7422
+          crowdsecAppsecHost: crowdsec-appsec-svc.crowdsec.svc.cluster.local:7422
           crowdsecLapiHost: crowdsec-svc.crowdsec.svc.cluster.local:3000
           crowdsecLapiKeyFile: /etc/treafik/crowdsec-api-key
           crowdsecLapiScheme: http
