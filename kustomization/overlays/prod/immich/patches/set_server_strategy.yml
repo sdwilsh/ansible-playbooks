@@ -1,7 +1,11 @@
 ---
-# The data volume is ReadWriteOnce.  A rolling update can start the new pod on
-# another node, where the volume cannot attach while the old pod holds it.
+# The data volume is ReadWriteOnce, so the old pod must stop before the new
+# one starts.  Recreate does this too, but under server-side apply the
+# defaulted rollingUpdate stays and the API server rejects the Deployment.
 - op: replace
   path: /spec/strategy
   value:
-    type: Recreate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
