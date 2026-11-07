@@ -20,6 +20,9 @@ configMapGenerator:
   - name: crowdsec-configmap
     files:
       - configmap/config.yaml.local
+  - name: crowdsec-parsers-configmap
+    files:
+      - configmap/parsers/traefik-cf-connecting-ip.yaml
   - name: crowdsec-acquisitions-configmap
     files:
       - configmap/acquis.d/authelia.yaml

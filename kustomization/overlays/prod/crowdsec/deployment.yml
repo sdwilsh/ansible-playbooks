@@ -150,6 +150,12 @@ spec:
               mountPath: /secrets/online_api_credentials.yaml
               readOnly: true
               subPath: online_api_credentials.yaml
+            # The name sorts first, so this parser runs before the other
+            # parsers in s02-enrich.
+            - name: crowdsec-parsers-config
+              mountPath: /etc/crowdsec/parsers/s02-enrich/00-traefik-cf-connecting-ip.yaml
+              readOnly: true
+              subPath: traefik-cf-connecting-ip.yaml
             - name: crowdsec-scripts
               mountPath: /scripts
               readOnly: true
@@ -205,6 +211,9 @@ spec:
         - name: crowdsec-credentials-config
           secret:
             secretName: crowdsec-credentials-secret
+        - configMap:
+            name: crowdsec-parsers-configmap
+          name: crowdsec-parsers-config
         - configMap:
             defaultMode: 0777
             name: crowdsec-scripts-configmap

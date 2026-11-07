@@ -1,0 +1,13 @@
+---
+# Each request on websecure-ext arrives from choros, which masquerades the
+# connection, so the Traefik log has the address of choros.  choros forwards
+# only connections from Cloudflare, and Cloudflare sets CF-Connecting-IP.
+description: Take the client address from CF-Connecting-IP on websecure-ext
+filter: >-
+  evt.Meta.log_type == 'http_access-log' &&
+  (evt.Unmarshaled.traefik.entryPointName ?? '') == 'websecure-ext' &&
+  (evt.Unmarshaled.traefik['request_Cf-Connecting-Ip'] ?? '') != ''
+name: sdwilsh/traefik-cf-connecting-ip
+statics:
+  - meta: source_ip
+    expression: evt.Unmarshaled.traefik['request_Cf-Connecting-Ip']
