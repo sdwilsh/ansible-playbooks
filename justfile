@@ -168,6 +168,31 @@ build-mack platform="linux/amd64" tag="mack":
 
     podman build "${PODMAN_BUILD_ARGS[@]}" images/mack
 
+# Builds an ISO that installs the published mack image with no prompts.
+[group('images')]
+build-mack-iso image="ghcr.io/sdwilsh/mack:latest":
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    mkdir -p output-mack
+
+    # bootc-image-builder reads the image from root storage.
+    sudo podman pull {{ image }}
+
+    sudo podman run \
+        --rm \
+        -it \
+        --privileged \
+        --pull=newer \
+        --security-opt label=type:unconfined_t \
+        -v ./config.toml:/config.toml:ro \
+        -v ./output-mack:/output \
+        -v /var/lib/containers/storage:/var/lib/containers/storage \
+        quay.io/centos-bootc/bootc-image-builder:latest \
+        --rootfs ext4 \
+        --type anaconda-iso \
+        {{ image }}
+
 # Builds the images/mack container's mack-kairos target.
 [group('images')]
 build-mack-kairos platform="linux/amd64":
