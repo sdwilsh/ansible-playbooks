@@ -259,6 +259,14 @@
       ]
     },
     {
+      "commitBody": "{{#if logJSON.hasReleaseNotes}}{{#each logJSON.versions as |release|}}{{#if release.releaseNotes}}- [{{{release.version}}}]({{{release.releaseNotes.url}}})\n{{/if}}{{/each}}{{/if}}",
+      "description": "The Argo release notes make a commit body of more than 200 KB, and the hosted Renovate did not create the argo-cd v3.6.1 branch.  Link to the notes instead.",
+      "matchPackageNames": [
+        "argoproj/argo-cd",
+        "argoproj/argo-rollouts"
+      ]
+    },
+    {
       "description": "Automatic Patch Updates",
       "automerge": true,
       "automergeType": "branch",
