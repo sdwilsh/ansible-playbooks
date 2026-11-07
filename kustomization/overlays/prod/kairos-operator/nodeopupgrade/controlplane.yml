@@ -2,10 +2,10 @@
 apiVersion: operator.kairos.io/v1alpha1
 kind: NodeOpUpgrade
 metadata:
-  name: kairos-upgrade-control-plane-mack-20261008
+  name: kairos-upgrade-control-plane-mack-2026-11-0
 spec:
   concurrency: 1
-  image: ghcr.io/sdwilsh/mack-kairos:latest.20261008@sha256:46d0482471a88a36fb3645551e48b761b160b251e574a7d8da76a38ac7c4f54d
+  image: ghcr.io/sdwilsh/mack-kairos:2026.11.0@sha256:119ba6bc084ded6e64257fe8c29b20aac930592dd2ec2557d341061e0d0438c1
   nodeSelector:
     matchExpressions:
       - key: node-role.kubernetes.io/control-plane
