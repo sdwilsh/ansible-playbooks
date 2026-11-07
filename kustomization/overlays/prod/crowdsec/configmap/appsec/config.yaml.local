@@ -1,0 +1,15 @@
+---
+api:
+  client:
+    unregister_on_exit: true
+
+crowdsec_service:
+  enable: true
+  acquisition_dir: /etc/crowdsec/acquis.d
+  acquisition_path: ""
+
+prometheus:
+  enabled: true
+  level: full
+  listen_addr: ${POD_IP}
+  listen_port: 6060

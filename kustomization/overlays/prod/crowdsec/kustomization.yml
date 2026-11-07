@@ -29,8 +29,15 @@ configMapGenerator:
       - configmap/acquis.d/navidrome.yaml
       - configmap/acquis.d/traefik.yaml
       - configmap/acquis.d/unifi.yaml
+  - name: crowdsec-appsec-acquisitions-configmap
+    files:
+      - configmap/acquis.d/appsec.yaml
+  - name: crowdsec-appsec-configmap
+    files:
+      - configmap/appsec/config.yaml.local
   - name: crowdsec-scripts-configmap
     files:
+      - configmap/scripts/appsec-entrypoint.sh
       - configmap/scripts/entrypoint.sh
 images:
   - name: docker.io/bitnami/kubectl
@@ -51,6 +58,9 @@ patches:
       name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
+  - appsec/deployment.yml
+  - appsec/poddisruptionbudget.yml
+  - appsec/service.yml
   - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml

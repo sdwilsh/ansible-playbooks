@@ -3,6 +3,12 @@ api:
   client:
     unregister_on_exit: true
   server:
+    # The AppSec `Pod`s register with this token.
+    auto_registration:
+      allowed_ranges:
+        - 172.16.0.0/16
+      enabled: true
+      token: ${REGISTRATION_TOKEN}
     listen_uri: ${POD_IP}:3000
     online_client:
       credentials_path: /secrets/online_api_credentials.yaml

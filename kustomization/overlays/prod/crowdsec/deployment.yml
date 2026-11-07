@@ -77,6 +77,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: REGISTRATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: registration_token
+                  name: crowdsec-credentials-secret
             - name: TZ
               value: America/Los_Angeles
           image: ghcr.io/crowdsecurity/crowdsec

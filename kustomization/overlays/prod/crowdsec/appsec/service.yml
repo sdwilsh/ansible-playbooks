@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crowdsec-appsec-svc
+spec:
+  ports:
+    - protocol: TCP
+      name: appsec
+      port: 7422
+      targetPort: appsec
+  selector:
+    app.kubernetes.io/name: crowdsec-appsec
+  type: ClusterIP

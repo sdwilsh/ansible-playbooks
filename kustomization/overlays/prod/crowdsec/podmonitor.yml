@@ -9,5 +9,9 @@ spec:
     - path: /metrics
       port: metrics
   selector:
-    matchLabels:
-      app.kubernetes.io/name: crowdsec
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - crowdsec
+          - crowdsec-appsec
