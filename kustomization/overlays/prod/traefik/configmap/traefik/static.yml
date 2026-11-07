@@ -5,6 +5,8 @@ accessLog:
     headers:
       defaultMode: drop
       names:
+        # CrowdSec takes the client address on websecure-ext from this header.
+        CF-Connecting-IP: keep
         User-Agent: keep
         X-Request-Id: keep
   filePath: "" # log to stdout
