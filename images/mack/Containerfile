@@ -25,7 +25,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 # This is the base image.  This stage must stay last.  `just build-mack`
 # and `just build-mack-vm` run `podman build` with no `--target` flag.
 # Podman then picks the last stage.
-FROM quay.io/fedora/fedora-bootc:43
+FROM quay.io/fedora/fedora-bootc:44
 
 ARG TARGETPLATFORM
 
