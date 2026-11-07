@@ -35,7 +35,6 @@ spec:
           env:
             - name: COLLECTIONS
               value: >-
-                crowdsecurity/appsec-virtual-patching
                 crowdsecurity/iptables
                 crowdsecurity/traefik
                 gauth-fr/immich
@@ -98,8 +97,6 @@ spec:
           ports:
             - name: api
               containerPort: 3000
-            - name: appsec
-              containerPort: 7422
             - name: metrics
               containerPort: 6060
           readinessProbe:

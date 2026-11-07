@@ -22,7 +22,6 @@ configMapGenerator:
       - configmap/config.yaml.local
   - name: crowdsec-acquisitions-configmap
     files:
-      - configmap/acquis.d/appsec.yaml
       - configmap/acquis.d/authelia.yaml
       - configmap/acquis.d/immich.yaml
       - configmap/acquis.d/jellyfin.yaml

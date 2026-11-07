@@ -9,10 +9,6 @@ spec:
       name: api
       port: 3000
       targetPort: api
-    - protocol: TCP
-      name: appsec
-      port: 7422
-      targetPort: appsec
   selector:
     app.kubernetes.io/name: crowdsec
   type: ClusterIP
