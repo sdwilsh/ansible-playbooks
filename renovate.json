@@ -166,14 +166,14 @@
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^latest\\.(?<major>\\d{4})(?<minor>\\d{2})(?<patch>\\d{2})$",
+      "versioningTemplate": "semver",
       "managerFilePatterns": [
         "/^kustomization/overlays/prod/kairos-operator/nodeopupgrade/workers\\.yml$/"
       ],
       "matchStrings": [
-        "name:\\s+kairos-upgrade-workers-mack-[0-9]{8}\\nspec:\\n  concurrency: 1\\n  image:\\s+(?<depName>[^:\\s]+):(?<currentValue>latest\\.[0-9]{8})@(?<currentDigest>sha256:[a-f0-9]{64})"
+        "name:\\s+kairos-upgrade-workers-mack-[0-9]+-[0-9]+-[0-9]+\\nspec:\\n  concurrency: 1\\n  image:\\s+(?<depName>[^:\\s]+):(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
       ],
-      "autoReplaceStringTemplate": "name: kairos-upgrade-workers-mack-{{{replace 'latest[.]' '' newValue}}}\nspec:\n  concurrency: 1\n  image: {{{depName}}}:{{{newValue}}}@{{{newDigest}}}"
+      "autoReplaceStringTemplate": "name: kairos-upgrade-workers-mack-{{{replace '[.]' '-' newValue}}}\nspec:\n  concurrency: 1\n  image: {{{depName}}}:{{{newValue}}}@{{{newDigest}}}"
     },
     {
       "customType": "regex",
