@@ -1,0 +1,14 @@
+---
+# The upstream base pins an older node-labeler image.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: NODE_LABELER_IMAGE
+              value: quay.io/kairos/operator-node-labeler:v0.3.0@sha256:ec5df061bdde751b90ac0d5b43d9596ba09be8f344eb86fd39bab95ef096fa14
+          name: manager

@@ -6,6 +6,24 @@ images:
   - name: quay.io/kairos/operator
     newTag: v0.3.0@sha256:bc0462a0bd5e240ee17af9e3743d228173905ec642e894e30cbfc650ef43fed7
 namespace: kairos-operator
+patches:
+  - path: patches/set_node_labeler_image.yml
+    target:
+      kind: Deployment
+      name: operator-kairos-operator
+# The upstream base copies its own pinned image into OPERATOR_IMAGE.  The
+# reboot Pod runs OPERATOR_IMAGE, so it must match the operator container.
+replacements:
+  - source:
+      fieldPath: spec.template.spec.containers.0.image
+      kind: Deployment
+      name: operator-kairos-operator
+    targets:
+      - fieldPaths:
+          - spec.template.spec.containers.0.env.[name=OPERATOR_IMAGE].value
+        select:
+          kind: Deployment
+          name: operator-kairos-operator
 resources:
   - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.3.0
   - nodeopupgrade/controlplane.yml

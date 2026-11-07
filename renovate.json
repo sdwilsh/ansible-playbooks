@@ -191,6 +191,17 @@
     },
     {
       "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/^kustomization/overlays/prod/kairos-operator/patches/set_node_labeler_image\\.yml$/"
+      ],
+      "matchStrings": [
+        "name:\\s+NODE_LABELER_IMAGE\\n\\s+value:\\s+(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "datasourceTemplate": "gitea-tags",
       "registryUrlTemplate": "https://code.tswn.us",
       "managerFilePatterns": [
@@ -400,7 +411,8 @@
       "groupName": "kairos-operator",
       "matchPackageNames": [
         "kairos-io/kairos-operator",
-        "quay.io/kairos/operator"
+        "quay.io/kairos/operator",
+        "quay.io/kairos/operator-node-labeler"
       ]
     },
     {
