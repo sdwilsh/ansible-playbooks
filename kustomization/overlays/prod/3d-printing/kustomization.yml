@@ -21,7 +21,7 @@ images:
   - name: ghcr.io/donkie/spoolman
     newTag: 0.27.1@sha256:1ebb4f6a62c2e72a07f18b07ebfdbd96322f5bc2eb72570af3088f68d7c393b1
   - name: postgres
-    newTag: 18@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
+    newTag: 18@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
 namespace: 3d-printing
 patches:
   - path: patches/cnpg/set_backup_path.yml
