@@ -1,0 +1,7 @@
+displayName: Cloudflare real IP
+import: tswn.us/cloudflarerealip
+summary: Replace X-Forwarded-For and X-Real-Ip with the Cloudflare client address when the peer is trusted.
+testData:
+  trustedPeers:
+    - 10.11.2.2/32
+type: middleware

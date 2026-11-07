@@ -488,6 +488,52 @@ justfix:
         just --unstable --fmt -f ${file}
     done
 
+# Run `go test` on all Go modules
+[group('go')]
+go-test:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    git ls-files 'go.mod' '*/go.mod' | while read -r file; do
+        dir=$(dirname ${file})
+        echo "Running \`go test\` in ${dir}..."
+        (cd ${dir} && go test ./...)
+        echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+    done
+
+# Run `go vet` on all Go modules
+[group('go')]
+go-vet:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    git ls-files 'go.mod' '*/go.mod' | while read -r file; do
+        dir=$(dirname ${file})
+        echo -n "Running \`go vet\` in ${dir}..."
+        (cd ${dir} && go vet ./...)
+        echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+    done
+
+# Check `gofmt` formatting on all Go files
+[group('go')]
+gofmtcheck:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    git ls-files '*.go' | while read -r file; do
+        echo -n "Running \`gofmt -l\` on ${file}..."
+        test -z "$(gofmt -l ${file})"
+        echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+    done
+
+# Fix `gofmt` formatting on all Go files
+[group('go')]
+gofmtfix:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    git ls-files '*.go' | while read -r file; do
+        echo -n "Running \`gofmt -w\` on ${file}..."
+        gofmt -w ${file}
+        echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+    done
+
 # Run `hadolint` on all `Dockerfile`s
 [group('lint')]
 hadolint:
