@@ -55,6 +55,9 @@ jobs:
             just ansible-syntax-check
             just ansible-scale-order-check
             just coredns-drift-check
+            just go-test
+            just go-vet
+            just gofmtcheck
             just hadolint
             just justcheck
             just renovate-validate
