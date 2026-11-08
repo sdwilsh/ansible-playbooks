@@ -14,6 +14,10 @@ patches:
     target:
       kind: DaemonSet
       name: kube-vip-svc-ds
+  - path: patches/set_instance_name.yml
+    target:
+      kind: DaemonSet
+      name: kube-vip-svc-ds
   - path: patches/set_vip_address.yml
     target:
       kind: DaemonSet
