@@ -18,74 +18,73 @@ images:
     newTag: 0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52
 namespace: aventertainment
 patches:
-  - path: patches/add_jellyfin_hardware_acc_reqs.yml
+  # Jellyfin
+  - path: patches/jellyfin/add_hardware_acc_reqs.yml
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
-  - path: patches/add_jellyfin_shader_cache_volume.yml
+  - path: patches/jellyfin/add_lldap_client_label.yml
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
-  - path: patches/add_jellyfin_volumes.yml
+  - path: patches/jellyfin/add_shader_cache_volume.yml
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
-  - path: patches/add_lldap_client_label.yml
+  - path: patches/jellyfin/add_volumes.yml
     target:
       kind: StatefulSet
       name: jellyfin-statefulset
-  - path: patches/add_navidrome_volumes.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
-  - path: patches/add_tdarr_node_volumes.yml
-    target:
-      kind: Deployment
-      name: tdarr-node-deployment
-  - path: patches/add_tdarr_server_volumes.yml
-    target:
-      kind: StatefulSet
-      name: tdarr-server-statefulset
-  - path: patches/set_navidrome_baseurl.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
-  - path: patches/set_navidrome_disable_star_rating.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
-  - path: patches/set_navidrome_service_ip.yml
-    target:
-      kind: Service
-      name: navidrome-svc
-  - path: patches/set_jellyfin_service_ip.yml
+  - path: patches/jellyfin/set_service_ip.yml
     target:
       kind: Service
       name: jellyfin-svc
-  - path: patches/add_traefik_networkpolicy_ports.yml
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: jellyfin-statefulset
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: jellyfin-statefulset
+  # Navidrome
+  - path: patches/navidrome/add_traefik_networkpolicy_ports.yml
     target:
       kind: NetworkPolicy
       name: allow-from-traefik-networkpolicy
-  - path: patches/add_traefik_route_label.yml
+  - path: patches/navidrome/add_volumes.yml
     target:
       kind: StatefulSet
-      name: jellyfin-statefulset
-  - path: patches/add_traefik_route_label.yml
+      name: navidrome-statefulset
+  - path: patches/navidrome/set_baseurl.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
+  - path: patches/navidrome/set_disable_star_rating.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
+  - path: patches/navidrome/set_service_ip.yml
+    target:
+      kind: Service
+      name: navidrome-svc
+  - path: patches/add_internet_client_label.yml
     target:
       kind: StatefulSet
       name: navidrome-statefulset
   - path: patches/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
+  # tdarr
+  - path: patches/tdarr/add_node_volumes.yml
+    target:
+      kind: Deployment
+      name: tdarr-node-deployment
+  - path: patches/tdarr/add_server_volumes.yml
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
-  - path: patches/add_internet_client_label.yml
-    target:
-      kind: StatefulSet
-      name: jellyfin-statefulset
-  - path: patches/add_internet_client_label.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
   - path: patches/add_internet_client_label.yml
     target:
       kind: StatefulSet
@@ -94,6 +93,10 @@ patches:
     target:
       kind: Deployment
       name: tdarr-node-deployment
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
 resources:
   - namespace.yml
   - ingress.yml
