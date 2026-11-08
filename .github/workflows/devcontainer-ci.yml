@@ -56,12 +56,14 @@ jobs:
             just ansible-scale-order-check
             just coredns-drift-check
             just go-test
+            just go-traefik-test
             just go-vet
             just gofmtcheck
             just hadolint
             just justcheck
             just renovate-validate
             just shellcheck
+            just traefik-pin-check
 
   kustomize-build:
     needs: build
