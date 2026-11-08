@@ -104,6 +104,7 @@
           Description=A network with a known set of addresses to talk to HOGS services.
 
           [Network]
+          DisableDNS=true
           Gateway=10.11.2.1
           IPRange=10.11.2.128/25
           IPv6=false
