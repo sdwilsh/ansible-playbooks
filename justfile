@@ -500,6 +500,19 @@ go-test:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Run the tests that need the `traefik` binary on all Go modules
+[group('go')]
+go-traefik-test:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    traefik_bin=$(command -v traefik) || { echo "traefik is not on PATH" >&2; exit 1; }
+    git ls-files 'go.mod' '*/go.mod' | while read -r file; do
+        dir=$(dirname ${file})
+        echo "Running \`go test -tags traefik\` in ${dir}..."
+        (cd ${dir} && TRAEFIK_BIN="${traefik_bin}" go test -tags traefik -count=1 -run Traefik ./...)
+        echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
+    done
+
 # Run `go vet` on all Go modules
 [group('go')]
 go-vet:
@@ -508,7 +521,7 @@ go-vet:
     git ls-files 'go.mod' '*/go.mod' | while read -r file; do
         dir=$(dirname ${file})
         echo -n "Running \`go vet\` in ${dir}..."
-        (cd ${dir} && go vet ./...)
+        (cd ${dir} && go vet -tags traefik ./...)
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
@@ -681,6 +694,23 @@ tag-images target_image tag tags registry="":
 
     # Show Images
     podman images
+
+# Check that the devcontainer and the deployment pin the same `traefik` image
+[group('lint')]
+traefik-pin-check:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    built=$(sed -n 's|^FROM 11notes/traefik:\([^ ]*\) AS traefik$|\1|p' .devcontainer/Containerfile)
+    deployed=$(python3 -c 'import sys, yaml; print(*[i["newTag"] for i in yaml.safe_load(open(sys.argv[1]))["images"] if i["name"] == "traefik"])' kustomization/overlays/prod/traefik/kustomization.yml)
+    if [ -z "${built}" ] || [ -z "${deployed}" ]; then
+        echo "{{ BOLD + RED }}FAIL{{ NORMAL }} could not read a traefik pin: devcontainer='${built}' deployment='${deployed}'" >&2
+        exit 1
+    fi
+    if [ "${built}" != "${deployed}" ]; then
+        echo "{{ BOLD + RED }}FAIL{{ NORMAL }} traefik pins differ: devcontainer='${built}' deployment='${deployed}'" >&2
+        exit 1
+    fi
+    echo "{{ BOLD + GREEN }}OK{{ NORMAL }} ${built}"
 
 [group('longhorn')]
 longhorn-allow-trim:
