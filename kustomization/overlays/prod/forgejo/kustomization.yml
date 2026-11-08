@@ -61,3 +61,4 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - networkpolicy/allow-ssh.yml
+  - service/forgejo-ssh-choros.yml
