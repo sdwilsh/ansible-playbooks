@@ -54,4 +54,11 @@ db_uri = \"postgres://${ATUIN_DB_USERNAME}:${db_password}@${ATUIN_DB_HOST}/${ATU
 sync_v1_enabled = false
 " > $config_dest
 
+if [ -n "${ATUIN_TRUSTED_PROXIES}" ]; then
+    echo "trusted_proxies = \"${ATUIN_TRUSTED_PROXIES}\"" >> $config_dest
+fi
+if [ -n "${ATUIN_TRUSTED_PROXY_HEADER}" ]; then
+    echo "trusted_proxy_header = \"${ATUIN_TRUSTED_PROXY_HEADER}\"" >> $config_dest
+fi
+
 echo "Successfully setup configuration at ${config_dest}"

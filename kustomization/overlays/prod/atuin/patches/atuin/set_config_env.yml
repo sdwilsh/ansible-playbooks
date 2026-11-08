@@ -22,6 +22,10 @@ spec:
                   key: username
             - name: ATUIN_OPEN_REGISTRATION
               value: "false"
+            - name: ATUIN_TRUSTED_PROXIES
+              value: 172.16.0.0/16
+            - name: ATUIN_TRUSTED_PROXY_HEADER
+              value: X-Real-Ip
           name: generate-config
           volumeMounts:
             - mountPath: /postgresql-secrets
