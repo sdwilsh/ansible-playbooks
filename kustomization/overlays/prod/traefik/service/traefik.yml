@@ -36,10 +36,6 @@ spec:
       port: 8444
       protocol: TCP
       targetPort: websecure-ci
-    - name: websecure-ext
-      port: 8443
-      protocol: TCP
-      targetPort: websecure-ext
   selector:
     app.kubernetes.io/name: traefik
   type: LoadBalancer
