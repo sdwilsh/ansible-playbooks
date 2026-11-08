@@ -1,0 +1,11 @@
+BaseURL = "https://navidrome.tswn.us"
+CacheFolder = "/cache"
+EnableStarRating = false
+ImageCacheSize = "512Mi"
+TranscodingCacheSize = "4096Mi"
+
+[ExtAuth]
+# An empty UserHeader turns off login by header.  An empty environment
+# variable does not, because navidrome then uses Remote-User.
+TrustedSources = "172.16.0.0/16"
+UserHeader = ""

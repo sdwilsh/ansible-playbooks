@@ -11,6 +11,10 @@ components:
   - ../../../components/networkpolicy-allow-to-lldap
   - ../../../components/networkpolicy-deny-all
   - ../../../components/tdarr
+configMapGenerator:
+  - name: navidrome-configmap
+    files:
+      - configmap/navidrome/navidrome.toml
 images:
   - name: jellyfin/jellyfin
     newTag: 10.11.11@sha256:aefb67e6a7ff1debdd154a78a7bbb780fd0c873d8639210a7f6a2016ad2b35db
@@ -48,6 +52,10 @@ patches:
       kind: StatefulSet
       name: jellyfin-statefulset
   # Navidrome
+  - path: patches/navidrome/add_config.yml
+    target:
+      kind: StatefulSet
+      name: navidrome-statefulset
   - path: patches/navidrome/add_traefik_networkpolicy_ports.yml
     target:
       kind: NetworkPolicy
@@ -56,22 +64,10 @@ patches:
     target:
       kind: StatefulSet
       name: navidrome-statefulset
-  - path: patches/navidrome/set_baseurl.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
-  - path: patches/navidrome/set_disable_star_rating.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
   - path: patches/navidrome/set_service_ip.yml
     target:
       kind: Service
       name: navidrome-svc
-  - path: patches/navidrome/set_trusted_proxies.yml
-    target:
-      kind: StatefulSet
-      name: navidrome-statefulset
   - path: patches/add_internet_client_label.yml
     target:
       kind: StatefulSet

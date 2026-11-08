@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: navidrome
+          volumeMounts:
+            - mountPath: /data/navidrome.toml
+              name: navidrome-config
+              readOnly: true
+              subPath: navidrome.toml
+      volumes:
+        - configMap:
+            name: navidrome-configmap
+          name: navidrome-config
