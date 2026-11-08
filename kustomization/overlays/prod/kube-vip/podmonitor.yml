@@ -8,5 +8,9 @@ spec:
     - path: /metrics
       port: metrics
   selector:
-    matchLabels:
-      app.kubernetes.io/name: kube-vip-svc-ds
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - kube-vip-svc-ds
+          - kube-vip-wg-ds

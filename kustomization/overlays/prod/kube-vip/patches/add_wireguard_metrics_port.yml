@@ -1,0 +1,15 @@
+---
+# See `add_metrics_port.yml`.  `kube-vip-wg-ds` serves its metrics on port 2114.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: kube-vip
+          ports:
+            - containerPort: 2114
+              name: metrics
+              protocol: TCP

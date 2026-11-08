@@ -3,18 +3,19 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - https://github.com/marinatedconcrete/config/kustomization/components/kube-vip?ref=kustomize-kube-vip@v5.0.0
+  - https://github.com/marinatedconcrete/config/kustomization/components/kube-vip?ref=kustomize-kube-vip@v5.1.0
+  - https://github.com/marinatedconcrete/config/kustomization/components/kube-vip-wireguard?ref=kustomize-kube-vip-wireguard@v1.0.0
 namespace: kube-vip
 patches:
   - path: patches/add_metrics_port.yml
     target:
       kind: DaemonSet
       name: kube-vip-svc-ds
-  - path: patches/set_egress_cidrs.yml
+  - path: patches/add_wireguard_metrics_port.yml
     target:
       kind: DaemonSet
-      name: kube-vip-svc-ds
-  - path: patches/set_instance_name.yml
+      name: kube-vip-wg-ds
+  - path: patches/set_egress_cidrs.yml
     target:
       kind: DaemonSet
       name: kube-vip-svc-ds
@@ -25,7 +26,7 @@ patches:
   - path: patches/tolerate_each_taint.yml
     target:
       kind: DaemonSet
-      name: kube-vip-svc-ds
+      name: kube-vip-(svc|wg)-ds
 resources:
   - namespace.yml
   - podmonitor.yml
