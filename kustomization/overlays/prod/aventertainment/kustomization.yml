@@ -70,8 +70,8 @@ patches:
       name: navidrome-svc
   - path: patches/navidrome/set_trusted_proxies.yml
     target:
-      kind: Service
-      name: navidrome-svc
+      kind: StatefulSet
+      name: navidrome-statefulset
   - path: patches/add_internet_client_label.yml
     target:
       kind: StatefulSet
