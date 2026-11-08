@@ -4,7 +4,7 @@
 # `ssh-keygen -lf known_hosts` here.  Then run
 # `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` on each host.  Use a
 # console for that command, and not SSH.  Compare the two fingerprints.
-choros.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDlTRlMOkQg/C+UFQhLNLt/VsjTlQAAiaR4SyAWwOwyp
+choros.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO/B72P4kY1fAHOKyXl0q618l9pWtEEkwj0WWoTLzvJX
 gpuworker01.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP7Dom4Xl16cxi8/T0XteH3wkZFNacCFeWBc1YG5TjcY
 gpuworker02.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF2CXs5hxvwkNzQJnWvODQ02scajObpN//LL9oVzMMHI
 monitor.house.gem.hogs.tswn.us ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGDsCp2NbnB37xOr1fQMzwERZfulGzMhRq8EQZouG74j
