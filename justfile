@@ -105,7 +105,7 @@ build-loki-image:
     # This must be built rootful...
     sudo podman build \
         images/loki \
-        --build-arg PARENT=ghcr.io/sdwilsh/mack:latest-arm64 \
+        --build-arg PARENT=ghcr.io/sdwilsh/mack:latest \
         --platform=linux/arm64 \
         -t loki
 
@@ -137,36 +137,16 @@ build-loki-image:
 
 # Builds the images/mack container.
 [group('images')]
-build-mack platform="linux/amd64" tag="mack":
+build-mack platform="linux/amd64":
     #!/usr/bin/env bash
-    set -eoux pipefail
+    set -eou pipefail
 
-    BUILD_ARGS=()
-    LABELS=()
+    MACK_VERSION=unknown
     if [[ -z "$(git status -s)" ]]; then
-        GIT_SHA=$(git rev-parse --short HEAD)
-        BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=${GIT_SHA}")
-        LABELS+=("--label" "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/sdwilsh/mack/${GIT_SHA}/README.md")
-        LABELS+=("--label" "org.opencontainers.image.documentation=https://raw.githubusercontent.com/sdwilsh/mack/${GIT_SHA}/README.md")
-        LABELS+=("--label" "org.opencontainers.image.source=https://github.com/sdwilsh/mack/${GIT_SHA}/Containerfile")
-        LABELS+=("--label" "org.opencontainers.image.url=https://github.com/sdwilsh/mack/tree/${GIT_SHA}")
+        MACK_VERSION=$(git rev-parse --short HEAD)
     fi
 
-    LABELS+=("--label" "io.artifacthub.package.deprecated=false")
-    LABELS+=("--label" "io.artifacthub.package.keywords=bootc")
-    LABELS+=("--label" "io.artifacthub.package.license=Apache-2.0")
-    LABELS+=("--label" "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/656602?s=200&v=4")
-    LABELS+=("--label" "io.artifacthub.package.prerelease=false")
-    LABELS+=("--label" "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)")
-    LABELS+=("--label" "org.opencontainers.image.description='Mack OS—A bootc-powered core operating system.'")
-    LABELS+=("--label" "org.opencontainers.image.title=mack")
-    LABELS+=("--label" "org.opencontainers.image.vendor=sdwilsh")
-    LABELS+=("--label" "org.opencontainers.image.version={{ tag }}.$(date +%Y%M%d)")
-
-    # This actually builds the image!
-    PODMAN_BUILD_ARGS=("${BUILD_ARGS[@]}" "${LABELS[@]}" --platform={{ platform }} --pull=newer --tag "mack:{{ tag }}")
-
-    podman build "${PODMAN_BUILD_ARGS[@]}" images/mack
+    podman build images/mack --target mack --platform={{ platform }} --pull=newer --build-arg MACK_VERSION="${MACK_VERSION}" --tag mack:latest
 
 # Builds an ISO that installs the published mack image with no prompts.
 [group('images')]
@@ -235,6 +215,7 @@ build-mack-vm:
     # This must be built rootful...
     sudo podman build \
         images/mack \
+        --target mack \
         -t mack
 
     # ...so it can be done rootful here.
@@ -700,30 +681,6 @@ shellcheck:
         shellcheck -x ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
-
-# Tag Images
-[group('images')]
-tag-images target_image tag tags registry="":
-    #!/usr/bin/env bash
-    set -eoux pipefail
-
-    # Get Image, and untag
-    IMAGE=$(podman inspect {{ target_image }}:{{ tag }} | jq -r .[].Id)
-    podman untag ${IMAGE}
-
-    if [ -z "{{ registry }}"]; then
-        REGISTRY=""
-    else
-        REGISTRY="{{ registry }}/"
-    fi
-
-    # Tag Image
-    for tag in {{ tags }}; do
-        podman tag ${IMAGE} "${REGISTRY}{{ target_image }}:${tag}"
-    done
-
-    # Show Images
-    podman images
 
 # Check that the devcontainer and the deployment pin the same `traefik` image
 [group('lint')]

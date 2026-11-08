@@ -22,12 +22,13 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/kairos.sh
 
-# This is the base image.  This stage must stay last.  `just build-mack`
-# and `just build-mack-vm` run `podman build` with no `--target` flag.
-# Podman then picks the last stage.
-FROM quay.io/fedora/fedora-bootc:44
+FROM quay.io/fedora/fedora-bootc:44 AS mack
 
 ARG TARGETPLATFORM
+
+# The value changes at each release.  The `build.sh` layer then runs again
+# and installs current packages.
+ARG MACK_VERSION=unknown
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache,id=mack-var-cache \
