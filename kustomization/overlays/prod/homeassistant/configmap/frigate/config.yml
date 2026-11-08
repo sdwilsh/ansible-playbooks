@@ -1,6 +1,8 @@
 ---
 auth:
   enabled: false
+  trusted_proxies:
+    - 172.16.0.0/16
 birdseye:
   enabled: true
   mode: continuous
