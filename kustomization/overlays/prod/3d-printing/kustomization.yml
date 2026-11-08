@@ -32,6 +32,10 @@ patches:
     target:
       kind: StatefulSet
       name: spoolman-statefulset
+  - path: patches/spoolman/set_trusted_proxies.yml
+    target:
+      kind: StatefulSet
+      name: spoolman-statefulset
   - path: patches/spoolman/add_traefik_route_label.yml
     target:
       kind: StatefulSet
