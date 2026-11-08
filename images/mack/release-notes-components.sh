@@ -1,8 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-# Print the Kairos components for the release notes.  This script runs in the
-# image.  Each line contains a label, a tab, and a version.
+# Each line contains a label, a tab, and a version.
 # Source: images/kairos-fedora/release-notes-components.sh in marinatedconcrete/config.
 
 kairos_release=/etc/kairos-release
@@ -19,6 +18,9 @@ row() {
     [ -n "$2" ] || return 0
     printf '%s\t%s\n' "$1" "$2"
 }
+
+row "Fedora" "$(sed -n 's/^VERSION_ID=//p' /etc/os-release | head -n 1)"
+row "bootc" "$(bootc --version 2>/dev/null | sed -n 's/^bootc //p' | head -n 1)"
 
 [ -f "$kairos_release" ] || exit 0
 
