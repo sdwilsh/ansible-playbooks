@@ -124,6 +124,7 @@
           Description=A pod that contains a set of containers that need to talk to HOGS.
 
           [Pod]
+          DNS=10.11.1.66
           Network=hogs-services.network
           # A fixed address keeps UDP conntrack entries valid across restarts.
           IP=10.11.2.129
@@ -276,7 +277,6 @@
         content: |
           [Interface]
           Address = 10.11.2.2/32
-          DNS = 10.11.1.66
           ListenPort = 51821
           MTU = 1280
           PrivateKey = {{ wireguard__privkey }}
