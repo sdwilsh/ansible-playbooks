@@ -1,0 +1,9 @@
+[
+  {
+    "keyPath": "/etc/pki/containers/sdwilsh-mack.pub",
+    "signedIdentity": {
+      "type": "matchRepository"
+    },
+    "type": "sigstoreSigned"
+  }
+]

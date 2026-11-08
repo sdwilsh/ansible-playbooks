@@ -34,6 +34,11 @@ on:
         description: True when this run publishes a release.  A false value builds the image and publishes nothing.
         required: true
         type: boolean
+      verify-script:
+        default: ""
+        description: A script that copies the signed image with the signature check that hosts run.  It takes a source and a destination.
+        required: false
+        type: string
     secrets:
       signing-key:
         description: The private key that signs the image.
@@ -272,7 +277,20 @@ jobs:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.signing-key }}
           DIGEST: ${{ steps.index.outputs.digest }}
-        run: cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY "${IMAGE}@${DIGEST}"
+        # Hosts read only the legacy .sig signature, so sign in both formats.
+        run: |
+          cosign sign -y --recursive --key env://COSIGN_PRIVATE_KEY "${IMAGE}@${DIGEST}"
+          cosign sign -y --recursive --new-bundle-format=false --use-signing-config=false --key env://COSIGN_PRIVATE_KEY "${IMAGE}@${DIGEST}"
+
+      # cosign deprecates the legacy flags.  If hosts cannot verify the
+      # signature, this step fails the release before latest moves.
+      - name: Verify the signature as hosts do
+        env:
+          DIGEST: ${{ steps.index.outputs.digest }}
+          VERIFY_SCRIPT: ${{ inputs.verify-script }}
+        if: ${{ inputs.verify-script != '' }}
+        run: |
+          "${VERIFY_SCRIPT}" "docker://${IMAGE}@${DIGEST}" "dir:$(mktemp -d)"
 
       - name: Download release notes
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2

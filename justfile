@@ -156,8 +156,9 @@ build-mack-iso image="ghcr.io/sdwilsh/mack:latest":
 
     mkdir -p output-mack
 
-    # bootc-image-builder reads the image from root storage.
-    sudo podman pull {{ image }}
+    # bootc-image-builder reads the image from root storage.  It makes the
+    # installed host follow the tag, so the image must stay under the tag.
+    sudo images/mack/verify-signature.sh docker://{{ image }} containers-storage:{{ image }}
 
     sudo podman run \
         --rm \
