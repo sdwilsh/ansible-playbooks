@@ -194,6 +194,11 @@ stages:
         # seeds interfaces created after this applies.
         net.ipv4.conf.all.rp_filter: "2"
         net.ipv4.conf.default.rp_filter: "2"
+    - name: Set src_valid_mark for kube-vip WireGuard
+      sysctl:
+        # kube-vip writes this at start when it is 0, and its /proc/sys is
+        # read-only, so it cannot start.
+        net.ipv4.conf.all.src_valid_mark: "1"
     - name: Disable multipath
       systemctl:
         disable:
