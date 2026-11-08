@@ -61,6 +61,7 @@ jobs:
             just gofmtcheck
             just hadolint
             just justcheck
+            just next-calver-version-test
             just renovate-validate
             just shellcheck
             just traefik-pin-check

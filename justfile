@@ -645,6 +645,11 @@ kustomize-build:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Test the script that picks the next release version of an image
+[group('lint')]
+next-calver-version-test:
+    .github/scripts/test-next-calver-version.sh
+
 # Split the image for smaller updates.
 [group('images')]
 rechunk target_image tag:
