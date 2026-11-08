@@ -49,7 +49,7 @@
         - hfp-wireguard.service
         - hogs-pod.service
         - hogs-services-network.service
-        - kv-wireguard.service
+        - kube-vip-wireguard.service
         - wireguard.service
   roles:
     - role: common-users
@@ -287,7 +287,7 @@
       tags:
         - hfp-wireguard
         - hogs-pod
-        - kv-wireguard
+        - kube-vip-wireguard
         - wireguard
     - name: Setup Wireguard Config
       ansible.builtin.copy:
@@ -317,7 +317,8 @@
           PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.69 --dport 34197 --jump MASQUERADE
 
           # Traefik Port Forwarding.  Forward only connections from Cloudflare,
-          # over kv0 with no masquerade, so Traefik sees the Cloudflare address.
+          # over the kube-vip tunnel with no masquerade, so Traefik sees the Cloudflare
+          # address.
           {% for cidr in cloudflare_ips_v4 %}
           PreUp = iptables --table nat --append PREROUTING --protocol tcp --source {{ cidr }} --dport 443 --jump DNAT --to-destination 10.11.3.64:8443
           {% endfor %}
@@ -476,22 +477,22 @@
 
           # kube-vip sends the ICMP "need to frag" message for these flows into
           # the tunnel, not to the pod.  Path MTU discovery fails, so clamp MSS.
-          PreUp = iptables --table mangle --append FORWARD --out-interface kv0 --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
-          PreUp = iptables --table mangle --append FORWARD --in-interface kv0 --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --set-mss 1380
+          PreUp = iptables --table mangle --append FORWARD --out-interface kube-vip --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
+          PreUp = iptables --table mangle --append FORWARD --in-interface kube-vip --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --set-mss 1380
 
           [Peer]
           AllowedIPs = 10.11.3.64/32
           PublicKey = XtA4c8MsSJn5yR+aeTFdQjLWZiwZ+m1DDWQ5/GRtbT4=
-        dest: /etc/wireguard/kv0.conf
+        dest: /etc/wireguard/kube-vip.conf
         mode: u=rw,g=r
         owner: root
         group: root
       no_log: true
       notify:
-        - kv-wireguard.service
+        - kube-vip-wireguard.service
       tags:
         - hogs-pod
-        - kv-wireguard
+        - kube-vip-wireguard
       vars:
         wireguard__privkey: !vault |
           $ANSIBLE_VAULT;1.1;AES256
@@ -505,14 +506,14 @@
       ansible.builtin.copy:
         content: |
           [Unit]
-          ConditionPathExists=/etc/wireguard/kv0.conf
+          ConditionPathExists=/etc/wireguard/kube-vip.conf
           Description=A container that hosts the choros end of the wireguard tunnel to kube-vip.
 
           [Container]
           AddCapability=NET_ADMIN
           AddCapability=NET_RAW
           DropCapability=ALL
-          HealthCmd=CMD-SHELL wg show kv0 || exit 1
+          HealthCmd=CMD-SHELL wg show kube-vip || exit 1
           HealthInterval=60s
           HealthLogDestination=events_logger
           HealthRetries=3
@@ -520,14 +521,14 @@
           NoNewPrivileges=true
           Image=docker.io/procustodibus/wireguard
           Pod=hogs.pod
-          Volume=/etc/wireguard/kv0.conf:/etc/wireguard/kv0.conf:Z
-        dest: /etc/containers/systemd/kv-wireguard.container
+          Volume=/etc/wireguard/kube-vip.conf:/etc/wireguard/kube-vip.conf:Z
+        dest: /etc/containers/systemd/kube-vip-wireguard.container
         mode: u=rw,g=r,o=r
         owner: root
         group: root
       notify:
         - systemctl daemon-reload
-        - kv-wireguard.service
+        - kube-vip-wireguard.service
       tags:
         - hogs-pod
-        - kv-wireguard
+        - kube-vip-wireguard

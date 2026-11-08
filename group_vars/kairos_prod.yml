@@ -1198,7 +1198,7 @@ secrets:
     namespace: kube-vip
     stringData:
       tunnels: |
-        kv0:
+        wg-traefik:
           allowedIPs:
             - 0.0.0.0/0
           listenPort: 51822
