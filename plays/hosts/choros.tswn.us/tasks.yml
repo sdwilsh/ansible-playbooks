@@ -27,6 +27,19 @@
       ansible.builtin.systemd_service:
         name: systemd-sysctl.service
         state: restarted
+    # podman network create runs with --ignore, so a changed network applies
+    # only after the old one is gone.  Stop the pod, which uses it, and let
+    # NetworkDeleteOnStop remove it.  The next handler starts the pod again.
+    - name: Stop hogs-pod for a network change
+      ansible.builtin.systemd_service:
+        name: hogs-pod.service
+        state: stopped
+      listen:
+        - hogs-services-network.service
+    - name: hogs-services-network.service
+      ansible.builtin.systemd_service:
+        name: hogs-services-network.service
+        state: restarted
     - name: hogs-pod.service
       ansible.builtin.systemd_service:
         name: hogs-pod.service
@@ -108,6 +121,7 @@
           Gateway=10.11.2.1
           IPRange=10.11.2.128/25
           IPv6=false
+          NetworkDeleteOnStop=true
           Subnet=10.11.2.0/24
         dest: /etc/containers/systemd/hogs-services.network
         mode: u=rw,g=r,o=r
