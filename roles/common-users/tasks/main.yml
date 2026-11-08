@@ -20,7 +20,7 @@
     home: "{{ common__home_prefix }}{{ item.name }}"
     name: "{{ item.name }}"
     password: "{{ item.password | default(omit) }}"
-    password_lock: "{{ item.password is not defined }}"
+    password_lock: "{{ true if item.password is not defined else omit }}"
     shell: "{{ item.shell | default('/bin/bash') }}"
     state: present
     uid: "{{ item.uid }}"
