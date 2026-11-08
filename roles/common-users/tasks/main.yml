@@ -8,6 +8,9 @@
   loop: "{{ common__unix_groups + common__host_unix_groups }}"
   loop_control:
     label: "{{ item.name }}"
+# A user with no password gets a locked password, not an empty one.  Key
+# login still works only because sshd uses PAM.  With UsePAM no, sshd
+# refuses every login to a locked account.
 - name: Create users
   ansible.builtin.user:
     append: true
@@ -16,7 +19,8 @@
     groups: "{{ item.extra_groups | default([]) }}"
     home: "{{ common__home_prefix }}{{ item.name }}"
     name: "{{ item.name }}"
-    password: "{{ item.password | default('') }}"
+    password: "{{ item.password | default(omit) }}"
+    password_lock: "{{ item.password is not defined }}"
     shell: "{{ item.shell | default('/bin/bash') }}"
     state: present
     uid: "{{ item.uid }}"
