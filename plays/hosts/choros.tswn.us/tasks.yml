@@ -259,6 +259,18 @@
         - systemd-modules-load.service
       tags:
         - modules-load
+    - name: Ensure /etc/wireguard exists
+      ansible.builtin.file:
+        group: root
+        mode: u=rwx,g=,o=
+        owner: root
+        path: /etc/wireguard
+        state: directory
+      tags:
+        - hfp-wireguard
+        - hogs-pod
+        - kv-wireguard
+        - wireguard
     - name: Setup Wireguard Config
       ansible.builtin.copy:
         content: |
