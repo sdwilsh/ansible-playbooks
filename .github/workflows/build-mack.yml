@@ -76,6 +76,7 @@ jobs:
       highlight-packages: bootc kernel systemd
       image: mack
       release: ${{ fromJSON(needs.plan.outputs.release) }}
+      verify-script: images/mack/verify-signature.sh
 
   mack-kairos:
     name: Build and release mack-kairos
