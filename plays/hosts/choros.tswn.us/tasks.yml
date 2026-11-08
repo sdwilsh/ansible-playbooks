@@ -364,7 +364,7 @@
           AddCapability=NET_ADMIN
           AddCapability=NET_RAW
           DropCapability=ALL
-          HealthCmd=CMD-SHELL ping -c 1 10.11.2.1 || exit 1
+          HealthCmd=CMD-SHELL ping -c 1 10.11.1.1 || exit 1
           HealthInterval=30s
           HealthLogDestination=events_logger
           HealthRetries=3
