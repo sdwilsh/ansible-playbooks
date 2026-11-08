@@ -49,6 +49,7 @@
         - hfp-wireguard.service
         - hogs-pod.service
         - hogs-services-network.service
+        - kv-wireguard.service
         - wireguard.service
   roles:
     - role: common-users
@@ -164,6 +165,7 @@
           PublishPort={{ ansible_facts['default_ipv4'].address }}:2457:2457/udp
           # Wireguard
           PublishPort={{ ansible_facts['default_ipv4'].address }}:51821:51821/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:51822:51822/udp
 
           [Install]
           WantedBy=multi-user.target default.target
@@ -463,3 +465,71 @@
       tags:
         - hogs-pod
         - hfp-wireguard
+
+    - name: Setup kube-vip Wireguard Config
+      ansible.builtin.copy:
+        content: |
+          [Interface]
+          Address = 10.11.3.1/32
+          ListenPort = 51822
+          # kube-vip fixes its end of the tunnel at 1420.  Use the same value.
+          MTU = 1420
+          PrivateKey = {{ wireguard__privkey }}
+
+          # kube-vip sends the ICMP "need to frag" message for these flows into
+          # the tunnel, not to the pod.  Path MTU discovery fails, so clamp MSS.
+          PreUp = iptables --table mangle --append FORWARD --out-interface kv0 --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
+          PreUp = iptables --table mangle --append FORWARD --in-interface kv0 --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --set-mss 1380
+
+          [Peer]
+          AllowedIPs = 10.11.3.64/32
+          PublicKey = XtA4c8MsSJn5yR+aeTFdQjLWZiwZ+m1DDWQ5/GRtbT4=
+        dest: /etc/wireguard/kv0.conf
+        mode: u=rw,g=r
+        owner: root
+        group: root
+      no_log: true
+      notify:
+        - kv-wireguard.service
+      tags:
+        - hogs-pod
+        - kv-wireguard
+      vars:
+        wireguard__privkey: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31626662643563653335643230303239666331313533633566656332303437353935353730623764
+          3534333334323666396264646266313636646138393835620a316536663435333364343562633436
+          38306661356236626137623537323261663763326235663135393039336231643936326233326236
+          3935383566333631390a326162626162613334313837633166306430356533313465613534363066
+          34343065623762663635336265346233316639306662396235646139666634343762326335386432
+          3330323830303431303063346235613032323731636139356266
+    - name: Setup kube-vip Wireguard container
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          ConditionPathExists=/etc/wireguard/kv0.conf
+          Description=A container that hosts the choros end of the wireguard tunnel to kube-vip.
+
+          [Container]
+          AddCapability=NET_ADMIN
+          AddCapability=NET_RAW
+          DropCapability=ALL
+          HealthCmd=CMD-SHELL wg show kv0 || exit 1
+          HealthInterval=60s
+          HealthLogDestination=events_logger
+          HealthRetries=3
+          HealthStartPeriod=10s
+          NoNewPrivileges=true
+          Image=docker.io/procustodibus/wireguard
+          Pod=hogs.pod
+          Volume=/etc/wireguard/kv0.conf:/etc/wireguard/kv0.conf:Z
+        dest: /etc/containers/systemd/kv-wireguard.container
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - kv-wireguard.service
+      tags:
+        - hogs-pod
+        - kv-wireguard
