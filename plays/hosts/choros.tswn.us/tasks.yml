@@ -486,6 +486,10 @@
           [Peer]
           AllowedIPs = 10.11.3.70/32
           PublicKey = N/SfTWX7EBNrA8g4Goy4YN9roHCE5dMy5gO0lBLWLx4=
+
+          [Peer]
+          AllowedIPs = 10.11.3.65/32
+          PublicKey = QtyRi8YrbJWzTnvGNCACHJV66fn6/4UN83EuGt84CXY=
         dest: /etc/wireguard/kube-vip.conf
         mode: u=rw,g=r
         owner: root
