@@ -10,6 +10,8 @@ spec:
         - env:
             - name: NAME
               value: valheim-relic.tswn.us
+            - name: PUBLIC
+              value: "0"
             - name: WORLD
               value: Relic
           name: valheim
