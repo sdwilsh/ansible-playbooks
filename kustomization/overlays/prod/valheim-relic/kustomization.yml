@@ -36,3 +36,4 @@ resources:
   - namespace.yml
   - networkpolicy/allow-to-game-from-choros-and-home.yml
   - podmonitor.yml
+  - prometheusrule.yml

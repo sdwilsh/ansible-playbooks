@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: valheim-rules
+spec:
+  groups:
+    - name: valheim-relic
+      rules:
+        # The liveness probe checks only that the process runs.  A server that
+        # cannot load its world or log in to Steam keeps running, offline.
+        - alert: valheim-relic-offline
+          annotations:
+            description: "valheim-relic has reported itself offline for 15m — players cannot join."
+          expr: max(valheim_online{namespace="valheim-relic"}) == 0
+          for: 15m
+          labels:
+            severity: warning
+        - alert: valheim-relic-metrics-absent
+          annotations:
+            description: "Prometheus has no metrics from valheim-relic for 15m — the Pod is not running, or a NetworkPolicy blocks the scrape."
+          expr: absent(valheim_online{namespace="valheim-relic"})
+          for: 15m
+          labels:
+            severity: warning
