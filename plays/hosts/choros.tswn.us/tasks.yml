@@ -323,10 +323,8 @@
           {% endfor %}
 
           # Unifi Inform Forwarding
-          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 8080 --jump DNAT --to-destination 10.11.1.65:8080
-          PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 3478 --jump DNAT --to-destination 10.11.1.65:3478
-          PreUp = iptables --table nat --append POSTROUTING --protocol tcp --destination 10.11.1.65 --dport 8080 --jump MASQUERADE
-          PreUp = iptables --table nat --append POSTROUTING --protocol udp --destination 10.11.1.65 --dport 3478 --jump MASQUERADE
+          PreUp = iptables --table nat --append PREROUTING --protocol tcp --dport 8080 --jump DNAT --to-destination 10.11.3.65:8080
+          PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 3478 --jump DNAT --to-destination 10.11.3.65:3478
 
           # Valheim Relic Forwarding
           PreUp = iptables --table nat --append PREROUTING --protocol udp --dport 2456 --jump DNAT --to-destination 10.11.1.68:2456
