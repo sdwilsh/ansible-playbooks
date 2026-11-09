@@ -13,3 +13,4 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
+  - service/unifi-choros.yml
