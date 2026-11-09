@@ -5,11 +5,16 @@ kind: Kustomization
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/factorio?ref=kustomize-factorio@v0.1.5
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
 namespace: factorio-relic
 patches:
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: factorio-statefulset
   - path: patches/set_load_balancer.yml
     target:
       kind: Service
@@ -33,6 +38,5 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
-  - networkpolicy/allow-from-factorio-to-internet.yml
   - networkpolicy/allow-to-admin-from-traefik.yml
   - networkpolicy/allow-to-game-from-choros-and-home.yml
