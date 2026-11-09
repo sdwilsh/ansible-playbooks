@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-game-from-choros-and-home-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.2.2/32  # choros wireguard forwarding, for players outside the LAN
+        - ipBlock:
+            cidr: 10.117.0.0/23  # home network, for players connecting directly
+      ports:
+        - port: 2456
+          protocol: UDP
+        - port: 2457
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: valheim
+  policyTypes:
+    - Ingress
