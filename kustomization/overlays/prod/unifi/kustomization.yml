@@ -4,13 +4,35 @@ kind: Kustomization
 
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/unifi-network-application?ref=kustomize-unifi-network-application@v1.2.4
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-deny-all
 namespace: unifi
 patches:
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: unifi-network-application-statefulset
+  - path: patches/add_mqtt_port_to_internet.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-internet-networkpolicy
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: unifi-network-application-statefulset
   - path: patches/add_una_svc_annotations.yml
     target:
       kind: Service
       name: unifi-network-application-svc
+  - path: patches/replace_traefik_port_with_una_web.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml
+  - networkpolicy/allow-from-unifi-devices.yml
+  - networkpolicy/allow-from-unifi-network-mcp.yml
   - service/unifi-choros.yml

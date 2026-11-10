@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-unifi-devices-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 0.0.0.0/0 # remote UniFi sites, through the choros tunnel
+            except:
+              - 10.0.0.0/8
+              - 100.64.0.0/10
+              - 169.254.0.0/16
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+        - ipBlock:
+            cidr: 10.10.0.0/24 # MAN, the UniFi devices
+        - ipBlock:
+            cidr: 10.11.0.1/32 # UniFi gateway, on SERVICES
+      ports:
+        - port: device-api
+          protocol: TCP
+        - port: device-stun
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: unifi-network-application
+  policyTypes:
+    - Ingress

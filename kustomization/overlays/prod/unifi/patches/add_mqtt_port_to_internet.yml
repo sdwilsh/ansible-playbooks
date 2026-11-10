@@ -1,0 +1,6 @@
+---
+- op: add
+  path: /spec/egress/0/ports/-
+  value:
+    port: 8883
+    protocol: TCP
