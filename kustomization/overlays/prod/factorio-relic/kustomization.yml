@@ -3,12 +3,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - https://github.com/marinatedconcrete/config/kustomization/components/factorio?ref=kustomize-factorio@v0.1.5
+  - https://github.com/marinatedconcrete/config/kustomization/components/factorio?ref=kustomize-factorio@v1.0.0
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
-  - ../../../components/pod-security-enforce-baseline
+  - ../../../components/pod-security-enforce-restricted
 namespace: factorio-relic
 patches:
   - path: patches/add_internet_client_label.yml
@@ -19,10 +19,6 @@ patches:
     target:
       kind: Service
       name: factorio-game-svc
-  - path: patches/use_user_namespace.yml
-    target:
-      kind: StatefulSet
-      name: factorio-statefulset
   - path: patches/use_stable_factorio_version.yml
     target:
       kind: StatefulSet
