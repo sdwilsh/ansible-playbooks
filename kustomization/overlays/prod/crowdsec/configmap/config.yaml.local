@@ -25,6 +25,10 @@ db_config:
     # first.  This deletes the machine of each old `Pod`.
     agents_autodelete:
       login_password: 1d
+    # Each Traefik `Pod` adds a bouncer named for its address.  This deletes
+    # the bouncer of each old `Pod`.
+    bouncers_autodelete:
+      api_key: 1d
   host: ${DB_HOST}
   password: ${DB_PASSWORD}
   port: 5432

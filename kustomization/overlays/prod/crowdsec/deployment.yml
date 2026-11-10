@@ -33,6 +33,14 @@ spec:
             - -c
             - /scripts/entrypoint.sh
           env:
+            # The entrypoint registers a bouncer named `traefik` with this key.
+            # Without it, only the bouncer of the current Traefik `Pod` holds the
+            # key.
+            - name: BOUNCER_KEY_traefik
+              valueFrom:
+                secretKeyRef:
+                  key: traefik-bouncer_api_key
+                  name: crowdsec-credentials-secret
             - name: COLLECTIONS
               value: >-
                 crowdsecurity/iptables
