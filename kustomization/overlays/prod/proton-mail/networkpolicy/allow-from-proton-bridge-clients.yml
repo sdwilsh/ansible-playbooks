@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-proton-bridge-clients-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              hogs.tswn.us/proton-bridge-client: "true"
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/proton-bridge-client: "true"
+      ports:
+        - port: 25
+          protocol: TCP
+        - port: 143
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: proton-bridge
+  policyTypes:
+    - Ingress
