@@ -31,7 +31,7 @@ spec:
               subPath: entrypoint.sh
             - name: registry-scripts
               mountPath: /garbage-collect.sh
-              subPath: garbage-collect.sh
+              subPath: gc.sh
             - name: registry-config
               mountPath: /etc/docker/registry/config.yml
               subPath: config.yml

@@ -20,5 +20,19 @@ spec:
               mountPath: /var/lib/registry
       volumes:
         # This throws away all data on every restart!
-        - name: registry-data
-          emptyDir: {}
+        - ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  # Use this PVC to configure attached PVs.
+                  recurring-job.longhorn.io/source: enabled
+                  # Opt into the no-backup group since it can easily be recreated.
+                  recurring-job-group.longhorn.io/no-backup: enabled
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 60Gi
+                storageClassName: longhorn-ephemeral-ssd
+          name: registry-data
