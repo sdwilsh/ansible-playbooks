@@ -4,7 +4,7 @@ envs:
   - name: APP_LOCALE
     value: en_US
   - name: SYSTEM_ENABLEANALYTICS
-    value: "true"
+    value: "false"
 
 ingress:
   annotations:
