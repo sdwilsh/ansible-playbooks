@@ -4,7 +4,7 @@ FROM registry.k8s.io/kustomize/kustomize:v5.8.3@sha256:429eda4a1c76a7de458d0c4ca
 FROM docker.io/koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
 FROM 11notes/traefik:3.7.17@sha256:5fa3de90a94596d3bd11e95d6f2f3cd0c7254d61a11739c7332be81aa6ab66c8 AS traefik
 
-FROM ghcr.io/marinatedconcrete/devcontainer-base:latest@sha256:6cc3339d24312786026abc5f634e4c5e13760b29ed794bd2b907ee09a80aab92
+FROM ghcr.io/marinatedconcrete/devcontainer-base:latest@sha256:08da3fadeb5b3b86f05219204fc0924f21becddfdbf1f10acf94ec22f57e0353
 
 # hadolint ignore=DL3064
 ARG USERNAME=vscode
