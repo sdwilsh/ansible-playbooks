@@ -91,15 +91,9 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              add:
-                - CHOWN
-                - DAC_OVERRIDE
-                - SETUID
-                - SETGID
               drop:
                 - ALL
             readOnlyRootFilesystem: false
-            runAsNonRoot: false
             seccompProfile:
               type: RuntimeDefault
           startupProbe:
@@ -123,6 +117,7 @@ spec:
               mountPath: /scripts
               readOnly: true
       enableServiceLinks: false
+      hostUsers: false
       priorityClassName: system-cluster-critical
       volumes:
         - configMap:

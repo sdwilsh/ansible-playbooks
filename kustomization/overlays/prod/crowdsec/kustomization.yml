@@ -15,7 +15,7 @@ components:
   - ../../../components/networkpolicy-allow-to-loki
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
-  - ../../../components/pod-security-enforce-baseline
+  - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
   - name: crowdsec-configmap
     files:
