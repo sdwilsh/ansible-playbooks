@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ttl-redis-networkpolicy
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - ttl-hooks
+                  - ttl-reaper
+      ports:
+        - port: 6379
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app: ttl-redis
+  policyTypes:
+    - Ingress

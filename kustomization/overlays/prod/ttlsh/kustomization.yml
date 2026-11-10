@@ -3,6 +3,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/networkpolicy-allow-from-prometheus
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/ttlsh
 images:
   - name: busybox
@@ -20,6 +24,14 @@ images:
     newTag: 8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
 namespace: ttlsh
 patches:
+  - path: patches/add_prometheus_target_label.yml
+    target:
+      kind: Deployment
+      name: ttl-registry
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: Deployment
+      name: ttl-registry
   - path: patches/configure-hooks.yml
     target:
       kind: Deployment
@@ -28,8 +40,16 @@ patches:
     target:
       kind: Deployment
       name: ttl-registry
+  - path: patches/set_prometheus_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml
+  - networkpolicy/ttl-hooks.yml
+  - networkpolicy/ttl-reaper.yml
+  - networkpolicy/ttl-redis.yml
+  - networkpolicy/ttl-registry.yml
   - podmonitor.yml
   - prometheusrule.yml
