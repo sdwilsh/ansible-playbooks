@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-repo-server-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 8081
+          protocol: TCP
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: argocd-repo-server
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - argocd-application-controller
+          - argocd-applicationset-controller
+          - argocd-notifications-controller
+          - argocd-server
+  policyTypes:
+    - Egress

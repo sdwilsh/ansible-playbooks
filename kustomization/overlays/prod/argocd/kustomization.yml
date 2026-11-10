@@ -4,21 +4,66 @@ kind: Kustomization
 
 components:
   - ../../../components/argo-cd
+  - ../../../components/networkpolicy-allow-from-prometheus
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-to-traefik
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/schedule-prefer-control-plane
 namespace: argocd
 patches:
-  - target:
+  - path: patches/add_api_server_client_label.yml
+    target:
+      kind: Deployment|StatefulSet
+      labelSelector: app.kubernetes.io/name in (argocd-application-controller,
+        argocd-applicationset-controller, argocd-dex-server,
+        argocd-notifications-controller, argocd-server)
+  - path: patches/add_deny_all_sync_wave.yml
+    target:
+      kind: NetworkPolicy
+      name: deny-all-networkpolicy
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: Deployment
+      name: argocd-repo-server
+  - path: patches/add_mcp_account.yml
+    target:
       kind: ConfigMap
       name: argocd-cm
-    path: patches/add_oidc_config.yml
-  - target:
+  - path: patches/add_oidc_config.yml
+    target:
       kind: ConfigMap
       name: argocd-cm
-    path: patches/add_mcp_account.yml
-  - target:
+  - path: patches/add_oidc_policy.yml
+    target:
       kind: ConfigMap
       name: argocd-rbac-cm
-    path: patches/add_oidc_policy.yml
+  - path: patches/add_prometheus_target_label.yml
+    target:
+      kind: Deployment
+      name: argocd-server
+  - path: patches/add_traefik_client_label.yml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/name in (argocd-repo-server, argocd-server)
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: Deployment
+      name: argocd-server
+  - path: patches/delete_server_networkpolicy.yml
+  - path: patches/set_prometheus_networkpolicy_port.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
+  - path: patches/set_traefik_networkpolicy_port.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-traefik-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml
+  - networkpolicy/allow-from-argocd-mcp.yml
+  - networkpolicy/allow-to-redis.yml
+  - networkpolicy/allow-to-repo-server.yml
