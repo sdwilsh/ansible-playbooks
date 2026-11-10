@@ -10,6 +10,7 @@ components:
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/opencloud
+  - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
   # These can be set with an environment variable and can therefore just be
   # mounted and pointed to.
