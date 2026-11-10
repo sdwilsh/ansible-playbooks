@@ -4,5 +4,22 @@ kind: Kustomization
 
 components:
   - ../../../components/longhorn
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+patches:
+  - path: patches/add_traefik_route_label_to_namespace.yml
+  - path: patches/add_traefik_route_label_to_ui.yml
+    target:
+      kind: Deployment
+      name: longhorn-ui
+  - path: patches/replace_traefik_port_with_http.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-traefik-networkpolicy
+  - path: patches/select_longhorn_ui_for_coredns.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-coredns-networkpolicy
 resources:
   - ingress.yml
+  - networkpolicy/allow-from-longhorn-ui-to-longhorn-manager.yml
