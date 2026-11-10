@@ -84,11 +84,13 @@ env:
       secretKeyRef:
         name: manyfold-secret
         key: SECRET_KEY_BASE
+  WEB_CONCURRENCY:
+    value: "2"
 
 resources:
   limits:
     cpu: 2000m
-    memory: 2Gi
+    memory: 3Gi
   requests:
     cpu: 50m
 
