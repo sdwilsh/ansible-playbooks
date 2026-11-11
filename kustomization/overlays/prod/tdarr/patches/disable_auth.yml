@@ -1,0 +1,15 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            # Authelia protects the web UI at Traefik, and only the tdarr nodes
+            # can reach the server port.  The tdarr login adds nothing.
+            - name: auth
+              value: "false"
+          name: tdarr

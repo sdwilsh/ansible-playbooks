@@ -19,6 +19,10 @@ patches:
     target:
       kind: StatefulSet
       name: tdarr-server-statefulset
+  - path: patches/disable_auth.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
   - path: patches/add_internet_client_label.yml
     target:
       kind: Deployment
