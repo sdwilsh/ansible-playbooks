@@ -1,1 +1,11 @@
 ---
+# The image sets uid 65532, so runAsNonRoot needs no runAsUser.
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
