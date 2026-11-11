@@ -323,6 +323,7 @@
         "ghcr.io/dancwilliams/protonmail-bridge-docker",
         "ghcr.io/marinatedconcrete/devcontainer-base",
         "ghcr.io/sdwilsh/nut-shutdown-agent",
+        "ghcr.io/sdwilsh/wireguard-egress",
         "postgres",
         "rocm/k8s-device-plugin"
       ],

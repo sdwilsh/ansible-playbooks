@@ -16,11 +16,14 @@ spec:
               name: protonvpn
               subPath: resolv.conf
       initContainers:
-        - command:
-            - /bin/sh
-            - -c
-            - /scripts/setup_wireguard.sh
-          image: alpine
+        - env:
+            # Proton VPN client address is always 10.2.0.2.
+            - name: WG_ADDRESS
+              value: 10.2.0.2/32
+            # The pod and service ranges of the cluster stay off the tunnel.
+            - name: WG_EXCLUDE_CIDRS
+              value: 172.16.0.0/16 172.17.0.0/16
+          image: ghcr.io/sdwilsh/wireguard-egress
           name: setup-transmission
           securityContext:
             allowPrivilegeEscalation: false
@@ -37,16 +40,10 @@ spec:
           volumeMounts:
             - mountPath: /etc/wireguard
               name: wireguard-conf
-            - mountPath: /scripts
-              name: wireguard-scripts
       volumes:
         - name: protonvpn 
           configMap:
             name: protonvpn-configmap
-        - name: wireguard-scripts
-          configMap:
-            defaultMode: 0777
-            name: wireguard-scripts-configmap
         - name: wireguard-conf
           secret:
             items:

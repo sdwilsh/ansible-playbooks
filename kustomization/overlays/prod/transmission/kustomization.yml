@@ -9,14 +9,9 @@ configMapGenerator:
   - name: protonvpn-configmap
     files:
       - configmap/protonvpn/resolv.conf
-  - name: wireguard-scripts-configmap
-    files:
-      - configmap/scripts/setup_wireguard.sh
 images:
-  - name: alpine
-    newTag: 3.24.4@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf
-  - name: dockurr/dnsmasq
-    newTag: 2.93@sha256:b40fbaa3a9c3742d5943a4bec789dabc6c5c932b2db76a4e052c84f0b8d173a2
+  - name: ghcr.io/sdwilsh/wireguard-egress
+    newTag: latest@sha256:169374cb385e3fb117dc8f64cc07f0df125e54d8399a282e498d9f73c9f3466b
   - name: lscr.io/linuxserver/transmission
     newTag: 4.0.5-r0-ls223@sha256:bd450da4a328cdf1f89845785150e79b531983b27ab6a1d4c2e3e7dcbf952bfc
 namespace: transmission
