@@ -63,6 +63,9 @@ spec:
             runAsUser: 65534
             seccompProfile:
               type: RuntimeDefault
+      # The entrypoint needs root and five capabilities.  In a user namespace
+      # they act only on the files of the pod, not on the node.
+      hostUsers: false
       initContainers:
         - command:
             - sh
