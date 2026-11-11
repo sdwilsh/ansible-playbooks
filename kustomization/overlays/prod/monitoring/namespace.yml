@@ -5,8 +5,4 @@ metadata:
   labels:
     hogs.tswn.us/garage-client: "true"
     hogs.tswn.us/traefik-route: "true"
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/enforce-version: latest
-    pod-security.kubernetes.io/warn: restricted
-    pod-security.kubernetes.io/warn-version: latest
   name: this-is-ignored-but-is-required

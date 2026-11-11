@@ -12,6 +12,7 @@ components:
   - ../../../components/networkpolicy-allow-to-garage
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/prometheus
 configMapGenerator:
   - name: alloy-config
