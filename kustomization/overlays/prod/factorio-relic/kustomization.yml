@@ -15,6 +15,10 @@ patches:
     target:
       kind: StatefulSet
       name: factorio-statefulset
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: factorio-statefulset
   - path: patches/set_load_balancer.yml
     target:
       kind: Service
