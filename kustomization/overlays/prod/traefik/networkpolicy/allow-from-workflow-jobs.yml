@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-workflow-jobs-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values:
+                  - forgejo-runners-privileged
+                  - forgejo-runners-restricted
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/component: workflow-job
+      ports:
+        - port: websecure-ci
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  policyTypes:
+    - Ingress

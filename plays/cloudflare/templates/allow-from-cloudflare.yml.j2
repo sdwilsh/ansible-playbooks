@@ -1,0 +1,22 @@
+# @codegen-command: ansible-playbook plays/cloudflare/update_ips.yml
+# @generated
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-cloudflare-networkpolicy
+spec:
+  ingress:
+    - from:
+{% for cidr in ips_v4 %}
+        - ipBlock:
+            cidr: {{ cidr }}
+{% endfor %}
+      ports:
+        - port: websecure-ext
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  policyTypes:
+    - Ingress

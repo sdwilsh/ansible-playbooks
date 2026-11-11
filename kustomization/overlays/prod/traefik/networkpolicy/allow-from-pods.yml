@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-pods-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector: {}
+      ports:
+        - port: imapsecure
+          protocol: TCP
+        - port: mqtts
+          protocol: TCP
+        - port: smtpsecure
+          protocol: TCP
+        - port: web
+          protocol: TCP
+        - port: websecure
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  policyTypes:
+    - Ingress

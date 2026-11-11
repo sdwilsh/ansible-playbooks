@@ -22,11 +22,9 @@ components:
 
 ### Namespace
 
-Put the `hogs.tswn.us/traefik-route` label on your `namespace.yml`.  No rule reads this label yet.
-The `traefik` namespace has no `NetworkPolicy` at all, because the consumers and the providers of
-Traefik have not all moved to this scheme.  A future change adds a `deny-all` rule there, and the
-egress rule that goes with it reads this label to find your `Namespace`.  Put the label on now, and
-your client needs no change on that day.
+Put the `hogs.tswn.us/traefik-route` label on your `namespace.yml`.  The `traefik` namespace has a
+`deny-all` rule.  Its `allow-to-routes-networkpolicy` egress rule reads this label on your
+`Namespace` and on your `Pod`.  Without both labels, Traefik cannot connect to your `Pod`.
 
 ```yaml
 ---

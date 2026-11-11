@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-routes-networkpolicy
+spec:
+  egress:
+    # No port list.  The allow-from-traefik rule in each Namespace sets the
+    # ports, so a new backend needs only the labels.
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              hogs.tswn.us/traefik-route: "true"
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/traefik-route: "true"
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  policyTypes:
+    - Egress

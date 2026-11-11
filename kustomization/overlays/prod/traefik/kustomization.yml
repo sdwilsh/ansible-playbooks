@@ -4,6 +4,13 @@ kind: Kustomization
 
 components:
   - ../../../components/traefik
+  - ../../../components/networkpolicy-allow-from-prometheus
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-garage
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-within-this-namespace
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/schedule-prefer-control-plane
 configMapGenerator:
   - name: crowdsec-pages-configmap
@@ -32,6 +39,10 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
+  - path: patches/traefik/add_networkpolicy_labels.yml
+    target:
+      kind: Deployment
+      name: traefik-deployment
   - path: patches/traefik/update_subjects.yml
     target:
       kind: ClusterRoleBinding
@@ -40,6 +51,15 @@ resources:
   - namespace.yml
   - certificate.yml
   - ingress/traefik-dashboard.yml
+  - networkpolicy/allow-from-cloudflare.yml
+  - networkpolicy/allow-from-home.yml
+  - networkpolicy/allow-from-man.yml
+  - networkpolicy/allow-from-pods.yml
+  - networkpolicy/allow-from-services.yml
+  - networkpolicy/allow-from-workflow-jobs.yml
+  - networkpolicy/allow-postgres-from-home-assistant.yml
+  - networkpolicy/allow-to-external-backends.yml
+  - networkpolicy/allow-to-routes.yml
   - podmonitor.yml
   - service/traefik-choros.yml
   - service/traefik-ci.yml

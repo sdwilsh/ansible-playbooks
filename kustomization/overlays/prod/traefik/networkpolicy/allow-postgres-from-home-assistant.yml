@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-postgres-from-home-assistant-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.117.0.33/32 # Home Assistant appliance
+      ports:
+        - port: postgres
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  policyTypes:
+    - Ingress

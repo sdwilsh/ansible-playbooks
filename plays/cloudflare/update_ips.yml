@@ -33,6 +33,11 @@
         line: "          forwardedHeadersTrustedIPs: [{{ ips_v4 | join(',') }}]"
         path: "{{ root_dir }}/kustomization/overlays/prod/traefik/configmap/traefik/dynamic.yml"
         regexp: "forwardedHeadersTrustedIPs:"
+    - name: Update traefik websecure-ext NetworkPolicy
+      ansible.builtin.template:
+        dest: "{{ root_dir }}/kustomization/overlays/prod/traefik/networkpolicy/allow-from-cloudflare.yml"
+        mode: u=rw,g=r,o=r
+        src: templates/allow-from-cloudflare.yml.j2
     - name: Update traefik real IP middleware
       ansible.builtin.lineinfile:
         line: "          trustedPeers: [{{ ips_v4 | join(',') }}]"

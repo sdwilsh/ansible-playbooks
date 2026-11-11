@@ -1,0 +1,51 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-external-backends-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 8080
+          protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 10.10.0.6/32 # harvest, opensprinkler-svc
+    - ports:
+        - port: 80
+          protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 10.10.0.14/32 # chanttogreen, nas-svc
+    - ports:
+        - port: 30186
+          protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 10.11.0.14/32 # chanttogreen, garage-admin-svc
+    - ports:
+        - port: 9981
+          protocol: TCP
+      to:
+        # tvheadend uses the host network and can run on any of these nodes.
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01
+        - ipBlock:
+            cidr: 10.11.0.104/32 # worker01
+        - ipBlock:
+            cidr: 10.11.0.105/32 # worker02
+        - ipBlock:
+            cidr: 10.11.0.106/32 # worker03
+    - ports:
+        - port: 8095
+          protocol: TCP
+        - port: 8123
+          protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 10.117.0.33/32 # homeassistant-appliance
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  policyTypes:
+    - Egress
