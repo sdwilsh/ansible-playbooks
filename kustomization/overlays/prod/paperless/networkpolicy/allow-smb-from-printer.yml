@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-smb-from-printer-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.117.0.14/32 # printer.hogs.tswn.us
+      ports:
+        - port: 445
+          protocol: TCP
+  # Samba is its own pod now and moves into the paperless pod later.
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - paperless
+          - samba
+  policyTypes:
+    - Ingress

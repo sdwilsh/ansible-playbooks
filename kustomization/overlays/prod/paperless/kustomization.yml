@@ -63,4 +63,5 @@ resources:
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
   - ingress.yml
+  - networkpolicy/allow-smb-from-printer.yml
   - redis.yml
