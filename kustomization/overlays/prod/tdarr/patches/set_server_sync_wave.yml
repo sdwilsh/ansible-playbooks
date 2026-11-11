@@ -1,0 +1,7 @@
+---
+# The database claim must exist before this StatefulSet.  Else the
+# controller makes a new empty volume.  A Pending claim holds this wave.
+- op: add
+  path: /metadata/annotations
+  value:
+    argocd.argoproj.io/sync-wave: "1"

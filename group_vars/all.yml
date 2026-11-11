@@ -98,6 +98,7 @@ k8s_scale_down_order:
   - opencloud
   - paperless
   - tandoor
+  - tdarr
   - transmission
   - ttlsh
   - tvheadend
@@ -146,6 +147,7 @@ k8s_scale_up_order:
   - opencloud
   - paperless
   - tandoor
+  - tdarr
   - transmission
   - ttlsh
   - tvheadend

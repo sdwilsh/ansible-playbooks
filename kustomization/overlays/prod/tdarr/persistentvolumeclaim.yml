@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 2Ti
+  volumeName: tdarr-media-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rips-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 2Ti
+  volumeName: rips-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tdarr-cache-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      # Size this according to:
+      # (Number of Workers) * (Max Jobs per Worker) * (Max Disk Size of File)
+      storage: 1Ti
+  volumeName: tdarr-cache-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # The StatefulSet adopts this claim by name.  Keep the labels and the
+  # spec equal to the old claim, else the volume loses its backup group.
+  labels:
+    app.kubernetes.io/name: tdarr-server
+    recurring-job-group.longhorn.io/default: enabled
+  name: tdarr-server-tdarr-server-statefulset-0
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-encrypted
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: pvc-f105eb1c-217a-4a33-9ab6-294a93e7f07d

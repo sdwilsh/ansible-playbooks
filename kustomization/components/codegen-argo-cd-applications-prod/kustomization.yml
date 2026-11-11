@@ -54,6 +54,7 @@ resources:
   - application/redis.yml
   - application/stirling-pdf.yml
   - application/tandoor.yml
+  - application/tdarr.yml
   - application/traefik.yml
   - application/transmission.yml
   - application/ttlsh.yml

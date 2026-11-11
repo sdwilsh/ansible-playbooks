@@ -1,0 +1,43 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/networkpolicy-allow-from-traefik
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-baseline
+  - ../../../components/tdarr
+namespace: tdarr
+patches:
+  - path: patches/add_node_volumes.yml
+    target:
+      kind: Deployment
+      name: tdarr-node-deployment
+  - path: patches/add_server_volumes.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: Deployment
+      name: tdarr-node-deployment
+  - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
+  - path: patches/add_traefik_route_label.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
+  - path: patches/set_server_sync_wave.yml
+    target:
+      kind: StatefulSet
+      name: tdarr-server-statefulset
+resources:
+  - namespace.yml
+  - ingress.yml
+  - networkpolicy/allow-tdarr-internal.yml
+  - persistentvolume.yml
+  - persistentvolumeclaim.yml
