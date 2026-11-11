@@ -10,7 +10,6 @@ components:
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-lldap
   - ../../../components/networkpolicy-deny-all
-  - ../../../components/tdarr
 configMapGenerator:
   - name: navidrome-configmap
     files:
@@ -76,31 +75,9 @@ patches:
     target:
       kind: StatefulSet
       name: navidrome-statefulset
-  # tdarr
-  - path: patches/tdarr/add_node_volumes.yml
-    target:
-      kind: Deployment
-      name: tdarr-node-deployment
-  - path: patches/tdarr/add_server_volumes.yml
-    target:
-      kind: StatefulSet
-      name: tdarr-server-statefulset
-  - path: patches/add_internet_client_label.yml
-    target:
-      kind: StatefulSet
-      name: tdarr-server-statefulset
-  - path: patches/add_internet_client_label.yml
-    target:
-      kind: Deployment
-      name: tdarr-node-deployment
-  - path: patches/add_traefik_route_label.yml
-    target:
-      kind: StatefulSet
-      name: tdarr-server-statefulset
 resources:
   - namespace.yml
   - ingress.yml
-  - networkpolicy/allow-tdarr-internal.yml
   - networkpolicy/allow-to-jellyfin-from-hfp.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml

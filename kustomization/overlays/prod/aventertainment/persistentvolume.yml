@@ -12,31 +12,3 @@ spec:
     path: /mnt/rust0/nfs/media
     server: services-nfs.hogs.tswn.us
   persistentVolumeReclaimPolicy: Retain
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: rips-pv
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 2Ti
-  nfs:
-    path: /mnt/rust0/nfs/mkv
-    server: services-nfs.hogs.tswn.us
-  persistentVolumeReclaimPolicy: Retain
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: tdarr-cache-pv
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 1Ti
-  nfs:
-    path: /mnt/rust0/nfs/tdarr-cache
-    server: services-nfs.hogs.tswn.us
-  persistentVolumeReclaimPolicy: Retain

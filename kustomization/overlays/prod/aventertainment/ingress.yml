@@ -3,27 +3,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.middlewares: auth-forwardauth-middleware@kubernetescrd
-    traefik.ingress.kubernetes.io/router.tls: "true"
-  name: aventertainment-ingress
-spec:
-  rules:
-    - host: tdarr.hogs.tswn.us
-      http:
-        paths:
-          - backend:
-              service:
-                name: tdarr-svc
-                port:
-                  name: ui
-            path: /
-            pathType: Prefix
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: aventertainment-external-ingress

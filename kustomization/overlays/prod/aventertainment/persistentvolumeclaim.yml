@@ -11,31 +11,3 @@ spec:
     requests:
       storage: 2Ti
   volumeName: media-pv
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: rips-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: ""
-  resources:
-    requests:
-      storage: 2Ti
-  volumeName: rips-pv
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tdarr-cache-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: ""
-  resources:
-    requests:
-      # Size this according to:
-      # (Number of Workers) * (Max Jobs per Worker) * (Max Disk Size of File)
-      storage: 1Ti
-  volumeName: tdarr-cache-pv
