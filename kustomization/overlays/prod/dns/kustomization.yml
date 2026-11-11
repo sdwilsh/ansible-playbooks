@@ -5,6 +5,7 @@ kind: Kustomization
 components:
   - ../../../components/blocky
   - ../../../components/schedule-prefer-control-plane
+  - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
   - name: blocky-configmap
     files:

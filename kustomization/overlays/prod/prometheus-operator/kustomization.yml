@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/prometheus-operator
+  - ../../../components/pod-security-enforce-restricted
 namespace: prometheus-operator
 resources:
   - namespace.yml

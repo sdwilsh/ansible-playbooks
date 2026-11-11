@@ -6,6 +6,7 @@ components:
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-privileged
 images:
   - name: ghcr.io/sdwilsh/nut-shutdown-agent
     newTag: latest@sha256:efb24d47c0cce971615b1d3770e2a72f34a37bcc0b6032141fe1a71b3e3d4c8f

@@ -5,6 +5,7 @@ kind: Kustomization
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/kube-vip?ref=kustomize-kube-vip@v5.1.0
   - https://github.com/marinatedconcrete/config/kustomization/components/kube-vip-wireguard?ref=kustomize-kube-vip-wireguard@v1.0.0
+  - ../../../components/pod-security-enforce-privileged
 namespace: kube-vip
 patches:
   - path: patches/add_metrics_port.yml

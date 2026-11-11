@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/schedule-prefer-control-plane
+  - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
   - name: cnpg-scripts-configmap
     files:
@@ -12,18 +13,6 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:8f59408f9e896fc8992a0660a56687545bd06751f26531b4a26fca6d5dc7562d
 namespace: cnpg-system
-patches:
-  - patch: |-
-      ---
-      apiVersion: v1
-      kind: Namespace
-      metadata:
-        labels:
-          pod-security.kubernetes.io/enforce: restricted
-          pod-security.kubernetes.io/enforce-version: latest
-        name: this-is-ignored-but-is-required
-    target:
-      kind: Namespace
 resources:
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.30.1.yaml
   - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.16.0/manifest.yaml

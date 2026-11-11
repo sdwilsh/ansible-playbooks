@@ -15,6 +15,7 @@ components:
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
   - ../../../components/schedule-avoid-control-plane
+  - ../../../components/pod-security-enforce-baseline
 helmCharts:
   - name: manyfold
     version: 1.0.3

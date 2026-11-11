@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/generic-device-plugin
+  - ../../../components/pod-security-enforce-privileged
 namespace: generic-device-plugin
 patches:
   - target:
