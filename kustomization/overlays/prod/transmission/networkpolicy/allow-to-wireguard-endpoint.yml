@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-wireguard-endpoint-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 51820
+          protocol: UDP
+      to:
+        - ipBlock:
+            cidr: 146.70.195.82/32 # Proton VPN endpoint
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: transmission
+  policyTypes:
+    - Egress
