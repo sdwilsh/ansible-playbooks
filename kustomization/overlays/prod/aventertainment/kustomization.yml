@@ -10,6 +10,7 @@ components:
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-lldap
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
   - name: navidrome-configmap
     files:
