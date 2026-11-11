@@ -52,10 +52,10 @@ resources:
   - certificate.yml
   - ingress/traefik-dashboard.yml
   - networkpolicy/allow-from-cloudflare.yml
-  - networkpolicy/allow-from-home.yml
-  - networkpolicy/allow-from-man.yml
+  - networkpolicy/allow-from-home-vlan.yml
+  - networkpolicy/allow-from-man-vlan.yml
   - networkpolicy/allow-from-pods.yml
-  - networkpolicy/allow-from-services.yml
+  - networkpolicy/allow-from-services-vlan.yml
   - networkpolicy/allow-from-workflow-jobs.yml
   - networkpolicy/allow-postgres-from-home-assistant.yml
   - networkpolicy/allow-to-external-backends.yml

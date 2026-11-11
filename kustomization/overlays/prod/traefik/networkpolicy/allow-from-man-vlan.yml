@@ -2,14 +2,12 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-home-networkpolicy
+  name: allow-from-man-vlan-networkpolicy
 spec:
   ingress:
     - from:
         - ipBlock:
-            cidr: 10.117.0.0/23 # HOME
-        - ipBlock:
-            cidr: 10.117.2.0/24 # Home, the remote-user VPN
+            cidr: 10.10.0.0/24 # MAN
       ports:
         - port: imapsecure
           protocol: TCP
