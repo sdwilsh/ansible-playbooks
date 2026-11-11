@@ -19,6 +19,7 @@ spec:
         memory: 128Mi
   podSecurityContext:
     fsGroup: 1000 # redis
+    runAsNonRoot: true
     runAsUser: 1000 # redis
   securityContext:
     allowPrivilegeEscalation: false

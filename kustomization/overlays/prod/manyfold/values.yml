@@ -4,10 +4,11 @@ podSecurityContext:
 
 securityContext:
   allowPrivilegeEscalation: false
+  # The s6 entrypoint chowns tmp and log, then calls setgroups to start
+  # the app as PUID.  Restricted is not possible without a new entrypoint.
   capabilities:
     add:
       - CHOWN
-      - DAC_OVERRIDE
       - SETUID
       - SETGID
     drop:
@@ -103,6 +104,9 @@ initContainers:
       - /tmp
     securityContext:
       allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
       seccompProfile:
         type: RuntimeDefault
     resources:
