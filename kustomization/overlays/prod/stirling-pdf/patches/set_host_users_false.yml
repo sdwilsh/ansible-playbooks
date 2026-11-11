@@ -1,0 +1,5 @@
+---
+# Root in the pod is not root on the node.  The entrypoint needs root to start.
+- op: add
+  path: /spec/template/spec/hostUsers
+  value: false

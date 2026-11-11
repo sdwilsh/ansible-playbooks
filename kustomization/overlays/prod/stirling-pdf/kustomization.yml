@@ -6,6 +6,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/schedule-avoid-control-plane
 helmCharts:
   - name: stirling-pdf-chart
@@ -26,5 +27,9 @@ patches:
     target:
       kind: NetworkPolicy
       name: allow-from-traefik-networkpolicy
+  - path: patches/set_host_users_false.yml
+    target:
+      kind: Deployment
+      name: stirling-pdf-stirling-pdf-chart
 resources:
   - namespace.yml

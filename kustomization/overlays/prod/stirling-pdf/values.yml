@@ -1,5 +1,18 @@
 ---
 
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  # The entrypoint runs everything as this user when it does not start as
+  # root.  This is stirlingpdfuser in the image.
+  runAsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
 envs:
   - name: APP_LOCALE
     value: en_US
