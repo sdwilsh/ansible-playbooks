@@ -19,19 +19,15 @@ spec:
         - name: proxy-registry
           image: ghcr.io/distribution/distribution
           command:
-            - /entrypoint.sh
+            - registry
+            - serve
+            - /etc/distribution/config.yml
           ports:
             - containerPort: 5000
               name: web
             - containerPort: 5001
               name: debug
           volumeMounts:
-            - mountPath: /entrypoint.sh
-              name: registry-scripts
-              subPath: entrypoint.sh
-            - mountPath: /garbage-collect.sh
-              name: registry-scripts
-              subPath: garbage-collect.sh
             - mountPath: /etc/distribution/config.yml
               name: registry-config
               subPath: config.yml
@@ -90,8 +86,22 @@ spec:
         - name: registry-config
           emptyDir: {}
         # This throws away all data on every restart!
-        - name: registry-data
-          emptyDir: {}
+        - ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  # Use this PVC to configure attached PVs.
+                  recurring-job.longhorn.io/source: enabled
+                  # Opt into the no-backup group since it can easily be recreated.
+                  recurring-job-group.longhorn.io/no-backup: enabled
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 20Gi
+                storageClassName: longhorn-ephemeral-ssd
+          name: registry-data
         - name: registry-original-config
           configMap:
             name: proxy-registry-configmap

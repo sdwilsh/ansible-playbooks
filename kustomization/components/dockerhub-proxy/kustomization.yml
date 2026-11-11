@@ -8,8 +8,6 @@ configMapGenerator:
       - configmap/config.yml
   - name: proxy-registry-scripts-configmap
     files:
-      - configmap/entrypoint.sh
-      - configmap/gc.sh
       - configmap/substitute-config.sh
 resources:
   - deployment.yml
