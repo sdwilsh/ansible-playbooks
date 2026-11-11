@@ -11,6 +11,7 @@ components:
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/schedule-prefer-control-plane
 namespace: argocd
 patches:
