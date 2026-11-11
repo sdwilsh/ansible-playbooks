@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/valheim
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/schedule-avoid-control-plane
 namespace: valheim-forerunner
 patches:
