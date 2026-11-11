@@ -37,11 +37,20 @@ spec:
               memory: 2Gi
           securityContext:
             allowPrivilegeEscalation: false
+            # socat binds ports 25 and 143.
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
             - mountPath: /root
               name: data
+      # The entrypoint runs as root and keeps its state in /root.  In a user
+      # namespace that root is not root on the node.
+      hostUsers: false
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
