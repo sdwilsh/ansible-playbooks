@@ -9,6 +9,7 @@ components:
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/schedule-avoid-control-plane
 images:
   # Later versions do not start the server.  Remove this pin when

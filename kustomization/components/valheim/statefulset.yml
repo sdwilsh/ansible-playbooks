@@ -31,8 +31,6 @@ spec:
               value: "1"
             - name: AUTO_UPDATE_PAUSE_WITH_PLAYERS
               value: "1"
-            - name: GUID
-              value: "65534"
             - name: HTTP_PORT
               value: "9090"
             - name: PASSWORD
@@ -44,8 +42,6 @@ spec:
               value: "2456"
             - name: PUBLIC
               value: "1"
-            - name: PUID
-              value: "65534"
             - name: TZ
               value: America/Los_Angeles
           image: mbround18/valheim
@@ -72,8 +68,16 @@ spec:
             requests:
               cpu: 500m
               memory: 400Mi
+          # This is the steam user of the image.  Without sudo, the entrypoint
+          # cannot chown, so fsGroup must be the same group.
           securityContext:
-            allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
@@ -83,9 +87,10 @@ spec:
               name: valheim-steam
             - mountPath: /home/steam/.config/unity3d/IronGate/Valheim
               name: valheim-saves
+      hostUsers: false
       priorityClassName: application
       securityContext:
-        fsGroup: 65534
+        fsGroup: 1000
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
