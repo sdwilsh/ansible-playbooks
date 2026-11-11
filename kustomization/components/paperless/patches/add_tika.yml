@@ -26,6 +26,16 @@ spec:
             limits:
               cpu: 1000m
               memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 1001 # gotenberg
+            runAsNonRoot: true
+            runAsUser: 1001 # gotenberg
+            seccompProfile:
+              type: RuntimeDefault
         - env:
             - name: PAPERLESS_TIKA_ENABLED
               value: "1"
@@ -43,3 +53,13 @@ spec:
             limits:
               cpu: 1000m
               memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 35002
+            runAsNonRoot: true
+            runAsUser: 35002
+            seccompProfile:
+              type: RuntimeDefault
