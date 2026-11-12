@@ -17,7 +17,7 @@ components:
   - ../../../components/pod-security-enforce-baseline
 images:
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:8f59408f9e896fc8992a0660a56687545bd06751f26531b4a26fca6d5dc7562d
+    newTag: latest@sha256:8919c149c2e3d6860e0143c117900e64d71395172aaef0e01e604bb98c8e7ce0
   - name: postgres
     newTag: 18@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
   - name: quay.io/opstree/redis
