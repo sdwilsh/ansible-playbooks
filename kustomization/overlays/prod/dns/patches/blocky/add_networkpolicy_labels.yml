@@ -1,6 +1,24 @@
 ---
 - op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1choros-target
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1home-vlan-target
+  value: "true"
+- op: add
   path: /spec/template/metadata/labels/hogs.tswn.us~1internet-client
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1iot-vlan-target
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1man-vlan-target
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1nodes-target
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1nowan-vlan-target
   value: "true"
 - op: add
   path: /spec/template/metadata/labels/hogs.tswn.us~1prometheus-target
