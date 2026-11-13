@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/tvheadend
+  - ../../../components/pod-security-enforce-privileged
   - ../../../components/schedule-avoid-control-plane
 namespace: tvheadend
 patches:
