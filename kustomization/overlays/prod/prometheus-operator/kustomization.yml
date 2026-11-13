@@ -4,6 +4,8 @@ kind: Kustomization
 
 components:
   - ../../../components/prometheus-operator
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
 namespace: prometheus-operator
 patches:
