@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/valheim
+  - ../../../components/networkpolicy-allow-from-home-vlan
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
@@ -12,6 +13,10 @@ components:
   - ../../../components/schedule-avoid-control-plane
 namespace: valheim-forerunner
 patches:
+  - path: patches/add_home_vlan_target_label.yml
+    target:
+      kind: StatefulSet
+      name: valheim-statefulset
   - path: patches/add_internet_client_label.yml
     target:
       kind: StatefulSet
@@ -24,6 +29,10 @@ patches:
     target:
       kind: StatefulSet
       name: valheim-statefulset
+  - path: patches/set_game_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-home-vlan-networkpolicy
   - path: patches/set_load_balancer.yml
     target:
       kind: Service
@@ -38,4 +47,3 @@ patches:
       name: valheim-statefulset
 resources:
   - namespace.yml
-  - networkpolicy/allow-to-game-from-home.yml

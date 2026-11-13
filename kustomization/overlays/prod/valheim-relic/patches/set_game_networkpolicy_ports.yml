@@ -1,0 +1,8 @@
+---
+- op: add
+  path: /spec/ingress/0/ports
+  value:
+    - port: 2456
+      protocol: UDP
+    - port: 2457
+      protocol: UDP

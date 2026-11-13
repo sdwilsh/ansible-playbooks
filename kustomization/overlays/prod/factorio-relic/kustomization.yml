@@ -4,6 +4,8 @@ kind: Kustomization
 
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/factorio?ref=kustomize-factorio@v1.0.0
+  - ../../../components/networkpolicy-allow-from-choros
+  - ../../../components/networkpolicy-allow-from-home-vlan
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
@@ -35,8 +37,19 @@ patches:
     target:
       kind: StatefulSet
       name: factorio-statefulset
+  - path: patches/add_choros_target_label.yml
+    target:
+      kind: StatefulSet
+      name: factorio-statefulset
+  - path: patches/add_home_vlan_target_label.yml
+    target:
+      kind: StatefulSet
+      name: factorio-statefulset
+  - path: patches/set_game_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-(choros|home-vlan)-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml
   - networkpolicy/allow-to-admin-from-traefik.yml
-  - networkpolicy/allow-to-game-from-choros-and-home.yml

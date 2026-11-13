@@ -4,6 +4,8 @@ kind: Kustomization
 
 components:
   - ../../../components/valheim
+  - ../../../components/networkpolicy-allow-from-choros
+  - ../../../components/networkpolicy-allow-from-home-vlan
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-to-internet
@@ -18,6 +20,14 @@ images:
     newTag: 3.8.10@sha256:aea2eb4cc8c7ca11a7ab7550751f5a12a9c71765989eacd34b0a190c16a02c4d
 namespace: valheim-relic
 patches:
+  - path: patches/add_choros_target_label.yml
+    target:
+      kind: StatefulSet
+      name: valheim-statefulset
+  - path: patches/add_home_vlan_target_label.yml
+    target:
+      kind: StatefulSet
+      name: valheim-statefulset
   - path: patches/add_internet_client_label.yml
     target:
       kind: StatefulSet
@@ -34,12 +44,15 @@ patches:
     target:
       kind: StatefulSet
       name: valheim-statefulset
+  - path: patches/set_game_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-(choros|home-vlan)-networkpolicy
   - path: patches/set_load_balancer.yml
     target:
       kind: Service
       name: valheim-svc
 resources:
   - namespace.yml
-  - networkpolicy/allow-to-game-from-choros-and-home.yml
   - podmonitor.yml
   - prometheusrule.yml
