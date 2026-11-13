@@ -45,4 +45,5 @@ resources:
   - ingress.yml
   - networkpolicy/allow-from-unifi-devices.yml
   - networkpolicy/allow-from-unifi-network-mcp.yml
+  - networkpolicy/allow-to-unifi-syslog.yml
   - service/unifi-choros.yml

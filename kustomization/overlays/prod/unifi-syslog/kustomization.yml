@@ -38,5 +38,6 @@ patches:
       name: allow-from-man-vlan-networkpolicy
 resources:
   - namespace.yml
+  - networkpolicy/allow-from-unifi-controller.yml
   - networkpolicy/allow-from-unifi-devices.yml
   - service.yml

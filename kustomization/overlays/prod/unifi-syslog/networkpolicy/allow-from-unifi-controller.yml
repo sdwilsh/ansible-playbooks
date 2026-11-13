@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-unifi-controller-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: unifi
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: unifi-network-application
+      ports:
+        - port: syslog
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: alloy
+  policyTypes:
+    - Ingress
