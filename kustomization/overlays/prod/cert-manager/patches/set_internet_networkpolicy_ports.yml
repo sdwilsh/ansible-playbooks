@@ -1,0 +1,13 @@
+---
+# ACME and the Cloudflare API use port 443 only.  The DNS-01 self-check
+# asks the Cloudflare name servers directly on port 53.  See
+# add_dns01_recursive_nameservers.yml.
+- op: replace
+  path: /spec/egress/0/ports
+  value:
+    - port: 53
+      protocol: TCP
+    - port: 53
+      protocol: UDP
+    - port: 443
+      protocol: TCP

@@ -4,6 +4,12 @@ kind: Kustomization
 
 components:
   - ../../../components/cert-manager
+  - ../../../components/networkpolicy-allow-from-api-server
+  - ../../../components/networkpolicy-allow-from-prometheus
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
   - ../../../components/schedule-prefer-control-plane
 patches:
@@ -27,5 +33,17 @@ patches:
     target:
       kind: Deployment
   - path: patches/increase_replicas.yml
+  - path: patches/set_api_server_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-api-server-networkpolicy
+  - path: patches/set_internet_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-internet-networkpolicy
+  - path: patches/set_prometheus_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
 resources:
   - clusterissuer.yml
