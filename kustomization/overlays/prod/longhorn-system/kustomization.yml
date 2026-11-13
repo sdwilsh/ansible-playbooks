@@ -6,6 +6,7 @@ components:
   - ../../../components/longhorn
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/pod-security-enforce-privileged
 patches:
   - path: patches/add_traefik_route_label_to_namespace.yml
   - path: patches/add_traefik_route_label_to_ui.yml
