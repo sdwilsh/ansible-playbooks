@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-drop-pods-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: devcontainers
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: drop-pod
+      ports:
+        - port: web
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: proxy-registry
+  policyTypes:
+    - Ingress
