@@ -8,6 +8,7 @@ components:
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
   - ../../../components/opstree-redis-images
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/ttlsh
 images:
   - name: busybox

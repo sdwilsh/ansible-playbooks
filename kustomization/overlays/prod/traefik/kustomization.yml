@@ -14,6 +14,7 @@ components:
   - ../../../components/networkpolicy-allow-to-internet
   - ../../../components/networkpolicy-allow-within-this-namespace
   - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-restricted
   - ../../../components/schedule-prefer-control-plane
 configMapGenerator:
   - name: crowdsec-pages-configmap
