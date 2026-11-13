@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-redis-networkpolicy
+spec:
+  egress:
+    # The namespace of the Redis pods must also admit the operator, with
+    # the networkpolicy-allow-from-redis-operator component.
+    - ports:
+        - port: 6379
+          protocol: TCP
+        - port: sentinel
+          protocol: TCP
+      to:
+        - namespaceSelector: {}
+          podSelector:
+            matchExpressions:
+              - key: redis_setup_type
+                operator: Exists
+  podSelector:
+    matchLabels:
+      name: redis-operator
+  policyTypes:
+    - Egress

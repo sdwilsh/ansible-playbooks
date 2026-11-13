@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
   - ../../../components/redis-operator
   - ../../../components/schedule-prefer-control-plane
@@ -14,3 +16,4 @@ patches:
       name: redis-operator
 resources:
   - namespace.yml
+  - networkpolicy/allow-to-redis.yml
