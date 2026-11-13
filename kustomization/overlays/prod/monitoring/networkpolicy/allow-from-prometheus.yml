@@ -10,6 +10,8 @@ spec:
     - ports:
         - port: 2113 # kube-vip metrics (hostNetwork DaemonSet; an ipBlock rule ignores a named port)
           protocol: TCP
+        - port: 2114 # kube-vip WireGuard metrics (hostNetwork DaemonSet)
+          protocol: TCP
         - port: 3903 # garage admin/metrics (hostNetwork DaemonSet)
           protocol: TCP
         - port: 9100
