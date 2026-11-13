@@ -6,9 +6,12 @@ securityContext:
   allowPrivilegeEscalation: false
   # The s6 entrypoint chowns tmp and log, then calls setgroups to start
   # the app as PUID.  Restricted is not possible without a new entrypoint.
+  # As root, the entrypoint removes the PUID-owned stale server.pid in the
+  # emptyDir.  Without DAC_OVERRIDE, the container does not start again.
   capabilities:
     add:
       - CHOWN
+      - DAC_OVERRIDE
       - SETUID
       - SETGID
     drop:
@@ -54,6 +57,11 @@ env:
       secretKeyRef:
         name: manyfold-pg-cluster-app
         key: username
+  # Each job that stores a 3D file starts an f3d render.  One render of a
+  # 137 MB STL used 0.7 GB.  When you change this value, change the memory
+  # limit below.
+  DEFAULT_WORKER_CONCURRENCY:
+    value: "2"
   FORCE_OIDC:
     value: enabled
   HTTPS_ONLY:
@@ -91,7 +99,7 @@ env:
 resources:
   limits:
     cpu: 2000m
-    memory: 3Gi
+    memory: 4Gi
   requests:
     cpu: 50m
 
