@@ -8,6 +8,9 @@ metadata:
   name: maybe-restart-cnpg-job
 spec:
   template:
+    metadata:
+      labels:
+        hogs.tswn.us/api-server-client: "true"
     spec:
       containers:
         - args:
