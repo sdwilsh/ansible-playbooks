@@ -12,7 +12,7 @@ images:
   - name: docker.io/apache/tika
     newTag: 3.3.3.0@sha256:326b238b37904c94ff61fed87afe0af72e6a29fa715933b10af97b7d56f1d4cb
   - name: docker.io/gotenberg/gotenberg
-    newTag: 9.4.1@sha256:7d790c081a944f4d30cacb59a2cdccbe71569532af691b93c36551f6a877b4fc
+    newTag: 9.5.0@sha256:ac61457a1e889ef1ca256a9afc117cff8caf517f19e66ea23cede3feb22f69a5
 patches:
   - path: patches/add_tika.yml
     target:
