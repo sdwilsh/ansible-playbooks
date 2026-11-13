@@ -1,0 +1,20 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-unifi-gateway-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.0.1/32 # UniFi gateway, on SERVICES
+      ports:
+        - port: dns-tcp
+          protocol: TCP
+        - port: dns-udp
+          protocol: UDP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: blocky
+  policyTypes:
+    - Ingress
