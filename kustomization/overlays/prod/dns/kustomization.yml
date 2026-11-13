@@ -4,17 +4,6 @@ kind: Kustomization
 
 components:
   - ../../../components/blocky
-  - ../../../components/networkpolicy-allow-from-choros
-  - ../../../components/networkpolicy-allow-from-home-vlan
-  - ../../../components/networkpolicy-allow-from-iot-vlan
-  - ../../../components/networkpolicy-allow-from-man-vlan
-  - ../../../components/networkpolicy-allow-from-nodes
-  - ../../../components/networkpolicy-allow-from-nowan-vlan
-  - ../../../components/networkpolicy-allow-from-prometheus
-  - ../../../components/networkpolicy-allow-to-coredns
-  - ../../../components/networkpolicy-allow-to-internet
-  - ../../../components/networkpolicy-allow-within-this-namespace
-  - ../../../components/networkpolicy-deny-all
   - ../../../components/schedule-prefer-control-plane
   - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
@@ -31,10 +20,6 @@ images:
     newTag: v0.26@sha256:b259ada3f943e73283f1fc5e84ac39a791afec7de86515d1aeccc03d2c39e595
 namespace: dns
 patches:
-  - path: patches/blocky/add_dot_port_to_internet.yml
-    target:
-      kind: NetworkPolicy
-      name: allow-to-internet-networkpolicy
   - path: patches/blocky/add_networkpolicy_labels.yml
     target:
       kind: Deployment
@@ -43,23 +28,12 @@ patches:
     target:
       kind: Deployment
       name: blocky-deployment
-  - path: patches/blocky/set_dns_networkpolicy_ports.yml
-    target:
-      kind: NetworkPolicy
-      name: allow-from-(choros|home-vlan|iot-vlan|man-vlan|nodes|nowan-vlan)-networkpolicy
   - path: patches/blocky/set_load_balancer_ips.yml
     target:
       kind: Service
       name: blocky-svc
-  - path: patches/blocky/set_prometheus_networkpolicy_ports.yml
-    target:
-      kind: NetworkPolicy
-      name: allow-from-prometheus-networkpolicy
 resources:
   - namespace.yml
-  - networkpolicy/allow-from-coredns.yml
-  - networkpolicy/allow-from-hdhomerun.yml
-  - networkpolicy/allow-from-unifi-gateway.yml
   - poddisruptionbudget.yml
   - prometheusrule.yml
   - service.yml

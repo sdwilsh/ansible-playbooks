@@ -1,7 +1,0 @@
----
-# The upstream and bootstrap resolvers use DNS over TLS on this port.
-- op: add
-  path: /spec/egress/0/ports/-
-  value:
-    port: 853
-    protocol: TCP

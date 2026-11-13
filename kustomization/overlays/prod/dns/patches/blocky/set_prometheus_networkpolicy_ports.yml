@@ -1,6 +1,0 @@
----
-- op: replace
-  path: /spec/ingress/0/ports
-  value:
-    - port: web
-      protocol: TCP
