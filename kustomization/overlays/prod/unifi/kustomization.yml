@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - https://github.com/marinatedconcrete/config/kustomization/components/unifi-network-application?ref=kustomize-unifi-network-application@v2.0.0
+  - ../../../components/networkpolicy-allow-from-man-vlan
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
@@ -11,6 +12,10 @@ components:
 namespace: unifi
 patches:
   - path: patches/add_internet_client_label.yml
+    target:
+      kind: StatefulSet
+      name: unifi-network-application-statefulset
+  - path: patches/add_man_vlan_target_label.yml
     target:
       kind: StatefulSet
       name: unifi-network-application-statefulset
@@ -30,6 +35,10 @@ patches:
     target:
       kind: NetworkPolicy
       name: allow-from-traefik-networkpolicy
+  - path: patches/set_device_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-man-vlan-networkpolicy
 resources:
   - namespace.yml
   - ingress.yml

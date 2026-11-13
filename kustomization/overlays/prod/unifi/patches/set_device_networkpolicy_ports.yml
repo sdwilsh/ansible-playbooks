@@ -1,0 +1,8 @@
+---
+- op: add
+  path: /spec/ingress/0/ports
+  value:
+    - port: device-api
+      protocol: TCP
+    - port: device-stun
+      protocol: UDP

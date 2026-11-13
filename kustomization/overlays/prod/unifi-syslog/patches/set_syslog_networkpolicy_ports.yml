@@ -1,0 +1,6 @@
+---
+- op: add
+  path: /spec/ingress/0/ports
+  value:
+    - port: syslog
+      protocol: UDP
