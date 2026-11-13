@@ -30,6 +30,8 @@ alloy:
     runAsUser: 473 # alloy
     seccompProfile:
       type: RuntimeDefault
+  # otelcol.receiver.syslog is public preview.
+  stabilityLevel: public-preview
   storagePath: /tmp/alloy
 
 configReloader:

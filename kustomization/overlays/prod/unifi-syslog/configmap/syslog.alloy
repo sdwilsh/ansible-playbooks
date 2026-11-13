@@ -1,57 +1,67 @@
-// loki.source.syslog puts the RFC3164 header fields in `__` labels and then
-// removes them.  Without these rules, all devices share one stream.
-loki.relabel "unifi" {
-  // loki.source.syslog below uses only the rules.  This component sends no
-  // entries.
-  forward_to = []
+// The controller sends RFC3164 with no priority header.  loki.source.syslog
+// does not accept that.
+otelcol.receiver.syslog "unifi" {
+  allow_skip_pri_header = true
+  on_error              = "drop"
+  protocol              = "rfc3164"
 
-  rule {
-    source_labels = ["__syslog_message_hostname"]
-    action        = "replace"
-    target_label  = "hostname"
+  udp {
+    add_attributes                = true
+    listen_address                = "0.0.0.0:514"
+    preserve_trailing_whitespaces = true
   }
 
-  // Always present, unlike the hostname.  Each device has one address.
-  rule {
-    source_labels = ["__syslog_connection_ip_address"]
-    action        = "replace"
-    target_label  = "source_ip"
+  output {
+    logs = [otelcol.processor.transform.unifi.input]
   }
-
-  // UniFi puts `<mac>,<model>-<firmware>` in the tag field, not the name of
-  // the process.  The gateway sends no tag.
-  rule {
-    source_labels = ["__syslog_message_app_name"]
-    action        = "replace"
-    target_label  = "device_tag"
-  }
-
-  // Loki also reads this field to set `detected_level`.
-  rule {
-    source_labels = ["__syslog_message_severity"]
-    action        = "replace"
-    target_label  = "severity"
-  }
-
-  // Do not add "__syslog_message_proc_id".  A process id makes a new stream at
-  // each restart.
 }
 
-loki.source.syslog "unifi" {
-  listener {
-    address       = "0.0.0.0:514"
-    protocol      = "udp"
-    syslog_format = "rfc3164"
-    labels        = {
-      job = "unifi",
-    }
+// Without these labels, all devices share one stream.
+otelcol.processor.transform "unifi" {
+  log_statements {
+    context    = "log"
+    statements = [
+      `set(attributes["job"], "unifi")`,
+      // Always present, unlike the hostname.  Each device has one address.
+      `set(attributes["source_ip"], attributes["net.peer.ip"])`,
+      // UniFi puts `<mac>,<model>-<firmware>` in the tag field, not the name
+      // of the process.  The gateway sends no tag.
+      `set(attributes["device_tag"], attributes["appname"]) where attributes["appname"] != nil`,
+      // Loki also reads this field to set `detected_level`.  Keep the names
+      // that the stored entries use.
+      `set(attributes["severity"], "emergency") where severity_text == "emerg"`,
+      `set(attributes["severity"], "alert") where severity_text == "alert"`,
+      `set(attributes["severity"], "critical") where severity_text == "crit"`,
+      `set(attributes["severity"], "error") where severity_text == "err"`,
+      `set(attributes["severity"], "warning") where severity_text == "warning"`,
+      `set(attributes["severity"], "notice") where severity_text == "notice"`,
+      `set(attributes["severity"], "informational") where severity_text == "info"`,
+      `set(attributes["severity"], "debug") where severity_text == "debug"`,
+      `set(body, attributes["message"]) where attributes["message"] != nil`,
+      // Device clocks and time zones vary.  Use the time of receipt.
+      `set(time, observed_time)`,
+      `set(attributes["loki.format"], "raw")`,
+      // Do not add "proc_id".  A process id makes a new stream at each
+      // restart.
+      `set(attributes["loki.attribute.labels"], "device_tag, hostname, job, severity, source_ip")`,
+    ]
   }
 
-  relabel_rules = loki.relabel.unifi.rules
-  forward_to    = [loki.process.unifi.receiver]
+  output {
+    logs = [otelcol.exporter.loki.unifi.input]
+  }
+}
+
+otelcol.exporter.loki "unifi" {
+  forward_to = [loki.process.unifi.receiver]
 }
 
 loki.process "unifi" {
+  // otelcol.exporter.loki always adds these labels.
+  stage.label_drop {
+    values = ["exporter", "level"]
+  }
+
   // The name of the process is in the message, not in the tag field.  The
   // shapes are `proc[pid]: `, `proc: `, `hostname proc[pid]: ` and
   // `proc[pid][pid]: `.  A message of two words and a colon, as
