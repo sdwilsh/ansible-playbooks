@@ -5,9 +5,18 @@
 - op: add
   path: /spec/template/metadata/labels/hogs.tswn.us~1garage-client
   value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1home-vlan-target
+  value: "true"
 # Traefik downloads its plugins from plugins.traefik.io each time it starts.
 - op: add
   path: /spec/template/metadata/labels/hogs.tswn.us~1internet-client
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1man-vlan-target
+  value: "true"
+- op: add
+  path: /spec/template/metadata/labels/hogs.tswn.us~1nodes-target
   value: "true"
 - op: add
   path: /spec/template/metadata/labels/hogs.tswn.us~1prometheus-target
