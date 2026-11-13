@@ -565,6 +565,11 @@ hadolint:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Fail on `images:` entries that match no image in a rendered overlay
+[group('lint')]
+image-pin-check:
+    .github/scripts/check-image-pins.py
+
 # Check that each tool the `linux-mcp` policy denies is a tool the server has
 [group('lint')]
 linux-mcp-validate:
