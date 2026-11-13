@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-longhorn-manager-to-share-manager-networkpolicy
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: longhorn-manager
+      ports:
+        - port: 9600
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      longhorn.io/component: share-manager
+  policyTypes:
+    - Ingress

@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/longhorn
+  - ../../../components/networkpolicy-allow-from-nodes
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
@@ -22,7 +23,13 @@ patches:
     target:
       kind: NetworkPolicy
       name: allow-from-traefik-networkpolicy
+  - path: patches/select_share_manager_for_nodes.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-nodes-networkpolicy
 resources:
   - ingress.yml
   - networkpolicy/allow-to-backup-target.yml
+  - networkpolicy/allow-to-share-manager.yml
+  - networkpolicy/allow-to-support-bundle-manager.yml
   - networkpolicy/allow-to-this-namespace.yml

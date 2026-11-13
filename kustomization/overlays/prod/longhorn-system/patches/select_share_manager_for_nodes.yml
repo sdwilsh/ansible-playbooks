@@ -1,0 +1,13 @@
+---
+# The node mounts an RWX volume over NFS.  The mount from a different
+# node comes from the address of that node.
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchLabels:
+      longhorn.io/component: share-manager
+- op: add
+  path: /spec/ingress/0/ports
+  value:
+    - port: 2049
+      protocol: TCP
