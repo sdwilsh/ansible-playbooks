@@ -19,7 +19,16 @@ spec:
         memory: 128Mi
   podSecurityContext:
     fsGroup: 1000 # redis
+    runAsNonRoot: true
     runAsUser: 1000 # redis
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: false
+    seccompProfile:
+      type: RuntimeDefault
   storage:
     volumeClaimTemplate:
       spec:
