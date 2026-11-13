@@ -1,0 +1,23 @@
+---
+# The manager, the instance managers, the backing image managers and the
+# system restore job mount the backup target.  The UI does not.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-backup-target-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 2049
+          protocol: TCP
+      to:
+        - ipBlock:
+            cidr: 10.11.0.14/32 # chanttogreen
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: NotIn
+        values:
+          - longhorn-ui
+  policyTypes:
+    - Egress

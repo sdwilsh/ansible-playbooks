@@ -1,7 +1,0 @@
----
-# The Longhorn manager pods must keep their open egress.  Select only the UI.
-- op: replace
-  path: /spec/podSelector
-  value:
-    matchLabels:
-      app: longhorn-ui

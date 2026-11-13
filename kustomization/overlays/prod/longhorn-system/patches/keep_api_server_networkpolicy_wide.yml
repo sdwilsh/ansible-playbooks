@@ -1,0 +1,11 @@
+---
+# Longhorn makes most of its pods, so a patch cannot label them.  Select
+# all pods except the UI, which does not call the API server.
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchExpressions:
+      - key: app
+        operator: NotIn
+        values:
+          - longhorn-ui

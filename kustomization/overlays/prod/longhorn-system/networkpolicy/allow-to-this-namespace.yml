@@ -1,0 +1,14 @@
+---
+# The Longhorn ingress rules control the traffic between Longhorn pods.
+# The replica ports change with each volume.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-this-namespace-networkpolicy
+spec:
+  egress:
+    - to:
+        - podSelector: {}
+  podSelector: {}
+  policyTypes:
+    - Egress
