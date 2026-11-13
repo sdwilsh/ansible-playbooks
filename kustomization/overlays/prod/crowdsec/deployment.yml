@@ -48,6 +48,7 @@ spec:
                 gauth-fr/immich
                 LePresidente/authelia
                 LePresidente/jellyfin
+                sdwilsh/bifrost
                 sdwilsh/navidrome
             - name: CROWDSEC_BYPASS_DB_VOLUME_CHECK
               value: "1"
