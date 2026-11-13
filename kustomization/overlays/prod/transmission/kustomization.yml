@@ -6,6 +6,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-deny-all
   - ../../../components/transmission
+  - ../../../components/pod-security-enforce-privileged
   - ../../../components/schedule-avoid-control-plane
 configMapGenerator:
   - name: protonvpn-configmap

@@ -4,6 +4,4 @@ kind: Namespace
 metadata:
   labels:
     hogs.tswn.us/traefik-route: "true"
-    pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: latest
   name: this-is-ignored-but-is-required

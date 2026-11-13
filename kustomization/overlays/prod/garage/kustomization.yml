@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/garage
+  - ../../../components/pod-security-enforce-privileged
 configMapGenerator:
   - name: garage-config
     files:
