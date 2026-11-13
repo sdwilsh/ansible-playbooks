@@ -1,0 +1,15 @@
+---
+# The server logs in to Steam and registers with its server list over these
+# ports.
+- op: add
+  path: /spec/egress/0/ports/-
+  value:
+    endPort: 27050
+    port: 27015
+    protocol: TCP
+- op: add
+  path: /spec/egress/0/ports/-
+  value:
+    endPort: 27050
+    port: 27015
+    protocol: UDP
