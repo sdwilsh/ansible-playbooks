@@ -8,10 +8,13 @@ spec:
     - from:
         - ipBlock:
             cidr: 10.117.0.14/32 # printer.hogs.tswn.us
+      # Samba listens on 445 in its own pod.  Component v2 moves it into
+      # the paperless pod, on the port named smb.
       ports:
         - port: 445
           protocol: TCP
-  # Samba is its own pod now and moves into the paperless pod later.
+        - port: smb
+          protocol: TCP
   podSelector:
     matchExpressions:
       - key: app.kubernetes.io/name
