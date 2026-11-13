@@ -68,6 +68,11 @@ controller:
           
           exec python3 /app/logger_sidecar.py
           
+      env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
       livenessProbe:
         exec:
           command:

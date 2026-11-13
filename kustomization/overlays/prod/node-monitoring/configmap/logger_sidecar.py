@@ -1,54 +1,70 @@
 #!/usr/bin/env python3
-import sys
-import subprocess
-import logging
 import json
-import re
+import logging
+import os
+import socket
+import struct
+import subprocess
+import sys
 import threading
 import time
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
-from typing import Tuple, Dict, Any, List, Optional
+from typing import IO, Any, Iterator, NamedTuple
 
 LOG_FILE: str = "/tmp/nflog/drops.log"
 MAX_BYTES: int = 10 * 1024 * 1024
 BACKUP_COUNT: int = 1
 
-CONNTRACK_PATH: str = "/proc/net/nf_conntrack"
-MAX_VERIFY_SECONDS: float = 3.0
-# Each tick reads and parses the whole conntrack table (see build_conntrack_index()).
-# The table can hold tens of thousands of entries.  A short tick makes this run often
-# and costs CPU on every node.  This tick still gives each flow several checks before
-# it reaches MAX_VERIFY_SECONDS.
-VERIFIER_TICK_SECONDS: float = 0.5
+LINKTYPE_NFLOG: int = 239
+NFULA_PAYLOAD: int = 9
+NFULA_PREFIX: int = 10
+class PcapFormat(NamedTuple):
+    byte_order: str
+    fraction_per_usec: int
 
-# Flows awaiting a verdict, as (captured_at, log_data) pairs, guarded by PENDING_LOCK.
-# Checked against conntrack on every tick starting on the tick right after capture; a
-# flow that is not yet replied is put back here rather than judged immediately - a Node
-# under momentary load (e.g. many Pods restarting at once) can take a coredns/apiserver
-# reply past a tick or two without the flow actually being blocked, and a single
-# snapshot can't tell "slow" from "dropped".  Only once a flow has gone unreplied for
-# the full MAX_VERIFY_SECONDS is it logged as dropped.
-PENDING: List[Tuple[float, Dict[str, Any]]] = []
-PENDING_LOCK: threading.Lock = threading.Lock()
 
-LINE_RE: re.Pattern = re.compile(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+(.+)$')
+PCAP_MAGICS: dict[bytes, PcapFormat] = {
+    b"\xd4\xc3\xb2\xa1": PcapFormat("<", 1),
+    b"\xa1\xb2\xc3\xd4": PcapFormat(">", 1),
+    b"\x4d\x3c\xb2\xa1": PcapFormat("<", 1000),
+    b"\xa1\xb2\x3c\x4d": PcapFormat(">", 1000),
+}
 
 # Direct diagnostics to stderr to end up in container logs.
 logging.basicConfig(
-    level=logging.WARNING, 
+    level=logging.WARNING,
     format='%(asctime)s [%(levelname)s] sidecar_diagnostics: %(message)s',
     handlers=[logging.StreamHandler(sys.stderr)]
 )
 diag_logger: logging.Logger = logging.getLogger("Diagnostics")
 
 POD_CACHE_REFRESH_SECONDS: float = 300.0
-POD_IP_MAP: Dict[str, Tuple[str, str]] = {}
+POD_IP_MAP: dict[str, tuple[str, str]] = {}
 POD_IP_MAP_LOCK: threading.Lock = threading.Lock()
 
-def fetch_pod_ip_map() -> Optional[Dict[str, Tuple[str, str]]]:
-    cmd: List[str] = ["kubectl", "get", "pods", "--all-namespaces", "-o", "json", "--request-timeout=10s"]
-    res: subprocess.CompletedProcess = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+@dataclass(frozen=True)
+class NflogPacket:
+    time: datetime
+    prefix: str | None
+    payload: bytes
+
+
+@dataclass(frozen=True)
+class Flow:
+    protocol: str
+    src_ip: str
+    src_port: str
+    dest_ip: str
+    dest_port: str
+    details: str
+
+
+def fetch_pod_ip_map() -> dict[str, tuple[str, str]] | None:
+    cmd: list[str] = ["kubectl", "get", "pods", "--all-namespaces", "-o", "json", "--request-timeout=10s"]
+    res: subprocess.CompletedProcess[str] = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     if res.returncode != 0:
         diag_logger.error(f"Kubectl API call failed with code {res.returncode}. Stderr: {res.stderr.strip()}")
@@ -57,17 +73,17 @@ def fetch_pod_ip_map() -> Optional[Dict[str, Tuple[str, str]]]:
     if not res.stdout.strip():
         return None
 
-    data: Dict[str, Any] = json.loads(res.stdout)
-    ip_map: Dict[str, Tuple[str, str]] = {}
+    data: dict[str, Any] = json.loads(res.stdout)
+    ip_map: dict[str, tuple[str, str]] = {}
     for item in data.get("items", []):
-        status: Dict[str, Any] = item.get("status", {})
-        metadata: Dict[str, Any] = item.get("metadata", {})
+        status: dict[str, Any] = item.get("status", {})
+        metadata: dict[str, Any] = item.get("metadata", {})
 
         pod_name: str = str(metadata.get("name", ""))
         namespace: str = str(metadata.get("namespace", ""))
 
         for pod_ip_obj in status.get("podIPs", []):
-            ip: Optional[str] = pod_ip_obj.get("ip")
+            ip: str | None = pod_ip_obj.get("ip")
             if ip:
                 ip_map[ip] = (pod_name, namespace)
 
@@ -77,226 +93,162 @@ def fetch_pod_ip_map() -> Optional[Dict[str, Tuple[str, str]]]:
 # fetching one Pod's IP on each cache miss.  The Kubernetes API has no way to fetch a Pod by IP,
 # so a per-IP lookup still downloads every Pod on the cluster.  On a per-miss cache, that cost
 # lands on whichever thread hits the miss - the capture loop, for every unresolved IP in a packet.
-# A timer pays that same cost once per interval, off the capture and verifier threads, so a slow
-# API call can never stall packet capture.  A lookup against the map is then a plain, fast dict
-# read.
 def pod_cache_refresh_loop() -> None:
     while True:
-        ip_map: Optional[Dict[str, Tuple[str, str]]] = fetch_pod_ip_map()
+        ip_map: dict[str, tuple[str, str]] | None = fetch_pod_ip_map()
         if ip_map is not None:
             with POD_IP_MAP_LOCK:
                 POD_IP_MAP.clear()
                 POD_IP_MAP.update(ip_map)
         time.sleep(POD_CACHE_REFRESH_SECONDS)
 
-def resolve_pod_from_ip(ip_addr: str) -> Tuple[str, str]:
+def resolve_pod_from_ip(ip_addr: str) -> tuple[str, str]:
     if not ip_addr or not ip_addr.startswith("172.16."):
         return "", ""
 
     with POD_IP_MAP_LOCK:
         return POD_IP_MAP.get(ip_addr, ("", ""))
 
-def parse_endpoint(endpoint_str: str) -> Tuple[str, str]:
-    """Safely extracts IP and Port for both IPv4 and IPv6 string styles."""
-    endpoint_str = endpoint_str.rstrip(':')
-    if '.' in endpoint_str and ':' not in endpoint_str:
-        parts: List[str] = endpoint_str.rsplit('.', 1)
-        if len(parts) == 2:
-            return str(parts[0]), str(parts[1])
-    return endpoint_str, ""
+def read_exact(stream: IO[bytes], size: int) -> bytes | None:
+    data: bytes = stream.read(size)
+    return data if len(data) == size else None
 
-def parse_packet_time(raw_time: str) -> float:
-    """Converts tcpdump's -tttt timestamp (container clock, UTC) to a Unix epoch time."""
-    try:
-        return datetime.strptime(raw_time, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc).timestamp()
-    except ValueError:
-        return time.time()
+def parse_nflog(record: bytes, order: str) -> tuple[str | None, bytes]:
+    prefix: str | None = None
+    payload: bytes = b""
+    # TLVs start after the 4-byte nflog header.  Their length and type use the
+    # byte order of the capture host, which is also the pcap header byte order.
+    offset: int = 4
+    while offset + 4 <= len(record):
+        length, tlv_type = struct.unpack_from(order + "HH", record, offset)
+        if length < 4:
+            break
+        value: bytes = record[offset + 4:offset + length]
+        if tlv_type == NFULA_PREFIX:
+            prefix = value.split(b"\0", 1)[0].decode("utf-8", "replace")
+        elif tlv_type == NFULA_PAYLOAD:
+            payload = value
+        offset += (length + 3) & ~3
+    return prefix, payload
 
-# kube-router logs a packet via NFLOG whenever the NetworkPolicy chain it happens to
-# evaluate first doesn't match, even if a later chain for the same Pod goes on to accept
-# the packet (see https://github.com/k3s-io/k3s/issues/8008,
-# https://github.com/k3s-io/k3s/issues/9032). Verify against conntrack, which reflects
-# what the kernel actually did with the packet, rather than trusting the log.
-#
-# Match on the Pod's own (protocol, src, sport) rather than reconstructing a NATed
-# 4-tuple.  Two independent NAT layers can each break a dest-based match: NFLOG reports
-# the post-DNAT dest_ip (it taps the Pod's own firewall chain after any Service DNAT),
-# which never lines up with conntrack's original-direction dst (pre-DNAT); and whenever
-# the destination is outside the Pod network - the apiserver's Node IP via the
-# 172.17.0.1 hairpin, or a real LAN host like a Garage Node or a camera - flannel also
-# SNATs/masquerades the packet, so conntrack's reply-direction dst becomes the *Node's*
-# real IP rather than the Pod's, which never lines up with the Pod IP either.  This was
-# confirmed live: Pods successfully reaching the apiserver and Garage via that hairpin
-# were logged as "dropped" on every single request, because the reply tuple's dst was
-# the Node's masqueraded IP, not the Pod's.  src/sport is the one pair NFLOG and
-# conntrack's original-direction tuple always agree on, since NFLOG taps before any NAT
-# rewrites the source, so anchor there instead.
-#
-# SYN_SENT (TCP) / UNREPLIED (UDP) mean conntrack created the entry but has not yet seen
-# a reply. conntrack can hold tens of thousands of entries and this cluster sees
-# hundreds of NFLOG events a minute, so checks are batched: the whole table is parsed
-# once per tick into an index, and every flow due for a check is looked up against that
-# single pass, rather than each flow re-scanning the entire table on its own thread.
-
-def build_conntrack_index() -> Optional[Dict[Tuple[str, str, str], Dict[str, Any]]]:
-    # Keyed on the flow's own (protocol, src, sport), same as "replied" above and for the
-    # same reason.  Also carries the reply tuple's src: for a DNATed flow (a Pod talking
-    # to a ClusterIP) that's the real backend Pod that answered.  PREROUTING fills in the
-    # reply tuple as soon as the entry is created - before any actual reply packet
-    # arrives - so it's there even for a flow that's ultimately logged as dropped, and
-    # lets that log entry resolve the true destination Pod instead of the Service IP,
-    # which resolve_pod_from_ip() has no way to map on its own.
-    index: Dict[Tuple[str, str, str], Dict[str, Any]] = {}
-    try:
-        with open(CONNTRACK_PATH, "r") as f:
-            for line in f:
-                fields: List[str] = line.split()
-                if len(fields) < 3:
-                    continue
-                protocol: str = fields[2]
-                replied: bool = "SYN_SENT" not in line and "UNREPLIED" not in line
-                # Read src and sport from the fields already split above.  A conntrack
-                # line has a dozen or more fields, such as byte and packet counters,
-                # mark, secctx, and zone.  Only two of them matter here.
-                original_src: Optional[str] = None
-                original_sport: Optional[str] = None
-                reply_src: Optional[str] = None
-                for field in fields:
-                    eq: int = field.find('=')
-                    if eq == -1:
-                        continue
-                    key: str = field[:eq]
-                    if key == "src":
-                        if original_src is None:
-                            original_src = field[eq + 1:]
-                        else:
-                            reply_src = field[eq + 1:]
-                    elif key == "sport" and original_sport is None:
-                        original_sport = field[eq + 1:]
-                if original_src is not None and original_sport is not None:
-                    flow_key: Tuple[str, str, str] = (protocol, original_src, original_sport)
-                    entry: Dict[str, Any] = index.setdefault(flow_key, {"replied": False, "reply_src": ""})
-                    entry["replied"] = entry["replied"] or replied
-                    if reply_src:
-                        entry["reply_src"] = reply_src
-    except OSError:
-        diag_logger.exception(f"Failed to read {CONNTRACK_PATH} for conntrack verification")
-        return None
-    return index
-
-def verifier_loop(logger: logging.Logger) -> None:
+def read_pcap(stream: IO[bytes]) -> Iterator[NflogPacket]:
+    header: bytes | None = read_exact(stream, 24)
+    if header is None:
+        return
+    if header[:4] not in PCAP_MAGICS:
+        raise ValueError(f"not a pcap stream: magic {header[:4].hex()}")
+    pcap_format: PcapFormat = PCAP_MAGICS[header[:4]]
+    order: str = pcap_format.byte_order
+    per_usec: int = pcap_format.fraction_per_usec
+    linktype: int = struct.unpack_from(order + "I", header, 20)[0]
+    if linktype != LINKTYPE_NFLOG:
+        raise ValueError(f"pcap link type is {linktype}, not NFLOG")
     while True:
-        time.sleep(VERIFIER_TICK_SECONDS)
-        now: float = time.time()
+        record_header: bytes | None = read_exact(stream, 16)
+        if record_header is None:
+            return
+        ts_sec, ts_frac, incl_len, _ = struct.unpack(order + "IIII", record_header)
+        record: bytes | None = read_exact(stream, incl_len)
+        if record is None:
+            return
+        prefix, payload = parse_nflog(record, order)
+        when: datetime = datetime.fromtimestamp(ts_sec, timezone.utc).replace(microsecond=min(ts_frac // per_usec, 999999))
+        yield NflogPacket(when, prefix, payload)
 
-        with PENDING_LOCK:
-            due: List[Tuple[float, Dict[str, Any]]] = list(PENDING)
-            PENDING.clear()
+def is_policy_reject(packet: NflogPacket) -> bool:
+    # kube-router logs "DROP by policy <ns>/<name>" when one policy does not
+    # match, and a later policy can still accept the packet (k3s-io/k3s#9032).
+    # Only the log just before the pod chain REJECT has no prefix.
+    return not packet.prefix
 
-        if not due:
-            continue
+def tcp_flags(flags: int) -> str:
+    letters: list[tuple[int, str]] = [(0x01, "F"), (0x02, "S"), (0x04, "R"), (0x08, "P"), (0x10, "."), (0x20, "U"), (0x40, "E"), (0x80, "W")]
+    return "".join(letter for bit, letter in letters if flags & bit) or "none"
 
-        index: Optional[Dict[Tuple[str, str, str], Dict[str, Any]]] = build_conntrack_index()
-        undecided: List[Tuple[float, Dict[str, Any]]] = []
-        for captured_at, log_data in due:
-            flow_key = (log_data["protocol"], log_data["src_ip"], log_data["src_port"])
-            entry: Optional[Dict[str, Any]] = index.get(flow_key) if index is not None else None
-            if entry is not None and entry["replied"]:
-                continue
-            if now - captured_at < MAX_VERIFY_SECONDS:
-                undecided.append((captured_at, log_data))
-                continue
-            if not log_data["dest_pod"] and entry and entry["reply_src"]:
-                pod_name, namespace = resolve_pod_from_ip(entry["reply_src"])
-                if pod_name:
-                    log_data["dest_pod"], log_data["dest_namespace"] = pod_name, namespace
-            log_data["verdict"] = "unknown" if index is None else "dropped"
-            logger.info(json.dumps(log_data))
+def decode_flow(payload: bytes) -> Flow | None:
+    if not payload:
+        return None
+    version: int = payload[0] >> 4
+    if version == 4 and len(payload) >= 20:
+        header_len: int = (payload[0] & 0x0f) * 4
+        ip_len: int = struct.unpack_from("!H", payload, 2)[0]
+        proto: int = payload[9]
+        src: str = socket.inet_ntop(socket.AF_INET, payload[12:16])
+        dst: str = socket.inet_ntop(socket.AF_INET, payload[16:20])
+        l4: bytes = payload[header_len:ip_len]
+    elif version == 6 and len(payload) >= 40:
+        proto = payload[6]
+        src = socket.inet_ntop(socket.AF_INET6, payload[8:24])
+        dst = socket.inet_ntop(socket.AF_INET6, payload[24:40])
+        l4 = payload[40:40 + struct.unpack_from("!H", payload, 4)[0]]
+    else:
+        return None
 
-        if undecided:
-            with PENDING_LOCK:
-                PENDING.extend(undecided)
+    if proto == 6 and len(l4) >= 20:
+        sport, dport, seq, ack, offset_flags, win = struct.unpack_from("!HHIIHH", l4)
+        flags: int = offset_flags & 0xff
+        ack_text: str = f", ack {ack}" if flags & 0x10 else ""
+        data_len: int = len(l4) - (offset_flags >> 12) * 4
+        return Flow("tcp", src, str(sport), dst, str(dport),
+                    f"Flags [{tcp_flags(flags)}], seq {seq}{ack_text}, win {win}, length {data_len}")
+    if proto == 17 and len(l4) >= 8:
+        sport, dport, udp_len = struct.unpack_from("!HHH", l4)
+        return Flow("udp", src, str(sport), dst, str(dport), f"UDP, length {udp_len - 8}")
+    if proto in (1, 58) and len(l4) >= 2:
+        name: str = "icmp" if proto == 1 else "icmp6"
+        return Flow(name, src, "", dst, "", f"{name.upper()} type {l4[0]}, code {l4[1]}, length {len(l4)}")
+    return Flow(f"ip-proto-{proto}", src, "", dst, "", f"length {len(l4)}")
+
+def drop_record(packet: NflogPacket, node: str) -> dict[str, str] | None:
+    if not is_policy_reject(packet):
+        return None
+    flow: Flow | None = decode_flow(packet.payload)
+    if flow is None:
+        diag_logger.warning(f"Undecodable NFLOG payload: {packet.payload[:64].hex()}")
+        return None
+    src_pod, src_ns = resolve_pod_from_ip(flow.src_ip)
+    dest_pod, dest_ns = resolve_pod_from_ip(flow.dest_ip)
+    return {
+        "raw_time": packet.time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+        "protocol": flow.protocol,
+        "src_ip": flow.src_ip, "src_port": flow.src_port, "src_pod": src_pod, "src_namespace": src_ns,
+        "dest_ip": flow.dest_ip, "dest_port": flow.dest_port, "dest_pod": dest_pod, "dest_namespace": dest_ns,
+        "packet_details": flow.details,
+        "verdict": "dropped",
+        "node": node,
+    }
 
 def setup_file_logger() -> logging.Logger:
     logger: logging.Logger = logging.getLogger("AlloyJsonLogger")
     logger.setLevel(logging.INFO)
-    
-    logger.propagate = False 
-    
+
+    logger.propagate = False
+
     handler: RotatingFileHandler = RotatingFileHandler(LOG_FILE, maxBytes=MAX_BYTES, backupCount=BACKUP_COUNT)
     handler.setFormatter(logging.Formatter('%(message)s'))
     logger.addHandler(handler)
     return logger
 
 def main() -> None:
+    node: str = os.environ["NODE_NAME"]
     logger: logging.Logger = setup_file_logger()
-    diag_logger.debug("Initializing background netfilter capture sidecar...")
 
-    threading.Thread(target=verifier_loop, args=(logger,), daemon=True).start()
     threading.Thread(target=pod_cache_refresh_loop, daemon=True).start()
 
-    cmd: List[str] = ["tcpdump", "-l", "-i", "nflog:100", "-n", "-tttt"]
-    process: subprocess.Popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
+    cmd: list[str] = ["tcpdump", "-i", "nflog:100", "-U", "-w", "-"]
+    process: subprocess.Popen[bytes] = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    assert process.stdout is not None
 
     try:
-        while True:
-            line: str = process.stdout.readline()
-            if not line:
-                break
-            line = line.strip()
-            if not line or " > " not in line: 
-                continue
-                
-            match: re.Match = LINE_RE.match(line)
-            if not match: 
-                continue
-            
-            timestamp, payload = match.groups()
-            tokens: List[str] = payload.split()
-            if len(tokens) < 4: 
-                continue
-            
+        for packet in read_pcap(process.stdout):
             try:
-                src_token: str = tokens[1]
-                dst_token: str = tokens[3]
-                
-                src_ip, src_port = parse_endpoint(src_token)
-                dest_ip, dest_port = parse_endpoint(dst_token)
-                
-                src_pod, src_ns = resolve_pod_from_ip(src_ip)
-                dest_pod, dest_ns = resolve_pod_from_ip(dest_ip)
-
-                # tcpdump always prints "Flags [...]" first for TCP, even when it also
-                # decodes an application-layer protocol on top (e.g. HTTP).  UDP has no
-                # such fixed marker: unrecognized UDP prints "UDP, length N", but a
-                # well-known port like 53 gets fully decoded instead (e.g. "12345+ A?
-                # example.com. (29)"), so checking for a literal "UDP" token misses it.
-                protocol: str = "tcp" if len(tokens) > 4 and tokens[4] == "Flags" else "udp"
-
-                log_data: Dict[str, Any] = {
-                    "raw_time": timestamp,
-                    "protocol": protocol,
-                    "src_ip": src_ip, "src_port": src_port, "src_pod": src_pod, "src_namespace": src_ns,
-                    "dest_ip": dest_ip, "dest_port": dest_port, "dest_pod": dest_pod, "dest_namespace": dest_ns,
-                    "packet_details": " ".join(tokens[4:])
-                }
-
-                # Use the packet's own capture time, not the time this line was read, as the start
-                # of its verification window.  A stall between capture and read (e.g. a slow disk
-                # read) can leave a line sitting unread past MAX_VERIFY_SECONDS; queuing it with a
-                # fresh window would check it against a conntrack table taken long after its own
-                # flow closed and its entry was evicted, and wrongly report a real reply as dropped.
-                captured_at: float = parse_packet_time(timestamp)
-                if time.time() - captured_at >= MAX_VERIFY_SECONDS:
-                    log_data["verdict"] = "unknown"
-                    logger.info(json.dumps(log_data))
-                else:
-                    with PENDING_LOCK:
-                        PENDING.append((captured_at, log_data))
+                record: dict[str, str] | None = drop_record(packet, node)
+                if record is not None:
+                    logger.info(json.dumps(record))
             except Exception:
-                diag_logger.exception("A fatal parsing exception occurred while processing a log stream line.")
-    except KeyboardInterrupt: 
+                diag_logger.exception("A parsing exception occurred while processing an NFLOG packet.")
+    except KeyboardInterrupt:
         process.terminate()
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     main()
