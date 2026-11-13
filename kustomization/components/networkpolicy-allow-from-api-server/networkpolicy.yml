@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-api-server-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.0.101/32 # node01
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/api-server-target: "true"
+  policyTypes:
+    - Ingress
