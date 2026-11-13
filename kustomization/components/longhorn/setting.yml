@@ -5,3 +5,12 @@ metadata:
   name: taint-toleration
   namespace: longhorn-system
 value: "gpu=strixhalo:NoSchedule"
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: upgrade-checker
+  namespace: longhorn-system
+# Renovate finds new releases.  This stops the only internet egress of the
+# manager.
+value: "false"
