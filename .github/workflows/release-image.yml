@@ -159,15 +159,17 @@ jobs:
           target: ${{ inputs.image }}
 
       - name: Generate Image Release Notes
-        uses: marinatedconcrete/config/actions/image-release-notes@ac4100cc1745c8639ae92118edd4674863bc7328 # image-release-notes-1.2.0
+        uses: marinatedconcrete/config/actions/image-release-notes@4791ad62691b42c260ad02fcfd386e3bae6eae80 # image-release-notes-1.3.0
         id: release_notes
         if: ${{ matrix.arch == 'amd64' }}
         with:
           component: ${{ inputs.image }}
           components-script: ${{ inputs.components-script }}
+          containerfile: ${{ inputs.context }}/Containerfile
           highlight-packages: ${{ inputs.highlight-packages }}
           image: ${{ inputs.image }}:ci
           tag: ${{ needs.version.outputs.tag }}
+          target: ${{ inputs.image }}
           version: ${{ needs.version.outputs.version || github.sha }}
 
       - name: Upload release notes
@@ -324,7 +326,7 @@ jobs:
           gh release create "${TAG}" --title "${IMAGE_NAME} ${VERSION}" --verify-tag --notes "${body}"
 
       - name: Publish Image Release Notes
-        uses: marinatedconcrete/config/actions/image-release-notes/publish@ac4100cc1745c8639ae92118edd4674863bc7328 # image-release-notes-1.2.0
+        uses: marinatedconcrete/config/actions/image-release-notes/publish@4791ad62691b42c260ad02fcfd386e3bae6eae80 # image-release-notes-1.3.0
         with:
           component: ${{ inputs.image }}
           tag: ${{ needs.version.outputs.tag }}
