@@ -6,5 +6,10 @@ components:
   - ../../../components/prometheus-operator
   - ../../../components/pod-security-enforce-restricted
 namespace: prometheus-operator
+patches:
+  - path: patches/add_networkpolicy_labels.yml
+    target:
+      kind: Deployment
+      name: prometheus-operator
 resources:
   - namespace.yml
