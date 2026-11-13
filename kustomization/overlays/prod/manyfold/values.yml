@@ -57,9 +57,9 @@ env:
       secretKeyRef:
         name: manyfold-pg-cluster-app
         key: username
-  # Each job that stores a 3D file starts an f3d render.  One render of a
-  # 137 MB STL used 0.7 GB.  When you change this value, change the memory
-  # limit below.
+  # Each job that stores a 3D file runs f3d to read the bounding box.  f3d
+  # uses about 8 times the uncompressed model size.  When you change this
+  # value, change the memory limit below.
   DEFAULT_WORKER_CONCURRENCY:
     value: "2"
   FORCE_OIDC:
@@ -99,9 +99,10 @@ env:
 resources:
   limits:
     cpu: 2000m
-    memory: 4Gi
+    memory: 10Gi
   requests:
     cpu: 50m
+    memory: 2Gi
 
 initContainers:
   - name: chmod-tmp
