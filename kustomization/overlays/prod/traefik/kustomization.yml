@@ -4,6 +4,9 @@ kind: Kustomization
 
 components:
   - ../../../components/traefik
+  - ../../../components/networkpolicy-allow-from-home-vlan
+  - ../../../components/networkpolicy-allow-from-man-vlan
+  - ../../../components/networkpolicy-allow-from-nodes
   - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
@@ -43,6 +46,10 @@ patches:
     target:
       kind: Deployment
       name: traefik-deployment
+  - path: patches/traefik/set_lan_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-(home-vlan|man-vlan|nodes)-networkpolicy
   - path: patches/traefik/update_subjects.yml
     target:
       kind: ClusterRoleBinding
@@ -52,10 +59,7 @@ resources:
   - certificate.yml
   - ingress/traefik-dashboard.yml
   - networkpolicy/allow-from-cloudflare.yml
-  - networkpolicy/allow-from-home-vlan.yml
-  - networkpolicy/allow-from-man-vlan.yml
   - networkpolicy/allow-from-pods.yml
-  - networkpolicy/allow-from-services-vlan.yml
   - networkpolicy/allow-from-workflow-jobs.yml
   - networkpolicy/allow-postgres-from-home-assistant.yml
   - networkpolicy/allow-to-external-backends.yml

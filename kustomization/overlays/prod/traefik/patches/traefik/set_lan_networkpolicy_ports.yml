@@ -1,0 +1,14 @@
+---
+- op: add
+  path: /spec/ingress/0/ports
+  value:
+    - port: imapsecure
+      protocol: TCP
+    - port: mqtts
+      protocol: TCP
+    - port: smtpsecure
+      protocol: TCP
+    - port: web
+      protocol: TCP
+    - port: websecure
+      protocol: TCP
