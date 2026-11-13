@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-home-vlan-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.117.0.0/23 # HOME
+        - ipBlock:
+            cidr: 10.117.2.0/24 # Home, the remote-user VPN
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/home-vlan-target: "true"
+  policyTypes:
+    - Ingress

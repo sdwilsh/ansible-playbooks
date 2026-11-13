@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-nowan-vlan-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.67.0.0/24 # NOWAN
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/nowan-vlan-target: "true"
+  policyTypes:
+    - Ingress

@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-iot-vlan-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.66.0.0/24 # IOT
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/iot-vlan-target: "true"
+  policyTypes:
+    - Ingress

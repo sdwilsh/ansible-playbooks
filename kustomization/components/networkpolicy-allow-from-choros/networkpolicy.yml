@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-choros-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.11.2.2/32 # choros, on the choros.tswn.us VPN
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/choros-target: "true"
+  policyTypes:
+    - Ingress

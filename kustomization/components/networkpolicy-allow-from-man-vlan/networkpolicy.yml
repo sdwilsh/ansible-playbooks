@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-man-vlan-networkpolicy
+spec:
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.10.0.0/24 # MAN
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/man-vlan-target: "true"
+  policyTypes:
+    - Ingress
