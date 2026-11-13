@@ -18,6 +18,10 @@ patches:
     target:
       kind: Deployment
       name: barman-cloud|cnpg-controller-manager
+  - path: patches/add_api_server_target_label.yml
+    target:
+      kind: Deployment
+      name: cnpg-controller-manager
   - path: patches/add_namespace_prometheus_target_label.yml
     target:
       kind: Namespace

@@ -1,4 +1,7 @@
 ---
+podLabels:
+  hogs.tswn.us/api-server-target: "true"
+
 priorityClassName: critical-application-infra
 
 prometheus:
