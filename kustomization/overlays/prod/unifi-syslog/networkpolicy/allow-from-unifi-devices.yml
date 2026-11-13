@@ -9,12 +9,9 @@ spec:
     - from:
         # UniFi does not route Activity Logging (Syslog) through the Network
         # Application controller.  Each adopted device sends its own syslog stream
-        # directly.
+        # directly.  The MAN component admits the other devices.
         - ipBlock:
-            cidr: 10.10.0.0/24
-        # The gateway device comes in on the same VLAN.
-        - ipBlock:
-            cidr: 10.11.0.1/32
+            cidr: 10.11.0.1/32 # UniFi gateway, on SERVICES
       ports:
         - port: syslog
           protocol: UDP

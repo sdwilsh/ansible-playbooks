@@ -15,8 +15,6 @@ spec:
               - 172.16.0.0/12
               - 192.168.0.0/16
         - ipBlock:
-            cidr: 10.10.0.0/24 # MAN, the UniFi devices
-        - ipBlock:
             cidr: 10.11.0.1/32 # UniFi gateway, on SERVICES
       ports:
         - port: device-api
