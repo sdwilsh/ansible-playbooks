@@ -6,10 +6,14 @@ metadata:
 spec:
   egress:
     - ports:
-        - port: 5000
+        - port: web
       to:
-        - ipBlock:
-            cidr: 10.11.1.75/32 # dockerhub-proxy.hogs.tswn.us
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: dockerhub-proxy
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: proxy-registry
   podSelector:
     matchLabels:
       app.kubernetes.io/component: workflow-job
