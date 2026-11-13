@@ -7,6 +7,7 @@ components:
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
+  - ../../../components/schedule-prefer-control-plane
 helmCharts:
   - includeCRDs: true
     name: hermes-agent-operator

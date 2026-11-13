@@ -10,6 +10,7 @@ components:
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
+  - ../../../components/schedule-prefer-control-plane
 
 configurations:
   - kustomizeconfig.yml
