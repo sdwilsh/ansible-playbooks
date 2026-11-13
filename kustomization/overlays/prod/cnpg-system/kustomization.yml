@@ -3,6 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
+  - ../../../components/networkpolicy-allow-from-api-server
+  - ../../../components/networkpolicy-allow-from-prometheus
+  - ../../../components/networkpolicy-allow-to-api-server
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
   - ../../../components/schedule-prefer-control-plane
   - ../../../components/pod-security-enforce-restricted
 configMapGenerator:
@@ -30,11 +35,18 @@ patches:
     target:
       kind: Deployment
       name: cnpg-controller-manager
+  - path: patches/set_api_server_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-api-server-networkpolicy
 resources:
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.30.1.yaml
   - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.16.0/manifest.yaml
   - configmap.yml
   - job.yml
+  - networkpolicy/allow-barman-cloud-from-controller-manager.yml
+  - networkpolicy/allow-controller-manager-to-barman-cloud.yml
+  - networkpolicy/allow-controller-manager-to-instances.yml
   - podmonitor.yml
   - rbac.yml
   - storageclass/data.yml

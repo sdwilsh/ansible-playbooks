@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-controller-manager-to-barman-cloud-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 9090
+          protocol: TCP
+      to:
+        - podSelector:
+            matchLabels:
+              app: barman-cloud
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: cloudnative-pg
+  policyTypes:
+    - Egress
