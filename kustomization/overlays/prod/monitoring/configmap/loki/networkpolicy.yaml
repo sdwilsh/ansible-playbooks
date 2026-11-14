@@ -3,8 +3,9 @@ groups:
   - name: networkpolicy
     interval: 1m
     rules:
-      # A short burst, such as the first second of a new pod, is normal.  A
-      # flow that is rejected for longer usually means that a rule is missing.
+      # A short burst, such as the first second of a new pod, is normal.  It
+      # stays in the 10 minute window for less than the 20 minute hold.  A flow
+      # that is rejected again and again usually means that a rule is missing.
       # Broadcasts and the cloud metadata address are rejected on purpose.
       - alert: networkpolicy-rejects
         expr: |
@@ -14,18 +15,18 @@ groups:
               | json
               | dest_ip !~ `.*\.255`
               | dest_ip != `169.254.169.254`
-              [15m]
+              [10m]
             )
           ) >= 3
-        for: 15m
+        for: 20m
         labels:
           severity: warning
         annotations:
           summary: "NetworkPolicy rejects {{ $labels.protocol }}/{{ $labels.dest_port }} into {{ $labels.dest_namespace }}"
           description: >-
-            kube-router rejected {{ $labels.protocol }} traffic from
-            namespace "{{ $labels.src_namespace }}" to port
-            {{ $labels.dest_port }} in namespace "{{ $labels.dest_namespace }}"
-            for 15 minutes or more.  An empty namespace is an address outside
-            the cluster.  Query `{job="k8s-network-policy-drops"}` in Loki for
-            the pods and addresses, then add the rule that is missing.
+            kube-router rejected {{ $labels.protocol }} traffic from namespace
+            "{{ $labels.src_namespace }}" to port {{ $labels.dest_port }} in
+            namespace "{{ $labels.dest_namespace }}" again and again for 20
+            minutes or more.  An empty namespace is an address outside the
+            cluster.  Query `{job="k8s-network-policy-drops"}` in Loki for the
+            pods and addresses, then add the rule that is missing.
