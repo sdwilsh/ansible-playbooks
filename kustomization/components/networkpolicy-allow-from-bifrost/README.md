@@ -61,6 +61,9 @@ Additionally, the network policy assumes the `port` is named one of the followin
 - `model-api4`
 - `web`
 
+The pods that Bifrost reaches must use one number for each port name.  An MCP server listens on
+`web`, port 9101.  `just named-port-check` fails when a port name has more than one number.
+
 Many workloads come from a Helm chart or from a shared component, and you cannot write in those
 files.  Add the label with a patch, and give the patch a `target` in your `kustomization.yml`.
 

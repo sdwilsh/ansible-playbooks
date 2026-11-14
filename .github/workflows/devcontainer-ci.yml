@@ -82,3 +82,4 @@ jobs:
             set -euxo pipefail
             just kustomize-build
             just image-pin-check
+            just named-port-check
