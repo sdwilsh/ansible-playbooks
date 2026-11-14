@@ -33,11 +33,12 @@ spec:
             - -transport
             - streamable-http
             - -address
-            - $(POD_IP):8000
+            - $(POD_IP):9101
             # Bifrost reaches this server on the pod network, so the Host
             # header carries the name of the Service.  This server compares
             # the port as well, so each name needs the form with the port
-            # and the form without it.
+            # and the form without it.  That port is the Service port, 8000,
+            # not the listen port.
             - -allowed-hosts
             - grafana-mcp.hogs.tswn.us,grafana-mcp-svc.grafana-mcp.svc.cluster.local:8000
             # The default limit is 10 seconds.  A Loki query over the full
@@ -80,7 +81,7 @@ spec:
           ports:
             - containerPort: 8081
               name: healthz
-            - containerPort: 8000
+            - containerPort: 9101
               name: web
           readinessProbe:
             failureThreshold: 3
