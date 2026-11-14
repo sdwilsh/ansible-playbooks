@@ -30,7 +30,7 @@ spec:
             timeoutSeconds: 5
           name: kubernetes-mcp
           ports:
-            - containerPort: 8080
+            - containerPort: 9101
               name: web
           readinessProbe:
             failureThreshold: 3

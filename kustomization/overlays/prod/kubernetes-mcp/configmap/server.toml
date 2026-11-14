@@ -1,4 +1,4 @@
-port = "8080"
+port = "9101"
 # The pod network namespace holds only loopback and the pod IP, so binding
 # every address exposes the same surface as binding the pod IP.
 bind_address = "0.0.0.0"
