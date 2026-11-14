@@ -632,6 +632,11 @@ kustomize-build:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Fail when a NetworkPolicy port name maps to more than one number
+[group('lint')]
+named-port-check:
+    .github/scripts/check-named-ports.py
+
 # Test the script that picks the next release version of an image
 [group('lint')]
 next-calver-version-test:
