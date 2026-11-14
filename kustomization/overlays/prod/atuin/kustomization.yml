@@ -22,7 +22,7 @@ images:
   - name: ghcr.io/atuinsh/atuin
     newTag: 18.24.6@sha256:07aa18bc60e129254209b82da0fe8b1bf61fb770066360c657b5e462e8c61577
   - name: postgres
-    newTag: 18@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
+    newTag: 18@sha256:b9f6b8ff03b62f3cfd9d9ba3fe56226a9991c79d3fb46fd46536263bf02be553
 namespace: atuin
 patches:
   - path: patches/atuin/add_traefik_route_label.yml

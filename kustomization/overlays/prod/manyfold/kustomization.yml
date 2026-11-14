@@ -29,7 +29,7 @@ images:
   - name: ghcr.io/manyfold3d/manyfold
     newTag: 0.154.1@sha256:32308a8370452af6bc93f749fc4fa037de8d77075b9c3f0e423efe5dfef1d192
   - name: postgres
-    newTag: 18@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
+    newTag: 18@sha256:b9f6b8ff03b62f3cfd9d9ba3fe56226a9991c79d3fb46fd46536263bf02be553
   - name: quay.io/opstree/redis
     newTag: v8.10.1@sha256:d3ef5a7f11eb501034b6612b842c864e1946088c52c04b29a22f38b1fe37c99b
 namespace: manyfold
