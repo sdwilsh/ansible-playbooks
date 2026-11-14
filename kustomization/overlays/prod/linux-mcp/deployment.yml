@@ -36,7 +36,7 @@ spec:
             - name: LINUX_MCP_POLICY_PATH
               value: /etc/linux-mcp/ssh/policy.yml
             - name: LINUX_MCP_PORT
-              value: "8000"
+              value: "9101"
             - name: LINUX_MCP_SEARCH_FOR_SSH_KEY
               value: "false"
             - name: LINUX_MCP_SSH_KEY_PATH
@@ -65,7 +65,7 @@ spec:
             timeoutSeconds: 5
           name: linux-mcp
           ports:
-            - containerPort: 8000
+            - containerPort: 9101
               name: web
           readinessProbe:
             failureThreshold: 3
