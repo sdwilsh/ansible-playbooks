@@ -1,4 +1,16 @@
 ---
+# A named port that maps to more than one number makes kube-router reject new
+# connections during some syncs.  Name each number of `web` instead.
+- op: replace
+  path: /spec/ingress/0/ports/0
+  value:
+    port: 9090 # web (prometheus)
+    protocol: TCP
+- op: add
+  path: /spec/ingress/0/ports/-
+  value:
+    port: 9093 # web (alertmanager)
+    protocol: TCP
 - op: add
   path: /spec/ingress/0/ports/-
   value:

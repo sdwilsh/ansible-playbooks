@@ -1,0 +1,10 @@
+---
+# A named port that maps to more than one number makes kube-router reject new
+# connections during some syncs.  Name each number instead.
+- op: replace
+  path: /spec/ingress/0/ports
+  value:
+    - port: 9091 # web (authelia)
+      protocol: TCP
+    - port: 17170 # web (lldap)
+      protocol: TCP
