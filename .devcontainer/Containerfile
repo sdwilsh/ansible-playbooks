@@ -2,7 +2,7 @@ FROM docker.io/library/golang:1.27.3@sha256:e519d3b0a5b285e5aa53ab9eef02bc6bbb9c
 FROM ghcr.io/hadolint/hadolint:v2.15.1@sha256:32dac94127fd60b7b7e3fbfc65e1383b9b5e25c9bfd7b8536de7a539fe68a12d AS hadolint
 FROM registry.k8s.io/kustomize/kustomize:v5.8.3@sha256:429eda4a1c76a7de458d0c4ca3ded9b5d764899ff6bdaeccc1d98b1b6ee873e4 AS kustomize
 FROM docker.io/koalaman/shellcheck:stable@sha256:bb596a0d169b85ddd81d8b6d3a2ff6d5baf5fca10b97f575ebc647c3dff62b3d AS shellcheck
-FROM 11notes/traefik:3.7.17@sha256:5fa3de90a94596d3bd11e95d6f2f3cd0c7254d61a11739c7332be81aa6ab66c8 AS traefik
+FROM 11notes/traefik:3.7.18@sha256:59b1b552009f8a4b73d88f8609b839a715911ce5df310f7a1ee4a1330f1eae46 AS traefik
 
 FROM ghcr.io/marinatedconcrete/devcontainer-base:latest@sha256:d0af93d859db9575fa4052b99f63edcdaae86f3686e8c6bb45284b5a839feab8
 
