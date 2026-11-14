@@ -22,7 +22,7 @@ helmCharts:
     releaseName: alloy
     valuesFile: alloy-values.yml
   - name: prometheus-node-exporter
-    version: 5.0.0
+    version: 5.0.1
     repo: https://prometheus-community.github.io/helm-charts
     releaseName: node-exporter
     valuesFile: node-exporter-values.yml
