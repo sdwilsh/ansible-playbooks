@@ -60,7 +60,7 @@ images:
   - name: docker.io/bitnami/kubectl
     newTag: latest@sha256:8919c149c2e3d6860e0143c117900e64d71395172aaef0e01e604bb98c8e7ce0
   - name: docker.io/grafana/alloy
-    newTag: v1.21.3@sha256:8ab871206bd2d8f89277f53abffee5f452a293980788d52f85fa183a87a505a4
+    newTag: v1.22.0@sha256:9acc2529bc1edb7f5b2bd801dd8334ebc80c158e3a9e5526ecd7c9a273d43189
   - name: postgres
     newTag: 18@sha256:b9f6b8ff03b62f3cfd9d9ba3fe56226a9991c79d3fb46fd46536263bf02be553
   - name: registry.k8s.io/kube-state-metrics/kube-state-metrics
