@@ -1,0 +1,8 @@
+---
+# A backing image from a URL is downloaded by this pod, which Longhorn makes
+# for each download.  No other Longhorn pod needs the internet.
+- op: replace
+  path: /spec/podSelector
+  value:
+    matchLabels:
+      longhorn.io/component: backing-image-data-source
