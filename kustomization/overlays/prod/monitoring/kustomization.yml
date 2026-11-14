@@ -52,7 +52,7 @@ helmCharts:
     releaseName: loki
     valuesFile: loki-values.yml
   - name: prometheus-adapter
-    version: 5.4.0
+    version: 5.4.1
     repo: oci://ghcr.io/prometheus-community/charts
     releaseName: prometheus-adapter
     valuesFile: prometheus-adapter-values.yml
