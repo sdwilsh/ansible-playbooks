@@ -24,6 +24,7 @@ configMapGenerator:
     files:
       - configmap/loki/blocky.yaml
       - configmap/loki/linux-mcp.yaml
+      - configmap/loki/networkpolicy.yaml
     options:
       disableNameSuffixHash: true
       labels:
