@@ -33,6 +33,8 @@ spec:
                 configMapKeyRef:
                   key: UNIFI_MCP_HTTP_ENABLED
                   name: unifi-network-mcp-configmap
+            - name: UNIFI_MCP_PORT
+              value: "9101"
             - name: UNIFI_NETWORK_HOST
               valueFrom:
                 configMapKeyRef:
@@ -88,7 +90,7 @@ spec:
             timeoutSeconds: 5
           name: unifi-network-mcp
           ports:
-            - containerPort: 3000
+            - containerPort: 9101
               name: web
           readinessProbe:
             failureThreshold: 3
