@@ -15,19 +15,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: rips-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: ""
-  resources:
-    requests:
-      storage: 2Ti
-  volumeName: rips-pv
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: tdarr-cache-pvc
 spec:
   accessModes:

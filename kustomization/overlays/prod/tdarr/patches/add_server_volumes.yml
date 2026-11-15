@@ -11,12 +11,7 @@ spec:
           volumeMounts:
             - mountPath: /media
               name: tdarr-media
-            - mountPath: /rips
-              name: tdarr-rips
       volumes:
         - name: tdarr-media
           persistentVolumeClaim:
             claimName: media-pvc
-        - name: tdarr-rips
-          persistentVolumeClaim:
-            claimName: rips-pvc
