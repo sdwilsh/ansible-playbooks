@@ -9,7 +9,7 @@ common__ip_addresses:
 
 # The GPU holds 81.99 GiB of GTT at its highest.  The kubelet does not
 # read GTT pages, so this value is the 88 GiB limit of this node.  The
-# scheduler then sees 29.07 GiB.
+# scheduler then sees 31.07 GiB.
 k3s_system_reserved_memory: 88Gi
 
 kairos__disks_to_format: []
@@ -19,11 +19,21 @@ kairos__disks_to_format: []
 #
 # | Item                  |    GiB | Source            |
 # | --------------------- | -----: | ----------------- |
-# | common floor          |   7.07 | group vars        |
+# | common floor          |   7.31 | group vars        |
 # | `local-llm` container |  24.00 | group B patch     |
 # | GTT for group B       |  88.00 | limit             |
-# | **total**             | 119.07 |                   |
-# | free for other work   |   6.00 | 125.07 less total |
+# | **total**             | 119.31 |                   |
+# | host memory not used  |   5.76 | 125.07 less total |
+#
+# The pods total must stay below `allocatable`.  `allocatable` is 31.07
+# GiB: 125.07 less 88 `system-reserved`, 2 `kube-reserved` and 4
+# `eviction-hard`.
+#
+# | Item                  |   GiB | Source                        |
+# | --------------------- | ----: | ----------------------------- |
+# | `local-llm` container | 24.00 | group B patch                 |
+# | other pods            |  2.35 | peak, 2026-11-07 to 11-15     |
+# | **total**             | 26.35 |                               |
 #
 # | Item                  | measured | limit | margin |
 # | --------------------- | -------: | ----: | -----: |

@@ -10,6 +10,9 @@
 #
 #   GTT limit = 125.07 GiB - (the floor of the node)
 #
+# The working set of all pods must also stay below `allocatable`.  The
+# `host_vars` file of the node shows that sum.
+#
 # An affinity term keeps each model group and each NPU server on one node.
 # The floor is thus different on each node, and `kairos__extra_cmdline`
 # lives in `host_vars` with the floor table of that node.  A node with no
@@ -22,20 +25,24 @@
 # reboot of the node.
 #
 # `k3s_system_reserved_memory` below tells the kubelet about this memory.
-# That argument changes `allocatable` only.  k3s takes the default value of
-# `--enforce-node-allocatable=pods`, so no cgroup holds the reservation.
+# That argument lowers `allocatable` and the `kubepods.slice` limit.  k3s
+# takes the default value of `--enforce-node-allocatable=pods`, so no cgroup
+# holds the reservation.
 #
-# Each node has the same floor of 7.07 GiB.  The `host_vars` file of the
+# Each node has the same floor of 7.31 GiB.  The `host_vars` file of the
 # node adds the container limit of each server to it.
 #
 # | Item                            |  GiB | Source           |
 # | ------------------------------- | ---: | ---------------- |
-# | operating system and other pods | 2.21 | measured         |
+# | operating system and other pods | 2.84 | measured         |
 # | GTT page tables                 | 0.47 | measured         |
-# | metrics exporter container      | 0.13 | limit            |
 # | `eviction-hard` reserve         | 4.00 | kubelet argument |
-# | slack                           | 0.26 | maths            |
-# | **total**                       | 7.07 |                  |
+# | **total**                       | 7.31 |                  |
+#
+# The 2.84 GiB is the peak working set of the root cgroup less the
+# inference container, on gpuworker02 from 2026-11-07 to 2026-11-15.  It
+# includes the metrics exporter.  Test pods made the gpuworker01 value too
+# large.
 #
 # The GPU page tables map the GTT, so their size follows the limit: 0.47
 # GiB at a limit of 108 GiB, which is 0.44% of the limit.  The floor thus
@@ -53,18 +60,20 @@
 k3s_system_reserved_memory: 512Mi
 
 k3s_kubelet_args:
-  # These settings are based on a measured working set of 2.21 GiB.
-  # 4Gi is larger than the 2.21 GiB working set, and gives the kubelet a
-  # margin of approximately four read intervals of 10 seconds.
+  # 4Gi gives the kubelet a margin of approximately four read intervals of
+  # 10 seconds.
   #
   # This threshold does not detect the GTT pages that the GPU uses, because
-  # the kubelet reads `memory.available` from the root cgroup.
+  # the kubelet reads `memory.available` from the root cgroup.  Because of
+  # `--enforce-node-allocatable=pods`, the kubelet also evicts when the
+  # total working set of all pods is more than `allocatable`.  Refer to
+  # `ParseThresholdConfig` in kubernetes pkg/kubelet/eviction/helpers.go.
   - eviction-hard=memory.available<4Gi,imagefs.available<5%,nodefs.available<5%
-  # `kube-reserved` keeps memory for the operating system, the kubelet, and
-  # the container runtime.  The value of 4Gi is larger than the measured
-  # 2.21 GiB working set on purpose.  The budget above uses the measurement,
-  # because the kubelet does not enforce this reservation as a cgroup.
-  - kube-reserved=memory=4Gi
+  # `kube-reserved` is for the operating system, the kubelet, and the
+  # container runtime.  No cgroup holds it.  It lowers `allocatable` and the
+  # `kubepods.slice` limit, and the floor above counts the measured working
+  # set of these parts.
+  - kube-reserved=memory=2Gi
   # `system-reserved` keeps memory for a component outside Kubernetes.
   # The amdgpu driver is such a component.  The kubelet does not read GTT
   # pages, so the scheduler needs this value.

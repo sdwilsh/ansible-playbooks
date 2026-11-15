@@ -25,8 +25,8 @@ spec:
             periodSeconds: 23
             timeoutSeconds: 18
           # Four servers share this limit.  The weights are in GTT, so the
-          # container holds the 6 GiB Q8 RAM cache and the file cache.  The
-          # request fits the 29.07 GiB of allocatable memory.
+          # container holds the 6 GiB Q8 RAM cache and the file cache.
+          # `host_vars/gpuworker02.hogs.tswn.us.yml` holds the memory budget.
           resources:
             limits:
               memory: 24Gi
