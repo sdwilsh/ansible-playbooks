@@ -6,7 +6,7 @@ components:
   - ../../../components/pod-security-enforce-privileged
 images:
   - name: quay.io/kairos/operator
-    newTag: v0.3.0@sha256:bc0462a0bd5e240ee17af9e3743d228173905ec642e894e30cbfc650ef43fed7
+    newTag: v0.4.0@sha256:0d9b340727e52be45a74097cdf90190a296707fbe33e8620be2b96e412c5de07
 namespace: kairos-operator
 patches:
   - path: patches/set_node_labeler_image.yml
@@ -27,6 +27,6 @@ replacements:
           kind: Deployment
           name: operator-kairos-operator
 resources:
-  - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.3.0
+  - https://github.com/kairos-io/kairos-operator/config/default?ref=v0.4.0
   - nodeopupgrade/controlplane.yml
   - nodeopupgrade/workers.yml

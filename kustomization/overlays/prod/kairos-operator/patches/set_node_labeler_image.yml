@@ -10,5 +10,5 @@ spec:
       containers:
         - env:
             - name: NODE_LABELER_IMAGE
-              value: quay.io/kairos/operator-node-labeler:v0.3.0@sha256:ec5df061bdde751b90ac0d5b43d9596ba09be8f344eb86fd39bab95ef096fa14
+              value: quay.io/kairos/operator-node-labeler:v0.4.0@sha256:b53badbf5f5b21d63284abb842e32da1194ebc3fba0b5062cbf80b45a2f4d51e
           name: manager
