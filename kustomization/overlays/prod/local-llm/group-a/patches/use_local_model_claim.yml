@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-llm-model-cache-pvc
+$patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-llm-deployment
+spec:
+  template:
+    spec:
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: local-llm-model-local-pvc

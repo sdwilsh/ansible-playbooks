@@ -1,0 +1,14 @@
+---
+# The model streams its experts from this disk, so the claim is local to
+# the node.  local-path does not enforce the size.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-llm-model-local-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 300Gi
+  storageClassName: local-path

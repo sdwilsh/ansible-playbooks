@@ -11,6 +11,7 @@ configMapGenerator:
       - MODELS=configmap/models.txt
 namePrefix: group-a-
 patches:
+  - path: patches/use_local_model_claim.yml
   - path: patches/set_cache_sizes.yml
   - path: patches/set_progress_deadline.yml
   - path: patches/pin_node.yml
@@ -38,3 +39,5 @@ replacements:
           - spec.metrics.[name=smoke-test].provider.job.spec.template.spec.containers.[name=smoke-test].env.[name=SERVICE].value
         select:
           kind: AnalysisTemplate
+resources:
+  - persistentvolumeclaim.yml

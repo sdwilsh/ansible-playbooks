@@ -7,10 +7,10 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.120/23
 
-# The GPU holds up to 97.62 GiB of GTT.  The kubelet does not read GTT pages,
-# so this value is the 98 GiB limit of this node.  The scheduler then
-# sees 21.07 GiB.
-k3s_system_reserved_memory: 98Gi
+# The GPU holds up to 17.65 GiB of GTT.  The kubelet does not read GTT pages,
+# so this value is the 20 GiB limit of this node.  The scheduler then
+# sees 99.07 GiB.
+k3s_system_reserved_memory: 20Gi
 
 kairos__disks_to_format: []
 
@@ -20,37 +20,29 @@ kairos__disks_to_format: []
 # | Item                  |    GiB | Source            |
 # | --------------------- | -----: | ----------------- |
 # | common floor          |   7.31 | group vars        |
-# | `local-llm` container |  18.00 | group A patch     |
-# | GTT for group A       |  98.00 | limit             |
-# | **total**             | 123.31 |                   |
-# | host memory not used  |   1.76 | 125.07 less total |
+# | `local-llm` container |  93.00 | group A patch     |
+# | GTT for group A       |  20.00 | limit             |
+# | **total**             | 120.31 |                   |
+# | host memory not used  |   4.76 | 125.07 less total |
 #
-# The pods total must stay below `allocatable`.  `allocatable` is 21.07
-# GiB: 125.07 less 98 `system-reserved`, 2 `kube-reserved` and 4
+# The pods total must stay below `allocatable`.  `allocatable` is 99.07
+# GiB: 125.07 less 20 `system-reserved`, 2 `kube-reserved` and 4
 # `eviction-hard`.
 #
 # | Item                  |   GiB | Source                        |
 # | --------------------- | ----: | ----------------------------- |
-# | `local-llm` container | 18.00 | group A patch                 |
+# | `local-llm` container | 93.00 | group A patch                 |
 # | other pods            |  2.32 | peak, 2026-11-07 to 11-15     |
-# | **total**             | 20.32 |                               |
+# | **total**             | 95.32 |                               |
 #
-# Each limit holds a margin over a measurement:
-#
-# | Item                  | measured | limit | margin |
-# | --------------------- | -------: | ----: | -----: |
-# | group A GTT           |    97.62 | 98.00 |   0.38 |
-# | container working set |    14.55 | 18.00 |   3.45 |
-#
-# 98 GiB is 25690112 pages.  From 2026-11-07 to 2026-11-15, the GTT peak
-# is 97.62 GiB (`gpu_used_gtt`) with DeepSeek V4 Flash and DSpark at
-# 196608 tokens.  The working set of the container peaked at 14.55 GiB,
-# with a 4 GiB RAM cache.  Measure the peak again before you change the
-# RAM cache or lower the container limit.
+# DeepSeek V4.1 Flash keeps its expert cache in container memory, not in
+# GTT.  The server sizes the cache from the container limit.  GTT holds
+# the dense weights, the DSpark model and the context: 17.65 GiB at
+# 1048576 tokens.  20 GiB is 5242880 pages.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.
 # These values permit 180 seconds for a compute job.
 kairos__extra_cmdline:
   - amdgpu.lockup_timeout=10000,180000,10000,10000
-  - ttm.pages_limit=25690112
+  - ttm.pages_limit=5242880

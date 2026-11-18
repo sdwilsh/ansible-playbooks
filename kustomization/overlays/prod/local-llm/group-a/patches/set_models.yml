@@ -24,10 +24,9 @@ spec:
           # for this limit.  Change them together.
           resources:
             limits:
-              memory: 18Gi
+              memory: 93Gi
             requests:
-              memory: 16Gi
-          # A cold load of 92 GB from a remote replica can take over 20 minutes.
+              memory: 89Gi
           startupProbe:
             failureThreshold: 240
             periodSeconds: 15
