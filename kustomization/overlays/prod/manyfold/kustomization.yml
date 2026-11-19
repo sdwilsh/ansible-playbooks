@@ -27,7 +27,7 @@ images:
   - name: busybox
     newTag: 1.38.0@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
   - name: ghcr.io/manyfold3d/manyfold
-    newTag: 0.154.2@sha256:c9e477d1b6fd700472a3c1c7542673a78e47be39fc0c078c7398d08efbe372d2
+    newTag: 0.154.3@sha256:528f9be8568782b1d6f3acc71659ddfc8975af109dfb1e0f4865ba3feca27c05
   - name: postgres
     newTag: 18@sha256:b9f6b8ff03b62f3cfd9d9ba3fe56226a9991c79d3fb46fd46536263bf02be553
   - name: quay.io/opstree/redis
