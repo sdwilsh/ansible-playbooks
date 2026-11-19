@@ -14,3 +14,11 @@ metadata:
 # Renovate finds new releases.  This stops the only internet egress of the
 # manager.
 value: "false"
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: node-drain-policy
+  namespace: longhorn-system
+# A drain waits only for the last replica of a volume that is still running.
+value: allow-if-replica-is-stopped

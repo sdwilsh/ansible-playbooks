@@ -79,7 +79,9 @@ metadata:
   name: longhorn-ephemeral-ssd
 allowVolumeExpansion: true
 parameters:
-  dataLocality: disabled
+  # The only replica follows the pod.  Then a drain of a different node
+  # does not wait on this volume.
+  dataLocality: best-effort
   diskSelector: ssd
   fromBackup: ""
   numberOfReplicas: "1"
