@@ -37,7 +37,7 @@ images:
   - name: quay.io/prometheus-operator/prometheus-config-reloader
     newTag: v0.95.1@sha256:39bdbade0c64f7c38bb6d18d6f602b14ad489bc189b709dc9266b49e6647aac1
   - name: quay.io/prometheus/node-exporter
-    newTag: v1.12.1@sha256:1b4e4438faca4dd7e001dd445d161a4a2091b0fededa84093b3a8dfeae1f1be0
+    newTag: v1.13.1@sha256:011e2d12c5bff759b90804bda642664775d7b4b127bf5148539bb82d3f590bb7
   - name: quay.io/prometheuscommunity/smartctl-exporter
     newTag: v0.15.0@sha256:a76e08dbf5db4781fefd1ed81c65ad46ae8d2849dae6b6d3acebcde2fc4e59d6
 namespace: node-monitoring
