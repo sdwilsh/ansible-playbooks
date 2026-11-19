@@ -1,0 +1,25 @@
+{
+ "format": {
+  "duration": "300.380000",
+  "tags": {
+   "TDARR_TARGET": "1"
+  }
+ },
+ "streams": [
+  {
+   "codec_type": "video",
+   "width": 720,
+   "height": 480,
+   "display_aspect_ratio": "4:3",
+   "tags": {
+    "DURATION": "00:05:00.300000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.288000000"
+   }
+  }
+ ]
+}

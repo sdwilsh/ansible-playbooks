@@ -1,0 +1,63 @@
+{
+ "tracks": [
+  {
+   "id": 0,
+   "type": "video",
+   "properties": {
+    "codec_id": "V_MPEG4/ISO/AVC",
+    "default_track": true,
+    "forced_track": false,
+    "language": "und",
+    "language_ietf": "und"
+   }
+  },
+  {
+   "id": 1,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_TRUEHD",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 2,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 2,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_TRUEHD",
+    "default_track": true,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 3,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": true,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 4,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  }
+ ]
+}

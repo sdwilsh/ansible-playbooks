@@ -1,0 +1,47 @@
+{
+ "format": {
+  "duration": "300.061000",
+  "tags": {
+   "TDARR_TARGET": "1"
+  }
+ },
+ "streams": [
+  {
+   "codec_type": "video",
+   "width": 1920,
+   "height": 1080,
+   "display_aspect_ratio": "16:9",
+   "tags": {
+    "DURATION": "00:05:00.008000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.061000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.051000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.051000000"
+   }
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  }
+ ]
+}

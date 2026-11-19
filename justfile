@@ -693,6 +693,11 @@ shellcheck:
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
 
+# Test the tdarr flow conversion module and the flow documents
+[group('lint')]
+tdarr-flows-test:
+    node --test 'kustomization/overlays/prod/tdarr/flows/*.test.js'
+
 # Check that the devcontainer and the deployment pin the same `traefik` image
 [group('lint')]
 traefik-pin-check:

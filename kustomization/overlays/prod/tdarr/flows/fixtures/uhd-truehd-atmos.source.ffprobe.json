@@ -1,0 +1,161 @@
+{
+ "format": {
+  "duration": "300.311000"
+ },
+ "streams": [
+  {
+   "codec_type": "video",
+   "width": 3840,
+   "height": 2160,
+   "color_transfer": "smpte2084",
+   "display_aspect_ratio": "16:9",
+   "tags": {
+    "DURATION": "00:05:00.217000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.217000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:05:00.224000000"
+   }
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  }
+ ]
+}

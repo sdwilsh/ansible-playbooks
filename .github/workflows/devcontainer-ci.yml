@@ -64,6 +64,7 @@ jobs:
             just next-calver-version-test
             just renovate-validate
             just shellcheck
+            just tdarr-flows-test
             just traefik-pin-check
 
   kustomize-build:

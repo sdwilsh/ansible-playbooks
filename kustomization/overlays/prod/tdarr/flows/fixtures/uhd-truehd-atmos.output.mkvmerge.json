@@ -1,0 +1,435 @@
+{
+ "tracks": [
+  {
+   "id": 0,
+   "type": "video",
+   "properties": {
+    "codec_id": "V_MPEGH/ISO/HEVC",
+    "default_track": true,
+    "forced_track": false,
+    "language": "und",
+    "language_ietf": "und"
+   }
+  },
+  {
+   "id": 1,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 8,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_TRUEHD",
+    "default_track": true,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 2,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_EAC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 3,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  },
+  {
+   "id": 4,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  },
+  {
+   "id": 5,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "ger",
+    "language_ietf": "de"
+   }
+  },
+  {
+   "id": 6,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "ita",
+    "language_ietf": "it"
+   }
+  },
+  {
+   "id": 7,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 8,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 2,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 9,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 10,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 11,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 2,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 12,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 2,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 13,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 14,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  },
+  {
+   "id": 15,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "ger",
+    "language_ietf": "de"
+   }
+  },
+  {
+   "id": 16,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "ita",
+    "language_ietf": "it"
+   }
+  },
+  {
+   "id": 17,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 18,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "dut",
+    "language_ietf": "nl"
+   }
+  },
+  {
+   "id": 19,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "chi",
+    "language_ietf": "zh"
+   }
+  },
+  {
+   "id": 20,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "kor",
+    "language_ietf": "ko"
+   }
+  },
+  {
+   "id": 21,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 22,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "dan",
+    "language_ietf": "da"
+   }
+  },
+  {
+   "id": 23,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fin",
+    "language_ietf": "fi"
+   }
+  },
+  {
+   "id": 24,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "nor",
+    "language_ietf": "no"
+   }
+  },
+  {
+   "id": 25,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "swe",
+    "language_ietf": "sv"
+   }
+  },
+  {
+   "id": 26,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  },
+  {
+   "id": 27,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "ger",
+    "language_ietf": "de"
+   }
+  },
+  {
+   "id": 28,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "ita",
+    "language_ietf": "it"
+   }
+  },
+  {
+   "id": 29,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 30,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 31,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 32,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 33,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 34,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 35,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "jpn",
+    "language_ietf": "ja"
+   }
+  },
+  {
+   "id": 36,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_HDMV/PGS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  }
+ ]
+}

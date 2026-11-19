@@ -1,0 +1,63 @@
+[Parsed_idet_0 @ 0x55ce24c8e400] Multi frame detection: TFF:     0 BFF:     0 Progressive:     0 Undetermined:     0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:27 pts_time:0.027 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:60 pts_time:0.06 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:93 pts_time:0.093 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 2329>=hi keep pts:127 pts_time:0.127 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:160 pts_time:0.16 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:193 pts_time:0.193 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:227 pts_time:0.227 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:260 pts_time:0.26 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:294 pts_time:0.294 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:327 pts_time:0.327 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1869>=hi keep pts:360 pts_time:0.36 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:394 pts_time:0.394 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:427 pts_time:0.427 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1187>=hi keep pts:460 pts_time:0.46 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:494 pts_time:0.494 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:527 pts_time:0.527 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:561 pts_time:0.561 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:594 pts_time:0.594 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1193>=hi keep pts:627 pts_time:0.627 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:661 pts_time:0.661 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:694 pts_time:0.694 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:727 pts_time:0.727 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:761 pts_time:0.761 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:794 pts_time:0.794 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:827 pts_time:0.827 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 837>=hi keep pts:861 pts_time:0.861 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:894 pts_time:0.894 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:928 pts_time:0.928 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 867>=hi keep pts:961 pts_time:0.961 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:994 pts_time:0.994 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1028 pts_time:1.028 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1061 pts_time:1.061 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1094 pts_time:1.094 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1535>=hi keep pts:1128 pts_time:1.128 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1161 pts_time:1.161 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1194 pts_time:1.194 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1228 pts_time:1.228 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1261 pts_time:1.261 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1295 pts_time:1.295 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1328 pts_time:1.328 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 987>=hi keep pts:1361 pts_time:1.361 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1395 pts_time:1.395 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1428 pts_time:1.428 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 770>=hi keep pts:1461 pts_time:1.461 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1495 pts_time:1.495 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1528 pts_time:1.528 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1562 pts_time:1.562 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1595 pts_time:1.595 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1245>=hi keep pts:1628 pts_time:1.628 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1662 pts_time:1.662 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1695 pts_time:1.695 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1728 pts_time:1.728 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1762 pts_time:1.762 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1795 pts_time:1.795 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1828 pts_time:1.828 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1057>=hi keep pts:1862 pts_time:1.862 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1895 pts_time:1.895 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:1929 pts_time:1.929 drop_count:-1 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] 1593>=hi keep pts:1962 pts_time:1.962 drop_count:-2 keep_count:0
+[Parsed_mpdecimate_1 @ 0x7fb408002880] lo:0<445 lo:0<108 lo:0<108 drop pts:1995 pts_time:1.995 drop_count:1 keep_count:-1
+[Parsed_mpdecimate_1 @ 0x7fb408002880] keep pts:2029 pts_time:2.029 drop_count:-1 keep_count:0
+[Parsed_idet_0 @ 0x7fb408002500] Multi frame detection: TFF:     0 BFF:     0 Progressive:    59 Undetermined:     2

@@ -1,0 +1,68 @@
+{
+ "format": {
+  "duration": "299.727000"
+ },
+ "streams": [
+  {
+   "codec_type": "video",
+   "width": 1920,
+   "height": 1080,
+   "color_transfer": "bt709",
+   "display_aspect_ratio": "16:9",
+   "tags": {
+    "DURATION": "00:04:59.717000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:04:59.713000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:04:59.712000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:04:59.712000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:04:59.712000000"
+   }
+  },
+  {
+   "codec_type": "audio",
+   "tags": {
+    "DURATION": "00:04:59.712000000"
+   }
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle",
+   "width": 1920,
+   "height": 1080
+  },
+  {
+   "codec_type": "subtitle"
+  },
+  {
+   "codec_type": "subtitle"
+  }
+ ]
+}

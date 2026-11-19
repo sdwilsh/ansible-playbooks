@@ -1,0 +1,28 @@
+{
+ "tracks": [
+  {
+   "id": 0,
+   "type": "video",
+   "properties": {
+    "codec_id": "V_MPEG2",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 1,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 2,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": true,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  }
+ ]
+}

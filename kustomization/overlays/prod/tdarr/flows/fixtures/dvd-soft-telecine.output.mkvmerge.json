@@ -1,0 +1,113 @@
+{
+ "tracks": [
+  {
+   "id": 0,
+   "type": "video",
+   "properties": {
+    "codec_id": "V_AV1",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 1,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": true,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 2,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_DTS",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 3,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 4,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 6,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  },
+  {
+   "id": 5,
+   "type": "audio",
+   "properties": {
+    "audio_channels": 2,
+    "audio_sampling_frequency": 48000,
+    "codec_id": "A_AC3",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 6,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_VOBSUB",
+    "default_track": false,
+    "forced_track": false,
+    "language": "eng",
+    "language_ietf": "en"
+   }
+  },
+  {
+   "id": 7,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_VOBSUB",
+    "default_track": false,
+    "forced_track": false,
+    "language": "spa",
+    "language_ietf": "es"
+   }
+  },
+  {
+   "id": 8,
+   "type": "subtitles",
+   "properties": {
+    "codec_id": "S_VOBSUB",
+    "default_track": false,
+    "forced_track": false,
+    "language": "fre",
+    "language_ietf": "fr"
+   }
+  }
+ ]
+}
