@@ -1,0 +1,186 @@
+{
+  "_id": "tgtShows",
+  "name": "Target: Shows",
+  "priority": 0,
+  "flowPlugins": [
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "id": "shInput",
+      "position": {
+        "x": 400,
+        "y": 0
+      },
+      "inputsDB": {
+        "fileAccessChecks": "true",
+        "pauseNodeIfAccessChecksFail": "true"
+      }
+    },
+    {
+      "name": "Check if file is hidden or in a hidden folder",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "shSkip",
+      "position": {
+        "x": 400,
+        "y": 120
+      },
+      "inputsDB": {
+        "terms": "/.",
+        "includeFileDirectory": "true"
+      }
+    },
+    {
+      "name": "Skip: hidden file (a partial write)",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "shSkipped",
+      "position": {
+        "x": 700,
+        "y": 240
+      },
+      "inputsDB": {}
+    },
+    {
+      "name": "Check file name includes SxxEyy",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "shName",
+      "position": {
+        "x": 400,
+        "y": 360
+      },
+      "inputsDB": {
+        "terms": "S01E,s01e",
+        "pattern": "[Ss][0-9]{2,}[Ee][0-9]{2,}"
+      }
+    },
+    {
+      "name": "Check if file is an extra",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "shExtras",
+      "position": {
+        "x": 400,
+        "y": 480
+      },
+      "inputsDB": {
+        "terms": "/behind the scenes/,/deleted scenes/,/interviews/,/scenes/,/samples/,/shorts/,/featurettes/,/clips/,/other/,/extras/,/trailers/",
+        "includeFileDirectory": "true"
+      }
+    },
+    {
+      "name": "Check if file is a trailer",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "shTrailer",
+      "position": {
+        "x": 400,
+        "y": 600
+      },
+      "inputsDB": {
+        "terms": "-trailer.mkv",
+        "pattern": "trailer\\.mkv$"
+      }
+    },
+    {
+      "name": "Go To Flow: Target: Convert",
+      "sourceRepo": "Community",
+      "pluginName": "goToFlow",
+      "version": "2.0.0",
+      "id": "shGo",
+      "position": {
+        "x": 400,
+        "y": 720
+      },
+      "inputsDB": {
+        "flowId": "tgtConvert",
+        "pluginId": "start"
+      }
+    },
+    {
+      "name": "Fail Flow: season and episode not present",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "shFail",
+      "position": {
+        "x": 400,
+        "y": 840
+      },
+      "inputsDB": {}
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "shInput",
+      "sourceHandle": "1",
+      "target": "shSkip",
+      "targetHandle": null,
+      "id": "shInput-1-shSkip"
+    },
+    {
+      "source": "shSkip",
+      "sourceHandle": "1",
+      "target": "shSkipped",
+      "targetHandle": null,
+      "id": "shSkip-1-shSkipped"
+    },
+    {
+      "source": "shSkip",
+      "sourceHandle": "2",
+      "target": "shName",
+      "targetHandle": null,
+      "id": "shSkip-2-shName"
+    },
+    {
+      "source": "shName",
+      "sourceHandle": "1",
+      "target": "shGo",
+      "targetHandle": null,
+      "id": "shName-1-shGo"
+    },
+    {
+      "source": "shName",
+      "sourceHandle": "2",
+      "target": "shExtras",
+      "targetHandle": null,
+      "id": "shName-2-shExtras"
+    },
+    {
+      "source": "shExtras",
+      "sourceHandle": "1",
+      "target": "shGo",
+      "targetHandle": null,
+      "id": "shExtras-1-shGo"
+    },
+    {
+      "source": "shExtras",
+      "sourceHandle": "2",
+      "target": "shTrailer",
+      "targetHandle": null,
+      "id": "shExtras-2-shTrailer"
+    },
+    {
+      "source": "shTrailer",
+      "sourceHandle": "1",
+      "target": "shGo",
+      "targetHandle": null,
+      "id": "shTrailer-1-shGo"
+    },
+    {
+      "source": "shTrailer",
+      "sourceHandle": "2",
+      "target": "shFail",
+      "targetHandle": null,
+      "id": "shTrailer-2-shFail"
+    }
+  ]
+}

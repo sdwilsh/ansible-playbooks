@@ -1,0 +1,185 @@
+{
+  "_id": "tgtMovies",
+  "name": "Target: Movies",
+  "priority": 0,
+  "flowPlugins": [
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "id": "mvInput",
+      "position": {
+        "x": 400,
+        "y": 0
+      },
+      "inputsDB": {
+        "fileAccessChecks": "true",
+        "pauseNodeIfAccessChecksFail": "true"
+      }
+    },
+    {
+      "name": "Check if file is hidden or in a hidden folder",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "mvSkip",
+      "position": {
+        "x": 400,
+        "y": 120
+      },
+      "inputsDB": {
+        "terms": "/.",
+        "includeFileDirectory": "true"
+      }
+    },
+    {
+      "name": "Skip: hidden file (a partial write)",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "mvSkipped",
+      "position": {
+        "x": 700,
+        "y": 240
+      },
+      "inputsDB": {}
+    },
+    {
+      "name": "Check file name includes year",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "mvName",
+      "position": {
+        "x": 400,
+        "y": 360
+      },
+      "inputsDB": {
+        "terms": "(19,(20"
+      }
+    },
+    {
+      "name": "Check if file is an extra",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "mvExtras",
+      "position": {
+        "x": 400,
+        "y": 480
+      },
+      "inputsDB": {
+        "terms": "/behind the scenes/,/deleted scenes/,/interviews/,/scenes/,/samples/,/shorts/,/featurettes/,/clips/,/other/,/extras/,/trailers/",
+        "includeFileDirectory": "true"
+      }
+    },
+    {
+      "name": "Check if file is a trailer",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileNameIncludes",
+      "version": "2.0.0",
+      "id": "mvTrailer",
+      "position": {
+        "x": 400,
+        "y": 600
+      },
+      "inputsDB": {
+        "terms": "-trailer.mkv",
+        "pattern": "trailer\\.mkv$"
+      }
+    },
+    {
+      "name": "Go To Flow: Target: Convert",
+      "sourceRepo": "Community",
+      "pluginName": "goToFlow",
+      "version": "2.0.0",
+      "id": "mvGo",
+      "position": {
+        "x": 400,
+        "y": 720
+      },
+      "inputsDB": {
+        "flowId": "tgtConvert",
+        "pluginId": "start"
+      }
+    },
+    {
+      "name": "Fail Flow: year not present",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "mvFail",
+      "position": {
+        "x": 400,
+        "y": 840
+      },
+      "inputsDB": {}
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "mvInput",
+      "sourceHandle": "1",
+      "target": "mvSkip",
+      "targetHandle": null,
+      "id": "mvInput-1-mvSkip"
+    },
+    {
+      "source": "mvSkip",
+      "sourceHandle": "1",
+      "target": "mvSkipped",
+      "targetHandle": null,
+      "id": "mvSkip-1-mvSkipped"
+    },
+    {
+      "source": "mvSkip",
+      "sourceHandle": "2",
+      "target": "mvName",
+      "targetHandle": null,
+      "id": "mvSkip-2-mvName"
+    },
+    {
+      "source": "mvName",
+      "sourceHandle": "1",
+      "target": "mvGo",
+      "targetHandle": null,
+      "id": "mvName-1-mvGo"
+    },
+    {
+      "source": "mvName",
+      "sourceHandle": "2",
+      "target": "mvExtras",
+      "targetHandle": null,
+      "id": "mvName-2-mvExtras"
+    },
+    {
+      "source": "mvExtras",
+      "sourceHandle": "1",
+      "target": "mvGo",
+      "targetHandle": null,
+      "id": "mvExtras-1-mvGo"
+    },
+    {
+      "source": "mvExtras",
+      "sourceHandle": "2",
+      "target": "mvTrailer",
+      "targetHandle": null,
+      "id": "mvExtras-2-mvTrailer"
+    },
+    {
+      "source": "mvTrailer",
+      "sourceHandle": "1",
+      "target": "mvGo",
+      "targetHandle": null,
+      "id": "mvTrailer-1-mvGo"
+    },
+    {
+      "source": "mvTrailer",
+      "sourceHandle": "2",
+      "target": "mvFail",
+      "targetHandle": null,
+      "id": "mvTrailer-2-mvFail"
+    }
+  ]
+}

@@ -9,8 +9,24 @@ components:
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
   - ../../../components/tdarr
+configMapGenerator:
+  - files:
+      - flows/sync-flows.js
+      - flows/target-convert.json
+      - flows/target-movies.json
+      - flows/target-shows.json
+    name: tdarr-flows
+  - files:
+      - flows/target-convert.js
+    name: tdarr-target-code
+    options:
+      disableNameSuffixHash: true
 namespace: tdarr
 patches:
+  - path: patches/add_target_code_volume.yml
+    target:
+      kind: Deployment
+      name: tdarr-node-deployment
   - path: patches/add_node_volumes.yml
     target:
       kind: Deployment
@@ -42,6 +58,7 @@ patches:
 resources:
   - namespace.yml
   - ingress.yml
+  - job.yml
   - networkpolicy/allow-tdarr-internal.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml

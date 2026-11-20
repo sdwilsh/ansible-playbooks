@@ -1,0 +1,104 @@
+{
+  "_id": "tgtConvert",
+  "name": "Target: Convert",
+  "priority": 0,
+  "flowPlugins": [
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "id": "cvInput",
+      "position": {
+        "x": 400,
+        "y": 0
+      },
+      "inputsDB": {
+        "fileAccessChecks": "true",
+        "pauseNodeIfAccessChecksFail": "true"
+      }
+    },
+    {
+      "name": "Convert to target",
+      "sourceRepo": "Community",
+      "pluginName": "customFunction",
+      "version": "1.0.0",
+      "id": "cvConvert",
+      "position": {
+        "x": 400,
+        "y": 120
+      },
+      "inputsDB": {
+        "code": "module.exports = async (args) => {\n  const file = require('fs').realpathSync('/app/target/target-convert.js');\n  delete require.cache[file];\n  return require(file)(args);\n};\n"
+      }
+    },
+    {
+      "name": "Run Health Check",
+      "sourceRepo": "Community",
+      "pluginName": "runHealthCheck",
+      "version": "1.0.0",
+      "id": "cvHealth",
+      "position": {
+        "x": 400,
+        "y": 240
+      },
+      "inputsDB": {
+        "type": "thorough"
+      }
+    },
+    {
+      "name": "Replace Original File",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "id": "cvReplace",
+      "position": {
+        "x": 400,
+        "y": 360
+      },
+      "inputsDB": {}
+    },
+    {
+      "name": "Already at target",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "cvAtTarget",
+      "position": {
+        "x": 400,
+        "y": 480
+      },
+      "inputsDB": {}
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "cvInput",
+      "sourceHandle": "1",
+      "target": "cvConvert",
+      "targetHandle": null,
+      "id": "cvInput-1-cvConvert"
+    },
+    {
+      "source": "cvConvert",
+      "sourceHandle": "1",
+      "target": "cvHealth",
+      "targetHandle": null,
+      "id": "cvConvert-1-cvHealth"
+    },
+    {
+      "source": "cvConvert",
+      "sourceHandle": "2",
+      "target": "cvAtTarget",
+      "targetHandle": null,
+      "id": "cvConvert-2-cvAtTarget"
+    },
+    {
+      "source": "cvHealth",
+      "sourceHandle": "1",
+      "target": "cvReplace",
+      "targetHandle": null,
+      "id": "cvHealth-1-cvReplace"
+    }
+  ]
+}

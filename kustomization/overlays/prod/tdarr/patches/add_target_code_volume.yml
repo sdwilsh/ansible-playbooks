@@ -1,0 +1,18 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      containers:
+        - name: tdarr
+          volumeMounts:
+            - mountPath: /app/target
+              name: tdarr-target-code
+              readOnly: true
+      volumes:
+        - configMap:
+            name: tdarr-target-code
+          name: tdarr-target-code
