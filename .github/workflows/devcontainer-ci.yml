@@ -1,31 +1,167 @@
 ---
 name: Devcontainer-based CI
 on:
- push:
-   branches:
-     - main
-     - renovate/**
- pull_request:
+  pull_request:
+  push:
+    branches:
+      - main
+      - renovate/**
+
+# A renovate branch push and its pull request share one head commit.  They
+# run once.
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.sha || github.sha }}
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  ci-result:
+    name: CI result
+
+    # This job is the one required check.  A skipped job passes.
+    if: ${{ always() }}
+
+    needs:
+      - devcontainer
+      - kustomize-build
+      - mack
+      - nut-shutdown-agent
+      - quick-lint
+      - sif
+      - wireguard-egress
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Fail when a job failed or stopped
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "results: ${RESULTS}"
+          case " ${RESULTS} " in
+            *" failure "* | *" cancelled "*) exit 1 ;;
+          esac
+
+  devcontainer:
+    name: Build the devcontainer image
+
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Login to GHCR
+        run: |
+          printf '%s' "${{ secrets.GITHUB_TOKEN }}" |
+            buildah login --username "${{ github.repository_owner }}" --password-stdin ghcr.io
+
+      # Only a push to main writes the layer cache.  Other runs read it.
+      - name: Build the devcontainer image with buildah
+        env:
+          CACHE: ghcr.io/${{ github.repository }}-devcontainer-cache
+        run: |
+          set -euxo pipefail
+          cache_to=()
+          if [ "${GITHUB_EVENT_NAME}" = push ] && [ "${GITHUB_REF}" = refs/heads/main ]; then
+            cache_to=(--cache-to "${CACHE}")
+          fi
+          buildah build \
+            --cache-from "${CACHE}" \
+            "${cache_to[@]}" \
+            --file .devcontainer/Containerfile \
+            --isolation=chroot \
+            --layers \
+            --tag devcontainer:ci \
+            .
+
+      - name: Save the devcontainer image
+        run: buildah push devcontainer:ci "docker-archive:${RUNNER_TEMP}/devcontainer.tar:devcontainer:ci"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          compression-level: 1
+          name: devcontainer
+          path: ${{ runner.temp }}/devcontainer.tar
+          retention-days: 1
+
+  kustomize-build:
+    name: Build the kustomizations
+
+    needs: devcontainer
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/devcontainer
+        with:
+          run: |
+            just kustomize-build
+            just image-pin-check
+            just named-port-check
+
+  mack:
+    name: Build mack images
+
+    # A push to main runs build-mack.yml by its own trigger.
+    if: ${{ github.ref != 'refs/heads/main' }}
+
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+
+    secrets: inherit
+
+    uses: ./.github/workflows/build-mack.yml
+
+  nut-shutdown-agent:
+    name: Build the nut-shutdown-agent image
+
+    if: ${{ github.ref != 'refs/heads/main' }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    uses: ./.github/workflows/build-nut-shutdown-agent.yml
+
+  # This job publishes the image that VS Code uses as its BuildKit cache.  It
+  # is not part of the result.
+  publish-devcontainer:
+    name: Publish the devcontainer image
+
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-26.04
+
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4 
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4
         with:
+          password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up Buildx to use docker-container
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
         with:
           driver: docker-container
 
-      - name: Pre-build image and run lint in dev container
+      - name: Build and push the devcontainer image
         uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3.1900000450
         with:
           cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
@@ -33,24 +169,22 @@ jobs:
           env: |
             CI=1
           imageName: ghcr.io/${{ github.repository }}-devcontainer
-          push: filter
-          refFilterForPush: refs/heads/main
+          push: always
 
   quick-lint:
-    needs: build
-    runs-on: ubuntu-latest
+    name: Lint and test
+
+    needs: devcontainer
+
+    runs-on: ubuntu-26.04
+
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Run quick-lint
-        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3.1900000450
+
+      - uses: ./.github/actions/devcontainer
         with:
-          cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
-          env: |
-            ANSIBLE_CONFIG=ansible-ci.cfg
-            CI=1
-          push: never
-          runCmd: |
-            set -euxo pipefail
+          ansible: "true"
+          run: |
             just ansible-lint
             just ansible-syntax-check
             just ansible-scale-order-check
@@ -67,20 +201,24 @@ jobs:
             just tdarr-flows-test
             just traefik-pin-check
 
-  kustomize-build:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Run kustomize-build
-        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3.1900000450
-        with:
-          cacheFrom: ghcr.io/${{ github.repository }}-devcontainer
-          env: |
-            CI=1
-          push: never
-          runCmd: |
-            set -euxo pipefail
-            just kustomize-build
-            just image-pin-check
-            just named-port-check
+  sif:
+    name: Build the sif image
+
+    if: ${{ github.ref != 'refs/heads/main' }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    uses: ./.github/workflows/build-sif.yml
+
+  wireguard-egress:
+    name: Build the wireguard-egress image
+
+    if: ${{ github.ref != 'refs/heads/main' }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    uses: ./.github/workflows/build-wireguard-egress.yml

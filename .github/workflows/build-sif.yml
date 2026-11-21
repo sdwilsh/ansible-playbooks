@@ -1,20 +1,14 @@
 ---
 name: Build Sif Container Image
 on:
-  pull_request:
-    branches:
-      - main
-      - renovate/**
-    paths:
-      - .github/workflows/build-sif.yml
-      - images/sif/**
   push:
     branches:
       - main
-      - renovate/**
     paths:
       - .github/workflows/build-sif.yml
       - images/sif/**
+  # The CI workflow calls this one for pull requests and renovate branches.
+  workflow_call:
   workflow_dispatch:
 
 env:
@@ -22,8 +16,10 @@ env:
   IMAGE_NAME: sif
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
 
+# A called run has the name of the caller as github.workflow.  The group needs
+# its own name.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  group: build-sif-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:

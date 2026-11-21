@@ -1,24 +1,20 @@
 ---
 name: Build Mack Container Images
 on:
-  pull_request:
+  push:
     branches:
       - main
-      - renovate/**
-    paths: &paths
+    paths:
       - .github/scripts/next-calver-version.sh
       - .github/workflows/build-mack.yml
       - .github/workflows/release-image.yml
       - images/mack/**
-  push:
-    branches:
-      - main
-      - renovate/**
-    paths: *paths
   schedule:
     # Each Monday at 12:00 UTC.  This is 04:00 Pacific in winter and 05:00
     # Pacific in summer.
     - cron: "0 12 * * 1"
+  # The CI workflow calls this one for pull requests and renovate branches.
+  workflow_call:
   workflow_dispatch:
     inputs:
       image:

@@ -1,22 +1,16 @@
 ---
 name: Build Nut Shutdown Agent Container Image
 on:
-  pull_request:
-    branches:
-      - main
-      - renovate/**
-    paths:
-      - .github/workflows/build-nut-shutdown-agent.yml
-      - images/nut-shutdown-agent/**
   push:
     branches:
       - main
-      - renovate/**
     paths:
       - .github/workflows/build-nut-shutdown-agent.yml
       - images/nut-shutdown-agent/**
   schedule:
     - cron: 0 6 * * 1
+  # The CI workflow calls this one for pull requests and renovate branches.
+  workflow_call:
   workflow_dispatch:
 
 env:
@@ -24,8 +18,10 @@ env:
   IMAGE_NAME: nut-shutdown-agent
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
 
+# A called run has the name of the caller as github.workflow.  The group needs
+# its own name.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  group: build-nut-shutdown-agent-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
