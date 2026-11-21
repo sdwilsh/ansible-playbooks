@@ -682,6 +682,11 @@ run-mack: build-mack-vm
         -serial stdio \
         -snapshot output-mack/qcow2/disk.qcow2
 
+# Test the script that picks the CI jobs for a set of changed files
+[group('lint')]
+select-jobs-test:
+    .github/scripts/test-select-jobs.py
+
 # Run `shellcheck` on all shell files
 [group('lint')]
 shellcheck:

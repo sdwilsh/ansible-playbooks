@@ -17,6 +17,68 @@ permissions:
   contents: read
 
 jobs:
+  ansible:
+    name: Lint the ansible code
+
+    if: ${{ needs.changes.outputs.ansible == 'true' }}
+
+    needs:
+      - changes
+      - devcontainer
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/devcontainer
+        with:
+          ansible: "true"
+          run: |
+            just ansible-lint
+            just ansible-syntax-check
+            just ansible-scale-order-check
+
+  changes:
+    name: Select the jobs
+
+    outputs:
+      ansible: ${{ steps.select.outputs.ansible }}
+      devcontainer: ${{ steps.select.outputs.devcontainer }}
+      go: ${{ steps.select.outputs.go }}
+      kustomize-build: ${{ steps.select.outputs.kustomize-build }}
+      mack: ${{ steps.select.outputs.mack }}
+      nut-shutdown-agent: ${{ steps.select.outputs.nut-shutdown-agent }}
+      renovate-validate: ${{ steps.select.outputs.renovate-validate }}
+      shell-docker-lint: ${{ steps.select.outputs.shell-docker-lint }}
+      sif: ${{ steps.select.outputs.sif }}
+      wireguard-egress: ${{ steps.select.outputs.wireguard-egress }}
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # This is the `select-jobs-test` recipe.  It needs no image.
+      - name: Test the job selection
+        run: .github/scripts/test-select-jobs.py
+
+      # A pull request compares with its base.  A renovate branch compares with
+      # main.  Any other run, such as a push to main, selects every job.
+      - name: Select the jobs
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        id: select
+        run: |
+          case "${GITHUB_EVENT_NAME}:${GITHUB_REF}" in
+            pull_request:*) args=(--base "${BASE_SHA}") ;;
+            push:refs/heads/renovate/*) args=(--base origin/main) ;;
+            *) args=(--all) ;;
+          esac
+          .github/scripts/select-jobs.py "${args[@]}" | tee --append "${GITHUB_OUTPUT}"
+
   ci-result:
     name: CI result
 
@@ -24,11 +86,15 @@ jobs:
     if: ${{ always() }}
 
     needs:
+      - ansible
+      - changes
       - devcontainer
+      - go
       - kustomize-build
       - mack
       - nut-shutdown-agent
-      - quick-lint
+      - renovate-validate
+      - shell-docker-lint
       - sif
       - wireguard-egress
 
@@ -46,6 +112,10 @@ jobs:
 
   devcontainer:
     name: Build the devcontainer image
+
+    if: ${{ needs.changes.outputs.devcontainer == 'true' }}
+
+    needs: changes
 
     permissions:
       contents: read
@@ -90,10 +160,36 @@ jobs:
           path: ${{ runner.temp }}/devcontainer.tar
           retention-days: 1
 
+  go:
+    name: Check the Go code
+
+    if: ${{ needs.changes.outputs.go == 'true' }}
+
+    needs:
+      - changes
+      - devcontainer
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/devcontainer
+        with:
+          run: |
+            just go-test
+            just go-traefik-test
+            just go-vet
+            just gofmtcheck
+
   kustomize-build:
     name: Build the kustomizations
 
-    needs: devcontainer
+    if: ${{ needs.changes.outputs.kustomize-build == 'true' }}
+
+    needs:
+      - changes
+      - devcontainer
 
     runs-on: ubuntu-26.04
 
@@ -106,12 +202,17 @@ jobs:
             just kustomize-build
             just image-pin-check
             just named-port-check
+            just coredns-drift-check
+            just tdarr-flows-test
+            just traefik-pin-check
 
   mack:
     name: Build mack images
 
     # A push to main runs build-mack.yml by its own trigger.
-    if: ${{ github.ref != 'refs/heads/main' }}
+    if: ${{ github.ref != 'refs/heads/main' && needs.changes.outputs.mack == 'true' }}
+
+    needs: changes
 
     permissions:
       contents: write
@@ -125,7 +226,9 @@ jobs:
   nut-shutdown-agent:
     name: Build the nut-shutdown-agent image
 
-    if: ${{ github.ref != 'refs/heads/main' }}
+    if: ${{ github.ref != 'refs/heads/main' && needs.changes.outputs.nut-shutdown-agent == 'true' }}
+
+    needs: changes
 
     permissions:
       contents: read
@@ -171,10 +274,14 @@ jobs:
           imageName: ghcr.io/${{ github.repository }}-devcontainer
           push: always
 
-  quick-lint:
-    name: Lint and test
+  renovate-validate:
+    name: Validate the renovate config
 
-    needs: devcontainer
+    if: ${{ needs.changes.outputs.renovate-validate == 'true' }}
+
+    needs:
+      - changes
+      - devcontainer
 
     runs-on: ubuntu-26.04
 
@@ -183,28 +290,36 @@ jobs:
 
       - uses: ./.github/actions/devcontainer
         with:
-          ansible: "true"
+          run: just renovate-validate
+
+  shell-docker-lint:
+    name: Lint the shell, Docker and just files
+
+    if: ${{ needs.changes.outputs.shell-docker-lint == 'true' }}
+
+    needs:
+      - changes
+      - devcontainer
+
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/devcontainer
+        with:
           run: |
-            just ansible-lint
-            just ansible-syntax-check
-            just ansible-scale-order-check
-            just coredns-drift-check
-            just go-test
-            just go-traefik-test
-            just go-vet
-            just gofmtcheck
             just hadolint
             just justcheck
             just next-calver-version-test
-            just renovate-validate
             just shellcheck
-            just tdarr-flows-test
-            just traefik-pin-check
 
   sif:
     name: Build the sif image
 
-    if: ${{ github.ref != 'refs/heads/main' }}
+    if: ${{ github.ref != 'refs/heads/main' && needs.changes.outputs.sif == 'true' }}
+
+    needs: changes
 
     permissions:
       contents: read
@@ -215,7 +330,9 @@ jobs:
   wireguard-egress:
     name: Build the wireguard-egress image
 
-    if: ${{ github.ref != 'refs/heads/main' }}
+    if: ${{ github.ref != 'refs/heads/main' && needs.changes.outputs.wireguard-egress == 'true' }}
+
+    needs: changes
 
     permissions:
       contents: read
