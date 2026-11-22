@@ -31,9 +31,11 @@ ARG GUFO_COMMIT
 ARG GUFO_FLAKE_REF=github:gufo-org/gufo/${GUFO_COMMIT}
 # A build can limit nix, for example `NIX_CONFIG="max-jobs = 1"`.
 ARG NIX_CONFIG=""
-# Renovate does not change this commit.  It must accept the extension API
-# of `GUFO_VERSION`, or the check in the last stage stops the build.
+# The DeepSeek V4.1 Flash extension.  Renovate changes the tag line and the
+# commit line together.  The release must accept the extension API of
+# `GUFO_VERSION`, or the check in the last stage stops the build.
 ARG DS41_URL=https://github.com/franzmoca/ds41-gufo-extension
+ARG DS41_VERSION=v0.3.0
 ARG DS41_REV=8390e85c5bbd922adbdc8bbcd60473f08341cead
 # The expression sets the release version.  The flake accepts only X.Y.Z in `version.txt`.
 # `bin/gufo` is a wrapper script.  The ELF is `bin/.gufo-wrapped`, so the
