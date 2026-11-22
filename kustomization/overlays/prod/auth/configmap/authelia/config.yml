@@ -146,6 +146,16 @@ access_control:
 
 identity_providers:
   oidc:
+    # https://www.authelia.com/configuration/identity-providers/openid-connect/provider/#authorization_policies
+    authorization_policies:
+      # Only members of `HiveUsers` may sign in to the Hive hub.  Without this policy, any
+      # Authelia user who passes two-factor could sign in.
+      hive-hub:
+        default_policy: deny
+        rules:
+          - policy: two_factor
+            subject:
+              - group:HiveUsers
     clients:
       # https://www.authelia.com/integration/openid-connect/clients/argocd/
       - access_token_signed_response_alg: none
@@ -189,6 +199,25 @@ identity_providers:
           - offline_access
           - openid
         token_endpoint_auth_method: none
+        userinfo_signed_response_alg: none
+      - access_token_signed_response_alg: none
+        authorization_policy: hive-hub
+        client_id: hive-hub
+        client_name: Hive Hub
+        client_secret: $pbkdf2-sha512$310000$NniOqnroTeIQnqQAh0w8/Q$oxDlkf2k.lCSlUWKUq/YJuU0ACbHlb2GNqaOt9/Js9XgzVJjMYfvMeshrHCsKLMb5uORDRT7t87AHMxhzP9mZg
+        consent_mode: implicit
+        grant_types:
+          - authorization_code
+        public: false
+        redirect_uris:
+          - https://hive.tswn.us/api/auth/callback
+        response_types:
+          - code
+        scopes:
+          - email
+          - openid
+          - profile
+        token_endpoint_auth_method: client_secret_post
         userinfo_signed_response_alg: none
       # https://www.authelia.com/integration/openid-connect/clients/immich/
       - access_token_signed_response_alg: none
