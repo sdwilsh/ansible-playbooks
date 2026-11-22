@@ -14,7 +14,7 @@ configMapGenerator:
       - configmap/protonvpn/resolv.conf
 images:
   - name: ghcr.io/sdwilsh/wireguard-egress
-    newTag: latest@sha256:169374cb385e3fb117dc8f64cc07f0df125e54d8399a282e498d9f73c9f3466b
+    newTag: latest@sha256:a7a215ff26131ad1ffe8a002cc603a8d4a97ed5dae051d0d3d9776e98bf18991
   - name: lscr.io/linuxserver/transmission
     newTag: 4.0.5-r0-ls223@sha256:bd450da4a328cdf1f89845785150e79b531983b27ab6a1d4c2e3e7dcbf952bfc
 namespace: transmission
