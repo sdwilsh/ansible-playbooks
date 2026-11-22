@@ -55,6 +55,27 @@ access_control:
       networks:
         - homeassistant-appliance
       policy: bypass
+    # Only `HiveUsers` may reach the Hive hub, and only they may finish a sign-in.  The
+    # hub checks its own session or its spoke key on every other `/api/` path, so those
+    # bypass.  A hive spoke cannot sign in.
+    - domain: hive.tswn.us
+      policy: two_factor
+      resources:
+        - ^/api/auth(?:/.*)?$
+      subject: group:HiveUsers
+    - domain: hive.tswn.us
+      policy: deny
+      resources:
+        - ^/api/auth(?:/.*)?$
+    - domain: hive.tswn.us
+      policy: bypass
+      resources:
+        - ^/api/.*$
+    - domain: hive.tswn.us
+      policy: two_factor
+      subject: group:HiveUsers
+    - domain: hive.tswn.us
+      policy: deny
     - domain: homeassistant.hogs.tswn.us
       networks:
         - home
