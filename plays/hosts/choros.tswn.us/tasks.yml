@@ -46,6 +46,7 @@
         state: restarted
       listen:
         - alloy.service
+        - enshrouded-relic-wireguard.service
         - hfp-wireguard.service
         - hogs-pod.service
         - hogs-services-network.service
@@ -151,6 +152,9 @@
           PublishPort={{ ansible_facts['default_ipv4'].address }}:26902:26902/udp
           # code-ssh.tswn.us SSH Forwarding
           PublishPort={{ ansible_facts['default_ipv4'].address }}:2222:2222/tcp
+          # Enshrouded Relic
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:51825:51825/udp
+          PublishPort={{ ansible_facts['default_ipv4'].address }}:15637:15637/udp
           # Factorio
           PublishPort={{ ansible_facts['default_ipv4'].address }}:34197:34197/udp
           # HFP
@@ -285,6 +289,7 @@
         path: /etc/wireguard
         state: directory
       tags:
+        - enshrouded-relic-wireguard
         - hfp-wireguard
         - hogs-pod
         - kube-vip-wireguard
@@ -537,3 +542,67 @@
       tags:
         - hogs-pod
         - kube-vip-wireguard
+
+    # Enshrouded Relic
+    - name: Setup Enshrouded Relic Wireguard Config
+      ansible.builtin.copy:
+        content: |
+          [Interface]
+          Address = 10.11.2.40/32
+          ListenPort = 51825
+          MTU = 1280
+          PrivateKey = {{ wireguard__privkey }}
+
+          PreUp = iptables --append FORWARD --in-interface wg2 --destination 10.0.0.0/8 --jump DROP
+          PreUp = iptables --append FORWARD --in-interface wg2 --destination 172.16.0.0/12 --jump DROP
+          PreUp = iptables --append FORWARD --in-interface wg2 --destination 192.168.0.0/16 --jump DROP
+
+          PreUp = iptables --table nat --append PREROUTING --in-interface eth0 --protocol udp --dport 15637 --jump DNAT --to-destination 10.11.2.41:15637
+
+          [Peer]
+          AllowedIPs = 10.11.2.41/32
+          PublicKey = 77Fh85FbfXfY6njjDuPG5WNDuh6hWo+g1+wFRVImtUA=
+        dest: /etc/wireguard/enshrouded-relic0.conf
+        mode: u=rw,g=r
+        owner: root
+        group: root
+      no_log: true
+      notify:
+        - enshrouded-relic-wireguard.service
+      tags:
+        - enshrouded-relic-wireguard
+        - hogs-pod
+      vars:
+        wireguard__privkey: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61373437623463386537636463303364346631366633363432323630376239323032626438653261
+          6135363030613063646536396634396661346163313662650a613065663438386266383137373732
+          38666236383964343232373036383463616364633437663131303865656439333536343234333136
+          3939666666643363380a653131623434323565616330353064333235663038343435353963383133
+          33393431323337393466633662393062346139303930383037333730396139623064613266643037
+          3430663839396138653331656462343564336133313935376263
+    - name: Setup Enshrouded Relic Wireguard container
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          ConditionPathExists=/etc/wireguard/enshrouded-relic0.conf
+          Description=A container that hosts the choros end of the wireguard tunnel to the Enshrouded Relic pod.
+
+          [Container]
+          AddCapability=NET_ADMIN
+          AddCapability=NET_RAW
+          DropCapability=ALL
+          NoNewPrivileges=true
+          Image=docker.io/procustodibus/wireguard
+          Pod=hogs.pod
+          Volume=/etc/wireguard/enshrouded-relic0.conf:/etc/wireguard/wg2.conf:Z
+        dest: /etc/containers/systemd/enshrouded-relic-wireguard.container
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify:
+        - systemctl daemon-reload
+        - enshrouded-relic-wireguard.service
+      tags:
+        - enshrouded-relic-wireguard
+        - hogs-pod
