@@ -41,6 +41,7 @@ DEVCONTAINER: tuple[str, ...] = (
     "package.json",
     "pnpm-lock.yaml",
     "requirements.txt",
+    "requirements.yml",
 )
 
 # The key is the job name in `devcontainer-ci.yml`.  The value lists the

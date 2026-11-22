@@ -56,6 +56,7 @@ CASES: dict[str, tuple[list[str], set[str]]] = {
         CONTAINER | {"devcontainer"},
     ),
     "python requirements": (["requirements.txt"], CONTAINER | {"devcontainer"}),
+    "galaxy requirements": (["requirements.yml"], CONTAINER | {"devcontainer"}),
     "go source": (
         ["kustomization/overlays/prod/traefik/plugins/cloudflarerealip/cloudflarerealip.go"],
         {"devcontainer", "go", "kustomize-build"},

@@ -124,5 +124,11 @@ WORKDIR /tmp
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+# The ansible configs search these paths after `.ansible/`.  CI then needs no
+# galaxy install.  The install keeps each collection's license files.
+COPY requirements.yml requirements.yml
+RUN ansible-galaxy collection install -p /usr/share/ansible/collections -r requirements.yml \
+  && ansible-galaxy role install -p /usr/share/ansible/roles -r requirements.yml
+
 WORKDIR /home/${USERNAME}
 USER ${USERNAME}

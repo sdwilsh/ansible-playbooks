@@ -33,7 +33,6 @@ jobs:
 
       - uses: ./.github/actions/devcontainer
         with:
-          ansible: "true"
           run: |
             just ansible-lint
             just ansible-syntax-check

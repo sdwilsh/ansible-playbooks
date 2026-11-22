@@ -2,10 +2,6 @@
 name: Run in the devcontainer
 description: Load the devcontainer image from the CI artifact, then run a bash snippet in it.
 inputs:
-  ansible:
-    default: "false"
-    description: Install the ansible collections and roles first.  They come from a cache that requirements.yml keys.
-    required: false
   run:
     description: The bash snippet to run in the container.
     required: true
@@ -20,19 +16,6 @@ runs:
 
     - name: Load the devcontainer image
       run: docker load --input "${RUNNER_TEMP}/devcontainer.tar"
-      shell: bash
-
-    - name: Restore the ansible requirements
-      id: ansible-cache
-      if: ${{ inputs.ansible == 'true' }}
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-      with:
-        key: ansible-${{ runner.os }}-${{ hashFiles('requirements.yml') }}
-        path: .ansible
-
-    - name: Install the ansible requirements
-      if: ${{ inputs.ansible == 'true' && steps.ansible-cache.outputs.cache-hit != 'true' }}
-      run: .github/scripts/devcontainer-run.sh .devcontainer/post-create-command.sh
       shell: bash
 
     - name: Run
