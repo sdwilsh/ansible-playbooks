@@ -121,7 +121,9 @@
           [Network]
           DisableDNS=true
           Gateway=10.11.2.1
-          IPRange=10.11.2.128/25
+          # The leases stop at .191.  10.11.2.224/27 is for tunnel peers that are
+          # not containers.  Do not use .255, which is the broadcast address.
+          IPRange=10.11.2.128/26
           IPv6=false
           NetworkDeleteOnStop=true
           Subnet=10.11.2.0/24
@@ -548,7 +550,7 @@
       ansible.builtin.copy:
         content: |
           [Interface]
-          Address = 10.11.2.40/32
+          Address = 10.11.2.224/32
           ListenPort = 51825
           MTU = 1280
           PrivateKey = {{ wireguard__privkey }}
@@ -557,10 +559,12 @@
           PreUp = iptables --append FORWARD --in-interface wg2 --destination 172.16.0.0/12 --jump DROP
           PreUp = iptables --append FORWARD --in-interface wg2 --destination 192.168.0.0/16 --jump DROP
 
-          PreUp = iptables --table nat --append PREROUTING --in-interface eth0 --protocol udp --dport 15637 --jump DNAT --to-destination 10.11.2.41:15637
+          PreUp = iptables --table nat --append PREROUTING --in-interface eth0 --protocol udp --dport 15637 --jump DNAT --to-destination 10.11.2.225:15637
+          # The host sends replies for 10.11.2.225 to its bridge, not to this pod.
+          PreUp = iptables --table nat --append POSTROUTING --source 10.11.2.225 --out-interface eth0 --jump MASQUERADE
 
           [Peer]
-          AllowedIPs = 10.11.2.41/32
+          AllowedIPs = 10.11.2.225/32
           PublicKey = 77Fh85FbfXfY6njjDuPG5WNDuh6hWo+g1+wFRVImtUA=
         dest: /etc/wireguard/enshrouded-relic0.conf
         mode: u=rw,g=r
