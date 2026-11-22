@@ -7,11 +7,12 @@ on:
       - main
       - renovate/**
 
-# A renovate branch push and its pull request share one head commit.  They
-# run once.
+# A renovate branch push and its pull request share one head commit.  Do not
+# put them in one group: the cancelled run stays on the commit as a failure.
+# A new run cancels an old run of the same event and ref, but not on main.
 concurrency:
-  cancel-in-progress: true
-  group: ${{ github.workflow }}-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
 
 permissions:
   contents: read
