@@ -158,6 +158,7 @@ customDNS:
     frigate.hogs IN CNAME traefik.hogs
     garage-admin.hogs IN CNAME traefik.hogs
     grafana.hogs IN CNAME traefik.hogs
+    hive IN CNAME traefik.hogs
     homeassistant.hogs IN CNAME traefik.hogs
     idm IN CNAME traefik.hogs
     imap.hogs IN CNAME traefik.hogs
