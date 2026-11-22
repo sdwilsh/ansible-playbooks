@@ -45,6 +45,7 @@ jobs:
     permissions:
       actions: write
       contents: read
+      pull-requests: read
 
     runs-on: ubuntu-latest
 
@@ -53,12 +54,21 @@ jobs:
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
+        # Renovate can add an update type prefix, as in
+        # renovate/patch-kairos-workers.  Re-run the latest run of each open
+        # workers PR.  A run older than 30 days cannot re-run.
         run: |
-          gh run list \
-            --workflow kairos-upgrade-order.yml \
-            --event pull_request \
-            --branch renovate/kairos-workers \
-            --limit 1 \
-            --json databaseId \
-            --jq '.[].databaseId' |
+          gh pr list \
+            --state open \
+            --json headRefName \
+            --jq '.[].headRefName | select(test("^renovate/(.+-)?kairos-workers$"))' |
+            while read -r branch; do
+              gh run list \
+                --workflow kairos-upgrade-order.yml \
+                --event pull_request \
+                --branch "$branch" \
+                --limit 1 \
+                --json databaseId \
+                --jq '.[].databaseId'
+            done |
             xargs --no-run-if-empty -n1 gh run rerun
