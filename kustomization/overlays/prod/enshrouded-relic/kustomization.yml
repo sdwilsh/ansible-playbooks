@@ -1,0 +1,39 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../components/enshrouded
+  - ../../../components/networkpolicy-allow-from-home-vlan
+  - ../../../components/networkpolicy-allow-to-coredns
+  - ../../../components/networkpolicy-deny-all
+  - ../../../components/pod-security-enforce-privileged
+  - ../../../components/schedule-avoid-control-plane
+images:
+  - name: ghcr.io/sdwilsh/wireguard-egress
+    newTag: latest@sha256:a7a215ff26131ad1ffe8a002cc603a8d4a97ed5dae051d0d3d9776e98bf18991
+namespace: enshrouded-relic
+patches:
+  - path: patches/add_enshrouded_env_vars.yml
+    target:
+      kind: StatefulSet
+      name: enshrouded-statefulset
+  - path: patches/add_home_vlan_target_label.yml
+    target:
+      kind: StatefulSet
+      name: enshrouded-statefulset
+  - path: patches/add_wireguard.yml
+    target:
+      kind: StatefulSet
+      name: enshrouded-statefulset
+  - path: patches/set_game_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-home-vlan-networkpolicy
+  - path: patches/set_load_balancer.yml
+    target:
+      kind: Service
+      name: enshrouded-svc
+resources:
+  - namespace.yml
+  - networkpolicy/allow-to-wireguard-endpoint.yml

@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  template:
+    spec:
+      initContainers:
+        - env:
+            - name: WG_ADDRESS
+              value: 10.11.2.225/32
+            - name: WG_EXCLUDE_CIDRS
+              value: 10.0.0.0/8 172.16.0.0/16 172.17.0.0/16
+            - name: WG_MTU
+              value: "1280"
+          image: ghcr.io/sdwilsh/wireguard-egress
+          name: setup-wireguard
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_ADMIN
+              drop:
+                - ALL
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/wireguard
+              name: wireguard-conf
+      volumes:
+        - name: wireguard-conf
+          secret:
+            items:
+              - key: wg0
+                path: wg0.conf
+            secretName: enshrouded-secret

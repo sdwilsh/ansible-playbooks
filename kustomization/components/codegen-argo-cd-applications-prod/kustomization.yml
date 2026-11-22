@@ -18,6 +18,7 @@ resources:
   - application/crowdsec.yml
   - application/dns.yml
   - application/dockerhub-proxy.yml
+  - application/enshrouded-relic.yml
   - application/external-services.yml
   - application/factorio-relic.yml
   - application/forgejo-runner-dns.yml

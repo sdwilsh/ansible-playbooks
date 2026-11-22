@@ -1,0 +1,114 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: enshrouded-statefulset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: enshrouded
+  serviceName: enshrouded-svc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: enshrouded
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: PORT
+              value: "15637"
+            - name: SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: enshrouded-secret
+            - name: SERVER_SLOTS
+              value: "16"
+          image: docker.io/sknnr/enshrouded-dedicated-server
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - -f
+                - enshrouded_server.exe
+            periodSeconds: 60
+            timeoutSeconds: 3
+          name: enshrouded
+          ports:
+            - containerPort: 15637
+              name: game
+              protocol: UDP
+          resources:
+            limits:
+              cpu: 4000m
+              memory: 16Gi
+            requests:
+              cpu: 500m
+              memory: 4Gi
+          # The root filesystem stays writable.  Steamcmd and Proton write
+          # under /home/steam.  The user is the steam user of the image.
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 10000
+            runAsNonRoot: true
+            runAsUser: 10000
+            seccompProfile:
+              type: RuntimeDefault
+          # The first start downloads the game, which takes many minutes.
+          startupProbe:
+            exec:
+              command:
+                - pgrep
+                - -f
+                - enshrouded_server.exe
+            failureThreshold: 180
+            periodSeconds: 10
+            timeoutSeconds: 3
+          volumeMounts:
+            - mountPath: /home/steam/enshrouded
+              name: enshrouded-install
+            - mountPath: /home/steam/enshrouded/savegame
+              name: enshrouded-savegame
+      hostUsers: false
+      priorityClassName: application
+      securityContext:
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          recurring-job-group.longhorn.io/default: disabled
+          recurring-job-group.longhorn.io/no-backup: enabled
+        name: enshrouded-install
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 30Gi
+        storageClassName: longhorn-unencrypted
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        labels:
+          # Use this PVC to configure attached PVs.
+          recurring-job.longhorn.io/source: enabled
+          recurring-job-group.longhorn.io/default: disabled
+          recurring-job-group.longhorn.io/game: enabled
+        name: enshrouded-savegame
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: longhorn-unencrypted

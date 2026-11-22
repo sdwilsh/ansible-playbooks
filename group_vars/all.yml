@@ -89,6 +89,7 @@ k8s_scale_down_order:
   - atuin
   - aventertainment
   - bifrost
+  - enshrouded-relic
   - factorio-relic
   - forgejo
   - homeassistant
@@ -138,6 +139,7 @@ k8s_scale_up_order:
   - atuin
   - aventertainment
   - bifrost
+  - enshrouded-relic
   - factorio-relic
   - forgejo
   - homeassistant
