@@ -159,6 +159,10 @@ spec:
               mountPath: /etc/crowdsec/parsers/s02-enrich/00-traefik-cf-connecting-ip.yaml
               readOnly: true
               subPath: traefik-cf-connecting-ip.yaml
+            - name: crowdsec-parsers-config
+              mountPath: /etc/crowdsec/parsers/s02-enrich/hive-whitelist.yaml
+              readOnly: true
+              subPath: hive-whitelist.yaml
             - name: crowdsec-scripts
               mountPath: /scripts
               readOnly: true

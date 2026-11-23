@@ -1,0 +1,13 @@
+---
+# The Hive dashboard sends about 200 API requests in two seconds when a page
+# loads, and some of them answer 404 or 503.  The behavioral scenarios read that
+# as a crawler and ban the signed-in user.
+description: Skip events for the Hive dashboards
+filter: >-
+  evt.Meta.service == 'http' &&
+  evt.Meta.log_type == 'http_access-log'
+name: sdwilsh/hive-whitelist
+whitelist:
+  expression:
+    - evt.Meta.target_fqdn in ['hive.tswn.us', 'marinatedconcrete-hive.tswn.us']
+  reason: Hive dashboard page loads
