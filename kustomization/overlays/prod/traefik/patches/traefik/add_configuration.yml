@@ -51,6 +51,9 @@ spec:
               readOnly: true
             - mountPath: /plugins-storage
               name: traefik-plugins-storage
+            - name: wildcard-hive-tswn-us
+              mountPath: /certs/wildcard-hive-tswn-us
+              readOnly: true
             - name: wildcard-hogs-tswn-us
               mountPath: /certs/wildcard-hogs-tswn-us
               readOnly: true
@@ -69,6 +72,9 @@ spec:
           name: traefik-config
         - emptyDir: {}
           name: traefik-plugins-storage
+        - name: wildcard-hive-tswn-us
+          secret:
+            secretName: wildcard-hive-tswn-us-secret
         - name: wildcard-hogs-tswn-us
           secret:
             secretName: wildcard-hogs-tswn-us-secret
