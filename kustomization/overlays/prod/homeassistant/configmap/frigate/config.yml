@@ -129,9 +129,9 @@ genai:
     provider: openai
     base_url: https://bifrost.tswn.us/v1
     api_key: "{FRIGATE_BIFROST_API_KEY}"
-    model: Qwen3.8-27B-Q4_K_XL
+    model: Qwen3.8-27B-Q8_K_XL
     provider_options:
-      context_size: 131072
+      context_size: 262144
     roles:
       - chat
       - descriptions

@@ -7,9 +7,8 @@ common__interfaces:
 common__ip_addresses:
   - 10.11.0.121/23
 
-# The GPU holds 81.99 GiB of GTT at its highest.  The kubelet does not
-# read GTT pages, so this value is the 88 GiB limit of this node.  The
-# scheduler then sees 31.07 GiB.
+# The kubelet does not read GTT pages, so this value is the 88 GiB GTT
+# limit of this node.  The scheduler then sees 31.07 GiB.
 k3s_system_reserved_memory: 88Gi
 
 kairos__disks_to_format: []
@@ -37,22 +36,21 @@ kairos__disks_to_format: []
 #
 # | Item                  | measured | limit | margin |
 # | --------------------- | -------: | ----: | -----: |
-# | Q4, Q8 and ASR        |    78.88 |       |        |
+# | Q8 and ASR            |    57.66 |       |        |
 # | EmbeddingGemma 2      |     3.11 |       |        |
-# | group B GTT           |    81.99 | 88.00 |   6.01 |
+# | group B GTT           |    60.77 | 88.00 |  27.23 |
 #
-# 88 GiB is 23068672 pages.  gufo v0.28.0 puts the weights of a model in GTT
-# when 4 GiB stays free after them.  With 38 GiB, Q8 did not get the GTT
-# for its session state, and it did not start.  With 84 GiB, both weight
-# sets fit, and the GTT peaks at 78.88 GiB.  The weights then use no
-# container memory, so the container needs 24 GiB.
+# 88 GiB is 23068672 pages.  gufo puts the weights of a model in GTT when
+# 4 GiB stays free after them.  The weights then use no container memory,
+# so the container needs 24 GiB.  A change to the limit needs a reboot.
+#
+# gufo loads the image projector beside the model.  The Q8 and ASR value
+# is the peak GTT during image requests to Q8, less a ready EmbeddingGemma
+# 2 (1.10 GiB).  Q8 takes the GTT for its context at load.  A prompt of
+# 251848 tokens and image requests then added 0.41 GiB.
 #
 # EmbeddingGemma 2 holds 1.10 GiB of GTT when it is ready.  The first image
-# and the first audio request add their encoders, for 3.11 GiB.  At 88 GiB,
-# the margin is larger than the 5.12 GiB margin before this server.
-#
-# Q4 has no RAM cache, and Q8 has 6 GiB.  Q4 also has the image projector,
-# because gufo loads a projector beside the model.
+# and the first audio request add their encoders, for 3.11 GiB.
 #
 # The AMD driver stops a compute job after 2 seconds.  A large context
 # makes each job longer, and the GPU then loses its Vulkan context.
