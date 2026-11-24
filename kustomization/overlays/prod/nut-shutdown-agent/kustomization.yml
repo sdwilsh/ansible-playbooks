@@ -9,7 +9,7 @@ components:
   - ../../../components/pod-security-enforce-privileged
 images:
   - name: ghcr.io/sdwilsh/nut-shutdown-agent
-    newTag: latest@sha256:522b3c5c8c3fd3b3779f82cbbafac0c54e3488af7cc09e5e9cc70b69d09c7639
+    newTag: latest@sha256:e052002f00cabaa56ba5d27cf2a1fab5c5b7a8b4552864e78e0b1d00fcb615b7
 namespace: nut-shutdown-agent
 resources:
   - namespace.yml
