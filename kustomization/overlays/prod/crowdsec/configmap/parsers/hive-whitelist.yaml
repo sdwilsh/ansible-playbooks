@@ -1,7 +1,7 @@
 ---
-# The Hive dashboard sends about 200 API requests in two seconds when a page
-# loads, and some of them answer 404 or 503.  The behavioral scenarios read that
-# as a crawler and ban the signed-in user.
+# One Hive dashboard load makes about 45 requests in three seconds.  The
+# http-crawl-non_statics scenario counts them as a crawl and bans the signed-in
+# user.
 description: Skip events for the Hive dashboards
 filter: >-
   evt.Meta.service == 'http' &&
