@@ -351,14 +351,13 @@
     {
       "automerge": true,
       "automergeType": "branch",
-      "description": "Build inputs and tooling.  CI builds and lints the branch, and each deploy is a separate update.  Gufo and the DeepSeek V4.1 extension stay manual because each release gets a benchmark.",
+      "description": "Build inputs and tooling.  CI builds and lints the branch, and each deploy is a separate update.  Gufo stays manual because each release gets a benchmark.",
       "matchFileNames": [
         ".devcontainer/**",
         "images/**"
       ],
       "matchPackageNames": [
-        "!gufo-org/gufo",
-        "!franzmoca/ds41-gufo-extension"
+        "!gufo-org/gufo"
       ],
       "matchUpdateTypes": [
         "digest",
