@@ -37,6 +37,7 @@ const config = {
     sampleFractions: [0.25, 0.5, 0.75],
     sampleSeconds: 30,
     softTelecineMinRepeatShare: 0.3,
+    mixedMinRepeatShare: 0.05,
     interlacedMinCombedShare: 0.6,
     telecineMinCombedShare: 0.1,
     pulldownMinDupShare: 0.15,
@@ -54,6 +55,8 @@ const TREATMENTS = {
   telecine: { filter: 'fieldmatch=order=auto:combmatch=full,yadif=deint=interlaced,decimate', timing: KEEP_TIMESTAMPS },
   interlaced: { filter: 'bwdif=mode=send_field:parity=auto:deint=all', timing: KEEP_TIMESTAMPS },
 };
+// Decimate also drops frames from the soft-telecine parts and makes the video short.  Deinterlace drops no frames.
+TREATMENTS.mixed = TREATMENTS.interlaced;
 
 // A plan is { mode: 'remux', tracks, hdr10 } or { mode: 'av1', tracks, hdr10, crf }.
 // The first audio track is the default.  A track is { origin: 'source', tid, srcAudioIndex }
@@ -181,6 +184,7 @@ const isHiddenPulldown = (scan) =>
 function classifyScan(scan) {
   const c = config.scan;
   if (scan.repeatShare >= c.softTelecineMinRepeatShare) return 'soft_telecine';
+  if (scan.repeatShare >= c.mixedMinRepeatShare) return 'mixed';
   if (scan.combedShare >= c.interlacedMinCombedShare) return 'interlaced';
   if (scan.combedShare >= c.telecineMinCombedShare) return 'telecine';
   if (isHiddenPulldown(scan)) return 'telecine';

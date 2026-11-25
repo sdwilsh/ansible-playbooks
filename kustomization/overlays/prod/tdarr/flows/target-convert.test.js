@@ -112,6 +112,7 @@ const MEASURED = [
   ['dvd-interlaced', { repeatShare: 0, combedShare: 0.995, dupShare: 0.02, decodedFps: 30.03 }, 'interlaced'],
   ['dvd-hidden-pulldown', { repeatShare: 0, combedShare: 0, dupShare: 0.361, decodedFps: 30.04 }, 'telecine'],
   ['hard telecine', { repeatShare: 0, combedShare: 0.4, dupShare: 0, decodedFps: 29.97 }, 'telecine'],
+  ['dvd trailer reel, soft telecine and combed parts', { repeatShare: 0.262, combedShare: 0.398, dupShare: 0.124, decodedFps: 26.56 }, 'mixed'],
   ['bd-dts-hd-ma-7.1', { repeatShare: 0, combedShare: 0, dupShare: 0.0014, decodedFps: 24.03 }, 'progressive'],
   ['29.97p with few duplicates', { repeatShare: 0, combedShare: 0, dupShare: 0.05, decodedFps: 29.97 }, 'progressive'],
 ];
@@ -135,8 +136,14 @@ test('decideVideo: every kind classifyScan returns has a treatment, and soft tel
   assert.deepEqual(argv.slice(i, i + 4), ['-fps_mode', 'cfr', '-r', '24000/1001']);
 });
 
+test('decideVideo: a mixed scan deinterlaces and drops no frames', () => {
+  const { treatment } = decideVideo({ repeatShare: 0.262, combedShare: 0.398, dupShare: 0.124, decodedFps: 26.56 }, 0);
+  assert.doesNotMatch(treatment.filter, /decimate/);
+  assert.deepEqual(treatment.timing, ['-fps_mode', 'passthrough']);
+});
+
 test('decideVideo: film grain is on from the strength threshold and the decision is frozen', () => {
-  const [, progressive] = MEASURED[4];
+  const [, progressive] = MEASURED.find(([name]) => name === 'bd-dts-hd-ma-7.1');
   assert.equal(decideVideo(progressive, 20).grain, true);
   assert.equal(decideVideo(progressive, 19).grain, false);
   assert.ok(Object.isFrozen(decideVideo(progressive, 0)));
