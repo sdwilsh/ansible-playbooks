@@ -1,0 +1,31 @@
+---
+groups:
+  - name: kata
+    interval: 1m
+    rules:
+      # The host kernel killed a VM because the pod cgroup was full.  The pod
+      # restarts, and kubelet can report "can't find shim for sandbox".  Compare
+      # the `overhead.podFixed` memory of the RuntimeClass with the VM host
+      # memory, such as virtiofsd and kernel slab.
+      - alert: kata-qemu-oom-kill
+        expr: |
+          sum by (hostname) (
+            count_over_time(
+              {transport="kernel"}
+              |= "Memory cgroup out of memory"
+              |~ `Killed process [0-9]+ \(qemu-system`
+              [15m]
+            )
+          ) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "The kernel on {{ $labels.hostname }} killed a Kata VM for memory"
+          description: >-
+            A Memory cgroup out of memory event killed `qemu-system` on
+            {{ $labels.hostname }} in the last 15 minutes.  The pod of that
+            VM restarted.  Query
+            `{hostname="{{ $labels.hostname }}", transport="kernel"} |= "qemu-system"`
+            in Loki for the cgroup and the memory use.  Raise the memory
+            overhead of the `kata-qemu-runtime-rs` RuntimeClass in
+            `kustomization/overlays/prod/kata-containers/values.yml`.
