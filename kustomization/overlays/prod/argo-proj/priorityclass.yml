@@ -3,4 +3,7 @@ apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
   name: continuous-integration
+# A CI pod waits for free capacity.  It does not evict lower-priority
+# pods, such as tdarr nodes, which lose all encode progress when evicted.
+preemptionPolicy: Never
 value: 10000
