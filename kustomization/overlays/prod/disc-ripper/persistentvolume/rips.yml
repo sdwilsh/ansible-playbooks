@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: disc-ripper-rips-pv
+spec:
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 2Ti
+  nfs:
+    path: /mnt/rust0/nfs/rips
+    readOnly: true
+    server: services-nfs.hogs.tswn.us
+  persistentVolumeReclaimPolicy: Retain

@@ -1,0 +1,153 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: disc-ripper-sweep
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: disc-ripper
+            hogs.tswn.us/internet-client: "true"
+            hogs.tswn.us/traefik-client: "true"
+        spec:
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - preference:
+                    matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: DoesNotExist
+                  weight: 100
+          automountServiceAccountToken: false
+          containers:
+            - args:
+                # MakeMKV may write beside settings.conf.  A subPath mount
+                # makes that directory root-owned, so copy the file.
+                - |
+                  set -eu
+                  mkdir -p "$HOME/.MakeMKV"
+                  cp /secrets/makemkv/settings.conf "$HOME/.MakeMKV/settings.conf"
+                  exec disc-ripper sweep /rips/*
+              command:
+                - /bin/sh
+                - -c
+              env:
+                - name: DISC_BIFROST_TIMEOUT_SECS
+                  value: "960"
+                - name: DISC_EPISODES_CACHE
+                  value: /cache/episodes
+                - name: DISC_EXTRACT_ROOT
+                  value: /media
+                # The library to check for copies before a write.  It is
+                # the same tree as DISC_EXTRACT_ROOT.
+                - name: DISC_LIBRARY_ROOT
+                  value: /media
+                - name: DISC_MENUS_CACHE
+                  value: /cache/menus
+                - name: DISC_NAMES_CACHE
+                  value: /cache/names
+                # The code requires a value.  This one is a placeholder.
+                - name: DISC_REVIEW_PAGE
+                  value: https://review.example
+                - name: DISC_REVIEW_TOKEN_FILE
+                  value: /secrets/disc-tagger/forgejo.key
+                - name: HOME
+                  value: /home/disc-ripper
+                # disc-ripper reads its keys from $XDG_CONFIG_HOME/disc-tagger.
+                - name: XDG_CONFIG_HOME
+                  value: /secrets
+              image: code.tswn.us/sdwilsh/disc-ripper
+              imagePullPolicy: Always
+              name: disc-ripper
+              resources:
+                limits:
+                  memory: 4Gi
+                requests:
+                  cpu: 250m
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                - mountPath: /home/disc-ripper
+                  name: home
+                - mountPath: /media
+                  name: media
+                - mountPath: /rips
+                  name: rips
+                  readOnly: true
+                - mountPath: /secrets/disc-tagger
+                  name: config
+                  readOnly: true
+                - mountPath: /secrets/makemkv
+                  name: makemkv-settings
+                  readOnly: true
+                - mountPath: /tmp
+                  name: tmp
+          imagePullSecrets:
+            - name: disc-ripper-registry-secret
+          priorityClassName: application
+          restartPolicy: Never
+          securityContext:
+            fsGroup: 65534
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 3000
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: cache
+              persistentVolumeClaim:
+                claimName: disc-ripper-cache-pvc
+            - name: config
+              secret:
+                defaultMode: 0440
+                items:
+                  - key: bifrost.key
+                    path: bifrost.key
+                  - key: forgejo.key
+                    path: forgejo.key
+                  - key: opensubtitles.toml
+                    path: opensubtitles.toml
+                  - key: tmdb.key
+                    path: tmdb.key
+                  - key: tvdb.key
+                    path: tvdb.key
+                secretName: disc-ripper-secret
+            - emptyDir: {}
+              name: home
+            - name: makemkv-settings
+              secret:
+                defaultMode: 0440
+                items:
+                  - key: settings.conf
+                    path: settings.conf
+                secretName: disc-ripper-secret
+            - name: media
+              persistentVolumeClaim:
+                claimName: disc-ripper-media-pvc
+            - name: rips
+              persistentVolumeClaim:
+                claimName: disc-ripper-rips-pvc
+                readOnly: true
+            - emptyDir: {}
+              name: tmp
+  # Three times a day: 04:00, 12:00 and 20:00.
+  schedule: "0 4,12,20 * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: true
+  timeZone: America/Los_Angeles

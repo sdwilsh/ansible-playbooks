@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: disc-ripper-sweep-rules
+spec:
+  groups:
+    - name: disc-ripper
+      interval: 1m
+      rules:
+        - alert: disc-ripper-sweep-failed
+          annotations:
+            description: "The last run of the CronJob {{ $labels.exported_namespace }}/{{ $labels.cronjob }} ended without success."
+          # A run that never succeeded has no last_successful_time, so 0 stands in.
+          expr: |
+            max by (exported_namespace, cronjob) (kube_cronjob_status_last_schedule_time{exported_namespace="disc-ripper"})
+              > max by (exported_namespace, cronjob) (kube_cronjob_status_last_successful_time{exported_namespace="disc-ripper"} or kube_cronjob_status_last_schedule_time{exported_namespace="disc-ripper"} * 0)
+            and max by (exported_namespace, cronjob) (kube_cronjob_status_active{exported_namespace="disc-ripper"}) == 0
+          for: 5m
+          labels:
+            severity: warning

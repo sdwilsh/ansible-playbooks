@@ -16,6 +16,7 @@ resources:
   - application/cert-manager.yml
   - application/cnpg-system.yml
   - application/crowdsec.yml
+  - application/disc-ripper.yml
   - application/dns.yml
   - application/dockerhub-proxy.yml
   - application/enshrouded-relic.yml

@@ -403,6 +403,7 @@
         "pinDigest"
       ],
       "matchPackageNames": [
+        "code.tswn.us/sdwilsh/disc-ripper",
         "ghcr.io/marinatedconcrete/kairos-fedora",
         "ghcr.io/sdwilsh/mack-kairos",
         "quay.io/fedora/fedora-bootc"
