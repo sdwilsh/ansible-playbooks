@@ -197,6 +197,8 @@ function decideVideo(scan, grainStrength) {
 }
 
 const sampleStarts = (duration, fractions) => fractions.map((f) => Math.floor(duration * f));
+// A sample that starts near the end is shorter than secs.
+const sampledSeconds = (duration, starts, secs) => starts.reduce((sum, start) => sum + Math.min(secs, duration - start), 0);
 
 const videoArgs = (treatment) => [...treatment.timing, ...(treatment.filter ? ['-vf', treatment.filter] : [])];
 
@@ -248,7 +250,8 @@ async function scanVideo(job) {
   const { t, input, duration } = job;
   let frames = 0; let repeats = 0; let combed = 0; let analysed = 0; let drops = 0; let decoded = 0;
   const secs = config.scan.sampleSeconds;
-  for (const start of sampleStarts(duration, config.scan.sampleFractions)) {
+  const starts = sampleStarts(duration, config.scan.sampleFractions);
+  for (const start of starts) {
     const { out: flags } = await run(t.ffprobe, ['-v', 'error', '-read_intervals', `${start}%+${secs}`, '-select_streams', 'v:0',
       '-show_entries', 'frame=repeat_pict', '-of', 'csv=p=0', input]);
     for (const line of flags.split('\n').filter(Boolean)) { frames += 1; if (Number(line.split(',')[0]) > 0) repeats += 1; }
@@ -264,7 +267,7 @@ async function scanVideo(job) {
     repeatShare: frames ? repeats / frames : 0,
     combedShare: analysed ? combed / analysed : 0,
     dupShare: decoded ? drops / decoded : 0,
-    decodedFps: decoded / (secs * config.scan.sampleFractions.length),
+    decodedFps: decoded / sampledSeconds(duration, starts, secs),
   };
 }
 
@@ -507,6 +510,6 @@ async function convert(args) {
 
 module.exports = convert;
 Object.assign(module.exports, {
-  OUTPUT_CONVERTED, OUTPUT_AT_TARGET, MKVMERGE_OK, MARKER: config.marker, WRITER_TAGS, DURATION_TAG, TREATMENTS, makePlan, audioTracks, grainStrengths, classifyScan, decideVideo, sampleStarts,
+  OUTPUT_CONVERTED, OUTPUT_AT_TARGET, MKVMERGE_OK, MARKER: config.marker, WRITER_TAGS, DURATION_TAG, TREATMENTS, makePlan, audioTracks, grainStrengths, classifyScan, decideVideo, sampleStarts, sampledSeconds,
   av1EncodeArgs, idetDecimateArgs, grainFramesArgs, parseIdet, parseMpdecimate, buildInputs, trackOrder, buildMkvmergeArgs, evaluateOutput,
 });

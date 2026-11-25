@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const {
-  makePlan, classifyScan, decideVideo, sampleStarts, av1EncodeArgs, parseIdet, parseMpdecimate, idetDecimateArgs, grainStrengths,
+  makePlan, classifyScan, decideVideo, sampleStarts, sampledSeconds, av1EncodeArgs, parseIdet, parseMpdecimate, idetDecimateArgs, grainStrengths,
   buildInputs, trackOrder, buildMkvmergeArgs, evaluateOutput, audioTracks, TREATMENTS,
 } = require('./target-convert.js');
 
@@ -157,6 +157,11 @@ test('av1EncodeArgs: grain parameters appear only when grain is on', () => {
   assert.ok(!off.includes('-svtav1-params'));
   assert.equal(on[on.indexOf('-crf') + 1], '26');
   assert.equal(on[on.indexOf('-preset') + 1], '2');
+});
+
+test('sampledSeconds: a sample that starts near the end counts only the seconds to the end', () => {
+  assert.equal(sampledSeconds(299.7, sampleStarts(299.7, [0.25, 0.5, 0.75]), 30), 90);
+  assert.equal(sampledSeconds(17, sampleStarts(17, [0.25, 0.5, 0.75]), 30), 13 + 9 + 5);
 });
 
 test('sampleStarts: each sample starts at a whole second of its fraction of the duration', () => {
