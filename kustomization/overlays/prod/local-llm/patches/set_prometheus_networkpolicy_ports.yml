@@ -1,0 +1,8 @@
+---
+- op: replace
+  path: /spec/ingress/0/ports
+  value:
+    - port: model-api
+      protocol: TCP
+    - port: model-api2
+      protocol: TCP

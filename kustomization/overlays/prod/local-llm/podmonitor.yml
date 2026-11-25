@@ -1,0 +1,26 @@
+---
+# Only the text models serve `/metrics`.  ASR and EmbeddingGemma 2 give
+# 404.  Add a port here when a text model starts on it.
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: group-a-local-llm-podmonitor
+spec:
+  podMetricsEndpoints:
+    - path: /metrics
+      port: model-api
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: local-llm
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: group-b-local-llm-podmonitor
+spec:
+  podMetricsEndpoints:
+    - path: /metrics
+      port: model-api2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: local-llm-group-b

@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/networkpolicy-allow-from-bifrost
+  - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-to-api-server
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-olah
@@ -24,10 +25,16 @@ images:
   - name: ghcr.io/sdwilsh/sif
     newTag: latest@sha256:594a45d8d533239d17158746a60bdff1c720ce36b44177722fa20aa4e3f2d25d
 namespace: local-llm
+patches:
+  - path: patches/set_prometheus_networkpolicy_ports.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-from-prometheus-networkpolicy
 resources:
   - namespace.yml
   - networkpolicy/allow-from-frigate.yml
   - networkpolicy/allow-smoke-test.yml
+  - podmonitor.yml
   - rbac/smoke-test.yml
   - ./group-a
   - ./group-b

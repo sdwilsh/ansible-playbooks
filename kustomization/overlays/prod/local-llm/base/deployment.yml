@@ -16,6 +16,7 @@ spec:
         app.kubernetes.io/name: local-llm
         hogs.tswn.us/bifrost-route: "true"
         hogs.tswn.us/olah-client: "true"
+        hogs.tswn.us/prometheus-target: "true"
     spec:
       automountServiceAccountToken: false
       affinity:
