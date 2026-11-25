@@ -21,3 +21,10 @@ shims:
   disableAll: true
   qemu-runtime-rs:
     enabled: true
+    runtimeClass:
+      # The pod cgroup holds the guest RAM and the host helpers of the VM,
+      # such as virtiofsd and its kernel slab.  At the 320Mi default, the
+      # host kernel killed qemu when `/data` held many files.  Check the
+      # `kata-qemu-oom-kill` alert before you lower this value.
+      overhead:
+        memory: 768Mi
