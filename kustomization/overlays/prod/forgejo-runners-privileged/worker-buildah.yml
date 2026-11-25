@@ -91,6 +91,10 @@ spec:
               name: containers-config
               readOnly: true
               subPath: storage.conf
+            - mountPath: /etc/containers/storage.rootful.conf.d/99-override.conf
+              name: containers-config
+              readOnly: true
+              subPath: storage-override.conf
             - mountPath: /var/lib/containers/storage
               name: scratch
       dnsConfig:

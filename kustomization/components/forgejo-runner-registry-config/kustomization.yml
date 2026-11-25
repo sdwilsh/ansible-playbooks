@@ -6,6 +6,7 @@ configMapGenerator:
   - name: containers-config-configmap
     files:
       - registries.conf
+      - storage-override.conf
       - storage.conf
 
 configurations:
