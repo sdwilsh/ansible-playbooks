@@ -34,8 +34,6 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
         - env:
-            - name: ffmpegVersion
-              value: "6"
             - name: inContainer
               value: "true"
             - name: nodeName
