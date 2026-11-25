@@ -15,7 +15,7 @@
     "drop_excess_requests": true,
     "enforce_auth_on_inference": true,
     "initial_pool_size": 10,
-    "log_retention_days": 90,
+    "log_retention_days": 14,
     "max_request_body_size_mb": 32,
     "mcp_disable_auto_tool_inject": true,
     "mcp_external_client_url": "https://bifrost.hogs.tswn.us",
