@@ -20,6 +20,8 @@ metadata:
 spec:
   podMetricsEndpoints:
     - path: /metrics
+      port: model-api
+    - path: /metrics
       port: model-api2
   selector:
     matchLabels:

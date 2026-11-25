@@ -6,7 +6,7 @@ metadata:
 spec:
   resources:
     requests:
-      # The files in `models.txt` total 37.04 GiB.  64Gi keeps 26.96 GiB free.
+      # The files in `models.txt` total 53.93 GiB.  64Gi keeps 10.07 GiB free.
       storage: 64Gi
 ---
 apiVersion: v1

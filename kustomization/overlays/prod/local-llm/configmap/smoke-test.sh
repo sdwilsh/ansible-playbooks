@@ -52,7 +52,7 @@ check() {
     *)
       code=$(curl -sS --max-time "$TIMEOUT" -o "$BODY" -w '%{http_code}' \
         -H 'Content-Type: application/json' \
-        -d "{\"model\":\"$alias\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply with the single word: ready\"}],\"max_tokens\":200,\"temperature\":0,\"reasoning_effort\":\"none\"}" \
+        -d "{\"model\":\"$alias\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply with the single word: ready\"}],\"max_tokens\":1000,\"temperature\":0,\"reasoning_effort\":\"none\"}" \
         "$base/v1/chat/completions") || code=000
       [ "$code" = 200 ] || { echo "POST /v1/chat/completions answered HTTP $code: $(head -c 200 "$BODY")"; return 1; }
       grep -Eq '"content"[[:space:]]*:[[:space:]]*"[^"]' "$BODY" ||
