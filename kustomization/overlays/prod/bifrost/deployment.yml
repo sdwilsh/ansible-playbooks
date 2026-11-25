@@ -126,6 +126,10 @@ spec:
               subPath: config.json
             - mountPath: /tmp
               name: tmp
+            # Bifrost refuses token paths outside /var/run/secrets.
+            - mountPath: /var/run/secrets/anthropic.com
+              name: anthropic-token
+              readOnly: true
       enableServiceLinks: false
       initContainers:
         - command:
@@ -170,6 +174,7 @@ spec:
       priorityClassName: application-infra
       securityContext:
         fsGroup: 1000 # bifrost
+      serviceAccountName: bifrost
       volumes:
         # Nothing should be stored here because data is stored PostgreSQL.
         - emptyDir: {}
@@ -179,3 +184,13 @@ spec:
           name: config
         - emptyDir: {}
           name: tmp
+        # Anthropic exchanges this token for an access token.  The audience
+        # must match the audience of the federation rule.  The rule
+        # lifetime must be at least expirationSeconds.
+        - name: anthropic-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  audience: https://api.anthropic.com
+                  expirationSeconds: 600
+                  path: token

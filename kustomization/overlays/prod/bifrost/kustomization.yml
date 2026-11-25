@@ -50,3 +50,4 @@ resources:
   - podmonitor.yml
   - prometheusrule.yml
   - service.yml
+  - serviceaccount.yml
