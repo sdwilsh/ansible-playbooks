@@ -126,8 +126,10 @@ spec:
               subPath: config.json
             - mountPath: /tmp
               name: tmp
-            # Bifrost refuses token paths outside /var/run/secrets.
-            - mountPath: /var/run/secrets/anthropic.com
+            # Bifrost refuses token paths outside /run/secrets.  Do not use
+            # /var/run/secrets: /var/run is a symlink, and Bifrost fails
+            # to follow it.
+            - mountPath: /run/secrets/anthropic.com
               name: anthropic-token
               readOnly: true
       enableServiceLinks: false
