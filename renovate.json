@@ -714,6 +714,20 @@
       ]
     },
     {
+      "description": "Hive ships a release about every hour.  Update the hub and the spokes together, once a week, within v5.",
+      "allowedVersions": "/^v5\\./",
+      "groupName": "hive",
+      "matchPackageNames": [
+        "ghcr.io/hivecommons/hive",
+        "ghcr.io/hivecommons/hive-hub"
+      ],
+      "schedule": [
+        "after 4pm on friday"
+      ],
+      "separateMinorPatch": false,
+      "sourceUrl": "https://github.com/hivecommons/hive"
+    },
+    {
       "groupName": "tdarr",
       "matchPackageNames": [
         "/^ghcr\\.io\\/haveagitgat\\/tdarr.*/"
