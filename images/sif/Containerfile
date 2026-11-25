@@ -35,8 +35,8 @@ ARG NIX_CONFIG=""
 # commit line together.  The release must accept the extension API of
 # `GUFO_VERSION`, or the check in the last stage stops the build.
 ARG DS41_URL=https://github.com/franzmoca/ds41-gufo-extension
-ARG DS41_VERSION=v0.4.0
-ARG DS41_REV=b6046c6131d764e7607c5d42433fa136079b948b
+ARG DS41_VERSION=v0.5.1
+ARG DS41_REV=d78c48773bbd49caa3912482971ac02a10695ae9
 # The expression sets the release version.  The flake accepts only X.Y.Z in `version.txt`.
 # `bin/gufo` is a wrapper script.  The ELF is `bin/.gufo-wrapped`, so the
 # library checks read that file and must find `libamdhip64`.
