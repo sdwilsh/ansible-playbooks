@@ -101,9 +101,11 @@ TABLE: dict[str, tuple[str, ...]] = {
         ".github/scripts/test-next-calver-version.sh",
         ".hadolint.yaml",
     ),
+    # The sif test starts each production model list.
     "sif": (
         ".github/workflows/build-sif.yml",
         "images/sif/**",
+        "kustomization/overlays/prod/local-llm/*/configmap/models.txt",
     ),
     "wireguard-egress": (
         ".github/workflows/build-wireguard-egress.yml",

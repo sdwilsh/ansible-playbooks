@@ -25,11 +25,13 @@ Process = dict[str, str]
 RUNTIME: str = os.environ.get("CONTAINER_RUNTIME", "docker")
 TEST_DIR: Path = Path(__file__).resolve().parent
 FIXTURES_DIR: Path = TEST_DIR / "fixtures"
+PRODUCTION_DIR: Path = TEST_DIR.parents[2] / "kustomization/overlays/prod/local-llm"
+PRODUCTION_GROUPS: tuple[str, ...] = ("group-a", "group-b")
 SCRIPTS_DIR = "/usr/local/bin"
 
 # The suite must make this many results.  A scenario that stops early makes
 # fewer.
-EXPECTED_ASSERTIONS = 57
+EXPECTED_ASSERTIONS = 59
 
 
 class Report:
@@ -77,6 +79,7 @@ class Harness:
     def __init__(self, image: str, work_dir: Path) -> None:
         self.image: str = image
         self.containers: list[str] = []
+        self.work_dir: Path = work_dir
         self.models: Path = work_dir / "models"
         self.run_dir: Path = work_dir / "run"
 
@@ -106,7 +109,12 @@ class Harness:
         if result.returncode != 0:
             raise RuntimeError(f"cannot give /run to root: {result.stderr}")
 
-    def common_arguments(self) -> list[str]:
+    def common_arguments(self, models: Path, stub: bool) -> list[str]:
+        gufo = (
+            ["-v", f"{TEST_DIR}/stub-gufo.sh:/usr/local/bin/gufo:ro,Z"]
+            if stub
+            else []
+        )
         return [
             "--cap-drop=ALL",
             "--read-only",
@@ -114,11 +122,42 @@ class Harness:
             "--user", "1000:1000",
             "--tmpfs", "/tmp:rw,size=64m",
             "-v", f"{TEST_DIR}:/test:ro,Z",
-            "-v", f"{TEST_DIR}/stub-gufo.sh:/usr/local/bin/gufo:ro,Z",
-            "-v", f"{self.models}:/models:ro,Z",
+            *gufo,
+            "-v", f"{models}:/models:ro,Z",
         ]
 
-    def start(self, name: str, *extra: str, host_run: bool = False) -> None:
+    def empty_models(self, name: str, records: str) -> Path:
+        """Make an empty file for each shard, where `fetch-model.sh` puts it."""
+        root = self.work_dir / name
+        for record in records.splitlines():
+            fields = record.split("|")
+            if len(fields) < 3 or not fields[0]:
+                continue
+            shards = fields[2].split()
+            kind = fields[6] if len(fields) > 6 else ""
+            if kind in ("asr", "embedding"):
+                paths = [f"{shards[0]}/{shard}" for shard in shards[1:]]
+            else:
+                prefix = shards[0].rpartition("/")[0]
+                paths = [
+                    f"{prefix}/{shard.rpartition('/')[2]}".lstrip("/")
+                    if shard.startswith("http")
+                    else shard
+                    for shard in shards
+                ]
+            for path in paths:
+                (root / path).parent.mkdir(parents=True, exist_ok=True)
+                (root / path).touch()
+        return root
+
+    def start(
+        self,
+        name: str,
+        *extra: str,
+        host_run: bool = False,
+        models: Path | None = None,
+        stub: bool = True,
+    ) -> None:
         runtime("rm", "-f", name)
         self.containers.append(name)
         run_mount = (
@@ -129,7 +168,8 @@ class Harness:
         )
         result = runtime(
             "run", "-d", "--name", name,
-            *self.common_arguments(), *run_mount, *extra, self.image,
+            *self.common_arguments(models or self.models, stub),
+            *run_mount, *extra, self.image,
         )
         if result.returncode != 0:
             raise RuntimeError(f"{RUNTIME} run failed: {result.stderr}")
@@ -606,6 +646,47 @@ def stale_tree(report: Report, harness: Harness) -> None:
     )
 
 
+def production_records(report: Report, harness: Harness) -> None:
+    """Start each production model list with the real `gufo`.
+
+    `gufo` reads each option before it opens the model, so an empty file is
+    enough for each shard.  An option that this build does not know stops
+    `gufo` before the load.
+    """
+    for group in PRODUCTION_GROUPS:
+        name = f"production-{group}"
+        records = (PRODUCTION_DIR / group / "configmap/models.txt").read_text()
+        records = records.rstrip("\n")
+        aliases = [r.split("|")[0] for r in records.splitlines() if r]
+        harness.start(
+            name,
+            "-e", "POD_IP=127.0.0.1",
+            "-e", f"MODELS={records}",
+            "--tmpfs", "/cache:rw,size=1m",
+            models=harness.empty_models(name, records),
+            stub=False,
+        )
+
+        def missing() -> list[str]:
+            lines = "\n".join(harness.logs(name)).splitlines()
+            return [
+                alias
+                for alias in aliases
+                if not any(
+                    line.startswith(f"[{alias}] ") and "event=load_started" in line
+                    for line in lines
+                )
+            ]
+
+        wait_for(60, lambda: not missing())
+        absent = missing()
+        report.check(
+            f"each record of {group} reaches the model load",
+            not absent,
+            f"no load for: {absent}\n" + "\n".join(harness.logs(name))[-3000:],
+        )
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: e2e.py <image-tag>", file=sys.stderr)
@@ -619,6 +700,7 @@ def main() -> int:
         ("negatives", negatives),
         ("missing-user2", missing_user2),
         ("stale-tree", stale_tree),
+        ("production-records", production_records),
     )
 
     report = Report()

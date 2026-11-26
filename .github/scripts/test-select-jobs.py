@@ -72,6 +72,14 @@ CASES: dict[str, tuple[list[str], set[str]]] = {
     ),
     "release workflow": ([".github/workflows/release-image.yml"], {"mack"}),
     "image workflow": ([".github/workflows/build-sif.yml"], {"sif"}),
+    "local-llm model list": (
+        ["kustomization/overlays/prod/local-llm/group-b/configmap/models.txt"],
+        {"devcontainer", "kustomize-build", "sif"},
+    ),
+    "local-llm kustomization": (
+        ["kustomization/overlays/prod/local-llm/group-b/kustomization.yml"],
+        {"devcontainer", "kustomize-build"},
+    ),
     "CI workflow": ([".github/workflows/devcontainer-ci.yml"], CONTAINER | IMAGES | {"devcontainer"}),
     "selection script": (
         [".github/scripts/select-jobs.py"],
