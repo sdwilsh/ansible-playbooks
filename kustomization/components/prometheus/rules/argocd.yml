@@ -11,8 +11,19 @@ spec:
         - alert: argocd-app-unhealthy
           annotations:
             description: "{{ $labels.name }} is reported as unhealthy for more than 5 minutes!"
-          expr: count by (name) (argocd_app_info{health_status!="Healthy"}) > 0
+          expr: count by (name) (argocd_app_info{health_status!~"Healthy|Progressing"}) > 0
           for: 5m
+          labels:
+            severity: warning
+        # A deploy of local-llm loads its models for 12 to 24 minutes, and
+        # the app is Progressing for all of that time.  A server that does
+        # not start keeps the app Progressing too, until the Rollout
+        # deadline at 2 hours.
+        - alert: argocd-app-progressing-long
+          annotations:
+            description: "{{ $labels.name }} is reported as progressing for more than 30 minutes!"
+          expr: count by (name) (argocd_app_info{health_status="Progressing"}) > 0
+          for: 30m
           labels:
             severity: warning
         - alert: argocd-app-out-of-sync
