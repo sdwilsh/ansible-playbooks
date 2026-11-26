@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const {
-  makePlan, classifyScan, decideVideo, sampleStarts, sampledSeconds, av1EncodeArgs, parseIdet, parseMpdecimate, idetDecimateArgs, grainStrengths,
+  makePlan, classifyScan, decideVideo, sampleStarts, sampledSeconds, progressUpdate, av1EncodeArgs, parseIdet, parseMpdecimate, idetDecimateArgs, grainStrengths,
   buildInputs, trackOrder, buildMkvmergeArgs, evaluateOutput, audioTracks, TREATMENTS,
 } = require('./target-convert.js');
 
@@ -157,6 +157,14 @@ test('av1EncodeArgs: grain parameters appear only when grain is on', () => {
   assert.ok(!off.includes('-svtav1-params'));
   assert.equal(on[on.indexOf('-crf') + 1], '26');
   assert.equal(on[on.indexOf('-preset') + 1], '2');
+});
+
+test('progressUpdate: an ffmpeg progress chunk gives the percentage, the fps and an ETA from the elapsed time', () => {
+  const chunk = 'frame=1200\nfps=12.5\nout_time_us=600000000\nprogress=continue\n';
+  assert.deepEqual(progressUpdate(chunk, 2400, 900), { percentage: 25, ETA: '0:45:00', fps: 12.5 });
+  assert.deepEqual(progressUpdate('fps=0.00\nout_time_us=0\n', 2400, 5), { percentage: 0 });
+  assert.equal(progressUpdate('frame=10\nfps=3\n', 2400, 5), null);
+  assert.equal(progressUpdate(chunk, 0, 900), null);
 });
 
 test('sampledSeconds: a sample that starts near the end counts only the seconds to the end', () => {

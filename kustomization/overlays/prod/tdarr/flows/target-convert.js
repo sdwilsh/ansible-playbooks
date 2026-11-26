@@ -271,16 +271,35 @@ async function scanVideo(job) {
   };
 }
 
+const clockText = (secs) => {
+  const s = Math.max(0, Math.round(secs));
+  const two = (n) => String(n).padStart(2, '0');
+  return `${Math.floor(s / 3600)}:${two(Math.floor((s % 3600) / 60))}:${two(s % 60)}`;
+};
+
+// Make a tdarr worker update from one ffmpeg -progress chunk.  tdarr shows ETA only when the plugin sends it.
+function progressUpdate(chunk, duration, elapsedSecs) {
+  const time = /out_time_us=(\d+)/.exec(chunk);
+  if (!time || !(duration > 0)) return null;
+  const percentage = Math.min(99, (Number(time[1]) / 1e6 / duration) * 100);
+  const update = { percentage };
+  if (percentage > 0) update.ETA = clockText((elapsedSecs * (100 - percentage)) / percentage);
+  const fps = /fps=([\d.]+)/.exec(chunk);
+  if (fps && Number(fps[1]) > 0) update.fps = Number(fps[1]);
+  return update;
+}
+
 async function encodeVideo(job, plan, decision, progress) {
   const { t, input, dir, duration } = job;
   const out = path.join(dir, 'video-av1.mkv');
+  const start = Date.now();
   await run(t.ffmpeg, ['-hide_banner', '-v', 'error', '-y', '-i', input, '-map', '0:v:0', '-an', '-sn', '-dn', '-map_chapters', '-1',
     ...av1EncodeArgs({ preset: config.preset, crf: plan.crf, grain: decision.grain, treatment: decision.treatment }),
     '-progress', 'pipe:1', '-nostats', out], {
     log: job.log,
     onStdout: (chunk) => {
-      const m = /out_time_us=(\d+)/.exec(chunk);
-      if (m && duration > 0) progress(Math.min(99, (Number(m[1]) / 1e6 / duration) * 100));
+      const update = progressUpdate(chunk, duration, (Date.now() - start) / 1000);
+      if (update) progress(update);
     },
   });
   return out;
@@ -493,7 +512,7 @@ async function convert(args) {
       const strength = await measureGrain(job, plan.crf, TREATMENTS[classifyScan(scan)]);
       const decision = decideVideo(scan, strength);
       log(`video decision ${JSON.stringify(decision)}, grain strength median ${strength}, threshold ${config.grain.threshold}`);
-      videoFile = await encodeVideo(job, plan, decision, (p) => args.updateWorker({ percentage: p }));
+      videoFile = await encodeVideo(job, plan, decision, (update) => args.updateWorker(update));
     }
     const compatFiles = new Map();
     for (const tr of plan.tracks.filter((x) => x.origin === 'compat')) compatFiles.set(tr.srcAudioIndex, await encodeCompat(job, tr));
@@ -510,6 +529,6 @@ async function convert(args) {
 
 module.exports = convert;
 Object.assign(module.exports, {
-  OUTPUT_CONVERTED, OUTPUT_AT_TARGET, MKVMERGE_OK, MARKER: config.marker, WRITER_TAGS, DURATION_TAG, TREATMENTS, makePlan, audioTracks, grainStrengths, classifyScan, decideVideo, sampleStarts, sampledSeconds,
+  OUTPUT_CONVERTED, OUTPUT_AT_TARGET, MKVMERGE_OK, MARKER: config.marker, WRITER_TAGS, DURATION_TAG, TREATMENTS, makePlan, audioTracks, grainStrengths, classifyScan, decideVideo, sampleStarts, sampledSeconds, progressUpdate,
   av1EncodeArgs, idetDecimateArgs, grainFramesArgs, parseIdet, parseMpdecimate, buildInputs, trackOrder, buildMkvmergeArgs, evaluateOutput,
 });
