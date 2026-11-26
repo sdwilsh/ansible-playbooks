@@ -59,9 +59,12 @@ spec:
               value: "*"
           image: ghcr.io/marinatedconcrete/buildah-action-runner
           name: workflow
+          # A small request lets a job start on a busy node.  CI cannot
+          # preempt other pods, and the runner fails a job that waits too long.
+          # No limit, so a build uses each free core.
           resources:
             requests:
-              cpu: "4"
+              cpu: "1"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
