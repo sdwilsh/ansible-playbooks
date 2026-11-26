@@ -25,8 +25,8 @@ spec:
           readinessProbe:
             periodSeconds: 23
             timeoutSeconds: 18
-          # The weights are in GTT, so the container holds the 6 GiB Q8 RAM
-          # cache and the file cache.
+          # The weights are in GTT, so the container holds the 6 GiB RAM
+          # caches of Q8 and of Inkling, and the file cache.
           # `host_vars/gpuworker02.hogs.tswn.us.yml` holds the memory budget.
           resources:
             limits:
