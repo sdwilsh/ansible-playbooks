@@ -159,9 +159,9 @@ test('av1EncodeArgs: grain parameters appear only when grain is on', () => {
   assert.equal(on[on.indexOf('-preset') + 1], '2');
 });
 
-test('progressUpdate: an ffmpeg progress chunk gives the percentage, the fps and an ETA from the elapsed time', () => {
-  const chunk = 'frame=1200\nfps=12.5\nout_time_us=600000000\nprogress=continue\n';
-  assert.deepEqual(progressUpdate(chunk, 2400, 900), { percentage: 25, ETA: '0:45:00', fps: 12.5 });
+test('progressUpdate: an ffmpeg progress chunk gives the percentage, the fps, an ETA from the elapsed time and the sizes', () => {
+  const chunk = 'frame=1200\nfps=12.5\ntotal_size=268435456\nout_time_us=600000000\nprogress=continue\n';
+  assert.deepEqual(progressUpdate(chunk, 2400, 900), { percentage: 25, ETA: '0:45:00', fps: 12.5, outputFileSizeInGbytes: 0.25, estSize: 1 });
   assert.deepEqual(progressUpdate('fps=0.00\nout_time_us=0\n', 2400, 5), { percentage: 0 });
   assert.equal(progressUpdate('frame=10\nfps=3\n', 2400, 5), null);
   assert.equal(progressUpdate(chunk, 0, 900), null);

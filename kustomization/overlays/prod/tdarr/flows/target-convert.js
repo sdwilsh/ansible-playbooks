@@ -284,6 +284,12 @@ function progressUpdate(chunk, duration, elapsedSecs) {
   const percentage = Math.min(99, (Number(time[1]) / 1e6 / duration) * 100);
   const update = { percentage };
   if (percentage > 0) update.ETA = clockText((elapsedSecs * (100 - percentage)) / percentage);
+  // tdarr shows the estimated size against the source size.  The estimate is the video only.
+  const size = /total_size=(\d+)/.exec(chunk);
+  if (size && percentage > 0) {
+    update.outputFileSizeInGbytes = Number(size[1]) / 1024 ** 3;
+    update.estSize = (update.outputFileSizeInGbytes * 100) / percentage;
+  }
   const fps = /fps=([\d.]+)/.exec(chunk);
   if (fps && Number(fps[1]) > 0) update.fps = Number(fps[1]);
   return update;
