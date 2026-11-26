@@ -1,0 +1,31 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: local-llm-prometheusrule
+spec:
+  groups:
+    # The speed of each model over 1 hour, to compare gufo releases.  The
+    # `model` label comes from `podmonitor.yml`.
+    - name: gufo.speed
+      interval: 1m
+      rules:
+        - expr: sum by (model) (rate(llamacpp:tokens_predicted_total[1h])) / sum by (model) (rate(llamacpp:tokens_predicted_seconds_total[1h]))
+          record: model:gufo_decode_tokens_per_second:rate1h
+        - expr: sum by (model) (rate(llamacpp:prompt_tokens_total[1h])) / sum by (model) (rate(llamacpp:prompt_seconds_total[1h]))
+          record: model:gufo_prompt_tokens_per_second:rate1h
+        - expr: sum by (model) (rate(llamacpp:spec_decode_num_accepted_tokens_total[1h])) / sum by (model) (rate(llamacpp:spec_decode_num_draft_tokens_total[1h]))
+          record: model:gufo_draft_acceptance:ratio_rate1h
+    - name: gufo.health
+      interval: 1m
+      rules:
+        # `--stall-timeout-ms` stops a request that stalls for 10 minutes.
+        # This alert finds a server that is busy and makes no tokens after
+        # that time, for example because the GPU hangs below gufo.
+        - alert: gufo-server-stuck
+          annotations:
+            description: "{{ $labels.model }} in {{ $labels.pod }} has a request in progress and made no tokens for 20 minutes."
+          expr: max by (model, pod) (llamacpp:requests_processing) > 0 and on (model, pod) sum by (model, pod) (increase(llamacpp:tokens_predicted_total[15m]) + increase(llamacpp:prompt_tokens_total[15m])) == 0
+          for: 5m
+          labels:
+            severity: warning

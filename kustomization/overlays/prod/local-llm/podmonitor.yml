@@ -1,6 +1,8 @@
 ---
 # Only the text models serve `/metrics`.  ASR and EmbeddingGemma 2 give
-# 404.  Add a port here when a text model starts on it.
+# 404.  Add a port here when a text model starts on it.  The `model` label
+# is the alias of the record that `models.txt` puts on that port: record 1
+# on `model-api`, record 2 on `model-api2`.  Change both files together.
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
@@ -9,6 +11,10 @@ spec:
   podMetricsEndpoints:
     - path: /metrics
       port: model-api
+      relabelings:
+        - action: replace
+          replacement: DeepSeek-V4.1-Flash
+          targetLabel: model
   selector:
     matchLabels:
       app.kubernetes.io/name: local-llm
@@ -21,8 +27,16 @@ spec:
   podMetricsEndpoints:
     - path: /metrics
       port: model-api
+      relabelings:
+        - action: replace
+          replacement: Inkling-2-Mini-Q4_K_XL
+          targetLabel: model
     - path: /metrics
       port: model-api2
+      relabelings:
+        - action: replace
+          replacement: Qwen3.8-27B-Q8_K_XL
+          targetLabel: model
   selector:
     matchLabels:
       app.kubernetes.io/name: local-llm-group-b

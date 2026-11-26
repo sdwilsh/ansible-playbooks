@@ -35,6 +35,7 @@ resources:
   - networkpolicy/allow-from-frigate.yml
   - networkpolicy/allow-smoke-test.yml
   - podmonitor.yml
+  - prometheusrule.yml
   - rbac/smoke-test.yml
   - ./group-a
   - ./group-b
