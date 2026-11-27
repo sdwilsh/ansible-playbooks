@@ -2,8 +2,10 @@
 namespaceOverride: monitoring
 
 collectors:
+  - cronjobs
   - deployments
   - endpointslices
+  - jobs
   - leases
   - nodes
   - pods
