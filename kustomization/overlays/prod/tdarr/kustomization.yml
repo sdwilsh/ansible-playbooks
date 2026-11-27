@@ -59,6 +59,7 @@ resources:
   - namespace.yml
   - ingress.yml
   - job.yml
+  - networkpolicy/allow-from-disc-ripper.yml
   - networkpolicy/allow-tdarr-internal.yml
   - persistentvolume.yml
   - persistentvolumeclaim.yml
