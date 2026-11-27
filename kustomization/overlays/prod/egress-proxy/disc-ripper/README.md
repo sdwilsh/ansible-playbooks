@@ -20,6 +20,20 @@ method and path.
 makemkvcon does not use the proxy settings.  It connects directly, so the `NetworkPolicy` drops
 its update check, the proxy logs nothing, and no proxy alert fires.
 
+## The client side
+
+The disc-ripper overlay sets `HTTPS_PROXY` to the `Service` of this instance.  Its `NO_PROXY` is
+`bifrost.tswn.us,code.tswn.us`, because these hosts are behind Traefik in the cluster.
+disc-ripper refuses a CIDR range or a port in `NO_PROXY`, so the list holds only these two names.
+`DISC_EXTRA_CA_FILE` names the root CA of this instance, in `/secrets/egress-proxy/ca.crt`.
+
+Deploy a disc-ripper image with proxy support before the client change.  An older image also
+sends its calls through the proxy, because ureq reads `HTTPS_PROXY`.  It does not trust the CA, so
+each outside call fails in TLS, and the proxy logs no blocked request.
+
+The sweep pod does not start without its CA `Secret`.  The `Job` then stays active, and the
+`CronJob` skips each later run.  The `disc-ripper-pod-not-started` alert fires after 30 minutes.
+
 ## The proxy does not stop DNS queries
 
 The `disc-ripper` `Namespace` has the `networkpolicy-allow-to-coredns` component.  CoreDNS forwards

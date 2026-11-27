@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: this-is-ignored-but-is-required
+spec:
+  egress:
+    - ports:
+        - port: tunnel
+          protocol: TCP
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: egress-proxy
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: disc-ripper
+              app.kubernetes.io/name: iron-proxy
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/egress-proxy-client: disc-ripper

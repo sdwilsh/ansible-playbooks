@@ -1,0 +1,17 @@
+---
+# The sweep trusts the `ca.crt` key of this Secret, which is the root CA of
+# its proxy.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: egress-proxy-ca-certificate
+spec:
+  issuerRef:
+    kind: ClusterIssuer
+    name: disc-ripper-iron-proxy-ca-clusterissuer
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: egress-proxy-ca-secret
+  uris:
+    - urn:hogs.tswn.us:egress-proxy-ca:disc-ripper

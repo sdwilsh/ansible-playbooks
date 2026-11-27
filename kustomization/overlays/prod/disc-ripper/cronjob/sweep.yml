@@ -13,7 +13,7 @@ spec:
         metadata:
           labels:
             app.kubernetes.io/name: disc-ripper
-            hogs.tswn.us/internet-client: "true"
+            hogs.tswn.us/egress-proxy-client: disc-ripper
             hogs.tswn.us/traefik-client: "true"
         spec:
           affinity:
@@ -44,6 +44,8 @@ spec:
                   value: /cache/episodes
                 - name: DISC_EXTRACT_ROOT
                   value: /media
+                - name: DISC_EXTRA_CA_FILE
+                  value: /secrets/egress-proxy/ca.crt
                 # The library to check for copies before a write.  It is
                 # the same tree as DISC_EXTRACT_ROOT.
                 - name: DISC_LIBRARY_ROOT
@@ -59,6 +61,11 @@ spec:
                   value: /secrets/disc-tagger/forgejo.key
                 - name: HOME
                   value: /home/disc-ripper
+                - name: HTTPS_PROXY
+                  value: http://disc-ripper-iron-proxy-svc.egress-proxy.svc.cluster.local:8080
+                # These hosts are behind Traefik in the cluster.
+                - name: NO_PROXY
+                  value: bifrost.tswn.us,code.tswn.us
                 # disc-ripper reads its keys from $XDG_CONFIG_HOME/disc-tagger.
                 - name: XDG_CONFIG_HOME
                   value: /secrets
@@ -92,6 +99,9 @@ spec:
                   readOnly: true
                 - mountPath: /secrets/disc-tagger
                   name: config
+                  readOnly: true
+                - mountPath: /secrets/egress-proxy
+                  name: egress-proxy-ca
                   readOnly: true
                 - mountPath: /secrets/makemkv
                   name: makemkv-settings
@@ -128,6 +138,13 @@ spec:
                   - key: tvdb.key
                     path: tvdb.key
                 secretName: disc-ripper-secret
+            - name: egress-proxy-ca
+              secret:
+                defaultMode: 0440
+                items:
+                  - key: ca.crt
+                    path: ca.crt
+                secretName: egress-proxy-ca-secret
             - emptyDir: {}
               name: home
             - name: makemkv-settings

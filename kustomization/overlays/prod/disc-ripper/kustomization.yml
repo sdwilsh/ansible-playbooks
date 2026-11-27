@@ -4,7 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/networkpolicy-allow-to-coredns
-  - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-to-egress-proxy
   - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-restricted
@@ -12,8 +12,14 @@ images:
   - name: code.tswn.us/sdwilsh/disc-ripper
     newTag: main
 namespace: disc-ripper
+patches:
+  - path: patches/set_egress_proxy_instance.yml
+    target:
+      kind: NetworkPolicy
+      name: allow-to-egress-proxy-networkpolicy
 resources:
   - namespace.yml
+  - certificate.yml
   - cronjob/sweep.yml
   - persistentvolume/media.yml
   - persistentvolume/rips.yml
