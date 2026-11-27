@@ -19,6 +19,7 @@ patches:
       name: allow-to-egress-proxy-networkpolicy
 resources:
   - namespace.yml
+  - networkpolicy/allow-to-tdarr.yml
   - certificate.yml
   - cronjob/sweep.yml
   - persistentvolume/media.yml

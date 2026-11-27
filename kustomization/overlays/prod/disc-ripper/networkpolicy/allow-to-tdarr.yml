@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-tdarr-networkpolicy
+spec:
+  egress:
+    # The sweep asks tdarr which files it converts now, and does not
+    # replace those files.
+    - ports:
+        - port: 8265
+          protocol: TCP
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tdarr
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: tdarr-server
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: disc-ripper
+  policyTypes:
+    - Egress
