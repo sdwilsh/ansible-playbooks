@@ -1,0 +1,24 @@
+---
+# Admit one client only.  The tunnel listener does not authenticate clients,
+# so each client of this instance gets the full allowlist.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-client-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: set-by-each-instance
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/egress-proxy-client: set-by-each-instance
+      ports:
+        - port: tunnel
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: iron-proxy
+  policyTypes:
+    - Ingress

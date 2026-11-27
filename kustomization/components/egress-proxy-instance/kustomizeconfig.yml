@@ -1,0 +1,12 @@
+---
+# The `namePrefix` of an instance also goes into these names.  Each instance
+# then gets its own CA Secret, and it uses its own ClusterIssuer.
+namePrefix:
+  - kind: Certificate
+    path: spec/commonName
+  - kind: Certificate
+    path: spec/issuerRef/name
+  - kind: Certificate
+    path: spec/secretName
+  - kind: Deployment
+    path: spec/template/spec/volumes/secret/secretName

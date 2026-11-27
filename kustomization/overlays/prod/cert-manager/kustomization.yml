@@ -47,3 +47,4 @@ patches:
       name: allow-from-prometheus-networkpolicy
 resources:
   - clusterissuer.yml
+  - issuer/iron-proxy-selfsigned.yml

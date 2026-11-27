@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configurations:
+  - kustomizeconfig.yml
+images:
+  - name: docker.io/ironsh/iron-proxy
+    newTag: 0.59.0@sha256:30824bb4b8ba0703bd1acfe57e6ba2fb8dde041387df7a1fc776a807e3f111f5
+resources:
+  - certificate.yml
+  - deployment.yml
+  - networkpolicy/allow-from-client.yml
+  - poddisruptionbudget.yml
+  - service.yml

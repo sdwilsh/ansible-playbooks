@@ -1,0 +1,13 @@
+---
+# The anti-affinity rule of the Deployment keeps the two pods on different
+# nodes.  So a drain of one node evicts one pod, and this budget does not
+# refuse the drain.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: iron-proxy-pdb
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: iron-proxy

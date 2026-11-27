@@ -19,6 +19,7 @@ resources:
   - application/disc-ripper.yml
   - application/dns.yml
   - application/dockerhub-proxy.yml
+  - application/egress-proxy.yml
   - application/enshrouded-relic.yml
   - application/external-services.yml
   - application/factorio-relic.yml

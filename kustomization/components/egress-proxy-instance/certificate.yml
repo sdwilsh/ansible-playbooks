@@ -1,0 +1,28 @@
+---
+# The proxy reads this CA at start only, so the CA lasts ten years, as the
+# root does.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: iron-proxy-ca-certificate
+spec:
+  commonName: iron-proxy-intermediate-ca
+  duration: 87600h
+  isCA: true
+  issuerRef:
+    kind: ClusterIssuer
+    name: iron-proxy-ca-clusterissuer
+  nameConstraints:
+    critical: true
+    excluded:
+      ipRanges:
+        - 0.0.0.0/0
+        - ::/0
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Never
+    size: 256
+  secretName: iron-proxy-ca-secret
+  usages:
+    - cert sign
+    - crl sign

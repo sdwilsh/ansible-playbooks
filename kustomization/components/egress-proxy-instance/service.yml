@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iron-proxy-svc
+spec:
+  ports:
+    - name: tunnel
+      port: 8080
+      protocol: TCP
+      targetPort: tunnel
+  selector:
+    app.kubernetes.io/name: iron-proxy
