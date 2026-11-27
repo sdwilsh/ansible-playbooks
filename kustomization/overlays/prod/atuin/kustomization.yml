@@ -18,7 +18,7 @@ images:
   - name: busybox
     newTag: 1.38.0@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
   - name: docker.io/bitnami/kubectl
-    newTag: latest@sha256:ae71f848f057a71029d092e98548cabf7cd17b11da0adad0a8f4145a9c87c830
+    newTag: latest@sha256:a34afebf8bf3b99cac63c1ff5d449b0cc66ce636c7451b95a00e91d3bab1330d
   - name: ghcr.io/atuinsh/atuin
     newTag: 18.25.0@sha256:0981faad9f0205761e0588ab89d963032132c392f90ee824568a90a581f13839
   - name: postgres
