@@ -1,0 +1,32 @@
+---
+groups:
+  - name: egress-proxy
+    interval: 1m
+    rules:
+      # Iron Proxy has no metrics, so this rule reads the audit log.
+      - alert: egress-proxy-blocked-request
+        expr: |
+          sum by (instance, method, host, path) (
+            count_over_time(
+              {namespace="egress-proxy", app="iron-proxy"}
+              |= `"action":"reject"`
+              | json action="audit.action", host="audit.host", method="audit.method", path="audit.path"
+              | action = "reject"
+              | label_format instance=`{{ regexReplaceAll "-iron-proxy-deployment-.*" .pod "" }}`
+              [1h]
+            )
+          ) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "egress-proxy {{ $labels.instance }} blocked {{ $labels.method }} {{ $labels.host }}{{ $labels.path }}"
+          description: >-
+            The {{ $labels.instance }} instance of Iron Proxy blocked
+            {{ $labels.method }} {{ $labels.host }}{{ $labels.path }}.  The
+            count in the last hour is {{ $value }}.  No rule of its allowlist
+            matches the request.  If the client needs it, add a rule to
+            `egress-proxy/{{ $labels.instance }}/egressproxy.yml`, and run
+            `just generate-egress-proxy`.  For a new host, follow the
+            egress-proxy README.  If the client must not make the request,
+            examine the client.  The `"action":"reject"` lines of the proxy
+            log give the time and the client address.

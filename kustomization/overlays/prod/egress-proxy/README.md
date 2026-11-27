@@ -85,6 +85,11 @@ and checks that each `ca.crt` holds the new root.  Then it restarts the proxy an
 reads the CA at start, so the next `Job` gets the new CA.  If no client pod runs, no client restart
 is necessary.  It stops with an error at the first step that fails.
 
+## Blocked requests
+
+The `egress-proxy-blocked-request` alert names each request that an instance blocks.  It is in
+`kustomization/overlays/prod/monitoring/configmap/loki/egress-proxy.yaml`.
+
 ## Allowlist reference
 
 `<instance>/egressproxy.yml` holds the allowlist.  The codegen copies each rule as it is into the
