@@ -9,5 +9,10 @@ filter: >-
 name: sdwilsh/hive-whitelist
 whitelist:
   expression:
-    - evt.Meta.target_fqdn in ['hive.tswn.us', 'marinatedconcrete-hive.tswn.us']
+    - >-
+      evt.Meta.target_fqdn in [
+        'hive.tswn.us',
+        'marinatedconcrete-hive.tswn.us',
+        'marinatedconcrete-private-hive.tswn.us'
+      ]
   reason: Hive dashboard page loads
