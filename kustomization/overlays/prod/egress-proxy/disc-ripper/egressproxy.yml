@@ -1,0 +1,63 @@
+---
+# `just generate-egress-proxy` writes the resources of this instance from this
+# file.  No kustomization reads this file.
+apiVersion: egress-proxy.hogs.tswn.us/v1alpha1
+kind: EgressProxy
+metadata:
+  name: disc-ripper
+spec:
+  client:
+    namespace: disc-ripper
+  # `?*` matches one path segment.  A trailing `/*` also matches deeper
+  # paths.  Rules cannot match query strings.  Codegen adds the CONNECT rule
+  # of each host.
+  rules:
+    - host: api.themoviedb.org
+      methods: [GET]
+      paths:
+        - "/3/movie/*"
+        - "/3/search/?*"
+        - "/3/tv/*"
+    - host: api4.thetvdb.com
+      methods: [POST]
+      paths:
+        - "/v4/login"
+    - host: api4.thetvdb.com
+      methods: [GET]
+      paths:
+        - "/v4/search"
+        - "/v4/series/*"
+    # The login reply names the API host of the session.  It is one of
+    # these two hosts.
+    - host: api.opensubtitles.com
+      methods: [POST]
+      paths:
+        - "/api/v1/download"
+        - "/api/v1/login"
+    - host: api.opensubtitles.com
+      methods: [GET]
+      paths:
+        - "/api/v1/subtitles"
+    - host: vip-api.opensubtitles.com
+      methods: [POST]
+      paths:
+        - "/api/v1/download"
+        - "/api/v1/login"
+    - host: vip-api.opensubtitles.com
+      methods: [GET]
+      paths:
+        - "/api/v1/subtitles"
+    # The download reply gives a link on this host.  This host is also
+    # the website, so allow only the file path.
+    - host: www.opensubtitles.com
+      methods: [GET]
+      paths:
+        - "/download/*"
+    - host: thediscdb.com
+      methods: [POST]
+      paths:
+        - "/graphql"
+    - host: en.wikipedia.org
+      methods: [GET]
+      paths:
+        - "/w/api.php"

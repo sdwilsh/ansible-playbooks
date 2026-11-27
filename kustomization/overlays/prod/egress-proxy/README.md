@@ -29,6 +29,8 @@ another `Namespace` gets from the `ClusterIssuer`, cannot act as another host to
 
 ## Add an instance for a new client
 
+The `disc-ripper/` instance is an example.
+
 1. Write `<client>/egressproxy.yml`.  It has the shape of a Kubernetes resource, but no
    kustomization reads it.  Set `metadata.name` to `<client>`, `spec.client.namespace` to the
    `Namespace` of the client, and `spec.rules` to the allowlist.  Do not write the `CONNECT`

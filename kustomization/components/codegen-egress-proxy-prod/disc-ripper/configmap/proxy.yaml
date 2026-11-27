@@ -1,0 +1,112 @@
+# @codegen-command: ansible-playbook plays/codegen/egress-proxy.yml
+# @generated
+#
+# The rules come from
+# kustomization/overlays/prod/egress-proxy/disc-ripper/egressproxy.yml.
+dns:
+  enabled: false
+log:
+  level: info
+metrics:
+  listen: ":9090"
+proxy:
+  # Iron Proxy always starts the HTTP and HTTPS listeners.  Clients use only
+  # the tunnel listener, so the other two listen on loopback.
+  http_listen: "127.0.0.1:8081"
+  https_listen: "127.0.0.1:8443"
+  tunnel_listen: ":8080"
+  # The proxy does not connect to these ranges, so a public name that
+  # resolves to an internal address cannot reach the cluster or the home
+  # network.  0.0.0.0/8 is "this network".  10.0.0.0/8, 172.16.0.0/12 and
+  # 192.168.0.0/16 are the RFC 1918 private ranges.  They hold the home LAN,
+  # the pod range 172.16.0.0/16 and the Service range 172.17.0.0/16.
+  # 100.64.0.0/10 is carrier-grade NAT, 127.0.0.0/8 is loopback, and
+  # 169.254.0.0/16 is link-local, with the cloud metadata address.
+  #
+  # The list replaces the defaults of Iron Proxy: 127.0.0.0/8, ::1/128 and
+  # three metadata addresses.  The cluster has no IPv6, so the other IPv6
+  # ranges are absent on purpose.  The pod loopback has IPv6, so ::/128 and
+  # ::1/128 stay.
+  upstream_deny_cidrs:
+    - "0.0.0.0/8"
+    - "10.0.0.0/8"
+    - "100.64.0.0/10"
+    - "127.0.0.0/8"
+    - "169.254.0.0/16"
+    - "172.16.0.0/12"
+    - "192.168.0.0/16"
+    - "::/128"
+    - "::1/128"
+tls:
+  ca_cert: /etc/iron-proxy/ca/tls.crt
+  ca_key: /etc/iron-proxy/ca/tls.key
+  mode: mitm
+transforms:
+  - config:
+      # A CONNECT request has no path, so each host gets a CONNECT rule
+      # before its other rules.
+      rules:
+        - host: api.themoviedb.org
+          methods: [CONNECT]
+        - host: api.themoviedb.org
+          methods: [GET]
+          paths:
+            - "/3/movie/*"
+            - "/3/search/?*"
+            - "/3/tv/*"
+        - host: api4.thetvdb.com
+          methods: [CONNECT]
+        - host: api4.thetvdb.com
+          methods: [POST]
+          paths:
+            - "/v4/login"
+        - host: api4.thetvdb.com
+          methods: [GET]
+          paths:
+            - "/v4/search"
+            - "/v4/series/*"
+        - host: api.opensubtitles.com
+          methods: [CONNECT]
+        - host: api.opensubtitles.com
+          methods: [POST]
+          paths:
+            - "/api/v1/download"
+            - "/api/v1/login"
+        - host: api.opensubtitles.com
+          methods: [GET]
+          paths:
+            - "/api/v1/subtitles"
+        - host: vip-api.opensubtitles.com
+          methods: [CONNECT]
+        - host: vip-api.opensubtitles.com
+          methods: [POST]
+          paths:
+            - "/api/v1/download"
+            - "/api/v1/login"
+        - host: vip-api.opensubtitles.com
+          methods: [GET]
+          paths:
+            - "/api/v1/subtitles"
+        - host: www.opensubtitles.com
+          methods: [CONNECT]
+        - host: www.opensubtitles.com
+          methods: [GET]
+          paths:
+            - "/download/*"
+        - host: thediscdb.com
+          methods: [CONNECT]
+        - host: thediscdb.com
+          methods: [POST]
+          paths:
+            - "/graphql"
+        - host: en.wikipedia.org
+          methods: [CONNECT]
+        - host: en.wikipedia.org
+          methods: [GET]
+          paths:
+            - "/w/api.php"
+      # With `warn: true`, the proxy logs each request that no rule allows,
+      # and it does not block the request.  It then lets a CONNECT go to any
+      # host, so use it only for a short test.
+      warn: false
+    name: allowlist

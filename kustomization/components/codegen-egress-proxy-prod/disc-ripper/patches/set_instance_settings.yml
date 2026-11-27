@@ -1,0 +1,35 @@
+# @codegen-command: ansible-playbook plays/codegen/egress-proxy.yml
+# @generated
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: iron-proxy-ca-certificate
+spec:
+  nameConstraints:
+    permitted:
+      dnsDomains:
+        - api.opensubtitles.com
+        - api.themoviedb.org
+        - api4.thetvdb.com
+        - en.wikipedia.org
+        - thediscdb.com
+        - vip-api.opensubtitles.com
+        - www.opensubtitles.com
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-client-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: disc-ripper
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/egress-proxy-client: disc-ripper
+      ports:
+        - port: tunnel
+          protocol: TCP

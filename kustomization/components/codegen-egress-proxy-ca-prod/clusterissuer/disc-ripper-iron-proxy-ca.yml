@@ -1,0 +1,10 @@
+# @codegen-command: ansible-playbook plays/codegen/egress-proxy.yml
+# @generated
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: disc-ripper-iron-proxy-ca-clusterissuer
+spec:
+  ca:
+    secretName: disc-ripper-iron-proxy-root-ca-secret
