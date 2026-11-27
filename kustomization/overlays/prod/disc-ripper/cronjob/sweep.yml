@@ -59,13 +59,16 @@ spec:
                   value: https://review.example
                 - name: DISC_REVIEW_TOKEN_FILE
                   value: /secrets/disc-tagger/forgejo.key
+                # The sweep asks tdarr which files it converts now.
+                - name: DISC_TDARR_URL
+                  value: http://tdarr-svc.tdarr:8265
                 - name: HOME
                   value: /home/disc-ripper
                 - name: HTTPS_PROXY
                   value: http://disc-ripper-iron-proxy-svc.egress-proxy.svc.cluster.local:8080
                 # These hosts are behind Traefik in the cluster.
                 - name: NO_PROXY
-                  value: bifrost.tswn.us,code.tswn.us
+                  value: bifrost.tswn.us,code.tswn.us,tdarr-svc.tdarr
                 # disc-ripper reads its keys from $XDG_CONFIG_HOME/disc-tagger.
                 - name: XDG_CONFIG_HOME
                   value: /secrets
