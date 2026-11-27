@@ -48,6 +48,43 @@ connection through the proxy, and the proxy logs no blocked request.  Then merge
 and `egress-proxy` changes, and wait until the proxy `Pod`s are ready.  Then merge the client
 change.  The client `Pod` does not start before its CA `Secret` exists.
 
+## Reissue the CAs
+
+The root and the intermediate CA last ten years, and they keep their key
+(`rotationPolicy: Never`).  cert-manager does not issue a CA again when only its `nameConstraints`
+change.  The client `Certificate` holds a copy of the root in `ca.crt`, from the time of its issue.
+Go applies the name constraints of that copy.  The proxy and the client read the CAs at start only.
+cert-manager does not correct these cases on its own:
+
+- After you add a host or remove a host, the old CAs stay.  The proxy cannot sign a certificate
+  for a new host, and the old constraints still permit a removed host.
+- When the root `Secret` is lost, cert-manager issues a new root with a new key.  Nothing issues
+  the intermediate or the client `Certificate` again.  The client continues to work until its
+  `Certificate` renews, about 60 days later.  After the next restart of the client, each request
+  through the proxy then fails.
+- When a CA key leaks, nothing checks for revocation.  A leaked intermediate stays valid until the
+  root gets a new key.
+
+After a host change or a lost root, run this command after Argo CD syncs the change:
+
+```
+just egress-proxy-reissue <instance>
+```
+
+After a leaked key, run this command.  It deletes each `Secret` first, so each CA gets a new key:
+
+```
+just egress-proxy-reissue <instance> new
+```
+
+The recipe uses the current `kubectl` context.  It refuses an instance that has no `egressproxy.yml`
+in this overlay, and it shows each step before it starts.  It issues the root, the intermediate and
+each client `Certificate` of the instance again, in that order.  It waits until each one is Ready
+and checks that each `ca.crt` holds the new root.  Then it restarts the proxy and each client
+`Deployment`, `StatefulSet` or `DaemonSet`.  It does not restart a client `Job`, because a `Job`
+reads the CA at start, so the next `Job` gets the new CA.  If no client pod runs, no client restart
+is necessary.  It stops with an error at the first step that fails.
+
 ## Allowlist reference
 
 `<instance>/egressproxy.yml` holds the allowlist.  The codegen copies each rule as it is into the

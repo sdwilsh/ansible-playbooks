@@ -458,6 +458,128 @@ coredns-validate:
 crowdsec-list-decisions:
     kubectl exec -n crowdsec -it deployments/crowdsec-deployment -c crowdsec -- /usr/bin/env cscli decisions list
 
+# Issue the CAs of an Iron Proxy instance again, then restart the proxy and its client.  Use `keys=new` after a lost or leaked key.
+[group('egress-proxy')]
+egress-proxy-reissue instance keys="keep":
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    instance={{ quote(instance) }}
+    keys={{ quote(keys) }}
+    instances=$(find kustomization/overlays/prod/egress-proxy -mindepth 2 -maxdepth 2 -name egressproxy.yml -printf '%h\n' | xargs -n1 basename | sort | paste -sd' ')
+    if ! grep -qxF -- "${instance}" <(tr ' ' '\n' <<< "${instances}"); then
+        echo "Unknown instance '${instance}'.  Known instances: ${instances}" >&2
+        exit 1
+    fi
+    if [ "${keys}" != keep ] && [ "${keys}" != new ]; then
+        echo "Set keys to 'keep' or 'new', not '${keys}'." >&2
+        exit 1
+    fi
+
+    root="${instance}-iron-proxy-root-ca-certificate"
+    intermediate="${instance}-iron-proxy-ca-certificate"
+    issuer="${instance}-iron-proxy-ca-clusterissuer"
+    deployment="${instance}-iron-proxy-deployment"
+    kubectl -n cert-manager get certificate "${root}" > /dev/null
+    kubectl -n egress-proxy get certificate "${intermediate}" > /dev/null
+    client_ns=$(kubectl -n egress-proxy get networkpolicy "${instance}-allow-from-client-networkpolicy" \
+        -o jsonpath='{.spec.ingress[0].from[0].namespaceSelector.matchLabels.kubernetes\.io/metadata\.name}')
+    client_certs=$(kubectl -n "${client_ns}" get certificate -o json \
+        | jq -r --arg issuer "${issuer}" '.items[] | select(.spec.issuerRef.kind == "ClusterIssuer" and .spec.issuerRef.name == $issuer) | .metadata.name')
+    workloads=""
+    jobs=""
+    for owner in $(kubectl -n "${client_ns}" get pods -l "hogs.tswn.us/egress-proxy-client=${instance}" -o json \
+        | jq -r '.items[] | (.metadata.ownerReferences // [{"kind": "Pod", "name": .metadata.name}])[0] | "\(.kind)/\(.name)"' | sort -u); do
+        case "${owner}" in
+            ReplicaSet/*) owner=$(kubectl -n "${client_ns}" get "${owner}" -o jsonpath='{.metadata.ownerReferences[0].kind}/{.metadata.ownerReferences[0].name}') ;;
+        esac
+        case "${owner}" in
+            Deployment/* | StatefulSet/* | DaemonSet/*) workloads="${workloads} ${owner}" ;;
+            Job/*) jobs="${jobs} ${owner}" ;;
+            *)
+                echo "Cannot restart the client pod of ${owner}.  Only a Deployment, StatefulSet, DaemonSet or Job can be a client." >&2
+                exit 1
+                ;;
+        esac
+    done
+    # During a rollout, two ReplicaSets of one Deployment have pods.
+    workloads=$(tr ' ' '\n' <<< "${workloads}" | sed '/^$/d' | sort -u | paste -sd' ')
+    jobs=$(tr ' ' '\n' <<< "${jobs}" | sed '/^$/d' | sort -u | paste -sd' ')
+    if [ -z "${client_certs}" ]; then
+        echo "Found no client Certificate of ${instance} in namespace '${client_ns}'." >&2
+        exit 1
+    fi
+
+    echo "Context: $(kubectl config current-context)"
+    echo "Each step waits until its Certificate is Ready.  In order, this issues again:"
+    echo "  cert-manager/${root}"
+    echo "  egress-proxy/${intermediate}"
+    for cert in ${client_certs}; do echo "  ${client_ns}/${cert}"; done
+    if [ "${keys}" = new ]; then
+        echo "It deletes the Secret of each Certificate first, so each gets a new key."
+    fi
+    echo "Then it restarts egress-proxy/deployment/${deployment}."
+    if [ -n "${workloads}" ]; then
+        echo "It also restarts, in ${client_ns}, ${workloads}."
+    fi
+    if [ -n "${jobs}" ]; then
+        echo "It does not restart ${jobs} in ${client_ns}.  A Job reads the CA at start, so the next Job gets the new CA."
+        echo "A Job that runs now keeps the old CA.  Its calls through the restarted proxy can fail until it stops."
+    fi
+    if [ -z "${workloads}${jobs}" ]; then
+        echo "No client pod runs in ${client_ns}, so no client restart is necessary.  The next client pod gets the new CA."
+    fi
+    read -r -p "Continue? [y/N] " answer
+    if [ "${answer}" != y ]; then
+        echo "Stopped.  Nothing changed."
+        exit 1
+    fi
+
+    reissue() {
+        local ns=$1 cert=$2 revision generation
+        revision=$(kubectl -n "${ns}" get certificate "${cert}" -o jsonpath='{.status.revision}')
+        if [ "$(kubectl -n "${ns}" get certificate "${cert}" -o jsonpath='{.status.conditions[?(@.type=="Issuing")].status}')" = True ]; then
+            echo "${ns}/${cert} is in an issuance now.  Wait until it is Ready, then run this again." >&2
+            exit 1
+        fi
+        if [ "${keys}" = new ]; then
+            kubectl -n "${ns}" delete secret "$(kubectl -n "${ns}" get certificate "${cert}" -o jsonpath='{.spec.secretName}')"
+        else
+            # This is what `cmctl renew` does.  The devcontainer lacks `cmctl`.
+            generation=$(kubectl -n "${ns}" get certificate "${cert}" -o jsonpath='{.metadata.generation}')
+            kubectl -n "${ns}" patch certificate "${cert}" --subresource=status --type=json -p "$(jq -cn \
+                --argjson generation "${generation}" --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+                '[{"op": "add", "path": "/status/conditions/-", "value": {"lastTransitionTime": $now, "message": "Certificate re-issuance manually triggered", "observedGeneration": $generation, "reason": "ManuallyTriggered", "status": "True", "type": "Issuing"}}]')"
+        fi
+        kubectl -n "${ns}" wait --for=jsonpath='{.status.revision}'="$((revision + 1))" "certificate/${cert}" --timeout=180s
+        kubectl -n "${ns}" wait --for=condition=Ready "certificate/${cert}" --timeout=180s
+        echo "${ns}/${cert}: revision ${revision} -> $((revision + 1)), notBefore $(kubectl -n "${ns}" get certificate "${cert}" -o jsonpath='{.status.notBefore}')"
+    }
+    same_root() {
+        local ns=$1 secret=$2
+        if [ "$(kubectl -n "${ns}" get secret "${secret}" -o jsonpath='{.data.ca\.crt}')" != "$(kubectl -n cert-manager get secret "${instance}-iron-proxy-root-ca-secret" -o jsonpath='{.data.tls\.crt}')" ]; then
+            echo "${ns}/${secret} does not carry the new root in ca.crt." >&2
+            exit 1
+        fi
+    }
+
+    reissue cert-manager "${root}"
+    kubectl wait --for=condition=Ready "clusterissuer/${issuer}" --timeout=60s
+    reissue egress-proxy "${intermediate}"
+    same_root egress-proxy "${instance}-iron-proxy-ca-secret"
+    for cert in ${client_certs}; do
+        reissue "${client_ns}" "${cert}"
+        same_root "${client_ns}" "$(kubectl -n "${client_ns}" get certificate "${cert}" -o jsonpath='{.spec.secretName}')"
+    done
+    # The proxy and the client read the CAs at start only.
+    kubectl -n egress-proxy rollout restart "deployment/${deployment}"
+    kubectl -n egress-proxy rollout status "deployment/${deployment}" --timeout=300s
+    for workload in ${workloads}; do
+        kubectl -n "${client_ns}" rollout restart "${workload}"
+        kubectl -n "${client_ns}" rollout status "${workload}" --timeout=600s
+    done
+    echo "{{ BOLD + GREEN }}OK{{ NORMAL }} ${instance} has new CAs, and its proxy restarted.  Client workloads that restarted: ${workloads:-none}."
+
 # Generates/updates resources for Argo CD applications
 [group('codegen')]
 generate-argo-cd-applications:
