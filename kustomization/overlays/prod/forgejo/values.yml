@@ -58,6 +58,8 @@ gitea:
       MINIO_BASE_PATH: actions_artifacts/
     attachment:
       MINIO_BASE_PATH: attachments/
+    authorized_integration:
+      ALLOWED_DOMAINS: marinatedconcrete-private-hive.tswn.us
     avatar:
       MINIO_BASE_PATH: avatars/
     database:
