@@ -129,6 +129,13 @@ const markerValue = (probe) => {
   return entry ? String(entry[1]) : null;
 };
 
+// The old flows made the AV1 files in the libraries.  A second encode loses quality.
+function skipReason(mkvInfo, probe) {
+  if (markerValue(probe) === config.markerVersion) return `already at target version ${config.markerVersion}`;
+  if (mkvInfo.tracks.some((t) => t.type === 'video' && t.properties.codec_id === 'V_AV1')) return 'video is AV1 already';
+  return null;
+}
+
 const isCompatReady = (a) => config.compat.codecs.includes(a.codec) && a.rate === config.compat.rate && a.channels <= config.compat.maxChannels;
 
 const sourceDefault = (audio) => audio.find((a) => a.isDefault) || audio[0];
@@ -498,11 +505,12 @@ async function convert(args) {
   const input = args.inputFileObj._id;
   if (path.extname(input).toLowerCase() !== '.mkv') throw new Error(`not an MKV file: ${input}`);
   const srcProbe = await ffprobe(t, input);
-  if (markerValue(srcProbe) === config.markerVersion) {
-    log(`already at target version ${config.markerVersion}`);
+  const srcInfo = await identify(t, input);
+  const skip = skipReason(srcInfo, srcProbe);
+  if (skip) {
+    log(`not converted: ${skip}`);
     return { outputFileObj: args.inputFileObj, outputNumber: OUTPUT_AT_TARGET, variables: args.variables };
   }
-  const srcInfo = await identify(t, input);
   const plan = makePlan(srcInfo, srcProbe);
   const dir = path.join(args.workDir, `target-${Date.now()}`);
   const job = { t, input, dir, log, duration: Number(srcProbe.format.duration) };
@@ -535,6 +543,6 @@ async function convert(args) {
 
 module.exports = convert;
 Object.assign(module.exports, {
-  OUTPUT_CONVERTED, OUTPUT_AT_TARGET, MKVMERGE_OK, MARKER: config.marker, WRITER_TAGS, DURATION_TAG, TREATMENTS, makePlan, audioTracks, grainStrengths, classifyScan, decideVideo, sampleStarts, sampledSeconds, progressUpdate,
+  OUTPUT_CONVERTED, OUTPUT_AT_TARGET, MKVMERGE_OK, MARKER: config.marker, WRITER_TAGS, DURATION_TAG, TREATMENTS, makePlan, skipReason, audioTracks, grainStrengths, classifyScan, decideVideo, sampleStarts, sampledSeconds, progressUpdate,
   av1EncodeArgs, idetDecimateArgs, grainFramesArgs, parseIdet, parseMpdecimate, buildInputs, trackOrder, buildMkvmergeArgs, evaluateOutput,
 });

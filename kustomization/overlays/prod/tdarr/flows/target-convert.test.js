@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const {
-  makePlan, classifyScan, decideVideo, sampleStarts, sampledSeconds, progressUpdate, av1EncodeArgs, parseIdet, parseMpdecimate, idetDecimateArgs, grainStrengths,
+  makePlan, skipReason, classifyScan, decideVideo, sampleStarts, sampledSeconds, progressUpdate, av1EncodeArgs, parseIdet, parseMpdecimate, idetDecimateArgs, grainStrengths,
   buildInputs, trackOrder, buildMkvmergeArgs, evaluateOutput, audioTracks, TREATMENTS,
 } = require('./target-convert.js');
 
@@ -105,6 +105,14 @@ test('plan: a source without audio or with two video tracks is refused', () => {
   const twoVideo = clone(t.srcInfo);
   twoVideo.tracks.push(clone(twoVideo.tracks.find((x) => x.type === 'video')));
   assert.throws(() => makePlan(twoVideo, t.srcProbe), /expected 1 video track/);
+});
+
+test('skipReason: a converted output or an AV1 file without the marker is skipped; every source is converted', () => {
+  assert.match(skipReason(DTS_71.outInfo, DTS_71.outProbe), /already at target/);
+  const oldFlow = clone(DTS_71.outProbe);
+  delete oldFlow.format.tags.TDARR_TARGET;
+  assert.equal(skipReason(DTS_71.outInfo, oldFlow), 'video is AV1 already');
+  for (const name of SCENARIOS) assert.equal(skipReason(scenario(name).srcInfo, scenario(name).srcProbe), null, name);
 });
 
 const MEASURED = [
