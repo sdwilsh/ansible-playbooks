@@ -4,6 +4,7 @@ kind: Kustomization
 
 components:
   - ../../../components/cert-manager
+  - ../../../components/codegen-egress-proxy-ca-prod
   - ../../../components/networkpolicy-allow-from-api-server
   - ../../../components/networkpolicy-allow-from-prometheus
   - ../../../components/networkpolicy-allow-to-api-server

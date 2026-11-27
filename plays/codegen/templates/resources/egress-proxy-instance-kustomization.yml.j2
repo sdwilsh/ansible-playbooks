@@ -1,0 +1,31 @@
+# @codegen-command: ansible-playbook {{ play_name }}
+# @generated
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../egress-proxy-instance
+configMapGenerator:
+  - files:
+      - configmap/proxy.yaml
+    name: iron-proxy-configmap
+labels:
+  - fields:
+      - kind: Deployment
+        path: spec/selector/matchLabels
+      - kind: Deployment
+        path: spec/template/metadata/labels
+      - kind: Deployment
+        path: spec/template/spec/affinity/podAntiAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels
+      - kind: NetworkPolicy
+        path: spec/podSelector/matchLabels
+      - kind: PodDisruptionBudget
+        path: spec/selector/matchLabels
+      - kind: Service
+        path: spec/selector
+    pairs:
+      app.kubernetes.io/instance: {{ item.metadata.name }}
+namePrefix: {{ item.metadata.name }}-
+patches:
+  - path: patches/set_instance_settings.yml

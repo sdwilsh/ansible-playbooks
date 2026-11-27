@@ -200,6 +200,7 @@ jobs:
         with:
           run: |
             just kustomize-build
+            just egress-proxy-codegen-check
             just image-pin-check
             just named-port-check
             just coredns-drift-check

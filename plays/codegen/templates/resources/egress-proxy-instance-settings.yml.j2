@@ -1,0 +1,31 @@
+# @codegen-command: ansible-playbook {{ play_name }}
+# @generated
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: iron-proxy-ca-certificate
+spec:
+  nameConstraints:
+    permitted:
+      dnsDomains:
+{% for domain in item.spec.rules | map(attribute='host') | map('regex_replace', '^\\*\\.', '') | unique | sort %}
+        - {{ domain }}
+{% endfor %}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-client-networkpolicy
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ item.spec.client.namespace }}
+          podSelector:
+            matchLabels:
+              hogs.tswn.us/egress-proxy-client: {{ item.metadata.name }}
+      ports:
+        - port: tunnel
+          protocol: TCP

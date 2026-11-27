@@ -463,6 +463,11 @@ crowdsec-list-decisions:
 generate-argo-cd-applications:
     ansible-playbook plays/codegen/argo-cd-applications.yml --extra-vars overlay=prod
 
+# Generates/updates the Iron Proxy instances and their CAs from each `egressproxy.yml`
+[group('codegen')]
+generate-egress-proxy:
+    ansible-playbook plays/codegen/egress-proxy.yml
+
 # Generates/updates the `linux-mcp` NetworkPolicy, policy, and `known_hosts` files
 [group('codegen')]
 generate-linux-mcp:
@@ -564,6 +569,31 @@ hadolint:
         hadolint ${file}
         echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
     done
+
+# Fail when the egress-proxy codegen output differs from the committed files
+[group('lint')]
+egress-proxy-codegen-check:
+    #!/usr/bin/env bash
+    set -eou pipefail
+    out=$(mktemp -d)
+    trap 'rm -rf "${out}"' EXIT
+    echo -n "Comparing the egress-proxy codegen with the committed files..."
+    if ! log=$(ansible-playbook plays/codegen/egress-proxy.yml --extra-vars "output_root=${out}" 2>&1); then
+        echo "{{ BOLD + RED }}FAILED{{ NORMAL }}"
+        echo "${log}"
+        exit 1
+    fi
+    rc=0
+    for dir in codegen-egress-proxy-ca-prod codegen-egress-proxy-prod; do
+        diff -ruN "kustomization/components/${dir}" "${out}/kustomization/components/${dir}" > "${out}/${dir}.diff" || rc=1
+    done
+    if [ "${rc}" -ne 0 ]; then
+        echo "{{ BOLD + RED }}FAILED{{ NORMAL }}"
+        cat "${out}"/*.diff
+        echo "  Do not edit the generated files.  Edit \`egressproxy.yml\`, then run \`just generate-egress-proxy\`."
+        exit 1
+    fi
+    echo "{{ BOLD + GREEN }}OK{{ NORMAL }}"
 
 # Fail on `images:` entries that match no image in a rendered overlay
 [group('lint')]

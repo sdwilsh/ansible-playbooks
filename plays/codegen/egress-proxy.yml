@@ -1,0 +1,137 @@
+---
+# Each `egressproxy.yml` in the egress-proxy overlay describes one Iron Proxy
+# instance.  This play writes the instance resources and the CA resources
+# from these files.  Set `output_root` to write to another directory.
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    # Setup
+    - name: Set the paths
+      ansible.builtin.set_fact:
+        ca_dir: "{{ output_root | default(root_dir) }}/kustomization/components/codegen-egress-proxy-ca-prod"
+        instance_dir: "{{ output_root | default(root_dir) }}/kustomization/components/codegen-egress-proxy-prod"
+        instances: []
+        spec_dir: "{{ root_dir }}/kustomization/overlays/prod/egress-proxy"
+      vars:
+        root_dir: "{{ playbook_dir }}/../.."
+    - name: Find the instance specs
+      ansible.builtin.find:
+        paths:
+          - "{{ spec_dir }}"
+        patterns:
+          - egressproxy.yml
+        recurse: true
+      register: found
+    - name: Read the instance specs
+      ansible.builtin.set_fact:
+        instances: >-
+          {{ instances
+             + [lookup('ansible.builtin.file', item) | from_yaml
+                | combine({'directory': item | dirname | basename})] }}
+      loop: "{{ found.files | map(attribute='path') | sort }}"
+    # The proxy needs a CONNECT rule for each host.  This play adds them.  A
+    # rule with other fields could change what the proxy allows.
+    - name: Fail when a spec is not valid
+      ansible.builtin.assert:
+        fail_msg: >-
+          {{ item.directory }}/egressproxy.yml is not valid.  It needs
+          `apiVersion: egress-proxy.hogs.tswn.us/v1alpha1`, `kind: EgressProxy`,
+          `metadata.name` equal to its directory, `spec.client.namespace`,
+          `spec.rules` and optionally `spec.warn`.  A rule has `host` and
+          optionally `methods` and `paths`.  A rule must not have the CONNECT
+          method.
+        quiet: true
+        that:
+          - item.apiVersion == 'egress-proxy.hogs.tswn.us/v1alpha1'
+          - item.kind == 'EgressProxy'
+          - item.metadata.name == item.directory
+          - item.spec.client.namespace is string
+          - item.spec.keys() | difference(['client', 'rules', 'warn']) | length == 0
+          - item.spec.rules | length > 0
+          - item.spec.warn | default(false) is boolean
+          - item.spec.rules | map('dict2items') | flatten | map(attribute='key') | difference(['host', 'methods', 'paths']) | length == 0
+          - item.spec.rules | selectattr('host', 'undefined') | list | length == 0
+          - item.spec.rules | map(attribute='methods') | select('defined') | flatten | select('equalto', 'CONNECT') | list | length == 0
+      loop: "{{ instances }}"
+      loop_control:
+        label: "{{ item.directory }}"
+    - name: Delete existing codegen
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ ca_dir }}"
+        - "{{ instance_dir }}"
+
+    # Generate Resources
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        mode: "0755"
+        path: "{{ item }}"
+        state: directory
+      loop: >-
+        {{ [ca_dir, instance_dir]
+           + ([ca_dir + '/certificate', ca_dir + '/clusterissuer'] if instances else [])
+           + (instances | map(attribute='metadata.name')
+              | product(['/configmap', '/patches']) | map('join')
+              | map('regex_replace', '^', instance_dir + '/') | list) }}
+    - name: Generate the CA Kustomization
+      ansible.builtin.template:
+        dest: "{{ ca_dir }}/kustomization.yml"
+        mode: "0644"
+        src: resources/kustomization.yml.j2
+      vars:
+        resources: >-
+          {{ (names | map('regex_replace', '^', 'certificate/') | map('regex_replace', '$', '-iron-proxy-root-ca.yml') | list
+              + names | map('regex_replace', '^', 'clusterissuer/') | map('regex_replace', '$', '-iron-proxy-ca.yml') | list)
+             | sort }}
+        names: "{{ instances | map(attribute='metadata.name') | list }}"
+    - name: Generate the root CA Certificates
+      ansible.builtin.template:
+        dest: "{{ ca_dir }}/certificate/{{ item.metadata.name }}-iron-proxy-root-ca.yml"
+        mode: "0644"
+        src: resources/egress-proxy-root-ca.yml.j2
+      loop: "{{ instances }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+    - name: Generate the ClusterIssuers
+      ansible.builtin.template:
+        dest: "{{ ca_dir }}/clusterissuer/{{ item.metadata.name }}-iron-proxy-ca.yml"
+        mode: "0644"
+        src: resources/egress-proxy-clusterissuer.yml.j2
+      loop: "{{ instances }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+    - name: Generate the instance Kustomization
+      ansible.builtin.template:
+        dest: "{{ instance_dir }}/kustomization.yml"
+        mode: "0644"
+        src: resources/kustomization.yml.j2
+      vars:
+        resources: "{{ instances | map(attribute='metadata.name') | sort }}"
+    - name: Generate the Kustomization of each instance
+      ansible.builtin.template:
+        dest: "{{ instance_dir }}/{{ item.metadata.name }}/kustomization.yml"
+        mode: "0644"
+        src: resources/egress-proxy-instance-kustomization.yml.j2
+      loop: "{{ instances }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+    - name: Generate the Iron Proxy configuration of each instance
+      ansible.builtin.template:
+        dest: "{{ instance_dir }}/{{ item.metadata.name }}/configmap/proxy.yaml"
+        mode: "0644"
+        src: resources/egress-proxy-instance-proxy.yaml.j2
+      loop: "{{ instances }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+    - name: Generate the settings patch of each instance
+      ansible.builtin.template:
+        dest: "{{ instance_dir }}/{{ item.metadata.name }}/patches/set_instance_settings.yml"
+        mode: "0644"
+        src: resources/egress-proxy-instance-settings.yml.j2
+      loop: "{{ instances }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+  vars:
+    play_name: plays/codegen/egress-proxy.yml

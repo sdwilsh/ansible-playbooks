@@ -1,0 +1,39 @@
+# @codegen-command: ansible-playbook {{ play_name }}
+# @generated
+---
+# A ClusterIssuer reads its CA from this namespace only.  The client reads
+# the root at start only, so the root lasts ten years.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ item.metadata.name }}-iron-proxy-root-ca-certificate
+  namespace: cert-manager
+spec:
+  commonName: {{ item.metadata.name }}-iron-proxy-root-ca
+  duration: 87600h
+  isCA: true
+  issuerRef:
+    kind: Issuer
+    name: iron-proxy-selfsigned-issuer
+  # The client trusts this root for each host.  Any namespace can get a
+  # certificate from its ClusterIssuer, so the root permits only the
+  # allowlist hosts and no IP address.
+  nameConstraints:
+    critical: true
+    excluded:
+      ipRanges:
+        - 0.0.0.0/0
+        - ::/0
+    permitted:
+      dnsDomains:
+{% for domain in item.spec.rules | map(attribute='host') | map('regex_replace', '^\\*\\.', '') | unique | sort %}
+        - {{ domain }}
+{% endfor %}
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Never
+    size: 256
+  secretName: {{ item.metadata.name }}-iron-proxy-root-ca-secret
+  usages:
+    - cert sign
+    - crl sign

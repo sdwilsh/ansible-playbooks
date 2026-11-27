@@ -77,10 +77,14 @@ TABLE: dict[str, tuple[str, ...]] = {
     # This job also runs the recipes that read only `kustomization/`.  These
     # are `coredns-drift-check`, `tdarr-flows-test` and `traefik-pin-check`.
     # The last one also reads the devcontainer Containerfile.
+    # `egress-proxy-codegen-check` also reads its play and templates.
     "kustomize-build": (
         ".github/scripts/check-image-pins.py",
         ".github/scripts/check-named-ports.py",
         "kustomization/**",
+        "plays/codegen/egress-proxy.yml",
+        "plays/codegen/templates/resources/egress-proxy-*",
+        "plays/codegen/templates/resources/kustomization.yml.j2",
     ),
     "mack": (
         ".github/scripts/next-calver-version.sh",
