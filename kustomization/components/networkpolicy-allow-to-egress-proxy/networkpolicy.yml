@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-to-egress-proxy-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: tunnel
+          protocol: TCP
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: egress-proxy
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: set-by-each-client
+              app.kubernetes.io/name: iron-proxy
+  podSelector:
+    matchLabels:
+      hogs.tswn.us/egress-proxy-client: set-by-each-client
+  policyTypes:
+    - Egress

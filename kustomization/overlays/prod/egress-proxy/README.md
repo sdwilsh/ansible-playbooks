@@ -38,6 +38,8 @@ another `Namespace` gets from the `ClusterIssuer`, cannot act as another host to
    `ClusterIssuer` in `kustomization/components/codegen-egress-proxy-ca-prod/`.  It adds the
    instance to the `resources` of both components.  This overlay and the `cert-manager` overlay
    include these components.
+3. In the client overlay, add the `networkpolicy-allow-to-egress-proxy` component, the label and
+   the CA `Certificate`.  The README of the component gives each step.
 
 Do not edit the generated files.  CI runs `just egress-proxy-codegen-check`.  It fails when the
 generated files are not the output of the codegen.
