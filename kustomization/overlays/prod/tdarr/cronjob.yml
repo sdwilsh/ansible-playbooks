@@ -1,0 +1,107 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tdarr-rerip-list
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      # A run probes only the new and changed files.  The cache keeps the
+      # completed probes, so the next run continues a stopped run.
+      activeDeadlineSeconds: 21600
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: tdarr-rerip-list
+            hogs.tswn.us/traefik-client: "true"
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: DoesNotExist
+          automountServiceAccountToken: false
+          containers:
+            - args:
+                - /code/rerip-list.js
+                - /cache/rerip-list.jsonl
+                - /media/movies
+                - /media/tv
+              command:
+                - node
+              env:
+                - name: FORGEJO_REPO
+                  value: hogs/disc-review
+                - name: FORGEJO_TOKEN_FILE
+                  value: /secrets/forgejo.key
+                - name: FORGEJO_URL
+                  value: https://code.tswn.us
+                - name: JOBS
+                  value: "2"
+              image: ghcr.io/haveagitgat/tdarr_node
+              name: rerip-list
+              resources:
+                limits:
+                  cpu: "2"
+                  memory: 2Gi
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                  subPath: rerip-list
+                - mountPath: /code
+                  name: code
+                  readOnly: true
+                - mountPath: /media
+                  name: media
+                  readOnly: true
+                - mountPath: /secrets
+                  name: secret
+                  readOnly: true
+                - mountPath: /tmp
+                  name: tmp
+          priorityClassName: opportunistic
+          restartPolicy: Never
+          securityContext:
+            fsGroup: 65534
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: cache
+              persistentVolumeClaim:
+                claimName: tdarr-cache-pvc
+            - configMap:
+                name: tdarr-target-code
+              name: code
+            - name: media
+              persistentVolumeClaim:
+                claimName: media-pvc
+                readOnly: true
+            - name: secret
+              secret:
+                defaultMode: 0440
+                secretName: tdarr-rerip-list-secret
+            - emptyDir: {}
+              name: tmp
+  schedule: "30 5 * * *"
+  successfulJobsHistoryLimit: 1
+  timeZone: America/Los_Angeles

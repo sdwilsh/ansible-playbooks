@@ -6,6 +6,7 @@ components:
   - ../../../components/networkpolicy-allow-from-traefik
   - ../../../components/networkpolicy-allow-to-coredns
   - ../../../components/networkpolicy-allow-to-internet
+  - ../../../components/networkpolicy-allow-to-traefik
   - ../../../components/networkpolicy-deny-all
   - ../../../components/pod-security-enforce-baseline
   - ../../../components/tdarr
@@ -17,6 +18,7 @@ configMapGenerator:
       - flows/target-shows.json
     name: tdarr-flows
   - files:
+      - flows/rerip-list.js
       - flows/target-convert.js
     name: tdarr-target-code
     options:
@@ -57,6 +59,7 @@ patches:
       name: tdarr-server-statefulset
 resources:
   - namespace.yml
+  - cronjob.yml
   - ingress.yml
   - job.yml
   - networkpolicy/allow-from-disc-ripper.yml
