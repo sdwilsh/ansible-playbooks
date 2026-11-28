@@ -157,18 +157,19 @@ function compatFrom(a) {
 
 function makePlan(mkvInfo, probe) {
   const audio = audioTracks(mkvInfo);
-  if (audio.length === 0) throw new Error('source has no audio track');
   const video = mkvInfo.tracks.filter((t) => t.type === 'video');
   if (video.length !== 1) throw new Error(`expected 1 video track, found ${video.length}`);
   const vstream = probe.streams.find((s) => s.codec_type === 'video' && !(s.disposition && s.disposition.attached_pic));
+  const hdr10 = vstream.color_transfer === 'smpte2084';
+  const av1 = (tracks) => ({ mode: 'av1', tracks, hdr10, crf: (vstream.height || 0) > 1080 ? config.crfAbove1080 : config.crfUpTo1080 });
+  // Some disc extras have no sound.
+  if (audio.length === 0) return av1([]);
   const def = sourceDefault(audio);
   const others = audio.filter((a) => a !== def).map(sourceTrack);
-  const hdr10 = vstream.color_transfer === 'smpte2084';
   if (def.codec === 'truehd' && def.channels >= config.remuxMinTruehdChannels) {
     return { mode: 'remux', tracks: [sourceTrack(def), compatFrom(def), ...others], hdr10 };
   }
-  const tracks = isCompatReady(def) ? [sourceTrack(def), ...others] : [compatFrom(def), sourceTrack(def), ...others];
-  return { mode: 'av1', tracks, hdr10, crf: (vstream.height || 0) > 1080 ? config.crfAbove1080 : config.crfUpTo1080 };
+  return av1(isCompatReady(def) ? [sourceTrack(def), ...others] : [compatFrom(def), sourceTrack(def), ...others]);
 }
 
 function grainStrengths(probeJson) {
@@ -426,8 +427,10 @@ function commonChecks({ srcInfo, srcProbe, outInfo, outProbe, plan }) {
   const expects = MODE_EXPECTS[plan.mode];
   const outAudio = audioTracks(outInfo);
   const first = outAudio[0];
-  if (outAudio.filter((a) => a.isDefault).length !== 1 || !first || !first.isDefault) failures.push('audio track 1 is not the only default audio track');
-  if (!(first && expects.firstAudio(first))) failures.push(expects.firstAudioFailure);
+  if (plan.tracks.length > 0) {
+    if (outAudio.filter((a) => a.isDefault).length !== 1 || !first || !first.isDefault) failures.push('audio track 1 is not the only default audio track');
+    if (!(first && expects.firstAudio(first))) failures.push(expects.firstAudioFailure);
+  }
   if (outAudio.length !== plan.tracks.length) failures.push(`audio count ${outAudio.length}, expected ${plan.tracks.length}`);
   const vOut = outInfo.tracks.filter((x) => x.type === 'video');
   const vSrc = srcInfo.tracks.filter((x) => x.type === 'video');

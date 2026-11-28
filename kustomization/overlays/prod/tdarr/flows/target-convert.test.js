@@ -97,11 +97,8 @@ test('plan: an AC-3 default with more than 6 channels is not reused', () => {
   assert.deepEqual(fields(plan.tracks[0], ['origin', 'channels']), { origin: 'compat', channels: 6 });
 });
 
-test('plan: a source without audio or with two video tracks is refused', () => {
+test('plan: a source with two video tracks is refused', () => {
   const t = scenario('dvd-hidden-pulldown');
-  const noAudio = clone(t.srcInfo);
-  noAudio.tracks = noAudio.tracks.filter((x) => x.type !== 'audio');
-  assert.throws(() => makePlan(noAudio, t.srcProbe), /no audio/);
   const twoVideo = clone(t.srcInfo);
   twoVideo.tracks.push(clone(twoVideo.tracks.find((x) => x.type === 'video')));
   assert.throws(() => makePlan(twoVideo, t.srcProbe), /expected 1 video track/);
@@ -273,6 +270,20 @@ const evaluate = (t, changes = {}) => evaluateOutput({ ...passing(t), ...changes
 test('evaluateOutput: every real source and output pair passes', () => {
   assert.ok(SCENARIOS.length > 0, 'scenarios were found');
   for (const name of SCENARIOS) assert.deepEqual(evaluate(scenario(name)), [], name);
+});
+
+const silent = (t) => {
+  const out = clone(t);
+  for (const info of [out.srcInfo, out.outInfo]) info.tracks = info.tracks.filter((x) => x.type !== 'audio');
+  for (const probe of [out.srcProbe, out.outProbe]) probe.streams = probe.streams.filter((x) => x.codec_type !== 'audio');
+  return out;
+};
+
+test('a source without audio encodes the video only, and its output passes with no audio', () => {
+  const t = silent(DTS_71);
+  assert.deepEqual(fields(planOf(t), ['mode', 'tracks']), { mode: 'av1', tracks: [] });
+  assert.deepEqual(evaluate(t), []);
+  assert.deepEqual(evaluate(t, { outInfo: DTS_71.outInfo, outProbe: DTS_71.outProbe }), [`audio count ${audioTracks(DTS_71.outInfo).length}, expected 0`]);
 });
 
 test('evaluateOutput: the source given as its own output fails', () => {
