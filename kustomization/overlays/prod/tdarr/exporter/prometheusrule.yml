@@ -1,0 +1,26 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: tdarr-rules
+spec:
+  groups:
+    - name: tdarr
+      interval: 1m
+      rules:
+        # The flows pause a node when a file fails the access check.  The
+        # job report of the last failed file on the node gives the path.
+        - alert: tdarr-node-paused
+          annotations:
+            description: "The tdarr node {{ $labels.node_name }} is paused.  It starts no new jobs."
+          expr: max by (node_name) (tdarr_node_paused) == 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: tdarr-exporter-down
+          annotations:
+            description: "Prometheus cannot read the tdarr metrics, so it cannot see a paused node."
+          expr: absent(tdarr_up == 1)
+          for: 15m
+          labels:
+            severity: warning

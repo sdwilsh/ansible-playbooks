@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tdarr-exporter-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tdarr-exporter
+        hogs.tswn.us/prometheus-target: "true"
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: INSTANCE_NAME
+              value: tdarr
+            - name: TDARR_URL
+              value: http://tdarr-svc:8265
+          image: docker.io/homeylab/tdarr-exporter
+          name: exporter
+          ports:
+            - containerPort: 9090
+              name: metrics
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      priorityClassName: application

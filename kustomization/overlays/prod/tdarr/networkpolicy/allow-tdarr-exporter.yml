@@ -1,0 +1,37 @@
+---
+# The exporter reads the node and library state from the server API.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-tdarr-server-from-tdarr-exporter-networkpolicy
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: tdarr-exporter
+      ports:
+        - port: 8265
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-server
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-tdarr-exporter-to-tdarr-server-networkpolicy
+spec:
+  egress:
+    - ports:
+        - port: 8265
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: tdarr-server
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: tdarr-exporter
+  policyTypes:
+    - Egress
