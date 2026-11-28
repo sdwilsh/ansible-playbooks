@@ -35,7 +35,7 @@ images:
   - name: docker.io/grafana/alloy
     newTag: v1.22.0@sha256:9acc2529bc1edb7f5b2bd801dd8334ebc80c158e3a9e5526ecd7c9a273d43189
   - name: quay.io/prometheus-operator/prometheus-config-reloader
-    newTag: v0.95.1@sha256:39bdbade0c64f7c38bb6d18d6f602b14ad489bc189b709dc9266b49e6647aac1
+    newTag: v0.95.2@sha256:cc74ddedad4ab1c49446971f6d51302ad4303d8660a2018af925c7f62c114304
   - name: quay.io/prometheus/node-exporter
     newTag: v1.13.1@sha256:011e2d12c5bff759b90804bda642664775d7b4b127bf5148539bb82d3f590bb7
   - name: quay.io/prometheuscommunity/smartctl-exporter
