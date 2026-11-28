@@ -921,3 +921,16 @@ proton-bridge-login:
     # Run the CLI through `kubectl exec`.  The container log does not record an exec session.
     echo "In the bridge CLI, run 'login', then 'info' to see the bridge password, then 'exit'."
     kubectl -n "${namespace}" exec -it "${pod}" -- bash /protonmail/entrypoint.sh init
+
+# Make a WireGuard key pair.  Print the public key to stderr and the vaulted private key to stdout
+[group('wireguard')]
+wireguard-key var_name:
+    #!/usr/bin/env bash
+    set -eou pipefail
+
+    # The private key only passes through pipes.  It is never in argv, a file,
+    # or the terminal.  `tr` removes the newline that `wg genkey` adds.
+    wg genkey \
+        | tr --delete '\n' \
+        | tee >(wg pubkey >&2) \
+        | ansible-vault encrypt_string --stdin-name "{{ var_name }}"
