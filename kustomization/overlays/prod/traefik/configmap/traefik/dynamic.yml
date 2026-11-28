@@ -10,6 +10,11 @@ http:
         crowdsec-bouncer:
           banHTMLFilePath: /pages/ban.html
           crowdsecAppsecEnabled: true
+          # Docker streams a layer with no Content-Length.  AppSec cannot read
+          # such a body, and the bouncer then blocks the upload.  Decisions of
+          # CrowdSec still apply.
+          crowdsecAppsecExcludedLocations:
+            - code.tswn.us/v2/
           crowdsecAppsecHost: crowdsec-appsec-svc.crowdsec.svc.cluster.local:7422
           crowdsecLapiHost: crowdsec-svc.crowdsec.svc.cluster.local:3000
           crowdsecLapiKeyFile: /etc/treafik/crowdsec-api-key
