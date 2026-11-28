@@ -1,0 +1,17 @@
+---
+# A docker push checks each layer with a HEAD request that answers 404, and
+# sends several upload requests that answer 401 before it has a token.  The
+# probing and 401 scenarios count them and ban the address.  The token request
+# stays counted.
+description: Skip events for the Forgejo container registry
+filter: >-
+  evt.Meta.service == 'http' &&
+  evt.Meta.log_type == 'http_access-log'
+name: sdwilsh/registry-allowlist
+whitelist:
+  expression:
+    - >-
+      evt.Meta.target_fqdn == 'code.tswn.us' &&
+      evt.Meta.http_path startsWith '/v2/' &&
+      !(evt.Meta.http_path startsWith '/v2/token')
+  reason: Forgejo container registry pushes

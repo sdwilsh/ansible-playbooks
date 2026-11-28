@@ -23,6 +23,7 @@ configMapGenerator:
   - name: crowdsec-parsers-configmap
     files:
       - configmap/parsers/hive-whitelist.yaml
+      - configmap/parsers/registry-allowlist.yaml
       - configmap/parsers/traefik-cf-connecting-ip.yaml
   - name: crowdsec-acquisitions-configmap
     files:
