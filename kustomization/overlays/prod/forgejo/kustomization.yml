@@ -60,6 +60,7 @@ resources:
   - cnpg/backup.yml
   - cnpg/cluster.yml
   - cnpg/scheduledbackup.yml
+  - ingress/ci.yml
   - ingress/registry.yml
   - networkpolicy/allow-ssh.yml
   - service/forgejo-ssh-choros.yml

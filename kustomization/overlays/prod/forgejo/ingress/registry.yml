@@ -6,7 +6,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext,websecure-ci
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: forgejo-registry
 spec:

@@ -1,0 +1,23 @@
+---
+# Only workflow jobs can connect to websecure-ci.  They send Forgejo tokens,
+# and Authelia records each token as a failed login.  Forgejo checks the
+# tokens itself.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure-ci
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: forgejo-ci
+spec:
+  rules:
+    - host: code.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: forgejo-http
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
