@@ -1,0 +1,23 @@
+---
+# The chart ingress runs every request through Authelia.  Authelia reads the
+# Basic credentials of a `docker login` as an LDAP password, so a Forgejo token
+# counts as a failed login.  Forgejo checks registry credentials itself.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure,websecure-ext,websecure-ci
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: forgejo-registry
+spec:
+  rules:
+    - host: code.tswn.us
+      http:
+        paths:
+          - backend:
+              service:
+                name: forgejo-http
+                port:
+                  name: http
+            path: /v2
+            pathType: Prefix
